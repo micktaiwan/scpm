@@ -5,3 +5,20 @@
 #   
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
+
+Person.destroy_all
+Company.destroy_all
+
+
+companies = []
+companies << [{ :name => 'Airbus'}]
+companies << [{ :name => 'SQLI'}]
+Company.create(companies)
+
+airbus = Company.find_by_name('Airbus')
+
+persons = []
+persons << [{ :name => 'Catherine POTTIER', :email=>'catherine.pottier@airbus.com', :company_id=>airbus.id}]
+persons << [{ :name => 'Delphine JOHAN',    :email=>'delphine.johan@airbus.com',    :company_id=>airbus.id}]
+Person.create(persons)
+
