@@ -4,3 +4,4 @@ class Center < ActiveRecord::Base
   has_one :workstreamleader, :through => :people  
 
 end
+
