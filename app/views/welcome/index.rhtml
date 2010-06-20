@@ -5,17 +5,23 @@ Acknowledged: <%= @report.requests.select { |r| r.status == "acknowledged"}.size
 Assigned: <%= @report.requests.select { |r| r.status == "assigned"}.size %> requests<br/>
 <br/>
 
-<%
-  @report.by_assigned_to { |p, rs| %>
-    <%= link_to_function('+', "$('assigned_to_#{p}').toggle();") %>
-    <%= p %>: <%= rs.size %><br/>
-    <ul id="assigned_to_<%=p%>" style="display:none">
-        <% rs.each { |r|  %> 
-        <li><%= r.project %>: <%= r.summary_project_name %> <%= r.work_package %> <%= r.status %></li>
-        <% } %>
-    </ul>
-      
-<%    } %>
+<h2>By workstream</h2>
+
+<%@report.by_project { |title, rs| %>
+  <%= report_by(title, rs) %>
+<% } %>
+
+<h2>By assigned</h2>
+
+<%@report.by_assigned_to { |title, rs| %>
+  <%= report_by(title, rs) %>
+<% } %>
+
+<h2>By status</h2>
+
+<%@report.by_status { |title, rs| %>
+  <%= report_by(title, rs) %>
+<% } %>
 
 <br/>
 
