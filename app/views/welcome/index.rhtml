@@ -1,2 +1,21 @@
-Rien pour l'instant.
+<h1>EISQ Request Report</h1>
+Total: <%= @report.requests.size %> requests<br/>
+<b>New: <%= @report.requests.select { |r| r.status == "new"}.size %> requests</b><br/>
+Acknowledged: <%= @report.requests.select { |r| r.status == "acknowledged"}.size %> requests<br/>
+Assigned: <%= @report.requests.select { |r| r.status == "assigned"}.size %> requests<br/>
+<br/>
+
+<%
+  @report.by_assigned_to { |p, rs| %>
+    <%= link_to_function('+', "$('assigned_to_#{p}').toggle();") %>
+    <%= p %>: <%= rs.size %><br/>
+    <ul id="assigned_to_<%=p%>" style="display:none">
+        <% rs.each { |r|  %> 
+        <li><%= r.project %>: <%= r.summary_project_name %> <%= r.work_package %> <%= r.status %></li>
+        <% } %>
+    </ul>
+      
+<%    } %>
+
+<br/>
 
