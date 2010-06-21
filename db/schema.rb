@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100530190208) do
+ActiveRecord::Schema.define(:version => 20100621203322) do
 
   create_table "centers", :force => true do |t|
     t.string   "name"
@@ -33,5 +33,30 @@ ActiveRecord::Schema.define(:version => 20100530190208) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "requests", :force => true do |t|
+    t.string   "request_id"
+    t.string   "workstream"
+    t.string   "status"
+    t.string   "assigned_to"
+    t.string   "resolution"
+    t.string   "updated"
+    t.string   "reporter"
+    t.string   "view_status"
+    t.string   "milestone"
+    t.string   "priority"
+    t.string   "summary"
+    t.string   "date_submitted"
+    t.string   "product_version"
+    t.string   "severity"
+    t.string   "platform"
+    t.string   "work_package"
+    t.string   "complexity"
+    t.string   "start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
 
 end

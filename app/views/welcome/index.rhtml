@@ -1,11 +1,20 @@
 <h1>EISQ Request Report</h1>
+
+<h2>Update DB</h2>
+<%= form_tag ({:action => 'upload'}, :multipart => true) %>
+<p><label for="upload_file">Mantis CSV Export</label> : 
+<%= file_field 'upload', 'datafile' %>
+<%= submit_tag "Upload" %></p>
+</form>
+
+<h2>Stats</h2>
+
 Total: <%= @report.requests.size %> requests<br/>
 <b>TBV: <%= @report.requests.select { |r| r.status == "to be validated"}.size %></b><br/>
 <b>New: <%= @report.requests.select { |r| r.status == "new"}.size %></b><br/>
 Feedback: <%= @report.requests.select { |r| r.status == "feedback"}.size %><br/>
 Acknowledged: <%= @report.requests.select { |r| r.status == "acknowledged"}.size %><br/>
 Assigned: <%= @report.requests.select { |r| r.status == "assigned"}.size %><br/>
-<br/>
 
 <h2>By workstream</h2>
 
@@ -34,7 +43,7 @@ Assigned: <%= @report.requests.select { |r| r.status == "assigned"}.size %><br/>
 <h2>By Start date, non assigned (todo)</h2>
 
 <%@report.by_start_date { |title, rs| %>
-  <%= report_by(title, rs, "std") %>
+  <%= report_by(title.to_s, rs, "std") %>
 <% } %>
 
 

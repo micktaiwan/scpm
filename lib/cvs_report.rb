@@ -1,12 +1,12 @@
 # generate a html report based on the Mantis csv report
 require 'csv'
 
-class Request
+class CvsRequest
 
-  attr_accessor :workstream, :status, :assigned_to, :os, :resolution,
+  attr_accessor :workstream, :status, :assigned_to, :resolution,
     :updated, :reporter,
-    :id, :view_status, :milestone, :os_version, :priority,
-    :fixed_in_version, :summary, :date_submitted, :product_version,
+    :id, :view_status, :milestone, :priority,
+    :summary, :date_submitted, :product_version,
     :severity, :platform, :work_package, :complexity,
     :start_date
     
@@ -14,12 +14,19 @@ class Request
   end
 
   def method_missing(m, *args, &block)  
-    raise "Request does not have a '#{m}' attribute/method"
+    #raise "RRequest does not have a '#{m}' attribute/method"
   end
-
+  
+  def to_hash
+    h = Hash.new
+    self.instance_variables.each { |var|
+      h[var[1..-1].to_sym] = self.instance_variable_get(var)
+      }
+    h  
+  end
 end
 
-class Report
+class CvsReport
   
   attr_reader :requests
 
@@ -37,14 +44,13 @@ class Report
     end
   end
 
-  # les données devraient etre en base
   def method_missing(m, *args, &block)  
     if m.to_s[0..2] == "by_"
       key = m.to_s[3..-1] # example: "project"
       # get all possible values, example "EA", "EV"
       values = @requests.collect { |r| eval("r.#{key}")}.uniq.sort
       for value in values
-        yield value, @requests.select { |r| eval("r.#{key} == '#{value}'")}
+        yield value, @requests.select { |r| eval("r.#{key} == '#{value}'")}.sort_by { |r| [r.start_date, r.workstream]}
       end
       return  
     end
@@ -76,7 +82,7 @@ private
   end
 
   def parse_row(row)
-    r = Request.new
+    r = CvsRequest.new
     @columns.each { |attr_name, index|
       #puts "#{attr_name} = '#{row[index]}'"
       eval("r.#{attr_name} = '#{row[index]}'") # r.id = row[1]

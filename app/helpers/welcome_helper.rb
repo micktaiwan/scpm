@@ -15,7 +15,7 @@ module WelcomeHelper
     rv += ((title=="" ? "(empty)":title) + "</a>: " + rs.size.to_s + "<br/>")
     rv += "<ul id='"+id+"_"+title+"' style='display:none'>"
     rs.each { |r|
-      rv += ("<li class='#{sanitize(r.status)}'>" + r.workstream + ": <a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.id}'>" + r.summary + "</a> " + r.work_package  + " <b>" +  r.status + "</b> " + r.assigned_to + "</li>")
+      rv += ("<li class='#{sanitize(r.status)}'>" + r.workstream + ": <a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}'>" + r.summary + "</a> " + r.work_package  + " <b>" +  r.status + "</b> " + r.assigned_to + " " + r.start_date.to_s + "</li>")
       }
     rv += "</ul>"
   end      
