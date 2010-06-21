@@ -1,27 +1,42 @@
 <h1>EISQ Request Report</h1>
 Total: <%= @report.requests.size %> requests<br/>
-<b>New: <%= @report.requests.select { |r| r.status == "new"}.size %> requests</b><br/>
-Acknowledged: <%= @report.requests.select { |r| r.status == "acknowledged"}.size %> requests<br/>
-Assigned: <%= @report.requests.select { |r| r.status == "assigned"}.size %> requests<br/>
+<b>TBV: <%= @report.requests.select { |r| r.status == "to be validated"}.size %></b><br/>
+<b>New: <%= @report.requests.select { |r| r.status == "new"}.size %></b><br/>
+Feedback: <%= @report.requests.select { |r| r.status == "feedback"}.size %><br/>
+Acknowledged: <%= @report.requests.select { |r| r.status == "acknowledged"}.size %><br/>
+Assigned: <%= @report.requests.select { |r| r.status == "assigned"}.size %><br/>
 <br/>
 
 <h2>By workstream</h2>
 
-<%@report.by_project { |title, rs| %>
-  <%= report_by(title, rs) %>
+<%@report.by_workstream { |title, rs| %>
+  <%= report_by(title, rs, "wos") %>
 <% } %>
 
 <h2>By assigned</h2>
 
 <%@report.by_assigned_to { |title, rs| %>
-  <%= report_by(title, rs) %>
+  <%= report_by(title, rs, "ass") %>
 <% } %>
 
 <h2>By status</h2>
 
 <%@report.by_status { |title, rs| %>
-  <%= report_by(title, rs) %>
+  <%= report_by(title, rs, "sta") %>
 <% } %>
+
+<h2>By WP</h2>
+
+<%@report.by_work_package { |title, rs| %>
+  <%= report_by(title, rs, "wp") %>
+<% } %>
+
+<h2>By Start date, non assigned (todo)</h2>
+
+<%@report.by_start_date { |title, rs| %>
+  <%= report_by(title, rs, "std") %>
+<% } %>
+
 
 <br/>
 

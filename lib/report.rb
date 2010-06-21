@@ -3,10 +3,12 @@ require 'csv'
 
 class Request
 
-  attr_accessor :status, :assigned_to, :os, :resolution, :updated, :reporter,
-    :project, :id, :view_status, :milestone, :os_version, :priority,
-    :fixed_in_version, :summary_project_name, :date_submitted, :product_version,
-    :severity, :platform, :work_package
+  attr_accessor :workstream, :status, :assigned_to, :os, :resolution,
+    :updated, :reporter,
+    :id, :view_status, :milestone, :os_version, :priority,
+    :fixed_in_version, :summary, :date_submitted, :product_version,
+    :severity, :platform, :work_package, :complexity,
+    :start_date
     
   def initialize
   end
@@ -35,6 +37,7 @@ class Report
     end
   end
 
+  # les données devraient etre en base
   def method_missing(m, *args, &block)  
     if m.to_s[0..2] == "by_"
       key = m.to_s[3..-1] # example: "project"
@@ -68,6 +71,7 @@ private
   def get_columns(row)
     row.each_with_index { |r,i|
       @columns[sanitize_attr(r)] = i
+      #puts sanitize_attr(r)
       }
   end
 

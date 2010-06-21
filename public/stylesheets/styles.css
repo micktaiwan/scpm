@@ -1,0 +1,18 @@
+li.to_be_validated  {
+  background: #AAF;
+  }
+li.new  {
+  background: #F66;
+  }
+li.assigned {
+  background: #DFD;
+  }
+li.acknowledged {
+  background: #FDD;
+  }
+li.feedback   {
+  background: #FAF;
+  }
+li.cancelled   {
+  background: #AAA;
+  }
