@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100621203322) do
+ActiveRecord::Schema.define(:version => 20100622102040) do
 
   create_table "centers", :force => true do |t|
     t.string   "name"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20100621203322) do
     t.string   "start_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "sdp"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"

@@ -2,6 +2,7 @@ class WelcomeController < ApplicationController
 
   def index
     @report = Report.new(Request.all)
+    @last = Request.find(:all, :limit=>5, :order=>"updated_at desc")
   end
 
   def upload

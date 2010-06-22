@@ -1,3 +1,26 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  }
+h1 {
+  background: #ABC;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  background: #DEF;
+}
+
+
+#content {
+  margin: 0;
+  padding: 10px;
+}
+ul {
+  list-style-type: none;
+  }
 li.to_be_validated  {
   background: #AAF;
   }
