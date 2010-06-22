@@ -16,7 +16,7 @@ module WelcomeHelper
     rs.each { |r|
       rv += ("<li class='#{sanitize(r.status)}'>" + r.request_id.to_i.to_s + ": " + r.workstream + ": <a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}'>" + r.summary + "</a> " + r.work_package  + " <b>" +  r.status + "</b> " + r.assigned_to + " " + r.start_date.to_s + " " + r.resolution)
       rv += "<b>" if r.sdp == "No"
-      rv += " SDP:" + r.sdp
+      rv += " SDP:" + r.sdp if r.sdp
       rv += "</b>" if r.sdp == "No"
       rv += "</li>"
       }
