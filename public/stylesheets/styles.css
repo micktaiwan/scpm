@@ -21,21 +21,36 @@ h2 {
 ul {
   list-style-type: none;
   }
-li.to_be_validated  {
+table, th {
+  border: 1px solid black;
+  }  
+tr    {
+  padding: 0px;
+  margin: 0px;
+  }  
+
+td    {
+  padding: 2px;
+  }  
+.theader  {
+  background: #AAA;
+  font-weight: bold;
+  }
+.to_be_validated  {
   background: #AAF;
   }
-li.new  {
+.new  {
   background: #F66;
   }
-li.assigned {
+.assigned {
   background: #DFD;
   }
-li.acknowledged {
+.acknowledged {
   background: #FDD;
   }
-li.feedback   {
+.feedback   {
   background: #FAF;
   }
-li.cancelled   {
+.cancelled   {
   background: #AAA;
   }

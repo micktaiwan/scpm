@@ -13,13 +13,15 @@ module WelcomeHelper
     rv  = "<a href='#' onclick=\"$('#{id}_#{title}').toggle();return false;\">"
     rv += ((title=="" ? "(empty)":title) + "</a>: " + rs.size.to_s + "<br/>")
     rv += "<ul id='"+id+"_"+title+"' style='display:none'>"
+    rv += "<table><tr class='theader'><td>#</td><td>WS</td><td>Project</td><td>Type</td><td>Status</td><td>Resp</td><td>Start date</td><td>Progress</td><td>SDP</td></tr>"
     rs.each { |r|
-      rv += ("<li class='#{sanitize(r.status)}'>" + r.request_id.to_i.to_s + ": " + r.workstream + ": <a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}'>" + r.summary + "</a> " + r.work_package  + " <b>" +  r.status + "</b> " + r.assigned_to + " " + r.start_date.to_s + " " + r.resolution)
+      rv += ("<tr class='#{sanitize(r.status)}'><td>" + r.request_id.to_i.to_s + "</td><td>" + r.workstream + "</td><td><a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}'>" + r.summary + "</a></td><td>" + r.work_package  + "</td><td><b>" +  r.status + "</b></td><td>" + r.assigned_to + "</td><td>" + r.start_date.to_s + "</td><td>" + r.resolution + "<td>")
       rv += "<b>" if r.sdp == "No"
       rv += " SDP:" + r.sdp if r.sdp
       rv += "</b>" if r.sdp == "No"
-      rv += "</li>"
+      rv += "</td></tr>"
       }
+    rv += "</table>"
     rv += "</ul>"
   end      
 
