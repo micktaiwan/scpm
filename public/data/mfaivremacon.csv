@@ -1,88 +1,92 @@
-Id,WorkStream,Reporter,Assigned To,Priority,Complexity,Milestone,Product Version,Work-Package,Date Submitted,View Status,Updated,Summary,Status,Resolution,Fixed in Version,Start date,SDP
-0000012,EI,mfaivremacon,mdejean,normal,Easy,N/A,,WP6.2 - Coaching BRD,2010-06-10,public,2010-06-24,[ACN / PCN][][],assigned,not started,,2010-06-25,Yes
-0000018,EDS,mfaivremacon,mdejean,normal,Medium,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[IFP][Inspection & Finding procedures][],assigned,in progress,,2010-06-24,Yes
-0000032,EDY,mfaivremacon,nkohut,normal,Easy,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[Enhanced FLS Mngt][SGR v5][3040],assigned,in progress,,2010-06-14,Yes
-0000068,EV,damsellem,mdejean,normal,Easy,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[SUGECOM ex:Interoperability and ground test network][SUGECOM WP2],assigned,in progress,,2010-06-11,Yes
-0000021,EDY,mfaivremacon,lcayron,normal,Medium,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[TPI for Avionics and Simulation (NOVAC)][EYY minor IT investments][12.1],assigned,in progress,,2010-06-10,Yes
-0000086,EDY,damsellem,,normal,Medium,N/A,,WP6.2 - Coaching BRD,2010-06-21,public,2010-06-24,[R2D2][][],to be validated,not started,,,No
-0000030,EDY,mfaivremacon,lcayron,normal,Easy,N/A,,WP6.1 - Coaching PP,2010-06-11,public,2010-06-24,[A350 Reference platform][A350 REFPL][6032.01],assigned,not started,,2010-06-24,No
-0000070,EV,damsellem,,normal,Difficult,N/A,,WP4 - Surveillance,2010-06-11,public,2010-06-24,[FTA-NG][FTA-NG v2.0][1108.6],acknowledged,not started,,2010-09-01,No
-0000069,EM,damsellem,,normal,Difficult,N/A,,WP4 - Surveillance,2010-06-11,public,2010-06-24,[ARIAS V2][ARIAS V2][687.1],acknowledged,not started,,2010-08-20,No
-0000016,EDS,mfaivremacon,mdejean,normal,Medium,N/A,,WP3 - Modeling,2010-06-10,public,2010-06-24,[COLOSSUS- Thermal Process (WP5)][Thermal CAE Model][9020.01],assigned,not started,,2010-09-01,Yes
-0000026,EDY,mfaivremacon,mdejean,normal,Easy,N/A,,WP3 - Modeling,2010-06-11,public,2010-06-24,[Cockpit Text][Cockpit Text WP B][3016.1],assigned,not started,,2010-09-01,No
-0000010,EM,mfaivremacon,,normal,Medium,N/A,,WP3 - Modeling,2010-06-10,public,2010-06-24,[CATHREEN][CATHREEN V1][2039.01],cancelled,ended,,2010-06-10,No
-0000014,EDS,mfaivremacon,mdejean,normal,Medium,N/A,,WP3 - Modeling,2010-06-10,public,2010-06-24,[MAPIS - MATERIAL AND PROCESS INTERIOR STRUCTURE ][MAPIS][9013.01],assigned,in progress,,2010-06-23,Yes
-0000040,EA,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-24,[NICE (Network Integrated Certification Environment) Tool Project][NICE v2.7][684.11],assigned,in progress,,2010-06-17,Yes
-0000028,EDY,mfaivremacon,jpreira,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-24,[LR Iron Bird Hydraulic Model][LR Iron Bird Hydraulic Model][3041.01],assigned,in progress,,2010-06-21,Yes
-0000037,EDY,mfaivremacon,jpreira,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[2009 Migrations][][],assigned,in progress,,2010-06-16,Yes
-0000031,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[Enhanced FLS Mngt][SGR v5][],assigned,in progress,,2010-06-16,Yes
-0000034,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[SMILE][SMILE-Platform 6.6][],assigned,in progress,,2010-06-14,Yes
-0000025,EDY,mfaivremacon,jpreira,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[Cockpit Text][Cockpit Text WP B][3016.1],assigned,in progress,,2010-06-16,Yes
-0000050,EV,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-24,[SUGECOM ex:Interoperability and ground test network][SUGECOM WP1 Workflow V2][5010.06],assigned,in progress,,2010-06-10,Yes
-0000049,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[SUGECOM ex:Interoperability and ground test network][SUGECOM WP2 Schedules][5010.04],assigned,in progress,,2010-06-10,Yes
-0000093,EDY,fkalem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Enhanced FLS Mngt ] [ Master Project] [3040],new,not started,,2011-01-01,No
-0000096,EM,mfaivremacon,,normal,Difficult,N/A,,WP6.1 - Coaching PP,2010-06-23,public,2010-06-23,PLM Harmonisation Support,to be validated,not started,,2010-06-24,No
-0000091,EM,mmaza,,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Delta 1] [Delta 1-Rate 4][4409.01],to be validated,not started,,,No
-0000095,EDG,mfaivremacon,,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[EDGI DARIUS II][WP1 DRS Toolset V5.0][7050],to be validated,not started,,,No
-0000094,EDG,mfaivremacon,pviaud,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[EDGI DARIUS II][WP1 DRS Toolset V4.0][7050.01],assigned,not started,,,No
-0000009,EM,mfaivremacon,gurobert,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-23,[CATHREEN][CATHREEN V1][2039.01],assigned,in progress,,2010-06-23,Yes
-0000089,EDS,mfaivremacon,,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Colossus][WP1 CAE model][],to be validated,not started,,,No
-0000092,EM,mmaza,,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Suite 7.2 Management - PLM A380] [PLM A380 suite 7.2] [403.01] (complexity need to be validated),to be validated,not started,,,No
-0000090,EM,mmaza,,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Suite 7.3 Management PLM A380] [ A380 PLM Suite 7.3 Management] [404.01],to be validated,not started,,,No
-0000019,EDS,mfaivremacon,stessier,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-23,[IFP][Inspection & Finding procedures][],assigned,in progress,,2010-06-23,Yes
-0000057,EV,damsellem,cbednarek,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-23,[Lab Test Management Tool][LTM V3.0][5028.04],assigned,not started,,2010-08-20,No
-0000072,EDG,mfaivremacon,gurobert,normal,Easy,M1-M3,,WP1.2 - Quality Assurance,2010-06-15,public,2010-06-22,[EDGA Aero Optimization][Optim][7063.01],assigned,not started,,2010-06-30,Yes
-0000017,EDS,mfaivremacon,gurobert,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-22,[1.15 Virtual Structure Development - WP4][Test CAE][9022.01],assigned,in progress,,2010-06-22,Yes
-0000011,EI,mfaivremacon,gurobert,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-22,[New TSP][][],assigned,in progress,,2010-06-10,Yes
-0000005,EDS,mfaivremacon,gurobert,urgent,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-05-28,public,2010-06-22,[1.15 Virtual Structure Development - WP8][Parametric Modeling for Tests][9025.01],assigned,not started,,2010-06-28,Yes
-0000047,EA,damsellem,stessier,normal,Easy,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][SARAA 4.6][1109.23],assigned,not started,,2010-06-28,No
-0000048,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][SARAA 4.7][1109.24],assigned,not started,,2010-06-28,No
-0000046,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][MV2 v3.4][1109.20],assigned,not started,,2010-10-01,No
-0000045,EA,damsellem,stessier,normal,Easy,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][MV2 v3.3][1109.20],assigned,not started,,2010-07-10,No
-0000024,EDY,mfaivremacon,jpreira,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Field Loadable Software Management][CHIFS CFG A400M needs][3008.8],assigned,not started,,2010-07-01,No
-0000022,EDY,mfaivremacon,jpreira,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[FORGES][FORGES WP2 - FCS A350 needs][628.03],assigned,not started,,2010-06-28,No
-0000013,EDS,mfaivremacon,stessier,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-22,[MAPIS - MATERIAL AND PROCESS INTERIOR STRUCTURE ][MAPIS][9013.01],assigned,in progress,,2010-06-22,Yes
-0000079,EDG,mfaivremacon,gurobert,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-22,[EDGW WO - A/C LOAD ABILITY][EDGW WO Massys V2][7065.01] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-16,No
-0000065,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[SDM][SDM 3.6 Security][],assigned,not started,,2010-07-01,No
-0000066,EA,damsellem,stessier,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[SDM][SDM 3.7 military][],assigned,not started,,2010-10-01,No
-0000064,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[RAMSES][][],assigned,not started,,2010-07-01,No
-0000015,EDS,mfaivremacon,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-22,[COLOSSUS - Model Creation WP2][Industrialization][9017.01] complexity to be validated,assigned,not started,,2010-07-01,No
-0000020,EDS,mfaivremacon,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Colossus - Rapid Sizing (WP4)][Rapid sizing & weight derivation][],assigned,in progress,,2010-06-18,Yes
-0000039,EA,damsellem,cbednarek,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[NICE (Network Integrated Certification Environment) Tool Project][][],assigned,in progress,,2010-06-10,Yes
-0000043,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[EVPT][FTA-EVPT V2][1108.10],assigned,not started,,2010-07-01,No
-0000076,EDG,mfaivremacon,pviaud,normal,Medium,N/A,,WP2 - Quality for Maintenance,2010-06-16,public,2010-06-22,[EDGI MDDC/APOLLO I][STEP1 MD processes][717.2] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-22,No
-0000058,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Lab Test Management Tool][LTM V4.0][5028.05],assigned,not started,,2010-07-01,No
-0000077,EDG,mfaivremacon,pviaud,normal,Medium,N/A,,WP2 - Quality for Maintenance,2010-06-16,public,2010-06-22,[EDGI MDDC/APOLLO I][STEP1 Toolbox optimisation][717.3] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-22,No
-0000075,EDG,mfaivremacon,pviaud,normal,Medium,N/A,,WP2 - Quality for Maintenance,2010-06-16,public,2010-06-22,[EDGI MDDC/APOLLO I][STEP1 Framework][717.1] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-22,No
-0000061,EDE,damsellem,cbednarek,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Acoustic Cluster][IAP-NINA 2010][6996.34],assigned,in progress,,2010-06-11,Yes
-0000063,EDE,damsellem,cbednarek,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Powerplant Integration Cluster][ECS][6997.8],assigned,not started,,2010-09-01,No
-0000078,EDG,mfaivremacon,pviaud,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-22,[EDGI DARIUS II][WP2- ELISA V3.0 ][7050.02 ]  COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-16,Yes
-0000067,EDG,mfaivremacon,pviaud,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[EDGA Shape Design and Assembly][CAD Assembly tool][7062.01],assigned,in progress,,2010-06-10,No
-0000083,EDC,mfaivremacon,mmaza,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-17,public,2010-06-22,[Request for design rework][Solution][],assigned,in progress,,2010-06-17,Yes
-0000071,EM,mfaivremacon,mmaza,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-14,public,2010-06-22,[Unified Clash/Clearance Management][DMU Unified Clash and Clearance M&T][4209.01],assigned,in progress,,2010-06-10,Yes
-0000027,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[A350 cRDC Configuration Validation tool (VAL-cRDC)][VAL-CRDC][3025.01],assigned,in progress,,2010-06-16,Yes
-0000029,EM,damsellem,pviaud,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[EMD DOORS TREK][DOORS/TREK][88.01] V&V KPI,assigned,in progress,,2010-06-21,Yes
-0000007,EA,mfaivremacon,vlemaitre,normal,Medium,N/A,,WP5 - Change Accompaniment,2010-06-04,public,2010-06-22,[NECTAR][NECTAR V4][681.9],assigned,in progress,,2010-05-31,Yes
-0000008,EA,mfaivremacon,vlemaitre,normal,Medium,N/A,,WP5 - Change Accompaniment,2010-06-04,public,2010-06-22,[TRANSVERSE][TRANSVERSE][] Change Awareness & Support Generic Request,assigned,in progress,,2010-05-31,Yes
-0000042,EA,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[New ADCL][New ADCL][689.01],feedback,ended,,2010-07-01,Yes
-0000080,EDG,mfaivremacon,pviaud,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-21,[CFD][WP1][] COMPLEXITY TO BE VALIDATED,assigned,not started,,2010-07-01,No
-0000081,EDG,mfaivremacon,pviaud,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-21,[CFD][WP2][] COMPLEXITY TO BE VALIDATED,assigned,not started,,2010-07-01,No
-0000082,EDG,mfaivremacon,pviaud,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-21,[CFD][WP3][] COMPLEXITY TO BE VALIDATED,assigned,not started,,2010-07-01,No
-0000085,EDY,damsellem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-21,[R2D2][][],to be validated,not started,,,No
-0000088,EDY,damsellem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-21,[ISMD][MIMOS][627.04],to be validated,not started,,,No
-0000087,EDY,damsellem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-21,[ISMD][BRIDGE][627.05],to be validated,not started,,,No
-0000084,EDY,damsellem,,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-21,[TPI for Avionics and Simulation (NOVAC)][EYY minor IT investments][12.1],to be validated,not started,,,No
-0000062,EDE,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Acoustic Cluster][IAP-NINA 2010][6996.34],assigned,not started,,2010-09-10,No
-0000060,EDE,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Acoustic Cluster][IAP-New Cockpit V2][6996.28],assigned,not started,,2010-09-01,Yes
-0000059,EDE,damsellem,,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Acoustic Cluster][IAP-EMA Loc V2][6996.22],acknowledged,not started,,2010-09-01,No
-0000056,EV,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[cVIP (Cabin Virtual Integration Platform)][c-VIP][5025.01],acknowledged,not started,,2010-09-01,No
-0000055,EV,damsellem,,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-21,[FACT (Facility for Airbus Collection of Technical events)][FACT WP - ORCHESTRATION][5024.01],acknowledged,not started,,2010-07-01,No
-0000054,EV,damsellem,,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Test Preparation Process & Tools][SHOW_ICD - ARTEMISS v1.0][5023.06],acknowledged,not started,,2010-09-01,No
-0000053,EV,damsellem,,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Test Preparation Process & Tools][SHOW_ICD WP2.2 Test ICD Area - Customisation][5023.04],acknowledged,not started,,2010-09-01,No
-0000052,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-21,[TESI (Simulation & Virtual Testing Project)][TESI WP2 - Remote Testing][5022.02],assigned,not started,,2010-06-30,Yes
-0000051,EV,damsellem,cbednarek,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[TESI (Simulation & Virtual Testing Project)][TESI WP1 - Virtual Platform][5022.01],assigned,not started,,2010-06-10,No
-0000044,EV,damsellem,cbednarek,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[FTA-NG][FTA-NG v2.0][1108.6],assigned,not started,,2010-10-01,No
-0000041,EA,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[New ADCL][New ADCL][689.01],acknowledged,not started,,2010-07-01,No
-0000038,EA,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[NECTAR][NECTAR V4][681.9],acknowledged,not started,,2010-09-01,No
-0000033,EM,damsellem,,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-21,[EMD DOORS TREK][DOORS/TREK][88.01],acknowledged,not started,,2010-06-20,No
-0000023,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-21,[FORGES][FORGES WP3 - New configuration management framework][628.04],assigned,not started,,2010-08-20,No
+Id,WorkStream,Reporter,Assigned To,Priority,Complexity,Milestone,Product Version,Work-Package,Date Submitted,View Status,Updated,Summary,Status,Resolution,Fixed in Version,Start date,SDP,PM
+0000077,EDG,mfaivremacon,pviaud,normal,Medium,N/A,,WP2 - Quality for Maintenance,2010-06-16,public,2010-06-26,[EDGI MDDC/APOLLO I][STEP1 Toolbox optimisation][717.3] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-22,No,B. MARQUEZ 
+0000090,EM,mmaza,mmaza,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-26,[Suite 7.3 Management PLM A380] [ A380 PLM Suite 7.3 Management] [404.01],assigned,not started,,,No,Elisabeth Lavigne
+0000098,EM,lmariette,mdejean,normal,Easy,M1-M3,,WP3 - Modeling,2010-06-24,public,2010-06-26,Transversal Activity on Migration MEGA 2009,assigned,not started,,,Yes,LAGASSE Sylvie
+0000007,EA,mfaivremacon,vlemaitre,normal,Medium,N/A,,WP5 - Change Accompaniment,2010-06-04,public,2010-06-26,[NECTAR][NECTAR V4][681.9],assigned,in progress,,2010-05-31,Yes,Delphine JOHAN
+0000095,EDG,mfaivremacon,,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-26,[EDGI DARIUS II][WP1 DRS Toolset V5.0][7050],to be validated,not started,,,No,
+0000086,EDY,damsellem,,normal,Medium,N/A,,WP6.2 - Coaching BRD,2010-06-21,public,2010-06-25,[R2D2][][],new,not started,,,No,F MINOT
+0000089,EDS,mfaivremacon,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-25,[Colossus][WP1 CAE model][9016],assigned,not started,,,No,Jean Christophe Bonnet
+0000097,EM,lmariette,,normal,Medium,M1-M3,,WP3 - Modeling,2010-06-24,public,2010-06-25,Transversal Activity on BAT,new,not started,,,No,BOUIX Jean
+0000088,EDY,damsellem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-25,[ISMD][MIMOS][627.04],new,not started,,,No,Y. Bensallam
+0000087,EDY,damsellem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-25,[ISMD][BRIDGE][627.05],new,not started,,,No,Y. Bensallam
+0000085,EDY,damsellem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-25,[R2D2][][],new,not started,,,No,F MINOT
+0000084,EDY,damsellem,,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-21,public,2010-06-25,[TPI for Avionics and Simulation (NOVAC)][EYY minor IT investments][12.1],new,not started,,,No,P.Saby
+0000020,EDS,mfaivremacon,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-25,[Colossus - Rapid Sizing (WP4)][Rapid sizing & weight derivation][],assigned,in progress,,2010-06-18,Yes,Jean Christophe Bonnet
+0000015,EDS,mfaivremacon,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-25,[COLOSSUS - Model Creation WP2][Industrialization][9017.01] complexity to be validated,assigned,not started,,2010-07-01,No,Jean Christophe Bonnet
+0000016,EDS,mfaivremacon,mdejean,normal,Medium,N/A,,WP3 - Modeling,2010-06-10,public,2010-06-25,[COLOSSUS- Thermal Process (WP5)][Thermal CAE Model][9020.01],assigned,not started,,2010-09-01,Yes,Jean Christophe Bonnet
+0000100,EV,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-24,public,2010-06-24,[FACT (Facility for Airbus Collection of Technical events)][FACT WP - ORCHESTRATION][5024.01],to be validated,not started,,,No,Gérard MONTARIOL
+0000021,EDY,mfaivremacon,lcayron,normal,Medium,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[TPI for Avionics and Simulation (NOVAC)][EYY minor IT investments][12.1],assigned,in progress,,2010-06-10,Yes,P.Saby
+0000032,EDY,mfaivremacon,nkohut,normal,Easy,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[Enhanced FLS Mngt][SGR v5][3040],assigned,in progress,,2010-06-14,Yes,Valérie Brisset
+0000033,EM,damsellem,pviaud,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[EMD DOORS TREK][DOORS/TREK][88.01] Non compliance management,assigned,not started,,2010-06-20,Yes,Gaelle Gagne
+0000030,EDY,mfaivremacon,lcayron,normal,Easy,N/A,,WP6.1 - Coaching PP,2010-06-11,public,2010-06-24,[A350 Reference platform][A350 REFPL][6032.01],assigned,in progress,,2010-06-24,No,A. LETUPPE
+0000018,EDS,mfaivremacon,mdejean,normal,Medium,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[IFP][Inspection & Finding procedures][],assigned,in progress,,2010-06-24,Yes,Peter Boesch
+0000079,EDG,mfaivremacon,gurobert,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-24,[EDGW WO - A/C LOAD ABILITY][EDGW WO Massys V2][7065.01] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-16,No,Paul Asbury
+0000005,EDS,mfaivremacon,gurobert,urgent,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-05-28,public,2010-06-24,[1.15 Virtual Structure Development - WP8][Parametric Modeling for Tests][9025.01],assigned,not started,,2010-06-28,Yes,J. Gaudin / Gérard COUDOUENT
+0000011,EI,mfaivremacon,gurobert,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-24,[New TSP][][],assigned,in progress,,2010-06-10,Yes,CAILLABET Yannick
+0000017,EDS,mfaivremacon,gurobert,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-24,[1.15 Virtual Structure Development - WP4][Test CAE][9022.01],assigned,in progress,,2010-06-15,Yes,J. Gaudin / Pascal CHEZZI
+0000072,EDG,mfaivremacon,gurobert,normal,Easy,M1-M3,,WP1.2 - Quality Assurance,2010-06-15,public,2010-06-24,[EDGA Aero Optimization][Optim][7063.01],assigned,not started,,2010-06-30,Yes,
+0000009,EM,mfaivremacon,gurobert,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-24,[CATHREEN][CATHREEN V1][2039.01],assigned,in progress,,2010-06-23,Yes,S.ALLWRIGHT
+0000028,EDY,mfaivremacon,jpreira,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-24,[LR Iron Bird Hydraulic Model][LR Iron Bird Hydraulic Model][3041.01],assigned,in progress,,2010-06-21,Yes,Cornelia MAEDIGER
+0000022,EDY,mfaivremacon,jpreira,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[FORGES][FORGES WP2 - FCS A350 needs][628.03],assigned,not started,,2010-08-23,No,G. HIMBERT
+0000099,EDY,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-24,public,2010-06-24,[Enhanced FLS Mngt][SGR v5][3040],to be validated,not started,,,No,Valérie Brisset
+0000027,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[A350 cRDC Configuration Validation tool (VAL-cRDC)][VAL-CRDC][3025.01],assigned,in progress,,2010-06-16,Yes,Colette BASTOUL
+0000012,EI,mfaivremacon,mdejean,normal,Easy,N/A,,WP6.2 - Coaching BRD,2010-06-10,public,2010-06-24,[ACN / PCN][][],assigned,not started,,2010-06-25,Yes,John Hampton
+0000068,EV,damsellem,mdejean,normal,Easy,N/A,,WP6.2 - Coaching BRD,2010-06-11,public,2010-06-24,[SUGECOM ex:Interoperability and ground test network][SUGECOM WP2],assigned,in progress,,2010-06-11,Yes,Bertrand MOTTIER
+0000070,EV,damsellem,,normal,Difficult,N/A,,WP4.2 - Surveillance Root cause,2010-06-11,public,2010-06-24,[FTA-NG][FTA-NG v2.0][1108.6],acknowledged,not started,,2010-09-01,No,Jean Louis GUINET
+0000069,EM,damsellem,,normal,Difficult,N/A,,WP4.2 - Surveillance Root cause,2010-06-11,public,2010-06-24,[ARIAS V2][ARIAS V2][687.1],acknowledged,not started,,2010-08-20,No,John Calder
+0000026,EDY,mfaivremacon,mdejean,normal,Easy,N/A,,WP3 - Modeling,2010-06-11,public,2010-06-24,[Cockpit Text][Cockpit Text WP B][3016.1],assigned,not started,,2010-09-01,No,Lionel Cremel
+0000010,EM,mfaivremacon,,normal,Medium,N/A,,WP3 - Modeling,2010-06-10,public,2010-06-24,[CATHREEN][CATHREEN V1][2039.01],cancelled,ended,,2010-06-10,No,S.ALLWRIGHT
+0000014,EDS,mfaivremacon,mdejean,normal,Medium,N/A,,WP3 - Modeling,2010-06-10,public,2010-06-24,[MAPIS - MATERIAL AND PROCESS INTERIOR STRUCTURE ][MAPIS][9013.01],assigned,in progress,,2010-06-23,Yes,GERONIMO Christian
+0000040,EA,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-24,[NICE (Network Integrated Certification Environment) Tool Project][NICE v2.7][684.11],assigned,in progress,,2010-06-17,Yes,Delphine JOHAN
+0000037,EDY,mfaivremacon,jpreira,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[2009 Migrations][][],assigned,in progress,,2010-06-16,Yes,Xiaodong Wu
+0000031,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[Enhanced FLS Mngt][SGR v5][],assigned,in progress,,2010-06-16,Yes,Valérie Brisset
+0000034,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[SMILE][SMILE-Platform 6.6][],assigned,in progress,,2010-06-14,Yes,Lionel Cremel
+0000025,EDY,mfaivremacon,jpreira,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[Cockpit Text][Cockpit Text WP B][3016.1],assigned,in progress,,2010-06-16,Yes,Lionel Cremel
+0000050,EV,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-24,[SUGECOM ex:Interoperability and ground test network][SUGECOM WP1 Workflow V2][5010.06],assigned,in progress,,2010-06-10,Yes,Bertrand MOTTIER
+0000049,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-24,[SUGECOM ex:Interoperability and ground test network][SUGECOM WP2 Schedules][5010.04],assigned,in progress,,2010-06-10,Yes,Bertrand MOTTIER
+0000093,EDY,fkalem,,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Enhanced FLS Mngt ] [ Master Project] [3040],new,not started,,2011-01-01,No,Valérie Brisset
+0000096,EM,mfaivremacon,,normal,Difficult,N/A,,WP6.1 - Coaching PP,2010-06-23,public,2010-06-23,PLM Harmonisation Support,to be validated,not started,,2010-06-24,No,Jean Marie Parnaud
+0000091,EM,mmaza,,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Delta 1] [Delta 1-Rate 4][4409.01],to be validated,not started,,,No,Sebastien Voegele
+0000094,EDG,mfaivremacon,pviaud,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[EDGI DARIUS II][WP1 DRS Toolset V4.0][7050.01],assigned,not started,,,No,Philippe SAUVAGE
+0000092,EM,mmaza,,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-23,public,2010-06-23,[Suite 7.2 Management - PLM A380] [PLM A380 suite 7.2] [403.01] (complexity need to be validated),to be validated,not started,,,No,Elisabeth Lavigne
+0000019,EDS,mfaivremacon,stessier,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-23,[IFP][Inspection & Finding procedures][],assigned,in progress,,2010-06-23,Yes,Peter Boesch
+0000057,EV,damsellem,cbednarek,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-23,[Lab Test Management Tool][LTM V3.0][5028.04],assigned,not started,,2010-08-20,No,Gérard MONTARIOL
+0000047,EA,damsellem,stessier,normal,Easy,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][SARAA 4.6][1109.23],assigned,not started,,2010-06-28,No,Didier MASSOT
+0000048,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][SARAA 4.7][1109.24],assigned,not started,,2010-06-28,No,Didier MASSOT
+0000046,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][MV2 v3.4][1109.20],assigned,not started,,2010-10-01,No,Didier MASSOT
+0000045,EA,damsellem,stessier,normal,Easy,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[SARAA/SDT/MV2 Tool Project][MV2 v3.3][1109.20],assigned,not started,,2010-07-10,No,Didier MASSOT
+0000024,EDY,mfaivremacon,jpreira,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Field Loadable Software Management][CHIFS CFG A400M needs][3008.8],assigned,not started,,2010-07-01,No,Valérie BRISSET
+0000013,EDS,mfaivremacon,stessier,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-10,public,2010-06-22,[MAPIS - MATERIAL AND PROCESS INTERIOR STRUCTURE ][MAPIS][9013.01],assigned,in progress,,2010-06-22,Yes,Geronimo christian
+0000065,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[SDM][SDM 3.6 Security][],assigned,not started,,2010-07-01,No,Didier MASSOT
+0000066,EA,damsellem,stessier,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[SDM][SDM 3.7 military][],assigned,not started,,2010-10-01,No,Didier MASSOT
+0000064,EA,damsellem,stessier,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-22,[RAMSES][][],assigned,not started,,2010-07-01,No,Didier MASSOT
+0000039,EA,damsellem,cbednarek,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[NICE (Network Integrated Certification Environment) Tool Project][][],assigned,in progress,,2010-06-10,Yes,Delphine JOHAN
+0000043,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[EVPT][FTA-EVPT V2][1108.10],assigned,not started,,2010-07-01,No,Jean Louis GUINET
+0000076,EDG,mfaivremacon,pviaud,normal,Medium,N/A,,WP2 - Quality for Maintenance,2010-06-16,public,2010-06-22,[EDGI MDDC/APOLLO I][STEP1 MD processes][717.2] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-22,No,Mark Holden 
+0000058,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Lab Test Management Tool][LTM V4.0][5028.05],assigned,not started,,2010-07-01,No,Gérard MONTARIOL
+0000075,EDG,mfaivremacon,pviaud,normal,Medium,N/A,,WP2 - Quality for Maintenance,2010-06-16,public,2010-06-22,[EDGI MDDC/APOLLO I][STEP1 Framework][717.1] COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-22,No,B. MARQUEZ 
+0000061,EDE,damsellem,cbednarek,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Acoustic Cluster][IAP-NINA 2010][6996.34],assigned,in progress,,2010-06-11,Yes,Sébastien LE SAINT
+0000063,EDE,damsellem,cbednarek,normal,Easy,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[Powerplant Integration Cluster][ECS][6997.8],assigned,not started,,2010-09-01,No,JF.RAOULT
+0000078,EDG,mfaivremacon,pviaud,normal,Difficult,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-22,[EDGI DARIUS II][WP2- ELISA V3.0 ][7050.02 ]  COMPLEXITY TO BE VALIDATED,assigned,in progress,,2010-06-16,Yes,M.AUGELLO
+0000067,EDG,mfaivremacon,pviaud,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[EDGA Shape Design and Assembly][CAD Assembly tool][7062.01],assigned,in progress,,2010-06-10,No,
+0000083,EDC,mfaivremacon,mmaza,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-17,public,2010-06-22,[Request for design rework][Solution][],assigned,in progress,,2010-06-17,Yes,Joffrey ARMELLINI
+0000071,EM,mfaivremacon,mmaza,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-14,public,2010-06-22,[Unified Clash/Clearance Management][DMU Unified Clash and Clearance M&T][4209.01],assigned,in progress,,2010-06-10,Yes,Ludovic Graux
+0000029,EM,damsellem,pviaud,normal,Difficult,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[EMD DOORS TREK][DOORS/TREK][88.01] V&V KPI,assigned,in progress,,2010-06-21,Yes,Kossmann Mario
+0000008,EA,mfaivremacon,vlemaitre,normal,Medium,N/A,,WP5 - Change Accompaniment,2010-06-04,public,2010-06-22,[TRANSVERSE][TRANSVERSE][] Change Awareness & Support Generic Request,assigned,in progress,,2010-05-31,Yes,
+0000042,EA,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-22,[New ADCL][New ADCL][689.01],feedback,ended,,2010-07-01,Yes,Delphine JOHAN
+0000080,EDG,mfaivremacon,pviaud,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-21,[CFD][WP1][] COMPLEXITY TO BE VALIDATED,assigned,not started,,2010-07-01,No,FASSBENDER Jens
+0000081,EDG,mfaivremacon,pviaud,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-21,[CFD][WP2][] COMPLEXITY TO BE VALIDATED,assigned,not started,,2010-07-01,No,FASSBENDER Jens
+0000082,EDG,mfaivremacon,pviaud,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-16,public,2010-06-21,[CFD][WP3][] COMPLEXITY TO BE VALIDATED,assigned,not started,,2010-07-01,No,FASSBENDER Jens
+0000062,EDE,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Acoustic Cluster][IAP-NINA 2010][6996.34],assigned,not started,,2010-09-10,No,Sébastien LE SAINT
+0000060,EDE,damsellem,cbednarek,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Acoustic Cluster][IAP-New Cockpit V2][6996.28],assigned,not started,,2010-09-01,Yes,Pascale NEPLE
+0000059,EDE,damsellem,,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Acoustic Cluster][IAP-EMA Loc V2][6996.22],acknowledged,not started,,2010-09-01,No,
+0000056,EV,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[cVIP (Cabin Virtual Integration Platform)][c-VIP][5025.01],acknowledged,not started,,2010-09-01,No,Julien PHFEFFERKORN
+0000055,EV,damsellem,,normal,Medium,Post-M10,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-21,[FACT (Facility for Airbus Collection of Technical events)][FACT WP - ORCHESTRATION][5024.01],acknowledged,not started,,2010-07-01,No,
+0000054,EV,damsellem,,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Test Preparation Process & Tools][SHOW_ICD - ARTEMISS v1.0][5023.06],acknowledged,not started,,2010-09-01,No,
+0000053,EV,damsellem,,normal,Easy,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[Test Preparation Process & Tools][SHOW_ICD WP2.2 Test ICD Area - Customisation][5023.04],acknowledged,not started,,2010-09-01,No,
+0000052,EV,damsellem,cbednarek,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-21,[TESI (Simulation & Virtual Testing Project)][TESI WP2 - Remote Testing][5022.02],assigned,not started,,2010-06-30,Yes,Cédric GRANDSEIGNE
+0000051,EV,damsellem,cbednarek,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[TESI (Simulation & Virtual Testing Project)][TESI WP1 - Virtual Platform][5022.01],assigned,not started,,2010-06-10,No,Cédric GRANDSEIGNE
+0000044,EV,damsellem,cbednarek,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[FTA-NG][FTA-NG v2.0][1108.6],assigned,not started,,2010-10-01,No,Jean Louis GUINET
+0000041,EA,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[New ADCL][New ADCL][689.01],acknowledged,not started,,2010-07-01,No,Delphine JOHAN
+0000038,EA,damsellem,,normal,Medium,M5-M10,,WP1.1 - Quality Control,2010-06-11,public,2010-06-21,[NECTAR][NECTAR V4][681.9],acknowledged,not started,,2010-09-01,No,Delphine JOHAN
+0000023,EDY,mfaivremacon,jpreira,normal,Medium,M3-M5,,WP1.2 - Quality Assurance,2010-06-11,public,2010-06-21,[FORGES][FORGES WP3 - New configuration management framework][628.04],assigned,not started,,2010-08-20,No,G. HIMBERT

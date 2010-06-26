@@ -2,27 +2,33 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background: #567;
   }
 h1 {
-  background: #ABC;
+  background: #333;
+  color: #EEE;
   margin: 0;
   padding: 0;
 }
 
 h2 {
-  background: #DEF;
+  background: #ABC;
+  margin: 10px 0 5px -15px;
+  padding: 0 0 0 15px;
 }
 
-
 #content {
-  margin: 0;
-  padding: 10px;
+  margin:  10px;
+  padding: 0 5px 5px 15px;
+  border: 2px solid black;
+  background: #FFF;
 }
 ul {
   list-style-type: none;
   }
 table, th {
   border: 1px solid black;
+  font-size: 0.8em;
   }  
 tr    {
   padding: 0px;

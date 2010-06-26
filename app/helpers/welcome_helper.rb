@@ -6,6 +6,7 @@ Wp_index = {
 "WP2 - Quality for Maintenance" => 8,
 "WP3 - Modeling" => 9,
 "WP4 - Surveillance" => 10,
+"WP4.2 - Surveillance Root cause" => 10,
 "WP5 - Change Accompaniment" => 11,
 "WP6.1 - Coaching PP" => 12,
 "WP6.2 - Coaching BRD" => 13
@@ -72,10 +73,28 @@ Loads = [
     name
   end
 
-  
+
+  def wp_index(wp)
+    rv = Wp_index[wp]
+    raise "no workpackage #{wp}" if not rv
+    rv
+  end
+
+  def milestone_index(m)
+    rv = Milestone_index[m]
+    raise "no milestone #{m}" if not rv
+    rv
+  end
+
+  def comp_index(c)
+    rv = Comp_index[c]
+    raise "no complexity #{c}" if not rv
+    rv
+  end
   
   def load(r)
-    Loads[Wp_index[r.work_package]+Milestone_index[r.milestone]][Comp_index[r.complexity]]
+    return 0 if r.status == "cancelled" or r.status == "feedback"
+    Loads[wp_index(r.work_package)+milestone_index(r.milestone)][comp_index(r.complexity)]
   end
   
   def workload(rs)
@@ -86,9 +105,9 @@ Loads = [
     rv  = "<a href='#' onclick=\"$('#{id}_#{title}').toggle();return false;\">"
     rv += ((title=="" ? "(empty)":title) + "</a>: <b>#{rs.size}</b> (#{workload(rs)}j.)<br/>")
     rv += "<ul id='"+id+"_"+title+"' style='display:none'>"
-    rv += "<table><tr class='theader'><td>#</td><td>WS</td><td>Project</td><td>Type</td><td>Miles.</td><td>Status</td><td>Resp</td><td>Load</td><td>Start date</td><td>Progress</td><td>SDP</td></tr>"
+    rv += "<table><tr class='theader'><td>#</td><td>WS</td><td>Project</td><td>PM</td><td>Type</td><td>Miles.</td><td>Status</td><td>Resp</td><td>Load</td><td>Start date</td><td>Progress</td><td>SDP</td></tr>"
     rs.each { |r|
-      rv += ("<tr class='#{sanitize(r.status)}'><td>#{r.request_id.to_i}</td><td>#{r.workstream}</td><td><a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}'>" + r.summary + "</a></td><td>#{r.work_package}</td><td>#{r.milestone}</td><td><b>" +  r.status + "</b></td><td>#{r.assigned_to}</td><td>#{load(r)}</td><td>#{r.start_date.to_s}</td><td>#{r.resolution}<td>")
+      rv += ("<tr class='#{sanitize(r.status)}'><td>#{r.request_id.to_i}</td><td>#{r.workstream}</td><td><a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}'>" + r.summary + "</a></td><td>#{r.pm}</td><td>#{r.work_package}</td><td>#{r.milestone}</td><td><b>" +  r.status + "</b></td><td>#{r.assigned_to}</td><td>#{load(r)}</td><td>#{r.start_date.to_s}</td><td>#{r.resolution}<td>")
       rv += "<b>" if r.sdp == "No"
       rv += " SDP:" + r.sdp if r.sdp
       rv += "</b>" if r.sdp == "No"
