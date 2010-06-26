@@ -1,0 +1,1 @@
+          <task id="<%=task.request_id.to_i%>" name="<%=CGI.escapeHTML(task.summary)%>" color="#8cb6ce" meeting="false" start="<%=task.start_date%>" duration="<%=(load(task)+1).to_i%>" complete="0" priority="1" expand="true"></task>
