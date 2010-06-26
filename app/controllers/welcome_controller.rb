@@ -3,6 +3,8 @@ class WelcomeController < ApplicationController
   def index
     @report = Report.new(Request.all)
     @last = Request.find(:all, :limit=>5, :order=>"updated_at desc")
+    @sdp = Request.find(:all, :conditions=>["sdp='No' and start_date < ? and resolution='in progress' and workstream in ('EDS','EDG','EI','EM','EDC')", Date.today()+8], :order=>"start_date")
+    @not_assigned = Request.find(:all, :conditions=>["status!='assigned' and start_date < ? and workstream in ('EDS','EDG','EI','EM','EDC')", Date.today()+15], :order=>"start_date")
   end
 
   def upload

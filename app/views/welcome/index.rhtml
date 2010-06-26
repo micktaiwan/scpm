@@ -7,18 +7,23 @@
 
 <h2>Stats</h2>
 
-Total: <%= @report.requests.size %> requests<br/>
-<b>TBV: <%= @report.requests.select { |r| r.status == "to be validated"}.size %></b><br/>
-<b>New: <%= @report.requests.select { |r| r.status == "new"}.size %></b><br/>
-Feedback: <%= @report.requests.select { |r| r.status == "feedback"}.size %><br/>
-Acknowledged: <%= @report.requests.select { |r| r.status == "acknowledged"}.size %><br/>
-Assigned: <%= @report.requests.select { |r| r.status == "assigned"}.size %><br/>
-Cancelled: <%= @report.requests.select { |r| r.status == "cancelled"}.size %><br/>
+Total: <b><%= @report.requests.size %></b> requests<br/>
+
+<%@report.by_status { |title, rs| %>
+  <%= report_by(title, rs, "sta") %>
+<% } %>
+
 
 <h2>Last changes</h2>
 
 <%= report_by("Changes", @last, "") %>
 
+
+<h2>TODO</h2>
+
+<%= report_by("SDP", @sdp, "") %>
+
+<%= report_by("Not assigned", @not_assigned, "") %>
 
 <h2>By workstream</h2>
 
@@ -30,12 +35,6 @@ Cancelled: <%= @report.requests.select { |r| r.status == "cancelled"}.size %><br
 
 <%@report.by_assigned_to { |title, rs| %>
   <%= report_by(title, rs, "ass") %>
-<% } %>
-
-<h2>By status</h2>
-
-<%@report.by_status { |title, rs| %>
-  <%= report_by(title, rs, "sta") %>
 <% } %>
 
 <h2>By progress</h2>
