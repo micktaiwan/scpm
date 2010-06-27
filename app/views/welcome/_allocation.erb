@@ -1,1 +1,1 @@
-        <allocation task-id="<%= allocation.request_id.to_i %>" resource-id="<%=@resources.index(allocation.assigned_to)%>" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="<%= allocation.request_id.to_i %>" resource-id="<%=@resources.index(allocation.assigned_to)%>" function="Default:0" responsible="true" load="<%= allocation.rload %>"/>
