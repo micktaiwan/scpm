@@ -34,7 +34,7 @@ class WelcomeController < ApplicationController
   end
   
   def workload_schedule
-    @requests = Request.find(:all, :conditions=>["status!='feedback' and status!='cancelled'"]).sort_by { |r| r.gantt_start_date}
+    @requests = Request.find(:all, :conditions=>["status!='feedback' and status!='cancelled' and (start_date!='' or milestone_date!='')"]).sort_by { |r| r.gantt_start_date}
     @resources = @requests.collect { |r| r.assigned_to}.uniq.sort
     response.headers['Content-Type'] = 'text/xml'
     response.headers['Content-Disposition'] = 'attachment; filename=workload.gan'

@@ -90,10 +90,12 @@ class Request < ActiveRecord::Base
 
   # calculate a start date based on the milestone date
   def gantt_start_date
-    return self.start_date
-    
-    if self.milestone_date != ''
-      return (Time.parse(self.milestone_date) - real_duration.days).strftime("%Y-%m-%d")
+    if self.start_date == ''
+      if self.milestone_date != ''
+        return (Time.parse(self.milestone_date) - real_duration.days).strftime("%Y-%m-%d")
+      else
+        return Date.new.strftime("%Y-%m-%d")
+      end
     else
       return self.start_date
     end  
@@ -116,7 +118,7 @@ class Request < ActiveRecord::Base
   def rload
     real = real_duration
     real = 1 if real == 0
-    return ((gantt_duration / real) * 100).to_i
+    return ((gantt_duration.to_f / real) * 100).to_i
   end
 
   def gantt_duration
