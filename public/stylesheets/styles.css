@@ -62,3 +62,7 @@ td    {
 .cancelled   {
   background: #AAA;
   }
+
+.status_not_started {
+  background: #FAA;
+  }
