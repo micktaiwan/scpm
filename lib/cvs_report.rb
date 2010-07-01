@@ -8,7 +8,7 @@ class CvsRequest
     :id, :view_status, :milestone, :priority,
     :summary, :date_submitted, :product_version,
     :severity, :platform, :work_package, :complexity,
-    :start_date, :sdp, :pm, :milestone_date
+    :start_date, :sdp, :pm, :milestone_date, :project_name
     
   def initialize
   end
