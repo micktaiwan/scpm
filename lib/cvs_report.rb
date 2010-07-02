@@ -8,7 +8,8 @@ class CvsRequest
     :id, :view_status, :milestone, :priority,
     :summary, :date_submitted, :product_version,
     :severity, :platform, :work_package, :complexity,
-    :start_date, :sdp, :pm, :milestone_date, :project_name
+    :start_date, :sdp, :pm, :milestone_date, :project_name,
+    :end_date, :milestone_date, :actual_m_date
     
   def initialize
   end
@@ -96,6 +97,7 @@ private
     name.gsub!("  ","_")
     name.gsub!(" ","_")
     name.gsub!("-","_")
+    name.gsub!(".","")
     name
   end
     

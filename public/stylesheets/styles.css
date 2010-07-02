@@ -66,3 +66,7 @@ td    {
 .status_not_started {
   background: #FAA;
   }
+
+.status_ended {
+  background: #9F9;
+  }  

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100701165908) do
+ActiveRecord::Schema.define(:version => 20100702182100) do
 
   create_table "centers", :force => true do |t|
     t.string   "name"
@@ -58,7 +58,9 @@ ActiveRecord::Schema.define(:version => 20100701165908) do
     t.string   "sdp"
     t.string   "pm"
     t.string   "milestone_date"
+    t.string   "end_date"
     t.string   "project_name"
+    t.string   "actual_m_date"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"

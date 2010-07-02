@@ -103,12 +103,15 @@ class Request < ActiveRecord::Base
 
   # taking into account the start date and the milestone date
   def real_duration
-    if self.milestone_date != '' and self.start_date != ''
-      days = (Time.parse(self.milestone_date) - Time.parse(self.start_date)) / 1.days
-      return minus_week_ends(days)
+    faed = foreseen_actual_end_date
+    rv = if faed != '' and self.start_date != ''
+      days = (Time.parse(faed) - Time.parse(self.start_date)) / 1.days
+      minus_week_ends(days)
     else
-      return gantt_duration  
+      gantt_duration  
     end
+    rv = 1 if rv < 1
+    rv
   end
 
   def minus_week_ends(days)
@@ -124,6 +127,20 @@ class Request < ActiveRecord::Base
   def gantt_duration
     (self.workload+0.5).to_i
   end
+  
+  def foreseen_actual_end_date
+    return self.end_date + " (e)" if self.end_date and self.end_date != ''
+    return self.actual_m_date + " (a)" if self.actual_m_date and self.actual_m_date != ''
+    return ""
+  end
+
+  def foreseen_end_date
+    faed = foreseen_actual_end_date
+    return faed if faed != "" 
+    return self.milestone_date + " (m)" if self.milestone_date and self.milestone_date != ''
+    return ""
+  end
+
 
 end
 

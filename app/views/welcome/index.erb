@@ -1,5 +1,5 @@
 <h2>Update DB</h2>
-<%= form_tag ({:action => 'upload'}, :multipart => true) %>
+<%= form_tag({:action => 'upload'}, :multipart => true) %>
 <p><label for="upload_file">Mantis CSV Export</label> : 
 <%= file_field 'upload', 'datafile' %>
 <%= submit_tag "Upload" %></p>
@@ -32,9 +32,10 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
 <h2>Anomalies</h2>
 
 <%= report_by("should have started", @not_started, "not_started") %>
-<%= report_by("past milestones", @past_milestones, "pastm") %>
 <%= report_by("without start date", @null_start_date, "nulls") %>
 <%= report_by("without milestone date", @null_milestones, "nullm") %>
+<%= report_by("past milestones (should be ended)", @past_milestones, "pastm") %>
+<%= report_by("ended, but no actual milestone date", @ended_without_amdate, "ended") %>
 <%= report_by("ended, but not cancelled, performed or closed", @not_performed, "ended") %>
 <%= report_by("cancelled with sdp", @sdp_cancelled, "sdp_cancelled") %>
 
