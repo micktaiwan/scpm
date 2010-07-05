@@ -11,8 +11,12 @@
 <body>
 
 <h1>EISQ Request Report</h1>
-<%= link_to('requests', :action=>'index') %>
-<%= link_to('workload schedule', :action=>'workload_schedule') %>
+
+<div id="menu_bar">
+<%= link_to('Requests', {:action=>'index'}, {:class=>'menu'}) %>
+<%= link_to('Progress', {:action=>'progress'}, {:class=>'menu'}) %>
+<%= link_to('Workload schedule', {:action=>'workload_schedule'}, {:class=>'menu'}) %>
+</div>
 
 <div id="content">
 <%= yield %>

@@ -44,6 +44,11 @@ class WelcomeController < ApplicationController
     render(:layout=>false)
   end
 
+  def progress
+    @all_mine = Request.find(:all, :conditions=>["workstream in ('EDS','EDG','EI','EM','EDC')"], :order=>"start_date")
+    @report   = Report.new(@all_mine)
+  end
+
 private
 
 =begin

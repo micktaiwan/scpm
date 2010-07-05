@@ -1,0 +1,51 @@
+<h2>Stats</h2>
+
+Total: <b><%= @report.requests.size %></b> requests<br/>
+
+<%@report.by_status { |title, rs| %>
+  <%= report_by(title, rs, "sta") %>
+<% } %>
+
+<h2>Report</h2>
+<%= report_by("All MFM", @all_mine, "all_mfm") %>
+
+
+<h2>By project name</h2>
+
+<%@report.by_project_name { |title, rs| %>
+  <%= report_by(title, rs, "by_project_name") %>
+<% } %>
+
+
+<h2>By workstream</h2>
+
+<%@report.by_workstream { |title, rs| %>
+  <%= report_by(title, rs, "wos") %>
+<% } %>
+
+<h2>By assigned</h2>
+
+<%@report.by_assigned_to { |title, rs| %>
+  <%= report_by(title, rs, "ass") %>
+<% } %>
+
+<h2>By progress</h2>
+
+<%@report.by_resolution { |title, rs| %>
+  <%= report_by(title, rs, "res") %>
+<% } %>
+
+<h2>By WP</h2>
+
+<%@report.by_work_package { |title, rs| %>
+  <%= report_by(title, rs, "wp") %>
+<% } %>
+
+<h2>By PM</h2>
+
+<%@report.by_pm { |title, rs| %>
+  <%= report_by(title.to_s, rs, "std") %>
+<% } %>
+
+<br/>
+
