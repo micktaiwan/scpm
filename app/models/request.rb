@@ -103,9 +103,9 @@ class Request < ActiveRecord::Base
 
   # taking into account the start date and the milestone date
   def real_duration
-    faed = foreseen_actual_end_date
-    rv = if faed != '' and self.start_date != ''
-      days = (Time.parse(faed) - Time.parse(self.start_date)) / 1.days
+    faed = foreseen_end_date_arr
+    rv = if faed != nil and self.start_date != ''
+      days = (Time.parse(faed[0]) - Time.parse(self.start_date)) / 1.days
       minus_week_ends(days)
     else
       gantt_duration  
@@ -128,17 +128,23 @@ class Request < ActiveRecord::Base
     (self.workload+0.5).to_i
   end
   
-  def foreseen_actual_end_date
-    return self.end_date + " (e)" if self.end_date and self.end_date != ''
-    return self.actual_m_date + " (a)" if self.actual_m_date and self.actual_m_date != ''
-    return ""
+  def foreseen_actual_end_date_arr
+    return [self.end_date, "e"] if self.end_date and self.end_date != ''
+    return [self.actual_m_date, "a"] if self.actual_m_date and self.actual_m_date != ''
+    return nil
   end
 
-  def foreseen_end_date
-    faed = foreseen_actual_end_date
-    return faed if faed != "" 
-    return self.milestone_date + " (m)" if self.milestone_date and self.milestone_date != ''
-    return ""
+  def foreseen_end_date_arr
+    faed = foreseen_actual_end_date_arr
+    return faed if faed != nil
+    return [self.milestone_date, "m"] if self.milestone_date and self.milestone_date != ''
+    return nil
+  end
+  
+  def foreseen_end_date_str
+    arr = foreseen_end_date_arr
+    return "" if arr == nil
+    return arr[0] + " (#{arr[1]})"
   end
 
 

@@ -1,0 +1,31 @@
+<% ["jpreira", "cbednarek", "gurobert", "stessier", "mdejean", "pviaud", "mmaza"].each { |resp| %>
+
+<a href='#' onclick="$('<%=resp%>').toggle();return false;"><%=resp%></a><br/>
+<br/>
+<div id='<%=resp%>' style='display:none'>
+
+Bonjour <%= resp %>,<br/>
+<br/>
+voici les anomalies (informations contradictoires) renseignées dans RMT qu'il faudrait corriger.<br/>
+<br/>
+
+<%= report_by("Devrait avoir démarré (soit la start date est à décaler, soit le progress doit être changé à in progress)", @not_started.select {|r| r.assigned_to == resp} , "not_started", true) %>
+<%= report_by("Sans start date (devrait jamais arriver)", @null_start_date.select {|r| r.assigned_to == resp}, "nulls", true) %>
+<%= report_by("Sans milestone date (ça peut être vide mais c'est rare)", @null_milestones.select {|r| r.assigned_to == resp}, "nullm", true) %>
+<%= report_by("Jalons passés (le status devrait être ended si c'est vraiment fini)", @past_milestones.select {|r| r.assigned_to == resp}, "pastm", true) %>
+<%= report_by("Ended, mais il manque la actual milestone date", @ended_without_amdate.select {|r| r.assigned_to == resp}, "ended", true) %>
+<br/>
+
+A+,<br/>
+Mickael.<br/>
+(Mail autogénéré. Plaintes à déposer auprès du geek.)<br/>
+
+<br/>
+<br/>
+<%= report_by("En cadeau, toutes  tes requêtes", @all.select {|r| r.assigned_to == resp}, "ended", true) %>
+
+</div>
+<hr>
+
+<% } %>
+

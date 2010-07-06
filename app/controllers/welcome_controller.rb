@@ -7,14 +7,12 @@ class WelcomeController < ApplicationController
     @sdp_dam = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned' and workstream in ('EDY','EA','EV', 'EDE')", Date.today()+8], :order=>"start_date")
     @not_assigned_mfm = Request.find(:all, :conditions=>["status!='assigned' and status!='cancelled' and start_date < ? and workstream in ('EDS','EDG','EI','EM','EDC')", Date.today()+15], :order=>"start_date")
     @not_assigned_dam = Request.find(:all, :conditions=>["status!='assigned' and status!='cancelled' and start_date < ? and workstream in ('EDY','EA','EV', 'EDE')", Date.today()+15], :order=>"start_date")
-    @null_start_date  = Request.find(:all, :conditions=>["start_date = '' and status='assigned'"], :order=>"start_date")
-    @null_milestones  = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress'"], :order=>"start_date")
-    @past_milestones  = Request.find(:all, :conditions=>["milestone_date != '' and milestone_date < ? and resolution!='ended'", Date.today()], :order=>"milestone_date")
-    @not_started      = Request.find(:all, :conditions=>["status='assigned' and start_date <= ? and resolution='not started'", Date.today()], :order=>"start_date")
-    @not_performed    = Request.find(:all, :conditions=>["resolution='ended' and status!='performed' and status!='closed' and status!='cancelled'", Date.today()], :order=>"milestone_date")
-    @sdp_cancelled    = Request.find(:all, :conditions=>["sdp='Yes' and status='cancelled'", Date.today()], :order=>"milestone_date")
     @all_mine         = Request.find(:all, :conditions=>["workstream in ('EDS','EDG','EI','EM','EDC')"], :order=>"start_date")
-    @ended_without_amdate = Request.find(:all, :conditions=>["status !='cancelled' and resolution='ended' and actual_m_date=''"], :order=>"start_date")
+
+    @sdp_cancelled    = Request.find(:all, :conditions=>["sdp='Yes' and status='cancelled'", Date.today()], :order=>"milestone_date")
+    @not_performed    = Request.find(:all, :conditions=>["resolution='ended' and status!='performed' and status!='closed' and status!='cancelled'", Date.today()], :order=>"milestone_date")
+
+    get_anomalies
   end
 
   def upload
@@ -48,8 +46,21 @@ class WelcomeController < ApplicationController
     @all_mine = Request.find(:all, :conditions=>["workstream in ('EDS','EDG','EI','EM','EDC')"], :order=>"start_date")
     @report   = Report.new(@all_mine)
   end
-
+  
+  def reminders
+    @all = Request.all
+    get_anomalies
+  end
+  
 private
+
+  def get_anomalies
+    @not_started      = Request.find(:all, :conditions=>["status='assigned' and start_date <= ? and resolution='not started'", Date.today()], :order=>"start_date")
+    @null_start_date  = Request.find(:all, :conditions=>["start_date = '' and status='assigned'"], :order=>"start_date")
+    @null_milestones  = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress'"], :order=>"start_date")
+    @past_milestones  = Request.find(:all, :conditions=>["milestone_date != '' and milestone_date < ? and resolution!='ended'", Date.today()], :order=>"milestone_date")
+    @ended_without_amdate = Request.find(:all, :conditions=>["status !='cancelled' and resolution='ended' and actual_m_date=''"], :order=>"start_date")
+  end
 
 =begin
   def init

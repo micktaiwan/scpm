@@ -39,6 +39,15 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
 <%= report_by("ended, but not cancelled, performed or closed", @not_performed, "ended") %>
 <%= report_by("cancelled with sdp", @sdp_cancelled, "sdp_cancelled") %>
 
+<h3>Reminders</h3>
+
+<h4>not started</h4>
+
+<% Report.new(@not_started).by_assigned_to { |title,rs| %>
+<%= report_by(title, rs, "rem_not_start") %>
+<% } %>
+
+
 <h2>By workstream</h2>
 
 <%@report.by_workstream { |title, rs| %>
