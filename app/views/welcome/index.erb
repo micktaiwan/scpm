@@ -22,7 +22,9 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
 <h2>TODO MFM</h2>
 <%= report_by("SDP", @sdp_mfm, "sdp_mfm") %>
 <%= report_by("Not assigned", @not_assigned_mfm, "not_ass_mfm") %>
+<%= report_by("Next milestones", @next_milestones, "next_milestones") %>
 <%= report_by("All MFM", @all_mine, "all_mfm") %>
+
 
 <h2>TODO DAM</h2>
 <%= report_by("SDP", @sdp_dam, "sdp_dam") %>
@@ -38,15 +40,6 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
 <%= report_by("ended, but no actual milestone date", @ended_without_amdate, "ended") %>
 <%= report_by("ended, but not cancelled, performed or closed", @not_performed, "ended") %>
 <%= report_by("cancelled with sdp", @sdp_cancelled, "sdp_cancelled") %>
-
-<h3>Reminders</h3>
-
-<h4>not started</h4>
-
-<% Report.new(@not_started).by_assigned_to { |title,rs| %>
-<%= report_by(title, rs, "rem_not_start") %>
-<% } %>
-
 
 <h2>By workstream</h2>
 
