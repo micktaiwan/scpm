@@ -56,7 +56,7 @@ class WelcomeController < ApplicationController
 private
 
   def get_anomalies
-    @not_started      = Request.find(:all, :conditions=>["status='assigned' and start_date <= ? and resolution='not started'", Date.today()], :order=>"start_date")
+    @not_started      = Request.find(:all, :conditions=>["status='assigned' and start_date <= ? and resolution!='in progress' and resolution!='ended'", Date.today()], :order=>"start_date")
     @null_start_date  = Request.find(:all, :conditions=>["start_date = '' and status='assigned'"], :order=>"start_date")
     @null_milestones  = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress'"], :order=>"start_date")
     @past_milestones  = Request.find(:all, :conditions=>["milestone_date != '' and milestone_date < ? and resolution!='ended'", Date.today()], :order=>"milestone_date")
