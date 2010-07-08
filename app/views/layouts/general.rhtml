@@ -13,10 +13,11 @@
 <h1>EISQ Quality Bundle Report</h1>
 
 <div id="menu_bar">
-<%= link_to('Requests', {:action=>'index'}, {:class=>'menu'}) %>
-<%= link_to('Reminders', {:action=>'reminders'}, {:class=>'menu'}) %>
-<%= link_to('Progress', {:action=>'progress'}, {:class=>'menu'}) %>
-<%= link_to('Workload schedule', {:action=>'workload_schedule'}, {:class=>'menu'}) %>
+<%= link_to('Projects', {:controller=>'projects', :action=>'index'}, {:class=>'menu'}) %>
+<%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>'menu'}) %>
+<%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>'menu'}) %>
+<%= link_to('Progress', {:controller=>'welcome', :action=>'progress'}, {:class=>'menu'}) %>
+<%= link_to('Workload schedule', {:controller=>'welcome', :action=>'workload_schedule'}, {:class=>'menu'}) %>
 </div>
 
 <div id="content">
