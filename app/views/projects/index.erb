@@ -1,1 +1,6 @@
-yo
+<h2>Projects</h2>
+<%= link_to('Import', :action=>'import') %>
+
+<ul>
+<%= render(:partial=>'project', :collection=>@projects) %>
+</ul>

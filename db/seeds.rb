@@ -8,7 +8,7 @@
 
 Person.destroy_all
 Company.destroy_all
-
+# Project.destroy_all
 
 companies = []
 companies << [{ :name => 'Airbus'}]
@@ -21,4 +21,5 @@ persons = []
 persons << [{ :name => 'Catherine POTTIER', :email=>'catherine.pottier@airbus.com', :company_id=>airbus.id}]
 persons << [{ :name => 'Delphine JOHAN',    :email=>'delphine.johan@airbus.com',    :company_id=>airbus.id}]
 Person.create(persons)
+
 

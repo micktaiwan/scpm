@@ -1,9 +1,8 @@
 <% ["jpreira", "cbednarek", "gurobert", "stessier", "mdejean", "pviaud", "mmaza"].each { |resp| %>
 
 <a href='#' onclick="$('<%=resp%>').toggle();return false;"><%=resp%></a><br/>
-<br/>
 <div id='<%=resp%>' style='display:none'>
-
+<br/>
 Bonjour <%= resp %>,<br/>
 <br/>
 voici les anomalies (informations contradictoires) renseignées dans RMT qu'il faudrait corriger.<br/>
@@ -19,13 +18,11 @@ voici les anomalies (informations contradictoires) renseignées dans RMT qu'il f
 A+,<br/>
 Mickael.<br/>
 (Mail autogénéré. Plaintes à déposer auprès du geek.)<br/>
-
 <br/>
 <br/>
 <%= report_by("En cadeau, toutes  tes requêtes", @all.select {|r| r.assigned_to == resp}, "ended", true) %>
-
-</div>
 <hr>
+</div>
 
 <% } %>
 

@@ -1,0 +1,10 @@
+<li>
+<%= project.workstream %> <%=link_to(project.name, :action=>'show', :id=>project.id) %> <%= project.html_status %>
+<ul>
+<%= render(:partial=>'project', :collection=>project.projects) %>
+</ul>
+<ul>
+<%= render(:partial=>'request', :collection=>project.requests) %>
+</ul>
+</li>
+

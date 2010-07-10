@@ -5,7 +5,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text    :description
       t.string  :brn
       t.string  :workstream
-      t.integer :parent, :default=>0
+      t.integer :project_id, :default=>nil
       t.integer :last_status, :default=>0
       t.timestamps
     end
@@ -15,3 +15,4 @@ class CreateProjects < ActiveRecord::Migration
     drop_table :projects
   end
 end
+

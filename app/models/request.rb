@@ -1,5 +1,7 @@
 class Request < ActiveRecord::Base
 
+  belongs_to :project
+
   Wp_index = {
   "WP1.1 - Quality Control" => 0,
   "WP1.2 - Quality Assurance" => 4,

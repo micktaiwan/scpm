@@ -1,0 +1,23 @@
+<h2><%= @project.name %> </h2>
+WS: <%= @project.workstream %><br/>
+BRN: <%= @project.brn %>
+<%= simple_format(@project.description) %><br/>
+
+Project:
+<ul>
+<%= render(:partial=>'project', :object=>@project.project) %>
+</ul>
+
+<h3>Requests</h3>
+
+<ul>
+<%= render(:partial=>'request', :collection=>@project.requests) %>
+</ul>
+
+
+<h3>Workpackages</h3>
+
+<ul>
+<%= render(:partial=>'project', :collection=>@project.projects) %>
+</ul>
+
