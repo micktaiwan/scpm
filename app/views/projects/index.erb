@@ -1,5 +1,6 @@
 <h2>Projects</h2>
-<%= link_to('Import', :action=>'import') %>
+<%= link_to('Import', :action=>'import') %><br/>
+<%= @projects.size %> projects
 
 <ul>
 <%= render(:partial=>'project', :collection=>@projects) %>
