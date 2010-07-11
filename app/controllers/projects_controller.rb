@@ -9,12 +9,37 @@ class ProjectsController < ApplicationController
     @project = Project.find(id)
   end
 
+  def edit
+    id = params['id']
+    @project = Project.find(id)
+  end
+  
+  def update
+    project = Project.find(params[:id])
+    project.update_attributes(params[:project])
+    redirect_to :action=>:show, :id=>project.id
+  end
+  
   # check request and suggest projects
   def import
     @import = []
     Request.find(:all, :conditions=>"project_id is null").each { |r|
       @import << {:id=>r.id, :project_name=>r.project_name, :summary=>r.summary}
       }
+  end
+  
+  def add_status_form
+    @project = Project.find(params[:project_id])
+    @status = Status.new
+  end
+  
+  def add_status
+    project_id = params[:status][:project_id]
+    status = Status.create(params[:status])
+    p = Project.find(project_id)
+    p.last_status = params[:status][:status]
+    p.save
+    redirect_to :action=>:show, :id=>project_id
   end
   
   # link a request to a project, based on request project_name

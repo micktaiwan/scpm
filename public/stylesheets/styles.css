@@ -39,6 +39,14 @@ a {
 ul {
   list-style-type: none;
   }
+  
+
+/* TABLES */
+
+.edit {
+  border: 0px white;
+}
+
 table, th {
   border: 1px solid black;
   font-size: 0.8em;
@@ -47,7 +55,6 @@ tr    {
   padding: 0px;
   margin: 0px;
   }  
-
 td    {
   padding: 2px;
   }  
@@ -55,6 +62,10 @@ td    {
   background: #AAA;
   font-weight: bold;
   }
+
+
+/* STATUSES */
+  
 .to_be_validated  {
   background: #AAF;
   }
@@ -74,10 +85,11 @@ td    {
   background: #AAA;
   }
 
+/* PROGRESS */
+
 .status_not_started {
   background: #FAA;
   }
-
 .status_ended {
   background: #9F9;
   }  

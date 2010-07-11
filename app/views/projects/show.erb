@@ -1,9 +1,19 @@
 <h2><%= @project.name %> </h2>
-WS: <%= @project.workstream %><br/>
-BRN: <%= @project.brn %>
-<%= simple_format(@project.description) %><br/>
+<%= @project.icon_status %>
+<%= link_to('Edit', :action=>'edit', :id=>@project.id) %>
+<%= link_to('Add status', :action=>'add_status_form', :project_id=>@project.id) %><br/>
 
-Project:
+<b>WS</b>: <%= @project.workstream %><br/>
+<b>BRN</b>: <%= @project.brn %><br/>
+<% if @project.description and @project.description!=''%>
+<%= simple_format(@project.description) %>
+<% end %>
+
+<h3>Status</h3>
+
+<%= simple_format(@project.get_status.explanation) %>
+
+<h3>Project</h3>
 <ul>
 <%= render(:partial=>'project', :object=>@project.project) %>
 </ul>

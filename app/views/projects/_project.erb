@@ -1,10 +1,11 @@
 <li>
 <%= project.workstream %> <%=link_to(project.name, :action=>'show', :id=>project.id) %> <%= project.html_status %>
-<ul>
-<%= render(:partial=>'project', :collection=>project.projects) %>
-</ul>
-<ul>
-<%= render(:partial=>'request', :collection=>project.requests) %>
+<%= link_to_function('+', "$('sub_#{project.id}').toggle();") %>
+<ul id="sub_<%=project.id%>" style="display:none;">
+  <%= render(:partial=>'project', :collection=>project.projects) %>
+  <ul>
+    <%= render(:partial=>'request', :collection=>project.requests) %>
+  </ul>
 </ul>
 </li>
 
