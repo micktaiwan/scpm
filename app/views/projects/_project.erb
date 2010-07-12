@@ -1,5 +1,7 @@
 <li>
 <%= project.workstream %> <%=link_to(project.name, :action=>'show', :id=>project.id) %> <%= project.html_status %>
+<%= link_to_remote('cut', :url=>{:action=>'cut', :id=>project.id}) %>
+<%= link_to_remote('pas', :url=>{:action=>'paste', :id=>project.id}) %>
 <%= link_to_function('+', "$('sub_#{project.id}').toggle();") %>
 <ul id="sub_<%=project.id%>" style="display:none;">
   <%= render(:partial=>'project', :collection=>project.projects) %>

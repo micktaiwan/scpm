@@ -72,6 +72,20 @@ class ProjectsController < ApplicationController
     request.save
     render(:text=>"saved")
   end
+  
+  def cut
+    session[:cut] = params[:id]
+    render(:nothing=>true)
+  end
+
+  def paste
+    to_id   = params[:id].to_i
+    from_id = session[:cut].to_i
+    from = Project.find(from_id)
+    from.project_id = to_id
+    from.save
+    render(:nothing=>true)
+  end
 
 end
 
