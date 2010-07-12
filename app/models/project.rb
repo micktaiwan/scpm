@@ -17,9 +17,9 @@ class Project < ActiveRecord::Base
   def icon_status
     case last_status
       when 0; "<img src='/images/unknown.png' align='right'>"
-      when 1; "<img src='/images/green.png' align='right'>"
-      when 2; "<img src='/images/amber.png' align='right'>"
-      when 3; "<img src='/images/red.png' align='right'>"
+      when 1; "<img src='/images/green.gif' align='left'>"
+      when 2; "<img src='/images/amber.gif' align='left'>"
+      when 3; "<img src='/images/red.gif' align='left'>"
     end  
   end
 

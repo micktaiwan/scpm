@@ -23,8 +23,8 @@ class ProjectsController < ApplicationController
   # check request and suggest projects
   def import
     @import = []
-    Request.find(:all, :conditions=>"project_id is null").each { |r|
-      @import << {:id=>r.id, :project_name=>r.project_name, :summary=>r.summary}
+    Request.find(:all, :conditions=>"project_id is null", :order=>"workstream").each { |r|
+      @import << {:id=>r.id, :project_name=>r.project_name, :summary=>r.summary, :workstream=>r.workstream}
       }
   end
   

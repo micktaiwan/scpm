@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(:version => 20100711121000) do
     t.string   "sdp"
     t.string   "pm"
     t.string   "milestone_date"
+    t.string   "end_date"
     t.string   "project_name"
     t.string   "actual_m_date"
-    t.string   "end_date"
     t.integer  "project_id"
   end
 

@@ -148,7 +148,26 @@ class Request < ActiveRecord::Base
     return "" if arr == nil
     return arr[0] + " (#{arr[1]})"
   end
+  
+  def sanitized_status
+    sanitize(self.status)
+  end
+  
+  def sanitized_resolution
+    sanitize(self.resolution)
+  end
 
+
+private
+
+  def sanitize(name)
+    name = name.downcase
+    name.gsub!("/","")
+    name.gsub!("  ","_")
+    name.gsub!(" ","_")
+    name.gsub!("-","_")
+    name
+  end
 
 end
 

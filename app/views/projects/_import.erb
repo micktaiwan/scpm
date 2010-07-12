@@ -1,5 +1,6 @@
 <li id="req_<%= import[:id] %>">
 <%= link_to_remote('link', :url=>{:action=>'link', :id=>import[:id], :project_name=>import[:project_name]}, :update=>"req_#{import[:id]}") %>
+<%= import[:workstream] %>
 <%= import[:summary] %>
 </li>
 
