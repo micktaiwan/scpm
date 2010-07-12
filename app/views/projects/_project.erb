@@ -1,8 +1,8 @@
 <li>
+<%= link_to_function(image_tag('expand.gif'), "$('sub_#{project.id}').toggle();") %>
 <%= project.workstream %> <%=link_to(project.name, :action=>'show', :id=>project.id) %> <%= project.html_status %>
-<%= link_to_remote('cut', :url=>{:action=>'cut', :id=>project.id}) %>
-<%= link_to_remote('pas', :url=>{:action=>'paste', :id=>project.id}) %>
-<%= link_to_function('+', "$('sub_#{project.id}').toggle();") %>
+<%= link_to_remote(image_tag('cut.png'), :url=>{:action=>'cut', :id=>project.id}) %>
+<%= link_to_remote(image_tag('paste.png'), :url=>{:action=>'paste', :id=>project.id}) %>
 <ul id="sub_<%=project.id%>" style="display:none;">
   <%= render(:partial=>'project', :collection=>project.projects) %>
   <ul>

@@ -14,9 +14,11 @@
 <%= simple_format(@project.get_status.explanation) %>
 
 <h3>Project</h3>
+<% if @project.project %>
 <ul>
 <%= render(:partial=>'project', :object=>@project.project) %>
 </ul>
+<% end %>
 
 <h3>Requests</h3>
 
