@@ -8,9 +8,9 @@ class Project < ActiveRecord::Base
   def html_status
     case last_status
       when 0; "<b>unknown</b>"
-      when 1; "green"
-      when 2; "amber"
-      when 3; "<b>red</b>"
+      when 1; "<span class='status green'>green</span>"
+      when 2; "<span class='status amber'>amber</span>"
+      when 3; "<span class='status red'>red</span>"
     end  
   end
 
@@ -29,5 +29,21 @@ class Project < ActiveRecord::Base
     s
   end
 
+  # look at sub projects status and calcul its own
+  def update_status
+    status = 0
+    self.projects.each { |p|
+      status = p.last_status if status < p.last_status
+      }
+    self.last_status = status
+    save
+  end
+  
+  def full_name
+    rv = self.name
+    return self.project.full_name + " > " + rv if self.project
+    rv
+  end
+  
 end
 

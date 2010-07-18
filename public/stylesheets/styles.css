@@ -85,6 +85,21 @@ td    {
   background: #AAA;
   }
 
+
+.status {
+  font-weight:bold;
+  }
+.status.green {
+  color: #0A0;
+  }
+.status.amber {
+  color: #A50;
+  }
+.status.red {
+  color: #A00;
+  }
+
+
 /* PROGRESS */
 
 .status_not_started {
@@ -93,3 +108,5 @@ td    {
 .status_ended {
   background: #9F9;
   }  
+  
+  

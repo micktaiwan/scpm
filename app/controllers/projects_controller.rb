@@ -7,6 +7,7 @@ class ProjectsController < ApplicationController
   def show
     id = params['id']
     @project = Project.find(id)
+    @status = @project.get_status
   end
 
   def edit
@@ -39,6 +40,7 @@ class ProjectsController < ApplicationController
     p = Project.find(project_id)
     p.last_status = params[:status][:status]
     p.save
+    p.project.update_status if p.project
     redirect_to :action=>:show, :id=>project_id
   end
   
@@ -59,7 +61,7 @@ class ProjectsController < ApplicationController
       project.save
     end
 
-    wp = Project.find_by_name(workpackage_name)
+    wp = Project.find_by_name(workpackage_name, :conditions=>["project_id=?",project.id])
     if not wp
       wp = Project.create(:name=>workpackage_name)
       wp.workstream = request.workstream
