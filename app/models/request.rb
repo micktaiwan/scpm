@@ -8,6 +8,7 @@ class Request < ActiveRecord::Base
   "WP2 - Quality for Maintenance" => 8,
   "WP3 - Modeling" => 9,
   "WP4 - Surveillance" => 10,
+  "WP4.1 - Surveillance Audit" => 10,
   "WP4.2 - Surveillance Root cause" => 10,
   "WP5 - Change Accompaniment" => 11,
   "WP6.1 - Coaching PP" => 12,
