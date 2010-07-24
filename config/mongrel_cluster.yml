@@ -1,9 +1,9 @@
 --- 
-address: 127.0.0.1
+#address: 127.0.0.1
 log_file: log/mongrel.log
 port: 8110
 cwd: /home/mick/projects/eisq/current/
 environment: production
-pid_file: tmp/pids/mongrel.pid
+pid_file: /home/mick/projects/eisq/current/tmp/pids/mongrel.pid
 servers: 3
 
