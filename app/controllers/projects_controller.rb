@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
 
   def index
-    @projects = Project.find(:all, :conditions=>"project_id is null", :order=>'workstream')
+    @projects = Project.find(:all, :conditions=>"project_id is null", :order=>'workstream, name')
   end
   
   def show

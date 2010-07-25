@@ -3,34 +3,32 @@ class Request < ActiveRecord::Base
   belongs_to :project
 
   Wp_index = {
-  "WP1.1 - Quality Control" => 0,
-  "WP1.2 - Quality Assurance" => 4,
-  "WP2 - Quality for Maintenance" => 8,
-  "WP3 - Modeling" => 9,
-  "WP4 - Surveillance" => 10,
-  "WP4.1 - Surveillance Audit" => 10,
+  "WP1.1 - Quality Control" 		=> 0,
+  "WP1.2 - Quality Assurance" 		=> 4,
+  "WP2 - Quality for Maintenance" 	=> 8,
+  "WP3 - Modeling" 					=> 9,
+  "WP4 - Surveillance" 				=> 10,
+  "WP4.1 - Surveillance Audit" 		=> 10,
   "WP4.2 - Surveillance Root cause" => 10,
-  "WP5 - Change Accompaniment" => 11,
-  "WP6.1 - Coaching PP" => 12,
-  "WP6.2 - Coaching BRD" => 13
+  "WP5 - Change Accompaniment" 		=> 11,
+  "WP6.1 - Coaching PP" 			=> 12,
+  "WP6.2 - Coaching BRD" 			=> 13
   }
 
   Comp_index = {
-  "Easy" => 0,
-  "Medium" => 1,
-  "Difficult" => 2
+  "Easy" 		=> 0,
+  "Medium" 		=> 1,
+  "Difficult" 	=> 2
   }
 
   Milestone_index = {
-  "M1-M3" => 0,
-  "M3-M5" => 1,
-  "M5-M10" => 2,
-  "Post-M10" => 3,
-  "N/A" => 0,
+  "M1-M3" 		=> 0,
+  "M3-M5" 		=> 1,
+  "M5-M10" 		=> 2,
+  "Post-M10" 	=> 3,
+  "N/A" 		=> 0,
   }
 
-  #rows, cols = 8, 3
-  #Loads = Array.new(rows) { Array.new(cols) }
   Loads = [
     # WP 1.1
     [4.5,5.25,7.75],
@@ -86,7 +84,7 @@ class Request < ActiveRecord::Base
   end
   
   def workload
-    return 0 if self.status == "cancelled" or self.status == "feedback"
+    return 0 if self.status == "cancelled" or self.status == "feedback" or self.status == "performed" or self.resolution == "ended"
     Loads[wp_index(self.work_package)+milestone_index(self.milestone)][comp_index(self.complexity)]
   end
 
