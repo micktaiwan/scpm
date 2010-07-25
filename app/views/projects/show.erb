@@ -1,6 +1,6 @@
-<h2><%= @project.full_name %> </h2>
 <%= @project.icon_status %>
-<%= link_to('Edit', :action=>'edit', :id=>@project.id) %>
+<h2><%= @project.full_name %> </h2>
+<%= link_to('Edit project', :action=>'edit', :id=>@project.id) %>
 <%= link_to('Add status', :action=>'add_status_form', :project_id=>@project.id) %><br/>
 
 <b>WS</b>: <%= @project.workstream %><br/>
@@ -8,14 +8,19 @@
 <% if @project.description and @project.description!=''%>
 <%= simple_format(@project.description) %>
 <% end %>
+<br/>
 
 <h3>Status</h3>
-<% if @status.created_at %>
-<%= @status.created_at %>
-(<%= time_ago_in_words(@status.created_at) %>)
-<% end %>
 
+<div class="status_explanation">
+<% if @status.created_at %>
+<div class="status_date">
+<%= @status.created_at %>
+(<b><%= time_ago_in_words(@status.created_at) %></b>)
+</div>
+<% end %>
 <%= simple_format(@status.explanation) %>
+</div>
 
 <h3>Project</h3>
 <% if @project.project %>

@@ -29,6 +29,26 @@ class ProjectsController < ApplicationController
       }
   end
   
+  # for each request rename project if necessary
+  def check
+    t = ""
+    Request.find(:all, :conditions=>"project_id is not null").each { |r|
+      if r.workpackage_name != r.project.name
+        t << "#{r.workpackage_name} != #{r.project.name}<br/>" 
+        project = Project.find_by_name(r.workpackage_name)
+        if not project
+          r.project.name = r.workpackage_name
+          r.project.save
+        else
+          r.project_id = project.id
+          r.save  
+        end        
+      end    
+      }
+    t << "<br/><a href='/projects'>back to projects</a>"
+    render(:text=>t)  
+  end
+  
   def add_status_form
     @project = Project.find(params[:project_id])
     @status = Status.new
@@ -50,9 +70,8 @@ class ProjectsController < ApplicationController
     request_id    = params[:id]
     request = Request.find(request_id)
     project_name  = request.project_name
-    workpackage_name = request.summary.split(/\[([^\]]*)\]/)[3]
-    workpackage_name = project_name if workpackage_name == nil or workpackage_name == ""
-    brn = request.summary.split(/\[([^\]]*)\]/)[5]
+    workpackage_name = request.workpackage_name
+    brn = request.brn
 
     project = Project.find_by_name(project_name)
     if not project

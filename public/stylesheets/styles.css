@@ -20,16 +20,18 @@ h2 {
 a {
   text-decoration:none;
   }
+
 #menu_bar {
   margin: 10px 0 0 10px;
   }
 .menu {
-  color:white;
-  border: 1px solid white;
+  color:black;
+  border: 1px solid black;
   padding: 2px;
   margin: 2px;
-  background: #AA6;
+  background: #FFF;
   }
+
 #content {
   margin:  10px;
   padding: 0 5px 5px 15px;
@@ -97,6 +99,19 @@ td    {
   }
 .status.red {
   color: #A00;
+  }
+
+.status_explanation {
+  border: solid 1px #444;
+  background: #EEF;
+  padding: 10px;
+  }
+
+.status_date {
+  border-bottom: solid 1px #777;
+  background: #DDF;
+  margin: -10px;
+  padding: 2px;
   }
 
 

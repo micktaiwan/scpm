@@ -156,7 +156,16 @@ class Request < ActiveRecord::Base
     sanitize(self.resolution)
   end
 
-
+  def workpackage_name
+    wpn = self.summary.split(/\[([^\]]*)\]/)[3]
+    wpn = self.project_name if wpn == nil or wpn == ""
+    wpn
+  end
+  
+  def brn
+    self.summary.split(/\[([^\]]*)\]/)[5]
+  end  
+  
 private
 
   def sanitize(name)
