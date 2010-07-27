@@ -1,0 +1,6 @@
+<%= error_messages_for :person %>
+<% form_for :@person, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>

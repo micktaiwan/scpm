@@ -29,7 +29,7 @@ class Project < ActiveRecord::Base
     s
   end
 
-  # look at sub projects status and calcul its own
+  # look at sub projects status and calculates its own
   def update_status
     status = 0
     self.projects.each { |p|

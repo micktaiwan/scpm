@@ -1,0 +1,14 @@
+<p><%= label_tag 'name' %>
+<%= text_field :person, :name %></p>
+
+<p><%= label_tag 'company' %>
+<%= select (:person, :company_id, @companies.map {|u| [u.name,u.id]}) %></p>
+
+<p><%= label_tag 'email' %>
+<%= text_field :person, :email %></p>
+
+<p><%= label_tag 'phone' %>
+<%= text_field :person, :phone %></p>
+
+<p><%= label_tag 'rmt_user' %>
+<%= text_field :person, :rmt_user %></p>

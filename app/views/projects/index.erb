@@ -3,6 +3,25 @@
 <%= link_to('Check', :action=>'check') %>
 <br/>
 
+<% form_tag(:action=>'filter') do %>
+<table>
+<tr valign="top"><td>
+<b>Status</b><br/>
+<%= check_box_tag('unknown') %> unknown<br/>
+<%= check_box_tag('green') %> green<br/>
+<%= check_box_tag('amber') %> amber<br/>
+<%= check_box_tag('red') %> red<br/>
+</td><td>
+<b>Workstreams</b><br/>
+<% for workstream in @workstreams %>
+  <%= check_box_tag(workstream) %> <%= workstream %><br/>
+<% end %>
+</td></tr>
+</table>
+<%= submit_tag('Filter (todo)') %>
+<% end %>
+<br/>
+
 <%= @projects.size %> projects
 
 <ul>

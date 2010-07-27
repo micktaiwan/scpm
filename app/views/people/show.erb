@@ -1,0 +1,7 @@
+<h2><%=@person.name%></h2>
+
+
+<h3>Assigned requests</h3>
+
+<%= render (:partial=>'people/request', :collection=>@requests) %>
+<% if @requests.size == 0 %>none<% end %>

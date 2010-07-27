@@ -1,8 +1,17 @@
 class ProjectsController < ApplicationController
 
   def index
-    @projects = Project.find(:all, :conditions=>"project_id is null", :order=>'workstream, name')
+    cond = "project_id is null"
+    cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
+    @workstreams = Project.all.collect{|p| p.workstream}.uniq.sort
   end
+  
+  def filter
+    #session[:project_filter_workstream] = "('EDG', 'EDS', 'EI')"
+    redirect_to(:action=>'index')
+  end
+  
   
   def show
     id = params['id']
@@ -34,14 +43,23 @@ class ProjectsController < ApplicationController
     t = ""
     Request.find(:all, :conditions=>"project_id is not null").each { |r|
       if r.workpackage_name != r.project.name
-        t << "#{r.workpackage_name} != #{r.project.name}<br/>" 
+        t << "#{r.workpackage_name} (new) != #{r.project.name} (old)<br/>" 
         project = Project.find_by_name(r.workpackage_name)
         if not project
           r.project.name = r.workpackage_name
           r.project.save
         else
+          old_id = r.project_id
           r.project_id = project.id
-          r.save  
+          r.save
+          old_project = Project.find(old_id)
+          old_project.statuses.each { |s|
+            s.project_id = project.id
+            s.save
+            }
+          project.update_status
+          old_project.name = "to delete"
+          old.project.update_status # saves
         end        
       end    
       }
