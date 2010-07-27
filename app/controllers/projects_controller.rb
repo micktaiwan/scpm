@@ -9,6 +9,8 @@ class ProjectsController < ApplicationController
   
   def filter
     #session[:project_filter_workstream] = "('EDG', 'EDS', 'EI')"
+    ws = ""
+    pws = params[:ws]
     redirect_to(:action=>'index')
   end
   
