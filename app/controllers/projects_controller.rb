@@ -61,7 +61,7 @@ class ProjectsController < ApplicationController
             }
           project.update_status
           old_project.name = "to delete"
-          old.project.update_status # saves
+          old_project.update_status # saves
         end        
       end    
       }
