@@ -44,10 +44,12 @@ class WelcomeController < ApplicationController
     render(:layout=>false)
   end
 
+=begin
   def progress
     @all_mine = Request.find(:all, :conditions=>["workstream in ('EDS','EDG','EI','EM','EDC')"], :order=>"start_date")
     @report   = Report.new(@all_mine)
   end
+=end
   
   def reminders
     @all = Request.all
