@@ -20,6 +20,12 @@ h2 {
 a {
   text-decoration:none;
   }
+.btnlnk {
+  border: 1px solid #ABC;
+  padding: 0px;
+  margin: 0px;
+  background: #CDF;
+}
 
 #menu_bar {
   margin: 10px 0 0 10px;

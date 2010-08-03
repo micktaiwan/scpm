@@ -1,3 +1,4 @@
-<%= person.company_id %>
+<%= link_to('Edit', {:action=>'edit', :id=>person.id},{:class=>"btnlnk"}) %>
+<% if person.company %><%= person.company.name %><% else %>???<% end %>
 <%= link_to(person.name, :action=>'show', :id=>person.id) %>
 <br/>

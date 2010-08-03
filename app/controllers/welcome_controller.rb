@@ -13,6 +13,7 @@ class WelcomeController < ApplicationController
     @not_performed    = Request.find(:all, :conditions=>["resolution='ended' and status!='performed' and status!='closed' and status!='cancelled'", Date.today()], :order=>"milestone_date")
   
     @next_milestones =  Request.find(:all, :conditions=>["resolution != 'ended' and  (milestone_date !='' and milestone_date <= ?)", Date.today()+10], :order=>"milestone_date")
+    @special =  Request.find(:all, :conditions=>["work_package in ('WP1.1 - Quality Control', 'WP1.2 - Quality Assurance') and status='new' and workstream = 'EDY'"], :order=>"milestone_date")
     get_anomalies
   end
 

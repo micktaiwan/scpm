@@ -1,6 +1,6 @@
 class Person < ActiveRecord::Base
 
-  has_one :company
+  belongs_to :company
 
   def requests
     return [] if self.rmt_user == "" or self.rmt_user == nil
