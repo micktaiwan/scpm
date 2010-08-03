@@ -20,7 +20,7 @@ class PeopleController < ApplicationController
   end
   
   def show
-    @people = Person.find(:all, :order=>"company_id, name")
+    @people = Person.find(:all, :order=>"name")
     id            = params[:id]
     @person       = Person.find(id)
     @requests     = @person.requests

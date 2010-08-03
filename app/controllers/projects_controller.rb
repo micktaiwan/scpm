@@ -3,14 +3,26 @@ class ProjectsController < ApplicationController
   def index
     cond = "project_id is null"
     cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
     @workstreams = Project.all.collect{|p| p.workstream}.uniq.sort
   end
   
   def filter
-    #session[:project_filter_workstream] = "('EDG', 'EDS', 'EI')"
-    ws = ""
     pws = params[:ws]
+    if pws == nil
+      session[:project_filter_workstream] = nil
+    else
+      session[:project_filter_workstream] = "(#{pws.map{|t| "'#{t}'"}.join(',')})"
+    end
+
+    pst = params[:st]
+    if pst == nil
+      session[:project_filter_status] = nil
+    else
+      session[:project_filter_status] = "(#{pst.map{|t| "'#{t}'"}.join(',')})"
+    end
+
     redirect_to(:action=>'index')
   end
   

@@ -47,7 +47,13 @@ a {
 ul {
   list-style-type: none;
   }
-  
+label {
+  float: left;
+  text-align: right;
+  width:70px;
+  font-weight: bold;
+  padding: 5px;
+  }  
 
 /* TABLES */
 

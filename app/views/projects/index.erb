@@ -2,27 +2,29 @@
 <%= link_to('Import', {:action=>'import'},{:class=>"btnlnk"}) %>
 <%= link_to('Check', {:action=>'check'},{:class=>"btnlnk"}) %>
 <br/>
-
+<br/>
+<%= @projects.size %> projects<br/>
+<%= link_to_function('filters', "$('filters').toggle();") %>
+<div id="filters" style="display:none;">
 <% form_tag(:action=>'filter') do %>
 <table>
 <tr valign="top"><td>
 <b>Status</b><br/>
-<%= check_box_tag('unknown') %> unknown<br/>
-<%= check_box_tag('green') %> green<br/>
-<%= check_box_tag('amber') %> amber<br/>
-<%= check_box_tag('red') %> red<br/>
+<%= check_box_tag('st[]', 0) %> unknown<br/>
+<%= check_box_tag('st[]', 1) %> green<br/>
+<%= check_box_tag('st[]', 2) %> amber<br/>
+<%= check_box_tag('st[]', 3) %> red<br/>
 </td><td>
 <b>Workstreams</b><br/>
 <% for workstream in @workstreams %>
-  <%= check_box_tag(workstream) %> <%= workstream %><br/>
+  <%= check_box_tag('ws[]',workstream) %> <%= workstream %><br/>
 <% end %>
 </td></tr>
 </table>
 <%= submit_tag('Filter (todo)') %>
 <% end %>
 <br/>
-
-<%= @projects.size %> projects
+</div>
 
 <ul>
 <%= render(:partial=>'project', :collection=>@projects) %>
