@@ -140,5 +140,10 @@ class ProjectsController < ApplicationController
     render(:nothing=>true)
   end
 
+  def destroy
+    Project.find(params[:id].to_i).destroy
+    render(:nothing=>true)
+  end
+  
 end
 

@@ -54,6 +54,9 @@ label {
   font-weight: bold;
   padding: 5px;
   }  
+strong {
+  color:red;
+}
 
 /* TABLES */
 

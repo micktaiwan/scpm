@@ -1,9 +1,9 @@
 class Project < ActiveRecord::Base
 
   belongs_to  :project
-  has_many    :projects, :order=>'name'
-  has_many    :requests
-  has_many    :statuses
+  has_many    :projects, :order=>'name', :dependent=>:destroy
+  has_many    :requests, :dependent=>:nullify
+  has_many    :statuses, :dependent => :destroy
 
   def html_status
     case last_status
