@@ -6,6 +6,9 @@ class Person < ActiveRecord::Base
     return [] if self.rmt_user == "" or self.rmt_user == nil
     Request.find(:all, :conditions => "assigned_to='#{self.rmt_user}'", :order=>"workstream, project_name")
   end
-  
-end
 
+  def load
+    requests.inject(0.0) { |sum, r| sum + r.workload}
+  end
+    
+end
