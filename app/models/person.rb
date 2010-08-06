@@ -11,4 +11,16 @@ class Person < ActiveRecord::Base
     requests.inject(0.0) { |sum, r| sum + r.workload}
   end
     
+  def update_timeline
+     File.open("#{RAILS_ROOT}/public/data/timeline_#{self.id}.xml", "w") { |f|
+      requests.each { |r|
+        f << "<data>"
+        f << "<event start='#{Date.parse(r.gantt_start_date)}' title='#{r.project.name}' link='http://toulouse.sqli.com/EMN/'>"
+        f << "#{r.summary}"
+        f << "</event>"
+        f << "</data>\n"
+        }
+      }
+  end
+    
 end

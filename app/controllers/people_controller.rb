@@ -23,6 +23,7 @@ class PeopleController < ApplicationController
     @people = Person.find(:all, :order=>"name")
     id            = params[:id]
     @person       = Person.find(id)
+    @person.update_timeline
     @requests     = @person.requests
   end
   

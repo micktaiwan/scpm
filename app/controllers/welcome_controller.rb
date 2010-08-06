@@ -2,7 +2,7 @@ class WelcomeController < ApplicationController
 
   def index
     @report = Report.new(Request.all)
-    @last = Request.find(:all, :limit=>5, :order=>"updated_at desc")
+    @last = Request.find(:all, :conditions=>["updated_at >= ?", Date.today()], :order=>"updated_at desc")
     @sdp_mfm = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned' and workstream in ('EDS','EDG','EI','EM','EDC')", Date.today()+8], :order=>"start_date")
     @sdp_dam = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned' and workstream in ('EDY','EA','EV', 'EDE')", Date.today()+8], :order=>"start_date")
     @not_assigned_mfm = Request.find(:all, :conditions=>["status!='performed' and status!='assigned' and status!='cancelled' and start_date < ? and workstream in ('EDS','EDG','EI','EM','EDC')", Date.today()+15], :order=>"start_date")

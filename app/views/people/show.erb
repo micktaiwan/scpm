@@ -1,10 +1,45 @@
 <%= render(:partial=>'person2', :collection=>@people) %>
 
-
 <h2><%=@person.name%></h2>
-
 
 <h3>Assigned requests</h3>
 
 <%= render(:partial=>'people/request', :collection=>@requests) %>
 <% if @requests.size == 0 %>none<% end %>
+
+<h3>Schedule</h3>
+
+<div id="my-timeline" style="height: 400px; border: 1px solid #aaa"></div>
+<script>
+function onLoad() {
+  var eventSource = new Timeline.DefaultEventSource();
+  var bandInfos = [
+   Timeline.createBandInfo({
+      eventSource:    eventSource,   
+      width:          "75%", 
+      intervalUnit:   Timeline.DateTime.WEEK, 
+      intervalPixels: 100
+   }),
+   Timeline.createBandInfo({
+      eventSource:    eventSource,   
+      width:          "25%", 
+      intervalUnit:   Timeline.DateTime.MONTH, 
+      intervalPixels: 200
+   })
+  ];
+  bandInfos[1].syncWith = 0;
+  bandInfos[1].highlight = true; 
+  tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
+  Timeline.loadXML("/Data/timeline_<%=@person.id%>.xml", function(xml, url) { eventSource.loadXML(xml, url); });  
+  }
+
+addLoadEvent(onLoad);
+window.onresize=onResize;
+</script>
+<noscript>
+This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
+</noscript>
+
+<br/>
+<br/>
+<br/>

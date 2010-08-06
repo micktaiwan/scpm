@@ -2,6 +2,14 @@
 <% if person.company %><%= person.company.name %><% else %>???<% end %>
 <%= link_to(person.name, :action=>'show', :id=>person.id) %>
 
-<%= person.load %>
+<%
+  nb = person.requests.size
+  l  = person.load
+  a = (l/nb).to_s[0..3]
+%>
+
+<b>nb</b>: <%= nb %>
+<b>load</b>: <%= l %>
+<b>average</b>: <%= a %>
 
 <br/>
