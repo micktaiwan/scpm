@@ -15,7 +15,7 @@ class Person < ActiveRecord::Base
      File.open("#{RAILS_ROOT}/public/data/timeline_#{self.id}.xml", "w") { |f|
       f << "<data>\n"
       requests.each { |r|
-        f << "<event start='#{my_date(r.gantt_start_date)}' end='#{my_date(r.my_end_date)}' title='#{h(r.summary)}' link='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id}' isDuration='true'>"
+        f << "<event start='#{my_date(r.gantt_start_date)}' end='#{my_date(r.my_end_date)}' title='#{h(r.summary)}' link='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}' isDuration='true'>"
         f << "#{r.project ? h(r.project.name) : 'no project name'}"
         f << "</event>\n"
         }
