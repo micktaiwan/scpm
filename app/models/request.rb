@@ -148,6 +148,12 @@ class Request < ActiveRecord::Base
     return arr[0] + " (#{arr[1]})"
   end
   
+  def my_end_date
+    f = foreseen_end_date_arr
+    return f[0] if f
+    return (Date.parse(gantt_start_date) + real_duration).to_s
+  end
+  
   def sanitized_status
     sanitize(self.status)
   end
