@@ -140,10 +140,13 @@ class ProjectsController < ApplicationController
 
   def paste
     to_id   = params[:id].to_i
-    from_id = session[:cut].to_i
-    from = Project.find(from_id)
-    from.project_id = to_id
-    from.save
+    cut_id  = session[:cut].to_i
+    cut     = Project.find(cut_id)
+    from_id = cut.project_id 
+    cut.project_id = to_id
+    cut.save
+    cut.update_status    
+    Project.find(from_id).update_status if from_id
     render(:nothing=>true)
   end
 

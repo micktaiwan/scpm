@@ -34,15 +34,17 @@ class Project < ActiveRecord::Base
     days_ago(get_status.updated_at)
   end
   
-  def update_status(s)
-    self.last_status = s
-    save
+  def update_status(s = nil)
+    if s
+      self.last_status = s
+      save
+    end  
     project.propagate_status if self.project
   end
 
   # look at sub projects status and calculates its own
   def propagate_status
-    status = 0
+    status = self.last_status || 0
     self.projects.each { |p|
       status = p.last_status if status < p.last_status
       }
