@@ -33,13 +33,26 @@ class ProjectsController < ApplicationController
     id = params['id']
     @project = Project.find(id)
   end
-  
+
+  def edit_status
+    id = params['id']
+    @status = Status.find(id)
+    @project = @status.project
+  end
+
   def update
     project = Project.find(params[:id])
     project.update_attributes(params[:project])
     redirect_to :action=>:show, :id=>project.id
   end
   
+  def update_status
+    status = Status.find(params[:id])
+    status.update_attributes(params[:status])
+    status.project.update_status(params[:status][:status])
+    redirect_to :action=>:show, :id=>status.project_id
+  end
+
   # check request and suggest projects
   def import
     @import = []
@@ -86,9 +99,7 @@ class ProjectsController < ApplicationController
     project_id = params[:status][:project_id]
     status = Status.create(params[:status])
     p = Project.find(project_id)
-    p.last_status = params[:status][:status]
-    p.save
-    p.project.update_status if p.project
+    p.update_status(params[:status][:status])
     redirect_to :action=>:show, :id=>project_id
   end
   

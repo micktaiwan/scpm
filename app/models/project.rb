@@ -29,8 +29,19 @@ class Project < ActiveRecord::Base
     s
   end
 
+  def last_status_date
+    #time_ago_in_words(get_status.updated_at)
+    days_ago(get_status.updated_at)
+  end
+  
+  def update_status(s)
+    self.last_status = s
+    save
+    project.propagate_status if self.project
+  end
+
   # look at sub projects status and calculates its own
-  def update_status
+  def propagate_status
     status = 0
     self.projects.each { |p|
       status = p.last_status if status < p.last_status
@@ -45,5 +56,12 @@ class Project < ActiveRecord::Base
     rv
   end
   
+  
+private
+
+  def days_ago(date_time)
+    return "" if date_time == nil
+    Date.today() - Date.parse(date_time.to_s)
+  end
 end
 

@@ -4,6 +4,7 @@
 <%=link_to(project.name, :action=>'show', :id=>project.id) %>
 ( <b><%= project.projects.size + project.requests.size %></b> )
 <%= project.html_status %>
+<% days = project.last_status_date; if days != "" %>(<%= days %> days)<% end %>
 <%= link_to_remote(image_tag('cut.png'), :url=>{:action=>'cut', :id=>project.id}) %>
 <%= link_to_remote(image_tag('paste.png'), :url=>{:action=>'paste', :id=>project.id}) %>
 <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>project.id}, :confirm=>"Sure?", :success=>"$('p_#{project.id}').hide();") %>

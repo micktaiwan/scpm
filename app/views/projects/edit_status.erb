@@ -1,0 +1,11 @@
+<h2><%= @project.name %> Status</h2>
+
+<strong>You should add a new status rather than edit an old one unless it is a minor edit</strong>
+
+<%= error_messages_for :status %>
+<% form_for @status, :url=>{:action=>'update_status', :id=>@status.id} do |f| -%>
+  <%= render(:partial => 'status_form') %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'send' %></p>
+<% end -%>
+
