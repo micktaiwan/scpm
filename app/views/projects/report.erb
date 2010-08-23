@@ -1,0 +1,8 @@
+<%= @projects.size %> projects
+<% if(session[:project_filter_workstream] != nil or session[:project_filter_status]) %>(<strong>filtered</strong>)
+<% end %>
+<br/>
+
+<ul>
+<%= render(:partial=>'report', :collection=>@projects) %>
+</ul>

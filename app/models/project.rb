@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
 
   def html_status
     case last_status
-      when 0; "<b>unknown</b>"
+      when 0; "<span class='status unknown'>unknown</span>"
       when 1; "<span class='status green'>green</span>"
       when 2; "<span class='status amber'>amber</span>"
       when 3; "<span class='status red'>red</span>"

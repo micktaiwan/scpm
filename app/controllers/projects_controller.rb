@@ -1,23 +1,19 @@
 class ProjectsController < ApplicationController
 
   def index
-    cond = "project_id is null"
-    cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
-    @workstreams = Project.all.collect{|p| p.workstream}.uniq.sort
+    get_projects
   end
   
   def filter
     pws = params[:ws]
-    if pws == nil
+    if not pws
       session[:project_filter_workstream] = nil
     else
       session[:project_filter_workstream] = "(#{pws.map{|t| "'#{t}'"}.join(',')})"
     end
 
     pst = params[:st]
-    if pst == nil
+    if not pst
       session[:project_filter_status] = nil
     else
       session[:project_filter_status] = "(#{pst.map{|t| "'#{t}'"}.join(',')})"
@@ -145,5 +141,19 @@ class ProjectsController < ApplicationController
     render(:nothing=>true)
   end
   
+  def report
+    get_projects
+    render(:layout=>'report')
+  end
+  
+private
+  
+  def get_projects
+    cond = "project_id is null"
+    cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
+    @workstreams = Project.all.collect{|p| p.workstream}.uniq.sort
+  end
 end
 

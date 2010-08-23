@@ -1,0 +1,19 @@
+<li class="report_project">
+<div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= subreport.html_status %></div>
+<ul>
+<% status = subreport.get_status
+  if status.status != 0 %>
+Status:<br/>
+<ul>
+  <%= simple_format(status.explanation) %>
+</ul>
+<% end %>
+  <% if subreport.requests.size > 0 %>
+  Requests:
+  <ul>
+    <%= render(:partial=>'request', :collection=>subreport.requests) %>
+  </ul>
+  <% end %>
+  <%= render(:partial=>'subreport', :collection=>subreport.projects) %>
+</ul>
+</li>

@@ -1,0 +1,126 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  font-size: 0.8em;
+  }
+h1 {
+  margin: 20px 0 0 0;
+  padding: 0;
+}
+
+h2 {
+  margin: 10px 0 5px -15px;
+  padding: 0 0 0 15px;
+}
+
+#content {
+  margin:  10px;
+  padding: 0 5px 5px 15px;
+}
+ul {
+  list-style-type: none;
+  }
+label {
+  float: left;
+  text-align: right;
+  width:100px;
+  font-weight: bold;
+  padding: 5px;
+  }  
+strong {
+  color:red;
+}
+
+/* TABLES */
+
+.edit {
+  border: 0px white;
+}
+
+table, th {
+  border: 1px solid black;
+  font-size: 0.8em;
+  }  
+tr    {
+  padding: 0px;
+  margin: 0px;
+  }  
+td    {
+  padding: 2px;
+  }  
+.theader  {
+  background: #AAA;
+  font-weight: bold;
+  }
+
+
+/* STATUSES */
+  
+.to_be_validated  {
+  background: #AAF;
+  }
+.new  {
+  background: #FAA;
+  }
+.assigned {
+  background: #DFD;
+  }
+.acknowledged {
+  background: #FD6;
+  }
+.feedback   {
+  background: #FAF;
+  }
+.cancelled   {
+  background: #AAA;
+  }
+
+
+.status {
+  font-weight:bold;
+  }
+.status.unknown {
+  color: #888;
+  }
+.status.green {
+  color: #0A0;
+  }
+.status.amber {
+  color: #A50;
+  }
+.status.red {
+  color: #A00;
+  }
+
+.status_explanation {
+  border: solid 1px #444;
+  background: #EEF;
+  padding: 10px;
+  }
+
+.status_date {
+  border-bottom: solid 1px #777;
+  background: #DDF;
+  margin: -10px;
+  padding: 2px;
+  }
+
+.sub_name {
+  border:1px solid black;  
+  width: 400px;
+  margin: 5px;
+  background: #EEE;
+  }
+
+
+/* PROGRESS */
+
+.status_not_started {
+  background: #FAA;
+  }
+.status_ended {
+  background: #9F9;
+  }  
+  
+  
