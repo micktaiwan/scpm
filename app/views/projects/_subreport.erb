@@ -3,7 +3,7 @@
 <ul>
 <% status = subreport.get_status
   if status.status != 0 %>
-Status: (<%= report.last_status_date %> days)<br/>
+Status: (<%= subreport.last_status_date %> days)<br/>
 <ul>
   <%= simple_format(status.explanation) %>
 </ul>
