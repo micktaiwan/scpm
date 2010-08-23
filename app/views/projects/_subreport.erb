@@ -2,7 +2,7 @@
 <div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= subreport.html_status %></div>
 <ul>
 <% status = subreport.get_status
-  if status.status != 0 %>
+  if status.explanation != "unknown" %>
 Status: (<%= subreport.last_status_date %> days)<br/>
 <ul>
   <%= simple_format(status.explanation) %>
