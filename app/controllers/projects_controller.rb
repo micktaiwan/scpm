@@ -123,7 +123,7 @@ class ProjectsController < ApplicationController
     if not wp
       wp = Project.create(:name=>workpackage_name)
       wp.workstream = request.workstream
-      wp.brn = brn
+      wp.brn        = brn
       wp.project_id = project.id
       wp.save
     end

@@ -23,8 +23,12 @@ class Project < ActiveRecord::Base
     end  
   end
 
+  def has_status
+    Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
+  end
+  
   def get_status
-    s = Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc  ")
+    s = has_status
     s = Status.new({:status=>0, :explanation=>"unknown"}) if not s
     s
   end
@@ -38,13 +42,19 @@ class Project < ActiveRecord::Base
     if s
       self.last_status = s
       save
+      project.propagate_status if self.project
+    else
+      propagate_status
     end  
-    project.propagate_status if self.project
   end
 
   # look at sub projects status and calculates its own
   def propagate_status
-    status = self.last_status || 0
+    if has_status # so if the status was green only because a green sub project (status == nil) the status wont' be updated
+      status = self.last_status
+    else  
+      status = 0
+    end
     self.projects.each { |p|
       status = p.last_status if status < p.last_status
       }
