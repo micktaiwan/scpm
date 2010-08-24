@@ -66,23 +66,16 @@ class ProjectsController < ApplicationController
     t = ""
     Request.find(:all, :conditions=>"project_id is not null").each { |r|
       if r.workpackage_name != r.project.name
-        t << "#{r.workpackage_name} (new) != #{r.project.name} (old)<br/>" 
         project = Project.find_by_name(r.workpackage_name)
         if not project
-          r.project.name = r.workpackage_name
-          r.project.save
+          t << "#{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>" 
+          p = Project.create(:name=>r.workpackage_name, :workstream=>r.workstream)
+          r.move_to_project(p)
+          #r.project.name = r.workpackage_name
+          #r.project.save
         else
-          old_id = r.project_id
-          r.project_id = project.id
-          r.save
-          old_project = Project.find(old_id)
-          old_project.statuses.each { |s|
-            s.project_id = project.id
-            s.save
-            }
-          project.update_status
-          old_project.name = "to delete"
-          old_project.update_status # saves
+          t << "#{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>" 
+          r.move_to_project(project)
         end        
       end    
       }
@@ -167,7 +160,7 @@ private
     cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
-    @workstreams = Project.all.collect{|p| p.workstream}.uniq.sort
+    @workstreams = Project.all.collect{|p| p.workstream}.uniq#.sort
   end
 end
 

@@ -171,6 +171,22 @@ class Request < ActiveRecord::Base
   def brn
     self.summary.split(/\[([^\]]*)\]/)[5]
   end  
+
+  def move_to_project(p)
+    old_id = self.project_id
+    self.project_id = p.id
+    self.save
+    old_project = Project.find(old_id)
+    old_project.statuses.each { |s|
+      s.project_id = p.id
+      s.save
+      }
+    p.update_status
+    p.save
+    # old_project.name = "to delete"
+    old_project.update_status
+    old_project.save
+  end
   
 private
 
