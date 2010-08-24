@@ -42,10 +42,8 @@ class Project < ActiveRecord::Base
     if s
       self.last_status = s
       save
-      project.propagate_status if self.project
-    else
-      propagate_status
     end  
+    propagate_status
   end
 
   # look at sub projects status and calculates its own
@@ -60,6 +58,7 @@ class Project < ActiveRecord::Base
       }
     self.last_status = status
     save
+    project.propagate_status if self.project
   end
   
   def full_name
