@@ -69,10 +69,8 @@ class ProjectsController < ApplicationController
         project = Project.find_by_name(r.workpackage_name)
         if not project
           t << "#{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>" 
-          p = Project.create(:name=>r.workpackage_name, :workstream=>r.workstream)
+          p = Project.create(:name=>r.workpackage_name, :workstream=>r.workstream) # FIXME: need to set the project_id to wich it belongs
           r.move_to_project(p)
-          #r.project.name = r.workpackage_name
-          #r.project.save
         else
           t << "#{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>" 
           r.move_to_project(project)
