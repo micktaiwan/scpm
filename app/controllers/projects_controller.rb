@@ -56,6 +56,7 @@ class ProjectsController < ApplicationController
   def update
     project = Project.find(params[:id])
     project.update_attributes(params[:project])
+    project.propagate_attributes
     redirect_to :action=>:show, :id=>project.id
   end
   
@@ -161,6 +162,7 @@ class ProjectsController < ApplicationController
   
   def report
     get_projects
+    @report = Report.new(Request.all)
     render(:layout=>'report')
   end
   

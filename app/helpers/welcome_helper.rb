@@ -17,16 +17,19 @@ module WelcomeHelper
 =end
 
 
-  def report_by(title, rs, id, expanded = false)    
+  def report_by(title, rs, id, expanded = false, report = false)    
     title = "nil" if not title
+    rv = ""
     if not expanded
-      rv  = "<a href='#' onclick=\"$('#{id}_#{title}').toggle();return false;\">"
+      rv  += "<a href='#' onclick=\"$('#{id}_#{title}').toggle();return false;\">" if not report
       rv += ((title=="" ? "(empty)" : title) + "</a>: <b>#{rs.size}</b> (#{workload(rs)})<br/>")
-      rv += "<ul id='"+id+"_"+title+"' style='display:none'>"
+      rv += "<ul id='"+id+"_"+title+"' style='display:none'>" if not report
     else
       rv = ((title=="" ? "(empty)" : title) + ": <b>#{rs.size}</b> (#{workload(rs)})<br/>")
       rv += "<ul id='"+id+"_"+title+"'>"
     end
+    
+    return rv if report
     
     rv += "<table><tr class='theader'><td>#</td><td>WS</td><td>Project</td><td>PM</td><td>Type</td><td>Miles.</td><td>Status</td><td>Resp</td><td>Load</td><td>Start date</td><td>End date</td><td>Progress</td><td>SDP</td></tr>"
     rs.each { |r|

@@ -6,8 +6,7 @@
 <br/>
 <%= @projects.size %> projects<br/>
 <%= link_to_function('filters', "$('filters').toggle();") %>
-<% if(session[:project_filter_workstream] != nil or session[:project_filter_status]) %><strong>filtered</strong>
-<% end %>
+<% if(are_filtered) %><strong>filtered</strong><% end %>
 <div id="filters" style="display:none;">
 <% form_tag(:action=>'filter') do %>
 <table>

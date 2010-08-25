@@ -62,6 +62,14 @@ class Project < ActiveRecord::Base
     project.propagate_status if self.project
   end
   
+  def propagate_attributes
+    self.projects.each { |p|
+      p.supervisor_id = self.supervisor_id
+      p.save
+      p.propagate_attributes
+      }
+  end
+  
   def full_name
     rv = self.name
     return self.project.full_name + " > " + rv if self.project

@@ -1,8 +1,14 @@
 <%= @projects.size %> projects
-<% if(session[:project_filter_workstream] != nil or session[:project_filter_status]) %>(<strong>filtered</strong>)
-<% end %>
+<% if(are_filtered) %>(<strong>filtered</strong>)<% end %>
 <br/>
 
-<ul>
+<h1>Global Stats</h1>
+<h2>Requests by workstream (workload)</h2>
+<%@report.by_workstream(false) { |title, rs| %>
+  <%= report_by(title, rs, "wos", false, true) %>
+<% } %>
+
+<h1>Report</h1>
+
 <%= render(:partial=>'report', :collection=>@projects) %>
-</ul>
+
