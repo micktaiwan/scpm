@@ -2,6 +2,11 @@ class ProjectsController < ApplicationController
 
   def index
     get_projects
+    @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+    @workstreams = Project.all.collect{|p| p.workstream}.uniq.sort
+  end
+
+  def upload
   end
   
   def filter
@@ -19,6 +24,13 @@ class ProjectsController < ApplicationController
       session[:project_filter_status] = "(#{pst.map{|t| "'#{t}'"}.join(',')})"
     end
 
+    sup = params[:sup]
+    if not sup
+      session[:project_filter_supervisor] = nil
+    else
+      session[:project_filter_supervisor] = "(#{sup.map{|t| "'#{t}'"}.join(',')})"
+    end
+
     redirect_to(:action=>'index')
   end
   
@@ -32,6 +44,7 @@ class ProjectsController < ApplicationController
   def edit
     id = params['id']
     @project = Project.find(id)
+    @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
   end
 
   def edit_status
@@ -157,8 +170,8 @@ private
     cond = "project_id is null"
     cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond += " and supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
-    @workstreams = Project.all.collect{|p| p.workstream}.uniq#.sort
   end
 end
 

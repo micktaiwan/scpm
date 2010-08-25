@@ -22,6 +22,11 @@
 <% for workstream in @workstreams %>
   <%= check_box_tag('ws[]',workstream) %> <%= workstream %><br/>
 <% end %>
+</td><td>
+<b>Supervisors</b><br/>
+<% for s in @supervisors %>
+  <%= check_box_tag('sup[]',s.id) %> <%= s.name %><br/>
+<% end %>
 </td></tr>
 </table>
 <%= submit_tag('Filter') %>

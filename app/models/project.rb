@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
 
   belongs_to  :project
+  belongs_to  :supervisor, :class_name=>"Person"
   has_many    :projects, :order=>'name', :dependent=>:destroy
   has_many    :requests, :dependent=>:nullify
   has_many    :statuses, :dependent => :destroy

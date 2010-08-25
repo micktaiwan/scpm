@@ -2,6 +2,14 @@
 
 <h2><%=@person.name%></h2>
 
+<% if @person.is_supervisor == 1 %>Supervisor<% end %>
+
+<h3>Projects</h3>
+
+<%= render(:partial=>'project', :collection=>@person.projects) %>
+
+<% if @person.is_supervisor != 1 %>
+
 <h3>Assigned requests</h3>
 
 <%= render(:partial=>'people/request', :collection=>@requests) %>
@@ -46,6 +54,7 @@ window.onresize=onResize;
 This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
 </noscript>
 
+<% end %>
 <br/>
 <br/>
 <br/>

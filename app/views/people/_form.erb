@@ -12,3 +12,7 @@
 
 <p><%= label_tag 'rmt_user' %>
 <%= text_field :person, :rmt_user %></p>
+
+<p><%= label_tag 'is_supervisor' %>
+<%= radio_button :person, :is_supervisor, 0 %> No
+<%= radio_button :person, :is_supervisor, 1 %> Yes</p>

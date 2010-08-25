@@ -1,6 +1,7 @@
 class Person < ActiveRecord::Base
 
   belongs_to :company
+  has_many :projects, :foreign_key=>"supervisor_id"
 
   def requests
     return [] if self.rmt_user == "" or self.rmt_user == nil

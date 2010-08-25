@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100727103410) do
+ActiveRecord::Schema.define(:version => 20100825063848) do
 
   create_table "centers", :force => true do |t|
     t.string   "name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20100727103410) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "rmt_user"
+    t.integer  "is_supervisor", :default => 0
   end
 
   create_table "projects", :force => true do |t|
@@ -41,9 +42,10 @@ ActiveRecord::Schema.define(:version => 20100727103410) do
     t.string   "brn"
     t.string   "workstream"
     t.integer  "project_id"
-    t.integer  "last_status", :default => 0
+    t.integer  "last_status",   :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "supervisor_id"
   end
 
   create_table "requests", :force => true do |t|

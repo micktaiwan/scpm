@@ -3,6 +3,7 @@
 <%= link_to('Edit project', {:action=>'edit', :id=>@project.id}, {:class=>'btnlnk'}) %>
 <%= link_to('Add status', {:action=>'add_status_form', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
 <br/>
+<b>Supervisor</b>: <% if not @project.supervisor_id %>?<% else %><%= @project.supervisor.name %><% end %><br/>
 <b>WS</b>: <%= @project.workstream %><br/>
 <b>BRN</b>: <%= @project.brn %><br/>
 <% if @project.description and @project.description!=''%>

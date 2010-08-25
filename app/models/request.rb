@@ -85,9 +85,12 @@ class Request < ActiveRecord::Base
   
   def workload
     return 0 if self.status == "cancelled" or self.status == "feedback" or self.status == "performed" or self.resolution == "ended"
-    Loads[wp_index(self.work_package)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    workload2
   end
 
+  def workload2
+    Loads[wp_index(self.work_package)+milestone_index(self.milestone)][comp_index(self.complexity)]
+  end
 
   # calculate a start date based on the milestone date
   def gantt_start_date
