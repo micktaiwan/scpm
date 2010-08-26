@@ -82,11 +82,13 @@ class ProjectsController < ApplicationController
       if r.workpackage_name != r.project.name
         project = Project.find_by_name(r.workpackage_name)
         if not project
-          t << "#{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>" 
-          p = Project.create(:name=>r.workpackage_name, :workstream=>r.workstream) # FIXME: need to set the project_id to wich it belongs
+          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>" 
+          parent = Project.find(:first, :conditions=>"name='#{r.project.name}'")
+          parent_id = parent ? parent.id : nil
+          p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream) # FIXME: need to set the project_id to wich it belongs
           r.move_to_project(p)
         else
-          t << "#{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>" 
+          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>" 
           r.move_to_project(project)
         end        
       end    

@@ -3,19 +3,21 @@ body {
   padding: 0;
   font-family: sans-serif;
   font-size: 0.8em;
-  background: #567;
+  background: #EEE;
   }
 h1 {
-  background: #333;
-  color: #EEE;
+  background: #ABC;
+  background-image: url(/images/plane.png);
+  background-repeat:no-repeat;
+  color: #222;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 35px;
 }
-
 h2 {
   background: #ABC;
   margin: 10px 0 5px -15px;
   padding: 0 0 0 15px;
+  border: 1px solid #789;
 }
 a {
   text-decoration:none;
@@ -26,22 +28,20 @@ a {
   margin: 0px;
   background: #CDF;
 }
-
 #menu_bar {
   margin: 10px 0 0 10px;
   }
 .menu {
   color:black;
-  border: 1px solid black;
+  border: 1px solid #DDD;
   padding: 2px;
   margin: 2px;
   background: #FFF;
   }
-
 #content {
   margin:  10px;
   padding: 0 5px 5px 15px;
-  border: 2px solid black;
+  border-bottom: 1px solid #AAA;
   background: #FFF;
 }
 ul {
@@ -59,11 +59,9 @@ strong {
 }
 
 /* TABLES */
-
 .edit {
   border: 0px white;
 }
-
 table, th {
   border: 1px solid black;
   font-size: 0.8em;
@@ -80,10 +78,8 @@ td    {
   font-weight: bold;
   }
 
-
 /* STATUSES */
-  
-.to_be_validated  {
+ .to_be_validated  {
   background: #AAF;
   }
 .new  {
@@ -101,7 +97,6 @@ td    {
 .cancelled   {
   background: #AAA;
   }
-
 
 .status {
   font-weight:bold;
@@ -129,9 +124,7 @@ td    {
   padding: 2px;
   }
 
-
 /* PROGRESS */
-
 .status_not_started {
   background: #FAA;
   }
