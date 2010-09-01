@@ -13,6 +13,7 @@ ActiveRecord::Schema.define(:version => 20100826122701) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
+    t.integer  "person_id"
     t.integer  "project_id"
     t.date     "creation_date"
     t.date     "due_date"

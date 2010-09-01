@@ -1,8 +1,8 @@
 class PeopleController < ApplicationController
-
-	def index
+  
+  def index
     @people = Person.find(:all, :order=>"company_id, name")
-	end
+  end
 
   def new
     @person = Person.new

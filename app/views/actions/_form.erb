@@ -1,0 +1,20 @@
+<%= hidden_field :myaction, :project_id %>
+
+<p><%= label_tag 'action' %>
+<%= text_area :myaction, :action, {:rows=>3} %></p>
+
+<p><%= label_tag 'person_id' %>
+<%= select(:myaction, :person_id, @people.map {|u| [u.name,u.id]}) %></p>
+
+<p><%= label_tag 'creation_date' %>
+<%= text_field :myaction, :creation_date %></p>
+
+<p><%= label_tag 'due_date' %>
+<%= text_field :myaction, :due_date %></p>
+
+<p><%= label_tag 'progress' %>
+<%= radio_button :myaction, :progress, :open %> Open
+<%= radio_button :myaction, :progress, :in_progress %> In progress<br/>
+<%= radio_button :myaction, :progress, :closed %> Closed
+<%= radio_button :myaction, :progress, :abandonned %> Abandonned<br/>
+</p>

@@ -1,0 +1,6 @@
+<li>
+<%= action_report.person.name %>:
+<b><%= action_report.action %></b>
+<%= action_report.due_date %>
+(<%= time_ago_in_words(action_report.due_date) %>)
+</li>

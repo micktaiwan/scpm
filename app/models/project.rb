@@ -5,6 +5,8 @@ class Project < ActiveRecord::Base
   has_many    :projects, :order=>'name', :dependent=>:destroy
   has_many    :requests, :dependent=>:nullify
   has_many    :statuses, :dependent => :destroy
+  has_many    :actions, :dependent => :destroy, :order=>"progress"
+  has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
 
   def html_status
     case last_status

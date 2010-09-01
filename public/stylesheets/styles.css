@@ -132,4 +132,9 @@ td    {
   background: #9F9;
   }  
   
+  /* ACTIONS */
   
+  .action_closed, .action_abandonned {
+  font-style: italic;
+  color: #999;
+  }

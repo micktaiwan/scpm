@@ -1,5 +1,9 @@
 <li class="report_project">
 <h2><%= report.workstream %> <%= report.name %> <%= report.html_status %></h2>
+<h3>Actions</h3>
+<ul>
+  <%= render(:partial=>'actions/action_report', :collection=>report.current_actions) %>
+</ul>
 <ul>
 <% status = report.get_status
   if status.explanation != "unknown" %>

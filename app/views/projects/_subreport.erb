@@ -1,6 +1,10 @@
 <li class="report_project">
 <div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= subreport.html_status %></div>
+<h3>Actions</h3>
 <ul>
+  <%= render(:partial=>'actions/action_report', :collection=>subreport.current_actions) %>
+</ul>
+<br/>
 <% status = subreport.get_status
   if status.explanation != "unknown" %>
 Status: (<%= subreport.last_status_date %> days)<br/>
@@ -15,5 +19,4 @@ Status: (<%= subreport.last_status_date %> days)<br/>
   </ul>
   <% end %>
   <%= render(:partial=>'subreport', :collection=>subreport.projects) %>
-</ul>
 </li>

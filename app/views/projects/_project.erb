@@ -12,7 +12,7 @@
 <strong>no supervisor</strong>
 <% end %>
 <ul id="sub_<%=project.id%>" style="display:none;">
-   <%= render(:partial=>'request', :collection=>project.requests) %>
+  <%= render(:partial=>'request', :collection=>project.requests) %>
   <%= render(:partial=>'project', :collection=>project.projects) %>
 </ul>
 </li>

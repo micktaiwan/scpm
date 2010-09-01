@@ -34,7 +34,6 @@ class ProjectsController < ApplicationController
     redirect_to(:action=>'index')
   end
   
-  
   def show
     id = params['id']
     @project = Project.find(id)
@@ -42,7 +41,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    id = params['id']
+    id = params[:id]
     @project = Project.find(id)
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
   end

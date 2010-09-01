@@ -1,7 +1,8 @@
 <%= @project.icon_status %>
 <h2><%= @project.full_name %> </h2>
 <%= link_to('Edit project', {:action=>'edit', :id=>@project.id}, {:class=>'btnlnk'}) %>
-<%= link_to('Add status', {:action=>'add_status_form', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
+<%= link_to('Add status', {:action=>'add_status_form', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+<%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
 <br/>
 <b>Supervisor</b>: <% if not @project.supervisor_id %>?<% else %><%= @project.supervisor.name %><% end %><br/>
 <b>WS</b>: <%= @project.workstream %><br/>
@@ -21,6 +22,13 @@
   <% end %>
   <%= simple_format(@status.explanation) %>
 </div>
+
+<h3>Actions</h3>
+
+  <ul>
+  <%= render(:partial=>'actions/action', :collection=>@project.actions) %>
+  </ul>
+
 
 <h3>Project</h3>
 <% if @project.project %>
