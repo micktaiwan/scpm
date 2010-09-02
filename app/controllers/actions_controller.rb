@@ -1,8 +1,12 @@
 class ActionsController < ApplicationController
 
+  def index
+    @actions = Action.find(:all, :order=>"progress, person_id, due_date")
+  end
+  
   def new
     @myaction = Action.new(:project_id=>params[:project_id], :progress=>:open, :creation_date=>Date.today(), :due_date=>Date.today()+7)
-    @people = Person.find(:all, :order=>"name")
+    get_infos
   end
   
   def create
@@ -17,7 +21,7 @@ class ActionsController < ApplicationController
   def edit
     id = params[:id]
     @myaction = Action.find(id)
-    @people = Person.find(:all, :order=>"name")
+    get_infos
   end
   
   def update
@@ -31,5 +35,12 @@ class ActionsController < ApplicationController
     render(:nothing=>true)
   end
 
+  private
   
+  def get_infos
+    @people = Person.find(:all, :order=>"name")
+    @projects = Project.find(:all)
+    @projects_select = @projects.map {|u| [u.workstream + " " + u.full_name,u.id]}.sort_by { |n| n[0]}
+  end
+    
 end

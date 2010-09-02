@@ -1,0 +1,11 @@
+<h2>Actions</h2>
+<%= link_to('Import', {:action=>'import'},{:class=>"btnlnk"}) %>
+<%= link_to('Check', {:action=>'check'},{:class=>"btnlnk"}) %>
+<%= link_to('Report', {:action=>'report'},{:class=>"btnlnk"}) %>
+<br/>
+<br/>
+<%= @actions.size %> actions<br/>
+
+<ul>
+<%= render(:partial=>'action', :collection=>@actions) %>
+</ul>

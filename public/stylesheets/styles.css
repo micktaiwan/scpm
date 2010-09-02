@@ -50,9 +50,10 @@ ul {
 label {
   float: left;
   text-align: right;
+  vertical-align: top;
   width:100px;
   font-weight: bold;
-  padding: 5px;
+  padding-right: 5px;
   }  
 strong {
   color:red;

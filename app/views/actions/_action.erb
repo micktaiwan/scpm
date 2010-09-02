@@ -1,14 +1,17 @@
 <li id="a_<%=action.id%>" class="action_<%=action.progress%>">
-<%= action.person.name %>:
+<% if action.person %><%= action.person.name %>:<% end %>
 <b><%= action.action %></b>
 created on <%= action.creation_date %>
 <% if action.due_date %>
+<% if action.due_date < Date.today() %><strong><%end%>
   due on <%= action.due_date %>
   (<%= time_ago_in_words(action.due_date) %>)
+<% if action.due_date < Date.today() %></strong><%end%>
 <% else %>
 (no due date)
 <% end %>
 <b><%= action.progress %></b>
+<u><%= action.result %></u>
 <%= link_to(image_tag('edit.gif'), {:controller=>'actions', :action=>'edit', :id=>action.id}) %>
 <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'actions', :action=>'destroy', :id=>action.id}, :confirm=>"You should change the action status to 'abandonned', are you sure you want to delete this action ?", :success=>"$('a_#{action.id}').hide();") %>
 </li>
