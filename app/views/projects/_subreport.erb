@@ -1,9 +1,15 @@
 <li class="report_project">
 <div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= subreport.html_status %></div>
-<h3>Actions</h3>
+<%
+  cur = subreport.current_actions
+  if cur.size > 0
+%>
+Actions:
 <ul>
-  <%= render(:partial=>'actions/action_report', :collection=>subreport.current_actions) %>
+  <%= render(:partial=>'actions/action_report', :collection=>cur) %>
 </ul>
+<% end %>
+
 <br/>
 <% status = subreport.get_status
   if status.explanation != "unknown" %>

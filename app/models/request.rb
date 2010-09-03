@@ -12,7 +12,9 @@ class Request < ActiveRecord::Base
   "WP4.2 - Surveillance Root cause" => 10,
   "WP5 - Change Accompaniment" 		=> 11,
   "WP6.1 - Coaching PP" 			=> 12,
-  "WP6.2 - Coaching BRD" 			=> 13
+  "WP6.2 - Coaching BRD" 			=> 13,
+  "WP6.3 - Coaching V&V"      => 14,
+  "WP6.4 - Coaching ConfMgt"  => 15
   }
 
   Comp_index = {
