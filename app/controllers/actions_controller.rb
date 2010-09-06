@@ -1,7 +1,7 @@
 class ActionsController < ApplicationController
 
   def index
-    @actions = Action.find(:all, :order=>"progress, person_id, due_date")
+    @actions = Action.find(:all, :order=>"person_id, creation_date, due_date")
   end
   
   def new

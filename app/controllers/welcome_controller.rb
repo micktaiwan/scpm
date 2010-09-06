@@ -54,6 +54,7 @@ class WelcomeController < ApplicationController
   def reminders
     @all = Request.all
     get_anomalies
+	@rmt_users = Person.find(:all, :conditions=>"is_supervisor=0")
   end
   
 private

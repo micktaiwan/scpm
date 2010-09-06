@@ -1,18 +1,18 @@
-<% ["jpreira", "cbednarek", "gurobert", "stessier", "mdejean", "pviaud", "almartin"].each { |resp| %>
+<% @rmt_users.each { |resp| %>
 
-<a href='#' onclick="$('<%=resp%>').toggle();return false;"><%=resp%></a><br/>
-<div id='<%=resp%>' style='display:none'>
+<a href='#' onclick="$('<%=resp.rmt_user%>').toggle();return false;">- <%=resp.name%> (<%=resp.rmt_user%>)</a><br/>
+<div id='<%=resp.rmt_user%>' style='display:none'>
 <br/>
-Bonjour <%= resp %>,<br/>
+Bonjour <%= resp.name %>,<br/>
 <br/>
 voici les anomalies (informations contradictoires) renseignées dans RMT qu'il faudrait corriger.<br/>
 <br/>
 
-<%= report_by("Devrait avoir démarré (soit la start date est à décaler, soit le progress doit être changé à in progress)", @not_started.select {|r| r.assigned_to == resp} , "not_started", true) %>
-<%= report_by("Sans start date (devrait jamais arriver)", @null_start_date.select {|r| r.assigned_to == resp}, "nulls", true) %>
-<%= report_by("Sans milestone date (ça peut être vide mais c'est rare)", @null_milestones.select {|r| r.assigned_to == resp}, "nullm", true) %>
-<%= report_by("Jalons passés (le status devrait être ended si c'est vraiment fini)", @past_milestones.select {|r| r.assigned_to == resp}, "pastm", true) %>
-<%= report_by("Ended, mais il manque la actual milestone date", @ended_without_amdate.select {|r| r.assigned_to == resp}, "ended", true) %>
+<%= report_by("Devrait avoir démarré (soit la start date est à décaler, soit le progress doit être changé à in progress)", @not_started.select {|r| r.assigned_to == resp.rmt_user} , "not_started", true) %>
+<%= report_by("Sans start date (devrait jamais arriver)", @null_start_date.select {|r| r.assigned_to == resp.rmt_user}, "nulls", true) %>
+<%= report_by("Sans milestone date (ça peut être vide mais c'est rare)", @null_milestones.select {|r| r.assigned_to == resp.rmt_user}, "nullm", true) %>
+<%= report_by("Jalons passés (le status devrait être ended si c'est vraiment fini)", @past_milestones.select {|r| r.assigned_to == resp.rmt_user}, "pastm", true) %>
+<%= report_by("Ended, mais il manque la actual milestone date", @ended_without_amdate.select {|r| r.assigned_to == resp.rmt_user}, "ended", true) %>
 <br/>
 
 A+,<br/>
@@ -20,7 +20,7 @@ Mickael.<br/>
 (Mail autogénéré. Plaintes à déposer auprès du geek.)<br/>
 <br/>
 <br/>
-<%= report_by("En cadeau, toutes  tes requêtes", @all.select {|r| r.assigned_to == resp}, "ended", true) %>
+<%= report_by("En cadeau, toutes  tes requêtes", @all.select {|r| r.assigned_to == resp.rmt_user}, "ended", true) %>
 <hr>
 </div>
 
