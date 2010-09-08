@@ -1,7 +1,7 @@
 <li id="a_<%=action.id%>" class="action_<%=action.progress%>">
 <% if action.person %><%= action.person.name %>:<% end %>
 <b>
-<% if action.project %><%= action.project.name %>:<% end %>
+<% if action.project %><%= action.project.full_name %>:<% end %>
 <%= action.action %>
 </b>
 created on <%= action.creation_date %>

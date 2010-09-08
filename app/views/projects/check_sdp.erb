@@ -1,0 +1,8 @@
+In SDP but marked No in RMT or cancelled:<br/>
+<%= render(:partial=>"pbsdp", :collection=>@no_in_rmt_but_in_sdp) %>
+<br/>
+in SDP but not in RMT:<br/>
+<%= render(:partial=>"pbsdp", :collection=>@in_sdp) %>
+<br/>
+in RMT but not in SDP:<br/>
+<%= render(:partial=>"pbsdp", :collection=>@in_rmt) %>

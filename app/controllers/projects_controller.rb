@@ -96,6 +96,19 @@ class ProjectsController < ApplicationController
     render(:text=>t)  
   end
   
+  def check_sdp
+    i = ImportSDP.new
+    i.open('C:\Users\faivremacon\My Documents\Downloads\Rapport.xls')
+    list = i.list
+    i.close
+    all_requests = Request.find(:all).collect {|r| r.request_id.to_i}
+    no_requests  = Request.find(:all, :conditions=>"sdp!='No' and status!='cancelled'").collect {|r| r.request_id.to_i}
+    @in_sdp = (list - all_requests).sort
+    @in_rmt = (all_requests - list).sort
+    @no_in_rmt_but_in_sdp = (list - no_requests).sort
+    #render(:text=>@list.size)
+  end
+  
   def add_status_form
     @project = Project.find(params[:project_id])
     @status = Status.new
