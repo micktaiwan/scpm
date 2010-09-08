@@ -25,7 +25,7 @@ class PeopleController < ApplicationController
     @person       = Person.find(id)
     @person.update_timeline
     @requests     = @person.requests
-    @next         = @requests.select { |r| Date.parse(r.start_date) >= Date.today() and Date.parse(r.start_date) <= Date.today()+30}.sort_by { |r| r.start_date}
+    @next         = @requests.select { |r| if r.start_date ==""; return true; else; Date.parse(r.start_date) >= Date.today() and Date.parse(r.start_date) <= Date.today()+30; end}.sort_by { |r| r.start_date}
   end
   
   def edit
