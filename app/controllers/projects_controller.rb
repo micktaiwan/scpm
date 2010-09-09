@@ -188,6 +188,9 @@ private
     cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond += " and supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
+    if session[:project_filter_qr] != nil
+      @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
+    end
   end
 end
 

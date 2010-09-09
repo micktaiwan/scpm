@@ -78,6 +78,16 @@ class Project < ActiveRecord::Base
     rv
   end
   
+  # return true if the project or subprojects request is assigned to one of the users in the array
+  def has_responsible(user_arr)
+    self.requests.each { |r|
+      return true if user_arr.include?(r.user.id)
+      }
+    self.projects.each { |p|
+      return true if p.has_responsible(user_arr)
+      }
+    return false  
+  end
   
 private
 

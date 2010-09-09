@@ -1,6 +1,7 @@
 class Request < ActiveRecord::Base
 
   belongs_to :project
+  belongs_to :user, :class_name=>'User', :conditions=>"assigned_to=users.rmt_user"
 
   Wp_index = {
   "WP1.1 - Quality Control" 		=> 0,
