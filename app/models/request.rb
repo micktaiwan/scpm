@@ -1,7 +1,10 @@
 class Request < ActiveRecord::Base
 
   belongs_to :project
-  belongs_to :user, :class_name=>'User', :conditions=>"assigned_to=users.rmt_user"
+  # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
+  def resp
+    Person.find(:first, :conditions=>"rmt_user='#{self.assigned_to}'")
+  end
 
   Wp_index = {
   "WP1.1 - Quality Control" 		=> 0,
@@ -85,7 +88,7 @@ class Request < ActiveRecord::Base
     raise "no complexity #{c}" if not rv
     rv
   end
-  
+
   def workload
     return 0 if self.status == "cancelled" or self.status == "feedback" or self.status == "performed" or self.resolution == "ended"
     workload2
@@ -105,7 +108,7 @@ class Request < ActiveRecord::Base
       end
     else
       return self.start_date
-    end  
+    end
   end
 
   # taking into account the start date and the milestone date
@@ -115,7 +118,7 @@ class Request < ActiveRecord::Base
       days = (Time.parse(faed[0]) - Time.parse(self.start_date)) / 1.days
       minus_week_ends(days)
     else
-      gantt_duration  
+      gantt_duration
     end
     rv = 1 if rv < 1
     rv
@@ -134,7 +137,7 @@ class Request < ActiveRecord::Base
   def gantt_duration
     (self.workload+0.5).to_i
   end
-  
+
   def foreseen_actual_end_date_arr
     return [self.end_date, "e"] if self.end_date and self.end_date != ''
     return [self.actual_m_date, "a"] if self.actual_m_date and self.actual_m_date != ''
@@ -147,23 +150,23 @@ class Request < ActiveRecord::Base
     return [self.milestone_date, "m"] if self.milestone_date and self.milestone_date != ''
     return nil
   end
-  
+
   def foreseen_end_date_str
     arr = foreseen_end_date_arr
     return "" if arr == nil
     return arr[0] + " (#{arr[1]})"
   end
-  
+
   def my_end_date
     f = foreseen_end_date_arr
     return f[0] if f
     return (Date.parse(gantt_start_date) + real_duration).to_s
   end
-  
+
   def sanitized_status
     sanitize(self.status)
   end
-  
+
   def sanitized_resolution
     sanitize(self.resolution)
   end
@@ -173,10 +176,10 @@ class Request < ActiveRecord::Base
     wpn = self.project_name if wpn == nil or wpn == ""
     wpn
   end
-  
+
   def brn
     self.summary.split(/\[([^\]]*)\]/)[5]
-  end  
+  end
 
   def move_to_project(p)
     old_id = self.project_id
@@ -193,7 +196,7 @@ class Request < ActiveRecord::Base
     old_project.update_status
     old_project.save
   end
-  
+
 private
 
   def sanitize(name)

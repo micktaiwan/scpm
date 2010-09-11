@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
 
   def upload
   end
-  
+
   def filter
     pws = params[:ws]
     if not pws
@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
 
     redirect_to(:action=>'index')
   end
-  
+
   def show
     id = params['id']
     @project = Project.find(id)
@@ -58,7 +58,7 @@ class ProjectsController < ApplicationController
     project.propagate_attributes
     redirect_to :action=>:show, :id=>project.id
   end
-  
+
   def update_status
     status = Status.find(params[:id])
     status.update_attributes(params[:status])
@@ -73,7 +73,7 @@ class ProjectsController < ApplicationController
       @import << {:id=>r.id, :project_name=>r.project_name, :summary=>r.summary, :workstream=>r.workstream}
       }
   end
-  
+
   # for each request rename project if necessary
   def check
     t = ""
@@ -81,21 +81,21 @@ class ProjectsController < ApplicationController
       if r.workpackage_name != r.project.name
         project = Project.find_by_name(r.workpackage_name)
         if not project
-          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>" 
+          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
           parent = Project.find(:first, :conditions=>"name='#{r.project.name}'")
           parent_id = parent ? parent.id : nil
           p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream) # FIXME: need to set the project_id to wich it belongs
           r.move_to_project(p)
         else
-          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>" 
+          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
           r.move_to_project(project)
-        end        
-      end    
+        end
+      end
       }
     t << "<br/><a href='/projects'>back to projects</a>"
-    render(:text=>t)  
+    render(:text=>t)
   end
-  
+
   def check_sdp
     i = ImportSDP.new
     i.open('C:\Users\faivremacon\My Documents\Downloads\Rapport.xls')
@@ -108,12 +108,12 @@ class ProjectsController < ApplicationController
     @no_in_rmt_but_in_sdp = (list - no_requests).sort
     #render(:text=>@list.size)
   end
-  
+
   def add_status_form
     @project = Project.find(params[:project_id])
     @status = Status.new
   end
-  
+
   def add_status
     project_id = params[:status][:project_id]
     status = Status.create(params[:status])
@@ -121,7 +121,7 @@ class ProjectsController < ApplicationController
     p.update_status(params[:status][:status])
     redirect_to :action=>:show, :id=>project_id
   end
-  
+
   # link a request to a project, based on request project_name
   # if the project does not exists, create it
   def link
@@ -151,7 +151,7 @@ class ProjectsController < ApplicationController
     request.save
     render(:text=>"saved")
   end
-  
+
   def cut
     session[:cut] = params[:id]
     render(:nothing=>true)
@@ -161,10 +161,10 @@ class ProjectsController < ApplicationController
     to_id   = params[:id].to_i
     cut_id  = session[:cut].to_i
     cut     = Project.find(cut_id)
-    from_id = cut.project_id 
+    from_id = cut.project_id
     cut.project_id = to_id
     cut.save
-    cut.update_status    
+    cut.update_status
     Project.find(from_id).update_status if from_id
     render(:nothing=>true)
   end
@@ -173,21 +173,22 @@ class ProjectsController < ApplicationController
     Project.find(params[:id].to_i).destroy
     render(:nothing=>true)
   end
-  
+
   def report
     get_projects
     @report = Report.new(Request.all)
     render(:layout=>'report')
   end
-  
+
 private
-  
+
   def get_projects
     cond = "project_id is null"
     cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond += " and supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
+    session[:project_filter_qr] = [3]
     if session[:project_filter_qr] != nil
       @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
     end

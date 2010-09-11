@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
       when 1; "<span class='status green'>green</span>"
       when 2; "<span class='status amber'>amber</span>"
       when 3; "<span class='status red'>red</span>"
-    end  
+    end
   end
 
   def icon_status
@@ -23,13 +23,13 @@ class Project < ActiveRecord::Base
       when 1; "<img src='/images/green.gif' align='left'>"
       when 2; "<img src='/images/amber.gif' align='left'>"
       when 3; "<img src='/images/red.gif' align='left'>"
-    end  
+    end
   end
 
   def has_status
     Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
   end
-  
+
   def get_status
     s = has_status
     s = Status.new({:status=>0, :explanation=>"unknown"}) if not s
@@ -40,12 +40,12 @@ class Project < ActiveRecord::Base
     #time_ago_in_words(get_status.updated_at)
     days_ago(get_status.updated_at)
   end
-  
+
   def update_status(s = nil)
     if s
       self.last_status = s
       save
-    end  
+    end
     propagate_status
   end
 
@@ -53,7 +53,7 @@ class Project < ActiveRecord::Base
   def propagate_status
     if has_status # so if the status was green only because a green sub project (status == nil) the status wont' be updated
       status = self.last_status
-    else  
+    else
       status = 0
     end
     self.projects.each { |p|
@@ -63,7 +63,7 @@ class Project < ActiveRecord::Base
     save
     project.propagate_status if self.project
   end
-  
+
   def propagate_attributes
     self.projects.each { |p|
       p.supervisor_id = self.supervisor_id
@@ -71,24 +71,25 @@ class Project < ActiveRecord::Base
       p.propagate_attributes
       }
   end
-  
+
   def full_name
     rv = self.name
     return self.project.full_name + " > " + rv if self.project
     rv
   end
-  
+
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_arr)
     self.requests.each { |r|
-      return true if user_arr.include?(r.user.id)
+      #puts r.resp
+      return true if r.resp and user_arr.include?(r.resp.id)
       }
     self.projects.each { |p|
       return true if p.has_responsible(user_arr)
       }
-    return false  
+    return false
   end
-  
+
 private
 
   def days_ago(date_time)
