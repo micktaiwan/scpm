@@ -154,7 +154,7 @@ class ProjectsController < ApplicationController
 
   def cut
     session[:cut] = params[:id]
-    render(:nothing=>true)
+    render(:nothing => true)
   end
 
   def paste
@@ -187,11 +187,12 @@ private
     cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond += " and supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    @projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
-    session[:project_filter_qr] = [3]
-    if session[:project_filter_qr] != nil
-      @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
-    end
+    #@projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
+    @projects = Project.find(:all, :conditions=>cond)
+    #session[:project_filter_qr] = [3]
+    #if session[:project_filter_qr] != nil
+    #  @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
+    #end
+    @projects = @projects.sort_by { |p| d = p.last_status_date; d ? d : Time.zone.now }
   end
 end
-
