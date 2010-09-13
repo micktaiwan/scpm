@@ -193,6 +193,6 @@ private
     #if session[:project_filter_qr] != nil
     #  @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
     #end
-    @projects = @projects.sort_by { |p| d = p.last_status_date; d ? d : Time.zone.now }
+    @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
   end
 end

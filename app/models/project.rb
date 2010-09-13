@@ -109,9 +109,9 @@ class Project < ActiveRecord::Base
     return case s
       when 0: "unknown"
       when 1: "ended"
-      when 2: "in progress"
+      when 2: "in_progress"
       when 3: "planned"
-      when 4: "not started"
+      when 4: "not_started"
     end
   end
 

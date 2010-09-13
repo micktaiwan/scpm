@@ -5,6 +5,11 @@ body {
   font-size: 0.8em;
   background: #EEE;
   }
+  
+img {
+  border: 0px;
+}  
+
 h1 {
   background: #ABC;
   background-image: url(/images/plane.png);
@@ -132,6 +137,16 @@ td    {
 .status_ended {
   background: #9F9;
   }  
+
+.project_status_not_started {
+  color: #A00;
+  font-weight: bold;
+  }
+.project_status_ended {
+  color: #AAA;
+  font-style: italic;
+  }  
+
   
   /* ACTIONS */
   

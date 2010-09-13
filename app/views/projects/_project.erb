@@ -1,3 +1,4 @@
+<% status_html = project.project_requests_progress_status_html %>
 <li id="p_<%=project.id%>">
 <%= link_to_function(image_tag('expand.gif'), "$('sub_#{project.id}').toggle();") %>
 <%= project.workstream %>
@@ -15,7 +16,9 @@ if date
 <% if project.project==nil and project.supervisor_id==nil %>
 <strong>no supervisor</strong>
 <% end %>
-<%= project.project_requests_progress_status_html %>
+<span class="project_status_<%=status_html%>">
+<%= status_html %>
+</span>
 <ul id="sub_<%=project.id%>" style="display:none;">
   <%= render(:partial=>'request', :collection=>project.requests) %>
   <%= render(:partial=>'project', :collection=>project.projects) %>
