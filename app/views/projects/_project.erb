@@ -15,6 +15,7 @@ if date
 <% if project.project==nil and project.supervisor_id==nil %>
 <strong>no supervisor</strong>
 <% end %>
+<%= project.project_requests_progress_status_html %>
 <ul id="sub_<%=project.id%>" style="display:none;">
   <%= render(:partial=>'request', :collection=>project.requests) %>
   <%= render(:partial=>'project', :collection=>project.projects) %>

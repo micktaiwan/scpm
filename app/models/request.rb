@@ -197,6 +197,16 @@ class Request < ActiveRecord::Base
     old_project.save
   end
 
+  def progress_status
+    return case self.resolution
+      when 'not started'; 4
+      when 'planned'; 3
+      when 'in progress'; 2
+      when 'ended'; 1
+      else; 0
+    end
+  end
+  
 private
 
   def sanitize(name)

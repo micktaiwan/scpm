@@ -104,6 +104,36 @@ class Project < ActiveRecord::Base
     return date
   end
 
+  def project_requests_progress_status_html
+    s = self.project_requests_progress_status
+    return case s
+      when 0: "unknown"
+      when 1: "ended"
+      when 2: "in progress"
+      when 3: "planned"
+      when 4: "not started"
+    end
+  end
+
+  
+  def project_requests_progress_status
+    status = self.requests_progress_status
+    self.projects.each { |p|
+      s = p.project_requests_progress_status
+      status = s if s > status
+      }
+    return status
+  end
+
+  # get all requests status and summarize
+  def requests_progress_status
+    status = 0
+    self.requests.each { |r|
+      status = r.progress_status
+      }
+    return status
+  end
+  
 private
 
   def days_ago(date_time)
