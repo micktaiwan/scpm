@@ -6,10 +6,8 @@
 <%= project.html_status %>
 <% date = project.last_status_date;
 if date  
-  days = time_ago_in_words(date)
-  if days != "" %>
+  days = time_ago_in_words(date) %>
   (<%= days %>)
-  <% end %>
 <% end %>
 <%= link_to_remote(image_tag('cut.png'), :url=>{:action=>'cut', :id=>project.id}) %>
 <%= link_to_remote(image_tag('paste.png'), :url=>{:action=>'paste', :id=>project.id}) %>

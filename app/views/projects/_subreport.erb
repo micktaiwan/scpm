@@ -13,7 +13,12 @@ Actions:
 <br/>
 <% status = subreport.get_status
   if status.explanation != "unknown" %>
-Status: (<%= subreport.last_status_date %> days)<br/>
+Status: <% date = subreport.last_status_date;
+if date  
+  days = time_ago_in_words(date) %>
+  (<%= days %>)
+<% end %>
+<br/>
 <ul>
   <%= simple_format(status.explanation) %>
 </ul>
