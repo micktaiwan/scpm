@@ -96,13 +96,11 @@ class Project < ActiveRecord::Base
   def last_status_date
     status = has_status
     date = nil
-    if status
-      date = status.updated_at
-      self.projects.each { |p|
-        sub = p.last_status_date
-        date = sub if sub and sub > date
-        }
-    end
+    date = status.updated_at if status
+    self.projects.each { |p|
+      sub   = p.last_status_date
+      date  = sub if sub and (date == nil or sub > date)
+      }
     return date
   end
 
