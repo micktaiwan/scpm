@@ -7,18 +7,18 @@ class Request < ActiveRecord::Base
   end
 
   Wp_index = {
-  "WP1.1 - Quality Control" 		=> 0,
-  "WP1.2 - Quality Assurance" 		=> 4,
+  "WP1.1 - Quality Control" 		    => 0,
+  "WP1.2 - Quality Assurance" 		  => 4,
   "WP2 - Quality for Maintenance" 	=> 8,
-  "WP3 - Modeling" 					=> 9,
-  "WP4 - Surveillance" 				=> 10,
-  "WP4.1 - Surveillance Audit" 		=> 10,
+  "WP3 - Modeling" 					        => 9,
+  "WP4 - Surveillance" 				      => 10,
+  "WP4.1 - Surveillance Audit" 		  => 10,
   "WP4.2 - Surveillance Root cause" => 10,
-  "WP5 - Change Accompaniment" 		=> 11,
-  "WP6.1 - Coaching PP" 			=> 12,
-  "WP6.2 - Coaching BRD" 			=> 13,
-  "WP6.3 - Coaching V&V"      => 14,
-  "WP6.4 - Coaching ConfMgt"  => 15
+  "WP5 - Change Accompaniment" 		  => 11,
+  "WP6.1 - Coaching PP" 			      => 12,
+  "WP6.2 - Coaching BRD" 			      => 13,
+  "WP6.3 - Coaching V&V"            => 14,
+  "WP6.4 - Coaching ConfMgt"        => 15
   }
 
   Comp_index = {
