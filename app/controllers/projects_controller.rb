@@ -39,6 +39,8 @@ class ProjectsController < ApplicationController
       session[:project_filter_qr] = qr.map {|t| t.to_i}
     end
 
+    session[:project_filter_text] = params[:text]
+
     redirect_to(:action=>'index')
   end
 
@@ -191,6 +193,10 @@ class ProjectsController < ApplicationController
 private
 
   def get_projects
+    if session[:project_filter_text] != ""
+      @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
+      return
+    end
     cond = "project_id is null"
     cond += " and workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond += " and last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil

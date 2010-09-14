@@ -32,6 +32,12 @@
   <%= check_box_tag('qr[]',s.id) %> <%= s.name %><br/>
 <% end %>
 </td></tr>
+<tr>
+<td colspan=4>
+Text: <%= text_field_tag('text') %> precedence on other filters<br/>
+Searches project title and description, statuses, request summary and PM names
+</td>
+</tr>
 </table>
 <%= submit_tag('Filter') %>
 <% end %>

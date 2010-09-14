@@ -134,6 +134,19 @@ class Project < ActiveRecord::Base
     return status
   end
 
+  def text_filter(text)
+    return true if self.name =~ /#{text}/i
+    return true if self.description =~ /#{text}/i
+    self.statuses.each { |s|
+      return true if s.explanation =~ /#{text}/i
+      }
+    self.requests.each { |s|
+      return true if s.summary =~ /#{text}/i
+      return true if s.pm =~ /#{text}/i
+      }
+    return false
+  end
+
 private
 
   def days_ago(date_time)
