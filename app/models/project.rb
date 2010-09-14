@@ -4,19 +4,9 @@ class Project < ActiveRecord::Base
   belongs_to  :supervisor, :class_name=>"Person"
   has_many    :projects, :order=>'name', :dependent=>:destroy
   has_many    :requests, :dependent=>:nullify
-  has_many    :statuses, :dependent => :destroy
+  has_many    :statuses, :dependent => :destroy, :order=>"updated_at desc"
   has_many    :actions, :dependent => :destroy, :order=>"progress"
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
-
-  def html_status
-    case last_status
-      when 0; "<span class='status unknown'>unknown</span>"
-      when 1; "<span class='status green'>green</span>"
-      when 2; "<span class='status amber'>amber</span>"
-      when 3; "<span class='status red'>red</span>"
-    end
-
-  end
 
   def icon_status
     case last_status

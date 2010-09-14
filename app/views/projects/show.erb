@@ -12,15 +12,14 @@
 <% end %>
 
 <h3>Status</h3>
-<div class="status_explanation">
-  <% if @status.updated_at %>
-  <div class="status_date">
-  <%= @status.updated_at %>
-  (<b><%= time_ago_in_words(@status.updated_at) %></b>)
-  <%= link_to('Edit', :action=>'edit_status', :id=>@status.id) %>
-  </div>
-  <% end %>
-  <%= simple_format(@status.explanation) %>
+
+<%= display_status(@status) %>
+<br/>
+<%= link_to_function("Old (#{@old_statuses.size})", "$('old_statuses').toggle();") %>
+<div id='old_statuses' style="display:none;">
+<% for s in @old_statuses %>
+<%= display_status(s) %>
+<% end %>
 </div>
 
 <h3>Actions</h3>

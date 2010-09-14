@@ -48,6 +48,7 @@ class ProjectsController < ApplicationController
     id = params['id']
     @project = Project.find(id)
     @status = @project.get_status
+    @old_statuses = @project.statuses - [@status]
   end
 
   def edit
@@ -193,7 +194,7 @@ class ProjectsController < ApplicationController
 private
 
   def get_projects
-    if session[:project_filter_text] != ""
+    if session[:project_filter_text] != "" and session[:project_filter_text] != nil
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
       return
     end

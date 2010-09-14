@@ -4,7 +4,7 @@
 <%= project.workstream %>
 <%=link_to(project.name, :action=>'show', :id=>project.id) %>
 ( <b><%= project.projects.size + project.requests.size %></b> )
-<%= project.html_status %>
+<%= html_status(project.last_status) %>
 <% date = project.last_status_date
 if date
   days = time_ago_in_words(date) %>
