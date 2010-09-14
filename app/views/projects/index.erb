@@ -26,6 +26,11 @@
 <% for s in @supervisors %>
   <%= check_box_tag('sup[]',s.id) %> <%= s.name %><br/>
 <% end %>
+</td><td>
+<b>QR</b><br/>
+<% for s in @qr %>
+  <%= check_box_tag('qr[]',s.id) %> <%= s.name %><br/>
+<% end %>
 </td></tr>
 </table>
 <%= submit_tag('Filter') %>

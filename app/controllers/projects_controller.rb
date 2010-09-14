@@ -2,8 +2,9 @@ class ProjectsController < ApplicationController
 
   def index
     get_projects
-    @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
-    @workstreams = Project.all.collect{|p| p.workstream}.uniq.sort
+    @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+    @qr           = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name asc")
+    @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
   end
 
   def upload
@@ -29,6 +30,13 @@ class ProjectsController < ApplicationController
       session[:project_filter_supervisor] = nil
     else
       session[:project_filter_supervisor] = "(#{sup.map{|t| "'#{t}'"}.join(',')})"
+    end
+
+    qr = params[:qr]
+    if not qr
+      session[:project_filter_qr] = nil
+    else
+      session[:project_filter_qr] = qr.map {|t| t.to_i}
     end
 
     redirect_to(:action=>'index')
@@ -189,10 +197,9 @@ private
     cond += " and supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     #@projects = Project.find(:all, :conditions=>cond, :order=>'workstream, name')
     @projects = Project.find(:all, :conditions=>cond)
-    #session[:project_filter_qr] = [3]
-    #if session[:project_filter_qr] != nil
-    #  @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
-    #end
+    if session[:project_filter_qr] != nil
+      @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
+    end
     @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
   end
 end
