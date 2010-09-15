@@ -1,5 +1,5 @@
 <li class="report_project">
-<h2><%= report.workstream %> <%= report.name %> <%= report.html_status %></h2>
+<h2><%= report.workstream %> <%= report.name %> <%= html_status(report.last_status) %></h2>
 
 <%
   cur = report.current_actions
@@ -15,7 +15,7 @@ Actions:
 <% status = report.get_status
   if status.explanation != "unknown" %>
 Status: <% date = report.last_status_date;
-if date  
+if date
   days = time_ago_in_words(date) %>
   (<%= days %>)
 <% end %>

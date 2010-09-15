@@ -2,6 +2,7 @@ class ProjectsController < ApplicationController
 
   def index
     get_projects
+    @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
@@ -187,6 +188,11 @@ class ProjectsController < ApplicationController
 
   def report
     get_projects
+    @projects = @projects.sort_by { |p|
+      s = p.supervisor
+      sname = s ? s.name : ''
+      [sname, p.workstream, p.name]
+      }
     @report = Report.new(Request.all)
     render(:layout=>'report')
   end
@@ -207,6 +213,5 @@ private
     if session[:project_filter_qr] != nil
       @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
     end
-    @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
   end
 end

@@ -1,5 +1,5 @@
 <li class="report_project">
-<div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= subreport.html_status %></div>
+<div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= html_status(subreport.last_status) %></div>
 <%
   cur = subreport.current_actions
   if cur.size > 0
@@ -14,7 +14,7 @@ Actions:
 <% status = subreport.get_status
   if status.explanation != "unknown" %>
 Status: <% date = subreport.last_status_date;
-if date  
+if date
   days = time_ago_in_words(date) %>
   (<%= days %>)
 <% end %>
