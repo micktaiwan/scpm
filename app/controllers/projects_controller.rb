@@ -188,11 +188,7 @@ class ProjectsController < ApplicationController
 
   def report
     get_projects
-    @projects = @projects.sort_by { |p|
-      s = p.supervisor
-      sname = s ? s.name : ''
-      [sname, p.workstream, p.name]
-      }
+    @projects = @projects.sort_by { |p| [p.supervisor_name, p.workstream, p.name] }
     @report = Report.new(Request.all)
     render(:layout=>'report')
   end

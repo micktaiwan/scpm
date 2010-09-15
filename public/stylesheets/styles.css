@@ -5,10 +5,10 @@ body {
   font-size: 0.8em;
   background: #EEE;
   }
-  
+
 img {
   border: 0px;
-}  
+}
 
 h1 {
   background: #ABC;
@@ -24,9 +24,14 @@ h2 {
   padding: 0 0 0 15px;
   border: 1px solid #789;
 }
-a {
-  text-decoration:none;
+
+.project_name {
+  list-style-type:none;
+  font-size:5em;
   }
+
+a {text-decoration:none;}
+
 .btnlnk {
   border: 1px solid #ABC;
   padding: 0px;
@@ -59,7 +64,7 @@ label {
   width:100px;
   font-weight: bold;
   padding-right: 5px;
-  }  
+  }
 strong {
   color:red;
 }
@@ -71,14 +76,14 @@ strong {
 table, th {
   border: 1px solid black;
   font-size: 0.8em;
-  }  
+  }
 tr    {
   padding: 0px;
   margin: 0px;
-  }  
+  }
 td    {
   padding: 2px;
-  }  
+  }
 .theader  {
   background: #AAA;
   font-weight: bold;
@@ -136,7 +141,7 @@ td    {
   }
 .status_ended {
   background: #9F9;
-  }  
+  }
 
 .project_status_not_started {
   color: #A00;
@@ -145,12 +150,8 @@ td    {
 .project_status_ended {
   color: #AAA;
   font-style: italic;
-  }  
-
-  
-  /* ACTIONS */
-  
-  .action_closed, .action_abandonned {
-  font-style: italic;
-  color: #999;
   }
+
+/* ACTIONS */
+.action_closed, .action_abandonned {font-style: italic;color: #999;}
+

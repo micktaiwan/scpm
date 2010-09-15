@@ -1,5 +1,6 @@
 <li class="report_project">
-<h2><%= report.workstream %> <%= report.name %> <%= html_status(report.last_status) %></h2>
+<h2 class="project_name"><%= report.workstream %> <%= report.name %> <%= html_status(report.last_status) %></h2>
+<%= report.supervisor_name %>
 
 <%
   cur = report.current_actions

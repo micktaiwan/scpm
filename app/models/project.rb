@@ -137,6 +137,11 @@ class Project < ActiveRecord::Base
     return false
   end
 
+  def supervisor_name
+    s = self.supervisor
+    s ? s.name : ''
+  end
+
 private
 
   def days_ago(date_time)
