@@ -8,9 +8,8 @@ Actions:
 <ul>
   <%= render(:partial=>'actions/action_report', :collection=>cur) %>
 </ul>
-<% end %>
-
 <br/>
+<% end %>
 <% status = subreport.get_status
   if status.explanation != "unknown" %>
 Status: <% date = subreport.last_status_date;
@@ -23,11 +22,14 @@ if date
   <%= simple_format(status.explanation) %>
 </ul>
 <% end %>
-  <% if subreport.requests.size > 0 %>
+<% if subreport.requests.size > 0 %>
   Requests:
   <ul>
     <%= render(:partial=>'request', :collection=>subreport.requests) %>
   </ul>
-  <% end %>
+<% end %>
+<ul>
   <%= render(:partial=>'subreport', :collection=>subreport.projects) %>
+</ul>
 </li>
+
