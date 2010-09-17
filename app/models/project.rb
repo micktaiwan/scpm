@@ -72,7 +72,6 @@ class Project < ActiveRecord::Base
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_arr)
     self.requests.each { |r|
-      #puts "r.resp=#{r.resp}"
       next if not r.resp
       return true if user_arr.include?(r.resp.id)
       }
@@ -141,6 +140,14 @@ class Project < ActiveRecord::Base
     s = self.supervisor
     s ? s.name : ''
   end
+
+  def move_actions_to_project(p)
+    self.actions.each { |a|
+      a.project_id = p.id
+      a.save
+      }
+  end
+
 
 private
 

@@ -3,7 +3,7 @@
 <%= link_to_function(image_tag('expand.gif'), "$('sub_#{project.id}').toggle();") %>
 <%= project.workstream %>
 <%=link_to(project.name, :action=>'show', :id=>project.id) %>
-( <b><%= project.projects.size + project.requests.size %></b> )
+( <b><%= project.projects.size + project.requests.size + project.actions.size %></b> )
 <%= html_status(project.last_status) %>
 <% date = project.last_status_date
 if date
