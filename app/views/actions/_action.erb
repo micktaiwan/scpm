@@ -19,3 +19,4 @@ created on <%= action.creation_date %>
 <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'actions', :action=>'destroy', :id=>action.id}, :confirm=>"You should change the action status to 'abandonned', are you sure you want to delete this action ?", :success=>"$('a_#{action.id}').hide();") %>
 <%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'actions', :action=>'cut', :id=>action.id}) %>
 </li>
+
