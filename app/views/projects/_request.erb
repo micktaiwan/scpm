@@ -9,4 +9,6 @@
 <%= request.resolution %>
 <%= request.foreseen_end_date_str %>
 </span>
+<%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'welcome', :action=>'cut', :id=>request.id}) %>
 <br/>
+

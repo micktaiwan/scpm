@@ -8,6 +8,12 @@
   <%= report_by(title, rs, "wos", false, true) %>
 <% } %>
 
+<h2>Projects by status</h2>
+UNKNOWN: <% s = @projects.select { |p| p.project == nil and p.last_status==0}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
+GREEN: <% s = @projects.select { |p| p.project == nil and p.last_status==1}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
+AMBER: <% s = @projects.select { |p| p.project == nil and p.last_status==2}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
+RED: <% s = @projects.select { |p| p.project == nil and p.last_status==3}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
+
 <h1>Report</h1>
 
 <%= render(:partial=>'report', :collection=>@projects) %>

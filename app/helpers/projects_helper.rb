@@ -11,6 +11,8 @@ module ProjectsHelper
       rv += "(<b>#{time_ago_in_words(s.updated_at)}</b>) "
       rv += html_status(s.status) + " "
       rv += link_to('Edit', :action=>'edit_status', :id=>s.id)
+      rv += " "
+      rv += link_to_remote(image_tag('cut.png'), :url=>{:controller=>'projects', :action=>'cut_status', :id=>s.id})
       rv += "</div>"
     end
     rv += simple_format(s.explanation)

@@ -11,7 +11,7 @@ class WelcomeController < ApplicationController
 
     @sdp_cancelled    = Request.find(:all, :conditions=>["sdp='Yes' and status='cancelled'", Date.today()], :order=>"milestone_date")
     @not_performed    = Request.find(:all, :conditions=>["resolution='ended' and status!='performed' and status!='closed' and status!='cancelled'", Date.today()], :order=>"milestone_date")
-  
+
     @next_milestones =  Request.find(:all, :conditions=>["resolution != 'ended' and  (milestone_date !='' and milestone_date <= ?)", Date.today()+10], :order=>"milestone_date")
     @special =  Request.find(:all, :conditions=>["work_package in ('WP1.1 - Quality Control', 'WP1.2 - Quality Assurance') and status='new' and workstream = 'EDY'"], :order=>"milestone_date")
     get_anomalies
@@ -35,7 +35,7 @@ class WelcomeController < ApplicationController
         }
     redirect_to :action=>:index
   end
-  
+
   def workload_schedule
     @requests = Request.find(:all, :conditions=>["status!='feedback' and status!='cancelled' and (start_date!='' or milestone_date!='')"]).sort_by { |r| r.gantt_start_date}
     @resources = @requests.collect { |r| r.assigned_to}.uniq.sort
@@ -50,13 +50,21 @@ class WelcomeController < ApplicationController
     @report   = Report.new(@all_mine)
   end
 =end
-  
+
   def reminders
     @all = Request.all
     get_anomalies
-	@rmt_users = Person.find(:all, :conditions=>"is_supervisor=0")
+	  @rmt_users = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name")
   end
-  
+
+  def cut
+    session[:request_cut] = params[:id]
+    session[:cut]         = nil
+    session[:action_cut]  = nil
+    session[:status_cut]  = nil
+    render(:nothing => true)
+  end
+
 private
 
   def get_anomalies
@@ -72,7 +80,7 @@ private
     @report = CvsReport.new('/home/mick/DL/mfaivremacon.csv')
     #@report = Report.new('D:\DL\mfaivremacon.csv')
     @report.parse
-  end  
+  end
 =end
 
 end

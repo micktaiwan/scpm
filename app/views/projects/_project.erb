@@ -19,6 +19,11 @@ if date
 <%= link_to_remote(image_tag('cut.png'), :url=>{:action=>'cut', :id=>project.id}) %>
 <%= link_to_remote(image_tag('paste.png'), :url=>{:action=>'paste', :id=>project.id}) %>
 <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>project.id}, :confirm=>"Sure?", :success=>"$('p_#{project.id}').hide();") %>
+
+<% if @display_actions %>
+<%= project.actions.size %> actions
+<% end %>
+
 <% if project.project==nil and project.supervisor_id==nil %>
 <strong>no supervisor</strong>
 <% end %>

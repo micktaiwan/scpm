@@ -87,27 +87,28 @@ class ProjectsController < ApplicationController
   end
 
   # for each request rename project if necessary
+  # find projects with nothing in it
   def check
-    t = ""
+    @text = ""
     Request.find(:all, :conditions=>"project_id is not null").each { |r|
       if r.workpackage_name != r.project.name
         project = Project.find_by_name(r.workpackage_name)
         if not project
-          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
+          @text << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
           parent = Project.find(:first, :conditions=>"name='#{r.project.name}'")
           parent_id = parent ? parent.id : nil
           p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream) # FIXME: need to set the project_id to wich it belongs
           r.project.move_actions_to_project(p)
           r.move_to_project(p)
         else
-          t << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
+          @text << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
           r.project.move_actions_to_project(p)
           r.move_to_project(project)
         end
       end
       }
-    t << "<br/><a href='/projects'>back to projects</a>"
-    render(:text=>t)
+    @projects = Project.find(:all).select{ |p| p.projects.size == 0 and p.requests.size == 0}
+    @display_actions = true
   end
 
   def check_sdp
@@ -129,9 +130,9 @@ class ProjectsController < ApplicationController
   end
 
   def add_status
-    project_id = params[:status][:project_id]
-    status = Status.create(params[:status])
-    p = Project.find(project_id)
+    project_id  = params[:status][:project_id]
+    status      = Status.create(params[:status])
+    p           = Project.find(project_id)
     p.update_status(params[:status][:status])
     redirect_to :action=>:show, :id=>project_id
   end
@@ -169,12 +170,24 @@ class ProjectsController < ApplicationController
   def cut
     session[:cut] = params[:id]
     session[:action_cut] = nil
+    session[:status_cut] = nil
+    session[:request_cut] = nil
+    render(:nothing => true)
+  end
+
+  def cut_status
+    session[:status_cut] = params[:id]
+    session[:action_cut] = nil
+    session[:cut] = nil
+    session[:request_cut] = nil
     render(:nothing => true)
   end
 
   def paste
     paste_project if session[:cut] != nil
-    paste_action if  session[:action_cut] != nil
+    paste_action  if session[:action_cut] != nil
+    paste_request if session[:request_cut] != nil
+    paste_status  if session[:status_cut] != nil
   end
 
   def paste_project
@@ -199,6 +212,29 @@ class ProjectsController < ApplicationController
     render(:nothing=>true)
   end
 
+  def paste_request
+    to_id   = params[:id].to_i
+    cut_id  = session[:request_cut].to_i
+    cut     = Request.find(cut_id)
+    from_id = cut.project_id
+    cut.project_id = to_id
+    cut.save
+    render(:nothing=>true)
+  end
+
+  def paste_status
+    to_id   = params[:id].to_i
+    cut_id  = session[:status_cut].to_i
+    cut     = Status.find(cut_id)
+    from_id = cut.project_id
+    cut.project_id = to_id
+    cut.save
+    Project.find(to_id).update_status
+    Project.find(from_id).update_status
+    render(:nothing=>true)
+  end
+
+
   def destroy
     Project.find(params[:id].to_i).destroy
     render(:nothing=>true)
@@ -207,6 +243,7 @@ class ProjectsController < ApplicationController
   def report
     get_projects
     @projects = @projects.sort_by { |p| [p.supervisor_name, p.workstream, p.name] }
+    @size = @projects.size
     @report = Report.new(Request.all)
     render(:layout=>'report')
   end

@@ -38,6 +38,8 @@ class ActionsController < ApplicationController
   def cut
     session[:action_cut] = params[:id]
     session[:cut] = nil
+    session[:status_cut] = nil
+    session[:request_cut] = nil
   end
 
   private

@@ -1,5 +1,10 @@
 <li class="report_project">
 <div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= html_status(subreport.last_status) %></div>
+
+<% if subreport.projects.size == 0 and subreport.open_requests.size == 0 %>
+<strong>No open request!</strong><br/>
+<% end %>
+
 <%
   cur = subreport.current_actions
   if cur.size > 0

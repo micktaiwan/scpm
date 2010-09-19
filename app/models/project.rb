@@ -148,6 +148,9 @@ class Project < ActiveRecord::Base
       }
   end
 
+  def open_requests
+    self.requests.select { |r| r.resolution != "ended"}
+  end
 
 private
 
