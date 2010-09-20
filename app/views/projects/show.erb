@@ -24,10 +24,9 @@
 
 <h3>Actions</h3>
 
-  <ul>
+  <%= render(:file=>'actions/actions_header') %>
   <%= render(:partial=>'actions/action', :collection=>@project.actions) %>
-  </ul>
-
+  </table>
 
 <h3>Project</h3>
 <% if @project.project %>
