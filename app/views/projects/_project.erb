@@ -1,7 +1,7 @@
 <% status_html = project.project_requests_progress_status_html %>
 <li id="p_<%=project.id%>">
 
-<% if project.projects.size + projects.requests.size > 0 %>
+<% if project.projects.size + project.requests.size > 0 %>
 <%= link_to_function(image_tag('expand.gif'), "$('sub_#{project.id}').toggle();") %>
 <% else %>
 <%= image_tag('dot.gif', :width=>12) %>
