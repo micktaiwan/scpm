@@ -94,14 +94,14 @@ class ProjectsController < ApplicationController
       if r.workpackage_name != r.project.name
         project = Project.find_by_name(r.workpackage_name)
         if not project
-          @text << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
+          @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
           parent = Project.find(:first, :conditions=>"name='#{r.project.name}'")
           parent_id = parent ? parent.id : nil
           p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream) # FIXME: need to set the project_id to wich it belongs
           r.project.move_actions_to_project(p)
           r.move_to_project(p)
         else
-          @text << "<u>#{r.project.name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
+          @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
           r.project.move_actions_to_project(p)
           r.move_to_project(project)
         end
@@ -184,10 +184,18 @@ class ProjectsController < ApplicationController
   end
 
   def paste
+    Project.record_timestamps = false
+    Status.record_timestamps  = false
+    Action.record_timestamps  = false
+    Request.record_timestamps = false
     paste_project if session[:cut] != nil
     paste_action  if session[:action_cut] != nil
     paste_request if session[:request_cut] != nil
     paste_status  if session[:status_cut] != nil
+    Project.record_timestamps = true
+    Status.record_timestamps  = true
+    Action.record_timestamps  = true
+    Request.record_timestamps = true
   end
 
   def paste_project
