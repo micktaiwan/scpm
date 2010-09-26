@@ -248,6 +248,12 @@ class ProjectsController < ApplicationController
     render(:nothing=>true)
   end
 
+  def destroy_status
+    Status.find(params[:id].to_i).destroy
+    render(:nothing=>true)
+  end
+
+
   def report
     get_projects
     @projects = @projects.sort_by { |p| [p.supervisor_name, p.workstream, p.name] }
