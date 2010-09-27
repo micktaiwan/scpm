@@ -34,7 +34,7 @@ class WelcomeController < ApplicationController
         r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
         r.save
         }
-    redirect_to :action=>:index
+    redirect_to '/projects/import'
   end
 
   def workload_schedule

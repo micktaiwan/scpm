@@ -1,8 +1,9 @@
+<h2>Check</h2>
+<%= link_to('Projects', {:action=>'index'},{:class=>"btnlnk"}) %>
+<br/>
+<br/>
 <%= @text %>
 <br/>
 <ul>
 <%= render(:partial=>'project', :collection=>@projects) %>
 </ul>
-<br/>
-<a href='/projects'>back to projects</a>
-

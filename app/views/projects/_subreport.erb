@@ -1,15 +1,18 @@
 <li class="report_project">
-<div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= html_status(subreport.last_status) %></div>
+<div class="sub_name"><%= subreport.workstream %> <%= subreport.name %> <%= html_status(subreport.last_status) %>
 
 <% if subreport.projects.size == 0 and subreport.open_requests.size == 0 %>
-<strong>No open request!</strong><br/>
+<strong>No open request</strong>
 <% end %>
+
+</div>
+
 
 <%
   cur = subreport.current_actions
   if cur.size > 0
 %>
-Actions:
+<b>Actions:</b>
 <ul>
   <%= render(:partial=>'actions/action_report', :collection=>cur) %>
 </ul>
@@ -17,7 +20,7 @@ Actions:
 <% end %>
 <% status = subreport.get_status
   if status.explanation != "unknown" %>
-Status: <% date = subreport.last_status_date;
+<b>Status:</b> <% date = subreport.last_status_date;
 if date
   days = time_ago_in_words(date) %>
   (<%= days %>)
@@ -28,7 +31,7 @@ if date
 </ul>
 <% end %>
 <% if subreport.requests.size > 0 %>
-  Requests:
+  <b>Requests:</b>
   <ul>
     <%= render(:partial=>'request', :collection=>subreport.requests) %>
   </ul>

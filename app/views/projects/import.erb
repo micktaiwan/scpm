@@ -1,4 +1,7 @@
 <h2>Import</h2>
+<%= link_to('Check', {:action=>'check'},{:class=>"btnlnk"}) %>
+<%= link_to('Projects', {:action=>'index'},{:class=>"btnlnk"}) %>
+<br/>
 
 <ul>
 <%= render(:partial=>'import', :collection=>@import) %>
