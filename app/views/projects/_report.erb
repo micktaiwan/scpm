@@ -11,8 +11,6 @@
   <%= render(:partial=>'actions/action_report', :collection=>cur) %>
 </ul>
 <% end %>
-
-<ul>
 <% status = report.get_status
   if status.explanation != "unknown" %>
 <b>Status:</b> <% date = report.last_status_date;
@@ -31,6 +29,7 @@ if date
     <%= render(:partial=>'request', :collection=>report.requests) %>
   </ul>
   <% end %>
+<ul>
   <%= render(:partial=>'subreport', :collection=>report.projects) %>
 </ul>
 </li>
