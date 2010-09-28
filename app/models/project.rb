@@ -72,7 +72,7 @@ class Project < ActiveRecord::Base
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_arr)
     self.requests.each { |r|
-      next if not r.resp
+      next if not r.resp or r.status == "cancelled"
       return true if user_arr.include?(r.resp.id)
       }
     self.projects.each { |p|
@@ -128,6 +128,7 @@ class Project < ActiveRecord::Base
     return true if self.description =~ /#{text}/i
     self.statuses.each { |s|
       return true if s.explanation =~ /#{text}/i
+      return true if s.feedback =~ /#{text}/i
       }
     self.requests.each { |s|
       return true if s.summary =~ /#{text}/i

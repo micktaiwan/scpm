@@ -2,15 +2,6 @@
 <h2 class="project_name"><%= report.workstream %> <%= report.name %> <%= html_status(report.last_status) %></h2>
 <%= report.supervisor_name %><br/>
 
-<%
-  cur = report.current_actions
-  if cur.size > 0
-%>
-<b>Actions:</b><br/>
-<ul>
-  <%= render(:partial=>'actions/action_report', :collection=>cur) %>
-</ul>
-<% end %>
 <% status = report.get_status
   if status.explanation != "unknown" %>
 <b>Status:</b> <% date = report.last_status_date;
@@ -23,6 +14,17 @@ if date
   <%= simple_format(status.explanation) %>
 </ul>
 <% end %>
+
+<%
+  cur = report.current_actions
+  if cur.size > 0
+%>
+<b>Actions:</b><br/>
+<ul>
+  <%= render(:partial=>'actions/action_report', :collection=>cur) %>
+</ul>
+<% end %>
+
   <% if report.requests.size > 0 %>
   <b>Requests:</b>
   <ul>

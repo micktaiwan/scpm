@@ -7,17 +7,6 @@
 
 </div>
 
-
-<%
-  cur = subreport.current_actions
-  if cur.size > 0
-%>
-<b>Actions:</b>
-<ul>
-  <%= render(:partial=>'actions/action_report', :collection=>cur) %>
-</ul>
-<br/>
-<% end %>
 <% status = subreport.get_status
   if status.explanation != "unknown" %>
 <b>Status:</b> <% date = subreport.last_status_date;
@@ -30,6 +19,18 @@ if date
   <%= simple_format(status.explanation) %>
 </ul>
 <% end %>
+
+<%
+  cur = subreport.current_actions
+  if cur.size > 0
+%>
+<b>Actions:</b>
+<ul>
+  <%= render(:partial=>'actions/action_report', :collection=>cur) %>
+</ul>
+<br/>
+<% end %>
+
 <% if subreport.requests.size > 0 %>
   <b>Requests:</b>
   <ul>

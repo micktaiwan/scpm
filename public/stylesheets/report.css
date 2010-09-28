@@ -15,7 +15,7 @@ h2 {
 }
 
 .project_name {list-style-type:none;}
-.sub_name {border:1px solid black;width: 500px;margin: 5px;background: #EEE;}
+.sub_name {border:1px solid black;width: 500px;margin: 40px 5px 5px 0px;padding:3px;background: #EEE;}
 
 
 #content {

@@ -253,7 +253,6 @@ class ProjectsController < ApplicationController
     render(:nothing=>true)
   end
 
-
   def report
     get_projects
     @projects = @projects.sort_by { |p| [p.supervisor_name, p.workstream, p.name] }

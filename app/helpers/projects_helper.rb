@@ -18,7 +18,7 @@ module ProjectsHelper
     end
     rv += simple_format(s.explanation)
     rv += "</div>"
-    rv += "<h3>Feeback</h3>"
+    rv += "<h3>Feedback</h3>"
     rv += simple_format(s.feedback)
     rv += "</div>"
     rv
