@@ -127,6 +127,9 @@ class ProjectsController < ApplicationController
   def add_status_form
     @project = Project.find(params[:project_id])
     @status = Status.new
+    last = @project.get_status
+    @status.explanation = last.explanation
+    @status.feedback = last.feedback
   end
 
   def add_status

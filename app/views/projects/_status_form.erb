@@ -1,6 +1,6 @@
 <table class="edit">
 <tr><td>Status</td><td><%= text_field(:status, :status, {:size=>3}) %>0: unknown, 1: green, 2: amber, 3: red</td></tr>
-<td>Description</td><td><%= text_area(:status, :explanation, {:cols=>80}) %></td></tr>
-<td>Feedback</td><td><%= text_area(:status, :feedback, {:cols=>80}) %></td></tr>
+<td>Description</td><td><%= text_area(:status, :explanation, {:cols=>100, :rows=>15}) %></td></tr>
+<td>Feedback</td><td><%= text_area(:status, :feedback, {:cols=>100, :rows=>15}) %></td></tr>
 </table>
 <%= hidden_field :status, :project_id, :value=>@project.id %>
