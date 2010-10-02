@@ -90,6 +90,7 @@ class ProjectsController < ApplicationController
   # find projects with nothing in it
   def check
     @text = ""
+    timestamps_off
     Request.find(:all, :conditions=>"project_id is not null").each { |r|
       if r.workpackage_name != r.project.name
         project = Project.find_by_name(r.workpackage_name)
@@ -109,6 +110,7 @@ class ProjectsController < ApplicationController
       }
     @projects = Project.find(:all).select{ |p| p.projects.size == 0 and p.requests.size == 0}
     @display_actions = true
+    timestamps_on
   end
 
   def check_sdp
@@ -187,18 +189,12 @@ class ProjectsController < ApplicationController
   end
 
   def paste
-    Project.record_timestamps = false
-    Status.record_timestamps  = false
-    Action.record_timestamps  = false
-    Request.record_timestamps = false
+    timestamps_off
     paste_project if session[:cut] != nil
     paste_action  if session[:action_cut] != nil
     paste_request if session[:request_cut] != nil
     paste_status  if session[:status_cut] != nil
-    Project.record_timestamps = true
-    Status.record_timestamps  = true
-    Action.record_timestamps  = true
-    Request.record_timestamps = true
+    timestamps_on
   end
 
   def paste_project
@@ -265,6 +261,20 @@ class ProjectsController < ApplicationController
   end
 
 private
+
+  def timestamps_off
+    Project.record_timestamps = false
+    Status.record_timestamps  = false
+    Action.record_timestamps  = false
+    Request.record_timestamps = false
+  end
+
+  def timestamps_on
+    Project.record_timestamps = true
+    Status.record_timestamps  = true
+    Action.record_timestamps  = true
+    Request.record_timestamps = true
+  end
 
   def get_projects
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
