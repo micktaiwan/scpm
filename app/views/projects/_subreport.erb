@@ -34,7 +34,7 @@ if date
 <% if subreport.requests.size > 0 %>
   <b>Requests:</b>
   <ul>
-    <%= render(:partial=>'request', :collection=>subreport.requests) %>
+    <%= render(:partial=>'report_request', :collection=>subreport.requests) %>
   </ul>
 <% end %>
 <ul>
