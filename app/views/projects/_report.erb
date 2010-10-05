@@ -7,7 +7,7 @@
 <b>Status:</b> <% date = report.last_status_date;
 if date
   days = time_ago_in_words(date) %>
-  (<%= days %>)
+  (<%= date.to_date %> - <%= days %> ago)
 <% end %>
 <br/>
 <ul>

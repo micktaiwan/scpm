@@ -18,6 +18,10 @@ module ProjectsHelper
     end
     rv += simple_format(s.explanation)
     rv += "</div>"
+    rv += "<h3>Status change reason (#{html_status(s.project.old_status)} => #{html_status(s.project.last_status)})</h3>"
+    rv += simple_format(s.reason)
+    rv += "<h3>Operational Alert</h3>"
+    rv += simple_format(s.operational_alert)
     rv += "<h3>Feedback</h3>"
     rv += simple_format(s.feedback)
     rv += "</div>"

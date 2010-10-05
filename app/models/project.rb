@@ -18,18 +18,31 @@ class Project < ActiveRecord::Base
   end
 
   def has_status
-    Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
+    s = Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
+    s != [] and s!=nil
   end
 
   def get_status
-    s = has_status
-    s = Status.new({:status=>0, :explanation=>"unknown"}) if not s
+    s = Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
+    s = Status.new({:status=>0, :explanation=>"unknown"}) if s == [] or s == nil
     s
   end
+  
+  def last_reason
+    s = get_status
+    s.reason
+  end
 
-  def last_status_date
-    #time_ago_in_words(get_status.updated_at)
-    days_ago(get_status.updated_at)
+   def last_operational_alert
+    s = get_status
+    s.operational_alert
+  end
+
+  
+  def old_status
+    s = Status.find(:all, :conditions=>["project_id=?", self.id], :order=>"created_at desc", :limit=>2)
+    return 0 if s.size < 2
+    return s[1].status
   end
 
   def update_status(s = nil)
@@ -83,9 +96,9 @@ class Project < ActiveRecord::Base
 
   # recursively get the last status date
   def last_status_date
-    status = has_status
-    date = nil
-    date = status.updated_at if status
+    status  = get_status
+    date    = nil
+    date    = status.updated_at if status
     self.projects.each { |p|
       sub   = p.last_status_date
       date  = sub if sub and (date == nil or sub > date)
@@ -152,7 +165,20 @@ class Project < ActiveRecord::Base
   def open_requests
     self.requests.select { |r| r.resolution != "ended"}
   end
+  
+  def project_name
+    return project.project_name if self.project
+    self.name
+  end
 
+  def sub_has_supervisor
+    return false if self.supervisor_id==nil
+    self.projects.each{ |p|
+      return false if not p.sub_has_supervisor
+      }
+    return true
+  end
+  
 private
 
   def days_ago(date_time)

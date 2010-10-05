@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100926153251) do
+ActiveRecord::Schema.define(:version => 20101005110015) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -93,12 +93,14 @@ ActiveRecord::Schema.define(:version => 20100926153251) do
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
 
   create_table "statuses", :force => true do |t|
-    t.integer  "project_id",                 :null => false
-    t.integer  "status",      :default => 0
+    t.integer  "project_id",                       :null => false
+    t.integer  "status",            :default => 0
     t.text     "explanation"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "feedback"
+    t.text     "reason"
+    t.text     "operational_alert"
   end
 
 end

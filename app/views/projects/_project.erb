@@ -24,7 +24,7 @@ if date
 <%= project.actions.size %> actions
 <% end %>
 
-<% if project.project==nil and project.supervisor_id==nil %>
+<% if not project.sub_has_supervisor  %>
 <strong>no supervisor</strong>
 <% end %>
 <span class="project_status_<%=status_html%>">
