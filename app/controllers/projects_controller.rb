@@ -74,7 +74,8 @@ class ProjectsController < ApplicationController
   def update_status
     status = Status.find(params[:id])
     status.update_attributes(params[:status])
-    status.project.update_status(params[:status][:status])
+    p = status.project
+    p.update_status(params[:status][:status]) if p.get_status.id == status.id # only if we are updating the last status
     redirect_to :action=>:show, :id=>status.project_id
   end
 

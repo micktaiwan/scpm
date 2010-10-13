@@ -1,11 +1,11 @@
 class Project < ActiveRecord::Base
 
   belongs_to  :project
-  belongs_to  :supervisor, :class_name=>"Person"
-  has_many    :projects, :order=>'name', :dependent=>:destroy
-  has_many    :requests, :dependent=>:nullify
-  has_many    :statuses, :dependent => :destroy, :order=>"updated_at desc"
-  has_many    :actions, :dependent => :destroy, :order=>"progress"
+  belongs_to  :supervisor,  :class_name=>"Person"
+  has_many    :projects,    :order=>'name', :dependent=>:destroy
+  has_many    :requests,    :dependent=>:nullify
+  has_many    :statuses,    :dependent => :destroy, :order=>"created_at desc"
+  has_many    :actions,     :dependent => :destroy, :order=>"progress"
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
 
   def icon_status
@@ -48,15 +48,19 @@ class Project < ActiveRecord::Base
   def update_status(s = nil)
     if s
       self.last_status = s
+      st = self.get_status
+      st.status = s
+      st.save
       save
+      # puts "changing #{self.name} to #{s}"
     end
     propagate_status
   end
 
-  # look at sub projects status and calculates its own
+  # look at sub projects status and calculates its own and propagate it to parents
   def propagate_status
-    if has_status # so if the status was green only because a green sub project (status == nil) the status wont' be updated
-      status = self.last_status
+    if has_status # so if the status was green only because a green sub project (status == nil) the status won't be updated
+      status = self.get_status.status
     else
       status = 0
     end
@@ -65,6 +69,7 @@ class Project < ActiveRecord::Base
       }
     self.last_status = status
     save
+    #puts "#{self.name} status is now #{status}"
     project.propagate_status if self.project
   end
 
