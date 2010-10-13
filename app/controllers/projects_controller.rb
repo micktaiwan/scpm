@@ -1,3 +1,5 @@
+require 'builder'
+
 class ProjectsController < ApplicationController
 
   def index
@@ -263,6 +265,20 @@ class ProjectsController < ApplicationController
     @report = Report.new(Request.all)
     render(:layout=>'report')
   end
+  
+  # generate an Excel file to summarize projects status
+  def summary
+    #begin
+      @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
+      get_projects
+      headers['Content-Type'] = "application/vnd.ms-excel"
+      headers['Content-Disposition'] = 'attachment; filename="Summary.xls"'
+      headers['Cache-Control'] = ''
+      render(:layout=>false)
+    #rescue Exception => e
+    #  render(:text=>e)
+    #end
+  end
 
 private
 
@@ -297,4 +313,5 @@ private
       @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
     end
   end
+  
 end

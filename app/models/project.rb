@@ -136,7 +136,7 @@ class Project < ActiveRecord::Base
   def requests_progress_status
     status = 0
     self.requests.each { |r|
-      status = r.progress_status
+      status = r.progress_status if r.status!='cancelled' and status < r.progress_status
       }
     return status
   end
