@@ -1,11 +1,11 @@
 <%=
 @xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
 @xml.Workbook({
-  'xmlns'      => "urn:schemas-microsoft-com:office:spreadsheet", 
+  'xmlns'      => "urn:schemas-microsoft-com:office:spreadsheet",
   'xmlns:o'    => "urn:schemas-microsoft-com:office:office",
-  'xmlns:x'    => "urn:schemas-microsoft-com:office:excel",    
+  'xmlns:x'    => "urn:schemas-microsoft-com:office:excel",
   'xmlns:html' => "http://www.w3.org/TR/REC-html40",
-  'xmlns:ss'   => "urn:schemas-microsoft-com:office:spreadsheet" 
+  'xmlns:ss'   => "urn:schemas-microsoft-com:office:spreadsheet"
   }) do
 
   @xml.Styles do
@@ -21,10 +21,10 @@
      @xml.NumberFormat 'ss:Format' => 'General Date'
    end
   end
- 
+
   @xml.Worksheet 'ss:Name' => 'Blahblah' do
     @xml.Table do
-      
+
       # Header
       @xml.Row do
         for column in ['WS','Project', 'BRN'] do
@@ -33,20 +33,20 @@
           end
         end
       end
-      
+
       # Rows
-      #for p in @wps
-      #  @xml.Row do
-          #for column in ['workstream', 'name', 'brn'] do
-          #  @xml.Cell do
-          #    @xml.Data h(p.send(column)), 'ss:Type' => 'String'
-          #  end
-          #end
-      #  end
-      #end
-      
+      for p in @wps
+        @xml.Row do
+          for column in ['workstream', 'name', 'brn'] do
+            @xml.Cell do
+              @xml.Data h(p.send(column)), 'ss:Type' => 'String'
+            end
+          end
+        end
+      end
+
     end
   end
-  
+
 end
 %>
