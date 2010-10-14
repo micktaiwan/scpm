@@ -20,14 +20,25 @@
    @xml.Style 'ss:ID' => 's22' do
      @xml.NumberFormat 'ss:Format' => 'General Date'
    end
+   @xml.Style 'ss:ID' => 's62', 'ss:Name' => 'Header' do
+     @xml.Font 'ss:Bold'=>"1"
+   end
+   @xml.Style 'ss:ID' => 's75', 'ss:Name' => 'Closed' do
+     @xml.Font 'ss:Color'=>'#C5BE97', 'ss:Italic' => '1'
+   end
+   @xml.Style 'ss:ID' => 's76', 'ss:Name' => 'Alert' do
+     @xml.Font 'ss:Color'=>'#FF0000'
+   end
   end
 
-  @xml.Worksheet 'ss:Name' => 'Blahblah' do
+# STATUSES
+  
+  @xml.Worksheet 'ss:Name' => 'Projects Status' do
     @xml.Table do
 
       # Header
-      @xml.Row do
-        for column in ['WS','Project', 'BRN'] do
+      @xml.Row 'ss:StyleID' => 's62' do
+        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Status'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
           end
@@ -37,9 +48,13 @@
       # Rows
       for p in @wps
         @xml.Row do
-          for column in ['workstream', 'name', 'brn'] do
+          for column in ['supervisor_name', 'workstream', 'project_name', 'name', 'brn', 'last_status', 'last_status_description'] do
             @xml.Cell do
-              @xml.Data h(p.send(column)), 'ss:Type' => 'String'
+              begin
+                @xml.Data p.send(column), 'ss:Type' => 'String'
+              rescue Exception => e
+                @xml.Data e.message, 'ss:Type' => 'String'
+              end  
             end
           end
         end
@@ -48,5 +63,40 @@
     end
   end
 
+# ACTIONS
+
+  @xml.Worksheet 'ss:Name' => 'Actions' do
+    @xml.Table do
+
+      # Header
+      @xml.Row 'ss:StyleID' => 's62' do
+        for column in ['Resp', 'Target','Project', 'Action', 'Status'] do
+          @xml.Cell do
+            @xml.Data column, 'ss:Type' => 'String'
+          end
+        end
+      end
+
+      # Rows
+      for p in @actions
+        style = {}
+        style = {'ss:StyleID' => 's75'} if p.progress=='closed' or p.progress=='abandonned'
+        @xml.Row(style) do
+          for column in ['person_name', 'due_date', 'project_full_name', 'action', 'progress'] do
+            @xml.Cell do
+              begin
+                @xml.Data p.send(column), 'ss:Type' => 'String'
+              rescue Exception => e
+                @xml.Data e.message, 'ss:Type' => 'String'
+              end  
+            end
+          end
+        end
+      end
+
+    end
+  end
+  
+  
 end
 %>

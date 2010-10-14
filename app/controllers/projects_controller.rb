@@ -272,6 +272,10 @@ class ProjectsController < ApplicationController
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
+      @wps = @wps.sort_by { |w|
+        [w.supervisor_name, w.workstream, w.project_name, w.name]
+        }
+      @actions = Action.find(:all, :order=>"person_id, creation_date, progress")
       headers['Content-Type'] = "application/vnd.ms-excel"
       headers['Content-Disposition'] = 'attachment; filename="Summary.xls"'
       headers['Cache-Control'] = ''

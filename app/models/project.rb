@@ -38,6 +38,10 @@ class Project < ActiveRecord::Base
     s.operational_alert
   end
 
+  def last_status_description
+    get_status.explanation
+  end
+
   
   def old_status
     s = Status.find(:all, :conditions=>["project_id=?", self.id], :order=>"created_at desc", :limit=>2)
@@ -176,6 +180,12 @@ class Project < ActiveRecord::Base
     self.name
   end
 
+  def supervisor_name
+    return self.supervisor.name if self.supervisor
+    "?"
+  end
+
+  
   def sub_has_supervisor
     return false if self.supervisor_id==nil
     self.projects.each{ |p|
