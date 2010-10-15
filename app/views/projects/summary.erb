@@ -10,7 +10,7 @@
 
   @xml.Styles do
    @xml.Style 'ss:ID' => 'Default', 'ss:Name' => 'Normal' do
-     @xml.Alignment 'ss:Vertical' => 'Bottom'
+     @xml.Alignment 'ss:Vertical' => 'Top', 'ss:WrapText' => '1'
      @xml.Borders
      @xml.Font 'ss:FontName' => 'Verdana'
      @xml.Interior
@@ -29,38 +29,74 @@
    @xml.Style 'ss:ID' => 's76', 'ss:Name' => 'Alert' do
      @xml.Font 'ss:Color'=>'#FF0000'
    end
+
+   @xml.Style 'ss:ID' => 's77', 'ss:Name' => 'StatusUnknown' do
+     @xml.Font 'ss:Color'=>'#555555'
+   end
+   @xml.Style 'ss:ID' => 's78', 'ss:Name' => 'StatusGreen' do
+     @xml.Font 'ss:Color'=>'#00FF00'
+   end
+   @xml.Style 'ss:ID' => 's79', 'ss:Name' => 'StatusAmber' do
+     @xml.Font 'ss:Color'=>'#FFAA00'
+   end
+   @xml.Style 'ss:ID' => 's80', 'ss:Name' => 'StatusRed' do
+     @xml.Font 'ss:Color'=>'#FF0000'
+   end
+
+   @xml.Style 'ss:ID' => 's81', 'ss:Name' => 'CurrentStatusUnknown' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#DDDDDD", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's82', 'ss:Name' => 'CurrentStatusGreen' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#00FF00", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's83', 'ss:Name' => 'CurrentStatusAmber' do
+     @xml.Font 'ss:Color'=>'#FFFFFF', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#FFAA00", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's84', 'ss:Name' => 'CurrentStatusRed' do
+     @xml.Font 'ss:Color'=>'#FFFFFF', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#FF0000", 'ss:Pattern'=>'Solid'
+   end
   end
 
 # STATUSES
   
   @xml.Worksheet 'ss:Name' => 'Projects Status' do
+    @xml.Names do
+      @xml.NamedRange 'ss:Name' => '_FilterDatabase', 'ss:RefersTo' => "='Projects Status'!R1C1:R165C9", 'ss:Hidden' => '1'
+    end
     @xml.Table do
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Status'] do
+        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Old status', 'Current Status', 'Status Change Reason', 'Operational Alert'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
           end
         end
       end
 
       # Rows
       for p in @wps
+        status = p.get_status
         @xml.Row do
-          for column in ['supervisor_name', 'workstream', 'project_name', 'name', 'brn', 'last_status', 'last_status_description'] do
-            @xml.Cell do
-              begin
-                @xml.Data p.send(column), 'ss:Type' => 'String'
-              rescue Exception => e
-                @xml.Data e.message, 'ss:Type' => 'String'
-              end  
-            end
-          end
+          @xml.Cell { @xml.Data p.supervisor_name,    'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.workstream,         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.project_name,       'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.name,               'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.brn,                'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell 'ss:StyleID' => status_excel_style2(p.old_status)  do @xml.Data text_status(p.old_status),  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
+          @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
+          @xml.Cell { @xml.Data status.reason,             'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data status.operational_alert,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
         end
       end
 
     end
+  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C9', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
 
 # ACTIONS
@@ -73,6 +109,7 @@
         for column in ['Resp', 'Target','Project', 'Action', 'Status'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase' 
           end
         end
       end
@@ -85,9 +122,7 @@
           for column in ['person_name', 'due_date', 'project_full_name', 'action', 'progress'] do
             @xml.Cell do
               begin
-                @xml.Data p.send(column), 'ss:Type' => 'String'
-              rescue Exception => e
-                @xml.Data e.message, 'ss:Type' => 'String'
+                @xml.Data p.send(column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
               end  
             end
           end
@@ -95,6 +130,7 @@
       end
 
     end
+  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C5', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
   
   
