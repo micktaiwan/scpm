@@ -66,5 +66,15 @@ module ProjectsHelper
     end
   end
 
+  def request_style(r)
+    case r.status
+      when 'to be validated'; 's85'
+      when 'feedback';        's86'
+      when 'new';             's87'
+      when 'acknowledged';    's88'
+      when 'performed';       's89'
+    end
+  end
+
 end
 

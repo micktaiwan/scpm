@@ -276,6 +276,7 @@ class ProjectsController < ApplicationController
         [w.supervisor_name, w.workstream, w.project_name, w.name]
         }
       @actions = Action.find(:all, :order=>"person_id, creation_date, progress")
+      @requests = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed'", :order=>"status, workstream")
       headers['Content-Type'] = "application/vnd.ms-excel"
       headers['Content-Disposition'] = 'attachment; filename="Summary.xls"'
       headers['Cache-Control'] = ''
