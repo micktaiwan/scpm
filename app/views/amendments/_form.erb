@@ -1,0 +1,14 @@
+<%= hidden_field :amendment, :project_id %>
+
+<p><%= label_tag 'project' %>
+<%= select(:amendment, :project_id, @projects_select, :include_blank=>"=== No project ===") %>
+</p>
+
+<p><%= label_tag 'amendment' %>
+<%= text_area :amendment, :amendment, {:rows=>3} %></p>
+
+<p><%= label_tag 'action' %>
+<%= text_area :amendment, :action, {:rows=>3} %></p>
+
+<p><%= label_tag 'creation_date' %>
+<%= text_field :amendment, :creation_date %> yyyy-mm-dd</p>

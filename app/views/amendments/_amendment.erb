@@ -1,0 +1,39 @@
+<tr id="a_<%=action.id%>" class="action_<%=action.progress%>">
+
+<td><%= action.id %></td>
+
+<td>
+<% if action.person %><%= action.person.name %><% end %>
+</td>
+
+<td>
+<b>
+<% if action.project %><%= action.project.full_name %>:<% end %>
+<%= action.action %>
+</b>
+</td>
+
+<td>
+<%= action.creation_date %>
+</td>
+
+<td>
+<% if action.due_date %>
+<% if action.due_date < Date.today() %><strong><%end%>
+<%= action.due_date %> (<%= time_ago_in_words(action.due_date) %>)
+<% if action.due_date < Date.today() %></strong><%end%>
+<% end %>
+</td>
+<td>
+<b><%= action.progress %></b>
+</td>
+<td>
+<u><%= action.result %></u>
+</td>
+
+<td>
+<%= link_to(image_tag('edit.gif'), {:controller=>'actions', :action=>'edit', :id=>action.id}) %>
+<%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'actions', :action=>'destroy', :id=>action.id}, :confirm=>"You should change the action status to 'abandonned', are you sure you want to delete this action ?", :success=>"$('a_#{action.id}').hide();") %>
+<%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'actions', :action=>'cut', :id=>action.id}) %>
+</td>
+</tr>

@@ -1,0 +1,7 @@
+<h2>Add an amendment</h2>
+<%= error_messages_for :amendment %>
+<% form_for :@amendment, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>

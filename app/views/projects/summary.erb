@@ -114,7 +114,6 @@ end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell { @xml.Data status.reason,             'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data status.operational_alert,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          
         end
       end
 

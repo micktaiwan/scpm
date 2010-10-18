@@ -7,6 +7,7 @@ class Project < ActiveRecord::Base
   has_many    :statuses,    :dependent => :destroy, :order=>"created_at desc"
   has_many    :actions,     :dependent => :destroy, :order=>"progress"
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
+  has_many    :amendments,  :dependent => :destroy, :order=>"done, id"
 
   def icon_status
     case last_status
