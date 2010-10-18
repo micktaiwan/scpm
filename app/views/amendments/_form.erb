@@ -4,11 +4,21 @@
 <%= select(:amendment, :project_id, @projects_select, :include_blank=>"=== No project ===") %>
 </p>
 
+<p><%= label_tag 'milestone' %>
+<%= select(:amendment, :milestone, ['m1','m3','m5','m7','m9','m10','m10a','m11','m12','m13','m14']) %>
+</p>
+
 <p><%= label_tag 'amendment' %>
 <%= text_area :amendment, :amendment, {:rows=>3} %></p>
 
 <p><%= label_tag 'action' %>
 <%= text_area :amendment, :action, {:rows=>3} %></p>
 
+<p><%= label_tag 'responsible' %>
+<%= text_field :amendment, :responsible %></p>
+
 <p><%= label_tag 'creation_date' %>
 <%= text_field :amendment, :creation_date %> yyyy-mm-dd</p>
+
+<p><%= label_tag 'done' %>
+<%= check_box :amendment, :done %></p>

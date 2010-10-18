@@ -25,10 +25,12 @@ ActiveRecord::Schema.define(:version => 20101018074805) do
 
   create_table "amendments", :force => true do |t|
     t.integer  "project_id"
+    t.string   "responsible"
+    t.string   "milestone",     :limit => 0
     t.string   "amendment"
     t.string   "action"
     t.date     "creation_date"
-    t.integer  "done",          :default => 0
+    t.integer  "done",                       :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

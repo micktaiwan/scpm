@@ -127,7 +127,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-
   def project_requests_progress_status
     status = self.requests_progress_status
     self.projects.each { |p|
@@ -186,7 +185,6 @@ class Project < ActiveRecord::Base
     "?"
   end
 
-  
   def sub_has_supervisor
     return false if self.supervisor_id==nil
     self.projects.each{ |p|
