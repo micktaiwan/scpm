@@ -128,7 +128,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Resp', 'Target','Project', 'Action', 'Status'] do
+        for column in ['#','Resp', 'Target','Project', 'Action', 'Status'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase' 
@@ -141,7 +141,7 @@ end
         style = {}
         style = {'ss:StyleID' => 's75'} if p.progress=='closed' or p.progress=='abandonned'
         @xml.Row(style) do
-          for column in ['person_name', 'due_date', 'project_full_name', 'action', 'progress'] do
+          for column in ['id', 'person_name', 'due_date', 'project_full_name', 'action', 'progress'] do
             @xml.Cell do
               @xml.Data p.send(column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end

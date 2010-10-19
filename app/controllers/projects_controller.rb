@@ -140,6 +140,8 @@ class ProjectsController < ApplicationController
     @status.feedback          = last.feedback
     @status.reason            = last.reason
     @status.status            = last.status
+    @status.last_change       = last.last_change
+    @status.actions           = last.actions
     @status.operational_alert = last.operational_alert
   end
 
@@ -272,6 +274,7 @@ class ProjectsController < ApplicationController
 
   # generate an Excel file to summarize projects status
   def summary
+    #render(:text=>"filter on text on => no summary is possible") and return if not @wps
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
@@ -285,7 +288,7 @@ class ProjectsController < ApplicationController
       headers['Cache-Control'] = ''
       render(:layout=>false)
     rescue Exception => e
-      render(:text=>e)
+      render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
     end
   end
 
@@ -308,6 +311,7 @@ private
   def get_projects
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
+      @wps = @projects
       return
     end
     cond = []

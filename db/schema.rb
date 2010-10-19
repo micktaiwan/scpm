@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101018074805) do
+ActiveRecord::Schema.define(:version => 20101019085015) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -113,6 +113,8 @@ ActiveRecord::Schema.define(:version => 20101018074805) do
     t.text     "feedback"
     t.text     "reason"
     t.text     "operational_alert"
+    t.text     "last_change"
+    t.text     "actions"
   end
 
 end

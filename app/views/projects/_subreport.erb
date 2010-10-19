@@ -16,7 +16,16 @@ if date
 <% end %>
 <br/>
 <ul>
-  <%= simple_format(status.explanation) %>
+  <% if status.last_change and status.last_change != "" %>
+  Last change:<br/>
+  <%= simple_format(status.last_change) %><br/>
+  <% end %>
+  Details:
+  <%= simple_format(status.explanation) %><br/>
+  <% if status.actions and status.actions != "" %>
+  Actions:<br/>
+  <%= simple_format(status.actions) %><br/>
+  <% end %>
 </ul>
 <% end %>
 
