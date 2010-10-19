@@ -149,6 +149,14 @@ td    {
   }
 
 /* ACTIONS */
-.action_closed, .action_abandonned {font-style: italic;color: #999;}
-.amendment1 {font-style: italic;color: #999;}
+.action_closed, .action_abandonned {font-style: italic; color: #999;}
+.amendment1 {font-style: italic; color: #999;}
 
+.milestone_bar { margin: 20px; vertical-align:top;}
+.milestone { border:black solid 1px; width: 100px; display: inline-block;}
+.milestone_name { border-bottom:black solid 1px; font-weight: bold; }
+.milestone.status-1 {color: #F00;}
+.milestone.status0 {font-style: italic;color: #999;}
+.milestone.status1 {background-color: #5A5;}
+.milestone.status2 {background-color: #FA0;}
+.milestone.status3 {background-color: #F22;}

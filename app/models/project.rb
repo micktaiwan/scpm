@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'natural_sort'
+
 class Project < ActiveRecord::Base
 
   belongs_to  :project
@@ -8,6 +11,7 @@ class Project < ActiveRecord::Base
   has_many    :actions,     :dependent => :destroy, :order=>"progress"
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
   has_many    :amendments,  :dependent => :destroy, :order=>"done, id"
+  has_many    :milestones,  :dependent => :destroy, :order=>"round(right(name,length(name)-length('m'))) "
 
   def icon_status
     case last_status
@@ -28,7 +32,7 @@ class Project < ActiveRecord::Base
     s = Status.new({:status=>0, :explanation=>"unknown"}) if s == [] or s == nil
     s
   end
-  
+
   def last_reason
     s = get_status
     s.reason
@@ -43,7 +47,7 @@ class Project < ActiveRecord::Base
     get_status.explanation
   end
 
-  
+
   def old_status
     s = Status.find(:all, :conditions=>["project_id=?", self.id], :order=>"created_at desc", :limit=>2)
     return 0 if s.size < 2
@@ -174,7 +178,7 @@ class Project < ActiveRecord::Base
   def open_requests
     self.requests.select { |r| r.resolution != "ended"}
   end
-  
+
   def project_name
     return project.project_name if self.project
     self.name
@@ -191,6 +195,85 @@ class Project < ActiveRecord::Base
       return false if not p.sub_has_supervisor
       }
     return true
+  end
+
+  def create_milestones
+    ['M1-M3', 'M3-M5', 'M5-M10', 'Post-M10', 'Maintenance'].each {|m| create_milestone(m)}
+  end
+  
+  def create_milestone(m)
+    case m
+      when 'M1-M3'
+        rv = self.requests_string(m)
+        milestones.create(:project_id=>self.id, :name=>'m3', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m3')
+      when 'M3-M5'
+        rv = self.requests_string(m)
+        milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')
+      when 'M5-M10'
+        rv = self.requests_string(m)
+        milestones.create(:project_id=>self.id, :name=>'m7', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m7')
+        milestones.create(:project_id=>self.id, :name=>'m9', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m9')
+        milestones.create(:project_id=>self.id, :name=>'m10', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10')
+      when 'Post-M10'
+        rv = self.requests_string(m)
+        milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a')
+        milestones.create(:project_id=>self.id, :name=>'m11', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m11')
+        milestones.create(:project_id=>self.id, :name=>'m12', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m12')
+        milestones.create(:project_id=>self.id, :name=>'m13', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m13')
+        milestones.create(:project_id=>self.id, :name=>'m14', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m14')
+      when 'Maintenance'
+        rv = self.requests_string(m)
+        milestones.create(:project_id=>self.id, :name=>'maint.', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('maint.')
+    end
+  end
+
+  def requests_string(m)
+    rv = ""
+    nb = 0
+    self.requests.select { |r|
+      next if m != 'Maintenance' and ((r.milestone!='N/A' and r.milestone != m) or r.status=='cancelled' or r.status=='to be validated')
+      case r.work_package
+        when 'WP1.1 - Quality Control'
+          nb += 1 and rv += "Control\n" if m != 'Maintenance'
+        when 'WP1.2 - Quality Assurance'
+          nb += 1 and rv += "Assurance\n" if m != 'Maintenance'
+        when 'WP2 - Quality for Maintenance'
+          nb += 1 and rv += "Maintenance\n" if m == 'Maintenance'
+        when 'WP3 - Modeling'
+          nb += 1 and rv += "Modeling\n" if m == 'M3-M5'
+        when 'WP4 - Surveillance Audit'
+          nb += 1 and rv += "Audit (TBC)\n" if m == 'M3-M5'
+        when 'WP4 - Surveillance Root Cause'
+          nb += 1 and rv += "Root Cause (TBC)\n" if m == 'M3-M5'
+        when 'WP5 - Change Accompaniment'
+          nb += 1 and rv += "Change (TBC)\n" if m == 'M3-M5'
+        when 'WP6.1 - Coaching PP'
+          nb += 1 and rv += "Coaching PP\n" if m == 'M1-M3'
+        when 'WP6.2 - Coaching BRD'
+          nb += 1 and rv += "Coaching BRD\n" if m == 'M3-M5'
+        when 'WP6.3 - Coaching V&V'
+          nb += 1 and rv += "Coaching V&V\n"  if m == 'M5-M10'
+        when 'WP6.4 - Coaching ConfMgt'
+          nb += 1 and rv += "Coaching ConfMgt\n" if m == 'M1-M3'
+        when 'WP6.5 - Coaching Maintenance'
+          nb += 1 and rv += "Coaching Maint.\n"  if m == 'Maintenance'
+        else
+          rv += "unknown workpackage: #{r.work_package}"
+      end
+      }
+    rv = "No request" if rv == ""
+    [rv,nb]
+  end
+  
+  def find_milestone_by_name(name)
+    self.milestones.each { |m|
+      return m if m.name == name
+      }
+    nil  
+  end
+
+  def sorted_milestones
+    NaturalSort::naturalsort milestones
   end
   
 private

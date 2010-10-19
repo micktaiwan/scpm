@@ -1,0 +1,21 @@
+<%= hidden_field :milestone, :project_id %>
+
+<p><%= label_tag 'project' %>
+<%= select(:milestone, :project_id, @projects_select, :include_blank=>"=== No project ===") %>
+</p>
+
+<p><%= label_tag 'milestone' %>
+<%= select(:milestone, :name, ['m1','m3','m5', 'm5/m7', 'm7','m9', 'm9/m10', 'm10','m10a','m11','m12','m13','m14','maint.']) %>
+</p>
+
+<p><%= label_tag 'milestone date' %>
+<%= text_field :milestone, :milestone_date %> yyyy-mm-dd</p>
+
+<p><%= label_tag 'actual milestone date' %>
+<%= text_field :milestone, :actual_milestone_date %> yyyy-mm-dd</p>
+
+<p><%= label_tag 'status' %>
+<%= text_field :milestone, :status %> 0: unknown, 1: GO, 2: GO with amendments, 3: NOGO</p>
+
+<p><%= label_tag 'comments' %>
+<%= text_area :milestone, :comments, {:rows=>3} %></p>

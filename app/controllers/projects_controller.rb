@@ -50,6 +50,7 @@ class ProjectsController < ApplicationController
   def show
     id = params['id']
     @project = Project.find(id)
+    @project.create_milestones
     @status = @project.get_status
     @old_statuses = @project.statuses - [@status]
   end

@@ -1,0 +1,9 @@
+<h2>Milestone Edit</h2>
+
+<%= error_messages_for :milestone %>
+<% form_for @milestone, :url=>{:action=>'update', :id=>@milestone.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'send' %></p>
+<% end -%>
+

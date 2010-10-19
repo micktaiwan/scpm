@@ -1,0 +1,8 @@
+<h2>Actions</h2>
+<%= @actions.size %> actions<br/>
+
+<%= render(:file=>'actions/actions_header') %>
+<%= render(:partial=>'action', :collection=>@actions) %>
+</table>
+<br/>
+<br/>
