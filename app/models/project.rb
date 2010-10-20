@@ -26,6 +26,17 @@ class Project < ActiveRecord::Base
     s = Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
     s != [] and s!=nil
   end
+  
+  def has_requests
+    self.requests.size > 0
+  end
+  
+  def is_ended
+    self.requests.each { |r|
+      return false if r.status != 'cancelled' and r.resolution !='ended'
+      }
+    return true  
+  end
 
   def get_status
     s = Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
@@ -208,12 +219,12 @@ class Project < ActiveRecord::Base
         milestones.create(:project_id=>self.id, :name=>'m3', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m3')
       when 'M3-M5'
         rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')
+        milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')  and not find_milestone_by_name('m5/m7')
       when 'M5-M10'
         rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'m7', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m7')
-        milestones.create(:project_id=>self.id, :name=>'m9', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m9')
-        milestones.create(:project_id=>self.id, :name=>'m10', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10')
+        milestones.create(:project_id=>self.id, :name=>'m7', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m7')   and not find_milestone_by_name('m5/m7')
+        milestones.create(:project_id=>self.id, :name=>'m9', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m9')   and not find_milestone_by_name('m9/m10')
+        milestones.create(:project_id=>self.id, :name=>'m10', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10') and not find_milestone_by_name('m9/m10')
       when 'Post-M10'
         rv = self.requests_string(m)
         milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a')
@@ -272,6 +283,36 @@ class Project < ActiveRecord::Base
     nil  
   end
 
+  def get_cell_style_for_milestone(m)
+    return {} if not m
+    case m.status
+      when -1
+        {'ss:StyleID'=>'s76'}
+      when 0
+        {'ss:StyleID'=>'s81'}
+      when 1
+        {'ss:StyleID'=>'s82'}
+      when 2
+        {'ss:StyleID'=>'s83'}
+      when 3
+        {'ss:StyleID'=>'s84'}
+      else
+        {}
+    end
+  end
+  
+  def get_milestone_status(name)
+    m = find_milestone_by_name(name)
+    if m
+      status = m.comments.split("\n").join("\r\n") # FIXME: does not work
+      status += "\r\n" + m.date.to_s if m.date
+    else
+      status = ''
+    end
+    style  = get_cell_style_for_milestone(m)
+    [status,style]
+  end
+  
   def sorted_milestones
     NaturalSort::naturalsort milestones
   end

@@ -93,7 +93,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Old status', 'Current Status', 'Status Change Reason', 'Operational Alert', 'M3', 'M5', 'M7', 'M9', 'M10', 'M10a', 'M11', 'M12', 'M13', 'M14'] do
+        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Old status', 'Current Status', 'Date', 'Status Change Reason', 'Last change', 'Actions', 'Operational Alert', 'M3', 'M5', 'M7', 'M9', 'M10', 'M10a', 'M11', 'M12', 'M13', 'M14'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -104,7 +104,9 @@ end
       # Rows
       for p in @wps
         status = p.get_status
-        @xml.Row do
+        style = {}
+        style = {'ss:StyleID' => 's75'} if p.is_ended
+        @xml.Row(style) do
           @xml.Cell { @xml.Data p.supervisor_name,    'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.workstream,         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.project_name,       'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
@@ -112,8 +114,31 @@ end
           @xml.Cell { @xml.Data p.brn,                'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.old_status)  do @xml.Data text_status(p.old_status),  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
+          @xml.Cell { @xml.Data "#{status.updated_at.to_date} (#{time_ago_in_words(status.updated_at.to_date)})",   'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data status.reason,             'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data status.last_change,        'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data status.actions,            'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data status.operational_alert,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m3')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m5')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m7')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m9')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m10')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m10a')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m11')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m12')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m13')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('m14')
+          @xml.Cell(style) { @xml.Data status,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
         end
       end
 
