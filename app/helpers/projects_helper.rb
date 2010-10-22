@@ -80,5 +80,10 @@ module ProjectsHelper
     end
   end
 
+  def excel_text(txt)
+    return "" if not txt
+    txt.split("\r\n").join('&#10;')
+  end
+  
 end
 

@@ -219,7 +219,7 @@ class Project < ActiveRecord::Base
         milestones.create(:project_id=>self.id, :name=>'m3', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m3')
       when 'M3-M5'
         rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')  and not find_milestone_by_name('m5/m7')
+        milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')   and not find_milestone_by_name('m5/m7')
       when 'M5-M10'
         rv = self.requests_string(m)
         milestones.create(:project_id=>self.id, :name=>'m7', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m7')   and not find_milestone_by_name('m5/m7')
@@ -242,34 +242,35 @@ class Project < ActiveRecord::Base
     rv = ""
     nb = 0
     self.requests.select { |r|
-      next if m != 'Maintenance' and ((r.milestone!='N/A' and r.milestone != m) or r.status=='cancelled' or r.status=='to be validated')
+      next if (r.milestone!='N/A' and r.milestone != m) or r.status=='cancelled' or r.status=='to be validated'
       case r.work_package
         when 'WP1.1 - Quality Control'
-          nb += 1 and rv += "Control\n" if m != 'Maintenance'
+          nb += 1 and rv += "Control\n"           if m != 'Maintenance'
         when 'WP1.2 - Quality Assurance'
-          nb += 1 and rv += "Assurance\n" if m != 'Maintenance'
+          nb += 1 and rv += "Assurance\n"         if m != 'Maintenance'
         when 'WP2 - Quality for Maintenance'
-          nb += 1 and rv += "Maintenance\n" if m == 'Maintenance'
+          nb += 1 and rv += "Maintenance\n"       if m == 'Maintenance'
         when 'WP3 - Modeling'
-          nb += 1 and rv += "Modeling\n" if m == 'M3-M5'
+          nb += 1 and rv += "Modeling\n"          if m == 'M3-M5'
         when 'WP4.1 - Surveillance Audit'
-          nb += 1 and rv += "Audit (TBC)\n" if m == 'M3-M5'
-        when 'WP4.2 - Surveillance Root Cause'
-          nb += 1 and rv += "Root Cause (TBC)\n" if m == 'M3-M5'
+          nb += 1 and rv += "Audit (TBC)\n"       if m == 'M3-M5'
+        when 'WP4.2 - Surveillance Root cause'
+          nb += 1 and rv += "Root Cause (TBC)\n"  if m == 'M3-M5'
         when 'WP5 - Change Accompaniment'
-          nb += 1 and rv += "Change (TBC)\n" if m == 'M3-M5'
+          nb += 1 and rv += "Change (TBC)\n"      if m == 'M3-M5'
         when 'WP6.1 - Coaching PP'
-          nb += 1 and rv += "Coaching PP\n" if m == 'M1-M3'
+          nb += 1 and rv += "Coaching PP\n"       if m == 'M1-M3'
         when 'WP6.2 - Coaching BRD'
-          nb += 1 and rv += "Coaching BRD\n" if m == 'M3-M5'
+          nb += 1 and rv += "Coaching BRD\n"      if m == 'M3-M5'
         when 'WP6.3 - Coaching V&V'
-          nb += 1 and rv += "Coaching V&V\n"  if m == 'M5-M10'
+          nb += 1 and rv += "Coaching V&V\n"      if m == 'M5-M10'
         when 'WP6.4 - Coaching ConfMgt'
-          nb += 1 and rv += "Coaching ConfMgt\n" if m == 'M1-M3'
+          nb += 1 and rv += "Coaching ConfMgt\n"  if m == 'M1-M3'
         when 'WP6.5 - Coaching Maintenance'
-          nb += 1 and rv += "Coaching Maint.\n"  if m == 'Maintenance'
+          nb += 1 and rv += "Coaching Maint.\n"   if m == 'Maintenance'
         else
           rv += "unknown workpackage: #{r.work_package}"
+          puts rv
       end
       }
     rv = "No request" if rv == ""
