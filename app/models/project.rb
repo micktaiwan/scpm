@@ -270,7 +270,6 @@ class Project < ActiveRecord::Base
           nb += 1 and rv += "Coaching Maint.\n"   if m == 'Maintenance'
         else
           rv += "unknown workpackage: #{r.work_package}"
-          puts rv
       end
       }
     rv = "No request" if rv == ""
