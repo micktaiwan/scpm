@@ -10,6 +10,18 @@ img {
   border: 0px;
 }
 
+div#banner {
+  margin: 0;
+  line-height: 1.1;
+  position: fixed;
+  top: 0;
+  left: auto;
+  width: 100%;
+  height: 60px;
+  background: #ABC;
+  border-bottom: 1px solid #000;
+}
+
 h1 {
   background: #ABC;
   background-image: url(/images/plane.png);
@@ -20,7 +32,7 @@ h1 {
 }
 h2 {
   background: #ABC;
-  margin: 10px 0 5px -15px;
+  margin: 10px -5px 5px -15px;
   padding: 0 0 0 15px;
   border: 1px solid #789;
 }
@@ -44,8 +56,8 @@ a {text-decoration:none;}
   background: #FFF;
   }
 #content {
-  margin:  10px;
-  padding: 0 5px 5px 15px;
+  margin:  70px 10px 10px 10px;
+  padding: 0px 5px 5px 15px;
   border-bottom: 1px solid #AAA;
   background: #FFF;
 }
@@ -59,6 +71,7 @@ label {
   width:100px;
   font-weight: bold;
   padding-right: 5px;
+  font-size: 1.2em;
   }
 strong {
   color:red;
@@ -71,7 +84,6 @@ strong {
 table, th {
   /*border: 1px solid black;*/
   font-family: Arial;
-  font-size: 0.8em;
   }
 tr    {
   padding: 0px;
@@ -85,6 +97,10 @@ td    {
   font-weight: bold;
   }
 
+.descr {
+  font-weight: bold;
+  }  
+  
 /* STATUSES */
  .to_be_validated  {
   background: #AAF;

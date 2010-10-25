@@ -4,6 +4,7 @@ class ProjectsController < ApplicationController
 
   def index
     get_projects
+    @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
     @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name asc")

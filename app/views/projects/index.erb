@@ -5,7 +5,8 @@
 <%= link_to('Summary', {:action=>'summary'},{:class=>"btnlnk"}) %>
 <br/>
 <br/>
-<%= @projects.size %> projects<br/>
+Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
+<%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status<br/><br/>
 <%= link_to_function('filters', "$('filters').toggle();") %>
 <% if(are_filtered) %><strong>filtered</strong><% end %>
 <div id="filters" style="display:none;">
