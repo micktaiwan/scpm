@@ -2,16 +2,10 @@ class WelcomeController < ApplicationController
 
   def index
     @report = Report.new(Request.all)
-    @last = Request.find(:all, :conditions=>["updated_at >= ?", Date.today()], :order=>"updated_at desc")
-    @sdp_mfm = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned' and workstream in ('EDS','EDG','EI','EM','EDC')", Date.today()+8], :order=>"start_date")
-    @sdp_dam = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned' and workstream in ('EDY','EA','EV', 'EDE')", Date.today()+8], :order=>"start_date")
-    @not_assigned_mfm = Request.find(:all, :conditions=>["status!='performed' and status!='assigned' and status!='cancelled' and start_date < ? and workstream in ('EDS','EDG','EI','EM','EDC')", Date.today()+15], :order=>"start_date")
-    @not_assigned_dam = Request.find(:all, :conditions=>["status!='performed' and status!='assigned' and status!='cancelled' and start_date < ? and workstream in ('EDY','EA','EV', 'EDE')", Date.today()+15], :order=>"start_date")
-    @all_mine         = Request.find(:all, :conditions=>["workstream in ('EDS','EDG','EI','EM','EDC')"], :order=>"start_date")
-
+    @sdp = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned'", Date.today()+8], :order=>"start_date")
+    @not_assigned = Request.find(:all, :conditions=>["(status='new' or status='acknowledged') and start_date < ?", Date.today()+15], :order=>"start_date")
     @sdp_cancelled    = Request.find(:all, :conditions=>["sdp='Yes' and status='cancelled'", Date.today()], :order=>"milestone_date")
     @not_performed    = Request.find(:all, :conditions=>["resolution='ended' and status!='performed' and status!='closed' and status!='cancelled'", Date.today()], :order=>"milestone_date")
-
     @next_milestones =  Request.find(:all, :conditions=>["resolution != 'ended' and  (milestone_date !='' and milestone_date <= ?)", Date.today()+10], :order=>"milestone_date")
     @special =  Request.find(:all, :conditions=>["work_package in ('WP1.1 - Quality Control', 'WP1.2 - Quality Assurance') and status='new' and workstream = 'EDY'"], :order=>"milestone_date")
     @y2011    =  Request.find(:all, :conditions=>["(start_date is null or start_date = '' or start_date>'2010-12-31') and (milestone_date is null or milestone_date > '2011-01-01') and status!='cancelled'"], :order=>"start_date")

@@ -6,23 +6,11 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
   <%= report_by(title, rs, "sta") %>
 <% } %>
 
-
-<h2>Last changes</h2>
-
-<%= report_by("Changes", @last, "changes") %>
-
-
-<h2>TODO MFM</h2>
-<%= report_by("SDP", @sdp_mfm, "sdp_mfm") %>
-<%= report_by("Not assigned", @not_assigned_mfm, "not_ass_mfm") %>
+<h2>TODO</h2>
+<%= report_by("SDP", @sdp, "sdp_mfm") %>
+<%= report_by("Not assigned", @not_assigned, "not_ass_mfm") %>
 <%= report_by("Next milestones", @next_milestones, "next_milestones") %>
-<%= report_by("All MFM", @all_mine, "all_mfm") %>
 <%= report_by("2011", @y2011, "y2011") %>
-
-
-<h2>TODO DAM</h2>
-<%= report_by("SDP", @sdp_dam, "sdp_dam") %>
-<%= report_by("Not assigned", @not_assigned_dam, "not_ass_dam") %>
 <%= report_by("Special", @special, "special") %>
 
 <h2>Anomalies</h2>
