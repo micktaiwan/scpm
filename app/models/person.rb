@@ -43,6 +43,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.authenticate(login, password)
+    return nil if login.empty? or password.empty?
     self.find_by_login_and_pwd(login, self.encrypt(password))
     #puts encrypt(password)
   end

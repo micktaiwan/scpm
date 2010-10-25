@@ -10,6 +10,9 @@ class CreateRoles < ActiveRecord::Migration
     end
     add_index :roles, :name
     Role.create(:name => 'Admin')
+    Role.create(:name => 'Super')
+    Role.create(:name => 'QR')
+    Role.create(:name => 'Viewer')
   end
 
   def self.down
