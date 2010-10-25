@@ -1,5 +1,7 @@
 class AmendmentsController < ApplicationController
 
+  before_filter :require_login
+
   def index
     @amendments = Amendment.find(:all, :order=>"done, id")
   end

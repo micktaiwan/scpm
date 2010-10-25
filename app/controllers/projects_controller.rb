@@ -2,6 +2,8 @@ require 'builder'
 
 class ProjectsController < ApplicationController
 
+  before_filter :require_login
+
   def index
     get_projects
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at

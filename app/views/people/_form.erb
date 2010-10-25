@@ -10,9 +10,20 @@
 <p><%= label_tag 'phone' %>
 <%= text_field :person, :phone %></p>
 
+<% if current_user.has_role?('Admin') %>
+
 <p><%= label_tag 'rmt_user' %>
 <%= text_field :person, :rmt_user %></p>
+
+<p><%= label_tag 'login' %>
+<%= text_field :person, :login %></p>
+
+<p><%= label_tag 'Password' %>
+<%= password_field :person, :password %></p>
 
 <p><%= label_tag 'is_supervisor' %>
 <%= radio_button :person, :is_supervisor, 0 %> No
 <%= radio_button :person, :is_supervisor, 1 %> Yes</p>
+
+<% end %>
+

@@ -1,5 +1,7 @@
 class ActionsController < ApplicationController
 
+  before_filter :require_login
+
   def index
     @actions = Action.find(:all, :order=>"person_id, creation_date, progress")
   end

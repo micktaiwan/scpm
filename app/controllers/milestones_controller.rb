@@ -1,5 +1,7 @@
 class MilestonesController < ApplicationController
 
+  before_filter :require_login
+
   # def index
     # @milestones = Milestone.find(:all, :order=>"done, id")
   # end

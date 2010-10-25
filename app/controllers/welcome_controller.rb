@@ -1,5 +1,7 @@
 class WelcomeController < ApplicationController
 
+  before_filter :require_login
+
   def index
     @report = Report.new(Request.all)
     @sdp = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned'", Date.today()+8], :order=>"start_date")
