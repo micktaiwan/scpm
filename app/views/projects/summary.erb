@@ -116,7 +116,7 @@ end
           @xml.Cell { @xml.Data p.supervisor_name,    'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.workstream,         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.project_name,       'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          @xml.Cell { @xml.Data p.name,               'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.full_wp_name,       'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.brn,                'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.old_status)  do @xml.Data text_status(p.old_status),  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end

@@ -107,6 +107,14 @@ class Project < ActiveRecord::Base
     rv
   end
 
+  # stop before the global project name (RDR > Solution and not Suite 7.3 > RDR > Solution)
+  def full_wp_name
+    rv = self.name
+    return self.project.full_wp_name + " > " + rv if self.project and self.project.project
+    rv
+  end
+
+  
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_arr)
     self.requests.each { |r|
