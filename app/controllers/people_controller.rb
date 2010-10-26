@@ -10,6 +10,7 @@ class PeopleController < ApplicationController
     @person = Person.new
     Company.create(:name=>"SQLI") if Company.find(:first) == nil
     @companies = Company.all
+    @roles = Role.find(:all, :conditions=>"name != 'Super'")
   end
 
   def create
