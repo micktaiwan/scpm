@@ -9,6 +9,10 @@
 <b>Supervisor</b>: <% if not @project.supervisor_id %>?<% else %><%= @project.supervisor.name %><% end %><br/>
 <b>WS</b>: <%= @project.workstream %><br/>
 <b>BRN</b>: <%= @project.brn %><br/>
+<b>Coordinator</b>: <%= @project.coordinator %><br/>
+<b>PM</b>: <%= @project.pm %><br/>
+<b>BPL</b>: <%= @project.bpl %><br/>
+<b>ISPL</b>: <%= @project.ispl %><br/>
 <% if @project.description and @project.description!=''%>
 <%= simple_format(@project.description) %>
 <% end %>
