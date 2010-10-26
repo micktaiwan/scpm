@@ -21,6 +21,12 @@ class Person < ActiveRecord::Base
     self.roles << Role.find_by_name(role)
   end
 
+  def remove_role(role)
+    return if not self.has_role?(role)
+    self.roles.delete(Role.find_by_name(role))
+  end
+  
+  
   def requests
     return [] if self.rmt_user == "" or self.rmt_user == nil
     Request.find(:all, :conditions => "assigned_to='#{self.rmt_user}'", :order=>"workstream, project_name")

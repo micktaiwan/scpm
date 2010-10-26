@@ -8,7 +8,8 @@ class SessionsController < ApplicationController
   def do_login
     authenticate(params[:person][:login], params[:person][:pwd])
     if logged_in?
-      redirect_to :controller=>'people'
+      session[:project_filter_qr] = [current_user.id] if not current_user.has_role?('Admin')
+      redirect_to :controller=>'projects'
       return
     end
     redirect_to :action=>:login

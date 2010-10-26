@@ -3,10 +3,10 @@ class AddFirstLogin < ActiveRecord::Migration
     u = Person.find_by_rmt_user('mfaivremacon')
     u.login = 'mick'
     u.pwd   = '8a0d6b88bc3deb13702cee6f335b0547b1d9f0fb'
+    u.add_role('Super') # super admin
     u.add_role('Admin')
-    u.add_role('Super')
     u.add_role('QR')
-    u.add_role('Viewer')
+    #u.add_role('Viewer')
     u.save
   end
 

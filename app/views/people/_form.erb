@@ -25,5 +25,13 @@
 <%= radio_button :person, :is_supervisor, 0 %> No
 <%= radio_button :person, :is_supervisor, 1 %> Yes</p>
 
+<% @roles.each { |r| %>
+<p><%= label_tag r.name %>
+<%= radio_button :role, r.name.to_sym, 0, {:checked=>!@person.has_role?(r.name)} %> No
+<%= radio_button :role, r.name.to_sym, 1, {:checked=>@person.has_role?(r.name)} %> Yes
+</p>
+<% } %>
+
+
 <% end %>
 

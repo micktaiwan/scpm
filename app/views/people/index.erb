@@ -1,6 +1,7 @@
 <h2>People</h2>
+<% if current_user.has_role?('Admin') %>
 <%= link_to('Add', {:action=>'new'},{:class=>"btnlnk"}) %>
 <br/>
+<% end %>
 <br/>
-
 <%= render(:partial=>'person', :collection=>@people) %>

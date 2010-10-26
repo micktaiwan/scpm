@@ -1,4 +1,6 @@
+<% if current_user.has_role?('Admin') %>
 <%= link_to('Edit', {:action=>'edit', :id=>person.id},{:class=>"btnlnk"}) %>
+<% end %>
 <% if person.company %><%= person.company.name %><% else %>???<% end %>
 <%= link_to(person.name, :action=>'show', :id=>person.id) %>
 
