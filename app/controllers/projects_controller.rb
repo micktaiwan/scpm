@@ -7,7 +7,12 @@ class ProjectsController < ApplicationController
   def index
     get_projects
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
-    @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
+    case session[:project_sort]
+      when nil
+        @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
+      when 'alpha'
+        @projects = @projects.sort_by { |p| [p.workstream, p.name] }
+    end
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
