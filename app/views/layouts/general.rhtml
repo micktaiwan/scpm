@@ -13,6 +13,7 @@
 <body>
 
 <div id="banner">
+<%= image_tag('chrome.png', :align=>:right, :title=>"works better in chrome") %>
 <h1>EISQ Quality Bundle Report</h1>
 
 <div id="menu_bar">
@@ -25,6 +26,7 @@
 <%= link_to('Workload schedule', {:controller=>'welcome', :action=>'workload_schedule'}, {:class=>'menu'}) %>
 <%= link_to('Logout', {:controller=>'sessions', :action=>'logout'}, {:class=>'menu'}) %>
 </div>
+
 </div>
 
 <div id="content">
