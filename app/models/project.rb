@@ -15,7 +15,7 @@ class Project < ActiveRecord::Base
 
   def icon_status
     case last_status
-      when 0; "<img src='/images/unknown.png' align='right'>"
+      when 0; "<div style='float:right;font-weight:bold;'>No status</div>"
       when 1; "<img src='/images/green.gif' align='left'>"
       when 2; "<img src='/images/amber.gif' align='left'>"
       when 3; "<img src='/images/red.gif' align='left'>"
@@ -49,7 +49,7 @@ class Project < ActiveRecord::Base
     s.reason
   end
 
-   def last_operational_alert
+  def last_operational_alert
     s = get_status
     s.operational_alert
   end
@@ -57,7 +57,6 @@ class Project < ActiveRecord::Base
   def last_status_description
     get_status.explanation
   end
-
 
   def old_status
     s = Status.find(:all, :conditions=>["project_id=?", self.id], :order=>"created_at desc", :limit=>2)
@@ -107,18 +106,17 @@ class Project < ActiveRecord::Base
     rv
   end
 
-  # stop before the global project name (RDR > Solution and not Suite 7.3 > RDR > Solution)
+  # stop before the global project name ("RDR > Solution" and not "Suite 7.3 > RDR > Solution")
   def full_wp_name
     rv = self.name
     return self.project.full_wp_name + " > " + rv if self.project and self.project.project
     rv
   end
-
   
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_arr)
     self.requests.each { |r|
-      next if not r.resp or r.status == "cancelled"
+      next if not r.resp or r.status == "cancelled" or r.resolution =='ended' or r.resolution =='aborted'
       return true if user_arr.include?(r.resp.id)
       }
     self.projects.each { |p|

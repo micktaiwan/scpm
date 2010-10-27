@@ -10,12 +10,12 @@ module ProjectsHelper
       rv += "<div class='status_date'>#{s.updated_at}"
       rv += "(<b>#{time_ago_in_words(s.updated_at)}</b>) "
       rv += html_status(s.status) + " "
-      rv += link_to('Edit', :action=>'edit_status', :id=>s.id)
-      rv += " "
+      rv += link_to('Edit', :action=>'edit_status', :id=>s.id) + " "
       rv += link_to_remote(image_tag('cut.png'), :url=>{:controller=>'projects', :action=>'cut_status', :id=>s.id})
       rv += link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'projects', :action=>'destroy_status', :id=>s.id}, :confirm=>"Sure?", :success=>"new Effect.SwitchOff('status_#{s.id}');")
-      rv += "</div>"
+      rv += "</div><br/>"
     end
+    rv += "Last eReporting update:#{s.ereporting_date}"
     rv += simple_format(s.explanation)
     rv += "<h4>Last Change</h4>"
     rv += simple_format(s.last_change)

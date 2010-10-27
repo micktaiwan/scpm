@@ -7,10 +7,8 @@
 </td>
 
 <td>
-<b>
-<% if action.project %><%= action.project.full_name %>:<% end %>
+<% if action.project %><b><%= action.project.full_name %>:</b><% end %>
 <%= action.action %>
-</b>
 </td>
 
 <td>
@@ -19,9 +17,9 @@
 
 <td>
 <% if action.due_date %>
-<% if action.due_date < Date.today() %><strong><%end%>
+<% if action.progress != 'closed' and action.progress != 'abandonned' and action.due_date < Date.today() %><strong><%end%>
 <%= action.due_date %> (<%= time_ago_in_words(action.due_date) %>)
-<% if action.due_date < Date.today() %></strong><%end%>
+<% if action.progress != 'closed' and action.progress != 'abandonned' and action.due_date < Date.today() %></strong><%end%>
 <% end %>
 </td>
 <td>
