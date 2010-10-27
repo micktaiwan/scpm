@@ -106,19 +106,36 @@ class ProjectsController < ApplicationController
     @text = ""
     timestamps_off
     Request.find(:all, :conditions=>"project_id is not null").each do |r|
-      next if r.workpackage_name == r.project.name
-      project = Project.find_by_name(r.workpackage_name)
-      if not project
-        @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
-        parent = Project.find(:first, :conditions=>"name='#{r.project.name}'")
-        parent_id = parent ? parent.id : nil
-        p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream)
-        r.project.move_actions_to_project(p)
-        r.move_to_project(p)
-      else
-        @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
-        r.project.move_actions_to_project(p)
-        r.move_to_project(project)
+      if r.workpackage_name != r.project.name
+        projects = Project.find(:all, :conditions=>"name='#{r.workpackage_name}'")
+        @text << "found #{projects.size} projects with name '#{r.workpackage_name}' (#{r.project_name})"
+        projects.each { |p|
+          @text << ", wp belongs to #{p.project ? p.project.name : 'no parent'}"
+          projects.delete(p) if not p.project or p.project.name != r.project_name
+          }
+        @text << " => #{projects.size} projects has the right parent<br/>"
+        #next
+        if projects.size == 0
+          @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
+          parent = Project.find(:first, :conditions=>"name='#{r.project_name}'")
+          if not parent
+            # create parent
+            parent_id = Project.create(:project_id=>nil, :name=>r.project_name, :workstream=>r.workstream).id
+          else
+            parent_id = parent.id  
+          end
+          #create wp
+          p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream)
+          r.project.move_actions_to_project(p)
+          r.move_to_project(p)
+        else
+          @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
+          r.project.move_actions_to_project(projects[0])
+          r.move_to_project(projects[0])
+        end
+      end  
+      if (r.project and r.project.project and r.project.project.name != r.project_name)
+        @text << "FYI #{r.project.project.name} != #{r.project_name} (#{r.request_id})<br/>"
       end
     end
     Project.find(:all, :conditions=>"supervisor_id is null and project_id is not null").each { |p|
