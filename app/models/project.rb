@@ -171,6 +171,9 @@ class Project < ActiveRecord::Base
     return true if self.description =~ /#{text}/i
     self.statuses.each { |s|
       return true if s.explanation =~ /#{text}/i
+      return true if s.last_change =~ /#{text}/i
+      return true if s.actions =~ /#{text}/i
+      return true if s.operational_alert =~ /#{text}/i
       return true if s.feedback =~ /#{text}/i
       }
     self.requests.each { |s|
@@ -336,7 +339,11 @@ class Project < ActiveRecord::Base
   def assignees
     rv = []
     requests.each { |r|
-      person = Person.find_by_rmt_user(r.assigned_to)
+      if r.assigned_to != ''
+        person = Person.find_by_rmt_user(r.assigned_to)
+      else
+        person = nil
+      end      
       name = person ? person.name : r.assigned_to 
       name += " (#{r.work_package})"
       rv << name if not rv.include?(name)

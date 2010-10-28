@@ -29,6 +29,8 @@
 <% end %>
 
 <%= link_to('Logout', {:controller=>'sessions', :action=>'logout'}, {:class=>'menu'}) %>
+
+<b><%= Date.today %> - week <%= Date.today.cweek %></b>
 </div>
 
 </div>
