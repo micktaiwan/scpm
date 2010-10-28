@@ -10,9 +10,10 @@
 <b>WS</b>: <%= @project.workstream %><br/>
 <b>BRN</b>: <%= @project.brn %><br/>
 <b>Coordinator</b>: <%= @project.coordinator %><br/>
-<b>PM</b>: <%= @project.pm %><br/>
+<b>PM</b>: <%= @project.pm %> (from RMT: <%=@project.request_pm.join(', ')%>)<br/>
 <b>BPL</b>: <%= @project.bpl %><br/>
 <b>ISPL</b>: <%= @project.ispl %><br/>
+<b>SQLI:</b> <%=@project.assignees.join(', ')%>
 <% if @project.description and @project.description!=''%>
 <%= simple_format(@project.description) %>
 <% end %>

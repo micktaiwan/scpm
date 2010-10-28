@@ -323,6 +323,28 @@ class Project < ActiveRecord::Base
     NaturalSort::naturalsort milestones
   end
   
+  # give a list of corresponding requests PM
+  def request_pm
+    rv = []
+    requests.each { |r|
+      rv << r.pm if not rv.include?(r.pm)
+      }
+    rv
+  end
+
+  # give a list of corresponding requests QR
+  def assignees
+    rv = []
+    requests.each { |r|
+      person = Person.find_by_rmt_user(r.assigned_to)
+      name = person ? person.name : r.assigned_to 
+      name += " (#{r.work_package})"
+      rv << name if not rv.include?(name)
+      }
+    rv
+  end
+
+  
 private
 
   def days_ago(date_time)
