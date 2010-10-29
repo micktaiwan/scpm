@@ -1,28 +1,19 @@
-<%= @projects.size %> projects
-<% if(are_filtered) %>(<strong>filtered</strong>)<% end %>
-<br/>
+<% if(are_filtered) %>(<strong>filtered</strong>)<br/><% end %>
 
-<h1>Global Stats</h1>
-<h2>Requests by workstream (workload)</h2>
+<h2>Global Stats</h2>
+<h3>Requests by workstream (workload)</h3>
 <%@report.by_workstream(false) { |title, rs| %>
   <%= report_by(title, rs, "wos", false, true) %>
 <% } %>
 
-<h2>Projects by status</h2>
+<h3>Projects by status</h3>
 UNKNOWN: <% s = @projects.select { |p| p.project == nil and p.last_status==0}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
 GREEN: <% s = @projects.select { |p| p.project == nil and p.last_status==1}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
 AMBER: <% s = @projects.select { |p| p.project == nil and p.last_status==2}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
 RED: <% s = @projects.select { |p| p.project == nil and p.last_status==3}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
 
-<h1>Evolutions</h1>
-Workpackages without status (yet) are not listed<br/>
-<br/>
-<table>
-<tr style="font-weight:'bold';font-size:1em;"><td>WS</td><td>Project</td><td>WP</td><td>Last status</td><td>Current status</td><td>Reason</td><td>Operational alert</td></tr>
-<%= render(:partial=>'evolution', :collection=>@wps) %>
-</table>
-
-<h1>Detailled Report</h1>
-
-<%= render(:partial=>'report', :collection=>@projects) %>
+<% @supervisors.each do |s|%>
+<h1><%= s.name %></h1>
+<%= render(:partial=>'report', :collection=>@projects.select{|p| p.supervisor_id == s.id}) %>
+<% end %>
 

@@ -293,10 +293,11 @@ class ProjectsController < ApplicationController
 
   def report
     get_projects
-    @projects = @projects.sort_by { |p| [p.supervisor_name, p.workstream, p.name] }
-    @wps      = @wps.sort_by { |p| [p.workstream, p.full_name] }
-    @size = @projects.size
-    @report = Report.new(Request.all)
+    @projects     = @projects.sort_by { |p| [p.supervisor_name, p.workstream, p.name] }
+    @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :select=>"id, name",:order=>"name")
+    #@wps         = @wps.sort_by { |p| [p.workstream, p.full_name] }
+    @size         = @projects.size
+    @report       = Report.new(Request.all)
     render(:layout=>'report')
   end
 
