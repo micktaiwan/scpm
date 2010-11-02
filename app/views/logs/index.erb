@@ -1,0 +1,11 @@
+<%= link_to_remote('last', {}, {:class=>'btnlnk'}) %>
+<%= link_to_remote('by controller', {:url=>{:action=>'group_by', :by=>'controller'}}, {:class=>'btnlnk'}) %>
+<%= link_to_remote('by action', {:url=>{:action=>'group_by', :by=>'controller_action'}}, {:class=>'btnlnk'}) %>
+<%= link_to_remote('by person', {:url=>{:action=>'group_by', :by=>'person_id'}}, {:class=>'btnlnk'}) %>
+<%= link_to_remote('by agent', {:url=>{:action=>'group_by', :by=>'browser'}}, {:class=>'btnlnk'}) %>
+
+<br/>
+<br/>
+<div id="results">
+<%= render(:partial=>'results') %>
+</div>

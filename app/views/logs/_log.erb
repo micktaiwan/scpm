@@ -1,0 +1,6 @@
+<li>
+<%= log.person ? (h log.person.name) : "------" %>
+<%= h log.controller_action %>
+<%= log.created_at ? (h time_ago_in_words(log.created_at)) : 'nil' %>
+<%= h log.ip %>
+</li>

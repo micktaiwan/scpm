@@ -1,0 +1,24 @@
+<%= page_entries_info @logs %>
+
+<ol>
+<%
+  case @group_by
+  when 'controller_action'
+    partial = 'by_action'
+  when 'controller'
+    partial = 'by_controller'
+  when 'person_id'
+    partial = 'by_user'
+  when 'project_id'
+    partial = 'by_project'
+  when 'browser'
+    partial = 'by_browser'
+  else
+    partial = 'log'
+  end
+-%>
+<%= render(:partial=>partial, :collection=>@logs) %>
+</ol>
+
+<%= will_paginate(@logs, :renderer=>MyLinkRenderer) %>
+

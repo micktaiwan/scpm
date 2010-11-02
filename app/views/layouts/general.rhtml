@@ -26,6 +26,7 @@
 <% if current_user.has_role?('Admin') %>
 <%= link_to('Update', {:controller=>'welcome', :action=>'update'}, {:class=>'menu'}) %>
 <%= link_to('Workload schedule', {:controller=>'welcome', :action=>'workload_schedule'}, {:class=>'menu'}) %>
+<%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %>
 <% end %>
 
 <%= link_to('Logout', {:controller=>'sessions', :action=>'logout'}, {:class=>'menu'}) %>

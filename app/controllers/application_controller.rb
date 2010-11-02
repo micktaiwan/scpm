@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   def log_action
     @action_log = Log.new
     # who is doing the activity?
-    @action_log.user_id           = session[:user_id]
+    @action_log.person_id         = session[:user_id]
     @action_log.session_id        = session.session_id #record the session
     @action_log.browser           = request.env['HTTP_USER_AGENT']
     @action_log.ip                = request.env['HTTP_X_FORWARDED_FOR'] || request.env['REMOTE_ADDR']
@@ -27,4 +27,12 @@ class ApplicationController < ActionController::Base
     @action_log.save!
   end  
    
+end
+
+class MyLinkRenderer < WillPaginate::LinkRenderer
+
+  def page_link(page, text, attributes = {})
+    @template.link_to_remote(text, {:url=>{:page=>page}}, attributes)
+  end
+
 end
