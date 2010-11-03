@@ -161,7 +161,7 @@ class ProjectsController < ApplicationController
   end
 
   def add_status_form
-    @project = Project.find(params[:project_id])
+    @project = Project.find(params[:id])
     @status = Status.new
     last = @project.get_status
     @status.explanation       = last.explanation
@@ -347,7 +347,7 @@ private
     cond << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    @wps = Project.find(:all, :conditions=>cond.join(" and ")) # do not filter workpackages with project is null
+    @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions']) # do not filter workpackages with project is null
     @wps = @wps.select {|wp| wp.has_status and wp.has_requests }
     cond << "project_id is null"
     @projects = Project.find(:all, :conditions=>cond.join(" and "))
