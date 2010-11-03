@@ -1,6 +1,8 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
+require 'will_paginate'
+
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -13,7 +15,7 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   
   def log_action
-    @action_log = Log.new
+    @action_log                   = Log.new
     # who is doing the activity?
     @action_log.person_id         = session[:user_id]
     @action_log.session_id        = session.session_id #record the session
