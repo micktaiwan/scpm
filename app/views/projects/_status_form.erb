@@ -1,8 +1,8 @@
 <table class="edit">
 <tr><td class="descr">eReporting update:</td><td><%= text_field(:status, :ereporting_date) %>yyy-mm-dd</td></tr>
 <tr><td class="descr">Status</td><td><%= text_field(:status, :status, {:size=>3}) %>0: unknown, 1: green, 2: amber, 3: red</td></tr>
-<tr><td class="descr">Description</td><td><%= text_area(:status, :explanation, {:cols=>100, :rows=>10}) %></td></tr>
 <tr><td class="descr">Last Change</td><td><%= text_area(:status, :last_change, {:cols=>100, :rows=>7}) %></td></tr>
+<tr><td class="descr">Details</td><td><%= text_area(:status, :explanation, {:cols=>100, :rows=>10}) %></td></tr>
 <tr><td class="descr">Status Evolution Reason</td><td><%= text_area(:status, :reason, {:cols=>100, :rows=>3}) %></td></tr>
 <tr><td class="descr">Actions</td><td><%= text_area(:status, :actions, {:cols=>100, :rows=>3}) %></td></tr>
 <tr><td class="descr">Operational Alert</td><td><%= text_area(:status, :operational_alert, {:cols=>100, :rows=>3}) %></td></tr>

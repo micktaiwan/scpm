@@ -33,8 +33,10 @@
 <% end %>
 
 <%= link_to('Logout', {:controller=>'sessions', :action=>'logout'}, {:class=>'menu'}) %>
-
 <b><%= Date.today %> - week <%= Date.today.cweek %></b>
+<% form_tag({:controller=>'projects', :action=>'filter'}, {:style=>"display:inline;"}) do %>
+<%= text_field_tag('text', '', {:size=>5}) %>
+<% end %>
 </div>
 
 </div>
