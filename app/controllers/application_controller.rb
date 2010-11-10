@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
     @action_log                   = Log.new
     # who is doing the activity?
     @action_log.person_id         = session[:user_id]
-    @action_log.session_id        = session.session_id #record the session
+    @action_log.session_id        = request.session_options[:id] #record the session
     @action_log.browser           = request.env['HTTP_USER_AGENT']
     @action_log.ip                = request.env['HTTP_X_FORWARDED_FOR'] || request.env['REMOTE_ADDR']
     # what are they doing?

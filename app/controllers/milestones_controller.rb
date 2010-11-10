@@ -37,14 +37,6 @@ class MilestonesController < ApplicationController
     render(:nothing=>true)
   end
 
-  # def cut
-    # session[:milestone]   = params[:id]
-    # session[:action_cut]  = nil
-    # session[:cut]         = nil
-    # session[:status_cut]  = nil
-    # session[:request_cut] = nil
-  # end
-
   private
 
   def get_infos

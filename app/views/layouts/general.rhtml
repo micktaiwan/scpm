@@ -36,6 +36,7 @@
 <b><%= Date.today %> - week <%= Date.today.cweek %></b>
 <% form_tag({:controller=>'projects', :action=>'filter'}, {:style=>"display:inline;"}) do %>
 <%= text_field_tag('text', '', {:size=>5}) %>
+<%= link_to 'Updates', '/changes.txt' -%>
 <% end %>
 </div>
 
