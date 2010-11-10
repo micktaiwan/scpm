@@ -20,6 +20,11 @@ if date
 <%= link_to_remote(image_tag('cut.png'), :url=>{:action=>'cut', :id=>project.id}) %>
 <%= link_to_remote(image_tag('paste.png'), :url=>{:action=>'paste', :id=>project.id}) %>
 <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>project.id}, :confirm=>"Sure?", :success=>"$('p_#{project.id}').hide();") %>
+
+<span class="project_status_<%=status_html%>">
+<%= status_html %>
+</span>
+
 <% end %>
 
 <% if @display_actions %>
@@ -29,9 +34,6 @@ if date
 <% if not project.sub_has_supervisor  %>
 <strong>no supervisor</strong>
 <% end %>
-<span class="project_status_<%=status_html%>">
-<%= status_html %>
-</span>
 <ul id="sub_<%=project.id%>" style="display:none;">
   <%= render(:partial=>'request', :collection=>project.requests) %>
   <%= render(:partial=>'project', :collection=>project.projects) %>

@@ -17,4 +17,8 @@
   <b>load</b>: <%= l %>
   <b>average</b>: <%= a %>
 <% end %>
+<% if current_user.has_role?('Admin') and (not person.login or person.login=='')%>
+<strong>no login</strong>
+<% end %>
+
 <br/>
