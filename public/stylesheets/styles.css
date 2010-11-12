@@ -168,11 +168,17 @@ td    {
 .action_closed, .action_abandonned {font-style: italic; color: #999;}
 .amendment1 {font-style: italic; color: #999;}
 
-.milestone_bar { margin: 20px; vertical-align:top;}
+.milestone_bar { margin: 20px 0 20px 0; vertical-align:top;}
 .milestone { border:black solid 1px; width: 100px; display: inline-block;}
 .milestone_name { border-bottom:black solid 1px; font-weight: bold; }
-.milestone.status-1 {color: #F00;}
-.milestone.status0 {font-style: italic;color: #999;}
-.milestone.status1 {background-color: #5A5;}
-.milestone.status2 {background-color: #FA0;}
-.milestone.status3 {background-color: #F22;}
+.milestone_status-1 {color: #F00;}
+.milestone_status0 {font-style: italic;color: #999;}
+.milestone_status1 {background-color: #5A5;}
+.milestone_status2 {background-color: #FA0;}
+.milestone_status3 {background-color: #F22;}
+
+.milestone_name.blank {background-color: #EEE;}
+.milestone_name.normal {background-color: #FFA;}
+.milestone_name.soon {background-color: #FA0;}
+.milestone_name.verysoon {background-color: #F00;}
+.milestone_name.passed {background-color: #3F3;}

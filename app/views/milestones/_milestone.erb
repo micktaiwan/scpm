@@ -1,13 +1,13 @@
-<div id="m_<%=milestone.id%>" class="milestone status<%=milestone.status%>">
-<div class="milestone_name">
+<div id="m_<%=milestone.id%>" class="milestone">
+<div class="milestone_name <%=milestone.timealert%>">
 <%= milestone.name.upcase %>
-</div>
-
-<%= simple_format(milestone.comments) %>
-
-<%= milestone.date %>
 <%= link_to(image_tag('edit.gif'), {:controller=>'milestones', :action=>'edit', :id=>milestone.id}) %>
 <% if current_user.has_role?('Admin') %>
 <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'milestones', :action=>'destroy', :id=>milestone.id}, :confirm=>"Sure ?", :success=>"$('m_#{milestone.id}').hide();") %>
 <% end %>
+</div>
+<div class="milestone_status<%=milestone.status%>">
+<%= my_simple_format(milestone.comments) %>
+<%= milestone.date %>
+</div>
 </div>

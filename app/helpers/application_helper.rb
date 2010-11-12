@@ -3,5 +3,9 @@ module ApplicationHelper
 
   include Authentication
 
+  def my_simple_format(text)
+    text.split("\n").join("<br/>") + "<br/>"
+  end
+  
 end
 

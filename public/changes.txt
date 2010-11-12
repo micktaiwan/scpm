@@ -1,6 +1,7 @@
 12-Nov-2010
 ===========
 
+- Global milestones frieze with alert colors
 - check that milestones are N/A for WP2, WP3, WP4, WP5 and WP6
 - changed the way WP were filtered (wp that didn't have status were not included in summary)
 - check if user want to edit or add a status when the project has no requests open for it (should edit the sub workpackage)

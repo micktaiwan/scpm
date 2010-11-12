@@ -9,4 +9,15 @@ class Milestone < ActiveRecord::Base
     name
   end
   
+  def timealert
+    d = date
+    return "blank" if d.blank?
+    diff = d - Date.today
+    return "verysoon" if diff < 0 and self.actual_milestone_date.blank?
+    return "passed" if diff < 0
+    return "verysoon" if diff <= 5
+    return "soon" if diff <= 10
+    return "normal"
+  end
+  
 end

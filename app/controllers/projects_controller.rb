@@ -13,6 +13,7 @@ class ProjectsController < ApplicationController
       when 'alpha'
         @projects = @projects.sort_by { |p| [p.workstream, p.name] }
     end
+    @wps = @wps.sort_by { |p| p.full_name }
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
@@ -356,6 +357,7 @@ private
     @projects = Project.find(:all, :conditions=>cond.join(" and "))
     if session[:project_filter_qr] != nil
       @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
+      @wps = @wps.select {|p| p.has_responsible(session[:project_filter_qr]) }
     end
   end
 
