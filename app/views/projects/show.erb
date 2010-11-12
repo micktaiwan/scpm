@@ -1,10 +1,17 @@
 <script>
-function edit(id, same_week) {
+function edit(id, same_week, has_requests) {
+  if (!has_requests) {
+    alert("This project has no request, you should edit the workpackage")
+    }
   if(same_week || confirm('This status is old. You should add a new status.\nAre you sure you want to edit it?')) {
     location = '/projects/edit_status/'+id;
     }
   }
-function add(id, same_week) {
+function add(id, same_week, has_requests) {
+  if (!has_requests) {
+    alert("This project has no request, you should edit the workpackage")
+    return;
+    }
   if(!same_week || confirm('There is a status for this week already.\nAre you sure you want to add a new status?')) {
     location = '/projects/add_status_form/'+id;
     }
@@ -15,7 +22,7 @@ function add(id, same_week) {
 <%= @project.icon_status %>
 <h2><%= @project.full_name %> </h2>
 <%= link_to('Edit project', {:action=>'edit', :id=>@project.id}, {:class=>'btnlnk'}) %>
-<%= link_to_function('Add status', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false})", {:class=>'btnlnk'}) %>
+<%= link_to_function('Add status', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
 <%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
 <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
 <%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>

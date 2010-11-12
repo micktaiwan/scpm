@@ -137,6 +137,9 @@ class ProjectsController < ApplicationController
       if (r.project and r.project.project and r.project.project.name != r.project_name)
         @text << "FYI #{r.project.project.name} != #{r.project_name} (#{r.request_id})<br/>"
       end
+      if (r.milestone != 'N/A' and (r.work_package[0..2]=="WP2" or r.work_package[0..2]=="WP3" or r.work_package[0..2]=="WP4" or r.work_package[0..2]=="WP5" or r.work_package[0..2]=="WP6"))
+         @text << "not N/A for <a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id}'>#{r.project_name}</a><br/>"
+      end
     end
     Project.find(:all, :conditions=>"supervisor_id is null and project_id is not null").each { |p|
       p.supervisor_id = p.project.supervisor_id
@@ -348,7 +351,7 @@ private
     cond << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions']) # do not filter workpackages with project is null
-    @wps = @wps.select {|wp| wp.has_status and wp.has_requests }
+    @wps = @wps.select {|wp| wp.has_requests } # wp.has_status
     cond << "project_id is null"
     @projects = Project.find(:all, :conditions=>cond.join(" and "))
     if session[:project_filter_qr] != nil
