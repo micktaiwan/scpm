@@ -7,6 +7,12 @@
 <p><%= label_tag 'action' %>
 <%= text_area :myaction, :action, {:rows=>3} %></p>
 
+<p><%= label_tag 'Type' %>
+<%= radio_button :myaction, :private, 0 %> Public
+<%= radio_button :myaction, :private, 1 %> Private
+</p>
+
+
 <p><%= label_tag 'person_id' %>
 <%= select(:myaction, :person_id, @people.map {|u| [u.name,u.id]}) %></p>
 

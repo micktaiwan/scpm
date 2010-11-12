@@ -18,7 +18,7 @@ class Action < ActiveRecord::Base
 private
   
   def track_changes
-    self.result = self.result + " changed from project #{self.project_id_was}, #{Project.find(self.project_id_was).name}" if self.project_id_changed?
+    self.result = self.result + " changed from project #{self.project_id_was}, #{Project.find(self.project_id_was).name}" if self.project_id_changed? and self.project_id_was
   end
   
 end

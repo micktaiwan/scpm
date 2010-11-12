@@ -13,6 +13,11 @@ class Project < ActiveRecord::Base
   has_many    :amendments,  :dependent => :destroy, :order=>"done, id"
   has_many    :milestones,  :dependent => :destroy, :order=>"round(right(name,length(name)-length('m'))) "
 
+  
+  def visible_actions(user_id)
+    Action.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"progress, project_id, id")
+  end
+  
   def icon_status
     case last_status
       when 0; "<div style='float:right;font-weight:bold;'>No status</div>"
@@ -239,7 +244,7 @@ class Project < ActiveRecord::Base
       when 'Post-M10'
         rv = self.requests_string(m)
         milestones.create(:project_id=>self.id, :name=>'QG TD', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG TD')
-        milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a')
+        milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a') and not find_milestone_by_name('m9/m10')
         milestones.create(:project_id=>self.id, :name=>'QG MIP', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG MIP')
         milestones.create(:project_id=>self.id, :name=>'m11', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m11')
         milestones.create(:project_id=>self.id, :name=>'m12', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m12')

@@ -51,7 +51,7 @@ Searches project title and description, statuses, request summary and PM names
 <%= link_to_function('Toggle Frieze', "$('frieze').toggle()") %>
 <div id="frieze"<%if current_user.has_role?('Admin')%> style="display:none;"<%end%> >
 <% for project in @wps %>
-<h3><%= project.full_name %> <%= link_to('Open', :action=>'show', :id=>project.id) %></h3>
+<h3><%= project.full_name %> <%= link_to('Open', {:action=>'show', :id=>project.id}, {:class=>'menu'}) %></h3>
 <div class="milestone_bar">
 <%= render(:partial=>'milestones/milestone', :collection=>project.sorted_milestones) %>
 </div>

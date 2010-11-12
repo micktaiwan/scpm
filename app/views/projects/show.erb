@@ -22,7 +22,7 @@ function add(id, same_week, has_requests) {
 <%= @project.icon_status %>
 <h2><%= @project.full_name %> </h2>
 <%= link_to('Edit project', {:action=>'edit', :id=>@project.id}, {:class=>'btnlnk'}) %>
-<%= link_to_function('Add status', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
+<%= link_to_function('Add status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
 <%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
 <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
 <%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
@@ -66,7 +66,7 @@ function add(id, same_week, has_requests) {
 <h3>Actions</h3>
 
   <%= render(:file=>'actions/actions_header') %>
-  <%= render(:partial=>'actions/action', :collection=>@project.actions) %>
+  <%= render(:partial=>'actions/action', :collection=>@project.visible_actions(current_user.id)) %>
   </table>
 
 <h3>Project</h3>

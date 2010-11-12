@@ -3,15 +3,12 @@ class ActionsController < ApplicationController
   before_filter :require_login
 
   def index
-    if not current_user.has_role?('Admin')
-      @actions = Action.find(:all, :conditions=>["person_id=?",current_user.id], :order=>"progress, project_id, creation_date")
-    else
-      @actions = Action.find(:all, :order=>"person_id, creation_date, progress")
-    end    
+    @actions = Action.find(:all, :conditions=>["person_id=?", current_user.id], :order=>"progress, project_id, creation_date")
+    @other_actions = Action.find(:all, :conditions=>["private=0 and person_id!=?",current_user.id], :order=>"progress, project_id, creation_date")
   end
 
   def new
-    @myaction = Action.new(:project_id=>params[:project_id], :progress=>:open, :creation_date=>Date.today(), :due_date=>Date.today()+7)
+    @myaction = Action.new(:private=>1, :person_id=>current_user.id, :project_id=>params[:project_id], :progress=>:open, :creation_date=>Date.today(), :due_date=>Date.today()+7)
     get_infos
   end
 

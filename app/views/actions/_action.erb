@@ -8,6 +8,7 @@
 
 <td>
 <% if action.project %><b><%= action.project.full_name %>:</b><% end %>
+<% if action.private==1 %><%=image_tag('private.gif')%><% end %>
 <%= action.action %>
 </td>
 
