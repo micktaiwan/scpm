@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'natural_sort'
+#require 'natural_sort'
 
 class Project < ActiveRecord::Base
 
@@ -228,6 +228,8 @@ class Project < ActiveRecord::Base
         milestones.create(:project_id=>self.id, :name=>'m3', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m3')
       when 'M3-M5'
         rv = self.requests_string(m)
+        milestones.create(:project_id=>self.id, :name=>'QG BRD', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG BRD')
+        milestones.create(:project_id=>self.id, :name=>'QG ARD', :comments=>'No request', :status=>-1) if not find_milestone_by_name('QG ARD')
         milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')   and not find_milestone_by_name('m5/m7')
       when 'M5-M10'
         rv = self.requests_string(m)
@@ -236,7 +238,9 @@ class Project < ActiveRecord::Base
         milestones.create(:project_id=>self.id, :name=>'m10', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10') and not find_milestone_by_name('m9/m10')
       when 'Post-M10'
         rv = self.requests_string(m)
+        milestones.create(:project_id=>self.id, :name=>'QG TD', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG TD')
         milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a')
+        milestones.create(:project_id=>self.id, :name=>'QG MIP', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG MIP')
         milestones.create(:project_id=>self.id, :name=>'m11', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m11')
         milestones.create(:project_id=>self.id, :name=>'m12', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m12')
         milestones.create(:project_id=>self.id, :name=>'m13', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m13')
@@ -323,8 +327,33 @@ class Project < ActiveRecord::Base
   end
   
   def sorted_milestones
-    NaturalSort::naturalsort milestones
+    #NaturalSort::naturalsort milestones
+    milestones.sort_by { |m| milestone_order(m.name)}
   end
+  
+  def milestone_order(name)
+    case name
+    when 'm3';      1
+    when 'QG BRD';  2
+    when 'QG ARD';  3
+    when 'm5';      4
+    when 'm5/m7';   5
+    when 'm7';      6
+    when 'm9';      7
+    when 'm9/m10';  8
+    when 'm10';     9
+    when 'QG TD';   10
+    when 'm10a';    11
+    when 'QG MIP';  12
+    when 'm11';     13
+    when 'm12';     14
+    when 'm13';     15
+    when 'm14';     16
+    when 'maint.';  17
+    else;           0
+    end  
+  end
+
   
   # give a list of corresponding requests PM
   def request_pm
