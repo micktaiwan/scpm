@@ -11,13 +11,13 @@ class Project < ActiveRecord::Base
   has_many    :actions,     :dependent => :destroy, :order=>"progress"
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
   has_many    :amendments,  :dependent => :destroy, :order=>"done, id"
-  has_many    :milestones,  :dependent => :destroy, :order=>"round(right(name,length(name)-length('m'))) "
+  has_many    :milestones,  :dependent => :destroy
 
-  
+
   def visible_actions(user_id)
     Action.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"progress, project_id, id")
   end
-  
+
   def icon_status
     case last_status
       when 0; "<div style='float:right;font-weight:bold;'>No status</div>"
@@ -31,16 +31,16 @@ class Project < ActiveRecord::Base
     s = Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
     s != [] and s!=nil
   end
-  
+
   def has_requests
     self.requests.size > 0
   end
-  
+
   def is_ended
     self.requests.each { |r|
       return false if r.status != 'cancelled' and r.resolution !='ended'
       }
-    return true  
+    return true
   end
 
   def get_status
@@ -117,7 +117,7 @@ class Project < ActiveRecord::Base
     return self.project.full_wp_name + " > " + rv if self.project and self.project.project
     rv
   end
-  
+
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_arr)
     self.requests.each { |r|
@@ -200,6 +200,17 @@ class Project < ActiveRecord::Base
       }
   end
 
+  def move_milestones_to_project(p)
+    p.milestones.each { |m|
+      m.destroy if m.status == -1
+      }
+    self.milestones.each { |m|
+      m.project_id = p.id
+      m.save
+      }
+  end
+
+
   def open_requests
     self.requests.select { |r| r.resolution != "ended"}
   end
@@ -225,7 +236,7 @@ class Project < ActiveRecord::Base
   def create_milestones
     ['M1-M3', 'M3-M5', 'M5-M10', 'Post-M10', 'Maintenance'].each {|m| create_milestone(m)}
   end
-  
+
   def create_milestone(m)
     case m
       when 'M1-M3'
@@ -293,12 +304,12 @@ class Project < ActiveRecord::Base
     rv = "No request" if rv == ""
     [rv,nb]
   end
-  
+
   def find_milestone_by_name(name)
     self.milestones.each { |m|
       return m if m.name == name
       }
-    nil  
+    nil
   end
 
   def get_cell_style_for_milestone(m)
@@ -318,7 +329,7 @@ class Project < ActiveRecord::Base
         {}
     end
   end
-  
+
   def get_milestone_status(name)
     m = find_milestone_by_name(name)
     if m
@@ -330,12 +341,12 @@ class Project < ActiveRecord::Base
     style  = get_cell_style_for_milestone(m)
     [status,style]
   end
-  
+
   def sorted_milestones
     #NaturalSort::naturalsort milestones
     milestones.sort_by { |m| milestone_order(m.name)}
   end
-  
+
   def milestone_order(name)
     case name
     when 'm3';      1
@@ -356,10 +367,10 @@ class Project < ActiveRecord::Base
     when 'm14';     16
     when 'maint.';  17
     else;           0
-    end  
+    end
   end
 
-  
+
   # give a list of corresponding requests PM
   def request_pm
     rv = []
@@ -377,15 +388,15 @@ class Project < ActiveRecord::Base
         person = Person.find_by_rmt_user(r.assigned_to)
       else
         person = nil
-      end      
-      name = person ? person.name : r.assigned_to 
+      end
+      name = person ? person.name : r.assigned_to
       name += " (#{r.work_package})"
       rv << name if not rv.include?(name)
       }
     rv
   end
 
-  
+
 private
 
   def days_ago(date_time)

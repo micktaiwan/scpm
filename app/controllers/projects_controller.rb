@@ -123,18 +123,20 @@ class ProjectsController < ApplicationController
             # create parent
             parent_id = Project.create(:project_id=>nil, :name=>r.project_name, :workstream=>r.workstream).id
           else
-            parent_id = parent.id  
+            parent_id = parent.id
           end
           #create wp
           p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream)
           r.project.move_actions_to_project(p)
+          r.project.move_milestones_to_project(p)
           r.move_to_project(p)
         else
           @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
           r.project.move_actions_to_project(projects[0])
+          r.project.move_milestones_to_project(projects[0])
           r.move_to_project(projects[0])
         end
-      end  
+      end
       if (r.project and r.project.project and r.project.project.name != r.project_name)
         @text << "FYI #{r.project.project.name} != #{r.project_name} (#{r.request_id})<br/>"
       end
