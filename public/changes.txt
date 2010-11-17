@@ -1,3 +1,8 @@
+17-Nov-2010
+===========
+
+- Fixed milestones loss when importing projects
+
 12-Nov-2010
 ===========
 
@@ -15,3 +20,4 @@
 
 - Trying to fix a action bug, logging the project change for actions
 - Changes file creation
+

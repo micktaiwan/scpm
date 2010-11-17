@@ -5,14 +5,17 @@
 <%= link_to(person.name, :action=>'show', :id=>person.id) %>
 
 <%
+if current_user.has_role?('Admin')
   nb = person.requests.size
   l  = person.load
   a = (l/nb).to_s[0..3]
+end
 %>
+
 
 <% if person.is_supervisor==1 %>
   <b>supervisor</b>:  <%= person.projects.size %> projects
-<% else %>
+<% elsif current_user.has_role?('Admin') %>
   <b>nb</b>: <%= nb %>
   <b>load</b>: <%= l %>
   <b>average</b>: <%= a %>
