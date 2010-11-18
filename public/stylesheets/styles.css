@@ -55,6 +55,11 @@ a {text-decoration:none;}
   margin: 2px;
   background: #FFF;
   }
+.grey {
+  border: 1px solid #999;
+  background: #DDD;
+  }
+
 #content {
   margin:  75px 10px 10px 10px;
   padding: 0px 5px 5px 15px;
@@ -99,8 +104,8 @@ td    {
 
 .descr {
   font-weight: bold;
-  }  
-  
+  }
+
 /* STATUSES */
  .to_be_validated  {
   background: #AAF;
@@ -169,7 +174,7 @@ td    {
 .amendment1 {font-style: italic; color: #999;}
 
 .milestone_bar { margin: 20px 0 20px 0;}
-.milestone { border:black solid 1px; width: 90px; display: inline-block; vertical-align:top;}
+.milestone { border:black solid 1px; width: 94px; display: inline-block; vertical-align:top;}
 .milestone_name { border-bottom:black solid 1px; font-weight: bold; }
 .milestone_comments {min-height:64px;}
 .milestone_comments.status-1 {color: #F00;}
