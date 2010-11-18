@@ -258,8 +258,8 @@ class Project < ActiveRecord::Base
         milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a') and not find_milestone_by_name('m9/m10')
         milestones.create(:project_id=>self.id, :name=>'QG MIP', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG MIP')
         milestones.create(:project_id=>self.id, :name=>'m11', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m11')
-        milestones.create(:project_id=>self.id, :name=>'m12', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m12')
-        milestones.create(:project_id=>self.id, :name=>'m13', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m13')
+        milestones.create(:project_id=>self.id, :name=>'m12', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m12') and not find_milestone_by_name('m12/m13')
+        milestones.create(:project_id=>self.id, :name=>'m13', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m13') and not find_milestone_by_name('m12/m13')
         milestones.create(:project_id=>self.id, :name=>'m14', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m14')
       when 'Maintenance'
         rv = self.requests_string(m)
@@ -363,9 +363,10 @@ class Project < ActiveRecord::Base
     when 'QG MIP';  12
     when 'm11';     13
     when 'm12';     14
-    when 'm13';     15
-    when 'm14';     16
-    when 'maint.';  17
+    when 'm12/m13'; 15
+    when 'm13';     16
+    when 'm14';     17
+    when 'maint.';  18
     else;           0
     end
   end
