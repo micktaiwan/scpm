@@ -184,6 +184,7 @@ td    {
 .milestone_comments.status2 {background-color: #FA0;}
 .milestone_comments.status3 {background-color: #F22;}
 
+.milestone_name.missing {background-color: #AAF;}
 .milestone_name.blank {background-color: #EEE;}
 .milestone_name.normal {background-color: #FFA;}
 .milestone_name.soon {background-color: #FA0;}

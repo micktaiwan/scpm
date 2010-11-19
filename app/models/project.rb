@@ -371,7 +371,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-
   # give a list of corresponding requests PM
   def request_pm
     rv = []
