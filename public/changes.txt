@@ -4,6 +4,7 @@
 - added milestone m12/m13
 - added frieze project status and date
 - added legend for milestones
+- check that amemdments are defined
 
 17-Nov-2010
 ===========
