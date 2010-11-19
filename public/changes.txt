@@ -1,3 +1,9 @@
+19-Nov-2010
+===========
+
+- added blue color for milestones with request but no date
+- including all milestones and QG in Excel summary
+
 18-Nov-2010
 ===========
 

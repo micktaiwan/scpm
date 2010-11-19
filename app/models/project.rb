@@ -333,7 +333,7 @@ class Project < ActiveRecord::Base
   def get_milestone_status(name)
     m = find_milestone_by_name(name)
     if m
-      status = m.comments.split("\n").join("\r\n") # FIXME: does not work
+      status = m.comments.split("\n").join("\r\n")
       status += "\r\n" + m.date.to_s if m.date
     else
       status = ''
