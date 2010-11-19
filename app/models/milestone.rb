@@ -1,5 +1,7 @@
 class Milestone < ActiveRecord::Base
 
+  belongs_to :project
+
   def date
     return self.actual_milestone_date if self.actual_milestone_date
     self.milestone_date
