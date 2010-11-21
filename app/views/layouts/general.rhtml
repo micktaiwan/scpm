@@ -18,7 +18,15 @@
 
 <div id="menu_bar">
 <%= link_to('Projects', {:controller=>'projects', :action=>'index'}, {:class=>menu_style('projects','*')}) %>
-<%= link_to('Actions', {:controller=>'actions', :action=>'index'}, {:class=>menu_style('actions','*')}) %>
+<%
+  s = current_user.open_actions.size
+ if s > 0
+   nb_actions = ' <strong>' +s.to_s+'</strong>'
+ else
+  nb_actions = ''
+ end
+%>
+<%= link_to('Actions'+nb_actions, {:controller=>'actions', :action=>'index'}, {:class=>menu_style('actions','*')}) %>
 <%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %>
 <%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %>
 <%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %>

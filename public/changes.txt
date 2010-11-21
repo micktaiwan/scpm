@@ -2,7 +2,8 @@
 ===========
 
 - "done" checkbox for milestones
-- new style !
+- concept of skipped milestones (not done milestones but justified)
+- new styles
 
 19-Nov-2010
 ===========

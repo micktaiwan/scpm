@@ -4,9 +4,9 @@ class Person < ActiveRecord::Base
 
   belongs_to :company
   has_many :projects, :foreign_key=>"supervisor_id"
-
   has_many :person_roles
   has_many :roles, :through => :person_roles
+  has_many :open_actions, :class_name=>"Action", :conditions=>"progress='open' or progress='in_progress'"
 
   before_save :encrypt_password
 
@@ -25,8 +25,8 @@ class Person < ActiveRecord::Base
     return if not self.has_role?(role)
     self.roles.delete(Role.find_by_name(role))
   end
-  
-  
+
+
   def requests
     return [] if self.rmt_user == "" or self.rmt_user == nil
     Request.find(:all, :conditions => "assigned_to='#{self.rmt_user}'", :order=>"workstream, project_name")
