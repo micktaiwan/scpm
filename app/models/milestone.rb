@@ -13,6 +13,7 @@ class Milestone < ActiveRecord::Base
 
   def timealert
     return "passed" if done == 1
+    return "skipped" if done == 2
     d = date
     if d.blank?
       return "missing" if status == 0

@@ -8,66 +8,73 @@
 Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
 <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status
 
-<h3>Legend</h3>
+<div class="legend">
+  <div class="milestone">
+  <div class="milestone_name blank">
+  No date
+  </div>
+  <div class="milestone_comments status-1">
+  No request
+  </div>
+  </div>
 
-<div class="milestone">
-<div class="milestone_name blank">
-No date
-</div>
-<div class="milestone_comments status-1">
-No request
-</div>
-</div>
-
-<div class="milestone">
-<div class="milestone_name missing">
-No date
-</div>
-<div class="milestone_comments status0">
-Some requests
-</div>
-</div>
-
-
-<div class="milestone">
-<div class="milestone_name normal">
-Date OK
-</div>
-<div class="milestone_comments status0">
-No info
-</div>
-</div>
+  <div class="milestone">
+  <div class="milestone_name missing">
+  No date
+  </div>
+  <div class="milestone_comments status0">
+  Some requests
+  </div>
+  </div>
 
 
-<div class="milestone">
-<div class="milestone_name soon">
-2 weeks
-</div>
-<div class="milestone_comments status1">
-GO
-</div>
+  <div class="milestone">
+  <div class="milestone_name normal">
+  Date OK
+  </div>
+  <div class="milestone_comments status0">
+  No info
+  </div>
+  </div>
+
+
+  <div class="milestone">
+  <div class="milestone_name soon">
+  2 weeks
+  </div>
+  <div class="milestone_comments status1">
+  GO
+  </div>
+  </div>
+
+  <div class="milestone">
+  <div class="milestone_name verysoon">
+  1 w / late
+  </div>
+  <div class="milestone_comments status2">
+  GO w/a
+  </div>
+  </div>
+
+  <div class="milestone">
+  <div class="milestone_name passed">
+  Passed
+  </div>
+  <div class="milestone_comments status3">
+  NO GO
+  </div>
+  </div>
+
+  <div class="milestone">
+  <div class="milestone_name skipped">
+  Skipped
+  </div>
+  <div class="milestone_comments status0">
+  no info
+  </div>
+  </div>
 </div>
 
-<div class="milestone">
-<div class="milestone_name verysoon">
-1 w / late
-</div>
-<div class="milestone_comments status2">
-GO w/a
-</div>
-</div>
-
-<div class="milestone">
-<div class="milestone_name passed">
-Passed
-</div>
-<div class="milestone_comments status3">
-NO GO
-</div>
-</div>
-
-<br/>
-<br/>
 
 <%= link_to_function('filters', "$('filters').toggle();") %>
 <% if(are_filtered) %><strong>filtered</strong><% end %>

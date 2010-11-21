@@ -15,10 +15,13 @@
 <%= text_field :milestone, :actual_milestone_date %> yyyy-mm-dd</p>
 
 <p><%= label_tag 'done' %>
-<%= check_box :milestone, :done %></p>
+<%= radio_button(:milestone, :done, 0) %> not done yet
+<%= radio_button(:milestone, :done, 1) %> done
+<%= radio_button(:milestone, :done, 2) %> will not be done and is justified
+</p>
 
 <p><%= label_tag 'status' %>
-<%= text_field :milestone, :status %> 0: unknown, 1: GO, 2: GO with amendments, 3: NOGO</p>
+<%= select(:milestone, :status, [['no request',-1], ['unknown',0], ['GO',1], ['GO w/a',2], ['NO GO',3]]) %>
 
 <p><%= label_tag 'comments' %>
 <%= text_area :milestone, :comments, {:rows=>3} %></p>
