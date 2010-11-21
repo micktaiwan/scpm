@@ -25,4 +25,15 @@ class Milestone < ActiveRecord::Base
     return "normal"
   end
 
+  def amendments
+    self.project.amendments.select{|a| a.milestone == self.name}
+  end
+
+  #def rmt_alerts
+  #  alerts = []
+  #  alerts << "RMT milestone date is not the same" if self.name == 'm3' and project.requests.select{|r| r.milestone=="M1-M3"}.size > 0
+  #  alerts
+  #end
+
 end
+

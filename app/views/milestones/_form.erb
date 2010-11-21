@@ -8,10 +8,10 @@
 <%= select(:milestone, :name, ['m1','m3', 'QG BRD', 'QG ARD', 'm5', 'm5/m7', 'm7','m9', 'm9/m10', 'm10', 'QG TD', 'm10a', 'QG MIP', 'm11','m12', 'm12/m13', 'm13','m14','maint.']) %>
 </p>
 
-<p><%= label_tag 'milestone date' %>
+<p><%= label_tag 'planned date' %>
 <%= text_field :milestone, :milestone_date %> yyyy-mm-dd</p>
 
-<p><%= label_tag 'actual m. date' %>
+<p><%= label_tag 'current date' %>
 <%= text_field :milestone, :actual_milestone_date %> yyyy-mm-dd</p>
 
 <p><%= label_tag 'done' %>

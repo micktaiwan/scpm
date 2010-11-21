@@ -149,6 +149,7 @@ class ProjectsController < ApplicationController
       p.save
       }
     @projects = Project.find(:all).select{ |p| p.projects.size == 0 and p.requests.size == 0}
+    @root_requests = Project.find(:all, :conditions=>"project_id is null").select{ |p| p.requests.size > 0}
     @display_actions = true
     timestamps_on
   end

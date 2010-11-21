@@ -8,7 +8,7 @@
 <%= my_simple_format(milestone.comments) %>
 <%= milestone.date %>
 </div>
-<% if milestone.status==2 and milestone.project.amendments.select{|a| a.milestone == milestone.name}.size ==0 %>
+<% if milestone.status==2 and milestone.amendments.size == 0 %>
 No amendment<br/>
 <% end %>
 </div>
