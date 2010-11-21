@@ -1,3 +1,5 @@
+<h2>Reminders</h2>
+
 <% @rmt_users.each { |resp| %>
 
 <a href='#' onclick="$('<%=resp.rmt_user%>').toggle();return false;">- <%=resp.name%> (<%=resp.rmt_user%>)</a><br/>

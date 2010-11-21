@@ -3,7 +3,7 @@ body {
   padding: 0;
   font-family: sans-serif;
   font-size: 0.8em;
-  background: #EEE;
+  background: #FFF;
   }
 
 img {
@@ -18,23 +18,63 @@ div#banner {
   left: auto;
   width: 100%;
   height: 65px;
-  background: #ABC;
+  background: #89A;
   border-bottom: 1px solid #000;
+  box-shadow: inset 0px 20px 20px #789;
+  -moz-box-shadow: inset 0px 20px 20px #789;
+  -webkit-box-shadow: inset 0px 20px 20px #789;
 }
-
-h1 {
-  background: #ABC;
-  background-image: url(/images/plane.png);
-  background-repeat:no-repeat;
+#title {
+  text-transform: capitalize;
+  font:1.8em bold;
+  letter-spacing:-2px;
   color: #222;
   margin: 0;
-  padding: 0 0 0 35px;
-}
+  padding: 10px 10px 0 35px;
+  background-image: url(/images/plane.png);
+  background-repeat:no-repeat;
+  }
+#menu_bar {
+  margin: -2px 0 0 10px;
+  }
+.menu {
+  color:black;
+  border: 1px solid #678;
+  padding: 5px;
+  margin: 2px;
+  background: #FFF;
+  border-radius: 5px;
+  box-shadow: inset 2px 2px 2px #89A;
+  -moz-box-shadow: inset 2px 2px 2px #89A;
+  -webkit-box-shadow: inset 2px 2px 2px #89A;
+  }
+.menu:hover {
+  background: #EEE;
+  box-shadow: inset 4px 4px 4px #89A;
+  -moz-box-shadow: inset 4px 4px 4px #89A;
+  -webkit-box-shadow: inset 4px 4px 4px #89A;
+  }
+.grey {
+  border: 1px solid #999;
+  background: #DDD;
+  }
+.active {
+  background: #99F;
+  box-shadow: inset 4px 4px 4px #77A;
+  -moz-box-shadow: inset 4px 4px 4px #77A;
+  -webkit-box-shadow: inset 4px 4px 4px #77A;
+  }
+
+
 h2 {
   background: #ABC;
   margin: 10px -5px 5px -15px;
   padding: 0 0 0 15px;
   border: 1px solid #789;
+  box-shadow: 4px 4px 4px #89A;
+  -moz-box-shadow: 4px 4px 4px #89A;
+  -webkit-box-shadow: 4px 4px 4px #89A;
+  text-shadow: #FFF 0.1em 0.1em 0.1em;
 }
 
 a {text-decoration:none;}
@@ -45,25 +85,10 @@ a {text-decoration:none;}
   margin: 0px;
   background: #CDF;
 }
-#menu_bar {
-  margin: 10px 0 0 10px;
-  }
-.menu {
-  color:black;
-  border: 1px solid #DDD;
-  padding: 2px;
-  margin: 2px;
-  background: #FFF;
-  }
-.grey {
-  border: 1px solid #999;
-  background: #DDD;
-  }
-
 #content {
   margin:  75px 10px 10px 10px;
   padding: 0px 5px 5px 15px;
-  border-bottom: 1px solid #AAA;
+  border-bottom: 1px solid #AAAm;
   background: #FFF;
 }
 ul {
@@ -190,3 +215,4 @@ td    {
 .milestone_name.soon {background-color: #FA0;}
 .milestone_name.verysoon {background-color: #F00;}
 .milestone_name.passed {background-color: #3F3;}
+
