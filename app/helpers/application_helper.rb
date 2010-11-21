@@ -8,7 +8,7 @@ module ApplicationHelper
   end
 
   def menu_style(c,a)
-    if c == controller_name and a == action_name
+    if c == controller_name and (a == '*' or a == action_name)
       'menu active'
     else
       'menu'

@@ -12,7 +12,6 @@ img {
 
 div#banner {
   margin: 0;
-  line-height: 1.1;
   position: fixed;
   top: 0;
   left: auto;
@@ -20,9 +19,9 @@ div#banner {
   height: 65px;
   background: #89A;
   border-bottom: 1px solid #000;
-  box-shadow: inset 10px 10px 10px #ABC;
-  -moz-box-shadow: inset 10px 10px 10px #ABC;
-  -webkit-box-shadow: inset 10px 10px 10px #ABC;
+  box-shadow: inset 5px 5px 5px #ABC;
+  -moz-box-shadow: inset 5px 5px 5px #ABC;
+  -webkit-box-shadow: inset 5px 5px 5px #ABC;
 }
 #title {
   text-transform: capitalize;
@@ -36,7 +35,7 @@ div#banner {
   background-repeat:no-repeat;
   }
 #menu_bar {
-  margin: -2px 0 0 10px;
+  margin: -2px 0 0 0;
   }
 .menu {
   color:black;
@@ -78,6 +77,19 @@ h2 {
   text-shadow: #FFF 0.1em 0.1em 0.1em;
   border-radius: 5px;
 }
+
+#submenu {
+  position: fixed;
+  width: 100%;
+  background: #FFF;
+  margin: -9px 0 0 0;
+  padding: 10px 0 10px 0;
+}
+
+#subcontent {
+  padding: 70px 0 0 0;
+}
+
 
 a {text-decoration:none;}
 

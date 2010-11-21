@@ -14,6 +14,9 @@
 <p><%= label_tag 'actual m. date' %>
 <%= text_field :milestone, :actual_milestone_date %> yyyy-mm-dd</p>
 
+<p><%= label_tag 'done' %>
+<%= check_box :milestone, :done %></p>
+
 <p><%= label_tag 'status' %>
 <%= text_field :milestone, :status %> 0: unknown, 1: GO, 2: GO with amendments, 3: NOGO</p>
 

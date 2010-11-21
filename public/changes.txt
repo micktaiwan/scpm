@@ -1,6 +1,7 @@
 22-Nov-2010
 ===========
 
+- "done" checkbox for milestones
 - new style !
 
 19-Nov-2010

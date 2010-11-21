@@ -5,8 +5,6 @@
 <% end %>
 <%= link_to('Report', {:action=>'report'},{:class=>"btnlnk"}) %>
 <%= link_to('Summary', {:action=>'summary'},{:class=>"btnlnk"}) %>
-<br/>
-<br/>
 Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
 <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status
 
@@ -136,3 +134,4 @@ Searches project title and description, statuses, request summary and PM names
 <%= render(:partial=>'project', :collection=>@projects) %>
 </ul>
 </div>
+
