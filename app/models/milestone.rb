@@ -16,7 +16,7 @@ class Milestone < ActiveRecord::Base
     return "skipped" if done == 2
     d = date
     if d.blank?
-      return "missing" if status == 0
+      return "missing" if status != -1
       return "blank"
     end
     diff = d - Date.today
