@@ -1,0 +1,9 @@
+<%= hidden_field :note, :project_id %>
+
+<p><%= label_tag 'note' %>
+<%= text_area :note, :note, {:rows=>3} %></p>
+
+<p><%= label_tag 'Type' %>
+<%= radio_button :note, :private, 0 %> Public
+<%= radio_button :note, :private, 1 %> Private
+</p>

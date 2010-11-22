@@ -1,4 +1,5 @@
-require 'Differ'
+require 'rubygems'
+require 'differ'
 Differ.format = :html
 
 class AddDiffs < ActiveRecord::Migration

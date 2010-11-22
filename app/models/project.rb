@@ -18,6 +18,10 @@ class Project < ActiveRecord::Base
     Action.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"progress, project_id, id")
   end
 
+  def visible_notes(user_id)
+    Note.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"id desc")
+  end
+
   def icon_status
     case last_status
       when 0; "<div style='float:right;font-weight:bold;'>No status</div>"

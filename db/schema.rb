@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101122102315) do
+ActiveRecord::Schema.define(:version => 20101122201549) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -75,6 +75,16 @@ ActiveRecord::Schema.define(:version => 20101122102315) do
     t.integer  "done",                  :default => 0
   end
 
+  create_table "notes", :force => true do |t|
+    t.text     "note"
+    t.integer  "project_id"
+    t.integer  "private",    :default => 1
+    t.integer  "person_id"
+    t.integer  "note_id",    :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "people", :force => true do |t|
     t.string   "name"
     t.string   "email"
@@ -110,8 +120,37 @@ ActiveRecord::Schema.define(:version => 20101122102315) do
     t.string   "ispl"
   end
 
-# Could not dump table "requests" because of following ActiveRecord::StatementInvalid
-#   Mysql::Error: Can't create/write to file 'C:\TEMP\#sql_784_0.MYI' (Errcode: 13): describe `requests`
+  create_table "requests", :force => true do |t|
+    t.string   "request_id"
+    t.string   "workstream"
+    t.string   "status"
+    t.string   "assigned_to"
+    t.string   "resolution"
+    t.string   "updated"
+    t.string   "reporter"
+    t.string   "view_status"
+    t.string   "milestone"
+    t.string   "priority"
+    t.string   "summary"
+    t.string   "date_submitted"
+    t.string   "product_version"
+    t.string   "severity"
+    t.string   "platform"
+    t.string   "work_package"
+    t.string   "complexity"
+    t.string   "start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "sdp"
+    t.string   "pm"
+    t.string   "milestone_date"
+    t.string   "project_name"
+    t.string   "actual_m_date"
+    t.string   "end_date"
+    t.integer  "project_id"
+  end
+
+  add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
 
   create_table "roles", :force => true do |t|
     t.string "name"

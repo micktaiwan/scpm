@@ -27,6 +27,7 @@ function add(id, same_week, has_requests) {
 <%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
 <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
 <%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+<%= link_to('Add note', {:controller=>'notes', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
 </div>
 
 <div id="subcontent">
@@ -73,6 +74,10 @@ function add(id, same_week, has_requests) {
   <%= render(:partial=>'actions/action', :collection=>@project.visible_actions(current_user.id)) %>
   </table>
 
+<h3>Notes</h3>
+
+  <%= render(:partial=>'notes/note', :collection=>@project.visible_notes(current_user.id)) %>
+  
 <h3>Project</h3>
 
 <% if @project.project %>

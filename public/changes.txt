@@ -3,6 +3,7 @@
 
 - "done" checkbox for milestones
 - concept of skipped milestones (not done milestones but justified)
+- status changes identified
 - new styles
 
 19-Nov-2010

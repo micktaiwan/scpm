@@ -1,0 +1,8 @@
+<h2>Note Edit</h2>
+
+<%= error_messages_for :note %>
+<% form_for @note, :url=>{:action=>'update', :id=>@note.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'OK' %></p>
+<% end -%>
