@@ -78,6 +78,23 @@ h2 {
   border-radius: 5px;
 }
 
+h3 {
+  margin: 20px -5px 20px -15px;
+  padding: 0 0 0 15px;
+  text-shadow: #FFF 0.1em 0.1em 0.1em;
+}
+
+.panel {
+  background: #EEF;
+  margin: 20px 0px 20px 0;
+  padding: 0 10px 10px 10px;
+  border: 1px solid #789;
+  box-shadow: 4px 4px 4px #89A;
+  -moz-box-shadow: 4px 4px 4px #89A;
+  -webkit-box-shadow: 4px 4px 4px #89A;
+  border-radius: 5px;
+}
+
 #submenu {
   position: fixed;
   width: 100%;
@@ -87,7 +104,7 @@ h2 {
 }
 
 #subcontent {
-  padding: 70px 0 0 0;
+  padding: 80px 0 0 0;
 }
 
 
@@ -95,10 +112,19 @@ a {text-decoration:none;}
 
 .btnlnk {
   border: 1px solid #ABC;
-  padding: 0px;
+  padding: 2px;
   margin: 0px;
   background: #CDF;
+  border-radius: 3px;
 }
+.btnlnk:hover {
+  background: #BCF;
+  box-shadow: inset 2px 2px 2px #678;
+  -moz-box-shadow: inset 2px 2px 2px #678;
+  -webkit-box-shadow: inset 2px 2px 2px #678;
+  }
+
+
 #content {
   margin:  75px 10px 10px 10px;
   padding: 0px 5px 5px 15px;
@@ -181,13 +207,18 @@ td    {
   border: solid 1px #444;
   background: #EEF;
   padding: 10px;
+  border-radius: 5px;
+  margin:10px 0 10px 0;
   }
 
 .status_date {
+  font-size:1.2em;
   border-bottom: solid 1px #777;
   background: #DDF;
   margin: -10px;
   padding: 2px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   }
 
 /* PROGRESS */
@@ -254,3 +285,20 @@ ins.differ {
   border-left: 1px solid #BBB;
   padding: 0 0 0 10px;
   }
+.note_box {
+  margin: 0 0 10px 0;
+  }  
+.note_header {
+  float: left;
+  text-align: left;
+  vertical-align: top;
+  width:180px;
+  padding-right: 5px;
+  display: inline-block;
+  }
+.note_header.spaced {
+  }  
+.note {
+  width:600px;
+  display: inline-block;
+}

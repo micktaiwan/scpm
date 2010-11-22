@@ -21,19 +21,15 @@ module ProjectsHelper
     rv += "<table><tr><td>"
     rv += simple_format(s.explanation)
     rv += "</td><td class='diff'><br/>"
-    if current_user.has_role?('Admin') 
-      rv += s.explanation_diffs.to_s
-    end
+    rv += s.explanation_diffs.to_s
     rv += "</td></tr>"
     rv += "<tr><td valign='top'>"
     rv += "<h4>Last Change</h4>"
     rv += simple_format(s.last_change)
     rv += "</td><td class='diff'><br/><br/><br/>"
-    if current_user.has_role?('Admin') 
-      rv += s.last_change_diffs.to_s
-    end
+    rv += s.last_change_diffs.to_s
     rv += "</td></tr></table>"
-    rv += "</div>"
+    rv += "<br/>"
     if s.project
       rv += "<h3>Status change reason (#{html_status(s.project.old_status)} => #{html_status(s.project.last_status)})</h3>"
       rv += simple_format(s.reason)
@@ -44,7 +40,7 @@ module ProjectsHelper
       rv += "<h3>Feedback</h3>"
       rv += simple_format(s.feedback)
     end
-    rv += "</div>"
+    rv += "</div></div>"
     rv
   end
 

@@ -1,9 +1,14 @@
+23-Nov-2010
+===========
+
+- notes
+- status changes identified
+
 22-Nov-2010
 ===========
 
 - "done" checkbox for milestones
 - concept of skipped milestones (not done milestones but justified)
-- status changes identified
 - new styles
 
 19-Nov-2010
