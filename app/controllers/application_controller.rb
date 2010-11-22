@@ -2,6 +2,8 @@
 # Likewise, all the methods added will be available for all controllers.
 
 require 'will_paginate'
+require 'differ'
+Differ.format = :html
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time

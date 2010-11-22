@@ -396,6 +396,14 @@ class Project < ActiveRecord::Base
     rv
   end
 
+  # set last status explanation_diff and last_change_diff
+  def calculate_diffs
+    s = self.statuses
+    return if s.size < 2
+    s[0].explanation_diffs = Differ.diff(s[0].explanation,s[1].explanation).to_s.split("\n").join("<br/>") if s[0].explanation and s[1].explanation
+    s[0].last_change_diffs = Differ.diff(s[0].last_change,s[1].last_change).to_s.split("\n").join("<br/>") if s[0].last_change and s[1].last_change
+    s[0].save
+  end
 
 private
 

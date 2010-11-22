@@ -18,9 +18,21 @@ module ProjectsHelper
       rv += "</div><br/>"
     end
     rv += "Last eReporting update:#{s.ereporting_date}"
+    rv += "<table><tr><td>"
     rv += simple_format(s.explanation)
+    rv += "</td><td class='diff'><br/>"
+    if current_user.has_role?('Admin') 
+      rv += s.explanation_diffs.to_s
+    end
+    rv += "</td></tr>"
+    rv += "<tr><td valign='top'>"
     rv += "<h4>Last Change</h4>"
     rv += simple_format(s.last_change)
+    rv += "</td><td class='diff'><br/><br/><br/>"
+    if current_user.has_role?('Admin') 
+      rv += s.last_change_diffs.to_s
+    end
+    rv += "</td></tr></table>"
     rv += "</div>"
     if s.project
       rv += "<h3>Status change reason (#{html_status(s.project.old_status)} => #{html_status(s.project.last_status)})</h3>"

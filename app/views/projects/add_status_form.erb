@@ -1,8 +1,12 @@
-<h2><%= @project.full_name %> </h2>
+<div id="submenu">
+<h2><%= @project.full_name %></h2>
+</div>
 
+<div id="subcontent">
 <%= error_messages_for :status %>
 <% form_for @status, :url=>{:action=>'add_status', :project_id=>@project.id} do |f| -%>
   <%= render(:partial => 'status_form') %>
   <p><label>&nbsp;</label>
   <%= submit_tag 'add status' %></p>
 <% end -%>
+</div>

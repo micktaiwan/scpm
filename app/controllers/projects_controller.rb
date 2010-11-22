@@ -89,6 +89,7 @@ class ProjectsController < ApplicationController
     status.update_attributes(params[:status])
     p = status.project
     p.update_status(params[:status][:status]) if p.get_status.id == status.id # only if we are updating the last status
+    p.calculate_diffs
     timestamps_on if params[:update] != '1'
     redirect_to :action=>:show, :id=>status.project_id
   end
@@ -185,6 +186,7 @@ class ProjectsController < ApplicationController
     status      = Status.create(params[:status])
     p           = Project.find(project_id)
     p.update_status(params[:status][:status])
+    p.calculate_diffs
     redirect_to :action=>:show, :id=>project_id
   end
 

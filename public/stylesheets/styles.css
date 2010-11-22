@@ -241,3 +241,16 @@ td    {
   -webkit-box-shadow: 5px 5px 5px #89A;
   }
 
+del.differ {
+  color: red;
+  }
+  
+ins.differ {
+  color: green;
+  }  
+  
+.diff {
+  color: #AAB;
+  border-left: 1px solid #BBB;
+  padding: 0 0 0 10px;
+  }
