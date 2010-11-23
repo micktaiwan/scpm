@@ -4,6 +4,8 @@
 - notes
 - status changes identified
 - better Firefox styles
+- check project and wp names at request import
+- move amendments and notes on project move
 
 22-Nov-2010
 ===========

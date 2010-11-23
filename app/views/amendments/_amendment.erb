@@ -25,7 +25,12 @@
 </td>
 
 <td>
-<%= amendment.creation_date %>
+<% if amendment.done==0 and amendment.duedate < Date.today() %>
+<strong><%= amendment.duedate %></strong>
+<% else %>
+<%= amendment.duedate %>
+<% end %>
+
 </td>
 
 <td>
