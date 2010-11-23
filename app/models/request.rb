@@ -2,6 +2,9 @@ class Request < ActiveRecord::Base
 
   belongs_to :project
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
+  
+  include WelcomeHelper
+  
   def resp
     Person.find(:first, :conditions=>"rmt_user='#{self.assigned_to}'")
   end
@@ -172,9 +175,7 @@ class Request < ActiveRecord::Base
   end
 
   def workpackage_name
-    wpn = self.summary.split(/\[([^\]]*)\]/)[3]
-    wpn = self.project_name if wpn == nil or wpn == ""
-    wpn
+    get_workpackage_name_from_summary(self.summary, self.project_name)
   end
 
   def brn

@@ -12,7 +12,7 @@ class Project < ActiveRecord::Base
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
   has_many    :amendments,  :dependent => :destroy, :order=>"done, id"
   has_many    :milestones,  :dependent => :destroy
-
+  has_many    :notes,  :dependent => :destroy
 
   def visible_actions(user_id)
     Action.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"progress, project_id, id")
@@ -214,6 +214,19 @@ class Project < ActiveRecord::Base
       }
   end
 
+  def move_amendments_to_project(p)
+    self.amendments.each { |a|
+      a.project_id = p.id
+      a.save
+      }
+  end
+  
+  def move_notes_to_project(p)
+    self.notes.each { |a|
+      a.project_id = p.id
+      a.save
+      }
+  end
 
   def open_requests
     self.requests.select { |r| r.resolution != "ended"}

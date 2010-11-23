@@ -130,11 +130,15 @@ class ProjectsController < ApplicationController
           p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream)
           r.project.move_actions_to_project(p)
           r.project.move_milestones_to_project(p)
+          r.project.move_amendments_to_project(p)
+          r.project.move_notes_to_project(p)
           r.move_to_project(p)
         else
           @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
           r.project.move_actions_to_project(projects[0])
           r.project.move_milestones_to_project(projects[0])
+          r.project.move_amendments_to_project(projects[0])
+          r.project.move_notes_to_project(projects[0])
           r.move_to_project(projects[0])
         end
       end
@@ -193,11 +197,11 @@ class ProjectsController < ApplicationController
   # link a request to a project, based on request project_name
   # if the project does not exists, create it
   def link
-    request_id    = params[:id]
-    request = Request.find(request_id)
-    project_name  = request.project_name
-    workpackage_name = request.workpackage_name
-    brn = request.brn
+    request_id        = params[:id]
+    request           = Request.find(request_id)
+    project_name      = request.project_name
+    workpackage_name  = request.workpackage_name
+    brn               = request.brn
 
     project = Project.find_by_name(project_name)
     if not project

@@ -58,21 +58,6 @@ class CvsReport
     raise "Report does not have a '#{m}' attribute/method"
   end
 
-=begin
-  def generate_html_file(path)
-    file = File.open(path, "w")
-    file << "<html><head></head><body><h1>EISQ Request Report</h1>"
-    generate_stats(file)
-    file << "</body></html>"
-    file.close
-  end  
-  
-  def generate_stats(file)
-    file << "<h2>Overall statistics</h2>"
-    file << "<h2>By workstream</h2>"
-  end
-=end
-
 private
 
   def get_columns(row)
@@ -108,4 +93,3 @@ r = Report.new('/home/mick/DL/mfaivremacon.csv')
 r.parse
 r.generate_html_file('/home/mick/DL/test.html')
 =end
-

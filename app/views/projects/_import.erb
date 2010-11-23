@@ -1,6 +1,12 @@
 <li id="req_<%= import[:id] %>">
+<% if not Project.find_by_name(import[:project_name]) %>
+<strong>new project</strong>
+<% end %>
+<% if not Project.find_by_name(get_workpackage_name_from_summary(import[:summary], import[:project_name])) %>
+<strong>new WP</strong>
+<% end %>
+
 <%= link_to_remote('link', :url=>{:action=>'link', :id=>import[:id], :project_name=>import[:project_name]}, :update=>"req_#{import[:id]}") %>
 <%= import[:workstream] %>
 <%= import[:summary] %>
 </li>
-

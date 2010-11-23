@@ -65,8 +65,6 @@ div#banner {
   -moz-box-shadow: inset 4px 4px 4px #77A;
   -webkit-box-shadow: inset 4px 4px 4px #77A;
   }
-
-
 h2 {
   background: #ABC;
   margin: 10px -5px 10px -15px;
@@ -79,7 +77,6 @@ h2 {
   border-radius: 5px;
   -moz-border-radius: 5px;
 }
-
 h3 {
   margin: 20px -5px 20px -15px;
   padding: 0 0 0 15px;
@@ -110,10 +107,7 @@ h3 {
 #subcontent {
   padding: 80px 0 0 0;
 }
-
-
 a {text-decoration:none;}
-
 .btnlnk {
   border: 1px solid #ABC;
   padding: 2px;
@@ -128,8 +122,6 @@ a {text-decoration:none;}
   -moz-box-shadow: inset 2px 2px 2px #678;
   -webkit-box-shadow: inset 2px 2px 2px #678;
   }
-
-
 #content {
   margin:  75px 10px 10px 10px;
   padding: 0px 5px 5px 15px;
@@ -280,7 +272,17 @@ td    {
   -moz-box-shadow: 5px 5px 5px #89A;
   -webkit-box-shadow: 5px 5px 5px #89A;
   }
-
+.stats {
+  float:right;
+  border:1px solid #DDD;
+  background: #FEFEFE;
+  color: #777;
+  margin: 0;
+  padding: 2px 10px 2px 10px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  }
+  
 del.differ {
   color: red;
   }
@@ -308,7 +310,7 @@ ins.differ {
 
 .note {
   border-left: 1px solid #99A;
-  padding-left: 3px;
+  padding-left: 5px;
   width:600px;
   display: inline-block;
 }

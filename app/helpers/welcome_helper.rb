@@ -1,6 +1,5 @@
 module WelcomeHelper
 
-
   def workload(rs)
     rs.inject(0.0) { |sum, r| sum + r.workload}
   end
@@ -44,4 +43,11 @@ module WelcomeHelper
     rv += "</ul>"
   end      
 
+  def get_workpackage_name_from_summary(summary, default)
+    wpn = summary.split(/\[([^\]]*)\]/)[3] 
+    wpn = default if wpn == nil or wpn == ""
+    wpn
+  end
+  
 end
+
