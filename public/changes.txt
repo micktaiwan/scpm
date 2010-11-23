@@ -3,6 +3,7 @@
 
 - notes
 - status changes identified
+- better Firefox styles
 
 22-Nov-2010
 ===========

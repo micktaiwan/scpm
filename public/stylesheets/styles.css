@@ -98,6 +98,7 @@ h3 {
   -moz-border-radius: 5px;
 }
 
+
 #submenu {
   position: fixed;
   width: 100%;
@@ -304,9 +305,10 @@ ins.differ {
   padding-right: 5px;
   display: inline-block;
   }
-.note_header.spaced {
-  }  
+
 .note {
+  border-left: 1px solid #99A;
+  padding-left: 3px;
   width:600px;
   display: inline-block;
 }
