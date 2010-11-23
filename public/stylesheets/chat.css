@@ -1,0 +1,30 @@
+#chatbox {
+  position: absolute;
+  top: 70px;
+  right: 0px;
+  background: #FFF;
+  float: right;
+  clear: both;
+  width: 200px;
+  border: 3px solid #DDD;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  }
+#chatbox .title {
+  font-size: 1.2em;
+  padding:3px;
+  background: #DDD;
+  border-bottom: 3px solid #DDD;
+  }
+ul.list {
+  padding:3px;
+  margin:0;
+  }
+li.item:hover {
+  background: #FFF;
+  cursor:pointer;
+  }
+li.item:hover {
+  background: #FF9;
+  }
+

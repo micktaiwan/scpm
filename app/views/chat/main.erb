@@ -1,0 +1,16 @@
+<%
+  people = chat_get_people
+%>
+
+<div id="chatbox">
+  <div class="title">
+  <%= link_to_function(image_tag('expand.gif'), "new Effect.toggle('chat_list', 'blind', {duration:0.3});") %>
+  Chat
+  </div>
+
+  <ul id="chat_list" class="list" style="display: none;">
+  <%= render(:partial=>'chat/person', :collection=>people) %>
+  </ul>
+
+</div>
+

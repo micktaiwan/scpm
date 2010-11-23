@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101123161137) do
+ActiveRecord::Schema.define(:version => 20101123193812) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20101123161137) do
     t.integer  "is_supervisor", :default => 0
     t.string   "login"
     t.string   "pwd"
+    t.datetime "last_view"
   end
 
   create_table "person_roles", :force => true do |t|
