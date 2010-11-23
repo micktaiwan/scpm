@@ -3,6 +3,7 @@
 
 - notes
 - status changes identified
+- changed amendment "milestone date" to "duedate"
 - better Firefox styles
 - check project and wp names at request import
 - move amendments and notes on project move
