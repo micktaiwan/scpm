@@ -44,6 +44,7 @@ div#banner {
   margin: 2px;
   background: #FFF;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   box-shadow: inset 2px 2px 2px #89A;
   -moz-box-shadow: inset 2px 2px 2px #89A;
   -webkit-box-shadow: inset 2px 2px 2px #89A;
@@ -76,6 +77,7 @@ h2 {
   -webkit-box-shadow: 4px 4px 4px #89A;
   text-shadow: #FFF 0.1em 0.1em 0.1em;
   border-radius: 5px;
+  -moz-border-radius: 5px;
 }
 
 h3 {
@@ -93,6 +95,7 @@ h3 {
   -moz-box-shadow: 4px 4px 4px #89A;
   -webkit-box-shadow: 4px 4px 4px #89A;
   border-radius: 5px;
+  -moz-border-radius: 5px;
 }
 
 #submenu {
@@ -116,6 +119,7 @@ a {text-decoration:none;}
   margin: 0px;
   background: #CDF;
   border-radius: 3px;
+  -moz-border-radius: 5px;
 }
 .btnlnk:hover {
   background: #BCF;
@@ -208,6 +212,7 @@ td    {
   background: #EEF;
   padding: 10px;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   margin:10px 0 10px 0;
   }
 
@@ -218,7 +223,9 @@ td    {
   margin: -10px;
   padding: 2px;
   border-top-left-radius: 5px;
+  -moz-border-top_left-radius: 5px;
   border-top-right-radius: 5px;
+  -moz-border-top-right-radius: 5px;  
   }
 
 /* PROGRESS */
@@ -243,9 +250,9 @@ td    {
 .amendment1 {font-style: italic; color: #999;}
 
 .milestone_bar { margin: 10px 0 10px 0;}
-.milestone { border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;}
-.milestone_name { border-bottom:black solid 1px; font-weight: bold; border-top-left-radius: 5px;border-top-right-radius: 5px;}
-.milestone_comments {min-height:64px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;background-color: #FFF;}
+.milestone { border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;   -moz-border-radius: (px;}
+.milestone_name { border-bottom:black solid 1px; font-weight: bold; border-top-left-radius: 5px;border-top-right-radius: 5px; -moz-border-top-left-radius: 5px;-moz-border-top-right-radius: 5px;}
+.milestone_comments {min-height:64px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;-moz-border-bottom-left-radius: 5px;moz-border-bottom-right-radius: 5px;background-color: #FFF;}
 .milestone_comments.status-1 {color: #F00;}
 .milestone_comments.status-1 {color: #F00;}
 .milestone_comments.status0 {font-style: italic;color: #999;}
@@ -267,6 +274,7 @@ td    {
   margin: 10px 0 20px 0;
   padding: 10px;
   border-radius: 10px;
+  -moz-border-radius: 10px;
   box-shadow: 5px 5px 5px #89A;
   -moz-box-shadow: 5px 5px 5px #89A;
   -webkit-box-shadow: 5px 5px 5px #89A;

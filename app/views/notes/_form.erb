@@ -4,6 +4,6 @@
 <%= text_area :note, :note, {:rows=>10, :cols=>70} %></p>
 
 <p><%= label_tag 'Type' %>
-<%= radio_button :note, :private, 0 %> Public
-<%= radio_button :note, :private, 1 %> Private
+<%= radio_button :note, :private, 0 %> Public for SQLI (only)
+<%= radio_button :note, :private, 1 %> Private to me only
 </p>
