@@ -250,7 +250,7 @@ td    {
 .amendment1 {font-style: italic; color: #999;}
 
 .milestone_bar { margin: 10px 0 10px 0;}
-.milestone { border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;   -moz-border-radius: (px;}
+.milestone { border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
 .milestone_name { border-bottom:black solid 1px; font-weight: bold; border-top-left-radius: 5px;border-top-right-radius: 5px; -moz-border-top-left-radius: 5px;-moz-border-top-right-radius: 5px;}
 .milestone_comments {min-height:64px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;-moz-border-bottom-left-radius: 5px;moz-border-bottom-right-radius: 5px;background-color: #FFF;}
 .milestone_comments.status-1 {color: #F00;}
