@@ -252,7 +252,7 @@ td    {
 .milestone_bar { margin: 10px 0 10px 0;}
 .milestone { border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
 .milestone_name { border-bottom:black solid 1px; font-weight: bold; border-top-left-radius: 5px;border-top-right-radius: 5px; -moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;}
-.milestone_comments {min-height:64px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;-moz-border-radius-bottomleft: 5px;moz-border-radius-bottomright: 5px;background-color: #FFF;}
+.milestone_comments {min-height:64px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;-moz-border-radius-bottomleft: 5px; -moz-border-radius-bottomright: 5px;background-color: #FFF;}
 .milestone_comments.status-1 {color: #F00;}
 .milestone_comments.status-1 {color: #F00;}
 .milestone_comments.status0 {font-style: italic;color: #999;}
