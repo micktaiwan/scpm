@@ -1,0 +1,17 @@
+Chat
+====
+
+sessions de travail
+
+chat_sessions
+  id, created_at, title (optionel)
+chat_session_participants
+  chat_session_id, person_id
+chat_messages
+  id, person_id, chat_session_id, created_at
+  
+récupération d'une session ?
+- si une seule personne et date de moins d'un heure
+- par une liste de récente sessions
+
+Externaliser dans des helpers pour centraliser les noms des models utilisés ?
