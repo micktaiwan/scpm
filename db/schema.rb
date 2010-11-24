@@ -44,6 +44,27 @@ ActiveRecord::Schema.define(:version => 20101123193812) do
     t.datetime "updated_at"
   end
 
+  create_table "chat_message_reads", :force => true do |t|
+    t.integer "chat_message_id"
+    t.integer "person_id"
+  end
+
+  create_table "chat_messages", :force => true do |t|
+    t.integer  "chat_session_id"
+    t.integer  "person_id"
+    t.datetime "created_at"
+  end
+
+  create_table "chat_session_participants", :force => true do |t|
+    t.integer "chat_session_id"
+    t.integer "person_id"
+  end
+
+  create_table "chat_sessions", :force => true do |t|
+    t.datetime "created_at"
+    t.string   "title"
+  end
+
   create_table "companies", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"

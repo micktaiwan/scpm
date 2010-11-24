@@ -182,6 +182,7 @@ class ProjectsController < ApplicationController
     @status.status            = last.status
     @status.last_change       = last.last_change
     @status.actions           = last.actions
+    @status.ereporting_date   = last.ereporting_date
     @status.operational_alert = last.operational_alert
   end
 
@@ -292,7 +293,6 @@ class ProjectsController < ApplicationController
     Project.find(from_id).update_status
     render(:nothing=>true)
   end
-
 
   def destroy
     Project.find(params[:id].to_i).destroy
