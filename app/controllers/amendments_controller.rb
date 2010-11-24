@@ -7,7 +7,7 @@ class AmendmentsController < ApplicationController
   end
 
   def new
-    @amendment = Amendment.new(:project_id=>params[:project_id], :creation_date=>Date.today())
+    @amendment = Amendment.new(:project_id=>params[:project_id])
     get_infos
   end
 
