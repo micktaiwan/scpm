@@ -6,6 +6,6 @@
 <% form_for @status, :url=>{:action=>'update_status', :id=>@status.id} do |f| -%>
   <%= render(:partial => 'status_form') %>
   <p><label>&nbsp;</label>
-  <%= check_box_tag(:update, '1', false) %> update timestamp
+  <%= check_box_tag(:update, '1', true) %> update timestamp
   <%= submit_tag 'Update' %></p>
 <% end -%>
