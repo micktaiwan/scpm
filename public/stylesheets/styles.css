@@ -67,7 +67,7 @@ div#banner {
   }
 h2 {
   background: #ABC;
-  margin: 10px -5px 10px -15px;
+  margin: 10px 40px 10px -15px;
   padding: 0 0 0 15px;
   border: 1px solid #789;
   box-shadow: 4px 4px 4px #89A;
@@ -116,6 +116,21 @@ a {text-decoration:none;}
   border-radius: 3px;
   -moz-border-radius: 5px;
 }
+.btnlnk.special {
+  background: #FDC;
+  border: 1px solid #CBA;
+  }
+.btnlnk.special {
+  background: #FDC;
+  border: 1px solid #CBA;
+  }
+.btnlnk.special:hover {
+  background: #FCB;
+  box-shadow: inset 2px 2px 2px #876;
+  -moz-box-shadow: inset 2px 2px 2px #876;
+  -webkit-box-shadow: inset 2px 2px 2px #876;
+  }
+
 .btnlnk:hover {
   background: #BCF;
   box-shadow: inset 2px 2px 2px #678;
@@ -218,7 +233,7 @@ td    {
   border-top-left-radius: 5px;
   -moz-border-radius-topleft: 5px;
   border-top-right-radius: 5px;
-  -moz-border-radius-topright: 5px;  
+  -moz-border-radius-topright: 5px;
   }
 
 /* PROGRESS */
@@ -282,15 +297,15 @@ td    {
   border-radius: 10px;
   -moz-border-radius: 10px;
   }
-  
+
 del.differ {
   color: red;
   }
-  
+
 ins.differ {
   color: green;
-  }  
-  
+  }
+
 .diff {
   color: #AAB;
   border-left: 1px solid #BBB;
@@ -298,7 +313,7 @@ ins.differ {
   }
 .note_box {
   margin: 0 0 10px 0;
-  }  
+  }
 .note_header {
   float: left;
   text-align: left;

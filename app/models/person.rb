@@ -1,3 +1,5 @@
+require 'net/ldap'
+
 class Person < ActiveRecord::Base
 
   #include Authentication
@@ -7,6 +9,8 @@ class Person < ActiveRecord::Base
   has_many :person_roles
   has_many :roles, :through => :person_roles
   has_many :open_actions, :class_name=>"Action", :conditions=>"progress='open' or progress='in_progress'"
+  has_many :project_people
+  has_many :projects, :through=>:project_people
 
   before_save :encrypt_password
 
@@ -50,8 +54,24 @@ class Person < ActiveRecord::Base
 
   def self.authenticate(login, password)
     return nil if login.empty? or password.empty?
-    self.find_by_login_and_pwd(login, self.encrypt(password))
-    #puts encrypt(password)
+    #return self.find_by_login_and_pwd(login, self.encrypt(password))
+    if login_by_ldap(login,password)
+      self.find_by_login(login)
+    else
+      nil
+    end
+  end
+
+  def self.login_by_ldap(login,pwd)
+    ldap = Net::LDAP.new
+    ldap.host = "mailcorpo.sqli.com"
+    ldap.port = 389
+    ldap.auth "uid=#{login},ou=personsqli,o=sqli,c=com", pwd
+    if ldap.bind
+      return true
+    else
+      return false
+    end
   end
 
   def self.encrypt(password)

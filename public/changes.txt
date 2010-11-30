@@ -1,3 +1,10 @@
+01-Dec-2010
+===========
+
+- SQLI LDAP integration
+- association between users and projects not based on RMT only
+- adding a new project manually
+
 23-Nov-2010
 ===========
 
@@ -27,7 +34,7 @@
 - added milestone m12/m13
 - added frieze project status and date
 - added legend for milestones
-- check that amemdments are defined
+- check that amendments are defined
 
 17-Nov-2010
 ===========

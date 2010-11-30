@@ -16,3 +16,22 @@ récupération d'une session ?
 
 Externaliser dans des helpers pour centraliser les noms des models utilisés ?
 
+
+Status WP
+=========
+
+Organiser sous forme de catégories et notes ?
+Ou SWOT uniquement + Stats
+
+
+
+
+
+<% if project.requests.size > 0 %>
+  <% if project.responsibles.exists?(current_user) %>
+    <%= link_to_remote('Remove from my projects', {:url=>{:controller=>'projects', :action=>'remove_from_mine', :id=>project.id}, :success=>"$('btnaddtomine_'+project.id.to_s).fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine_'+project.id.to_s}) %>
+  <% else %>
+    <%= link_to_remote('Add to my projects', {:url=>{:controller=>'projects', :action=>'add_to_mine', :id=>project.id}, :success=>"$('btnaddtomine_'+project.id.to_s).fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine_'+project.id.to_s}) %>
+  <% end %>
+<% end %>
+

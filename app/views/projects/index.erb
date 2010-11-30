@@ -1,5 +1,6 @@
 <h2>Projects</h2>
 <% if current_user.has_role?('Admin') %>
+<%= link_to('New', {:action=>'new'},{:class=>"btnlnk"}) %>
 <%= link_to('Import', {:action=>'import'},{:class=>"btnlnk"}) %>
 <%= link_to('Check', {:action=>'check'},{:class=>"btnlnk"}) %>
 <% end %>

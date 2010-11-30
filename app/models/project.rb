@@ -12,7 +12,9 @@ class Project < ActiveRecord::Base
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
   has_many    :amendments,  :dependent => :destroy, :order=>"done, id"
   has_many    :milestones,  :dependent => :destroy
-  has_many    :notes,  :dependent => :destroy
+  has_many    :notes,       :dependent => :destroy
+  has_many    :project_people
+  has_many    :responsibles, :through=>:project_people
 
   def visible_actions(user_id)
     Action.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"progress, project_id, id")
@@ -24,7 +26,7 @@ class Project < ActiveRecord::Base
 
   def icon_status
     case last_status
-      when 0; "<div style='float:right;font-weight:bold;'>No status</div>"
+      when 0; ""
       when 1; "<img src='/images/green.gif' align='left'>"
       when 2; "<img src='/images/amber.gif' align='left'>"
       when 3; "<img src='/images/red.gif' align='left'>"
@@ -124,13 +126,21 @@ class Project < ActiveRecord::Base
 
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_arr)
-    self.requests.each { |r|
-      next if not r.resp or r.status == "cancelled" or r.resolution =='ended' or r.resolution =='aborted'
-      return true if user_arr.include?(r.resp.id)
+    user_arr.each { |id|
+      return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
+      self.projects.each { |p|
+        return true if p.has_responsible(user_arr)
+        }
       }
-    self.projects.each { |p|
-      return true if p.has_responsible(user_arr)
-      }
+
+    #self.requests.each { |r|
+    #  next if not r.resp or r.status == "cancelled" or r.resolution =='ended' or r.resolution =='aborted'
+    #  return true if user_arr.include?(r.resp.id)
+    #  }
+    #self.projects.each { |p|
+    #  return true if p.has_responsible(user_arr)
+    #  }
+
     return false
   end
 
@@ -220,7 +230,7 @@ class Project < ActiveRecord::Base
       a.save
       }
   end
-  
+
   def move_notes_to_project(p)
     self.notes.each { |a|
       a.project_id = p.id
@@ -420,6 +430,16 @@ class Project < ActiveRecord::Base
     s[0].explanation_diffs = Differ.diff(s[0].explanation,s[1].explanation).to_s.split("\n").join("<br/>") if s[0].explanation and s[1].explanation
     s[0].last_change_diffs = Differ.diff(s[0].last_change,s[1].last_change).to_s.split("\n").join("<br/>") if s[0].last_change and s[1].last_change
     s[0].save
+  end
+
+  def add_responsible(user)
+    self.responsibles << user if not self.responsibles.exists?(user)
+  end
+
+  def add_responsible_from_rmt_user(rmt_user)
+    return if rmt_user.empty?
+    u = Person.find_by_rmt_user(rmt_user)
+    self.add_responsible(u) if u
   end
 
 private

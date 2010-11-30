@@ -1,6 +1,6 @@
 #chatbox {
-  position: absolute;
-  top: 70px;
+  position: fixed;
+  top: 0px;
   right: 0px;
   background: #FFF;
   float: right;
@@ -9,6 +9,7 @@
   border: 3px solid #DDD;
   border-radius: 10px;
   -moz-border-radius: 10px;
+  z-index: 100;
   }
 #chatbox .title {
   font-size: 1.2em;

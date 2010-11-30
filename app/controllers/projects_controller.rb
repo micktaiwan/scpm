@@ -19,6 +19,20 @@ class ProjectsController < ApplicationController
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
   end
 
+  def new
+    @project = Project.new(:project_id=>nil, :name=>'')
+    @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+  end
+
+  def create
+    @project = Project.new(params[:project])
+    if not @project.save
+      render :action => 'new'
+      return
+    end
+    redirect_to("/projects")
+  end
+
   def upload
   end
 
@@ -222,8 +236,20 @@ class ProjectsController < ApplicationController
 
     request.project_id = wp.id
     request.save
+    project.add_responsible_from_rmt_user(request.assigned_to)
     render(:text=>"saved")
   end
+
+  def add_to_mine
+    Project.find(params[:id]).add_responsible(current_user)
+    render(:nothing=>true)
+  end
+
+  def remove_from_mine
+    Project.find(params[:id]).responsibles.delete(current_user)
+    render(:nothing=>true)
+  end
+
 
   def cut
     session[:cut] = params[:id]

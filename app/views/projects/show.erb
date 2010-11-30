@@ -23,11 +23,18 @@ function add(id, same_week, has_requests) {
 <%= @project.icon_status %>
 <h2><%= @project.full_name %> </h2>
 <%= link_to('Edit project', {:action=>'edit', :id=>@project.id}, {:class=>'btnlnk'}) %>
-<%= link_to_function('Add status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
-<%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
-<%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
-<%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
-<%= link_to('Add note', {:controller=>'notes', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+<% if @project.requests.size > 0 %>
+  <%= link_to_function('Add status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
+  <%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+  <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+  <%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+  <%= link_to('Add note', {:controller=>'notes', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+  <% if @project.responsibles.exists?(current_user) %>
+    <%= link_to_remote('Remove from my projects', {:url=>{:controller=>'projects', :action=>'remove_from_mine', :id=>@project.id}, :success=>"$('btnaddtomine').fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine'}) %>
+  <% else %>
+    <%= link_to_remote('Add to my projects', {:url=>{:controller=>'projects', :action=>'add_to_mine', :id=>@project.id}, :success=>"$('btnaddtomine').fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine'}) %>
+  <% end %>
+<% end %>
 </div>
 
 <div id="subcontent">
@@ -45,6 +52,8 @@ function add(id, same_week, has_requests) {
 <%= simple_format(@project.description) %>
 <% end %>
 </div>
+
+<% if @project.requests.size > 0 %>
 
 <h3>Status</h3>
 
@@ -82,6 +91,7 @@ function add(id, same_week, has_requests) {
   <h3>Notes</h3>
   <%= render(:partial=>'notes/note', :collection=>@project.visible_notes(current_user.id)) %>
 </div>
+<% end %>
 
 <div class="panel">
   <h3>Project</h3>

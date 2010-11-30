@@ -1,0 +1,7 @@
+<h2>Create an project</h2>
+<%= error_messages_for :project %>
+<% form_for :@project, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Create' %></p>
+<% end -%>
