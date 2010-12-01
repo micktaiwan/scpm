@@ -8,6 +8,13 @@
 <%= request.status %>
 <%= request.resolution %>
 <%= request.foreseen_end_date_str %>
+<% if request.resolution=="ended" and request.end_date %>
+<strong>No end date</strong>
+<% end %>
+<% if request.resolution=="ended" and request.actual_m_date=="" %>
+<strong>No actual milestone date</strong>
+<% end %>
+
 </span>
 <% if current_user.has_role?('Admin') %>
 <%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'welcome', :action=>'cut', :id=>request.id}) %>

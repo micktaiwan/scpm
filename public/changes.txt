@@ -5,9 +5,9 @@
 - checking project/person associations
 - actions private to SQLI and not to person only
 - it is normal to have no amendments for a AMBER QG (no displayed alert anymore)
+- if ended, check if actual milestone date and ended date are present
 - Change filter by default for admins
 - description displayed if root project
-
 
 01-Dec-2010
 ===========
