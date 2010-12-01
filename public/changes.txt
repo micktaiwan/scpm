@@ -8,6 +8,7 @@
 - Change filter by default for admins
 - description displayed if root project
 
+
 01-Dec-2010
 ===========
 
