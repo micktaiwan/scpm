@@ -5,9 +5,27 @@
 <%= render(:partial=>'action', :collection=>@actions) %>
 </table>
 <br/>
+<br/>
+<%= link_to_function('Display closed actions', '$("my_closed").toggle()') %>
+<div id="my_closed" style="display:none;">
+<%= render(:file=>'actions/actions_header') %>
+<%= render(:partial=>'action', :collection=>@actions_closed) %>
+</table>
+</div>
+
+
+<br/>
 <h2>Other actions</h2><br/>
 <%= render(:file=>'actions/actions_header') %>
 <%= render(:partial=>'action', :collection=>@other_actions) %>
 </table>
+<br/>
+<br/>
+<%= link_to_function('Display closed actions', '$("other_closed").toggle()') %>
+<div id="other_closed" style="display:none;">
+<%= render(:file=>'actions/actions_header') %>
+<%= render(:partial=>'action', :collection=>@other_actions_closed) %>
+</table>
+</div>
 <br/>
 <br/>
