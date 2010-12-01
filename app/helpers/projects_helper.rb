@@ -10,8 +10,8 @@ module ProjectsHelper
       rv += "<div class='status_date'>#{s.updated_at}"
       rv += "(<b>#{time_ago_in_words(s.updated_at)} - w#{s.updated_at.to_date.cweek}</b>) "
       rv += html_status(s.status) + " "
-      rv += link_to_function('Edit', "edit(#{s.id}, #{s.updated_at.to_date.cweek == Date.today.cweek}, #{s.project.has_requests});") + " "
-      if current_user.has_role?('Admin') 
+      rv += link_to_function('Edit', "edit(#{s.id}, #{s.is_current?}, #{s.project.has_requests});") + " "
+      if current_user.has_role?('Admin')
         rv += link_to_remote(image_tag('cut.png'), :url=>{:controller=>'projects', :action=>'cut_status', :id=>s.id})
         rv += link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'projects', :action=>'destroy_status', :id=>s.id}, :confirm=>"Sure?", :success=>"new Effect.SwitchOff('status_#{s.id}');")
       end
@@ -52,7 +52,7 @@ module ProjectsHelper
       when 3; "<span class='status red'>red</span>"
     end
   end
-  
+
   def text_status(s)
     case s
       when 0; "Unknown"
@@ -94,6 +94,6 @@ module ProjectsHelper
     return "" if not txt
     txt.split("\r\n").join('&#10;')
   end
-  
+
 end
 

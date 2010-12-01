@@ -39,7 +39,7 @@ function add(id, same_week, has_requests) {
 
 <div id="subcontent">
 <%= link_to_function('Informations', '$("infos").toggle();', :class=>"menu") %><br/>
-<div class="panel" id="infos" style="display:none">
+<div class="panel" id="infos"<% if @project.requests.size > 0 %> style="display:none"<%end%>>
 <b>Supervisor</b>: <% if not @project.supervisor_id %>?<% else %><%= @project.supervisor.name %><% end %><br/>
 <b>WS</b>: <%= @project.workstream %><br/>
 <b>BRN</b>: <%= @project.brn %><br/>
@@ -53,8 +53,7 @@ function add(id, same_week, has_requests) {
 <% end %>
 </div>
 
-<% if @project.requests.size > 0 %>
-
+<% if @project.requests.size > 0 or @project.has_status %>
 <h3>Status</h3>
 
 <div class="milestone_bar">
@@ -72,7 +71,9 @@ function add(id, same_week, has_requests) {
 <% end %>
 <% for s in @old_statuses %></ul><% end %>
 </div>
+<% end %>
 
+<% if @project.requests.size > 0  %>
 <div class="panel">
   <h3>Amendments</h3>
   <%= render(:file=>'amendments/amendments_header') %>

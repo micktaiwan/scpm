@@ -160,16 +160,17 @@ class ProjectsController < ApplicationController
         @text << "FYI #{r.project.project.name} != #{r.project_name} (#{r.request_id})<br/>"
       end
       if (r.milestone != 'N/A' and (r.work_package[0..2]=="WP2" or r.work_package[0..2]=="WP3" or r.work_package[0..2]=="WP4" or r.work_package[0..2]=="WP5" or r.work_package[0..2]=="WP6"))
-         @text << "not N/A for <a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id}'>#{r.project_name}</a><br/>"
+        @text << "not N/A for <a href='http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id}'>#{r.project_name}</a><br/>"
       end
     end
     Project.find(:all, :conditions=>"supervisor_id is null and project_id is not null").each { |p|
       p.supervisor_id = p.project.supervisor_id
       p.save
       }
-    @projects = Project.find(:all).select{ |p| p.projects.size == 0 and p.requests.size == 0}
-    @root_requests = Project.find(:all, :conditions=>"project_id is null").select{ |p| p.requests.size > 0}
-    @display_actions = true
+    @projects         = Project.find(:all).select{ |p| p.projects.size == 0 and p.requests.size == 0}
+    @root_requests    = Project.find(:all, :conditions=>"project_id is null").select{ |p| p.requests.size > 0}
+    @display_actions  = true
+    @missing_associations = find_missing_project_person_associations
     timestamps_on
   end
 
@@ -396,4 +397,14 @@ private
     end
   end
 
+  def find_missing_project_person_associations
+    Project.all.select { |p|
+      p.active_requests.map { |r| r.assigned_to }.uniq.each { |name|
+        return true if not p.responsibles.include?(Person.find_by_name(name))
+        }
+      return false
+      }
+  end
+
 end
+

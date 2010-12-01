@@ -4,7 +4,7 @@ class ActionsController < ApplicationController
 
   def index
     @actions = Action.find(:all, :conditions=>["person_id=?", current_user.id], :order=>"progress, project_id, creation_date")
-    @other_actions = Action.find(:all, :conditions=>["private=0 and person_id!=?",current_user.id], :order=>"progress, project_id, creation_date")
+    @other_actions = Action.find(:all, :conditions=>["person_id!=?",current_user.id], :order=>"progress, project_id, creation_date")
   end
 
   def new

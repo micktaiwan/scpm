@@ -242,6 +242,11 @@ class Project < ActiveRecord::Base
     self.requests.select { |r| r.resolution != "ended"}
   end
 
+  def active_requests
+    self.requests.select { |r| r.resolution != "ended" and r.resolution != "aborted" and r.status == "assigned"}
+  end
+
+
   def project_name
     return project.project_name if self.project
     self.name

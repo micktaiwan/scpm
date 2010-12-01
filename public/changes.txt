@@ -1,3 +1,13 @@
+02-Dec-2010
+===========
+
+- when editing status "update timestamps" is checked by default if edited status is for current week
+- checking project/person associations
+- actions private to SQLI and not to person only
+- it is normal to have no amendments for a AMBER QG (no displayed alert anymore)
+- Change filter by default for admins
+- description displayed if root project
+
 01-Dec-2010
 ===========
 
