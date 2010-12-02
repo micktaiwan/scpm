@@ -17,7 +17,7 @@ class WelcomeController < ApplicationController
   def update
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
   end
-  
+
   def upload
     post = params[:upload]
     name =  post['datafile'].original_filename

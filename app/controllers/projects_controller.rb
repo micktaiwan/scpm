@@ -237,8 +237,15 @@ class ProjectsController < ApplicationController
 
     request.project_id = wp.id
     request.save
-    project.add_responsible_from_rmt_user(request.assigned_to)
+    project.add_responsible_from_rmt_user(request.assigned_to) if request.assigned_to != ""
     render(:text=>"saved")
+  end
+
+  def associate
+    request = Request.find(params[:id].to_i)
+    #puts request.id
+    request.project.add_responsible_from_rmt_user(request.assigned_to)
+    render(:nothing=>true)
   end
 
   def add_to_mine
@@ -253,27 +260,27 @@ class ProjectsController < ApplicationController
 
 
   def cut
-    session[:cut] = params[:id]
-    session[:action_cut] = nil
-    session[:status_cut] = nil
+    session[:cut]         = params[:id]
+    session[:action_cut]  = nil
+    session[:status_cut]  = nil
     session[:request_cut] = nil
     render(:nothing => true)
   end
 
   def cut_status
-    session[:status_cut] = params[:id]
-    session[:action_cut] = nil
-    session[:cut] = nil
+    session[:status_cut]  = params[:id]
+    session[:action_cut]  = nil
+    session[:cut]         = nil
     session[:request_cut] = nil
     render(:nothing => true)
   end
 
   def paste
     timestamps_off
-    paste_project if session[:cut] != nil
-    paste_action  if session[:action_cut] != nil
-    paste_request if session[:request_cut] != nil
-    paste_status  if session[:status_cut] != nil
+    paste_project if session[:cut]          != nil
+    paste_action  if session[:action_cut]   != nil
+    paste_request if session[:request_cut]  != nil
+    paste_status  if session[:status_cut]   != nil
     timestamps_on
   end
 
@@ -397,12 +404,17 @@ private
     end
   end
 
+  def no_responsible(p)
+    p.active_requests.map { |r| r.assigned_to }.uniq.each { |name|
+      next if name == ""
+      return true if not p.responsibles.include?(Person.find_by_rmt_user(name))
+      }
+    return false
+  end
+
   def find_missing_project_person_associations
     Project.all.select { |p|
-      p.active_requests.map { |r| r.assigned_to }.uniq.each { |name|
-        return true if not p.responsibles.include?(Person.find_by_name(name))
-        }
-      return false
+      no_responsible(p)
       }
   end
 

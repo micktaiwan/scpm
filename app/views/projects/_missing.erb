@@ -1,0 +1,12 @@
+<% status_html = missing.project_requests_progress_status_html %>
+<li id="p_<%=missing.id%>">
+
+<%= link_to_function(image_tag('expand.gif'), "$('sub_#{missing.id}').toggle();") %>
+
+<%= missing.workstream %>
+<%=link_to(missing.name, :action=>'show', :id=>missing.id) %>
+
+<ul id="sub_<%=missing.id%>" style="display:none;">
+  <%= render(:partial=>'request2', :collection=>missing.requests) %>
+</ul>
+</li>

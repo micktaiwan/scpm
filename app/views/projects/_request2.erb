@@ -1,0 +1,23 @@
+<span class="<%= request2.sanitized_status %>">
+<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= request2.request_id %>"><%= request2.request_id %></a>
+<b><%= request2.work_package %></b>
+<%= request2.milestone %>
+<%= request2.complexity %>
+(<%= request2.workload2 %>)
+<%= request2.assigned_to %>
+<%= request2.status %>
+<%= request2.resolution %>
+<%= request2.foreseen_end_date_str %>
+<% if request2.resolution=="ended" and request2.end_date %>
+<strong>No end date</strong>
+<% end %>
+<% if request2.resolution=="ended" and request2.actual_m_date=="" %>
+<strong>No actual milestone date</strong>
+<% end %>
+
+</span>
+<% if request2.assigned_to != "" and request2.project and not request2.project.has_responsible([Person.find_by_rmt_user(request2.assigned_to)]) %>
+<%= link_to_remote('associate', {:url=>{:controller=>'projects', :action=>'associate', :id=>request2.id}, :success=>"$('ass_#{request2.id}').fade();"}, {:id=>"ass_#{request2.id}"}) %>
+<% end %>
+<br/>
+
