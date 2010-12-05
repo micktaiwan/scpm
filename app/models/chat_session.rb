@@ -1,7 +1,7 @@
 class ChatSession < ActiveRecord::Base
 
-  has_many :participants, :class_name=>"ChatSessionParticipant"
-  has_many :messages, :class_name=>"ChatMessage", :order=>"created_at"
+  has_many :participants, :class_name=>"ChatSessionParticipant", :dependent => :destroy
+  has_many :messages, :class_name=>"ChatMessage", :order=>"created_at", :dependent => :destroy
   include ChatHelper
 
   def send_msg(from_id, msg)

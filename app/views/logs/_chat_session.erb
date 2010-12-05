@@ -1,0 +1,8 @@
+<div>
+<div style="border:1px solid #888;background:#DDD;">
+<%= time_ago_in_words(chat_session.created_at) %><br/>
+<%= render(:partial=>'participant', :collection=>chat_session.participants) %>
+</div>
+<%= render(:partial=>'chat_message', :collection=>chat_session.messages) %>
+</div>
+<br/>
