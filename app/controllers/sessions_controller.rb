@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
   layout 'login'
 
   def login
+    @error = params[:error]
   end
 
   def do_login
@@ -17,7 +18,7 @@ class SessionsController < ApplicationController
       redirect_to :controller=>'projects'
       return
     end
-    redirect_to :action=>:login
+    redirect_to :action=>:login, :error=>"Could not log you in"
   end
 
   def logout

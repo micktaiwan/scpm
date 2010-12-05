@@ -3,12 +3,15 @@ Chat
 
 sessions de travail
 
+MODEL
+
 chat_sessions
   id, created_at, title (optionel)
 chat_session_participants
   chat_session_id, person_id
 chat_messages
   id, person_id, chat_session_id, created_at
+chat_message_reads
 
 récupération d'une session ?
 - si une seule personne et date de moins d'un heure

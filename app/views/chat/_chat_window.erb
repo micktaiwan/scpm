@@ -1,0 +1,24 @@
+<%=s.id%>||##||
+<div class="chat_window" id="chat_window_<%=s.id%>">
+
+<div class="participants">
+  <%= link_to_function(image_tag('expand.gif', {:style=>"float:left"}), "toggle_chat_window(#{s.id})") %>
+  <%= link_to_function(image_tag('delete.gif', {:style=>"float:right"}), "close_chat_window(#{s.id});") %>
+  <%=s.participants.select{|p| p.person.id != current_user.id}.map{|p| p.person.name}.join('<br/>')%>
+</div>
+
+<div id="chat_msg_and_input_<%=s.id%>">
+
+  <ul class="messages" id="chat_msg_<%=s.id%>">
+    <!--MESSAGES-->
+    <%= render(:partial=>'message', :collection=>s.messages) %>
+    <!--END_MESSAGES-->
+  </ul>
+
+  <div class="input">
+    <textarea id="chat_input_<%=s.id%>" style="width:95%" onkeydown="return chat_keydown(event, <%=s.id%>);"></textarea>
+  </div>
+
+</div>
+</div>
+

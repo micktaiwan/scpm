@@ -1,0 +1,10 @@
+<li>
+<b><%= chat_name(message.person.name) %></b>
+<% if (Time.now() - message.created_at) >= 60 %>
+<%= time_ago_in_words(message.created_at) %>
+<% end %>
+<br/>
+
+&nbsp;<%= message.msg %>
+</li>
+

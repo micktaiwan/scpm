@@ -1,5 +1,5 @@
-<li class="item">
+<li class="item" onclick="find_session_with(<%=person.id%>);">
 <%= chat_name(person.name) %>
-<%= time_ago_in_words(person.last_view) if person.last_view%>
+<div class="chat_last_view"><%= time_ago_in_words(person.last_view) if person.last_view%></div>
 </li>
 

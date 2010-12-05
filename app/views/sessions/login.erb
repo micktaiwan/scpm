@@ -1,7 +1,9 @@
 <h2>Login</h2>
+<%= @error %>
 <%= error_messages_for :person %>
 <%= form_tag :action=>'do_login'  -%>
   <p><label>Login</label><%= text_field(:person, :login) %></p>
   <p><label>Pwd</label><%= password_field(:person, :pwd) %></p>
   <p><label>&nbsp;</label><%= submit_tag 'login >>' %></p>
 </form>
+

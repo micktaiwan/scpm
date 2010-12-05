@@ -1,3 +1,8 @@
+07-Dec-2010
+===========
+
+- Messaging system (not quite a chat)
+
 02-Dec-2010
 ===========
 

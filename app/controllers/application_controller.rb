@@ -15,8 +15,9 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
-  
+
   def log_action
+    return if controller_name == "chat" and (action_name == "refresh_sessions" or action_name == "refresh")
     @action_log                   = Log.new
     # who is doing the activity?
     @action_log.person_id         = session[:user_id]
@@ -29,8 +30,8 @@ class ApplicationController < ActionController::Base
     @action_log.controller_action = controller_name + "/" + action_name
     @action_log.params            = params.inspect # wrap this in an unless block if it might contain a password
     @action_log.save!
-  end  
-   
+  end
+
 end
 
 class MyLinkRenderer < WillPaginate::LinkRenderer

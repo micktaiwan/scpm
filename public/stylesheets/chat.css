@@ -1,31 +1,70 @@
 #chatbox {
   position: fixed;
-  top: 0px;
+  top: 30px;
   right: 0px;
   background: #FFF;
   float: right;
   clear: both;
   width: 200px;
-  border: 3px solid #DDD;
+  border: 3px solid #ABC;
   border-radius: 10px;
   -moz-border-radius: 10px;
-  z-index: 100;
+  z-index:100;
   }
 #chatbox .title {
   font-size: 1.2em;
   padding:3px;
-  background: #DDD;
-  border-bottom: 3px solid #DDD;
+  background: #ABC;
+  border-bottom: 3px solid #ABC;
   }
 ul.list {
   padding:3px;
   margin:0;
+  background: #EEF;
   }
-li.item:hover {
-  background: #FFF;
+li.item {
+  background: #EEF;
   cursor:pointer;
   }
 li.item:hover {
   background: #FF9;
   }
+
+.chat_last_view {
+  color: #999;
+  display:inline;
+}
+
+.chat_window {
+  position: fixed;
+  float: right;
+  clear: both;
+  width: 200px;
+  border: 1px solid #77A;
+  z-index:101;
+}
+.chat_window .participants {
+  padding: 3px;
+  background: #DDF;
+  text-align: center;
+  font-weight:bold;
+  cursor: move;
+}
+.chat_window .messages {
+  background: #FFF;
+  height: 200px;
+  overflow-y: scroll;
+  list-style-type: none;
+  padding: 2px;
+  margin: 0;
+}
+.chat_window .messages .msg {
+}
+.chat_window .input {
+  background: #DDF;
+  border-top: 1px solid #333;
+}
+.chat_window .input textarea {
+  border: 0px;
+}
 
