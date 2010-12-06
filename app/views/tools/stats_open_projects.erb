@@ -21,10 +21,10 @@
     # Rows
     for s in @stats
       @xml.Row do
-        @xml.Cell { @xml.Data s[0],    'ss:Type' => 'Date'}
-        @xml.Cell { @xml.Data s[1],    'ss:Type' => 'Number'}
-        @xml.Cell { @xml.Data s[2],    'ss:Type' => 'Number'}
-        @xml.Cell { @xml.Data s[3],    'ss:Type' => 'Number'}
+        @xml.Cell { @xml.Data s[0],    'ss:Type' => 'String'}
+        @xml.Cell { @xml.Data s[1],    'ss:Type' => 'String'}
+        @xml.Cell { @xml.Data s[2],    'ss:Type' => 'String'}
+        @xml.Cell { @xml.Data s[3],    'ss:Type' => 'String'}
       end
     end
 

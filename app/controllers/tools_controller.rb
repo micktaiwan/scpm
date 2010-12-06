@@ -29,9 +29,9 @@ class ToolsController < ApplicationController
       return
     end while year < today.cwyear or (year == today.cwyear and month <= today.month)
 
-    #headers['Content-Type'] = "application/vnd.ms-excel"
-    #headers['Content-Disposition'] = 'attachment; filename="Stats.xls"'
-    #headers['Cache-Control'] = ''
+    headers['Content-Type'] = "application/vnd.ms-excel"
+    headers['Content-Disposition'] = 'attachment; filename="Stats.xls"'
+    headers['Cache-Control'] = ''
     render(:layout=>false)
   end
 
