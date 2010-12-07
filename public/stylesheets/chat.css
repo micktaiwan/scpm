@@ -37,6 +37,8 @@ li.item:hover {
 
 .chat_window {
   position: fixed;
+  top: 30px;
+  right:205px;
   float: right;
   clear: both;
   width: 200px;
