@@ -122,7 +122,6 @@ function chat_sessions_refresh() {
 function chat_keydown(e, id) {
   if(!e) e = window.event;
   if(e.keyCode != 13) return true;
-
   chat_send_msg(id);
   return false;
   }
@@ -130,11 +129,12 @@ function chat_keydown(e, id) {
 function chat_send_msg(id) {
   inp = $('chat_input_'+id);
   msg = inp.value;
+  if(msg == "") return false;
   new Ajax.Request("/chat/send_chat_msg?id="+id+"&msg="+msg);
   update_content(id, "<li><b>Moi</b><br/>&nbsp;"+msg+"</li>");
   inp.value = "";
   chat_sessions_refresh();
-  return false;
+  return true;
   }
 
 function scroll_down(id) {
