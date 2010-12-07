@@ -28,9 +28,15 @@ class ChatController < ApplicationController
       sessions << render_to_string(:partial=>"chat_window", :locals=>{:s=>s})
       #render_to_string(:partial=>"message_collection", :locals=>{:s=>s})
       }
-    msg_read.each { |r| r.destroy }
     render(:text=>sessions.join('||sessions||'))
   end
+
+  def set_read
+    session_id = params[:session_id]
+    person_id = params[:person_id]
+    ChatSession.find(session_id).set_all_messages_read(person_id)
+    render(:nothing=>true)
+  end  
 
   def create_new_session
     person_id = params[:id]

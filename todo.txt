@@ -27,9 +27,6 @@ Organiser sous forme de catégories et notes ?
 Ou SWOT uniquement + Stats
 
 
-
-
-
 <% if project.requests.size > 0 %>
   <% if project.responsibles.exists?(current_user) %>
     <%= link_to_remote('Remove from my projects', {:url=>{:controller=>'projects', :action=>'remove_from_mine', :id=>project.id}, :success=>"$('btnaddtomine_'+project.id.to_s).fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine_'+project.id.to_s}) %>

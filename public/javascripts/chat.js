@@ -21,8 +21,7 @@ function open_chat_window(id, person_id) {
   var win = $('chat_window_'+id);
   if(win) {
     win.show();
-    var m = $('chat_msg_'+id);
-    m.scrollTop = m.scrollHeight;
+    scroll_down(id);
     chat_sessions_refresh();
     }
   else {
@@ -39,15 +38,20 @@ function create_chat_window(person_id) {
     });
   }
 
-function close_chat_window(id) {
+function close_chat_window(session_id, person_id) {
   nb_win -= 1;
-  new Effect.Fade('chat_window_'+id, {duration:0.2})
+  new Effect.Fade('chat_window_'+session_id, {duration:0.2});
+  new Ajax.Request("/chat/set_read?session_id="+session_id+"&person_id="+person_id);
   }
 
-function toggle_chat_window(id) {
-  new Effect.toggle('chat_msg_and_input_'+id, 'blind', {duration:0.2})
-  }
-
+function toggle_chat_window(session_id, person_id) {
+  new Effect.toggle('chat_msg_and_input_'+session_id, 'blind', {duration:0.2});
+  
+  // set messages status to read
+  $('chat_participants_'+session_id).className = 'participants';
+  new Ajax.Request("/chat/set_read?session_id="+session_id+"&person_id="+person_id);
+  scroll_down(session_id);
+ }
 
 function chat_refresh() {
   new Ajax.Updater("chat_list", "/chat/refresh");
@@ -67,15 +71,14 @@ function show(id, content) {
   // FIX ME: just remove me after testing
   var win = $('chat_window_'+id);
   if(win) {
-    alert('Error: chat window already existed');
+    alert('Error: chat window already exists');
     windows.removeChild(win); // should never happen
     }
   // END
 
   windows.insert(content);
-  var m = $('chat_msg_'+id);
-  m.scrollTop = m.scrollHeight;
-  $('chat_input_'+id).focus();
+  scroll_down(id);
+  //$('chat_input_'+id).focus();
   win = $('chat_window_'+id);
   win.style.top = (Math.ceil((nb_win/5))*30)+"px";
   win.style.right = get_position();
@@ -89,12 +92,9 @@ function refresh_msg(id, content) {
   win.show();
   // if window is collapsed
   if($('chat_msg_and_input_'+id).style.display=='none')
-    toggle_chat_window(id);
+    $('chat_participants_'+id).className = 'participants unread';
   // change messages
-  var m = $('chat_msg_'+id);
-  m.innerHTML = content;
-  m.scrollTop = m.scrollHeight;
-  //$('chat_input_'+id).focus();
+  update_content(id, content);
   }
 
 function chat_sessions_refresh() {
@@ -127,14 +127,32 @@ function chat_keydown(e, id) {
   if(!e) e = window.event;
   if(e.keyCode != 13) return true;
 
+  chat_send_msg(id);
+  return false;
+  }
+
+function chat_send_msg(id) {
   inp = $('chat_input_'+id);
   msg = inp.value;
   new Ajax.Request("/chat/send_chat_msg?id="+id+"&msg="+msg);
-  var m = $('chat_msg_'+id);
-  m.innerHTML += "<li><b>Sending...</b><br/>&nbsp;"+msg+"</li>";
-  m.scrollTop = m.scrollHeight;
+  update_content(id, "<li><b>Moi</b><br/>&nbsp;"+msg+"</li>");
   inp.value = "";
   chat_sessions_refresh();
   return false;
   }
 
+function scroll_down(id) {  
+  var m = $('chat_msg_'+id);
+  m.scrollTop = m.scrollHeight;
+  }
+
+function update_conten(id, content) {  
+  var m = $('chat_msg_'+id);
+  m.innerHTML += content;
+  m.scrollTop = m.scrollHeight;
+  //$('chat_input_'+id).focus();
+  }
+  
+function chat_onfocus(session_id, person_id) {
+  new Ajax.Request("/chat/set_read?session_id="+session_id+"&person_id="+person_id);
+  }

@@ -9,25 +9,25 @@
   }) do
 
   @xml.Worksheet 'ss:Name' => 'Stats' do
-
-    # Titles
-    @xml.Row do
-      @xml.Cell { @xml.Data 'Date',         'ss:Type' => 'String'}
-      @xml.Cell { @xml.Data 'Requests',     'ss:Type' => 'String'}
-      @xml.Cell { @xml.Data 'Projects',     'ss:Type' => 'String'}
-      @xml.Cell { @xml.Data 'Workpackages', 'ss:Type' => 'String'}
-    end
-
-    # Rows
-    for s in @stats
+    @xml.Table do
+      # Titles
       @xml.Row do
-        @xml.Cell { @xml.Data s[0],    'ss:Type' => 'String'}
-        @xml.Cell { @xml.Data s[1],    'ss:Type' => 'String'}
-        @xml.Cell { @xml.Data s[2],    'ss:Type' => 'String'}
-        @xml.Cell { @xml.Data s[3],    'ss:Type' => 'String'}
+        @xml.Cell { @xml.Data 'Date',         'ss:Type' => 'String'}
+        @xml.Cell { @xml.Data 'Requests',     'ss:Type' => 'String'}
+        @xml.Cell { @xml.Data 'Projects',     'ss:Type' => 'String'}
+        @xml.Cell { @xml.Data 'Workpackages', 'ss:Type' => 'String'}
+      end
+
+      # Rows
+      for s in @stats
+        @xml.Row do
+          @xml.Cell { @xml.Data s[0],    'ss:Type' => 'String'}
+          @xml.Cell { @xml.Data s[1],    'ss:Type' => 'String'}
+          @xml.Cell { @xml.Data s[2],    'ss:Type' => 'String'}
+          @xml.Cell { @xml.Data s[3],    'ss:Type' => 'String'}
+        end
       end
     end
-
   end
 end
 %>

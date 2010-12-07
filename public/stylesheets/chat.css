@@ -50,6 +50,11 @@ li.item:hover {
   font-weight:bold;
   cursor: move;
 }
+
+.chat_window .participants.unread {
+  background: #FAA;
+}
+
 .chat_window .messages {
   background: #FFF;
   height: 200px;
