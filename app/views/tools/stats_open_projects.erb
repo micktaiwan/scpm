@@ -22,9 +22,9 @@
       for s in @stats
         @xml.Row do
           @xml.Cell { @xml.Data s[0],    'ss:Type' => 'String'}
-          @xml.Cell { @xml.Data s[1],    'ss:Type' => 'String'}
-          @xml.Cell { @xml.Data s[2],    'ss:Type' => 'String'}
-          @xml.Cell { @xml.Data s[3],    'ss:Type' => 'String'}
+          @xml.Cell { @xml.Data s[1],    'ss:Type' => 'Number'}
+          @xml.Cell { @xml.Data s[2],    'ss:Type' => 'Number'}
+          @xml.Cell { @xml.Data s[3],    'ss:Type' => 'Number'}
         end
       end
     end
@@ -42,12 +42,12 @@
         end
 
         # Rows
-        for s in centre[:stats]
+        for s in centre[:stats] do
           @xml.Row do
             @xml.Cell { @xml.Data s[0],    'ss:Type' => 'String'}
-            @xml.Cell { @xml.Data s[1],    'ss:Type' => 'String'}
-            @xml.Cell { @xml.Data s[2],    'ss:Type' => 'String'}
-            @xml.Cell { @xml.Data s[3],    'ss:Type' => 'String'}
+            @xml.Cell { @xml.Data s[1],    'ss:Type' => 'Number'}
+            @xml.Cell { @xml.Data s[2],    'ss:Type' => 'Number'}
+            @xml.Cell { @xml.Data s[3],    'ss:Type' => 'Number'}
           end
         end
       end

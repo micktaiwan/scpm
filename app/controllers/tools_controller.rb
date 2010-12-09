@@ -11,7 +11,6 @@ class ToolsController < ApplicationController
     year      = 2010
     @xml = Builder::XmlMarkup.new(:indent => 1)
     @stats = []
-
     # global stats
     begin
       d =  Date.new(year,month,1) - 1.day
@@ -37,13 +36,13 @@ class ToolsController < ApplicationController
       month     = 6
       year      = 2010
       stats = Array.new
-      @centres << {:centre=>centre, :stats=>stats}
+      @centres << {:name=>centre, :stats=>stats}
       begin
         d =  Date.new(year,month,1) - 1.day
         requests = Request.find(:all, :conditions=>"workstream='#{centre}' and date_submitted < '#{d.to_s}' and status!='to be validated' and status!='cancelled'")
         a = requests.size
         b = requests.map{|r| r.project_name}.uniq.size # work also with a simple group by clause
-        c = requests.map{|r| get_workpackage_name_from_summary(r.summary, '')}.uniq.size
+        c = requests.map{|r| r.project_name + get_workpackage_name_from_summary(r.summary, '')}.uniq.size
         stats << [d, a,b,c]
 
         month += 1
@@ -55,6 +54,7 @@ class ToolsController < ApplicationController
         render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
         return
       end while year < today.cwyear or (year == today.cwyear and month <= today.month)
+      puts "#{centre}: #{stats.size}"
     end
     headers['Content-Type'] = "application/vnd.ms-excel"
     headers['Content-Disposition'] = 'attachment; filename="Stats.xls"'
