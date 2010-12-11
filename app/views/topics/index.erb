@@ -1,0 +1,19 @@
+<h2>Progress Meeting Topics</h2>
+<%= link_to('New', {:action=>'new'}, {:class=>'btnlnk'}) %><br/>
+<br/>
+<%= @topics.size %> topics<br/>
+
+<%= render(:file=>'topics/header') %>
+<%= render(:partial=>'topic', :collection=>@topics) %>
+</table>
+<br/>
+<br/>
+<%= link_to_function('Display closed topics', '$("closed").toggle()') %>
+<div id="closed" style="display:none;">
+<%= render(:file=>'topics/header') %>
+<%= render(:partial=>'topic', :collection=>@topics_closed) %>
+</table>
+</div>
+<br/>
+<br/>
+

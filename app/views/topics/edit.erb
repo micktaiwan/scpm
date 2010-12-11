@@ -1,0 +1,9 @@
+<h2>Topic Edit</h2>
+
+<%= error_messages_for :topic %>
+<% form_for @topic, :url=>{:action=>'update', :id=>@topic.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'OK' %></p>
+<% end -%>
+

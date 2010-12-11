@@ -1,0 +1,29 @@
+<tr id="a_<%=topic.id%>" class="topic_<%=topic.done%>">
+
+<td><%= topic.id %></td>
+
+<td>
+<% if topic.person %><%= topic.person.name %><% end %>
+</td>
+
+<td>
+<% if topic.private==1 %><%=image_tag('private.gif')%><% end %>
+<%= topic.topic %>
+</td>
+
+<td>
+<%= topic.created_at.to_date %>
+(<%= time_ago_in_words(topic.created_at) %>)
+</td>
+
+<td>
+<%= topic.decision %>
+</td>
+
+<td>
+<%= link_to(image_tag('edit.gif'), {:controller=>'topics', :action=>'edit', :id=>topic.id}) %>
+<% if current_user.has_role?('Admin') %>
+<%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'topics', :action=>'destroy', :id=>topic.id}, :confirm=>"You should change the topic status to 'abandonned', are you sure you want to delete this topic ?", :success=>"$('a_#{topic.id}').hide();") %>
+<% end %>
+</td>
+</tr>

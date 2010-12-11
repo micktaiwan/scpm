@@ -1,0 +1,19 @@
+<p><%= label_tag 'topic' %>
+<%= text_area :topic, :topic, {:rows=>3} %></p>
+
+<p><%= label_tag 'Type' %>
+<%= radio_button :topic, :private, 0 %> Public to Airbus
+<%= radio_button :topic, :private, 1 %> Private to SQLI
+</p>
+
+
+<p><%= label_tag 'person_id' %>
+<%= select(:topic, :person_id, @people.map {|u| [u.name,u.id]}) %></p>
+
+<p><%= label_tag 'done' %>
+<%= radio_button :topic, :done, 0 %> Open
+<%= radio_button :topic, :done, 1 %> Closed
+</p>
+
+<p><%= label_tag 'decision' %>
+<%= text_area :topic, :decision, {:rows=>3} %></p>

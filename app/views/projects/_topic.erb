@@ -1,0 +1,21 @@
+<td><%= topic.id %></td>
+
+<td>
+<% if topic.person %><%= topic.person.name %><% end %>
+</td>
+
+<td>
+<% if topic.done==1 %>(DONE) <% end %>
+<%= topic.topic %>
+</td>
+
+<td>
+<%= topic.dates %>
+</td>
+
+<td>
+<%= topic.decision %>
+</td>
+
+</tr>
+

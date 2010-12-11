@@ -1,5 +1,18 @@
 <% if(are_filtered) %>(<strong>filtered</strong>)<br/><% end %>
 
+<h2>Discussion topics</h2>
+
+<table>
+<tr style="background-color: #DDD;font-weight:bold;">
+<td width="20">#</td>
+<td width="160">Supervisor</td>
+<td width="400">Topic</td>
+<td width="160">Created / Done</td>
+<td width="300">Decision</td>
+</tr>
+<%= render(:partial=>'topic', :collection=>@topics) %>
+</table>
+
 <h2>Global Stats</h2>
 <h3>Requests by workstream (workload)</h3>
 <%@report.by_workstream(false) { |title, rs| %>

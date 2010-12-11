@@ -345,6 +345,7 @@ class ProjectsController < ApplicationController
     #@wps         = @wps.sort_by { |p| [p.workstream, p.full_name] }
     @size         = @projects.size
     @report       = Report.new(Request.all)
+    @topics       = Topic.find(:all, :conditions=>"(done=0 or (done=1 and done_date >= '#{Date.today-18.days}')) and private=0", :order=>"done, person_id, id desc")
     render(:layout=>'report')
   end
 
@@ -357,8 +358,9 @@ class ProjectsController < ApplicationController
       @wps = @wps.sort_by { |w|
         [w.supervisor_name, w.workstream, w.project_name, w.name]
         }
-      @actions = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
-      @requests = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed'", :order=>"status, workstream")
+      @actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
+      @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed'", :order=>"status, workstream")
+      @topics     = Topic.find(:all, :conditions=>"private=0", :order=>"done, person_id, id desc")
       headers['Content-Type'] = "application/vnd.ms-excel"
       headers['Content-Disposition'] = 'attachment; filename="Summary.xls"'
       headers['Cache-Control'] = ''
