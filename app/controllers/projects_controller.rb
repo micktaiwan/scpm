@@ -329,7 +329,12 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    Project.find(params[:id].to_i).destroy
+    p = Project.find(params[:id].to_i)
+    if(p.projects.size > 0 or p.has_status or p.has_requests or p.amendments.size > 0 or p.actions.size > 0 or p.notes.size > 0)
+      render(:status=>500, :text=>"#{p.full_name} is not empty")
+      return
+    end
+    p.destroy
     render(:nothing=>true)
   end
 
