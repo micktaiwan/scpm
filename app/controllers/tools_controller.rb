@@ -12,12 +12,15 @@ class ToolsController < ApplicationController
     @xml = Builder::XmlMarkup.new(:indent => 1)
     @stats = []
     # global stats
+    @workpackages = Request.find(:all, :conditions=>"status !='cancelled' and status != 'to be validated'").map{|r| r.project_name + " / " + get_workpackage_name_from_summary(r.summary, 'No WP')}.uniq.sort
+    @projects     = Request.find(:all, :conditions=>"status !='cancelled' and status != 'to be validated'").map{|r| r.project_name}.uniq.sort
     begin
       d =  Date.new(year,month,1) - 1.day
       requests = Request.find(:all, :conditions=>"date_submitted < '#{d.to_s}' and status!='to be validated' and status!='cancelled'")
       a = requests.size
       b = requests.map{|r| r.project_name}.uniq.size # work also with a simple group by clause
-      c = requests.map{|r| get_workpackage_name_from_summary(r.summary, '')}.uniq.size
+      c = requests.map{|r| r.project_name + " " + get_workpackage_name_from_summary(r.summary, 'No WP')}.uniq.size
+
       @stats << [d, a,b,c]
 
       month += 1
@@ -42,7 +45,8 @@ class ToolsController < ApplicationController
         requests = Request.find(:all, :conditions=>"workstream='#{centre}' and date_submitted < '#{d.to_s}' and status!='to be validated' and status!='cancelled'")
         a = requests.size
         b = requests.map{|r| r.project_name}.uniq.size # work also with a simple group by clause
-        c = requests.map{|r| r.project_name + get_workpackage_name_from_summary(r.summary, '')}.uniq.size
+        c = requests.map{|r| r.project_name + " " + get_workpackage_name_from_summary(r.summary, 'No WP')}.uniq.size
+
         stats << [d, a,b,c]
 
         month += 1
@@ -54,7 +58,7 @@ class ToolsController < ApplicationController
         render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
         return
       end while year < today.cwyear or (year == today.cwyear and month <= today.month)
-      puts "#{centre}: #{stats.size}"
+      #puts "#{centre}: #{stats.size}"
     end
     headers['Content-Type'] = "application/vnd.ms-excel"
     headers['Content-Disposition'] = 'attachment; filename="Stats.xls"'

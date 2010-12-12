@@ -30,6 +30,25 @@
     end
   end
 
+  @xml.Worksheet 'ss:Name' => 'Projects' do
+    @xml.Table do
+      # Titles
+      @xml.Row do
+        @xml.Cell { @xml.Data 'Nom',   'ss:Type' => 'String'}
+      end
+
+      # Rows
+      i = 0
+      while i < @workpackages.size or i < @projects.size
+        @xml.Row do
+          @xml.Cell { @xml.Data i < @projects.size ? @projects[i]:'',         'ss:Type' => 'String'} 
+          @xml.Cell { @xml.Data i < @workpackages.size ? @workpackages[i]:'', 'ss:Type' => 'String'}
+        end
+      i += 1
+      end
+    end
+  end
+
   for centre in @centres do
     @xml.Worksheet 'ss:Name' => centre[:name] do
       @xml.Table do
