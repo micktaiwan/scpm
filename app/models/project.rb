@@ -17,7 +17,11 @@ class Project < ActiveRecord::Base
   has_many    :responsibles, :through=>:project_people
 
   def visible_actions(user_id)
-    Action.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"progress, project_id, id")
+    if Person.find(user_id).is_supervisor == 0
+      Action.find(:all, :conditions=>["project_id=?", self.id], :order=>"progress, project_id, id")
+    else
+      Action.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"progress, project_id, id")
+    end
   end
 
   def visible_notes(user_id)
