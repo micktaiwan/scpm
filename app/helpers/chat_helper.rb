@@ -1,5 +1,6 @@
 module ChatHelper
   def chat_get_people
+    return [] if current_user == nil
     Person.find(:all, :conditions=>["is_supervisor=0 and last_view is not null and id!=?", chat_current_user.id], :order=>"name")
   end
 

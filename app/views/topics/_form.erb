@@ -1,13 +1,17 @@
 <p><%= label_tag 'topic' %>
 <%= text_area :topic, :topic, {:rows=>3} %></p>
 
+
+<% if current_user.has_role?('Admin') %>
 <p><%= label_tag 'Type' %>
 <%= radio_button :topic, :private, 0 %> Public to Airbus
 <%= radio_button :topic, :private, 1 %> Private to SQLI
 </p>
+<% else %>
+<%= hidden_field(:topic, :private, :value=>1) %>
+<% end %>
 
-
-<p><%= label_tag 'person_id' %>
+<p><%= label_tag 'Supervisor' %>
 <%= select(:topic, :person_id, @people.map {|u| [u.name,u.id]}) %></p>
 
 <p><%= label_tag 'done' %>

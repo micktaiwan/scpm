@@ -19,11 +19,13 @@
   <%= report_by(title, rs, "wos", false, true) %>
 <% } %>
 
+<% if @size > 0 %>
 <h3>Projects by status</h3>
 UNKNOWN: <% s = @projects.select { |p| p.project == nil and p.last_status==0}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
 GREEN: <% s = @projects.select { |p| p.project == nil and p.last_status==1}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
 AMBER: <% s = @projects.select { |p| p.project == nil and p.last_status==2}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
 RED: <% s = @projects.select { |p| p.project == nil and p.last_status==3}.size %><%= s %> (<%= ((s.to_f/@size)*100).to_i %>%)<br/>
+<% end %>
 
 <% @supervisors.each do |s|%>
 <h1><%= s.name %></h1>
