@@ -8,7 +8,7 @@ class Topic < ActiveRecord::Base
 
   def dates
     rv = self.created_at.to_date.to_s
-    rv += " / " +  self.done_date.to_date.to_s if self.done==1
+    rv += " / " +  self.done_date.to_date.to_s if self.done == 1
     rv
   end
 

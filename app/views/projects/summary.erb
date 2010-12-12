@@ -87,6 +87,10 @@ end
 
   @xml.Worksheet 'ss:Name' => 'Topics' do
     @xml.Table do
+      # Columns width
+      for width in ['30','130','430','120','400'] do
+        @xml.Column nil, {'ss:Width' => width}
+      end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do

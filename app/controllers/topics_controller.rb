@@ -12,6 +12,7 @@ class TopicsController < ApplicationController
 
   def create
     @topic = Topic.new(params[:topic])
+    @topic.done_date = Time.now if params[:topic][:done]=="1"
     if not @topic.save
       render :action => 'new', :person_id=>current_user.id
       return
