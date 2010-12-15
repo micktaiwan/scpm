@@ -12,8 +12,13 @@
 </td>
 
 <td>
+<% if topic.done==1 %>
+<%= topic.done_date.to_date %>
+(<%= time_ago_in_words(topic.done_date) %>)
+<% else %>
 <%= topic.created_at.to_date %>
 (<%= time_ago_in_words(topic.created_at) %>)
+<% end %>
 </td>
 
 <td>
@@ -27,3 +32,4 @@
 <% end %>
 </td>
 </tr>
+
