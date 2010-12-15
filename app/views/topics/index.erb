@@ -4,18 +4,12 @@
 <b>Topics to be discussed at monday progress meeting (generally about requests, but not only).</b><br/>
 <br/>
 <%= @topics.size %> topics<br/>
+<%= select(:topic, :filter, @supervisors, {:include_blank => "=== choose ==="}, {:onchange=>"new Ajax.Updater('list', '/topics/refresh?filter='+this.value)"}) %>
 
-<%= render(:file=>'topics/header') %>
-<%= render(:partial=>'topic', :collection=>@topics) %>
-</table>
-<br/>
-<br/>
-<%= link_to_function('Display closed topics', '$("closed").toggle()') %>
-<div id="closed" style="display:none;">
-<%= render(:file=>'topics/header') %>
-<%= render(:partial=>'topic', :collection=>@topics_closed) %>
-</table>
+<div id="list">
+<%= render(:partial=>'list') %>
 </div>
+
 <br/>
 <br/>
 

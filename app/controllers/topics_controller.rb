@@ -1,13 +1,31 @@
 class TopicsController < ApplicationController
 
+  before_filter :require_login
+
   def index
     @topics         = Topic.find(:all, :conditions=>"done = 0", :order=>"id desc")
     @topics_closed  = Topic.find(:all, :conditions=>"done = 1", :order=>"id desc")
+    @supervisors    = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name").map{|p| [p.name, p.id]} + [["=== Blank decisions",0]]
+  end
+
+  def refresh
+    person_id = params[:filter]
+    if person_id == ""
+      @topics         = Topic.find(:all, :conditions=>"done = 0", :order=>"id desc")
+      @topics_closed  = Topic.find(:all, :conditions=>"done = 1", :order=>"id desc")
+    elsif person_id == "0"
+      @topics         = Topic.find(:all, :conditions=>["done = 0 and decision=''"], :order=>"id desc")
+      @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and decision=''"], :order=>"id desc")
+    else
+      @topics         = Topic.find(:all, :conditions=>["done = 0 and person_id=?", person_id], :order=>"id desc")
+      @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and person_id=?", person_id], :order=>"id desc")
+    end
+    render(:partial=>"list")
   end
 
   def new
-    @topic = Topic.new(:person_id=>current_user.id)
-    @people         = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name")
+    @topic  = Topic.new(:person_id=>current_user.id)
+    @people = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name")
   end
 
   def create
@@ -41,6 +59,7 @@ class TopicsController < ApplicationController
     Topic.find(params[:id].to_i).destroy
     render(:nothing=>true)
   end
+
 
 end
 

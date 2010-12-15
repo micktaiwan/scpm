@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(:version => 20101211112729) do
   create_table "chat_message_reads", :force => true do |t|
     t.integer "chat_message_id"
     t.integer "person_id"
-    t.integer "session_id"
     t.integer "chat_session_id"
     t.integer "state",           :default => 0
   end
