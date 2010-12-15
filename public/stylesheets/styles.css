@@ -329,3 +329,10 @@ ins.differ {
   width:600px;
   display: inline-block;
 }
+
+.even {
+  background: #EFE;
+  }
+.odd {
+  background: #EEF;
+  }
