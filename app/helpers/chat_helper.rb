@@ -33,4 +33,3 @@ module ChatHelper
   end
 
 end
-
