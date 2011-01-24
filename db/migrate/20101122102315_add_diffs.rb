@@ -15,4 +15,5 @@ class AddDiffs < ActiveRecord::Migration
     remove_column :statuses, :explanation_diffs
     remove_column :statuses, :last_change_diffs
   end
+  
 end

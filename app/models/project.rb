@@ -438,6 +438,7 @@ class Project < ActiveRecord::Base
     return if s.size < 2
     s[0].explanation_diffs = Differ.diff(s[0].explanation,s[1].explanation).to_s.split("\n").join("<br/>") if s[0].explanation and s[1].explanation
     s[0].last_change_diffs = Differ.diff(s[0].last_change,s[1].last_change).to_s.split("\n").join("<br/>") if s[0].last_change and s[1].last_change
+    s[0].last_change_excel = excel(s[0].last_change,s[1].last_change).to_s.split('\r\n').join('&#10;')       if s[0].last_change and s[1].last_change
     s[0].save
   end
 
@@ -451,7 +452,12 @@ class Project < ActiveRecord::Base
     self.add_responsible(u) if u
   end
 
+
 private
+
+  def excel(a,b)
+    Differ.diff(a,b).format_as(DiffExcel)
+  end
 
   def days_ago(date_time)
     return "" if date_time == nil
@@ -459,3 +465,26 @@ private
   end
 end
 
+module DiffExcel
+  class << self
+    def format(change)
+      (change.change? && as_change(change)) ||
+      (change.delete? && as_delete(change)) ||
+      (change.insert? && as_insert(change)) ||
+      ''
+    end
+
+  private
+    def as_insert(change)
+      "<B>#{change.insert}</B>&#10;"
+    end
+
+    def as_delete(change)
+      ""
+    end
+
+    def as_change(change)
+      "<B>#{change.insert}</B>&#10;"
+    end
+  end
+end

@@ -157,7 +157,7 @@ end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.old_status)  do @xml.Data text_status(p.old_status),  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell { @xml.Data status.updated_at ? "#{status.updated_at.to_date} (#{time_ago_in_words(status.updated_at.to_date)})" : "",   'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.last_change); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.ssData('ss:Type' => 'String', 'xmlns'=>'http://www.w3.org/TR/REC-html40') do; @xml<<excel_text(status.last_change_excel); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.reason); end;      @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.actions); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.operational_alert); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
