@@ -4,7 +4,7 @@ Differ.format = :html
 
 class AddExcelBold < ActiveRecord::Migration
   def self.up
-    #add_column :statuses, :last_change_excel, :text
+    add_column :statuses, :last_change_excel, :text
     timestamps_off
     Project.all.each { |p|
       p.calculate_diffs
@@ -13,7 +13,7 @@ class AddExcelBold < ActiveRecord::Migration
   end
 
   def self.down
-    #remove_column :statuses, :last_change_excel
+    remove_column :statuses, :last_change_excel
   end
   
   def self.timestamps_off
