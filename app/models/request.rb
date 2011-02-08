@@ -21,7 +21,8 @@ class Request < ActiveRecord::Base
   "WP6.1 - Coaching PP" 			      => 12,
   "WP6.2 - Coaching BRD" 			      => 13,
   "WP6.3 - Coaching V&V"            => 14,
-  "WP6.4 - Coaching ConfMgt"        => 15
+  "WP6.4 - Coaching ConfMgt"        => 15,
+  "WP6.5 - Coaching Maintenance"    => 16
   }
 
   Comp_index = {
