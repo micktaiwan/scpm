@@ -268,6 +268,46 @@ end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C9', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
 
+# STATUS PROGRESS
+
+  @xml.Worksheet 'ss:Name' => 'Status Progress' do
+    @xml.Table do
+
+      # Header
+      @xml.Row 'ss:StyleID' => 's62' do
+        for column in @status_columns do
+          @xml.Cell do
+            @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+        end
+      end
+
+      # Rows
+      for center in ['Total', 'EA', 'EI', 'EV', 'EDE', 'EDG', 'EDS', 'EDY', 'EDC', 'EM', 'EMNB', 'EMNC']
+      for status in [1,2,3,0]
+        @xml.Row do
+          @xml.Cell do
+            @xml.Data center, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+          @xml.Cell do
+            @xml.Data case status;when 1;'GREEN';when 2;'AMBER';when 3;'RED';when 0;'UNKNOWN';end, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+          for date in @status_progress_dates do
+            @xml.Cell do
+              @xml.Data @status_progress_series[center][date].select{ |s| s.status==status}.size, 'ss:Type' => 'Number'
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
+        end
+      end
+      end
+
+    end
+  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C20', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
+  end
 
 end
 %>

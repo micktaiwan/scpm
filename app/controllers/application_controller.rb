@@ -41,3 +41,21 @@ class MyLinkRenderer < WillPaginate::LinkRenderer
   end
 
 end
+
+def month_loop(month, year, mode=:one_date)
+  today     = Date.today()
+  begin
+    from =  Date.new(year,month,1)
+    to   =  (Date.new(year,month,1) + 1.month) - 1.day
+    if mode == :two_dates
+      yield(from,to)
+    else  
+      yield(to)
+    end
+    month += 1
+    if month > 12
+      month = 1
+      year += 1
+    end
+  end while year < today.cwyear or (year == today.cwyear and month <= today.month)
+end

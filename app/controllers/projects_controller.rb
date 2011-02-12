@@ -365,10 +365,19 @@ class ProjectsController < ApplicationController
         }
       @actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
       @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed'", :order=>"status, workstream")
-      @topics     = Topic.find(:all, :conditions=>"private=0", :order=>"done, person_id, id desc")
-      headers['Content-Type'] = "application/vnd.ms-excel"
-      headers['Content-Disposition'] = 'attachment; filename="Summary.xls"'
-      headers['Cache-Control'] = ''
+      @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
+
+      @status_progress_series = get_status_progress
+      @status_columns         = ['Centre','Status']
+      @status_progress_dates  = []
+      @status_progress_series['Total'].keys.sort.each { |date|
+        @status_columns << date
+        @status_progress_dates << date
+        }
+
+      headers['Content-Type']         = "application/vnd.ms-excel"
+      headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
+      headers['Cache-Control']        = ''
       render(:layout=>false)
     rescue Exception => e
       render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
@@ -376,6 +385,22 @@ class ProjectsController < ApplicationController
   end
 
 private
+
+  def get_status_progress
+    date = Hash.new
+    for center in ['Total', 'EA', 'EI', 'EV', 'EDE', 'EDG', 'EDS', 'EDY', 'EDC', 'EM', 'EMNB', 'EMNC']
+      date[center] = Hash.new
+      month_loop(5,2010) { |to|
+        date[center][to] = Array.new
+        Project.find(:all).each { |p|
+          next if not p.open_requests.size > 0 or not p.has_status or (center != 'Total' and p.workstream != center)
+          last_status = p.get_status(to)
+          date[center][to] << last_status
+          }
+        }
+    end  
+    date
+  end
 
   def timestamps_off
     Project.record_timestamps = false
@@ -402,7 +427,7 @@ private
     cond << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions']) # do not filter workpackages with project is null
-    @wps = @wps.select {|wp| wp.has_requests } # wp.has_status
+    @wps = @wps.select {|wp| wp.open_requests.size > 0 } # wp.has_status
     cond << "project_id is null"
     @projects = Project.find(:all, :conditions=>cond.join(" and "))
     if session[:project_filter_qr] != nil

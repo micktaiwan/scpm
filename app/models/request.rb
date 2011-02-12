@@ -9,6 +9,8 @@ class Request < ActiveRecord::Base
     Person.find(:first, :conditions=>"rmt_user='#{self.assigned_to}'")
   end
 
+  # TODO: contre-visites
+  
   Wp_index = {
   "WP1.1 - Quality Control" 		    => 0,
   "WP1.2 - Quality Assurance" 		  => 4,
@@ -36,7 +38,7 @@ class Request < ActiveRecord::Base
   "M3-M5" 		=> 1,
   "M5-M10" 		=> 2,
   "Post-M10" 	=> 3,
-  "N/A" 		=> 0,
+  "N/A" 		=> 0
   }
 
   Loads = [

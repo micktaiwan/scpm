@@ -53,8 +53,8 @@ class Project < ActiveRecord::Base
     return true
   end
 
-  def get_status
-    s = Status.find(:first, :conditions=>["project_id=?", self.id], :order=>"created_at desc")
+  def get_status(before_date=Date.today+1.day)
+    s = Status.find(:first, :conditions=>["project_id=? and updated_at <= ?", self.id, before_date], :order=>"updated_at desc")
     s = Status.new({:status=>0, :explanation=>"unknown"}) if s == [] or s == nil
     s
   end
@@ -243,13 +243,12 @@ class Project < ActiveRecord::Base
   end
 
   def open_requests
-    self.requests.select { |r| r.resolution != "ended"}
+    self.requests.select { |r| r.status != 'cancelled' and r.resolution != "ended" and r.resolution != 'aborted'}
   end
 
   def active_requests
     self.requests.select { |r| r.resolution != "ended" and r.resolution != "aborted" and r.status == "assigned"}
   end
-
 
   def project_name
     return project.project_name if self.project
