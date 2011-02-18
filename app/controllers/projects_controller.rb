@@ -17,6 +17,8 @@ class ProjectsController < ApplicationController
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
+    @actions         = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
+    @actions_closed  = Action.find(:all, :conditions=>["progress in('abandonned', 'closed') and person_id in (?)", session[:project_filter_qr]])
   end
 
   def new

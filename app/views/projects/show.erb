@@ -29,11 +29,11 @@ function add(id, same_week, has_requests) {
   <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
   <%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
   <%= link_to('Add note', {:controller=>'notes', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
-  <% if @project.responsibles.exists?(current_user) %>
-    <%= link_to_remote('Remove from my projects', {:url=>{:controller=>'projects', :action=>'remove_from_mine', :id=>@project.id}, :success=>"$('btnaddtomine').fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine'}) %>
-  <% else %>
-    <%= link_to_remote('Add to my projects', {:url=>{:controller=>'projects', :action=>'add_to_mine', :id=>@project.id}, :success=>"$('btnaddtomine').fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine'}) %>
-  <% end %>
+<% end %>
+<% if @project.responsibles.exists?(current_user) %>
+  <%= link_to_remote('Remove from my projects', {:url=>{:controller=>'projects', :action=>'remove_from_mine', :id=>@project.id}, :success=>"$('btnaddtomine').fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine'}) %>
+<% else %>
+  <%= link_to_remote('Add to my projects', {:url=>{:controller=>'projects', :action=>'add_to_mine', :id=>@project.id}, :success=>"$('btnaddtomine').fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine'}) %>
 <% end %>
 </div>
 
