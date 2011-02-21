@@ -1,7 +1,12 @@
+21-Feb-2011
+===========
+
+- Fixed a bug in reporting when last_change_excel is empty
+
 14-Feb-2011
 ===========
 
-Project Status evolution graph.
+- Project Status evolution graph.
 
 24-Jan-2011
 ===========
