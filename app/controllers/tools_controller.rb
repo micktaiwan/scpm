@@ -50,5 +50,9 @@ class ToolsController < ApplicationController
     render(:layout=>false)
   end
 
+  def test_email
+    Mailer::deliver_mail("mfaivremacon@sqli.com")
+  end
+
 end
 
