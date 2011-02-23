@@ -1,3 +1,9 @@
+23-Feb-2011
+===========
+
+- remember topic filter selection
+- if next milestone date if near, projet title is red
+
 21-Feb-2011
 ===========
 
