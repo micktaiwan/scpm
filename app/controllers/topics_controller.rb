@@ -3,23 +3,27 @@ class TopicsController < ApplicationController
   before_filter :require_login
 
   def index
-    @topics         = Topic.find(:all, :conditions=>"done = 0", :order=>"id desc")
-    @topics_closed  = Topic.find(:all, :conditions=>"done = 1", :order=>"done_date desc")
+    get_topics
     @supervisors    = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name").map{|p| [p.name, p.id]} + [["=== Blank decisions",0]]
   end
 
-  def refresh
-    person_id = params[:filter]
-    if person_id == ""
+  def get_topics
+    p_id  = params[:filter]
+    session[:topic_person_id] = p_id if p_id
+    if session[:topic_person_id] == ""
       @topics         = Topic.find(:all, :conditions=>"done = 0", :order=>"id desc")
       @topics_closed  = Topic.find(:all, :conditions=>"done = 1", :order=>"done_date desc")
-    elsif person_id == "0"
+    elsif session[:topic_person_id] == "0"
       @topics         = Topic.find(:all, :conditions=>["done = 0 and decision=''"], :order=>"id desc")
       @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and decision=''"], :order=>"done_date desc")
     else
-      @topics         = Topic.find(:all, :conditions=>["done = 0 and person_id=?", person_id], :order=>"id desc")
-      @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and person_id=?", person_id], :order=>"done_date desc")
+      @topics         = Topic.find(:all, :conditions=>["done = 0 and person_id=?", session[:topic_person_id]], :order=>"id desc")
+      @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and person_id=?", session[:topic_person_id]], :order=>"done_date desc")
     end
+  end
+  
+  def refresh
+    get_topics
     render(:partial=>"list")
   end
 
