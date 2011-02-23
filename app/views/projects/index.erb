@@ -144,7 +144,12 @@ Searches project title and description, statuses, request summary and PM names
 <% for project in @wps %>
 <h3>
   <%= link_to('Open', {:action=>'show', :id=>project.id}, {:class=>'menu grey'}) %>
+  <% next_m_date = project.next_milestone_date;  bool = (next_m_date and next_m_date-Date.today() <= 5); if bool %>
+  <font color="red">
+  <% end %>
+  <%= next_m_date %>
   <%= project.full_name %>
+  <% if bool %>  </font>  <% end %>
   <%= html_status(project.last_status) %>
   <% date = project.last_status_date
   if date

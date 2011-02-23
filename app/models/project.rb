@@ -450,6 +450,19 @@ class Project < ActiveRecord::Base
     u = Person.find_by_rmt_user(rmt_user)
     self.add_responsible(u) if u
   end
+  
+  def next_milestone_date
+    date = nil
+    self.milestones.each { |m|
+      next if m.done != 0 or m.status == -1 or (m.milestone_date == nil and m.actual_milestone_date == nil)
+      if m.actual_milestone_date and m.actual_milestone_date != ""
+        date = m.actual_milestone_date if not date or m.actual_milestone_date < date
+      elsif m.milestone_date and m.milestone_date != ""
+        date = m.milestone_date if not date or m.milestone_date < date
+      end
+      }
+    date
+  end
 
 
 private
