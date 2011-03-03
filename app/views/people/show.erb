@@ -1,12 +1,13 @@
+<!--<script src="/javascripts/timeline/timeline_js/timeline-api.js?bundle=true" type="text/javascript"></script>-->
 <%= render(:partial=>'person2', :collection=>@people) %>
 
 <h2><%=@person.name%></h2>
 
 <% if @person.is_supervisor == 1 %>Supervisor<% end %>
 
-<h3>Projects</h3>
+<h3>Active Projects</h3>
 
-<%= render(:partial=>'project', :collection=>@person.projects) %>
+<%= render(:partial=>'project', :collection=>@person.projects.sort_by{|p| [p.workstream, p.full_name]}) %>
 
 <% if @person.is_supervisor != 1 %>
 
@@ -15,11 +16,9 @@
 <%= render(:partial=>'people/request', :collection=>@requests) %>
 <% if @requests.size == 0 %>none<% end %>
 
-
 <h3>Next start dates</h3>
 
 <%= render(:partial=>'people/request', :collection=>@next) %>
-
 
 <h3>Schedule</h3>
 

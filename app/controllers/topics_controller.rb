@@ -4,7 +4,7 @@ class TopicsController < ApplicationController
 
   def index
     get_topics
-    @supervisors    = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name").map{|p| [p.name, p.id]} + [["=== Blank decisions",0]]
+    @supervisors    = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name").map{|p| [p.name, p.id]} + [["=== Blank decisions",0],["=== SQLI Actions",-1]]
   end
 
   def get_topics
@@ -16,6 +16,9 @@ class TopicsController < ApplicationController
     elsif session[:topic_person_id] == "0"
       @topics         = Topic.find(:all, :conditions=>["done = 0 and decision=''"], :order=>"id desc")
       @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and decision=''"], :order=>"done_date desc")
+    elsif session[:topic_person_id] == "-1"
+      @topics         = Topic.find(:all, :conditions=>["done = 0 and sqli_action=1"], :order=>"id desc")
+      @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and sqli_action=0"], :order=>"done_date desc")
     else
       @topics         = Topic.find(:all, :conditions=>["done = 0 and person_id=?", session[:topic_person_id]], :order=>"id desc")
       @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and person_id=?", session[:topic_person_id]], :order=>"done_date desc")

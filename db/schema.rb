@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110124072515) do
+ActiveRecord::Schema.define(:version => 20110303083338) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -211,11 +211,12 @@ ActiveRecord::Schema.define(:version => 20110124072515) do
     t.text     "topic"
     t.text     "decision"
     t.integer  "person_id"
-    t.integer  "done",       :default => 0
+    t.integer  "done",        :default => 0
     t.datetime "done_date"
-    t.integer  "private",    :default => 0
+    t.integer  "private",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sqli_action", :default => 0
   end
 
 end

@@ -6,7 +6,7 @@
 
 <%
 if current_user.has_role?('Admin')
-  nb = person.requests.size
+  nb = person.active_requests.size
   l  = person.load
   a = (l/nb).to_s[0..3]
 end
@@ -16,7 +16,7 @@ end
 <% if person.is_supervisor==1 %>
   <b>supervisor</b>:  <%= person.projects.size %> projects
 <% elsif current_user.has_role?('Admin') %>
-  <b>nb</b>: <%= nb %>
+  <b>nb</b>: <%= nb %> / <%= person.requests.size %>
   <b>load</b>: <%= l %>
   <b>average</b>: <%= a %>
 <% end %>

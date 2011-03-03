@@ -26,6 +26,13 @@
 </td>
 
 <td>
+<% if topic.sqli_action == 1 %>
+yes
+<% end %>
+
+</td>
+
+<td>
 <%= link_to(image_tag('edit.gif'), {:controller=>'topics', :action=>'edit', :id=>topic.id}) %>
 <% if current_user.has_role?('Admin') %>
 <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'topics', :action=>'destroy', :id=>topic.id}, :confirm=>"You should change the topic status to 'abandonned', are you sure you want to delete this topic ?", :success=>"$('a_#{topic.id}').hide();") %>

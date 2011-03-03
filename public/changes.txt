@@ -1,3 +1,9 @@
+03-Mar-2011
+===========
+
+- Adding a flag to topics to identify SQLI Actions
+- Better display of people with nb of active requests
+
 23-Feb-2011
 ===========
 
