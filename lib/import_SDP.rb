@@ -2,6 +2,14 @@
 
 require "ExcelFile"
 
+class SDPLine
+
+  def initialize
+  
+  end
+
+end
+
 class ImportSDP
 
 	def initialize
@@ -18,25 +26,27 @@ class ImportSDP
   
   def list
     @list = []
-    @excel.each_col(1,0,4) { |txt, line, col|
-      txt, nb = parse(txt)
-      # puts "#{nb}: #{txt}" if nb
-      }
+    puts @excel.cells(3,5).text
+#    { |txt, line, col|
+#      txt, nb = parse(txt)
+#      puts "#{nb}: #{txt}" if nb
+#      }
+    puts @list.size  
     @list
   end
   
   def parse(txt)
-    s = txt.scan(/\[(\d+)\]/)
-    nb = (s==[]) ? nil : s[0][0].to_i
+    s   = txt.scan(/\[(\d+)\]/)
+    nb  = (s==[]) ? nil : s[0][0].to_i
     @list << nb if nb and not @list.include?(nb)
     return [txt,nb]
   end
 
 end
 
-=begin
+#=begin
 i = ImportSDP.new
-i.open('C:\Users\faivremacon\My Documents\Downloads\Rapport.xls')
+i.open('C:\Users\faivremacon\My Documents\Downloads\Rapport (4).xls')
 i.list
 i.close
-=end
+#=end

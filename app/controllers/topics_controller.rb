@@ -18,7 +18,7 @@ class TopicsController < ApplicationController
       @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and decision=''"], :order=>"done_date desc")
     elsif session[:topic_person_id] == "-1"
       @topics         = Topic.find(:all, :conditions=>["done = 0 and sqli_action=1"], :order=>"id desc")
-      @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and sqli_action=0"], :order=>"done_date desc")
+      @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and sqli_action=1"], :order=>"done_date desc")
     else
       @topics         = Topic.find(:all, :conditions=>["done = 0 and person_id=?", session[:topic_person_id]], :order=>"id desc")
       @topics_closed  = Topic.find(:all, :conditions=>["done = 1 and person_id=?", session[:topic_person_id]], :order=>"done_date desc")
