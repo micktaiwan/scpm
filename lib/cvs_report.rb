@@ -4,18 +4,19 @@ require 'csv'
 class CvsRequest
 
   attr_accessor :workstream, :status, :assigned_to, :resolution,
-    :updated, :reporter,
-    :id, :view_status, :milestone, :priority,
+    :updated, :reporter, :id, :view_status, :milestone, :priority,
     :summary, :date_submitted, :product_version,
     :severity, :platform, :work_package, :complexity,
     :start_date, :sdp, :pm, :milestone_date, :project_name,
-    :end_date, :milestone_date, :actual_m_date
+    :end_date, :milestone_date, :actual_m_date, :po,
+    :status_to_be_validated, :status_new, :status_feedback, :status_acknowledged, :status_assigned, :status_contre_visite, :status_performed, :status_cancelled, :status_closed,
+    :total_csv_severity, :total_csv_category
     
   def initialize
   end
 
   def method_missing(m, *args, &block)  
-    #raise "RRequest does not have a '#{m}' attribute/method"
+    #raise "CvsRequest does not have a '#{m}' attribute/method"
   end
   
   def to_hash
@@ -78,6 +79,7 @@ private
   
   def sanitize_attr(name)
     name = name.downcase
+    name.gsub!(" #","")
     name.gsub!("/","")
     name.gsub!("  ","_")
     name.gsub!(" ","_")

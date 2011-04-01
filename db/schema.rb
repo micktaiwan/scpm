@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110303083338) do
+ActiveRecord::Schema.define(:version => 20110401070247) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -180,6 +180,18 @@ ActiveRecord::Schema.define(:version => 20110303083338) do
     t.string   "actual_m_date"
     t.string   "end_date"
     t.integer  "project_id"
+    t.date     "status_to_be_validated"
+    t.date     "status_new"
+    t.date     "status_feedback"
+    t.date     "status_acknowledged"
+    t.date     "status_assigned"
+    t.date     "status_contre_visite"
+    t.date     "status_performed"
+    t.date     "status_cancelled"
+    t.date     "status_closed"
+    t.date     "total_csv_severity"
+    t.date     "total_csv_category"
+    t.string   "po"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"

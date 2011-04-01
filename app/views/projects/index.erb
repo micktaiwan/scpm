@@ -25,6 +25,8 @@
 <% end %>
 <%= link_to('Report', {:action=>'report'},{:class=>"btnlnk"}) %>
 <%= link_to('Summary', {:action=>'summary'},{:class=>"btnlnk"}) %>
+<%= link_to('Tickets changes', {:action=>'week_changes'}, {:class=>'btnlnk'}) %>
+
 <div class="stats">
 Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
 <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status

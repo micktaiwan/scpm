@@ -385,6 +385,16 @@ class ProjectsController < ApplicationController
       render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
     end
   end
+  
+  def week_changes
+    #date = Date.today()-7.days
+    date = "2011-03-15"
+    @wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
+    @complexities = Request.find(:all, :conditions=>["total_csv_severity >= ?", date], :order=>"workstream, project_id, total_csv_severity")
+    @news         = Request.find(:all, :conditions=>["status_new >= ?", date], :order=>"workstream, project_id, status_new")
+    @performed    = Request.find(:all, :conditions=>["status_performed >= ?", date], :order=>"workstream, project_id, status_performed")
+    @closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
+  end
 
 private
 
