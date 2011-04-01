@@ -119,6 +119,43 @@ end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C5', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
 
+# WEEK CHANGES
+
+  @xml.Worksheet 'ss:Name' => 'Changes' do
+    @xml.Table do
+      # Columns width
+      for width in ['30','130','430','120','400'] do
+        @xml.Column nil, {'ss:Width' => width}
+      end
+
+      # Header
+      @xml.Row 'ss:StyleID' => 's62' do
+        for column in ['Type', 'PO', 'Workstream', 'Request', 'Summary', 'WP', 'Phase', 'Complexity', 'Status'] do
+          @xml.Cell do
+            @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+        end
+      end
+
+      # Rows
+      for p in @changes
+        style = {}
+        #style = {'ss:StyleID' => 's75'} if p.done==1
+        @xml.Row(style) do
+          for column in ['reporter', 'po', 'workstream', 'id', 'summary', 'work_package', 'milestone', 'complexity', 'status'] do
+            @xml.Cell do
+              @xml.Data p.send(column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
+        end
+      end
+
+    end
+  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C9', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
+  end
+  
+  
 # STATUSES
 
   @xml.Worksheet 'ss:Name' => 'Projects Status' do
