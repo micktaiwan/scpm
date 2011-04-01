@@ -1,0 +1,23 @@
+<span class="<%= request_change.sanitized_status %>">
+<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= request_change.request_id %>"><%= request_change.request_id %></a>
+
+<b><%= request_change.po %></b>
+
+<%= request_change.workstream %>
+
+<b><%= request_change.project.full_name if request_change.project %></b>
+<%= request_change.work_package %>
+<%= request_change.milestone %>
+<%= request_change.complexity %>
+(<%= request_change.workload2 %>)
+<%= request_change.assigned_to %>
+<%= request_change.status %>
+<%= request_change.resolution %>
+<%= request_change.foreseen_end_date_str %>
+
+<b>WP date:</b> <%= request_change.total_csv_category %>
+<b>New date:</b> <%= request_change.status_new %>
+
+</span>
+
+<br/>

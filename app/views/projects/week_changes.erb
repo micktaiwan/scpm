@@ -1,0 +1,37 @@
+<h2>Tickets changes</h2>
+
+<%= @wps.size %> WP changes<br/>
+<div id="wps">
+<ul>
+<%= render(:partial=>'request_change', :collection=>@wps) %>
+</ul>
+</div>
+
+<%= @complexities.size %> complexity changes<br/>
+<div id="complexities">
+<ul>
+<%= render(:partial=>'request_change', :collection=>@complexities) %>
+</ul>
+</div>
+
+
+<%= @news.size %> new<br/>
+<div id="news">
+<ul>
+<%= render(:partial=>'request_change', :collection=>@news) %>
+</ul>
+</div>
+
+<%= @performed.size %> performed<br/>
+<div id="performed">
+<ul>
+<%= render(:partial=>'request_change', :collection=>@performed) %>
+</ul>
+</div>
+
+<%= @closed.size %> closed<br/>
+<div id="closed">
+<ul>
+<%= render(:partial=>'request_change', :collection=>@closed) %>
+</ul>
+</div>
