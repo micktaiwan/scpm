@@ -1,3 +1,4 @@
+<li<% if person.has_left==1%> style="color:grey;"<%end%>>
 <% if current_user.has_role?('Admin') %>
 <%= link_to('Edit', {:action=>'edit', :id=>person.id},{:class=>"btnlnk"}) %>
 <% end %>
@@ -24,4 +25,5 @@ end
 <strong>no login</strong>
 <% end %>
 
-<br/>
+</li>
+

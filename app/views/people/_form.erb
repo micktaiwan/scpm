@@ -21,9 +21,15 @@
 <p><%= label_tag 'Password' %>
 <%= password_field :person, :password %></p>
 
+<p><%= label_tag 'has_left' %>
+<%= radio_button :person, :has_left, 0 %> No
+<%= radio_button :person, :has_left, 1 %> Yes</p>
+
+
 <p><%= label_tag 'is_supervisor' %>
 <%= radio_button :person, :is_supervisor, 0 %> No
 <%= radio_button :person, :is_supervisor, 1 %> Yes</p>
+
 
 <% @roles.each { |r| %>
 <p><%= label_tag r.name %>

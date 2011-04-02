@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
     end
     @wps = @wps.sort_by { |p| p.full_name }
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
-    @qr           = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name asc")
+    @qr           = Person.find(:all, :conditions=>"is_supervisor=0 and has_left=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
     @actions         = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
     @actions_closed  = Action.find(:all, :conditions=>["progress in('abandonned', 'closed') and person_id in (?)", session[:project_filter_qr]])
@@ -397,7 +397,7 @@ class ProjectsController < ApplicationController
       render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
     end
   end
-  
+
   def week_changes
     #date = Date.today()-7.days
     date = "2011-03-15"
@@ -422,7 +422,7 @@ private
           date[center][to] << last_status
           }
         }
-    end  
+    end
     date
   end
 

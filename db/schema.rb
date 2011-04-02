@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110401070247) do
+ActiveRecord::Schema.define(:version => 20110402110540) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(:version => 20110401070247) do
     t.string   "login"
     t.string   "pwd"
     t.datetime "last_view"
+    t.integer  "has_left",      :default => 0
   end
 
   create_table "person_roles", :force => true do |t|
