@@ -2,6 +2,7 @@
 ===========
 
 - Status change date integration and reporting
+- admin can flag people who have left
 
 03-Mar-2011
 ===========
