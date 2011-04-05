@@ -366,7 +366,7 @@ class ProjectsController < ApplicationController
         [w.supervisor_name, w.workstream, w.project_name, w.name]
         }
       @actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
-      @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed'", :order=>"status, workstream")
+      @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed' and status!='removed'", :order=>"status, workstream")
       @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
 
       @status_progress_series = get_status_progress

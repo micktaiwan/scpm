@@ -75,7 +75,7 @@ function add(id, same_week, has_requests) {
   </div>
 <% end %>
 
-<% if @project.requests.size > 0  %>
+<% if @project.requests.size > 0  or @project.actions.size > 0 %>
   <div class="panel">
     <h3>Amendments</h3>
     <%= render(:file=>'amendments/amendments_header') %>

@@ -124,7 +124,7 @@ end
   @xml.Worksheet 'ss:Name' => 'Changes' do
     @xml.Table do
       # Columns width
-      for width in ['30','130','430','120','400'] do
+      for width in ['100','60','80','60','400', '170', '80', '80', '80'] do
         @xml.Column nil, {'ss:Width' => width}
       end
 
@@ -143,7 +143,7 @@ end
         style = {}
         #style = {'ss:StyleID' => 's75'} if p.done==1
         @xml.Row(style) do
-          for column in ['reporter', 'po', 'workstream', 'id', 'summary', 'work_package', 'milestone', 'complexity', 'status'] do
+          for column in ['reporter', 'po', 'workstream', 'request_id', 'summary', 'work_package', 'milestone', 'complexity', 'status'] do
             @xml.Cell do
               @xml.Data p.send(column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
