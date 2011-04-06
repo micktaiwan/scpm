@@ -247,6 +247,11 @@ end
   @xml.Worksheet 'ss:Name' => 'Actions' do
     @xml.Table do
 
+      # Columns width
+      for width in ['40','120','80','400','400', '120'] do
+        @xml.Column nil, {'ss:Width' => width}
+      end
+
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
         for column in ['#','Resp', 'Target','Project', 'Action', 'Status'] do
@@ -278,6 +283,11 @@ end
 
   @xml.Worksheet 'ss:Name' => 'Requests' do
     @xml.Table do
+
+      # Columns width
+      for width in ['70','60','400','70','150', '120', '90', '90', '90'] do
+        @xml.Column nil, {'ss:Width' => width}
+      end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
