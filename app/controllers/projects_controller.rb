@@ -389,6 +389,20 @@ class ProjectsController < ApplicationController
       closed.each { |r| r.reporter = "Closed" }
       @changes = wps + complexities + news + performed + closed
 
+      date = Date.today-((Date.today().wday+6).days)
+      
+      wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
+      wps.each { |r| r.reporter = "WP change" }
+      complexities = Request.find(:all, :conditions=>["total_csv_severity >= ?", date], :order=>"workstream, project_id, total_csv_severity")
+      complexities.each { |r| r.reporter = "Complexity change" }
+      news         = Request.find(:all, :conditions=>["status_new >= ?", date], :order=>"workstream, project_id, status_new")
+      news.each { |r| r.reporter = "New" }
+      performed    = Request.find(:all, :conditions=>["status_performed >= ?", date], :order=>"workstream, project_id, status_performed")
+      performed.each { |r| r.reporter = "Performed" }
+      closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
+      closed.each { |r| r.reporter = "Closed" }
+      @week_changes = wps + complexities + news + performed + closed
+      
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
       headers['Cache-Control']        = ''
