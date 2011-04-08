@@ -134,7 +134,6 @@ class ProjectsController < ApplicationController
         @text << " => #{projects.size} projects has the right parent<br/>"
         #next
         if projects.size == 0
-          @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating<br/>"
           parent = Project.find(:first, :conditions=>"name='#{r.project_name}'")
           if not parent
             # create parent
@@ -144,17 +143,28 @@ class ProjectsController < ApplicationController
           end
           #create wp
           p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream)
-          r.project.move_actions_to_project(p)
-          r.project.move_milestones_to_project(p)
-          r.project.move_amendments_to_project(p)
-          r.project.move_notes_to_project(p)
+          if r.project.requests.size == 1 # if that was the only request move all statuts and actions, etc.. to new project
+            @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating and moving ALL<br/>"
+            r.project.move_actions_to_project(p)
+            r.project.move_milestones_to_project(p)
+            r.project.move_amendments_to_project(p)
+            r.project.move_notes_to_project(p)
+            r.project.move_statuses_to_project(p)
+          else
+            @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating and moving only request (not status and actions, etc...)<br/>"
+          end
           r.move_to_project(p)
         else
-          @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving<br/>"
-          r.project.move_actions_to_project(projects[0])
-          r.project.move_milestones_to_project(projects[0])
-          r.project.move_amendments_to_project(projects[0])
-          r.project.move_notes_to_project(projects[0])
+          if r.project.requests.size == 1 # if that was the only request move all statuts and actions, etc.. to new project
+            @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving ALL<br/>"
+            r.project.move_actions_to_project(projects[0])
+            r.project.move_milestones_to_project(projects[0])
+            r.project.move_amendments_to_project(projects[0])
+            r.project.move_notes_to_project(projects[0])
+            r.project.move_statuses_to_project(projects[0])
+          else
+            @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving only request (not status and actions, etc...)<br/>"
+          end
           r.move_to_project(projects[0])
         end
       end

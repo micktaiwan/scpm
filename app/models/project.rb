@@ -211,6 +211,17 @@ class Project < ActiveRecord::Base
     s ? s.name : ''
   end
 
+  def move_statuses_project(p)
+    self.statuses.each { |s|
+      s.project_id = p.id
+      s.save
+      }
+    p.update_status
+    p.save
+    self.update_status
+    self.save
+  end
+  
   def move_actions_to_project(p)
     self.actions.each { |a|
       a.project_id = p.id
