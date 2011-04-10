@@ -2,6 +2,7 @@
 ===========
 
 - Amendments still not closed are displayed on start page
+- If no action and status is not green, display an alert
 
 01-Apr-2011
 ===========

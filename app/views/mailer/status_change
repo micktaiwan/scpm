@@ -1,0 +1,4 @@
+Project "<%= @project.full_name %>" status is now:
+
+<%= @project.get_status.last_change %>
+

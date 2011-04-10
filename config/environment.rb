@@ -12,15 +12,8 @@ Rails::Initializer.run do |config|
 end
 
 ActionMailer::Base.sendmail_settings = {
-:location       => '/usr/sbin/sendmail',
-:arguments      => '-i -t'
+  :location       => '/usr/sbin/sendmail',
+  :arguments      => '-i -t'
 }
 
-#ActionMailer::Base.sendmail_settings = {
-#  :address => "smtp.gmail.com",
-#  :port => 465,
-#  :user_name => "mfaivremacon@sqli.com",
-#  :password => "mickael003",
-#  :authentication => :login
-#  }
 

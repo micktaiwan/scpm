@@ -111,6 +111,7 @@ class ProjectsController < ApplicationController
     p = status.project
     p.update_status(params[:status][:status]) if p.get_status.id == status.id # only if we are updating the last status
     p.calculate_diffs
+    Mailer::deliver_status_change(p)
     timestamps_on if params[:update] != '1'
     redirect_to :action=>:show, :id=>status.project_id
   end
