@@ -43,6 +43,7 @@ module ProjectsHelper
       rv += simple_format(s.operational_alert)
       rv += "<h3>Actions</h3>"
       rv += simple_format(s.actions)
+      rv += image_tag("alert.gif") if s.status > 1 and s.actions == ""
       rv += "<h3>Feedback</h3>"
       rv += simple_format(s.feedback)
     end
