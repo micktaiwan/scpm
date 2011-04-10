@@ -17,8 +17,12 @@ class ProjectsController < ApplicationController
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_supervisor=0 and has_left=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
-    @actions         = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
-    @actions_closed  = Action.find(:all, :conditions=>["progress in('abandonned', 'closed') and person_id in (?)", session[:project_filter_qr]])
+    @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
+    if @wps.size > 0
+      @amendments   = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
+    else
+      @amendments   = {}
+    end
   end
 
   def new
@@ -400,7 +404,7 @@ class ProjectsController < ApplicationController
       @changes = wps + complexities + news + performed + closed
 
       date = Date.today-((Date.today().wday+6).days)
-      
+
       wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
       wps.each { |r| r.reporter = "WP change" }
       complexities = Request.find(:all, :conditions=>["total_csv_severity >= ?", date], :order=>"workstream, project_id, total_csv_severity")
@@ -412,7 +416,7 @@ class ProjectsController < ApplicationController
       closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
       closed.each { |r| r.reporter = "Closed" }
       @week_changes = wps + complexities + news + performed + closed
-      
+
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
       headers['Cache-Control']        = ''
