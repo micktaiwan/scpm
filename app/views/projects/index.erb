@@ -98,7 +98,7 @@ Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>
 </div>
 
 
-<%= link_to_function('filters', "$('filters').toggle();") %>
+<%= link_to_function('filters', "Effect.toggle('filters','blind');",{:class=>"btnlnk"}) %>
 <% if(are_filtered) %><strong>filtered</strong><% end %>
 <div id="filters" style="display:none;">
 <% form_tag(:action=>'filter') do %>
@@ -136,8 +136,10 @@ Searches project title and description, statuses, request summary and PM names
 <% end %>
 <br/>
 </div>
+<br/>
+<br/>
 
-<%= link_to_function('Toggle Frieze', "$('frieze').toggle()") %>
+<%= link_to_function('Toggle Frieze', "Effect.toggle('frieze','blind')",{:class=>"btnlnk"}) %>
 <div id="frieze"<%if current_user.has_role?('Admin')%> style="display:none;"<%end%> >
 <% for project in @wps %>
 <h3>
@@ -161,8 +163,10 @@ Searches project title and description, statuses, request summary and PM names
 </div>
 <% end %>
 </div>
+<br/>
+<br/>
 
-<%= link_to_function('Toggle projects', "$('projects').toggle()") %>
+<%= link_to_function('Toggle projects', "Effect.toggle('projects','blind')",{:class=>"btnlnk"}) %>
 <div id="projects"<%if not current_user.has_role?('Admin')%> style="display:none;"<%end%> >
 <ul>
 <%= render(:partial=>'project', :collection=>@projects) %>
