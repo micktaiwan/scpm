@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110402110540) do
+ActiveRecord::Schema.define(:version => 20110410140019) do
 
   create_table "actions", :force => true do |t|
     t.string   "action"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(:version => 20110402110540) do
     t.string   "pm"
     t.string   "bpl"
     t.string   "ispl"
+    t.datetime "read_date"
   end
 
   create_table "requests", :force => true do |t|

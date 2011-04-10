@@ -30,6 +30,12 @@ module ProjectsHelper
     rv += s.last_change_diffs.to_s
     rv += "</td></tr></table>"
     rv += "<br/>"
+
+    if current_user.has_role?('Admin')
+      rv += link_to_remote('Mark as read', {:url=>{:controller=>'projects', :action=>'mark_as_read', :id=>@project.id}, :success=>"$('markasread').fade();"}, {:class=>'btnlnk special', :id=>'markasread'})
+    end
+
+
     if s.project
       rv += "<h3>Status change reason (#{html_status(s.project.old_status)} => #{html_status(s.project.last_status)})</h3>"
       rv += simple_format(s.reason)

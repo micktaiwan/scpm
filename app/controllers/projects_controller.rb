@@ -10,10 +10,11 @@ class ProjectsController < ApplicationController
     case session[:project_sort]
       when nil
         @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
+        @wps = @wps.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year}
       when 'alpha'
         @projects = @projects.sort_by { |p| [p.workstream, p.name] }
+        @wps = @wps.sort_by { |p| p.full_name }
     end
-    @wps = @wps.sort_by { |p| p.full_name }
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_supervisor=0 and has_left=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
@@ -271,6 +272,13 @@ class ProjectsController < ApplicationController
 
   def remove_from_mine
     Project.find(params[:id]).responsibles.delete(current_user)
+    render(:nothing=>true)
+  end
+
+  def mark_as_read
+    p           = Project.find(params[:id])
+    p.read_date = Time.now
+    p.save
     render(:nothing=>true)
   end
 

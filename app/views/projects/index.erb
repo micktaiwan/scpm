@@ -140,7 +140,7 @@ Searches project title and description, statuses, request summary and PM names
 <br/>
 
 <%= link_to_function('Toggle Frieze', "Effect.toggle('frieze','blind')",{:class=>"btnlnk"}) %>
-<div id="frieze"<%if current_user.has_role?('Admin')%> style="display:none;"<%end%> >
+<div id="frieze">
 <% for project in @wps %>
 <h3>
   <%= link_to('Open', {:action=>'show', :id=>project.id}, {:class=>'menu grey'}) %>
@@ -156,6 +156,13 @@ Searches project title and description, statuses, request summary and PM names
     days = time_ago_in_words(date) %>
     (<%= days %> - w<%= date.to_date.cweek %>)
   <% end %>
+
+  <% if project.read_date and current_user.has_role?('Admin')%>
+  <font color="#777777">
+  Last read: <%= time_ago_in_words(project.read_date) %>
+  </font>
+  <% end %>
+
 </h3>
 
 <div class="milestone_bar">
@@ -167,7 +174,7 @@ Searches project title and description, statuses, request summary and PM names
 <br/>
 
 <%= link_to_function('Toggle projects', "Effect.toggle('projects','blind')",{:class=>"btnlnk"}) %>
-<div id="projects"<%if not current_user.has_role?('Admin')%> style="display:none;"<%end%> >
+<div id="projects" style="display:none;">
 <ul>
 <%= render(:partial=>'project', :collection=>@projects) %>
 </ul>

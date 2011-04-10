@@ -63,6 +63,7 @@ function add(id, same_week, has_requests) {
   </div>
 
   <%= display_status(@status) %>
+
   <br/>
 
   <%= link_to_function("Old (#{@old_statuses.size})", "$('old_statuses').toggle();", :class=>"menu") %>
