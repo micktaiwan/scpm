@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
     if @wps.size > 0
       @amendments   = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
     else
-      @amendments   = {}
+      @amendments   = []
     end
   end
 
@@ -394,6 +394,11 @@ class ProjectsController < ApplicationController
       @actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
       @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed' and status!='removed'", :order=>"status, workstream")
       @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
+      if @wps.size > 0
+        @amendments   = Amendment.find(:all, :conditions=>"project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
+      else
+        @amendments   = []
+      end
 
       @status_progress_series = get_status_progress
       @status_columns         = ['Centre','Status']

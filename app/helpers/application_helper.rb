@@ -14,5 +14,14 @@ module ApplicationHelper
       'menu'
     end
   end
+  
+  def cascade_send(object, methods)
+    m_arr = methods.split('.')
+    rv = object
+    m_arr.each { |m|
+      rv = rv.send(m)
+      }
+    return rv  
+  end
 
 end
