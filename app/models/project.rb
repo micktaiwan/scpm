@@ -211,7 +211,7 @@ class Project < ActiveRecord::Base
     s ? s.name : ''
   end
 
-  def move_statuses_project(p)
+  def move_statuses_to_project(p)
     self.statuses.each { |s|
       s.project_id = p.id
       s.save
