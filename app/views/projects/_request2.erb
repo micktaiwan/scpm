@@ -17,7 +17,7 @@
 
 </span>
 <% if request2.assigned_to != "" and request2.project and not request2.project.has_responsible([Person.find_by_rmt_user(request2.assigned_to)]) %>
-<%= link_to_remote('associate', {:url=>{:controller=>'projects', :action=>'associate', :id=>request2.id}, :success=>"$('ass_#{request2.id}').fade();"}, {:id=>"ass_#{request2.id}"}) %>
+<%= link_to_remote('associate', {:url=>{:controller=>'projects', :action=>'associate', :id=>request2.id}, :success=>"if (request.responseText!='') alert(request.responseText); else $('ass_#{request2.id}').fade(); return false;"}, {:id=>"ass_#{request2.id}"}) %>
 <% end %>
 <br/>
 

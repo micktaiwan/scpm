@@ -457,9 +457,11 @@ class Project < ActiveRecord::Base
   end
 
   def add_responsible_from_rmt_user(rmt_user)
-    return if rmt_user.empty?
+    return false if rmt_user.empty?
     u = Person.find_by_rmt_user(rmt_user)
-    self.add_responsible(u) if u
+    return false if not u
+    self.add_responsible(u)
+    return true
   end
 
   def next_milestone_date

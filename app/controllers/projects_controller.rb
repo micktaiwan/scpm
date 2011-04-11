@@ -262,8 +262,11 @@ class ProjectsController < ApplicationController
   def associate
     request = Request.find(params[:id].to_i)
     #puts request.id
-    request.project.add_responsible_from_rmt_user(request.assigned_to)
-    render(:nothing=>true)
+    if request.project.add_responsible_from_rmt_user(request.assigned_to)
+      render(:text=>"")
+    else
+      render(:text=>"Error. Is the rmt_user declared for this user ?")
+    end
   end
 
   def add_to_mine
