@@ -225,6 +225,7 @@ class ProjectsController < ApplicationController
     p           = Project.find(project_id)
     p.update_status(params[:status][:status])
     p.calculate_diffs
+    Mailer::deliver_status_change(p)
     redirect_to :action=>:show, :id=>project_id
   end
 
