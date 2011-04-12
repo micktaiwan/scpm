@@ -8,7 +8,7 @@
 
 <td>
 <% if topic.private==1 %><%=image_tag('private.gif')%><% end %>
-<%= topic.topic %>
+<%= simple_format(topic.topic) %>
 </td>
 
 <td>
@@ -22,7 +22,7 @@
 </td>
 
 <td>
-<%= topic.decision %>
+<%= simple_format(topic.decision) %>
 </td>
 
 <td>
