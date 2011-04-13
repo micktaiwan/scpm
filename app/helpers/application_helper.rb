@@ -14,14 +14,25 @@ module ApplicationHelper
       'menu'
     end
   end
-  
+
   def cascade_send(object, methods)
     m_arr = methods.split('.')
     rv = object
     m_arr.each { |m|
       rv = rv.send(m)
       }
-    return rv  
+    return rv
+  end
+
+  def get_bandeau
+    b = Bandeau.find(:first, :order=>"last_display")
+    if b
+      b.last_display  = Time.now
+      b.nb_displays   = b.nb_displays + 1
+      b.save
+    end
+    b
   end
 
 end
+

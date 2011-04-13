@@ -1,0 +1,9 @@
+<h2>Add something! Anything!</h2>
+(This is not anonymous!)<br/>
+<%= error_messages_for :bandeau %>
+<% form_for :@bandeau, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add this!' %></p>
+<% end -%>
+

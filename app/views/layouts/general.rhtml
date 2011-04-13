@@ -30,6 +30,13 @@
 <div id="banner">
 <%= image_tag('chrome.png', :align=>:right, :title=>"works better in Chrome (une façon de dire que le développeur ne teste pas tous les navigateurs...)") %>
 <div id="title">EISQ Report</div>
+<div id="bandeau">
+<% b = get_bandeau; if b %>
+<div class="text"><%= b.text %></div>
+<div class="person"><%= b.person.name %></div>
+<% end %>
+<div class="link"><%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %></div>
+</div>
 
 
 <div id="menu_bar">

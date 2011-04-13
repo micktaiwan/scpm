@@ -1,0 +1,4 @@
+<li id="bandeau_<%=bandeau.id%>">
+- <%= bandeau.text %> <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>bandeau.id}, :confirm=>"Sure?", :success=>"$('bandeau_#{bandeau.id}').hide();") %>
+</li>
+

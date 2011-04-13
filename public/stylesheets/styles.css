@@ -336,3 +336,30 @@ ins.differ {
 .odd {
   background: #EEF;
   }
+
+div#bandeau {
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 200px;
+  width: auto;
+  height: 30px;
+}
+
+#bandeau .text {
+font-size: 1.2em;
+display: inline;
+}
+
+#bandeau .person {
+font-size: 0.8em;
+color: #555;
+display: inline;
+}
+
+#bandeau .link {
+font-size: 0.8em;
+color: #559;
+display: inline;
+}
+
