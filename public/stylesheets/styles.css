@@ -16,7 +16,7 @@ div#banner {
   top: 0;
   left: auto;
   width: 100%;
-  height: 65px;
+  height: 80px;
   background: #89A;
   border-bottom: 1px solid #000;
   box-shadow: inset 5px 5px 5px #ABC;
@@ -35,6 +35,8 @@ div#banner {
   background-repeat:no-repeat;
   }
 #menu_bar {
+  position: fixed;
+  top: 50px;
   margin: -2px 0 0 0;
   }
 .menu {
@@ -138,7 +140,7 @@ a {text-decoration:none;}
   -webkit-box-shadow: inset 2px 2px 2px #678;
   }
 #content {
-  margin:  75px 10px 10px 10px;
+  margin:  95px 10px 10px 10px;
   padding: 0px 5px 5px 15px;
   border-bottom: 1px solid #AAAm;
   background: #FFF;
