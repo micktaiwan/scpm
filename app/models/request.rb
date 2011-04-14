@@ -28,9 +28,10 @@ class Request < ActiveRecord::Base
   }
 
   Comp_index = {
-  "Easy" 		=> 0,
+  "Easy" 		  => 0,
   "Medium" 		=> 1,
-  "Difficult" 	=> 2
+  "Difficult" => 2,
+  "TBD"       => 1
   }
 
   Milestone_index = {

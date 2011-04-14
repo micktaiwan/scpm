@@ -254,7 +254,7 @@ class Project < ActiveRecord::Base
   end
 
   def open_requests
-    self.requests.select { |r| r.status != 'cancelled' and r.resolution != "ended" and r.resolution != 'aborted'}
+    self.requests.select { |r| r.status != 'cancelled' and r.status != 'removed' and r.resolution != "ended" and r.resolution != 'aborted'} # good to keep "to be validated" requests
   end
 
   def active_requests
