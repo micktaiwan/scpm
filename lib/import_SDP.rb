@@ -3,17 +3,21 @@
 require "ExcelFile"
 
 class SDPLine
+  TASKID = 1
+end
 
-  def initialize
-  
+class SDPPhase
+
+  def initialize  
   end
 
 end
 
-class ImportSDP
+class SDP
 
 	def initialize
 		@excel = ExcelFile.new
+    @lines =[]
 	end
 	
 	def open(path)
@@ -24,29 +28,38 @@ class ImportSDP
     @excel.close
   end
   
-  def list
-    @list = []
-    puts @excel.cells(3,5).text
-#    { |txt, line, col|
-#      txt, nb = parse(txt)
-#      puts "#{nb}: #{txt}" if nb
-#      }
-    puts @list.size  
-    @list
+  def import(path)
+    @line = 3
+    open(path)
+    parse_phase
+    close
   end
   
-  def parse(txt)
+  def parse_phase
+    @line = SDPPhase.new.parse(@line)
+    parse_activity
+  end
+  
+  def parse_phase
+    parse_tasks
+  end
+  
+  
+  
+    id = @excel.cells(line,TASKID).text
+    if id == id.to_i
+      l = SDPLine.new
+      
+      lines << l
+    end
     s   = txt.scan(/\[(\d+)\]/)
     nb  = (s==[]) ? nil : s[0][0].to_i
     @list << nb if nb and not @list.include?(nb)
     return [txt,nb]
-  end
 
 end
 
 #=begin
-i = ImportSDP.new
-i.open('C:\Users\faivremacon\My Documents\Downloads\Rapport (4).xls')
-i.list
-i.close
+i = SDP.new
+i.import('C:\Users\faivremacon\My Documents\Downloads\Rapport (9).xls')
 #=end

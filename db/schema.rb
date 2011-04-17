@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110413203549) do
+ActiveRecord::Schema.define(:version => 20110417201221) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -212,6 +212,59 @@ ActiveRecord::Schema.define(:version => 20110413203549) do
   end
 
   add_index "roles", ["name"], :name => "index_roles_on_name"
+
+  create_table "sdp_activities", :force => true do |t|
+    t.integer  "phase_id"
+    t.string   "title"
+    t.integer  "initial"
+    t.integer  "reevaluated"
+    t.integer  "assigned"
+    t.integer  "consumed"
+    t.integer  "remaining"
+    t.integer  "revised"
+    t.integer  "gained"
+    t.integer  "iteration"
+    t.integer  "collab"
+    t.integer  "balance"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sdp_phases", :force => true do |t|
+    t.string   "title"
+    t.integer  "initial"
+    t.integer  "reevaluated"
+    t.integer  "assigned"
+    t.integer  "consumed"
+    t.integer  "remaining"
+    t.integer  "revised"
+    t.integer  "gained"
+    t.integer  "iteration"
+    t.integer  "collab"
+    t.integer  "balance"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sdp_tasks", :force => true do |t|
+    t.integer  "sdp_id"
+    t.integer  "activity_id"
+    t.integer  "phase_id"
+    t.string   "title"
+    t.integer  "done",        :default => 0
+    t.integer  "initial"
+    t.integer  "reevaluated"
+    t.integer  "assigned"
+    t.integer  "consumed"
+    t.integer  "remaining"
+    t.integer  "revised"
+    t.integer  "gained"
+    t.integer  "iteration"
+    t.integer  "collab"
+    t.integer  "balance"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "statuses", :force => true do |t|
     t.integer  "project_id",                       :null => false
