@@ -1,3 +1,11 @@
+<%= link_to('SDP Import', {:controller=>'tools', :action=>'sdp_import'}, {:class=>'btnlnk'}) %>
+<%= link_to('CHECK RMT SDP yes', {:controller=>'tools', :action=>'sdp_yes_check'}, {:class=>'btnlnk'}) %>
+<%= link_to('CHECK RMT ended', {:controller=>'tools', :action=>'requests_ended_check'}, {:class=>'btnlnk'}) %>
+<%= link_to('CHECK Complexity', {:controller=>'tools', :action=>'complexity_check'}, {:class=>'btnlnk'}) %>
+<br/>
+<br/>
+Initial Balance : <%= @total %><br/>
+<br/>
 <ul>
 <%= render(:partial=>'phase', :collection=>@phases) %>
 </ul>

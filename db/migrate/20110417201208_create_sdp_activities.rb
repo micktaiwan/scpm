@@ -3,17 +3,19 @@ class CreateSdpActivities < ActiveRecord::Migration
     create_table :sdp_activities do |t|
       t.integer :phase_id
       t.string  :title
-      t.integer :initial
-      t.integer :reevaluated
-      t.integer :assigned
-      t.integer :consumed
-      t.integer :remaining
-      t.integer :revised
-      t.integer :gained
-      t.integer :revised
-      t.integer :iteration
-      t.integer :collab
-      t.integer :balance  
+      t.float :initial
+      t.float :reevaluated
+      t.float :assigned
+      t.float :consumed
+      t.float :remaining
+      t.float :revised
+      t.float :gained
+      t.float :revised
+      t.float :iteration
+      t.float :collab
+      t.float :balancei
+      t.float :balancer
+      t.float :balancea
       t.timestamps
     end
   end

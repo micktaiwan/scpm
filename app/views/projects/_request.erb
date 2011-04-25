@@ -8,6 +8,11 @@
 <%= request.status %>
 <%= request.resolution %>
 <%= request.foreseen_end_date_str %>
+<% if request.resolution != 'not started' and request.resolution != 'not planned' %>
+<% tasks = request.sdp_tasks %>
+RAF: <%= tasks.inject(0) { |sum, t| t.remaining+sum } %>
+<% end %>
+
 <% if request.resolution=="ended" and request.end_date %>
 <strong>No end date</strong>
 <% end %>

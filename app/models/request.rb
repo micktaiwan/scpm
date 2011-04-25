@@ -2,15 +2,15 @@ class Request < ActiveRecord::Base
 
   belongs_to :project
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
-  
+
   include WelcomeHelper
-  
+
   def resp
     Person.find(:first, :conditions=>"rmt_user='#{self.assigned_to}'")
   end
 
   # TODO: contre-visites
-  
+
   Wp_index = {
   "WP1.1 - Quality Control" 		    => 0,
   "WP1.2 - Quality Assurance" 		  => 4,
@@ -200,7 +200,11 @@ class Request < ActiveRecord::Base
       else; 0
     end
   end
-  
+
+  def sdp_tasks
+    SDPTask.find(:all, :conditions=>"request_id='#{self.request_id}'")
+  end
+
 private
 
   def sanitize(name)

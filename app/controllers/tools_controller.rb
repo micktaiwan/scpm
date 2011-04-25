@@ -53,10 +53,10 @@ class ToolsController < ApplicationController
   def test_email
     Mailer::deliver_mail("mfaivremacon@sqli.com")
   end
-  
+
   def sdp_import
   end
-  
+
   def do_sdp_upload
     post = params[:upload]
     name =  post['datafile'].original_filename
@@ -67,10 +67,33 @@ class ToolsController < ApplicationController
     sdp.import
     redirect_to '/tools/sdp_index'
   end
-  
+
   def sdp_index
     @phases = SDPPhase.all
+    @total  = @phases.inject(0) { |sum, p| p.balancei+sum}
   end
-  
+
+  def sdp_yes_check
+    @task_ids = SDPTask.all.collect{ |t| "'#{t.request_id}'" }.uniq
+    @requests = Request.find(:all, :conditions=>"sdp='yes' and request_id not in (#{@task_ids.join(',')})")
+  end
+
+  def requests_ended_check
+    @requests = Request.find(:all, :conditions=>"resolution='ended'")
+    @tasks = []
+    @requests.each { |r|
+      @tasks += SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}' and remaining > 0")
+      }
+  end
+
+  def complexity_check
+    @requests = Request.all
+    @tasks = []
+    @requests.each { |r|
+      @tasks += SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}' and remaining > 0")
+      }
+  end
+
+
 end
 

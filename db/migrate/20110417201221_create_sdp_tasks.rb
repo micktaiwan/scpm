@@ -5,18 +5,21 @@ class CreateSdpTasks < ActiveRecord::Migration
       t.integer :activity_id
       t.integer :phase_id
       t.string  :title
+      t.string  :request_id
       t.integer :done, :default=>0
-      t.integer :initial
-      t.integer :reevaluated
-      t.integer :assigned
-      t.integer :consumed
-      t.integer :remaining
-      t.integer :revised
-      t.integer :gained
-      t.integer :revised
-      t.integer :iteration
-      t.integer :collab
-      t.integer :balance      
+      t.float :initial
+      t.float :reevaluated
+      t.float :assigned
+      t.float :consumed
+      t.float :remaining
+      t.float :revised
+      t.float :gained
+      t.float :revised
+      t.string :iteration
+      t.string :collab
+      t.float :balancei
+      t.float :balancer
+      t.float :balancea
       t.timestamps
     end
   end
