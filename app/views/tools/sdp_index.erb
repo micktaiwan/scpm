@@ -1,11 +1,39 @@
-<%= link_to('SDP Import', {:controller=>'tools', :action=>'sdp_import'}, {:class=>'btnlnk'}) %>
-<%= link_to('CHECK RMT SDP yes', {:controller=>'tools', :action=>'sdp_yes_check'}, {:class=>'btnlnk'}) %>
-<%= link_to('CHECK RMT ended', {:controller=>'tools', :action=>'requests_ended_check'}, {:class=>'btnlnk'}) %>
-<%= link_to('CHECK Complexity', {:controller=>'tools', :action=>'complexity_check'}, {:class=>'btnlnk'}) %>
+<%= link_to('SDP Import',       {:controller=>'tools', :action=>'sdp_import'}, {:class=>'btnlnk'}) %>
+<%= link_to('People',           {:controller=>'tools', :action=>'sdp_people'}, {:class=>'btnlnk'}) %>
+<%= link_to('CHECK RMT SDP yes',{:controller=>'tools', :action=>'sdp_yes_check'}, {:class=>'btnlnk'}) %>
+<%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}, {:class=>'btnlnk'}) %>
+<%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}, {:class=>'btnlnk'}) %>
+<!-- <%= link_to('CHECK Complexity', {:controller=>'tools', :action=>'complexity_check'}, {:class=>'btnlnk'}) %> -->
 <br/>
+<br/>
+
+<table>
+<tr>
+<td>Title</td>
+<td>Remaining</td>
+<td>Balance</td>
+</tr>
+
+<%= render(:partial=>'phase', :collection=>@phases) %>
+</table><br/>
+
 <br/>
 Initial Balance : <%= @total %><br/>
+Operational Total  : <%= @operational_total %><br/>
 <br/>
-<ul>
-<%= render(:partial=>'phase', :collection=>@phases) %>
-</ul>
+
+
+<b>Provisions:</b>
+<table>
+<tr>
+<td>Title</td>
+<td>Initial</td>
+<td>Initial should be</td>
+<td>Remaining</td>
+<td>Remaining should be</td>
+<td>Difference</td>
+</tr>
+
+<%= render(:partial=>'provision', :collection=>@provisions) %>
+</table>
+

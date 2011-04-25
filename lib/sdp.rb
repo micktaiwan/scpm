@@ -60,6 +60,8 @@ private
     p.iteration   = @row[ITERATION]
     p.collab      = @row[COLLAB]
     p.balancei    = @row[BALANCEI]
+    p.balancer    = @row[BALANCER]
+    p.balancea    = @row[BALANCEA]
   end
 
   def create_phase

@@ -70,7 +70,15 @@ class ToolsController < ApplicationController
 
   def sdp_index
     @phases = SDPPhase.all
+    @provisions = SDPTask.find(:all, :conditions=>"iteration='P'", :order=>'title')
     @total  = @phases.inject(0) { |sum, p| p.balancei+sum}
+    tasks2010 = SDPTask.find(:all, :conditions=>"iteration='2010'")
+    tasks2011 = SDPTask.find(:all, :conditions=>"iteration='2011'")
+    operational = round_to_hour(tasks2011.inject(0) { |sum, t| t.initial*0.11111111111+sum})
+    @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + tasks2011.inject(0) { |sum, t| t.initial+sum} + operational
+    @provisions.each { |p|
+      calculate_provision(p,@operational_total,operational)
+      }
   end
 
   def sdp_yes_check
@@ -79,12 +87,36 @@ class ToolsController < ApplicationController
   end
 
   def requests_ended_check
-    @requests = Request.find(:all, :conditions=>"resolution='ended'")
+    reqs = Request.find(:all, :conditions=>"resolution='ended'")
     @tasks = []
-    @requests.each { |r|
+    reqs.each { |r|
       @tasks += SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}' and remaining > 0")
       }
+    ids = @tasks.collect {|t| t.request_id}.uniq.join(',')
+    if ids == ""
+      @requests = []
+    else
+      @requests = Request.find(:all, :conditions=>"request_id in (#{ids})")
+    end
   end
+
+  def requests_should_be_ended_check
+    reqs = Request.find(:all, :conditions=>"status='assigned' and resolution!='ended'")
+    @tasks = []
+    reqs.each { |r|
+      tmp = SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}'")
+      remaining = tmp.inject(0.0)  { |sum, t| sum+t.remaining}
+      @tasks += tmp if remaining == 0
+      }
+    ids = @tasks.collect {|t| t.request_id}.uniq.join(',')
+    if ids == ""
+      @requests = []
+    else
+      @requests = Request.find(:all, :conditions=>"request_id in (#{ids})", :order=>"assigned_to")
+    end
+  end
+
+
 
   def complexity_check
     @requests = Request.all
@@ -94,6 +126,50 @@ class ToolsController < ApplicationController
       }
   end
 
+  def sdp_people
+    tasks = SDPTask.find(:all, :conditions=>"iteration!='HO' and iteration!='P'")
+    @trig  = tasks.collect { |t| t.collab }.uniq
+    @people = []
+    @trig.each { |trig|
+      tasks   = SDPTask.find(:all, :conditions=>"collab='#{trig}' and iteration!='HO' and iteration!='P'")
+      initial = tasks.inject(0.0) { |sum, t| sum+t.assigned}
+      balance = tasks.inject(0.0) { |sum, t| sum+t.balancea}
+      if initial > 0
+        percent   = ((balance / initial)*100 / 0.1).round * 0.1
+        @people << [trig,initial, balance, percent]
+      else
+        @people << [trig,initial, balance, 0]
+      end
+      }
+    @people = @people.sort_by { |p| [-p[3],-p[1]]}
+  end
+
+private
+
+  def round_to_hour(f)
+    (f/0.125).round * 0.125
+  end
+
+  def calculate_provision(p, total, operational)
+    case p.title
+      when 'Project Management'
+        p.difference = round_to_hour(total * 0.09)-p.initial
+      when 'Risks'
+        p.difference = round_to_hour(total * 0.04)-p.initial
+      when 'Pilotage Operationnel'
+        p.difference = operational - p.initial
+      when 'Quality Assurance'
+        p.difference = 0
+      when 'Quality Assurance 2'
+        p.difference = round_to_hour(total * 0.02)-p.initial-49.625
+      when 'Continuous Improvement'
+        p.difference = round_to_hour(total * 0.05)-p.initial
+      else
+        p.difference = 0
+    end
+    p.initial_should_be = p.initial + p.difference
+    p.reevaluated_should_be = p.reevaluated + p.difference
+  end
 
 end
 
