@@ -54,26 +54,22 @@ class ToolsController < ApplicationController
     Mailer::deliver_mail("mfaivremacon@sqli.com")
   end
   
+  def sdp_import
+  end
+  
   def do_sdp_upload
     post = params[:upload]
     name =  post['datafile'].original_filename
     directory = "public/data"
     path = File.join(directory, name)
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
-    sdp = SDP.new
-    SDP.import(path)
-    # transform the Report into a Request
-    sdp.lines.each { |line|
-      # get it by title if it exist, else create it
-      r = SDPPhase.find_by_request_id(req.id)
-      r = Request.create(:request_id=>req.id) if not r
-      r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
-      r.save
-      }
+    sdp = SDP.new(path)
+    sdp.import
     redirect_to '/tools/sdp_index'
   end
   
   def sdp_index
+    @phases = SDPPhase.all
   end
   
 end
