@@ -4,9 +4,10 @@ class SDPTask < ActiveRecord::Base
 
   def initialize
     super
-    @initial_should_be  = 0.0
+    @initial_should_be      = 0.0
     @reevaluated_should_be  = 0.0
-    @difference = 0.0
+    @difference             = 0.0
   end
 
 end
+
