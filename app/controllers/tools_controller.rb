@@ -69,16 +69,29 @@ class ToolsController < ApplicationController
   end
 
   def sdp_index
-    @phases = SDPPhase.all
+    @phases     = SDPPhase.all
     @provisions = SDPTask.find(:all, :conditions=>"iteration='P'", :order=>'title')
-    @total  = @phases.inject(0) { |sum, p| p.balancei+sum}
-    tasks2010 = SDPTask.find(:all, :conditions=>"iteration='2010'")
-    tasks2011 = SDPTask.find(:all, :conditions=>"iteration='2011'")
+    @balancei   = @phases.inject(0) { |sum, p| p.balancei+sum}
+    tasks2010   = SDPTask.find(:all, :conditions=>"iteration='2010'")
+    tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
     operational = round_to_hour(tasks2011.inject(0) { |sum, t| t.initial*0.11111111111+sum})
     @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + tasks2011.inject(0) { |sum, t| t.initial+sum} + operational
+    @remaining  = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
+    @remaining_time = ((@remaining/14/18)/0.01).round * 0.01
+    @theorical_management = round_to_hour((20+10+1.5*14+2*3)*@remaining_time)
+    @theorical_remaining_management = round_to_hour(@theorical_management-@theorical_management*(31-Date.today.day)/31)
+    @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining
+    @real_balance = @balancei+(@remaining_management-@theorical_remaining_management)
+    @sold = @operational_total
+    @provisions_remaining = 0
     @provisions.each { |p|
       calculate_provision(p,@operational_total,operational)
+      @sold += p.initial_should_be
+      if p.title == 'Operational Management' or p.title == 'Project Management'
+        @provisions_remaining += p.reevaluated_should_be
+      end
       }
+    @real_balance_and_provisions = @real_balance+@provisions_remaining
   end
 
   def sdp_yes_check
@@ -156,11 +169,11 @@ private
         p.difference = round_to_hour(total * 0.09)-p.initial
       when 'Risks'
         p.difference = round_to_hour(total * 0.04)-p.initial
-      when 'Pilotage Operationnel'
+      when 'Operational Management'
         p.difference = operational - p.initial
-      when 'Quality Assurance'
+      when '(OLD) Quality Assurance'
         p.difference = 0
-      when 'Quality Assurance 2'
+      when 'Quality Assurance'
         p.difference = round_to_hour(total * 0.02)-p.initial-49.625
       when 'Continuous Improvement'
         p.difference = round_to_hour(total * 0.05)-p.initial
