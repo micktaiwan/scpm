@@ -1,5 +1,5 @@
 # import SDP
-# make a SDP export to Excel, delete the 2 first lines and save it as *.csv
+# make a SDP export to Excel and save it as *.csv
 #Identifiant,Phase/Activité/Tâche,Charge,,,Cons.,Reste à Faire,Charge révisée,Charge acquise,Itération,Collab,Solde,,
 #,,estimée,Ré-évaluée,Attribuée,,,,,,,Initial,Ré-évalué,Attribué
 
@@ -28,6 +28,11 @@ class SDP
 
   def import
     @reader = CSV.open(@path, 'r')
+
+    # skip 2 first lines
+    @reader.shift
+    @reader.shift
+
     @state = :init
     while true
       if @next_row == nil
