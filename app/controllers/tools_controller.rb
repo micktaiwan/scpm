@@ -114,7 +114,7 @@ class ToolsController < ApplicationController
   end
 
   def requests_should_be_ended_check
-    reqs = Request.find(:all, :conditions=>"status='assigned' and resolution!='ended'")
+    reqs = Request.find(:all, :conditions=>"status='assigned' and resolution!='ended' and resolution!='aborted'")
     @tasks = []
     reqs.each { |r|
       tmp = SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}'")
@@ -129,7 +129,7 @@ class ToolsController < ApplicationController
     end
   end
 
-  def complexity_check
+  def workload_check
     @requests = Request.all
     @tasks = []
     @requests.each { |r|

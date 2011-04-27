@@ -32,7 +32,9 @@ class SDP
     # skip 2 first lines
     @reader.shift
     @reader.shift
-
+    ActiveRecord::Base.connection.execute("TRUNCATE sdp_phases")
+    ActiveRecord::Base.connection.execute("TRUNCATE sdp_activities")
+    ActiveRecord::Base.connection.execute("TRUNCATE sdp_tasks")
     @state = :init
     while true
       if @next_row == nil
@@ -72,8 +74,8 @@ private
   def create_phase
     t = sanitize(@row[TITLE])
     return if t == nil
-    p = SDPPhase.find_by_title(t)
-    p = SDPPhase.new if not p
+    #p = SDPPhase.find_by_title(t)
+    p = SDPPhase.new# if not p
     p.title = t
     populate(p)
     p.save
@@ -83,8 +85,8 @@ private
   def create_activity
     t = sanitize(@row[TITLE])
     return if t == nil
-    p = SDPActivity.find_by_title_and_phase_id(t,@current_phase.id)
-    p = SDPActivity.new if not p
+    #p = SDPActivity.find_by_title_and_phase_id(t,@current_phase.id)
+    p = SDPActivity.new# if not p
     p.phase_id = @current_phase.id
     p.title = t
     populate(p)
@@ -95,8 +97,8 @@ private
   def create_task
     t = sanitize(@row[TITLE])
     return if t == nil
-    p = SDPTask.find_by_sdp_id(@row[ID])
-    p = SDPTask.new if not p
+    #p = SDPTask.find_by_sdp_id(@row[ID])
+    p = SDPTask.new# if not p
     p.phase_id    = @current_phase.id
     p.activity_id = @current_activity.id
     p.sdp_id = @row[ID]
@@ -147,3 +149,4 @@ end
 #i = Sdp.new('C:\Users\faivremacon\My Documents\Downloads\SDP.csv')
 #i.import
 #=end
+
