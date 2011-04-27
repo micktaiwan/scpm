@@ -1,4 +1,5 @@
 <%= link_to('SDP Import',       {:controller=>'tools', :action=>'sdp_import'}, {:class=>'btnlnk'}) %>
+<%= link_to('SDP Add',          {:controller=>'tools', :action=>'sdp_add'}, {:class=>'btnlnk'}) %>
 <%= link_to('People',           {:controller=>'tools', :action=>'sdp_people'}, {:class=>'btnlnk'}) %>
 <%= link_to('CHECK RMT SDP yes',{:controller=>'tools', :action=>'sdp_yes_check'}, {:class=>'btnlnk'}) %>
 <%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}, {:class=>'btnlnk'}) %>
@@ -24,7 +25,7 @@
 <tr><td>Initial Balance:</td><td><%= @balancei %> (theorical real: <%=@real_balance%>, plus provisions: <%=@real_balance_and_provisions%>)</td></tr>
 <tr><td>Operational remaining:</td><td> <%= @remaining %></td></tr>
 <tr><td>Remaining time:</td><td> <%= @remaining_time %> months</td></tr>
-<tr><td>Theorical remaining management:</td><td> <%= @theorical_management %> (remaining: <%= @theorical_remaining_management %>)</td></tr>
+<tr><td>Theorical remaining management:</td><td> <%= @theorical_management %></td></tr>
 <tr><td>Operational Total:</td><td> <%= @operational_total %></td></tr>
 <tr><td>Sold:</td><td> <%= @sold %></td></tr>
 </table><br/>

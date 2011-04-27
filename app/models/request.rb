@@ -39,10 +39,48 @@ class Request < ActiveRecord::Base
   "M3-M5" 		=> 1,
   "M5-M10" 		=> 2,
   "Post-M10" 	=> 3,
-  "N/A" 		=> 0
+  "N/A" 		  => 0
   }
 
-  Loads = [
+  Loads2011 = [
+    # WP 1.1
+    [4.0, 4.75, 7.0],
+    [3.25, 3.875, 5.375],
+    [2.625, 3.5, 5.875],
+    [4.0, 4.75, 7.0],
+    # WP 1.2
+    [3.0, 3.5, 4.0],
+    [5.5, 7.0, 9.375],
+    [5.375, 6.0, 7.0],
+    [5.375, 7.0, 9.25],
+    # WP 2
+    [5.125, 7.75, 11.875],
+    # WP 3
+    [8.5, 16.25, 22.5],
+    # WP 4
+    [5.5, 7.625, 12.125],
+    # WP 5
+    [10.75, 23.125, 42.5],
+    # WP 6
+    [4.75, 11.25, 20.75],
+    [3.375, 10.375, 21.625],
+    [2.0, 5.875, 14.375],
+    [2.75, 13.5, 31.5],
+    [7.875, 11.875, 16.375],
+    # WP 1.1 CV
+    [0.5, 0.5, 0.625],
+    [0.875, 0.875, 1.375],
+    [0.375, 0.375, 0.5],
+    [1.75, 2.25, 2.75],
+    # WP 1.2 CV
+    [0.5, 0.5, 0.5],
+    [1.75, 2.25, 2.75],
+    [1.75, 2.75, 3.625],
+    [2.75, 3.625, 4.5]
+    ]
+
+
+  Loads2010 = [
     # WP 1.1
     [4.5,5.25,7.75],
     [3.625,4.25,6],
@@ -102,7 +140,8 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    Loads[wp_index(self.work_package)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    # TODO get iteration and define workload in fonction of it (2010 or 2011)
+    Loads2011[wp_index(self.work_package)+milestone_index(self.milestone)][comp_index(self.complexity)]
   end
 
   # calculate a start date based on the milestone date
@@ -194,16 +233,34 @@ class Request < ActiveRecord::Base
   def progress_status
     return case self.resolution
       when 'not started'; 4
-      when 'planned'; 3
+      when 'planned';     3
       when 'in progress'; 2
-      when 'ended'; 1
-      else; 0
+      when 'ended';       1
+      else;               0
     end
   end
 
   def sdp_tasks
     SDPTask.find(:all, :conditions=>"request_id='#{self.request_id}'")
   end
+
+  def sdp_phase_id
+    SdpDB.sdp_phase_id(self.work_package)
+  end
+
+  def sdp_proposal_id
+    SdpDB.sdp_proposal_id(self.work_package)
+  end
+
+  def sdp_domain_id
+    SdpDB.sdp_domain_id(self.workstream)
+  end
+
+  def sdp_activity_id
+    m = (self.milestone=="N/A") ? "All" : self.milestone
+    SdpDB.sdp_activity_id([m,self.work_package])
+  end
+
 
 private
 

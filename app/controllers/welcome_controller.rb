@@ -69,10 +69,10 @@ class WelcomeController < ApplicationController
 private
 
   def get_anomalies
-    @not_started      = Request.find(:all, :conditions=>["start_date != '' and start_date <= ? and resolution!='in progress' and resolution!='ended'", Date.today()], :order=>"start_date")
+    @not_started      = Request.find(:all, :conditions=>["start_date != '' and start_date <= ? and resolution!='in progress' and resolution!='ended' and resolution!='aborted'", Date.today()], :order=>"start_date")
     @null_start_date  = Request.find(:all, :conditions=>["start_date = '' and status='assigned'"], :order=>"start_date")
     @null_milestones  = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress'"], :order=>"start_date")
-    @past_milestones  = Request.find(:all, :conditions=>["((actual_m_date != '' and actual_m_date < ?) or (actual_m_date = '' and milestone_date != '' and milestone_date < ?)) and resolution!='ended'", Date.today(), Date.today()], :order=>"milestone_date")
+    @past_milestones  = Request.find(:all, :conditions=>["((actual_m_date != '' and actual_m_date < ?) or (actual_m_date = '' and milestone_date != '' and milestone_date < ?)) and resolution!='ended' and resolution!='aborted'", Date.today(), Date.today()], :order=>"milestone_date")
     @ended_without_amdate = Request.find(:all, :conditions=>["status !='cancelled' and resolution='ended' and actual_m_date=''"], :order=>"start_date")
   end
 
