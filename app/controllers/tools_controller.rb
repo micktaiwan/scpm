@@ -69,6 +69,7 @@ class ToolsController < ApplicationController
   end
 
   def sdp_index
+    return if SDPTask.count.zero?
     @phases     = SDPPhase.all
     @provisions = SDPTask.find(:all, :conditions=>"iteration='P'", :order=>'title')
     @balancei   = @phases.inject(0) { |sum, p| p.balancei+sum}
@@ -78,8 +79,8 @@ class ToolsController < ApplicationController
     @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + tasks2011.inject(0) { |sum, t| t.initial+sum} + operational
     @phases.each { |p|  p.gain_percent = (p.balancei/p.initial*100/0.1).round * 0.1 }
     @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
-    @remaining_time       = (@remaining/13/18/0.01).round * 0.01
-    @theorical_management = round_to_hour((20+10+1.5*13+2*3)*@remaining_time)
+    @remaining_time       = (@remaining/13.55/18/0.01).round * 0.01
+    @theorical_management = round_to_hour((20+10+1.5*13.55+2*3)*@remaining_time)
     @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining
     @real_balance         = @balancei-(@theorical_management-@remaining_management)
     @sold                 = @operational_total
