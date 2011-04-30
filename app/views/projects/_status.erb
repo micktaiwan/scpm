@@ -1,0 +1,51 @@
+<div id='status_<%=status.id%>'><div class='status_explanation'>
+<% if status.updated_at %>
+  <div class='status_date'><%=status.updated_at%>
+  (<b><%=time_ago_in_words(status.updated_at)%> - w<%=status.updated_at.to_date.cweek%></b>)
+  <%=html_status(status.status)%>
+  <%=link_to_function('Edit', "edit(#{status.id}, #{status.is_current?}, #{status.project.has_requests});")%>
+  <% if current_user.has_role?('Admin')%>
+    <%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'projects', :action=>'cut_status', :id=>status.id})%>
+    <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'projects',
+     :action=>'destroy_status', :id=>status.id}, :confirm=>"Sure?",
+     :success=>"new Effect.SwitchOff('status_#{status.id}');")%>
+  <%end%>
+</div>
+<br/>
+<% end %>
+Last UP3P update:<%=status.ereporting_date%>
+<table><tr><td>
+<%=my_simple_format(status.explanation)%>
+</td><td class='diff'><br/>
+<%=status.explanation_diffs.to_s%>
+</td></tr>
+<tr><td valign='top'>
+<h4>Last Change</h4>
+<%=my_simple_format(status.last_change)%>
+</td><td class='diff'><br/><br/><br/>
+<%=status.last_change_diffs.to_s%>
+</td></tr></table>
+<br/>
+<% if current_user.has_role?('Admin')%>
+  <%= link_to_remote('Mark as read', {:url=>{:controller=>'projects',
+   :action=>'mark_as_read', :id=>@project.id},
+   :success=>"$('markasread').fade();"},
+   {:class=>'btnlnk special', :id=>'markasread'}) %>
+<% end %>
+
+<% if status.project %>
+    <h3>Status change reason (<%=html_status(status.project.old_status)%> => <%=html_status(status.project.last_status)%>)</h3>
+    <%=my_simple_format(status.reason)%>
+    <h3>Operational Alert</h3>
+    <%=my_simple_format(status.operational_alert)%>
+    <h3>Actions</h3>
+    <%=my_simple_format(status.actions)%>
+    <% if status.status > 1 and status.actions == "" %>
+    <%=image_tag("alert.gif")%>
+    <% end %>
+    <h3>Feedback</h3>
+    <%=my_simple_format(status.feedback)%>
+<% end %>
+</div>
+</div>
+

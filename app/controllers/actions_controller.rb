@@ -47,7 +47,7 @@ class ActionsController < ApplicationController
     session[:request_cut] = nil
   end
 
-  private
+private
 
   def get_infos
     @people = Person.find(:all, :conditions=>"has_left=0", :order=>"name")

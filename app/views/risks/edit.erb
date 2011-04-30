@@ -1,0 +1,8 @@
+<h2>Risk Edit</h2>
+
+<%= error_messages_for :risk %>
+<% form_for @risk, :url=>{:action=>'update', :id=>@risk.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'OK' %></p>
+<% end -%>

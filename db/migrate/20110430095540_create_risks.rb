@@ -7,6 +7,7 @@ class CreateRisks < ActiveRecord::Migration
       t.text    :context
       t.text    :risk
       t.text    :consequence
+      t.text    :actions
       t.timestamps
     end
   end

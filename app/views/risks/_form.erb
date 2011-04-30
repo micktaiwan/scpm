@@ -1,0 +1,24 @@
+<%= hidden_field :risk, :project_id %>
+
+<p><%= label_tag 'project' %>
+<%= select(:risk, :project_id, @projects_select, :include_blank=>"=== No project ===") %>
+</p>
+
+<p><%= label_tag 'context' %>
+<%= text_area :risk, :context, {:rows=>3} %></p>
+
+<p><%= label_tag 'risk' %>
+<%= text_area :risk, :risk, {:rows=>3} %></p>
+
+<p><%= label_tag 'probability' %>
+<%= select :risk, :probability, Risk::PROBABILITY %></p>
+
+<p><%= label_tag 'consequence' %>
+<%= text_area :risk, :consequence, {:rows=>3} %></p>
+
+<p><%= label_tag 'impact' %>
+<%= select :risk, :impact, Risk::IMPACT %></p>
+
+<p><%= label_tag 'actions' %>
+<%= text_area :risk, :actions, {:rows=>3} %></p>
+

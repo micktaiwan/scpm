@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110417201221) do
+ActiveRecord::Schema.define(:version => 20110430095540) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -206,6 +206,18 @@ ActiveRecord::Schema.define(:version => 20110417201221) do
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
+
+  create_table "risks", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "probability"
+    t.integer  "impact"
+    t.text     "context"
+    t.text     "risk"
+    t.text     "consequence"
+    t.text     "actions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "roles", :force => true do |t|
     t.string "name"
