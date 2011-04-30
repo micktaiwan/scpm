@@ -9,6 +9,8 @@ require File.join(File.dirname(__FILE__), 'boot')
 Rails::Initializer.run do |config|
   config.time_zone = 'UTC'
   config.action_mailer.delivery_method = :sendmail
+  config.gem 'ruby-net-ldap', :version => '0.0.4', :lib => 'net/ldap'
+  config.gem 'differ'
 end
 
 ActionMailer::Base.sendmail_settings = {
