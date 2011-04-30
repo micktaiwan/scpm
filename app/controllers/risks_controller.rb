@@ -23,6 +23,7 @@ class RisksController < ApplicationController
   def update
     r = Risk.find(params[:id])
     r.update_attributes(params[:risk])
+    Mailer::deliver_risk_change(r)
     redirect_to "/projects/show/#{r.project_id}"
   end
 

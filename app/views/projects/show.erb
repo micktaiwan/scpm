@@ -96,7 +96,7 @@ function add(id, same_week, has_requests) {
   <% if  suggested_status < @status.status %>
     <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are not identified</strong>
   <% end %>
-  <% if  suggested_status > @status.status %>
+  <% if @status.status > 0 and suggested_status > @status.status %>
     <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are too high</strong>
   <% end %>
 
