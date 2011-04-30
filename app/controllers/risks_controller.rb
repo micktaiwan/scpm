@@ -11,6 +11,7 @@ class RisksController < ApplicationController
       render :action => 'new', :project_id=>params[:risk][:project_id]
       return
     end
+    Mailer::deliver_risk_change(@risk)
     redirect_to("/projects/show/#{@risk.project_id}")
   end
 
