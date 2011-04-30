@@ -53,7 +53,7 @@ private
   def sanitize(name)
     return nil if not name
     name.gsub!(160.chr,"")
-    name
+    name.strip
   end
 
   def populate(p)
