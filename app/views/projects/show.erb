@@ -91,7 +91,14 @@ function add(id, same_week, has_requests) {
   </table>
 
   Suggested status:
-  <%= html_status(@project.suggested_status) %>
+  <% suggested_status = @project.suggested_status %>
+  <%= html_status(suggested_status) %>
+  <% if  suggested_status < @status.status %>
+    <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are not identified</strong>
+  <% end %>
+  <% if  suggested_status > @status.status %>
+    <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are too high</strong>
+  <% end %>
 
   <h3>Status</h3>
   <%= render(:partial=>'status', :object=>@status) %>
