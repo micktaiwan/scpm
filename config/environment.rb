@@ -11,6 +11,7 @@ Rails::Initializer.run do |config|
   config.action_mailer.delivery_method = :sendmail
   config.gem 'ruby-net-ldap', :version => '0.0.4', :lib => 'net/ldap'
   config.gem 'differ'
+  config.gem 'will_paginate'
 end
 
 ActionMailer::Base.sendmail_settings = {
