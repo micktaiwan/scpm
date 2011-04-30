@@ -57,7 +57,7 @@ function add(id, same_week, has_requests) {
 <br/>
 <% if @project.requests.size > 0 or @project.has_status %>
 
-  <h3>Frieze</h3>
+  <h3>Timeline</h3>
 
   <div class="milestone_bar">
   <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>

@@ -48,7 +48,7 @@
 <%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %>
 
 <% if current_user.has_role?('Admin') %>
-<%= link_to('Update', {:controller=>'welcome', :action=>'update'}, {:class=>'menu'}) %>
+<%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>'menu'}) %>
 <%= link_to('Tools', {:controller=>'tools', :action=>'index'}, {:class=>'menu'}) %>
 <% end %>
 
