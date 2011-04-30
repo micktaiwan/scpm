@@ -15,6 +15,7 @@ class Project < ActiveRecord::Base
   has_many    :notes,       :dependent => :destroy
   has_many    :project_people
   has_many    :responsibles, :through=>:project_people
+  has_many    :risks,       :order=>'id', :dependent=>:destroy
 
   def visible_actions(user_id)
     if Person.find(user_id).is_supervisor == 0
@@ -252,6 +253,14 @@ class Project < ActiveRecord::Base
       a.save
       }
   end
+
+  def move_risks_to_project(p)
+    self.risks.each { |a|
+      a.project_id = p.id
+      a.save
+      }
+  end
+
 
   def open_requests
     self.requests.select { |r| r.status != 'cancelled' and r.status != 'removed' and r.resolution != "ended" and r.resolution != 'aborted'} # good to keep "to be validated" requests

@@ -156,6 +156,7 @@ class ProjectsController < ApplicationController
             r.project.move_amendments_to_project(p)
             r.project.move_notes_to_project(p)
             r.project.move_statuses_to_project(p)
+            r.project.move_risks_to_project(p)
           else
             @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating and moving only request (not status and actions, etc...)<br/>"
           end
@@ -168,6 +169,7 @@ class ProjectsController < ApplicationController
             r.project.move_amendments_to_project(projects[0])
             r.project.move_notes_to_project(projects[0])
             r.project.move_statuses_to_project(projects[0])
+            r.project.move_risks_to_project(projects[0])
           else
             @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving only request (not status and actions, etc...)<br/>"
           end
