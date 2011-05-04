@@ -75,8 +75,10 @@ class ToolsController < ApplicationController
     @balancei   = @phases.inject(0) { |sum, p| p.balancei+sum}
     tasks2010   = SDPTask.find(:all, :conditions=>"iteration='2010'")
     tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
-    operational = round_to_hour(tasks2011.inject(0) { |sum, t| t.initial*0.11111111111+sum})
-    @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + tasks2011.inject(0) { |sum, t| t.initial+sum} + operational
+    op2011      = tasks2011.inject(0) { |sum, t| t.initial+sum}
+    operational = round_to_hour(op2011*0.11111111111)
+    puts operational
+    @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
     @phases.each { |p|  p.gain_percent = (p.balancei/p.initial*100/0.1).round * 0.1 }
     @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
     @remaining_time       = (@remaining/13.55/18/0.01).round * 0.01
@@ -178,7 +180,9 @@ private
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total * 0.02)-p.initial-49.625
+        p.difference = round_to_hour(total * 0.02)-p.initial-47.125
+        puts total
+        puts round_to_hour(total * 0.02)
       when 'Continuous Improvement'
         p.difference = round_to_hour(total * 0.05)-p.initial
       else
