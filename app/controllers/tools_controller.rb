@@ -84,7 +84,6 @@ class ToolsController < ApplicationController
     @remaining_time       = (@remaining/13.55/18/0.01).round * 0.01
     @theorical_management = round_to_hour((20+10+1.5*13.55+2*3)*@remaining_time)
     @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining
-    @real_balance         = @balancei-(@theorical_management-@remaining_management)
     @sold                 = @operational_total
     @provisions_remaining = 0
     @provisions.each { |p|
@@ -92,9 +91,13 @@ class ToolsController < ApplicationController
       @sold += p.initial_should_be
       if p.title == 'Operational Management' or p.title == 'Project Management'
         @provisions_remaining += p.reevaluated_should_be
+      elsif p.title == 'Risks'
+        @risks_remaining = p.reevaluated_should_be
       end
       }
-    @real_balance_and_provisions = @real_balance+@provisions_remaining
+    @real_balance_and_provisions  = @balancei-(@theorical_management-@remaining_management)-@risks_remaining
+    @real_balance                 = @real_balance_and_provisions - @provisions_remaining 
+    # Management provisions are already in the management total
   end
 
   def sdp_yes_check
