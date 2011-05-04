@@ -59,7 +59,8 @@ module SdpDB
     'EM'=>1593,
     'EI'=>1601,
     'EDC'=>1627,
-    'EMNC'=>1777
+    'EMNC'=>1777,
+    'EMNB'=>2338
     }
 
   def self.sdp_phase_id(name)
@@ -70,13 +71,13 @@ module SdpDB
 
   def self.sdp_proposal_id(name)
     rv = PhaseDB[name]
-    raise "SDPPhase '#{name}' unknown" if not rv
+    raise "Proposal '#{name}' unknown" if not rv
     rv[1]
   end
 
   def self.sdp_domain_id(name)
     rv = DomainDB[name]
-    raise "SDPPhase '#{name}' unknown" if not rv
+    raise "Domain '#{name}' unknown" if not rv
     rv
   end
 
