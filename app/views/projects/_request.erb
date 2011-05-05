@@ -10,12 +10,15 @@
 <%= request.foreseen_end_date_str %>
 </span>
 
-<span style="background:#88F">
 <% if request.resolution != 'not started' and request.resolution != 'not planned' %>
 <% tasks = request.sdp_tasks %>
+<span style="background:#AAF">
 RAF: <%= tasks.inject(0) { |sum, t| t.remaining+sum } %>
-<% end %>
 </span>
+<span style="background:#AFA">
+Gain: <%= tasks.inject(0) { |sum, t| t.balancei+sum } %>
+</span>
+<% end %>
 
 <% if request.resolution=="ended" and request.end_date %>
 <strong>No end date</strong>

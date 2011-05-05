@@ -7,7 +7,11 @@ module ApplicationHelper
     return "" if not text
     text.split("\n").join("<br/>") + "<br/>"
   end
-
+  
+  def my_time(time)
+    time.strftime("%d-%b-%Y %H:%m")
+  end
+  
   def menu_style(c,a)
     if c == controller_name and (a == '*' or a == action_name)
       'menu active'

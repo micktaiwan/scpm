@@ -1,3 +1,10 @@
+06-May-2011
+===========
+
+- Carrier return for risk display
+- SDP Balance is displayed along with requests
+- displaying risk creation and modification dates
+
 02-May-2011
 ===========
 

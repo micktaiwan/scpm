@@ -1,12 +1,12 @@
 <tr>
 <td align="center"<%if risk.probability>=4 %> bgcolor="#A00"<%elsif risk.severity>=8  %> bgcolor="#F00"<%elsif risk.severity>=6 %> bgcolor="#FA0"<%elsif risk.severity>=3 %> bgcolor="#FF9"<%else%> bgcolor="#AFA"<%end%>><%= risk.severity %></td>
-<td><%= risk.context %></td>
-<td><%= risk.risk %></td>
+<td><%= my_simple_format(risk.context) %></td>
+<td><%= my_simple_format(risk.risk) %></td>
 <td align="center"<%if risk.probability>=4%> bgcolor="#F55"<%end%>><%= risk.probability %></td>
-<td><%= risk.consequence %></td>
+<td><%= my_simple_format(risk.consequence) %></td>
 <td align="center"><%= risk.impact %></td>
-<td<%if (risk.probability>=4 or risk.severity>=6) and risk.actions==""%> bgcolor="#F55"<%end%>><%= risk.actions %></td>
+<td<%if (risk.probability>=4 or risk.severity>=6) and risk.actions==""%> bgcolor="#F55"<%end%>><%= my_simple_format(risk.actions) %></td>
+<td><%= my_time(risk.created_at) %></td>
+<td><%= my_time(risk.updated_at) %></td>
 <td><%= link_to('Edit', :controller=>'risks', :action=>'edit', :id=>risk.id) %></td>
 </tr>
-
-

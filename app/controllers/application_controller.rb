@@ -12,10 +12,15 @@ class ApplicationController < ActionController::Base
   layout 'general'
   include Authentication
   before_filter :log_action
+  before_filter :set_timezone
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
-
+  
+  def set_timezone
+    Time.zone = 'Paris'
+  end
+  
   def log_action
     return if controller_name == "chat" and (action_name == "refresh_sessions" or action_name == "refresh")
     @action_log                   = Log.new
