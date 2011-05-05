@@ -8,8 +8,8 @@ module ApplicationHelper
     text.split("\n").join("<br/>") + "<br/>"
   end
   
-  def my_time(time)
-    time.strftime("%d-%b-%Y %H:%m")
+  def my_time(t)
+    t.strftime("%d-%b-%Y %H:%M")
   end
   
   def menu_style(c,a)
