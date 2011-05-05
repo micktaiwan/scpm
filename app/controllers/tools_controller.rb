@@ -79,7 +79,7 @@ class ToolsController < ApplicationController
     operational = round_to_hour(op2011*0.11111111111)
     puts operational
     @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
-    @phases.each { |p|  p.gain_percent = (p.balancei/p.initial*100/0.1).round * 0.1 }
+    @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
     @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
     @remaining_time       = (@remaining/13.55/18/0.01).round * 0.01
     @theorical_management = round_to_hour((20+10+1.5*13.55+2*3)*@remaining_time)
