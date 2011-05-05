@@ -81,11 +81,12 @@ class ToolsController < ApplicationController
     @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
     @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
     @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
-    @remaining_time       = (@remaining/13.55/18/0.01).round * 0.01
-    @theorical_management = round_to_hour((20+10+1.5*13.55+2*3)*@remaining_time)
+    @remaining_time       = (@remaining/14/18/0.01).round * 0.01
+    @theorical_management = round_to_hour((20+10+1.5*14+2*3)*@remaining_time)
     @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining
     @sold                 = @operational_total
     @provisions_remaining = 0
+    @risks_remaining      = 0
     @provisions.each { |p|
       calculate_provision(p,@operational_total,operational)
       @sold += p.initial_should_be
