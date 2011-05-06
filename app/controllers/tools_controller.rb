@@ -107,7 +107,7 @@ class ToolsController < ApplicationController
   end
 
   def requests_ended_check
-    reqs = Request.find(:all, :conditions=>"resolution='ended'")
+    reqs = Request.find(:all, :conditions=>"resolution='ended' or resolution='aborted'")
     @tasks = []
     reqs.each { |r|
       @tasks += SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}' and remaining > 0")

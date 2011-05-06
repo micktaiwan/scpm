@@ -1,24 +1,43 @@
 <%= hidden_field :risk, :project_id %>
 
 <p><%= label_tag 'project' %>
-<%= select(:risk, :project_id, @projects_select, :include_blank=>"=== No project ===") %>
-</p>
+<%= select(:risk, :project_id, @projects_select, :include_blank=>"=== No project ===") %></p>
 
 <p><%= label_tag 'context' %>
-<%= text_area :risk, :context, {:rows=>3} %></p>
+<%= text_area :risk, :context, {:rows=>3} %>
+Context has already happen. It is the situation that leads to the risk.
+</p>
 
 <p><%= label_tag 'risk' %>
-<%= text_area :risk, :risk, {:rows=>3} %></p>
+<%= text_area :risk, :risk, {:rows=>3} %>
+The risk did not occur yet, that is the situation that we want to avoid (unless the situation happen, in that case this is a problem)
+</p>
 
 <p><%= label_tag 'probability' %>
-<%= select :risk, :probability, Risk::PROBABILITY %></p>
+<%= select :risk, :probability, Risk::PROBABILITY %><br/>
+Are we sure the risk will happen ?<br/>
+2 is a normal level risk, we must follow it carefully so that it does not happen, so we must have some actions already<br/>
+1 is less sure than 2. It could still happen, but the situation is still pretty good so that the risk do not occur. No need to define action.<br/>
+3 we are pretty sure the risk will occur. This is bad. We must act now, we still have a chance to avoid it<br/>
+0 is for a risk that we avoided completely already.<br/>
+4 is for a risk we did not prevent, it is now an issue. In that case a corrective action must be done to reduce impact (if not already done).<br/>
+</p>
 
 <p><%= label_tag 'consequence' %>
-<%= text_area :risk, :consequence, {:rows=>3} %></p>
+<%= text_area :risk, :consequence, {:rows=>3} %>
+What situation we will be if the risk occur and what impact this will have on our business
+</p>
 
 <p><%= label_tag 'impact' %>
-<%= select :risk, :impact, Risk::IMPACT %></p>
+<%= select :risk, :impact, Risk::IMPACT %><br/>
+How bad the impact will be.<br/>
+1 is low. in general this is a risk we don't care too much about.<br/>
+2 is medium. This is serious<br/>
+3 is very bad for our business. This could lead to the project stop.
+</p>
 
 <p><%= label_tag 'actions' %>
-<%= text_area :risk, :actions, {:rows=>3} %></p>
+<%= text_area :risk, :actions, {:rows=>3} %>
+What actions we must do in order either to reduce the probability or the impact
+</p>
 
