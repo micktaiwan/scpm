@@ -1,6 +1,7 @@
 <div id='status_<%=status.id%>'><div class='status_explanation'>
 <% if status.updated_at %>
   <div class='status_date'><%=status.updated_at%>
+  <%= status.modifier.name if status.last_modifier %>
   (<b><%=time_ago_in_words(status.updated_at)%> - w<%=status.updated_at.to_date.cweek%></b>)
   <%=html_status(status.status)%>
   <%=link_to_function('Edit', "edit(#{status.id}, #{status.is_current?}, #{status.project.has_requests});")%>

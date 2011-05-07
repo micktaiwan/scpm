@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110430095540) do
+ActiveRecord::Schema.define(:version => 20110507114715) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20110430095540) do
     t.datetime "updated_at"
     t.text     "result"
     t.integer  "private",                    :default => 0
+    t.integer  "origin",                     :default => 0
   end
 
   create_table "amendments", :force => true do |t|
@@ -131,6 +132,7 @@ ActiveRecord::Schema.define(:version => 20110430095540) do
     t.string   "pwd"
     t.datetime "last_view"
     t.integer  "has_left",      :default => 0
+    t.integer  "sdp_id",        :default => -1
   end
 
   create_table "person_roles", :force => true do |t|
@@ -161,6 +163,7 @@ ActiveRecord::Schema.define(:version => 20110430095540) do
     t.string   "bpl"
     t.string   "ispl"
     t.datetime "read_date"
+    t.integer  "lifecycle",     :default => 0
   end
 
   create_table "requests", :force => true do |t|
@@ -300,6 +303,9 @@ ActiveRecord::Schema.define(:version => 20110430095540) do
     t.text     "explanation_diffs"
     t.text     "last_change_diffs"
     t.text     "last_change_excel"
+    t.integer  "last_modifier"
+    t.integer  "locked",            :default => 0
+    t.datetime "locked_time"
   end
 
   create_table "topics", :force => true do |t|

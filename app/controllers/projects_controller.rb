@@ -108,6 +108,8 @@ class ProjectsController < ApplicationController
     timestamps_off if params[:update] != '1'
     status = Status.find(params[:id])
     status.update_attributes(params[:status])
+    status.last_modifier = current_user.id
+    status.save
     p = status.project
     p.update_status(params[:status][:status]) if p.get_status.id == status.id # only if we are updating the last status
     p.calculate_diffs
@@ -224,6 +226,8 @@ class ProjectsController < ApplicationController
   def add_status
     project_id  = params[:status][:project_id]
     status      = Status.create(params[:status])
+    status.last_modifier = current_user.id
+    status.save
     p           = Project.find(project_id)
     p.update_status(params[:status][:status])
     p.calculate_diffs
