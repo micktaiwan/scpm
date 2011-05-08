@@ -3,5 +3,6 @@
 <% form_for :@myaction, :url=>{:action=>'create'} do |f| -%>
   <%= render(:partial => f) %>
   <p><label>&nbsp;</label>
+  <%= hidden_field(:myaction, :origin_id, :value=>current_user.id) %>
   <%= submit_tag 'Add' %></p>
 <% end -%>

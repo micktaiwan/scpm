@@ -261,6 +261,14 @@ class Project < ActiveRecord::Base
       }
   end
 
+  def move_all(p)
+    move_actions_to_project(p)
+    move_milestones_to_project(p)
+    move_amendments_to_project(p)
+    move_notes_to_project(p)
+    move_statuses_to_project(p)
+    move_risks_to_project(p)
+  end
 
   def open_requests
     self.requests.select { |r| r.status != 'cancelled' and r.status != 'removed' and r.resolution != "ended" and r.resolution != 'aborted'} # good to keep "to be validated" requests

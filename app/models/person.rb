@@ -16,6 +16,13 @@ class Person < ActiveRecord::Base
 
   attr_accessor :password
 
+  def short_name
+    arr = self.name.split(" ")
+    return self.name if arr.size < 2
+    arr[0] + " " + arr[1][0].chr + "."
+  end
+
+
   def has_role?(role)
     self.roles.count(:conditions => ['name = ?', role]) > 0
   end
@@ -40,7 +47,7 @@ class Person < ActiveRecord::Base
     Request.find(:all, :conditions => "assigned_to='#{self.rmt_user}' and status='assigned' and resolution!='closed' and resolution!='aborted'", :order=>"workstream, project_name")
   end
 
-  
+
   def load
     active_requests.inject(0.0) { |sum, r| sum + r.workload}
   end

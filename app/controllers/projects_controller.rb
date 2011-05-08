@@ -45,35 +45,22 @@ class ProjectsController < ApplicationController
 
   def filter
     pws = params[:ws]
-    if not pws
-      session[:project_filter_workstream] = nil
-    else
-      session[:project_filter_workstream] = "(#{pws.map{|t| "'#{t}'"}.join(',')})"
+    if not pws; session[:project_filter_workstream] = nil
+    else;       session[:project_filter_workstream] = "(#{pws.map{|t| "'#{t}'"}.join(',')})"
     end
-
     pst = params[:st]
-    if not pst
-      session[:project_filter_status] = nil
-    else
-      session[:project_filter_status] = "(#{pst.map{|t| "'#{t}'"}.join(',')})"
+    if not pst; session[:project_filter_status] = nil
+    else;       session[:project_filter_status] = "(#{pst.map{|t| "'#{t}'"}.join(',')})"
     end
-
     sup = params[:sup]
-    if not sup
-      session[:project_filter_supervisor] = nil
-    else
-      session[:project_filter_supervisor] = "(#{sup.map{|t| "'#{t}'"}.join(',')})"
+    if not sup; session[:project_filter_supervisor] = nil
+    else;       session[:project_filter_supervisor] = "(#{sup.map{|t| "'#{t}'"}.join(',')})"
     end
-
     qr = params[:qr]
-    if not qr
-      session[:project_filter_qr] = nil
-    else
-      session[:project_filter_qr] = qr.map {|t| t.to_i}
+    if not qr;  session[:project_filter_qr] = nil
+    else;       session[:project_filter_qr] = qr.map {|t| t.to_i}
     end
-
     session[:project_filter_text] = params[:text]
-
     redirect_to(:action=>'index')
   end
 
@@ -153,12 +140,7 @@ class ProjectsController < ApplicationController
           p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream)
           if r.project.requests.size == 1 # if that was the only request move all statuts and actions, etc.. to new project
             @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating and moving ALL<br/>"
-            r.project.move_actions_to_project(p)
-            r.project.move_milestones_to_project(p)
-            r.project.move_amendments_to_project(p)
-            r.project.move_notes_to_project(p)
-            r.project.move_statuses_to_project(p)
-            r.project.move_risks_to_project(p)
+            r.project.move_all(p)
           else
             @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating and moving only request (not status and actions, etc...)<br/>"
           end
@@ -166,12 +148,7 @@ class ProjectsController < ApplicationController
         else
           if r.project.requests.size == 1 # if that was the only request move all statuts and actions, etc.. to new project
             @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving ALL<br/>"
-            r.project.move_actions_to_project(projects[0])
-            r.project.move_milestones_to_project(projects[0])
-            r.project.move_amendments_to_project(projects[0])
-            r.project.move_notes_to_project(projects[0])
-            r.project.move_statuses_to_project(projects[0])
-            r.project.move_risks_to_project(projects[0])
+            r.project.move_all(projects[0])
           else
             @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => moving only request (not status and actions, etc...)<br/>"
           end

@@ -9,8 +9,6 @@ class WelcomeController < ApplicationController
     @sdp_cancelled    = Request.find(:all, :conditions=>["sdp='Yes' and status='cancelled'", Date.today()], :order=>"milestone_date")
     @not_performed    = Request.find(:all, :conditions=>["resolution='ended' and status!='performed' and status!='closed' and status!='cancelled'", Date.today()], :order=>"milestone_date")
     @next_milestones =  Request.find(:all, :conditions=>["resolution != 'ended' and  (milestone_date !='' and milestone_date <= ?)", Date.today()+10], :order=>"milestone_date")
-    @special =  Request.find(:all, :conditions=>["work_package in ('WP1.1 - Quality Control', 'WP1.2 - Quality Assurance') and status='new' and workstream = 'EDY'"], :order=>"milestone_date")
-    @y2011    =  Request.find(:all, :conditions=>["(start_date is null or start_date = '' or start_date>'2010-12-31') and (milestone_date is null or milestone_date > '2011-01-01') and status!='cancelled'"], :order=>"start_date")
     get_anomalies
   end
 
@@ -45,13 +43,6 @@ class WelcomeController < ApplicationController
     render(:layout=>false)
   end
 
-=begin
-  def progress
-    @all_mine = Request.find(:all, :conditions=>["workstream in ('EDS','EDG','EI','EM','EDC')"], :order=>"start_date")
-    @report   = Report.new(@all_mine)
-  end
-=end
-
   def reminders
     @all = Request.all
     get_anomalies
@@ -69,7 +60,7 @@ class WelcomeController < ApplicationController
 private
 
   def get_anomalies
-    @not_started      = Request.find(:all, :conditions=>["start_date != '' and start_date <= ? and resolution!='in progress' and resolution!='ended' and resolution!='aborted'", Date.today()], :order=>"start_date")
+    @not_started      = Request.find(:all, :conditions=>["start_date != '' and start_date <= ? and resolution!='in progress' and resolution!='ended' and resolution!='aborted' and status!='cancelled'  and status!='removed' and status!='to be validated'", Date.today()], :order=>"start_date")
     @null_start_date  = Request.find(:all, :conditions=>["start_date = '' and status='assigned'"], :order=>"start_date")
     @null_milestones  = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress'"], :order=>"start_date")
     @past_milestones  = Request.find(:all, :conditions=>["((actual_m_date != '' and actual_m_date < ?) or (actual_m_date = '' and milestone_date != '' and milestone_date < ?)) and resolution!='ended' and resolution!='aborted'", Date.today(), Date.today()], :order=>"milestone_date")

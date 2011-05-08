@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20110507114715) do
     t.datetime "updated_at"
     t.text     "result"
     t.integer  "private",                    :default => 0
-    t.integer  "origin",                     :default => 0
+    t.integer  "origin_id",                  :default => 0
   end
 
   create_table "amendments", :force => true do |t|

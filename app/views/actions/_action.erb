@@ -3,7 +3,7 @@
 <td><%= action.id %></td>
 
 <td>
-<% if action.person %><%= action.person.name %><% end %>
+<% if action.person %><%= action.person.short_name %><% end %>
 </td>
 
 <td>
@@ -15,6 +15,11 @@
 <td>
 <%= action.creation_date %>
 </td>
+
+<td>
+<% if action.origin %><%= action.origin.short_name %><% end %>
+</td>
+
 
 <td>
 <% if action.due_date %>
