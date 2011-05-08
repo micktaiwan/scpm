@@ -85,19 +85,20 @@ class ToolsController < ApplicationController
     @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining
     @sold                 = @operational_total
     @provisions_remaining = 0
+    @provisions_diff      = 0
     @risks_remaining      = 0
     @provisions.each { |p|
       calculate_provision(p,@operational_total,operational)
       @sold += p.initial_should_be
       if p.title == 'Operational Management' or p.title == 'Project Management'
-        @provisions_remaining += p.reevaluated_should_be
+        @provisions_remaining += p.reevaluated
+        @provisions_diff      += p.difference
       elsif p.title == 'Risks'
-        @provisions_remaining += p.reevaluated_should_be
-        @risks_remaining = p.reevaluated_should_be
+        @risks_remaining = p.reevaluated
       end
       }
     # Management provisions are already in the management total
-    @real_balance_and_provisions  = @balancei-(@theorical_management-(@remaining_management- @risks_remaining))
+    @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management-(@remaining_management - @risks_remaining))
     @real_balance                 = @real_balance_and_provisions - @provisions_remaining
   end
 
