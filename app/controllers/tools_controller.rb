@@ -91,7 +91,7 @@ class ToolsController < ApplicationController
       calculate_provision(p,@operational_total,operational)
       @sold += p.initial_should_be
       if p.title == 'Operational Management' or p.title == 'Project Management'
-        @provisions_remaining += p.reevaluated
+        @provisions_remaining += p.reevaluated_should_be
         @provisions_diff      += p.difference
       elsif p.title == 'Risks'
         @risks_remaining = p.reevaluated
