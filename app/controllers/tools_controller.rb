@@ -77,7 +77,6 @@ class ToolsController < ApplicationController
     tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
     op2011      = tasks2011.inject(0) { |sum, t| t.initial+sum}
     operational = round_to_hour(op2011*0.11111111111)
-    puts operational
     @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
     @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
     @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
@@ -96,9 +95,9 @@ class ToolsController < ApplicationController
         @risks_remaining = p.reevaluated_should_be
       end
       }
-    @real_balance_and_provisions  = @balancei-(@theorical_management-@remaining_management)-@risks_remaining
-    @real_balance                 = @real_balance_and_provisions - @provisions_remaining 
     # Management provisions are already in the management total
+    @real_balance_and_provisions  = @balancei-(@theorical_management-(@remaining_management-@risks_remaining))
+    @real_balance                 = @real_balance_and_provisions - @provisions_remaining
   end
 
   def sdp_yes_check
@@ -185,8 +184,6 @@ private
         p.difference = 0
       when 'Quality Assurance'
         p.difference = round_to_hour(total * 0.02)-p.initial-47.125
-        puts total
-        puts round_to_hour(total * 0.02)
       when 'Continuous Improvement'
         p.difference = round_to_hour(total * 0.05)-p.initial
       else

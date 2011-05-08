@@ -267,7 +267,6 @@ class Request < ActiveRecord::Base
     return p.sdp_id
   end
 
-
 private
 
   def sanitize(name)
