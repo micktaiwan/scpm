@@ -92,11 +92,12 @@ class ToolsController < ApplicationController
       if p.title == 'Operational Management' or p.title == 'Project Management'
         @provisions_remaining += p.reevaluated_should_be
       elsif p.title == 'Risks'
+        @provisions_remaining += p.reevaluated_should_be
         @risks_remaining = p.reevaluated_should_be
       end
       }
     # Management provisions are already in the management total
-    @real_balance_and_provisions  = @balancei-(@theorical_management-(@remaining_management-@risks_remaining))
+    @real_balance_and_provisions  = @balancei-(@theorical_management-(@remaining_management- @risks_remaining))
     @real_balance                 = @real_balance_and_provisions - @provisions_remaining
   end
 
