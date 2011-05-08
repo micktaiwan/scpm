@@ -261,6 +261,12 @@ class Request < ActiveRecord::Base
     SdpDB.sdp_activity_id([m,self.work_package])
   end
 
+  def sdp_user_id
+    p = Person.find_by_rmt_user(self.assigned_to)
+    return -1 if not p
+    return p.sdp_id
+  end
+
 
 private
 
