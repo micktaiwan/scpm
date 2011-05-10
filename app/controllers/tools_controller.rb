@@ -101,7 +101,8 @@ class ToolsController < ApplicationController
       end
       }
     # Management provisions are already in the management total
-    @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management-(@remaining_management - @risks_remaining))
+    @management_minus_risk        = @remaining_management - @risks_remaining
+    @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - @management_minus_risk)
     @real_balance                 = @real_balance_and_provisions - @provisions_remaining
   end
 
