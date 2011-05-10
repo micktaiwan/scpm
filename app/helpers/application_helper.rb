@@ -51,7 +51,7 @@ class Integer
     when self < 100000
       ("%.1fk" % (self / 1000.0)).sub(".0", "")
     else
-      (self / 1000).pretty_str << "k"
+      (self / 1000).pretty_number << "k"
     end
   end
 end
