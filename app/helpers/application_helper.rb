@@ -41,3 +41,17 @@ module ApplicationHelper
 
 end
 
+class Integer
+  def pretty_number
+    case
+    when self < 1000
+      to_s
+    when self < 10000
+      to_s.insert(1, ",")
+    when self < 100000
+      ("%.1fk" % (self / 1000.0)).sub(".0", "")
+    else
+      (self / 1000).pretty_str << "k"
+    end
+  end
+end
