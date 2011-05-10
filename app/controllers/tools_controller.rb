@@ -87,6 +87,7 @@ class ToolsController < ApplicationController
     init        = SDPActivity.find_by_title('Initialization').remaining
     @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
     @sold                 = @operational_total
+    @provisions_remaining_should_be = 0
     @provisions_remaining = 0
     @provisions_diff      = 0
     @risks_remaining      = 0
@@ -94,16 +95,17 @@ class ToolsController < ApplicationController
       calculate_provision(p,@operational_total,operational)
       @sold += p.initial_should_be
       if p.title == 'Operational Management' or p.title == 'Project Management'
-        @provisions_remaining += p.reevaluated_should_be
+        @provisions_remaining_should_be += p.reevaluated_should_be
+        @provisions_remaining += p.reevaluated
         @provisions_diff      += p.difference
       elsif p.title == 'Risks'
         @risks_remaining = p.reevaluated
       end
       }
     # Management provisions are already in the management total
-    @management_minus_risk        = @remaining_management - @risks_remaining
-    @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - @management_minus_risk)
-    @real_balance                 = @real_balance_and_provisions - @provisions_remaining
+    @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
+    @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - (@remaining_management - @risks_remaining))
+    @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
   end
 
   def sdp_yes_check
