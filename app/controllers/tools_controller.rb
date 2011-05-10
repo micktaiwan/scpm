@@ -82,7 +82,10 @@ class ToolsController < ApplicationController
     @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
     @remaining_time       = (@remaining/14/18/0.01).round * 0.01
     @theorical_management = round_to_hour((20+10+1.5*14+2*3)*@remaining_time)
-    @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining
+    montee      = SDPActivity.find_by_title('Montee en competences').remaining
+    souscharges = SDPActivity.find_by_title('Sous charges').remaining
+    init        = SDPActivity.find_by_title('Initialization').remaining
+    @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
     @sold                 = @operational_total
     @provisions_remaining = 0
     @provisions_diff      = 0
