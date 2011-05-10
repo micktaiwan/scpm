@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110507114715) do
+ActiveRecord::Schema.define(:version => 20110510155741) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(:version => 20110507114715) do
     t.text     "actions"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "is_quality",  :default => 1
   end
 
   create_table "roles", :force => true do |t|

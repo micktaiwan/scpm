@@ -16,6 +16,7 @@ class Project < ActiveRecord::Base
   has_many    :project_people
   has_many    :responsibles, :through=>:project_people
   has_many    :risks,       :order=>'id', :dependent=>:destroy
+  has_many    :quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1"
 
   def visible_actions(user_id)
     if Person.find(user_id).is_supervisor == 0
@@ -497,7 +498,7 @@ class Project < ActiveRecord::Base
 
   def suggested_status
     rv = 1
-    self.risks.each { |r|
+    self.quality_risks.each { |r|
       rv = 2 if rv < 2 and r.severity >=6
       rv = 3 if rv < 3 and r.severity >=8
       }
