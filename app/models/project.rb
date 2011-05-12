@@ -3,6 +3,11 @@ require 'rubygems'
 
 class Project < ActiveRecord::Base
 
+  FullGPP       = 0
+  LightGPP      = 1
+  Maintenance   = 2
+  LBIP          = 3
+
   belongs_to  :project
   belongs_to  :supervisor,  :class_name=>"Person"
   has_many    :projects,    :order=>'name', :dependent=>:destroy
@@ -298,37 +303,51 @@ class Project < ActiveRecord::Base
   end
 
   def create_milestones
-    ['M1-M3', 'M3-M5', 'M5-M10', 'Post-M10', 'Maintenance'].each {|m| create_milestone(m)}
+      #['M1-M3', 'M3-M5', 'M5-M10', 'Post-M10'].each {|m| create_milestone(m)}
+      #return
+    case self.lifecycle
+    when FullGPP
+      ['M1', 'M3', 'QG BRD', 'QG ARD', 'M5', 'M7', 'M9', 'M10', 'QG TD', 'M10a', 'QG MIP', 'M11', 'M12', 'M13', 'M14'].each {|m| create_milestone(m)}
+    when LightGPP
+      ['M1', 'M3', 'QG BRD', 'QG ARD', 'M5/M7', 'M9/M10', 'QG TD', 'M10a', 'QG MIP', 'M11', 'M12/M13', 'M14'].each {|m| create_milestone(m)}
+    when Maintenance
+      ['CCB', 'QG TD', 'MIPM'].each {|m| create_milestone(m)}
+    when LBIP
+      ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'].each {|m| create_milestone(m)}
+    end
   end
 
   def create_milestone(m)
-    case m
-      when 'M1-M3'
-        rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'m3', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m3')
-      when 'M3-M5'
-        rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'QG BRD', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG BRD')
-        milestones.create(:project_id=>self.id, :name=>'QG ARD', :comments=>'No request', :status=>-1) if not find_milestone_by_name('QG ARD')
-        milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')   and not find_milestone_by_name('m5/m7')
-      when 'M5-M10'
-        rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'m7', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m7')   and not find_milestone_by_name('m5/m7')
-        milestones.create(:project_id=>self.id, :name=>'m9', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m9')   and not find_milestone_by_name('m9/m10')
-        milestones.create(:project_id=>self.id, :name=>'m10', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10') and not find_milestone_by_name('m9/m10')
-      when 'Post-M10'
-        rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'QG TD', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG TD')
-        milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a') and not find_milestone_by_name('m9/m10') and not find_milestone_by_name('m12/m13') and not find_milestone_by_name('m5/m7')
-        milestones.create(:project_id=>self.id, :name=>'QG MIP', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG MIP')
-        milestones.create(:project_id=>self.id, :name=>'m11', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m11')
-        milestones.create(:project_id=>self.id, :name=>'m12', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m12') and not find_milestone_by_name('m12/m13')
-        milestones.create(:project_id=>self.id, :name=>'m13', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m13') and not find_milestone_by_name('m12/m13')
-        milestones.create(:project_id=>self.id, :name=>'m14', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m14')
-      when 'Maintenance'
-        rv = self.requests_string(m)
-        milestones.create(:project_id=>self.id, :name=>'maint.', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('maint.')
-    end
+    rv = self.requests_string(m)
+    milestones.create(:project_id=>self.id, :name=>m, :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name(m)
+
+    #case m
+    #  when 'M1-M3'
+    #    rv = self.requests_string(m)
+    #    milestones.create(:project_id=>self.id, :name=>'m3', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m3')
+    #  when 'M3-M5'
+    #    rv = self.requests_string(m)
+    #    milestones.create(:project_id=>self.id, :name=>'QG BRD', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG BRD')
+    #    milestones.create(:project_id=>self.id, :name=>'QG ARD', :comments=>'No request', :status=>-1) if not find_milestone_by_name('QG ARD')
+    #    milestones.create(:project_id=>self.id, :name=>'m5', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m5')   and not find_milestone_by_name('m5/m7')
+    #  when 'M5-M10'
+    #    rv = self.requests_string(m)
+    #    milestones.create(:project_id=>self.id, :name=>'m7', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m7')   and not find_milestone_by_name('m5/m7')
+    #    milestones.create(:project_id=>self.id, :name=>'m9', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m9')   and not find_milestone_by_name('m9/m10')
+    #    milestones.create(:project_id=>self.id, :name=>'m10', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10') and not find_milestone_by_name('m9/m10')
+    #  when 'Post-M10'
+    #    rv = self.requests_string(m)
+    #    milestones.create(:project_id=>self.id, :name=>'QG TD', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG TD')
+    #    milestones.create(:project_id=>self.id, :name=>'m10a', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m10a') and not find_milestone_by_name('m9/m10') and not find_milestone_by_name('m12/m13') and not find_milestone_by_name('m5/m7')
+    #    milestones.create(:project_id=>self.id, :name=>'QG MIP', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('QG MIP')
+    #    milestones.create(:project_id=>self.id, :name=>'m11', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m11')
+    #    milestones.create(:project_id=>self.id, :name=>'m12', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m12') and not find_milestone_by_name('m12/m13')
+    #    milestones.create(:project_id=>self.id, :name=>'m13', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m13') and not find_milestone_by_name('m12/m13')
+    #    milestones.create(:project_id=>self.id, :name=>'m14', :comments=> rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('m14')
+    #  when 'Maintenance'
+    #    rv = self.requests_string(m)
+    #    milestones.create(:project_id=>self.id, :name=>'maint.', :comments=>rv[0], :status=>(rv[1] == 0 ? -1 : 0)) if not find_milestone_by_name('maint.')
+    #end
   end
 
   def requests_string(m)
@@ -344,21 +363,21 @@ class Project < ActiveRecord::Base
         when 'WP2 - Quality for Maintenance'
           nb += 1 and rv += "Maintenance\n"       if m == 'Maintenance'
         when 'WP3 - Modeling'
-          nb += 1 and rv += "Modeling\n"          if m == 'M3-M5'
+          nb += 1 and rv += "Modeling\n"          if m == 'M5'
         when 'WP4.1 - Surveillance Audit'
-          nb += 1 and rv += "Audit (TBC)\n"       if m == 'M3-M5'
+          nb += 1 and rv += "Audit (TBC)\n"       if m == 'M3'
         when 'WP4.2 - Surveillance Root cause'
-          nb += 1 and rv += "Root Cause (TBC)\n"  if m == 'M3-M5'
+          nb += 1 and rv += "Root Cause (TBC)\n"  if m == 'M3'
         when 'WP5 - Change Accompaniment'
-          nb += 1 and rv += "Change (TBC)\n"      if m == 'M3-M5'
+          nb += 1 and rv += "Change (TBC)\n"      if m == 'M3'
         when 'WP6.1 - Coaching PP'
-          nb += 1 and rv += "Coaching PP\n"       if m == 'M1-M3'
+          nb += 1 and rv += "Coaching PP\n"       if m == 'M3'
         when 'WP6.2 - Coaching BRD'
-          nb += 1 and rv += "Coaching BRD\n"      if m == 'M3-M5'
+          nb += 1 and rv += "Coaching BRD\n"      if m == 'M5'
         when 'WP6.3 - Coaching V&V'
-          nb += 1 and rv += "Coaching V&V\n"      if m == 'M5-M10'
+          nb += 1 and rv += "Coaching V&V\n"      if m == 'M12'
         when 'WP6.4 - Coaching ConfMgt'
-          nb += 1 and rv += "Coaching ConfMgt\n"  if m == 'M1-M3'
+          nb += 1 and rv += "Coaching ConfMgt\n"  if m == 'M14'
         when 'WP6.5 - Coaching Maintenance'
           nb += 1 and rv += "Coaching Maint.\n"   if m == 'Maintenance'
         else
@@ -413,24 +432,35 @@ class Project < ActiveRecord::Base
 
   def milestone_order(name)
     case name
-    when 'm3';      1
+    when 'M1';      0
+    when 'M3';      1
     when 'QG BRD';  2
     when 'QG ARD';  3
-    when 'm5';      4
-    when 'm5/m7';   5
-    when 'm7';      6
-    when 'm9';      7
-    when 'm9/m10';  8
-    when 'm10';     9
+    when 'M5';      4
+    when 'M5/M7';   5
+    when 'M7';      6
+    when 'M9';      7
+    when 'M9/M10';  8
+    when 'M10';     9
+    when 'CCB';     9
     when 'QG TD';   10
-    when 'm10a';    11
+    when 'MIPM';    11
+    when 'M10a';    11
     when 'QG MIP';  12
-    when 'm11';     13
-    when 'm12';     14
-    when 'm12/m13'; 15
-    when 'm13';     16
-    when 'm14';     17
-    when 'maint.';  18
+    when 'M11';     13
+    when 'M12';     14
+    when 'M12/M13'; 15
+    when 'M13';     16
+    when 'M14';     17
+    when 'Maintenance';  18
+    when 'G2';  2
+    when 'G3';  3
+    when 'G4';  4
+    when 'G5';  5
+    when 'G6';  6
+    when 'G7';  7
+    when 'G8';  8
+    when 'G9';  9
     else;           0
     end
   end
