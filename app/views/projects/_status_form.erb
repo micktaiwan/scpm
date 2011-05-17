@@ -1,11 +1,12 @@
 <table class="edit">
-<tr><td class="descr">Last eReporting Tool update:</td><td><%= text_field(:status, :ereporting_date) %>yyyy-mm-dd</td></tr>
-<tr><td class="descr">Status</td><td><%= text_field(:status, :status, {:size=>3}) %>0: unknown, 1: green, 2: amber, 3: red</td></tr>
-<tr><td class="descr">Last Change</td><td><%= text_area(:status, :last_change, {:cols=>100, :rows=>7}) %></td></tr>
-<tr><td class="descr">Details</td><td><%= text_area(:status, :explanation, {:cols=>100, :rows=>10}) %></td></tr>
+<tr><td class="descr">Status</td><td><%= select(:status, :status, options_with_colors(@status.status, [["Unknown",0, "#DDD"], ["GREEN",1, "#5F5"], ["AMBER",2, "#FA0"], ["RED",3, "#F00"]]), {}, {:style=>"font-size: 1.5em"}) %></td></tr>
 <tr><td class="descr">Status Evolution Reason</td><td><%= text_area(:status, :reason, {:cols=>100, :rows=>3}) %></td></tr>
 <tr><td class="descr">Actions to mitigate status<br/>(impact analysis done or not?)</td><td><%= text_area(:status, :actions, {:cols=>100, :rows=>3}) %></td></tr>
+<tr><td class="descr">Last Change</td><td><%= text_area(:status, :last_change, {:cols=>100, :rows=>5}) %></td></tr>
+<tr><td class="descr">Workstream level reporting</td><td><%= text_area(:status, :ws_report, {:cols=>100, :rows=>3}) %></td></tr>
 <tr><td class="descr">Operational Alert</td><td><%= text_area(:status, :operational_alert, {:cols=>100, :rows=>3}) %></td></tr>
-<tr><td class="descr">Feedback</td><td><%= text_area(:status, :feedback, {:cols=>100, :rows=>15}) %></td></tr>
+<tr><td class="descr">Last UP3P update:</td><td><%= text_field(:status, :ereporting_date) %>yyyy-mm-dd</td></tr>
+<tr><td class="descr">Details</td><td><%= text_area(:status, :explanation, {:cols=>100, :rows=>7}) %></td></tr>
+<tr><td class="descr">Supervisor Feedback</td><td><%= text_area(:status, :feedback, {:cols=>100, :rows=>7}) %></td></tr>
 </table>
 <%= hidden_field :status, :project_id, :value=>@project.id %>

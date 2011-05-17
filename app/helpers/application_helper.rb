@@ -39,6 +39,12 @@ module ApplicationHelper
     b
   end
 
+  def options_with_colors(value, colors)
+    colors.collect do |txt, code, color| 
+      "<option value='#{code}' style='background-color:#{color};' #{value==code ? " selected='selected'":""}>#{txt}</option> "
+    end.join
+  end
+  
 end
 
 class Integer

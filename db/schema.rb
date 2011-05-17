@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110512185311) do
+ActiveRecord::Schema.define(:version => 20110517165432) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -309,6 +309,7 @@ ActiveRecord::Schema.define(:version => 20110512185311) do
     t.integer  "last_modifier"
     t.integer  "locked",            :default => 0
     t.datetime "locked_time"
+    t.text     "ws_report"
   end
 
   create_table "topics", :force => true do |t|

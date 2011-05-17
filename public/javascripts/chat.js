@@ -86,7 +86,7 @@ function toggle_chat_window(session_id, person_id) {
 
 function chat_refresh() {
   new Ajax.Updater("chat_list", "/chat/refresh");
-  var delay = 1*60*1000;
+  var delay = 5*60*1000;
   setTimeout("chat_refresh()", delay);
   }
 
@@ -115,7 +115,7 @@ function chat_sessions_refresh() {
       }
     });
   // TODO: if last message is recent set it shorter
-  var delay = 10*1000;
+  var delay = 60*1000;
   setTimeout("chat_sessions_refresh()", delay);
   }
 
