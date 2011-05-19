@@ -311,7 +311,7 @@ class Project < ActiveRecord::Base
     when LightGPP
       ['M1', 'M3', 'QG BRD', 'QG ARD', 'M5/M7', 'M9/M10', 'QG TD', 'M10a', 'QG MIP', 'M11', 'M12/M13', 'M14'].each {|m| create_milestone(m)}
     when Maintenance
-      ['CCB', 'QG TD', 'MIPM'].each {|m| create_milestone(m)}
+      ['CCB', 'QG TD M', 'MIPM'].each {|m| create_milestone(m)}
     when LBIP
       ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'].each {|m| create_milestone(m)}
     end
