@@ -44,9 +44,6 @@ namespace :db do
     else
       raise "Task not supported by '#{abcs[RAILS_ENV]['adapter']}'"
     end
-
-    # TODO: zip data
-    gzip "db/#{RAILS_ENV}_data.sql"
   end
 
   desc "Refreshes your local development environment to the current production database"
@@ -61,8 +58,8 @@ namespace :db do
     load 'config/environment.rb'
     abcs = ActiveRecord::Base.configurations
     
-    # TODO: unzip data
-    unzip "db/#{RAILS_ENV}_data.gz"
+    # unzip data
+    `cd db && 7za x "production_data.sql.gz" -y`
     
     case abcs[RAILS_ENV]["adapter"]
     when 'mysql'

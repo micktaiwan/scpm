@@ -444,6 +444,7 @@ class Project < ActiveRecord::Base
     when 'M10';     9
     when 'CCB';     9
     when 'QG TD';   10
+    when 'QG TD M';   10
     when 'MIPM';    11
     when 'M10a';    11
     when 'QG MIP';  12
