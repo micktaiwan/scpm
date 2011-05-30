@@ -368,7 +368,6 @@ class ProjectsController < ApplicationController
 
   # generate an Excel file to summarize projects status
   def summary
-    #render(:text=>"filter on text on => no summary is possible") and return if not @wps
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
@@ -427,6 +426,32 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # generate an Excel file for Workstream reporting
+  def ws_reporting
+    begin
+      @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
+      get_projects
+      @wps = @wps.sort_by { |w|
+        [w.supervisor_name, w.workstream, w.project_name, w.name]
+        }
+      @status_progress_series = get_status_progress
+      @status_columns         = ['Centre','Status']
+      @status_progress_dates  = []
+      @status_progress_series['Total'].keys.sort.each { |date|
+        @status_columns << date
+        @status_progress_dates << date
+        }
+      headers['Content-Type']         = "application/vnd.ms-excel"
+      headers['Content-Disposition']  = 'attachment; filename="WS_Reporting.xls"'
+      headers['Cache-Control']        = ''
+      render(:layout=>false)
+    rescue Exception => e
+      render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
+    end
+  end
+  
+  
+  
   def week_changes
     #date = Date.today()-7.days
     date = "2011-03-15"
@@ -472,7 +497,7 @@ private
   def get_projects
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
-      @wps = @projects.select {|wp| wp.has_status and wp.has_requests }
+      @wps = @projects #.select {|wp| wp.has_status and wp.has_requests }
       return
     end
     cond = []
