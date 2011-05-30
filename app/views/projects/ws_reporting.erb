@@ -1,0 +1,194 @@
+<%=
+@xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
+@xml.Workbook({
+  'xmlns'      => "urn:schemas-microsoft-com:office:spreadsheet",
+  'xmlns:o'    => "urn:schemas-microsoft-com:office:office",
+  'xmlns:x'    => "urn:schemas-microsoft-com:office:excel",
+  'xmlns:html' => "http://www.w3.org/TR/REC-html40",
+  'xmlns:ss'   => "urn:schemas-microsoft-com:office:spreadsheet"
+  }) do
+
+  @xml.Styles do
+   @xml.Style 'ss:ID' => 'Default', 'ss:Name' => 'Normal' do
+     @xml.Alignment 'ss:Vertical' => 'Top', 'ss:WrapText' => '1'
+     @xml.Borders
+     @xml.Font 'ss:FontName' => 'Verdana'
+     @xml.Interior
+     @xml.NumberFormat
+     @xml.Protection
+   end
+   @xml.Style 'ss:ID' => 's22' do
+     @xml.NumberFormat 'ss:Format' => 'General Date'
+   end
+   @xml.Style 'ss:ID' => 's62', 'ss:Name' => 'Header' do
+     @xml.Font  'ss:Color'=>'#FFFFFF', 'ss:Bold'=>"1"
+     @xml.Interior 'ss:Color'=>"#000000", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's75', 'ss:Name' => 'Closed' do
+     @xml.Font 'ss:Color'=>'#C5BE97', 'ss:Italic' => '1'
+   end
+   @xml.Style 'ss:ID' => 's76', 'ss:Name' => 'Alert' do
+     @xml.Font 'ss:Color'=>'#FF0000'
+   end
+
+   @xml.Style 'ss:ID' => 's77', 'ss:Name' => 'StatusUnknown' do
+     @xml.Font 'ss:Color'=>'#555555'
+   end
+   @xml.Style 'ss:ID' => 's78', 'ss:Name' => 'StatusGreen' do
+     @xml.Font 'ss:Color'=>'#00FF00'
+   end
+   @xml.Style 'ss:ID' => 's79', 'ss:Name' => 'StatusAmber' do
+     @xml.Font 'ss:Color'=>'#FFAA00'
+   end
+   @xml.Style 'ss:ID' => 's80', 'ss:Name' => 'StatusRed' do
+     @xml.Font 'ss:Color'=>'#FF0000'
+   end
+
+   @xml.Style 'ss:ID' => 's81', 'ss:Name' => 'CurrentStatusUnknown' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#DDDDDD", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's82', 'ss:Name' => 'CurrentStatusGreen' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#00FF00", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's83', 'ss:Name' => 'CurrentStatusAmber' do
+     @xml.Font 'ss:Color'=>'#FFFFFF', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#FFAA00", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's84', 'ss:Name' => 'CurrentStatusRed' do
+     @xml.Font 'ss:Color'=>'#FFFFFF', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#FF0000", 'ss:Pattern'=>'Solid'
+   end
+
+   @xml.Style 'ss:ID' => 's85', 'ss:Name' => 'ToBeValidated' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+     @xml.Interior 'ss:Color'=>"#0087CC", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's86', 'ss:Name' => 'Feedback' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+     @xml.Interior 'ss:Color'=>"#e3b7eb", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's87', 'ss:Name' => 'New' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+     @xml.Interior 'ss:Color'=>"#fcbdbd", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's88', 'ss:Name' => 'Acknowledged' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+     @xml.Interior 'ss:Color'=>"#ffcd85", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's89', 'ss:Name' => 'Performed' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+     @xml.Interior 'ss:Color'=>"#D2F5B0", 'ss:Pattern'=>'Solid'
+   end
+end
+
+# Header page
+
+  @xml.Worksheet 'ss:Name' => 'Summary' do
+    #@xml.Row 'ss:StyleID' => 's62' do
+    #  for column in ['WS','Project', 'Workpackage', 'BRN', 'Current Status', 'Date', 'Reporting', 'Last milestone', 'Current milestone', 'Next milestone', 'EIS'] do
+    #    @xml.Cell do
+    #      @xml.Data column, 'ss:Type' => 'String'
+    #      @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+    #    end
+    #  end
+    #end
+  end
+
+# STATUSES
+
+  @xml.Worksheet 'ss:Name' => 'Projects Status' do
+    @xml.Names do
+      @xml.NamedRange 'ss:Name' => '_FilterDatabase', 'ss:RefersTo' => "='Projects Status'!R1C1:R165C9", 'ss:Hidden' => '1'
+    end
+    @xml.Table do
+
+      # Columns width
+      for width in ['40','80','167','50','50','63','257','40','40','40','40'] do
+        @xml.Column nil, {'ss:Width' => width}
+      end
+      @xml.Column nil, {'ss:Width' => '110', 'ss:Span'=>'17'}
+
+      # Header
+      @xml.Row 'ss:StyleID' => 's62' do
+        for column in ['WS','Project', 'Workpackage', 'BRN', 'Current Status', 'Date', 'Reporting', 'Last milestone', 'Current milestone', 'Next milestone', 'EIS'] do
+          @xml.Cell do
+            @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+        end
+      end
+
+      # Rows
+      for p in @wps
+        status = p.get_status
+        style = {}
+        style = {'ss:StyleID' => 's75'} if p.is_ended
+        @xml.Row(style) do
+          @xml.Cell { @xml.Data p.workstream,         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.project_name,       'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.full_wp_name,       'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.brn,                'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
+          @xml.Cell { @xml.Data status.updated_at ? "#{status.updated_at.to_date} (#{time_ago_in_words(status.updated_at.to_date)})" : "",   'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.ws_report); end;      @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('M3')
+          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('M5')
+          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('M10a')
+          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          status, style = p.get_milestone_status('M13')
+          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+        end
+      end
+
+    end
+  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C30', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
+  end
+
+
+# STATUS PROGRESS
+
+  @xml.Worksheet 'ss:Name' => 'Status Progress' do
+    @xml.Table do
+
+      # Header
+      @xml.Row 'ss:StyleID' => 's62' do
+        for column in @status_columns do
+          @xml.Cell do
+            @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+        end
+      end
+
+      # Rows
+      for center in ['Total', 'EA', 'EI', 'EV', 'EDE', 'EDG', 'EDS', 'EDY', 'EDC', 'EM', 'EMNB', 'EMNC']
+        for status in [1,2,3,0]
+          @xml.Row do
+            @xml.Cell do
+              @xml.Data center, 'ss:Type' => 'String'
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+            @xml.Cell do
+              @xml.Data case status;when 1;'GREEN';when 2;'AMBER';when 3;'RED';when 0;'UNKNOWN';end, 'ss:Type' => 'String'
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+            for date in @status_progress_dates do
+              @xml.Cell do
+                @xml.Data @status_progress_series[center][date].select{ |s| s.status==status}.size, 'ss:Type' => 'Number'
+                @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+              end
+            end
+          end
+        end
+      end
+
+    end
+  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C20', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
+  end
+
+end
+%>
