@@ -81,23 +81,64 @@
      @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
      @xml.Interior 'ss:Color'=>"#D2F5B0", 'ss:Pattern'=>'Solid'
    end
+   
+   @xml.Style 'ss:ID' => 's100', 'ss:Name' => 'ESWSReport' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Size'=>'26'
+   end
+   @xml.Style 'ss:ID' => 's101', 'ss:Name' => 'Bold' do
+     @xml.Font 'ss:Bold'=>'1'
+   end
+   @xml.Style 'ss:ID' => 's102', 'ss:Name' => 'Separator' do
+     @xml.Interior 'ss:Color'=>"#A2E0A0", 'ss:Pattern'=>'Solid'
+   end
 end
 
 # Header page
 
   @xml.Worksheet 'ss:Name' => 'Summary' do
-    #@xml.Row 'ss:StyleID' => 's62' do
-    #  for column in ['WS','Project', 'Workpackage', 'BRN', 'Current Status', 'Date', 'Reporting', 'Last milestone', 'Current milestone', 'Next milestone', 'EIS'] do
-    #    @xml.Cell do
-    #      @xml.Data column, 'ss:Type' => 'String'
-    #      @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-    #    end
-    #  end
-    #end
+    @xml.Table do
+      # Columns width
+      for width in ['70','30','600'] do
+        @xml.Column nil, {'ss:Width' => width}
+      end
+      
+      for center in @centers
+        @xml.Row 'ss:StyleID' => 's100' do
+          @xml.Cell 'ss:MergeAcross'=>'2' do @xml.Data('ss:Type' => 'String') do; @xml<< "#{center[0]} workstream projects quality report"; end; end
+        end  
+        @xml.Row 'ss:StyleID' => 's102' do
+        end  
+        @xml.Row  'ss:StyleID' => 'Default' do
+          @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "RED"; end; end
+          @xml.Cell { @xml.Data center[1], 'ss:Type' => 'Number' }
+        end  
+        @xml.Row  'ss:StyleID' => 'Default' do
+          @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "AMBER"; end; end
+          @xml.Cell { @xml.Data center[2], 'ss:Type' => 'Number' }
+        end  
+        @xml.Row  'ss:StyleID' => 'Default' do
+          @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "GREEN"; end; end
+          @xml.Cell { @xml.Data center[3], 'ss:Type' => 'Number' }
+        end  
+        @xml.Row  'ss:StyleID' => 'Default' do
+          @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "UNKNOWN"; end; end
+          @xml.Cell { @xml.Data center[4], 'ss:Type' => 'Number' }
+        end  
+        @xml.Row 'ss:StyleID' => 's102' do
+        end  
+        @xml.Row  'ss:StyleID' => 'Default' do
+          @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "Strengths"; end; end
+        end  
+        @xml.Row  'ss:StyleID' => 'Default' do
+          @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "Weaknesses"; end; end
+        end  
+        @xml.Row 'ss:StyleID' => 'Default' do
+        end  
+      end
+    end
   end
 
 # STATUSES
-
   @xml.Worksheet 'ss:Name' => 'Projects Status' do
     @xml.Names do
       @xml.NamedRange 'ss:Name' => '_FilterDatabase', 'ss:RefersTo' => "='Projects Status'!R1C1:R165C9", 'ss:Hidden' => '1'
@@ -105,7 +146,7 @@ end
     @xml.Table do
 
       # Columns width
-      for width in ['40','80','167','50','50','63','257','40','40','40','40'] do
+      for width in ['40','80','260','50','50','63','260','90','90','90','90'] do
         @xml.Column nil, {'ss:Width' => width}
       end
       @xml.Column nil, {'ss:Width' => '110', 'ss:Span'=>'17'}
@@ -133,19 +174,19 @@ end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell { @xml.Data status.updated_at ? "#{status.updated_at.to_date} (#{time_ago_in_words(status.updated_at.to_date)})" : "",   'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.ws_report); end;      @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M3')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M5')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M10a')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          name, status, style = p.get_last_milestone_status
+          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<< name + " " + excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          name, status, style = p.get_current_milestone_status
+          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<name + " " + excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          name, status, style = p.get_next_milestone_status
+          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<name + " " + excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           status, style = p.get_milestone_status('M13')
           @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
         end
       end
 
     end
-  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C30', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
+  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C11', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
 
 

@@ -270,7 +270,6 @@ class ProjectsController < ApplicationController
     render(:nothing=>true)
   end
 
-
   def cut
     session[:cut]         = params[:id]
     session[:action_cut]  = nil
@@ -426,13 +425,25 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def nb_of_wps_with_status(c,s)
+    @wps.select{ |w| w.workstream==c and w.get_status.status==s}.size.to_s
+  end
+  
+  def stats_for_center(c)
+    [c, nb_of_wps_with_status(c,3), nb_of_wps_with_status(c,2), nb_of_wps_with_status(c,1), nb_of_wps_with_status(c,0)]
+  end
+  
   # generate an Excel file for Workstream reporting
   def ws_reporting
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
+      
+      @centers = ['EA', 'EI', 'EV', 'EDE', 'EDG', 'EDS', 'EDY', 'EDC', 'EM', 'EMNB', 'EMNC']
+      @centers = @centers.map { |c| stats_for_center(c) }
+
       @wps = @wps.sort_by { |w|
-        [w.supervisor_name, w.workstream, w.project_name, w.name]
+        [w.workstream, w.project_name, w.name]
         }
       @status_progress_series = get_status_progress
       @status_columns         = ['Centre','Status']
@@ -441,6 +452,7 @@ class ProjectsController < ApplicationController
         @status_columns << date
         @status_progress_dates << date
         }
+
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="WS_Reporting.xls"'
       headers['Cache-Control']        = ''
@@ -449,8 +461,6 @@ class ProjectsController < ApplicationController
       render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
     end
   end
-  
-  
   
   def week_changes
     #date = Date.today()-7.days

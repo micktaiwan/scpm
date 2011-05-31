@@ -424,7 +424,28 @@ class Project < ActiveRecord::Base
     style  = get_cell_style_for_milestone(m)
     [status,style]
   end
+  
+  def get_current_milestone_status
+    i = get_current_milestone_index
+    return ["", "", {}] if not i
+    m =  sorted_milestones[i]
+    [m.name] + get_milestone_status(m.name)
+  end
 
+  def get_last_milestone_status
+    i = get_current_milestone_index
+    return ["", "", {}] if not i or i == 0
+    m =  sorted_milestones[i-1]
+    [m.name] + get_milestone_status(m.name)
+  end
+
+  def get_next_milestone_status
+    i = get_current_milestone_index
+    return ["", "", {}] if not i or i >= milestones.size-1
+    m =  sorted_milestones[i+1]
+    [m.name] + get_milestone_status(m.name)
+  end
+  
   def sorted_milestones
     #NaturalSort::naturalsort milestones
     milestones.sort_by { |m| milestone_order(m.name)}
@@ -513,6 +534,26 @@ class Project < ActiveRecord::Base
     return true
   end
 
+  def get_current_milestone_index
+    rv    = nil
+    date  = nil
+    sorted_milestones.each_with_index { |m, i|
+      next if m.done != 0 or m.status == -1 or (m.milestone_date == nil and m.actual_milestone_date == nil)
+      if m.actual_milestone_date and m.actual_milestone_date != ""
+        if not date or m.actual_milestone_date < date
+          date = m.actual_milestone_date 
+          rv = i
+        end  
+      elsif m.milestone_date and m.milestone_date != ""
+        if not date or m.milestone_date < date
+          date = m.milestone_date 
+          rv = i
+        end  
+      end
+      }
+    rv
+  end
+  
   def next_milestone_date
     date = nil
     self.milestones.each { |m|
