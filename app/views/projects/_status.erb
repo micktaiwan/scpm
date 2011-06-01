@@ -19,11 +19,11 @@
 
 <% if status.project %>
 
-    <h4>Status change reason (<%=html_status(status.project.old_status)%> => <%=html_status(status.project.last_status)%>)</h4>
+    <h4>Status explanation (<%=html_status(status.project.old_status)%> => <%=html_status(status.project.last_status)%>)</h4>
     <%=my_simple_format(status.reason)%>
     <% if status.project.old_status != status.project.last_status and status.reason == ""%><%=image_tag("alert.gif")%><br/><% end %>
 
-    <h4>Actions</h4>
+    <h4>Status mitigation actions</h4>
     <%=my_simple_format(status.actions)%>
     <% if status.status > 1 and status.actions == "" %><%=image_tag("alert.gif")%><br/><% end %>
     
@@ -32,7 +32,7 @@
 <table>
 
 <tr>
-<td valign='top'><h4>Last Change</h4><%=my_simple_format(status.last_change)%></td>
+<td valign='top'><h4>Last 7 days changes</h4><%=my_simple_format(status.last_change)%></td>
 <td class='diff'><br/><br/><br/><%=status.last_change_diffs.to_s%></td>
 </tr>
 
@@ -41,7 +41,7 @@
   <h4>Workstream level reporting</h4><%=my_simple_format(status.ws_report)%>
   <% if status.status > 1 and status.ws_report == "" %><%=image_tag("alert.gif")%><br/><br/><% end %>
 
-  <b>Last UP3P update:</b> <%=status.ereporting_date%><br/>
+  <b>Last UP3P verification:</b> <%=status.ereporting_date%><br/>
   
 <% if current_user.has_role?('Admin')%>
   <br/>

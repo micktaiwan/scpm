@@ -67,7 +67,7 @@ class Person < ActiveRecord::Base
   def self.authenticate(login, password)
     return self.find_by_login(login[4..-1]) if login[0..3] == "test" and password=="sqlitlse"
     return nil if login.empty? or password.empty?
-    return self.find_by_login(login) # temporaire.....
+    #return self.find_by_login(login) # temporaire.....
     
     if login_by_ldap(login,password)
       self.find_by_login(login)
