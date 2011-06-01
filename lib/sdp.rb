@@ -9,18 +9,18 @@ class SDP
 
   ID          = 0
   TITLE       = 1
-  INTIAL      = 2
-  REEVALUATED = 3
-  ASSIGNED    = 4
-  CONSUMED    = 5
-  REMAINING   = 6
-  REVISED     = 7
-  GAINED      = 8
-  ITERATION   = 9
-  COLLAB      = 10
-  BALANCEI    = 11
-  BALANCER    = 12
-  BALANCEA    = 13
+  INTIAL      = 3
+  REEVALUATED = 4
+  ASSIGNED    = 5
+  CONSUMED    = 6
+  REMAINING   = 7
+  REVISED     = 8
+  GAINED      = 9
+  ITERATION   = 10
+  COLLAB      = 11
+  BALANCEI    = 12
+  BALANCER    = 13
+  BALANCEA    = 14
 
 	def initialize(path)
     @path = path
@@ -45,6 +45,7 @@ class SDP
       end
       break if @row.empty?
       insert
+      break if @state == :end
     end
   end
 
@@ -123,7 +124,9 @@ private
           else
             @state = :activity
           end
-        else; raise "state error"
+        when :total
+          @state = :end
+        else; raise "state error #{@state.to_s}"
       end
     elsif @row[ID]=="Total"
       @state = :total
@@ -138,8 +141,8 @@ private
       when :task
         create_task
       when :total
-        #puts "END"
-      else; raise "state error"
+        @state = :end
+      else; raise "state error #{@state.to_s}"
     end
   end
 
