@@ -15,7 +15,6 @@
 <body>
 <%
   cu = current_user
-  redirect_to "/" and return if(not cu) 
   cu.last_view = Time.now
   cu.save
   s = cu.open_actions.size

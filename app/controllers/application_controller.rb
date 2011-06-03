@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   layout 'general'
   include Authentication
   before_filter :log_action
+  before_filter :verify_auth
   before_filter :set_timezone
 
   # Scrub sensitive parameters from your log
@@ -19,6 +20,10 @@ class ApplicationController < ActionController::Base
   
   def set_timezone
     Time.zone = 'Paris'
+  end
+  
+  def verify_auth
+    redirect_to "/" and return if(not current_user and controller_name != "sessions") 
   end
   
   def log_action
