@@ -1,3 +1,9 @@
+03-Jun-2011
+===========
+
+- better workstream reporting (strengh and weaknesses in DB)
+- possibility to display all bandeaux easily
+
 17-May-2011
 ===========
 

@@ -35,7 +35,10 @@
 <div class="text"><%= b.text %></div>
 <div class="person"><%= b.person.name %></div>
 <% end %>
-<div class="link"><%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %></div>
+<div class="link">
+  <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+  <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>  
+</div>
 </div>
 
 
