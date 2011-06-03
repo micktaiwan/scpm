@@ -6,4 +6,10 @@
 <ul>
 <%= render(:partial=>'tools/sdp_add_from_request', :collection=>@requests) %>
 </ul>
-
+<br/>
+<br/>
+<br/>
+<b>Requests in progress but still to be validated, or cancelled, or removed:</b><br/>
+<ul>
+<%= render(:partial=>'projects/request', :collection=>@pbs) %>
+</ul>

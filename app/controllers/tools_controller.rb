@@ -170,7 +170,8 @@ class ToolsController < ApplicationController
   end
 
   def sdp_add
-    @requests = Request.find(:all, :conditions=>"sdp='no' and resolution='in progress'")
+    @requests = Request.find(:all, :conditions=>"sdp='no' and resolution='in progress' and status!='to be validated'")
+    @pbs      = Request.find(:all, :conditions=>"sdp='no' and resolution='in progress' and (status='to be validated' or status='cancelled' or status='removed')")
   end
 
 

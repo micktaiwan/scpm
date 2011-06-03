@@ -39,7 +39,7 @@
 <tr>
 <td valign='top'>
   <h4>Workstream level reporting</h4><%=my_simple_format(status.ws_report)%>
-  <% if status.status > 1 and status.ws_report == "" %><%=image_tag("alert.gif")%><br/><br/><% end %>
+  <% if status.status > 1 and (status.ws_report == "" or status.ws_report == nil) %><%=image_tag("alert.gif")%><br/><br/><% end %>
 
   <b>Last UP3P verification:</b> <%=status.ereporting_date%><br/>
   
