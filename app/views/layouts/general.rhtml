@@ -44,6 +44,7 @@
 
 <div id="menu_bar">
 <%= link_to('Projects', {:controller=>'projects', :action=>'index'}, {:class=>menu_style('projects','*')}) %>
+<%= link_to('WS', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
 <%= link_to('Topics', {:controller=>'topics', :action=>'index'}, {:class=>menu_style('topics','*')}) %>
 <%= link_to('Actions'+nb_actions, {:controller=>'actions', :action=>'index'}, {:class=>menu_style('actions','*')}) %>
 <%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %>

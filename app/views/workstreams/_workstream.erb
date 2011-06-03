@@ -1,0 +1,24 @@
+<h2><%= workstream.name %></h2>
+<%= link_to('Edit', {:action=>'edit', :id=>workstream.id}, {:class=>'menu grey'}) %><br/>
+<ul>
+<b>Strenghts</b>: <%= my_simple_format(workstream.strenghts) %><br/>
+<b>Weaknesses</b>: <%= my_simple_format(workstream.weaknesses) %><br/>
+<br/>
+<%
+projects = workstream.non_green_projects
+projects_without_reporting = projects.select { |p| s = p.get_status; s.ws_report == nil or s.ws_report.strip == ""}
+size = projects_without_reporting.size
+%>
+
+<% if size > 0 %>
+<strong><%= size %></strong> projects <b>without</b> a reporting<br/>
+<br/>
+<% end %>
+
+<%= link_to_function('Projects', "$('projects_#{workstream.id}').toggle()",{:class=>"btnlnk"})%><br/>
+<br/>
+<div id="projects_<%=workstream.id%>" style="display:none;">
+<%= render(:partial=>'project', :collection=>projects) %>
+</div>
+</ul>
+<br/>

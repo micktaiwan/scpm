@@ -1,0 +1,3 @@
+<% status = project.get_status %> 
+<%= link_to('Go to', {:controller=>'projects', :action=>'show', :id=>project.id}) %> <b><%= project.full_name %></b> <%= html_status(status.status) %><br/>
+<ul><%= s = status.ws_report; s = s.strip if s; my_simple_format(s) %></ul>
