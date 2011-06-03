@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
   
   def verify_auth
-    redirect_to "/" and return if(not current_user and controller_name != "sessions") 
+    redirect_to "/sessions/login" and return if(not current_user and controller_name != "sessions") 
   end
   
   def log_action
