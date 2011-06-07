@@ -430,7 +430,7 @@ class ProjectsController < ApplicationController
   end
   
   def stats_for_center(c)
-    [c, nb_of_wps_with_status(c,3), nb_of_wps_with_status(c,2), nb_of_wps_with_status(c,1), nb_of_wps_with_status(c,0)]
+    [Workstream.find_by_name(c), nb_of_wps_with_status(c,3), nb_of_wps_with_status(c,2), nb_of_wps_with_status(c,1), nb_of_wps_with_status(c,0)]
   end
   
   # generate an Excel file for Workstream reporting

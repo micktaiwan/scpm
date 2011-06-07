@@ -104,7 +104,7 @@ end
       
       for center in @centers
         @xml.Row 'ss:StyleID' => 's100' do
-          @xml.Cell 'ss:MergeAcross'=>'2' do @xml.Data('ss:Type' => 'String') do; @xml<< "#{center[0]} workstream projects quality report"; end; end
+          @xml.Cell 'ss:MergeAcross'=>'2' do @xml.Data('ss:Type' => 'String') do; @xml<< "#{center[0].name} workstream projects quality report"; end; end
         end  
         @xml.Row 'ss:StyleID' => 's102' do
         end  
@@ -128,9 +128,13 @@ end
         end  
         @xml.Row  'ss:StyleID' => 'Default' do
           @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "Strengths"; end; end
+          @xml.Cell do @xml.Data('ss:Type' => 'String') do; @xml<< ""; end; end
+          @xml.Cell do @xml.Data('ss:Type' => 'String') do; @xml<< excel_text(center[0].strenghts.to_s); end; end
         end  
         @xml.Row  'ss:StyleID' => 'Default' do
           @xml.Cell 'ss:StyleID' => 's101' do @xml.Data('ss:Type' => 'String') do; @xml<< "Weaknesses"; end; end
+          @xml.Cell do @xml.Data('ss:Type' => 'String') do; @xml<< ""; end; end
+          @xml.Cell do @xml.Data('ss:Type' => 'String') do; @xml<< excel_text(center[0].weaknesses.to_s); end; end
         end  
         @xml.Row 'ss:StyleID' => 'Default' do
         end  

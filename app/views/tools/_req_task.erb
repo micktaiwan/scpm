@@ -1,0 +1,36 @@
+<span class="<%= req_task.sanitized_status %>">
+<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= req_task.request_id %>"><%= req_task.request_id %></a>
+<b><%= req_task.work_package %></b>
+<%= req_task.milestone %>
+<%= req_task.complexity %>
+(<%= req_task.workload2 %>)
+<%= req_task.assigned_to %>
+<%= req_task.status %>
+<%= req_task.resolution %>
+<%= req_task.foreseen_end_date_str %>
+</span>
+
+<% if req_task.resolution != 'not started' and req_task.resolution != 'not planned' %>
+<% tasks = req_task.sdp_tasks %>
+<span style="background:#AAF">
+RAF: <%= tasks.inject(0) { |sum, t| t.remaining+sum } %>
+</span>
+<span style="background:#AFA">
+Gain: <%= tasks.inject(0) { |sum, t| t.balancei+sum } %>
+</span>
+<% end %>
+
+<% if req_task.resolution=="ended" and req_task.end_date %>
+<strong>No end date</strong>
+<% end %>
+<% if req_task.resolution=="ended" and req_task.actual_m_date=="" %>
+<strong>No actual milestone date</strong>
+<% end %>
+<% if current_user.has_role?('Admin') %>
+<%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'welcome', :action=>'cut', :id=>req_task.id}) %>
+<% end %>
+<br/>
+
+<ul>
+<%= render(:partial=>'sdp_task', :collection=>req_task.sdp_tasks) %>
+</ul>

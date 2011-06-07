@@ -110,7 +110,8 @@ class ToolsController < ApplicationController
 
   def sdp_yes_check
     @task_ids = SDPTask.all.collect{ |t| "'#{t.request_id}'" }.uniq
-    @requests = Request.find(:all, :conditions=>"sdp='yes' and request_id not in (#{@task_ids.join(',')})")
+    @yes_but_no_task_requests = Request.find(:all, :conditions=>"sdp='yes' and request_id not in (#{@task_ids.join(',')})")
+    @yes_but_cancelled_requests = Request.find(:all, :conditions=>"request_id in (#{@task_ids.join(',')}) and (status='cancelled' or status='removed')")
   end
 
   def requests_ended_check
