@@ -22,6 +22,7 @@ module SdpDB
     ['All','WP3 - Modeling']=>102848,
     ['All','WP4.1 - Surveillance Audit']=>102850,
     ['All','WP4.2 - Surveillance Root cause']=>102850,
+    ['All','WP5 - Change Accompaniment']=>102855,    
     ['All','WP6.1 - Coaching PP']=>102851,
     ['All','WP6.2 - Coaching BRD']=>102852,
     ['All','WP6.3 - Coaching V&V']=>102853,
