@@ -198,6 +198,7 @@ class ProjectsController < ApplicationController
     @status.actions           = last.actions
     @status.ereporting_date   = last.ereporting_date
     @status.operational_alert = last.operational_alert
+    @status.ws_report         = last.ws_report
   end
 
   def add_status
