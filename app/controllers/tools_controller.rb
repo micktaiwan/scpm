@@ -1,6 +1,13 @@
 class ToolsController < ApplicationController
 
   include WelcomeHelper
+  
+  NB_QR 					= 14.8
+  NB_DAYS_PER_MONTH			= 18
+  MEETINGS_LOAD_PER_MONTH 	= 1.5
+  PM_LOAD_PER_MONTH 		= 20 + 10
+  WP_LEADERS_DAYS_PER_MONTH = 2
+  NB_WP_LEADERS 			= 3
 
   def index
   end
@@ -80,8 +87,8 @@ class ToolsController < ApplicationController
     @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
     @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
     @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
-    @remaining_time       = (@remaining/14/18/0.01).round * 0.01
-    @theorical_management = round_to_hour((20+10+1.5*14+2*3)*@remaining_time)
+    @remaining_time       = (@remaining/NB_QR/NB_DAYS_PER_MONTH/0.01).round * 0.01
+    @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH*NB_WP_LEADERS)*@remaining_time)
     montee      = SDPActivity.find_by_title('Montee en competences').remaining
     souscharges = SDPActivity.find_by_title('Sous charges').remaining
     init        = SDPActivity.find_by_title('Initialization').remaining
