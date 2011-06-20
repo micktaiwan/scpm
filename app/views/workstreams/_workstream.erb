@@ -5,7 +5,7 @@
 <b>Weaknesses</b>: <%= my_simple_format(workstream.weaknesses) %><br/>
 <br/>
 <%
-projects = workstream.non_green_projects
+projects = workstream.non_green_projects.select { |p| !p.is_ended }
 projects_without_reporting = projects.select { |p| s = p.get_status; s.ws_report == nil or s.ws_report.strip == ""}
 size = projects_without_reporting.size
 %>

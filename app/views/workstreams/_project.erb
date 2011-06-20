@@ -1,6 +1,15 @@
 <% status = project.get_status %> 
 <%= link_to('Go to', {:controller=>'projects', :action=>'show', :id=>project.id}) %> <b><%= project.full_name %></b> <%= html_status(status.status) %><br/>
 <ul>
-<b>Reporting</b>: <%= s = status.ws_report; s = (s ? s.strip : ""); my_simple_format(s) %>
+
+<% 
+s = status.ws_report
+s = (s ? s.strip : "")
+if s == "" -%>
+<strong>Reporting</strong>
+<% else -%>
+<b>Reporting</b>
+<% end -%>:
+<%= s; my_simple_format(s) %>
 <b>Actions</b>: <%= a = status.actions; a = a.strip if a; my_simple_format(a) %>
 </ul>
