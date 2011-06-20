@@ -55,7 +55,7 @@ class Project < ActiveRecord::Base
 
   def is_ended
     self.requests.each { |r|
-      return false if (r.status != 'cancelled' and r.status != 'removed' and r.status != 'performed') and r.resolution !='ended'
+      return false if r.status != 'cancelled' and r.status != 'removed' and r.status != 'performed' and r.resolution !='ended' and r.resolution !='aborted'
       }
     return true
   end
