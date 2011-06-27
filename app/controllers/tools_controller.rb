@@ -115,7 +115,7 @@ class ToolsController < ApplicationController
       @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - (@remaining_management - @risks_remaining))
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
     rescue Exception => e
-      render(:text=>"Wrong import. (Error: #{e.message})")
+      render(:text=>"<b>Import error:</b> <i>#{e.message}</i>")
     end
   end
 
