@@ -196,13 +196,13 @@ end
   @xml.Worksheet 'ss:Name' => 'Amendments' do
     @xml.Table do
       # Columns width
-      for width in ['130','40','250', '50', '300','300', '120', '80', '40'] do
+      for width in ['130','40','250', '50', '120', '300','300', '120', '80', '40'] do
         @xml.Column nil, {'ss:Width' => width}
       end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'Workstream', 'Project', 'Milestone', 'Amendment', 'Actions', 'Resp', 'Duedate', 'Done'] do
+        for column in ['Supervisor', 'Workstream', 'Project', 'Milestone', 'Date', 'Amendment', 'Actions', 'Resp', 'Duedate', 'Done'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -215,7 +215,7 @@ end
         style = {}
         style = {'ss:StyleID' => 's75'} if p.done==1
         @xml.Row(style) do
-          for column in ['project.supervisor.name', 'project.workstream', 'project.full_name', 'milestone.upcase', 'amendment', 'action', 'responsible', 'duedate', 'done'] do
+          for column in ['project.supervisor.name', 'project.workstream', 'project.full_name', 'milestone.upcase', 'created_at', 'amendment', 'action', 'responsible', 'duedate', 'done'] do
             @xml.Cell do
               @xml.Data cascade_send(p, column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
