@@ -2,7 +2,7 @@ class ToolsController < ApplicationController
 
   include WelcomeHelper
   
-  NB_QR 					= 14.8
+  NB_QR 					= 14.4
   NB_DAYS_PER_MONTH			= 18
   MEETINGS_LOAD_PER_MONTH 	= 1.5
   PM_LOAD_PER_MONTH 		= 20 + 10
