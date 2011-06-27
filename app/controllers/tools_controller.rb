@@ -77,42 +77,46 @@ class ToolsController < ApplicationController
 
   def sdp_index
     return if SDPTask.count.zero?
-    @phases     = SDPPhase.all
-    @provisions = SDPTask.find(:all, :conditions=>"iteration='P'", :order=>'title')
-    @balancei   = @phases.inject(0) { |sum, p| p.balancei+sum}
-    tasks2010   = SDPTask.find(:all, :conditions=>"iteration='2010'")
-    tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
-    op2011      = tasks2011.inject(0) { |sum, t| t.initial+sum}
-    operational = round_to_hour(op2011*0.11111111111)
-    @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
-    @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
-    @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
-    @remaining_time       = (@remaining/NB_QR/NB_DAYS_PER_MONTH/0.01).round * 0.01
-    @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH*NB_WP_LEADERS)*@remaining_time)
-    montee      = SDPActivity.find_by_title('Montee en competences').remaining
-    souscharges = SDPActivity.find_by_title('Sous charges').remaining
-    init        = SDPActivity.find_by_title('Initialization').remaining
-    @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
-    @sold                 = @operational_total
-    @provisions_remaining_should_be = 0
-    @provisions_remaining = 0
-    @provisions_diff      = 0
-    @risks_remaining      = 0
-    @provisions.each { |p|
-      calculate_provision(p,@operational_total,operational)
-      @sold += p.initial_should_be
-      if p.title == 'Operational Management' or p.title == 'Project Management'
-        @provisions_remaining_should_be += p.reevaluated_should_be
-        @provisions_remaining += p.reevaluated
-        @provisions_diff      += p.difference
-      elsif p.title == 'Risks'
-        @risks_remaining = p.reevaluated
-      end
-      }
-    # Management provisions are already in the management total
-    @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
-    @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - (@remaining_management - @risks_remaining))
-    @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
+    begin
+      @phases     = SDPPhase.all
+      @provisions = SDPTask.find(:all, :conditions=>"iteration='P'", :order=>'title')
+      @balancei   = @phases.inject(0) { |sum, p| p.balancei+sum}
+      tasks2010   = SDPTask.find(:all, :conditions=>"iteration='2010'")
+      tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
+      op2011      = tasks2011.inject(0) { |sum, t| t.initial+sum}
+      operational = round_to_hour(op2011*0.11111111111)
+      @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
+      @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
+      @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
+      @remaining_time       = (@remaining/NB_QR/NB_DAYS_PER_MONTH/0.01).round * 0.01
+      @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH*NB_WP_LEADERS)*@remaining_time)
+      montee      = SDPActivity.find_by_title('Montee en competences').remaining
+      souscharges = SDPActivity.find_by_title('Sous charges').remaining
+      init        = SDPActivity.find_by_title('Initialization').remaining
+      @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
+      @sold                 = @operational_total
+      @provisions_remaining_should_be = 0
+      @provisions_remaining = 0
+      @provisions_diff      = 0
+      @risks_remaining      = 0
+      @provisions.each { |p|
+        calculate_provision(p,@operational_total,operational)
+        @sold += p.initial_should_be
+        if p.title == 'Operational Management' or p.title == 'Project Management'
+          @provisions_remaining_should_be += p.reevaluated_should_be
+          @provisions_remaining += p.reevaluated
+          @provisions_diff      += p.difference
+        elsif p.title == 'Risks'
+          @risks_remaining = p.reevaluated
+        end
+        }
+      # Management provisions are already in the management total
+      @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
+      @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - (@remaining_management - @risks_remaining))
+      @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
+    rescue Exception => e
+      render(:text=>"Wrong import. (Error: #{e.message})")
+    end
   end
 
   def sdp_yes_check
