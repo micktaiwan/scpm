@@ -1,3 +1,50 @@
+Workloads
+=========
+
+Chaque WP a sa ligne wl_line
+Il faut pouvoir rajouter des lignes sans projet
+Chaque ligne est en fait une somme de charge associé à une semaine
+il faut sommer les semaines pour avoir la charge totale de la semaine
+il faut sommer les wl_line_id pour avoir la somme totale d'une ligne
+
+wl_line
+  id
+  person_id
+  project_id
+  name
+  type (project or not?)
+  color
+
+wl_load
+  id
+  wl_line_id
+  week (year + week number: 201128, 201201)
+  load (0.125)
+
+wl_holidays
+  week
+  nb
+
+l'interface doit avoir au moins autant de colonne que de semaines
+
+Add a line
+
+month Jul                     Aug
+week  w27   w28   w29   w30   w31   w32   w33   w34
+days  04-08 11-15 18-22 25-29 01-05 08-12 15-19
+open  5     4     5     5     5     5     4
+
+Proj1 0.25  2
+Congé 2
+
+Somme 2.25  2
+%     45%   50%
+SC    2.75  2
+
+
+
+
+
 Chat
 ====
 
