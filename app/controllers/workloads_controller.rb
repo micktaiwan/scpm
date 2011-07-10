@@ -95,7 +95,7 @@ class WorkloadsController < ApplicationController
   end
 
   def add_by_request
-    request_id = params[:request_id]
+    request_id = params[:request_id].strip
     if request_id.empty?
       @error = "Please provide a request number.\nTo close this window, click again on 'Add a line'."
       return
@@ -119,7 +119,7 @@ class WorkloadsController < ApplicationController
   end
 
   def add_by_name
-    name = params[:name]
+    name = params[:name].strip
     if name.empty?
       @error = "Please provide a name.\nTo close this window, click again on 'Add a line'."
       return
