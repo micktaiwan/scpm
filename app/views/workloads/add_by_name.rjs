@@ -1,0 +1,7 @@
+if @error
+  page.alert @error
+else
+  page.hide 'wl_line_add_form'
+end
+page.replace "workload", render(:partial=>'workload', :object=>@workload)
+

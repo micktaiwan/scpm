@@ -1,5 +1,6 @@
 class WelcomeController < ApplicationController
 
+  layout 'tools'
   before_filter :require_login
 
   def index

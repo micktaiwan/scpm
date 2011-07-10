@@ -1,0 +1,20 @@
+div#banner {
+  background: #89A;
+  border-bottom: 1px solid #000;
+}
+
+#title {
+  color: #227;
+  }
+
+.menu:hover {
+  background: #EEE;
+  box-shadow: inset 4px 4px 4px #89A;
+  -moz-box-shadow: inset 4px 4px 4px #89A;
+  -webkit-box-shadow: inset 4px 4px 4px #89A;
+  }
+
+.menu.active {
+  background: #99F;
+  }
+

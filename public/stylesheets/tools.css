@@ -1,0 +1,36 @@
+div#banner {
+  background: #AAA;
+  border-bottom: 1px solid #000;
+}
+
+#title {
+  color: #555;
+  }
+
+.menu {
+  color:black;
+  border: 1px solid #666;
+  }
+
+.menu:hover {
+  background: #EEE;
+  box-shadow: inset 4px 4px 4px #AAA;
+  -moz-box-shadow: inset 4px 4px 4px #AAA;
+  -webkit-box-shadow: inset 4px 4px 4px #AAA;
+  }
+
+.menu.active {
+  background: #AAA;
+  }
+
+.menu.active:hover {
+  background: #AAA;
+  box-shadow: inset 4px 4px 4px #888;
+  -moz-box-shadow: inset 4px 4px 4px #888;
+  -webkit-box-shadow: inset 4px 4px 4px #888;
+  }
+
+h2 {
+  background: #DDD;
+  border: 1px solid #005;
+}

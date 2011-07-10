@@ -1,0 +1,78 @@
+div#banner {
+  background: #FA0;
+  border-bottom: 1px solid #000;
+}
+
+#title {
+  color: #722;
+  }
+
+.menu:hover {
+  background: #EEE;
+  box-shadow: inset 4px 4px 4px #89A;
+  -moz-box-shadow: inset 4px 4px 4px #89A;
+  -webkit-box-shadow: inset 4px 4px 4px #89A;
+  }
+
+.menu.active {
+  background: #F80;
+  }
+
+.menu.active:hover {
+  background: #F80;
+  box-shadow: inset 4px 4px 4px #F90;
+  -moz-box-shadow: inset 4px 4px 4px #F90;
+  -webkit-box-shadow: inset 4px 4px 4px #F90;
+  }
+
+h2 {
+  background: #FD0;
+  border: 1px solid #005;
+}
+
+/* Workloads */
+
+.workload {
+  width: auto;
+  overflow-x: scroll;
+  padding: 10px;
+  }
+
+.wl_person_name {
+  font-weight:bold;
+  }
+
+.wl_table {
+  width: 1600px;
+  }
+
+td.wl_names {
+  /*position:fixed;*/
+  /*background: white;*/
+  }
+
+.wl_case {
+  border: 1px solid #DDD;
+  width: 35px;
+  margin: 0;
+  padding:0;
+  }
+
+.wl_case input {
+  color: #555;
+  }
+
+.wl_tft {
+  border: 0;
+  width: 40px;
+  }
+
+.wl_total {
+  border: 1px 0 0 0 solid #DDD;
+  color: #940;
+  }
+
+.wl_holidays .wl_case input{
+  color: #595;
+  }
+

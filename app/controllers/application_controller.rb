@@ -11,21 +11,22 @@ class ApplicationController < ActionController::Base
 
   layout 'general'
   include Authentication
+  include ApplicationHelper
   before_filter :log_action
   before_filter :verify_auth
   before_filter :set_timezone
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
-  
+
   def set_timezone
     Time.zone = 'Paris'
   end
-  
+
   def verify_auth
-    redirect_to "/sessions/login" and return if(not current_user and controller_name != "sessions") 
+    redirect_to "/sessions/login" and return if(not current_user and controller_name != "sessions")
   end
-  
+
   def log_action
     return if controller_name == "chat" and (action_name == "refresh_sessions" or action_name == "refresh")
     @action_log                   = Log.new
@@ -40,6 +41,10 @@ class ApplicationController < ActionController::Base
     @action_log.controller_action = controller_name + "/" + action_name
     @action_log.params            = params.inspect # wrap this in an unless block if it might contain a password
     @action_log.save!
+  end
+
+  def change_context
+    session[:context] = params[:context]
   end
 
 end
@@ -59,7 +64,7 @@ def month_loop(month, year, mode=:one_date)
     to   =  (Date.new(year,month,1) + 1.month) - 1.day
     if mode == :two_dates
       yield(from,to)
-    else  
+    else
       yield(to)
     end
     month += 1

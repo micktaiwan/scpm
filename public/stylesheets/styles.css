@@ -1,15 +1,10 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 0.8em;
   background: #FFF;
   }
-
-img {
-  border: 0px;
-}
-
 div#banner {
   margin: 0;
   position: fixed;
@@ -17,27 +12,23 @@ div#banner {
   left: auto;
   width: 100%;
   height: 80px;
-  background: #89A;
-  border-bottom: 1px solid #000;
-  box-shadow: inset 5px 5px 5px #ABC;
-  -moz-box-shadow: inset 5px 5px 5px #ABC;
-  -webkit-box-shadow: inset 5px 5px 5px #ABC;
+}
+div#banner #context_select {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+img {
+  border: 0px;
 }
 #title {
-  text-transform: capitalize;
-  font:2em bold;
-  font-family: "Arial";
-  letter-spacing:-3px;
-  color: #222;
-  margin: 0;
-  padding: 5px 10px 0px 35px;
-  background-image: url(/images/plane.png);
-  background-repeat:no-repeat;
-  }
-#menu_bar {
-  position: fixed;
-  top: 53px;
-  margin: -2px 0 0 0;
+  margin: -20px 0 0 0;
+  padding: 5px 10px 0px 10px;
+  font-family: "Zeyada";
+  font-size:4em;
   }
 .menu {
   color:black;
@@ -47,35 +38,35 @@ div#banner {
   background: #FFF;
   border-radius: 5px;
   -moz-border-radius: 5px;
-  box-shadow: inset 2px 2px 2px #89A;
-  -moz-box-shadow: inset 2px 2px 2px #89A;
-  -webkit-box-shadow: inset 2px 2px 2px #89A;
   }
-.menu:hover {
-  background: #EEE;
-  box-shadow: inset 4px 4px 4px #89A;
-  -moz-box-shadow: inset 4px 4px 4px #89A;
-  -webkit-box-shadow: inset 4px 4px 4px #89A;
+#menu_bar {
+  position: fixed;
+  top: 53px;
+  margin: -2px 0 0 0;
+  }
+.menu.special {
+  color:black;
+  border: 1px solid #678;
+  padding: 5px;
+  margin: 2px;
+  background: #DDD;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  box-shadow: inset 2px 2px 2px #CCC;
+  -moz-box-shadow: inset 2px 2px 2px #CCC;
+  -webkit-box-shadow: inset 2px 2px 2px #CCC;
   }
 .grey {
   border: 1px solid #999;
   background: #DDD;
   }
-.active {
-  background: #99F;
-  box-shadow: inset 4px 4px 4px #77A;
-  -moz-box-shadow: inset 4px 4px 4px #77A;
-  -webkit-box-shadow: inset 4px 4px 4px #77A;
-  }
 h2 {
+  font-family: 'Stardos Stencil', serif;
+  font-weight: normal;
   background: #ABC;
   margin: 10px 40px 10px -15px;
   padding: 0 0 0 15px;
   border: 1px solid #789;
-  box-shadow: 4px 4px 4px #89A;
-  -moz-box-shadow: 4px 4px 4px #89A;
-  -webkit-box-shadow: 4px 4px 4px #89A;
-  text-shadow: #FFF 0.1em 0.1em 0.1em;
   border-radius: 5px;
   -moz-border-radius: 5px;
 }
@@ -84,7 +75,6 @@ h3 {
   padding: 0 0 0 15px;
   text-shadow: #FFF 0.1em 0.1em 0.1em;
 }
-
 .panel {
   background: #EEF;
   margin: 20px 0px 20px 0;
@@ -96,16 +86,13 @@ h3 {
   border-radius: 5px;
   -moz-border-radius: 5px;
 }
-
-
 #submenu {
   position: fixed;
   width: 100%;
   background: #FFF;
-  margin: -9px 0 0 0;
+  margin: -25px 0 0 0;
   padding: 10px 0 5px 0;
 }
-
 #subcontent {
   padding: 80px 0 0 0;
 }
@@ -132,7 +119,6 @@ a {text-decoration:none;}
   -moz-box-shadow: inset 2px 2px 2px #876;
   -webkit-box-shadow: inset 2px 2px 2px #876;
   }
-
 .btnlnk:hover {
   background: #BCF;
   box-shadow: inset 2px 2px 2px #678;
@@ -168,7 +154,6 @@ strong {
 
 /* TABLES */
 table, th {
-  font-family: Arial;
   }
 tr    {
   padding: 0px;
@@ -338,44 +323,61 @@ ins.differ {
   padding-right: 5px;
   display: inline-block;
   }
-
 .note {
   border-left: 1px solid #99A;
   padding-left: 5px;
   width:600px;
   display: inline-block;
 }
-
 .even {
   background: #EFE;
   }
 .odd {
   background: #EEF;
   }
-
 div#bandeau {
-  margin: 0;
+  margin: 5px 80px 0 0;
   position: fixed;
+  padding: 0 10px 0 10px;
   top: 0;
-  left: 200px;
+  left: 170px;
   width: auto;
   height: 30px;
 }
-
 #bandeau .text {
-font-size: 1.2em;
-display: inline;
-}
-
+  font-family: "Kameron";
+  font-size: 1.2em;
+  display: inline;
+  line-height: 14px;
+  }
 #bandeau .person {
-font-size: 0.8em;
-color: #555;
-display: inline;
-}
-
+  font-size: 0.8em;
+  color: #000;
+  display: inline;
+  }
 #bandeau .link {
-font-size: 0.8em;
-color: #559;
-display: inline;
+  font-size: 0.8em;
+  color: #559;
+  display: inline;
+}
+.popup {
+  cursor:move;
+  position:fixed;
+  top:100px;
+  left: 200px;
+  background: #81BEF7;
+  padding:3px 30px 30px 30px;
+  border: 1px solid black;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  box-shadow: 5px 5px 5px #CCC;
+  -moz-box-shadow: 5px 5px 5px #CCC;
+  -webkit-box-shadow: 5px 5px 5px #CCC;
+  }
+
+.popup .title {
+  font-family: 'Stardos Stencil', serif;
+  font-weight: normal;
+  font-size: 2em;
 }
 

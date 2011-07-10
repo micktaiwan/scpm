@@ -1,0 +1,41 @@
+div#banner {
+  background: #DDD;
+  border-bottom: 1px solid #005;
+}
+
+.title {
+  font-family: 'Stardos Stencil', serif;
+  font-size: 3em;
+  color: #444;
+}
+
+.subt {
+  font-family: 'Zeyada', serif;
+  font-size: 2.5em;
+  margin: -10px 0 0 0;
+  color: #777;
+}
+
+.tag {
+  position:fixed;
+  top: 14px;
+  left: 260px;
+  font-family: 'Special Elite', serif;
+  font-size: 2.5em;
+  color: #A00;
+}
+
+h2 {
+  font-family: 'Stardos Stencil', serif;
+  font-weight: normal;
+  background: #DDD;
+  border: 1px solid #005;
+  color: #000;
+  margin: 100px 0 0 0;
+}
+
+.chrome {
+  position:fixed;
+  top: 16px;
+  right: 16px;
+}

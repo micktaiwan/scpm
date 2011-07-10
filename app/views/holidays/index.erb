@@ -1,0 +1,11 @@
+<h2>Holidays</h2>
+<% if current_user.has_role?('Admin') %>
+<%= link_to('Add', {:action=>'new'},{:class=>"btnlnk"}) %>
+<br/>
+<% end %>
+<br/>
+
+<ul>
+<%= render(:partial=>'holiday', :collection=>@holidays) %>
+</ul>
+

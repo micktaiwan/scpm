@@ -1,0 +1,25 @@
+<div id="wl_line_add_form" class="popup" style="display:none;">
+<div class="title">Add a line</div>
+By request number
+<% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
+  <%= label_tag(:request_id, "Request #") %>
+  <%= text_field_tag(:request_id) %>
+  <%= submit_tag("Add") %>
+<% end %>
+<br/>
+Or just enter a name ("Holidays", "Training",...)
+<% form_remote_tag(:url=>{:action => "add_by_name"}) do %>
+  <%= label_tag(:name, "Name") %>
+  <%= text_field_tag(:name) %>
+  <%= submit_tag("Add") %>
+<% end %>
+</div>
+
+<script>
+new Draggable(wl_line_add_form);
+</script>
+
+<%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %><br/>
+
+<%= render(:partial=>"workload") %>
+

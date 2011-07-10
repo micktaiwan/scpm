@@ -1,6 +1,7 @@
 class PeopleController < ApplicationController
 
   before_filter :require_login
+  layout 'tools'
 
   def index
     @people = Person.find(:all, :order=>"company_id, name")

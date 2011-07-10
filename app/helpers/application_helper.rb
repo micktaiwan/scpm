@@ -7,11 +7,11 @@ module ApplicationHelper
     return "" if not text
     text.split("\n").join("<br/>") + "<br/>"
   end
-  
+
   def my_time(t)
     t.strftime("%d-%b-%Y %H:%M")
   end
-  
+
   def menu_style(c,a)
     if c == controller_name and (a == '*' or a == action_name)
       'menu active'
@@ -40,11 +40,16 @@ module ApplicationHelper
   end
 
   def options_with_colors(value, colors)
-    colors.collect do |txt, code, color| 
+    colors.collect do |txt, code, color|
       "<option value='#{code}' style='background-color:#{color};' #{value==code ? " selected='selected'":""}>#{txt}</option> "
     end.join
   end
-  
+
+  # filled_number(123, 5) => 00123
+  def filled_number(n, nb)
+    "0"*(nb-n.to_s.size) + n.to_s
+  end
+
 end
 
 class Integer

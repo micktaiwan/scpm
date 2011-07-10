@@ -1,5 +1,7 @@
 class BandeausController < ApplicationController
 
+  layout 'tools'
+
   def index
     @bandeaus = Bandeau.find(:all, :conditions=>["person_id = ?", current_user.id], :order=>"id desc")
     @other    = Bandeau.find(:all, :conditions=>["person_id != ?", current_user.id], :order=>"id desc")

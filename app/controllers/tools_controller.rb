@@ -1,7 +1,9 @@
 class ToolsController < ApplicationController
 
+  layout 'tools'
+
   include WelcomeHelper
-  
+
   NB_QR 					= 14.4
   NB_DAYS_PER_MONTH			= 18
   MEETINGS_LOAD_PER_MONTH 	= 1.5

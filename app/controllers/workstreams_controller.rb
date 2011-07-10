@@ -1,5 +1,7 @@
 class WorkstreamsController < ApplicationController
 
+  before_filter :require_login
+
   def index
     @ws = Workstream.find(:all, :order=>'name')
   end
@@ -17,5 +19,5 @@ class WorkstreamsController < ApplicationController
       render :action => 'edit'
     end
   end
-  
+
 end

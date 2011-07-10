@@ -15,6 +15,7 @@ class SessionsController < ApplicationController
       else
         session[:project_sort]      = nil
       end
+      session[:context] = 'reporting'
       redirect_to :controller=>'projects'
       return
     end
@@ -27,3 +28,4 @@ class SessionsController < ApplicationController
   end
 
 end
+

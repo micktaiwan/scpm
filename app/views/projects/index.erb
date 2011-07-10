@@ -1,16 +1,25 @@
 <% if session[:project_filter_qr] != nil %>
-<h2>Actions</h2>
-<%= @actions.size %> actions<br/>
 
+<h2>Actions</h2>
+<%= link_to_function("#{@actions.size} actions", "$('actions').toggle();") %><br/>
+
+<div id="actions" style="display:none;">
+Pierre, je ferai mieux plus tard avec des onglets et tout et tout :)<br/>
 <%= render(:file=>'actions/actions_header') %>
 <%= render(:partial=>'actions/action', :collection=>@actions) %>
 </table>
+</div>
 <% end %>
 
 <h2>Amendments</h2>
+
+<%= link_to_function("#{@amendments.size} amendments", "$('amendments').toggle();") %><br/>
+
+<div id="amendments" style="display:none;">
 <%= render(:file=>'amendments/amendments_header') %>
 <%= render(:partial=>'amendments/amendment', :collection=>@amendments) %>
 </table>
+</div>
 
 
 <h2>Projects</h2>

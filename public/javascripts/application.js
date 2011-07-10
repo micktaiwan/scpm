@@ -16,9 +16,7 @@ function addLoadEvent(func) {
 }
 
 // http://code.google.com/p/simile-widgets/wiki/Timeline_GettingStarted
-
 var tl;
-
 var resizeTimerID = null;
 function onResize() {
    if (resizeTimerID == null) {
@@ -28,3 +26,18 @@ function onResize() {
        }, 500);
    }
 }
+
+function change_context() {
+  document.body.style.cursor = 'wait';
+  value = $('context_select').value
+  new Ajax.Request('/application/change_context', {
+    parameters: { context: value },
+    onComplete: function(r) {
+      if(value=='reporting') location = '/projects';
+      if(value=='workloads') location = '/workloads';
+      if(value=='tools')     location = '/tools/sdp_index';
+      if(value=='logout')    location = '/sessions/logout';
+      }
+    });
+  }
+

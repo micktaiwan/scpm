@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110603130754) do
+ActiveRecord::Schema.define(:version => 20110706081443) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -322,6 +322,31 @@ ActiveRecord::Schema.define(:version => 20110603130754) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sqli_action", :default => 0
+  end
+
+  create_table "wl_holidays", :force => true do |t|
+    t.integer  "week"
+    t.integer  "nb"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "wl_lines", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "request_id"
+    t.string   "name"
+    t.integer  "wl_type"
+    t.string   "color"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "wl_loads", :force => true do |t|
+    t.integer  "wl_line_id"
+    t.integer  "week"
+    t.float    "wlload"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "workstreams", :force => true do |t|
