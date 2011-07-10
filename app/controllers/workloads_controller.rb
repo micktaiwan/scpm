@@ -23,7 +23,7 @@ class Workload
     @percents   = []
     @months     = []
     @days       = []
-    month = Date::ABBR_MONTHNAMES[(from_day+5.days).month]
+    month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
     month_displayed = false
     nb = 1
     while true
@@ -31,8 +31,8 @@ class Workload
       break if w > farest_week or nb > 6*4
 
       # months
-      if Date::ABBR_MONTHNAMES[(from_day+5.days).month] != month
-        month = Date::ABBR_MONTHNAMES[(from_day+5.days).month]
+      if Date::ABBR_MONTHNAMES[(from_day+4.days).month] != month
+        month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
         month_displayed = false
       end
       if not month_displayed
@@ -41,7 +41,7 @@ class Workload
       else
         @months << ''
       end
-      @days << filled_number(from_day.day,2) + "-" + filled_number((from_day+5.days).day,2)
+      @days << filled_number(from_day.day,2) + "-" + filled_number((from_day+4.days).day,2)
       @wl_weeks << w
       @weeks    << from_day.cweek
       @opens    << 5 - WlHoliday.get_from_week(w)
