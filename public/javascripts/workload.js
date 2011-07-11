@@ -26,16 +26,16 @@ function wl_save_value(line_id, wlweek) {
       $('ctotal_'  +wlweek).innerHTML = arr[2]
       $('cpercent_'+wlweek).innerHTML = arr[3] + "%"
       if(parseInt(arr[3])>110)
-        wl_change_colors("#F00","#FFF");
+        wl_change_colors(wlweek,"#F00","#FFF");
       else if(parseInt(arr[3])<90)
-        wl_change_colors("#F90","#000");
+        wl_change_colors(wlweek,"#F90","#000");
       else
-        wl_change_colors("#FFF","#940");
+        wl_change_colors(wlweek,"#FFF","#940");
       }
     });
   }
 
-function wl_change_colors(background, color) {
+function wl_change_colors(wlweek, background, color) {
   $('cpercent_'+wlweek).style.background  = background;
   $('cpercent_'+wlweek).style.color       = color;
   }
