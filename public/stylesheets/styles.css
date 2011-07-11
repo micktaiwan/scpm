@@ -24,6 +24,9 @@ div#banner #context_select {
 img {
   border: 0px;
 }
+p {
+  line-height: 12px;
+  }
 #title {
   margin: -20px 0 0 0;
   padding: 5px 10px 0px 10px;
