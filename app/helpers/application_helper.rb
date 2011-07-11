@@ -50,6 +50,12 @@ module ApplicationHelper
     "0"*(nb-n.to_s.size) + n.to_s
   end
 
+  # appended_string("EDY", 5) => "EDY  "
+  def appended_string(str, nb, ch=" ")
+    str.to_s + ch*(nb-str.to_s.size)
+  end
+
+
 end
 
 class Integer

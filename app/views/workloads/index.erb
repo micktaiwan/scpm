@@ -20,6 +20,6 @@ new Draggable(wl_line_add_form);
 </script>
 
 <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %><br/>
-
+<br/>
 <%= render(:partial=>"workload") %>
 

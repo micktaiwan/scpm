@@ -1,3 +1,6 @@
+https://subversion.sqli.com/svndev/PI586/branches/dev-EISQ-pdc
+https://subversion.sqli.com/svndev/PI586/trunk/projets/interne/eisq/
+
 Chat
 ====
 

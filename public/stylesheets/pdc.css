@@ -34,7 +34,7 @@ h2 {
 
 .workload {
   width: auto;
-  overflow-x: scroll;
+  overflow: auto;
   padding: 10px;
   }
 
@@ -44,11 +44,15 @@ h2 {
 
 .wl_table {
   width: 1600px;
+  padding:0;
+  margin:0;
+  }
+
+.wl_table tr:hover {
+  background: #FFA;
   }
 
 td.wl_names {
-  /*position:fixed;*/
-  /*background: white;*/
   }
 
 .wl_case {
@@ -72,7 +76,24 @@ td.wl_names {
   color: #940;
   }
 
-.wl_holidays .wl_case input{
-  color: #595;
+tr.wl_opens {
+  color: #999;
   }
+
+.wl_line_200 {
+  background: #DDF;
+  }
+.wl_line_300 {
+  background: #DFD;
+  }
+
+.wl_line_200 .wl_case input {
+  background: #EEF;
+  }
+
+.wl_line_300 .wl_case input {
+  color: #595;
+  background: #EFE;
+  }
+
 

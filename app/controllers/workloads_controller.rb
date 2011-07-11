@@ -108,7 +108,7 @@ class WorkloadsController < ApplicationController
       return
     end
     project = request.project
-    name = "#{project.full_name} - #{request.milestone} (##{request_id})"
+    name = request.workload_name
     found = WlLine.find_by_person_id_and_request_id(person_id, request_id)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>request_id, :person_id=>person_id, :wl_type=>WL_LINE_REQUEST)

@@ -4,40 +4,40 @@
 
 <tr>
 <td class="wl_names"></td>
-<td class="wl_names"></td>
+<td></td>
 <%= render(:partial=>"wl_text", :collection=>workload.months) %>
 </tr>
 
 <tr>
 <td class="wl_names"></td>
-<td class="wl_names"></td>
+<td></td>
 <%= render(:partial=>"wl_text", :collection=>workload.weeks) %>
 </tr>
 
 <tr>
-<td class="wl_names"></td>
-<td class="wl_names"></td>
+<td class="wl_names">Tasks</td>
+<td class="wl_total">Total</td>
 <%= render(:partial=>"wl_text", :collection=>workload.days) %>
 </tr>
 
 <%= render(:partial=>"wl_line", :collection=>workload.wl_lines, :locals=>{:line_sums=>workload.line_sums, :wl_weeks=>workload.wl_weeks}) %>
 
-<tr>
+<tr class="wl_opens">
 <td class="wl_names">Nb of worked days</td>
-<td class="wl_names"></td>
+<td></td>
 <%= render(:partial=>"wl_text", :collection=>workload.opens) %>
 </tr>
 
 
 <tr class="wl_total">
 <td class="wl_names">Total</td>
-<td class="wl_names"></td>
+<td></td>
 <%= render(:partial=>"wl_ctotal", :collection=>workload.ctotals) %>
 </tr>
 
 <tr class="wl_total">
 <td class="wl_names">Percent</td>
-<td class="wl_names"></td>
+<td></td>
 <%= render(:partial=>"wl_ctotal", :collection=>workload.percents) %>
 </tr>
 

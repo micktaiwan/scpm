@@ -1,8 +1,7 @@
 Ajax.Replacer = Class.create(Ajax.Updater, {
   initialize: function($super, container, url, options) {
     options = options || { };
-    options.onComplete = (options.onComplete ||
-Prototype.emptyFunction)
+    options.onComplete = (options.onComplete || Prototype.emptyFunction)
       .wrap(function(proceed, transport, json) {
         $(container).replace(transport.responseText);
         proceed(transport, json);
@@ -41,8 +40,12 @@ function wl_change_colors(wlweek, background, color) {
   }
 
 function change_workload(person_id) {
+  document.body.style.cursor = 'wait';
   new Ajax.Replacer('workload', '/workloads/change_workload', {
-    parameters: { person_id: person_id }
+    parameters: { person_id: person_id },
+    onComplete: function(r) {
+      document.body.style.cursor = 'auto';
+      }
     });
   }
 

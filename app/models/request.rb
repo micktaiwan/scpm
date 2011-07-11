@@ -3,15 +3,31 @@ class Request < ActiveRecord::Base
   belongs_to :project
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
 
-  
-  
   include WelcomeHelper
+  include ApplicationHelper
 
   def resp
     Person.find(:first, :conditions=>"rmt_user='#{self.assigned_to}'")
   end
 
   # TODO: contre-visites
+
+  WP_shortnames = {
+  "WP1.1 - Quality Control" 		    => "Control",
+  "WP1.2 - Quality Assurance" 		  => "Assurance",
+  "WP2 - Quality for Maintenance" 	=> "Maint.",
+  "WP3 - Modeling" 					        => "Modeling",
+  "WP4 - Surveillance" 				      => "Audit",
+  "WP4.1 - Surveillance Audit" 		  => "Audit",
+  "WP4.2 - Surveillance Root cause" => "RCA",
+  "WP5 - Change Accompaniment" 		  => "Change",
+  "WP6.1 - Coaching PP" 			      => "PP",
+  "WP6.2 - Coaching BRD" 			      => "BRD",
+  "WP6.3 - Coaching V&V"            => "V&V",
+  "WP6.4 - Coaching ConfMgt"        => "ConfMgt",
+  "WP6.5 - Coaching Maintenance"    => "C. Maint."
+  }
+
 
   Wp_index = {
   "WP1.1 - Quality Control" 		    => 0,
@@ -267,6 +283,11 @@ class Request < ActiveRecord::Base
     p = Person.find_by_rmt_user(self.assigned_to)
     return -1 if not p
     return p.sdp_id
+  end
+
+  def workload_name
+    ##{appended_string(project.workstream, 6, "&nbsp;")}
+   "<b>#{project.full_name}</b> <u>#{WP_shortnames[self.work_package]}</u> #{self.milestone} (##{self.request_id.to_i})"
   end
 
 private

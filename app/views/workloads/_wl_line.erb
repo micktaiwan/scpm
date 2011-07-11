@@ -1,4 +1,4 @@
-<tr title="<%= wl_line.name %>"<% if wl_line.wl_type == 300 %> class="wl_holidays"<%end%>>
+<tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>">
 <td class="wl_names"><%= wl_line.display_name %></td>
 <td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= line_sums[wl_line.id] %></td>
 <% for week in wl_weeks %>
@@ -7,7 +7,7 @@
     wlload = wl_line.get_load_by_week(week)
     wlload = wlload == 0.0 ? '' : wlload
   %>
-  <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_tft', :onblur=>"wl_save_value('#{wl_line.id}', '#{week}');return false;") %>
+  <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_tft', :onchange=>"wl_save_value('#{wl_line.id}', '#{week}');return false;") %>
   </td>
 <% end %>
 </tr>
