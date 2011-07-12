@@ -15,7 +15,7 @@ class Workload
     @wl_lines  << WlLine.create(:name=>"Congés", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
     from_day    = Date.today - (Date.today.cwday-1).days
     #farest_week = @wl_lines.map{|l| m = l.wl_loads.map{|l| l.week}.max; m ? m:0}.max
-    farest_week = wlweek(from_day+5.months) # if farest_week == 0
+    farest_week = wlweek(from_day+6.months) # if farest_week == 0
     @wl_weeks   = []
     @weeks      = []
     @opens      = []
@@ -84,7 +84,7 @@ class WorkloadsController < ApplicationController
   def index
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @workload = Workload.new(session['workload_person_id'])
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| [p.name, p.id]}
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
   end
 
   def change_workload

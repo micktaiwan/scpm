@@ -1,27 +1,43 @@
 <div id="workload" class="workload">
-<%= link_to_function('Add a line', "wl_add_line(#{workload.person_id})", :class=>"btnlnk") %>
+<%= link_to_function('Add a line', "wl_add_line(#{workload.person_id})", :class=>"btnlnk") %><br/>
+<br/>
+<table>
 
-
-<div id="tableContainer" class="tableContainer"> 
-<table class="scrollTable">
-
-<thead class="fixedHeader">
+<thead>
   <tr>
-  <td class="wl_names"></td>
-  <td></td>
-  <%= render(:partial=>"wl_text", :collection=>workload.months) %>
+  <th class="wl_names"></th>
+  <th></th>
+  <%= render(:partial=>"wl_head", :collection=>workload.months) %>
   </tr>
 
   <tr>
-  <td class="wl_names"></td>
-  <td></td>
-  <%= render(:partial=>"wl_text", :collection=>workload.weeks) %>
+  <th class="wl_names"></th>
+  <th></th>
+  <%= render(:partial=>"wl_head", :collection=>workload.weeks) %>
   </tr>
 
   <tr>
-  <td class="wl_names">Tasks</td>
-  <td class="wl_total">Total</td>
-  <%= render(:partial=>"wl_text", :collection=>workload.days) %>
+  <th class="wl_names"></th>
+  <th class="wl_total"></th>
+  <%= render(:partial=>"wl_head", :collection=>workload.days) %>
+  </tr>
+
+  <tr class="wl_opens">
+  <th class="wl_names">Nb of worked days</th>
+  <th></th>
+  <%= render(:partial=>"wl_head", :collection=>workload.opens) %>
+  </tr>
+
+  <tr class="wl_total">
+  <th class="wl_names">Total</th>
+  <th></th>
+  <%= render(:partial=>"wl_ctotal", :collection=>workload.ctotals) %>
+  </tr>
+
+  <tr class="wl_total">
+  <th class="wl_names">Percent</th>
+  <th></th>
+  <%= render(:partial=>"wl_ctotal", :collection=>workload.percents) %>
   </tr>
 </thead>
 
@@ -29,27 +45,8 @@
   <%= render(:partial=>"wl_line", :collection=>workload.wl_lines, :locals=>{:line_sums=>workload.line_sums, :wl_weeks=>workload.wl_weeks}) %>
 </tbody>
 
-<tfoot class="fixedHeader">
-  <tr class="wl_opens">
-  <td class="wl_names">Nb of worked days</td>
-  <td></td>
-  <%= render(:partial=>"wl_text", :collection=>workload.opens) %>
-  </tr>
-
-  <tr class="wl_total">
-  <td class="wl_names">Total</td>
-  <td></td>
-  <%= render(:partial=>"wl_ctotal", :collection=>workload.ctotals) %>
-  </tr>
-
-  <tr class="wl_total">
-  <td class="wl_names">Percent</td>
-  <td></td>
-  <%= render(:partial=>"wl_ctotal", :collection=>workload.percents) %>
-  </tr>
-</tfoot>
 
 </table>
 </div>
 <br/>
-</div>
+

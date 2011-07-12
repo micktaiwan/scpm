@@ -32,30 +32,33 @@ h2 {
 
 /* Workloads */
 
-.workload {
-  width: auto;
-  overflow-x: scroll;
-  padding: 10px;
+.fht-table-wrapper {
+  border: 1px solid #888;
   }
 
-.wl_table {
-  width: 1600px;
-  padding:0;
-  margin:0;
+.fht-thead {
+  background: #EEE;
+  border-bottom: 1px solid #888;
+  box-shadow: inset 4px 4px 4px #DDD;
+  -moz-box-shadow: inset 4px 4px 4px #DDD;
+  -webkit-box-shadow: inset 4px 4px 4px #DDD;
+  }
+th {
+  text-align: left;
+  min-width: 35px;
   }
 
 tbody tr:hover {
   background: #FFA;
   }
 
-/*
-td.wl_names {
+.wl_names {
+  min-width: 600px;
   }
-*/
 
 .wl_case {
   border: 1px solid #DDD;
-  width: 35;
+  width: 35px;
   margin: 0;
   padding:0;
   }
@@ -64,7 +67,7 @@ td.wl_names {
   color: #555;
   }
 
-.wl_tft {
+.wl_textfield {
   border: 0;
   width: 40px;
   }

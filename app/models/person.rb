@@ -11,6 +11,7 @@ class Person < ActiveRecord::Base
   has_many :open_actions, :class_name=>"Action", :conditions=>"progress='open' or progress='in_progress'"
   has_many :project_people
   has_many :projects, :through=>:project_people
+  has_many :wl_lines
 
   before_save :encrypt_password
 
@@ -68,7 +69,7 @@ class Person < ActiveRecord::Base
     return self.find_by_login(login[4..-1]) if login[0..3] == "test" and password=="sqlitlse"
     return nil if login.empty? or password.empty?
     #return self.find_by_login(login) # temporaire.....
-    
+
     if login_by_ldap(login,password)
       self.find_by_login(login)
     else

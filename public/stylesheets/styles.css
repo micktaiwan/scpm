@@ -366,8 +366,9 @@ div#bandeau {
 .popup {
   cursor:move;
   position:fixed;
-  top:100px;
+  top:  100px;
   left: 200px;
+  z-index:100;
   background: #81BEF7;
   padding:3px 30px 30px 30px;
   border: 1px solid black;
@@ -377,7 +378,6 @@ div#bandeau {
   -moz-box-shadow: 5px 5px 5px #CCC;
   -webkit-box-shadow: 5px 5px 5px #CCC;
   }
-
 .popup .title {
   font-family: 'Stardos Stencil', serif;
   font-weight: normal;
