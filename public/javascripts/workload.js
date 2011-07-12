@@ -45,7 +45,7 @@ function change_workload(person_id) {
     parameters: { person_id: person_id },
     onComplete: function(r) {
       document.body.style.cursor = 'auto';
-      $j('table').fixedHeaderTable({ height: '400', footer: false, fixedColumn: true });
+      $j('table').fixedHeaderTable({ height: '400', footer: false, fixedColumn: false });
       }
     });
   }
