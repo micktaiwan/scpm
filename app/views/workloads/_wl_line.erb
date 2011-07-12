@@ -1,6 +1,6 @@
 <tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>">
 <td class="wl_names"><%= wl_line.display_name %></td>
-<td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= line_sums[wl_line.id] %></td>
+<td width="40" id="ltotal_<%= wl_line.id %>" class="wl_total"><%= line_sums[wl_line.id] %></td>
 <% for week in wl_weeks %>
   <td class="wl_case">
   <%
@@ -11,4 +11,3 @@
   </td>
 <% end %>
 </tr>
-

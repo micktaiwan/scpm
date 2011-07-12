@@ -1,4 +1,4 @@
-<h2>SDP 'yes' but no task in SDP</h2>
+<h2>Check RMT <=> SDP</h2>
 <ul>
 <%= render(:partial=>'projects/request', :collection=>@yes_but_no_task_requests) %>
 </ul>
@@ -6,4 +6,9 @@
 <h2>Task in SDP, but cancelled or removed</h2>
 <ul>
 <%= render(:partial=>'req_task', :collection=>@yes_but_cancelled_requests) %>
+</ul>
+
+<h2>"SDP No" in RMT, but task in SDP</h2>
+<ul>
+<%= render(:partial=>'req_task', :collection=>@no_but_sdp) %>
 </ul>

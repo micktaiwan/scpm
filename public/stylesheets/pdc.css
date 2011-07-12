@@ -34,12 +34,8 @@ h2 {
 
 .workload {
   width: auto;
-  overflow: auto;
+  overflow-x: scroll;
   padding: 10px;
-  }
-
-.wl_person_name {
-  font-weight:bold;
   }
 
 .wl_table {
@@ -48,16 +44,18 @@ h2 {
   margin:0;
   }
 
-.wl_table tr:hover {
+tbody tr:hover {
   background: #FFA;
   }
 
+/*
 td.wl_names {
   }
+*/
 
 .wl_case {
   border: 1px solid #DDD;
-  width: 35px;
+  width: 35;
   margin: 0;
   padding:0;
   }
@@ -95,5 +93,4 @@ tr.wl_opens {
   color: #595;
   background: #EFE;
   }
-
 
