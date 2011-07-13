@@ -1,6 +1,10 @@
 <div id="workload" class="workload">
 <%= link_to_function('Add a line', "wl_add_line(#{workload.person_id})", :class=>"btnlnk") %><br/>
 <br/>
+<br/>
+<b>Next month:</b> <%= workload.next_month_percents %>%<br/>
+<b>6 months:</b>   <%= workload.total_percents %>%<br/>
+<br/>
 <table>
 
 <thead>
