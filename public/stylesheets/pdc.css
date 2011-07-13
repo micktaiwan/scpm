@@ -33,10 +33,13 @@ h2 {
 /* Workloads */
 
 .fht-table-wrapper {
+  margin:10px;
   border: 1px solid #888;
   }
 
 .fht-thead {
+  margin: 0;
+  padding:0;
   background: #EEE;
   border-bottom: 1px solid #888;
   box-shadow: inset 4px 4px 4px #DDD;
@@ -44,7 +47,8 @@ h2 {
   -webkit-box-shadow: inset 4px 4px 4px #DDD;
   }
 th {
-  text-align: left;
+  text-align: center;
+  border: 1px solid #DDD;
   min-width: 35px;
   }
 
@@ -53,6 +57,7 @@ tbody tr:hover {
   }
 
 .wl_names {
+  text-align: left;
   min-width: 600px;
   }
 

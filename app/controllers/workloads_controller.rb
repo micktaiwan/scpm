@@ -3,12 +3,13 @@ class Workload
   include ApplicationHelper
 
   attr_reader :name, :weeks, :wl_weeks, :person_id, :wl_lines, :line_sums,
-              :opens, :ctotals, :percents, :months, :days
+              :opens, :ctotals, :percents, :months, :days, :person, :next_month_percents, :total_percents
 
   def initialize(person_id)
-    p = Person.find(person_id)
+    @person     = Person.find(person_id)
+    raise "could not find this person by id '#{person_id}'" if not @person
     @person_id  = person_id
-    @name       = p.name
+    @name       = @person.name
 
     # calculate lines
     @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?", person_id], :order=>"wl_type, name")
@@ -25,14 +26,17 @@ class Workload
     @days       = []
     month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
     month_displayed = false
-    nb = 1
+    nb = 0
+    iteration = from_day
+    @next_month_percents = 0.0
+    @total_percents = 0.0
     while true
-      w = wlweek(from_day)
+      w = wlweek(iteration)
       break if w > farest_week or nb > 6*4
 
       # months
-      if Date::ABBR_MONTHNAMES[(from_day+4.days).month] != month
-        month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
+      if Date::ABBR_MONTHNAMES[(iteration+4.days).month] != month
+        month = Date::ABBR_MONTHNAMES[(iteration+4.days).month]
         month_displayed = false
       end
       if not month_displayed
@@ -41,18 +45,23 @@ class Workload
       else
         @months << ''
       end
-      @days << filled_number(from_day.day,2) + "-" + filled_number((from_day+4.days).day,2)
+      @days << filled_number(iteration.day,2) + "-" + filled_number((iteration+4.days).day,2)
       @wl_weeks << w
-      @weeks    << from_day.cweek
+      @weeks    << iteration.cweek
       @opens    << 5 - WlHoliday.get_from_week(w)
 
       if @wl_lines.size > 0
         @ctotals << {:name=>'ctotal',    :id=>w, :value=>col_sum(w, @wl_lines)}
-        @percents << {:name=>'cpercent', :id=>w, :value=>((@ctotals.last[:value] / @opens.last)*100).round.to_s+"%"}
+        percent = (@ctotals.last[:value] / @opens.last)*100
+        @next_month_percents += percent if nb < 5
+        @total_percents += percent
+        @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%"}
       end
-      from_day = from_day + 7.days
+      iteration = iteration + 7.days
       nb += 1
     end
+    @next_month_percents = (@next_month_percents / 5).round
+    @total_percents = (@total_percents / nb).round
 
     # sum the lines
     @line_sums = Hash.new
@@ -60,7 +69,7 @@ class Workload
       @line_sums[l.id] = l.wl_loads.map{|l| l.wlload}.inject(:+)
     end
 
-    # calculate sums or not.... js is enough...
+    # calculate sums or not.... js is enough... or not, as we want to have the colors as sool as we load the page ? Can we do it by js at page load ? yes.
   end
 
   def col_sum(w, wl_lines)
@@ -85,6 +94,15 @@ class WorkloadsController < ApplicationController
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @workload = Workload.new(session['workload_person_id'])
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
+  end
+  
+  def consolidation
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name")
+    @workloads = []
+    for p in @people
+      @workloads << Workload.new(p.id)
+    end
+    @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.total_percents, w.person.name]}
   end
 
   def change_workload
