@@ -11,7 +11,7 @@ Ajax.Replacer = Class.create(Ajax.Updater, {
 })
 
 function wl_add_line(person_id) {
-  $('wl_line_add_form').toggle();
+  $('wl_line_add_form').appear({duration:0.2});
   }
 
 function wl_save_value(line_id, wlweek) {
@@ -41,12 +41,12 @@ function wl_change_colors(wlweek, background, color) {
 
 function change_workload(person_id) {
   document.body.style.cursor = 'wait';
-  new Ajax.Replacer('workload', '/workloads/change_workload', {
-    parameters: { person_id: person_id },
-    onComplete: function(r) {
-      document.body.style.cursor = 'auto';
-      $j('table').fixedHeaderTable({ height: '400', footer: false, fixedColumn: false });
-      }
+  new Ajax.Request('/workloads/change_workload', {
+    parameters: { person_id: person_id }
     });
+  }
+
+function set_fixed_header() {
+  $j('table').fixedHeaderTable({ height: '400', footer: false, fixedColumn: false });
   }
 

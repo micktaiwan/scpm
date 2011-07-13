@@ -94,8 +94,21 @@ class WorkloadsController < ApplicationController
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @workload = Workload.new(session['workload_person_id'])
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
+
+    if @workload.person.rmt_user == ""
+      @suggested_requests = []
+    else
+      get_suggested_requests(@workload)
+    end
   end
-  
+
+  def get_suggested_requests(wl)
+    request_ids   = wl.wl_lines.select {|l| l.request_id != nil}.map { |l| filled_number(l.request_id,7)}
+    cond = ""
+    cond = " and request_id not in (#{request_ids.join(',')})" if request_ids.size > 0
+    @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}'" + cond, :order=>"project_name, summary")
+  end
+
   def consolidation
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name")
     @workloads = []
@@ -109,7 +122,7 @@ class WorkloadsController < ApplicationController
     person_id = params[:person_id]
     session['workload_person_id'] = person_id
     @workload = Workload.new(person_id)
-    render(:partial=>'workload')
+    get_suggested_requests(@workload)
   end
 
   def add_by_request
@@ -134,6 +147,7 @@ class WorkloadsController < ApplicationController
       @error = "This line already exists: #{request_id}"
     end
     @workload = Workload.new(person_id)
+    get_suggested_requests(@workload)
   end
 
   def add_by_name
@@ -150,6 +164,7 @@ class WorkloadsController < ApplicationController
       @error = "This line already exists: #{name}"
     end
     @workload = Workload.new(person_id)
+    get_suggested_requests(@workload)
   end
 
   def edit_load

@@ -1,22 +1,30 @@
 <div id="wl_line_add_form" class="popup" style="display:none;">
 <div class="title">Add a line</div>
+<%= link_to_function("Close","$('wl_line_add_form').fade({duration:0.2});") %><br/>
+<br/>
 By request number
 <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
   <%= label_tag(:request_id, "Request #") %>
-  <%= text_field_tag(:request_id) %>
+  <%= text_field_tag(:request_id, nil, :id=>'input_request') %>
   <%= submit_tag("Add") %>
 <% end %>
 <br/>
-Or just enter a name ("Holidays", "Training",...)
+By name ("Holidays", "Training",...)
 <% form_remote_tag(:url=>{:action => "add_by_name"}) do %>
   <%= label_tag(:name, "Name") %>
-  <%= text_field_tag(:name) %>
+  <%= text_field_tag(:name, nil, :id=>'input_name') %>
   <%= submit_tag("Add") %>
 <% end %>
+<br/>
+<b>Suggested requests:</b><br/>
+<div id="suggested_requests" style="overflow-y:scroll; height:100px;">
+<%= render(:partial=>"suggested_request", :collection=>@suggested_requests) %>
+</div>
+
 </div>
 
 <script>
-new Draggable(wl_line_add_form);
+//new Draggable(wl_line_add_form);
 </script>
 
 <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %><br/>
@@ -24,6 +32,6 @@ new Draggable(wl_line_add_form);
 <%= render(:partial=>"workload") %>
 
 <script>
-$j('table').fixedHeaderTable({ height: '400', footer: true, fixedColumn: false });
+set_fixed_header();
 </script>
 

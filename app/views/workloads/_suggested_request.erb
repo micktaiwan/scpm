@@ -1,0 +1,7 @@
+<li id="sr_<%=suggested_request.request_id%>">
+<%= link_to_remote("#{suggested_request.request_id}",
+  :url=>{:action => "add_by_request", :request_id=>suggested_request.request_id},
+  :complete=>"$('sr_#{suggested_request.request_id}').blindUp({duration:0.2})") %>
+: <%=suggested_request.project_name%> - <%=suggested_request.summary%>
+</li>
+

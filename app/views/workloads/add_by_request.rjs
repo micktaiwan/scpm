@@ -1,8 +1,8 @@
 if @error
   page.alert @error
 else
-  page.hide 'wl_line_add_form'
-  page.replace "workload", render(:partial=>'workload', :object=>@workload)
-  page << "$j('table').fixedHeaderTable({ height: '400', footer: false, fixedColumn: false });"
+  page << "$('input_request').value='';"
+  page.replace "workload", render(:partial=>'workload')
+  page << "set_fixed_header();"
 end
 

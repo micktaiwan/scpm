@@ -1,5 +1,8 @@
 <div id="workload" class="workload">
-<%= link_to_function('Add a line', "wl_add_line(#{workload.person_id})", :class=>"btnlnk") %><br/>
+<%= link_to_function('Add a line', "wl_add_line(#{workload.person_id})", :class=>"btnlnk") %>
+<% if @suggested_requests.size > 0 %>
+You have <b><%=@suggested_requests.size%></b> suggested requests
+<% end %>
 <br/>
 <br/>
 <b>Next month:</b> <%= workload.next_month_percents %>%<br/>
