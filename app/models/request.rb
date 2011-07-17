@@ -42,7 +42,9 @@ class Request < ActiveRecord::Base
   "WP6.2 - Coaching BRD" 			      => 13,
   "WP6.3 - Coaching V&V"            => 14,
   "WP6.4 - Coaching ConfMgt"        => 15,
-  "WP6.5 - Coaching Maintenance"    => 16
+  "WP6.5 - Coaching Maintenance"    => 16,
+  "WP1.1 - Quality ControlCV"       => 17,
+  "WP1.2 - Quality AssuranceCV"     => 21
   }
 
   Comp_index = {
@@ -134,8 +136,8 @@ class Request < ActiveRecord::Base
     [2,3,4],
     [3,4,5]]
 
-  def wp_index(wp)
-    rv = Wp_index[wp]
+  def wp_index(wp, cv)
+    rv = Wp_index[wp+(cv=="Yes" ? "CV":"")]
     raise "no workpackage #{wp}" if not rv
     rv
   end
@@ -159,7 +161,7 @@ class Request < ActiveRecord::Base
 
   def workload2
     # TODO get iteration and define workload in fonction of it (2010 or 2011)
-    Loads2011[wp_index(self.work_package)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
   end
 
   # calculate a start date based on the milestone date

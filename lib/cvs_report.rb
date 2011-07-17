@@ -6,30 +6,30 @@ class CvsRequest
   attr_accessor :workstream, :status, :assigned_to, :resolution,
     :updated, :reporter, :id, :view_status, :milestone, :priority,
     :summary, :date_submitted, :product_version,
-    :severity, :platform, :work_package, :complexity,
+    :severity, :platform, :work_package, :complexity, :contre_visite,
     :start_date, :sdp, :pm, :milestone_date, :project_name,
     :end_date, :milestone_date, :actual_m_date, :po,
     :status_to_be_validated, :status_new, :status_feedback, :status_acknowledged, :status_assigned, :status_contre_visite, :status_performed, :status_cancelled, :status_closed,
     :total_csv_severity, :total_csv_category
-    
+
   def initialize
   end
 
-  def method_missing(m, *args, &block)  
+  def method_missing(m, *args, &block)
     #raise "CvsRequest does not have a '#{m}' attribute/method"
   end
-  
+
   def to_hash
     h = Hash.new
     self.instance_variables.each { |var|
       h[var[1..-1].to_sym] = self.instance_variable_get(var)
       }
-    h  
+    h
   end
 end
 
 class CvsReport
-  
+
   attr_reader :requests
 
   def initialize(path)
@@ -46,7 +46,7 @@ class CvsReport
     end
   end
 
-  def method_missing(m, *args, &block)  
+  def method_missing(m, *args, &block)
     if m.to_s[0..2] == "by_"
       key = m.to_s[3..-1] # example: "project"
       # get all possible values, example "EA", "EV"
@@ -54,7 +54,7 @@ class CvsReport
       for value in values
         yield value, @requests.select { |r| eval("r.#{key} == '#{value}'")}.sort_by { |r| [r.start_date, r.workstream]}
       end
-      return  
+      return
     end
     raise "Report does not have a '#{m}' attribute/method"
   end
@@ -76,7 +76,7 @@ private
       }
     @requests << r
   end
-  
+
   def sanitize_attr(name)
     name = name.downcase
     name.gsub!(" #","")
@@ -87,7 +87,7 @@ private
     name.gsub!(".","")
     name
   end
-    
+
 end
 
 =begin

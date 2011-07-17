@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110711212340) do
+ActiveRecord::Schema.define(:version => 20110717135927) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -208,6 +208,7 @@ ActiveRecord::Schema.define(:version => 20110711212340) do
     t.date     "total_csv_severity"
     t.date     "total_csv_category"
     t.string   "po"
+    t.string   "contre_visite"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"

@@ -93,7 +93,7 @@ class WorkloadsController < ApplicationController
   def index
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @workload = Workload.new(session['workload_person_id'])
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
 
     if @workload.person.rmt_user == ""
       @suggested_requests = []

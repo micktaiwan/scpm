@@ -26,13 +26,13 @@ class WelcomeController < ApplicationController
     report = CvsReport.new(path)
     report.parse
     # transform the Report into a Request
-      report.requests.each { |req|
-        # get the id if it exist, else create it
-        r = Request.find_by_request_id(req.id)
-        r = Request.create(:request_id=>req.id) if not r
-        r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
-        r.save
-        }
+    report.requests.each { |req|
+      # get the id if it exist, else create it
+      r = Request.find_by_request_id(req.id)
+      r = Request.create(:request_id=>req.id) if not r
+      r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
+      r.save
+      }
     redirect_to '/projects/import'
   end
 
