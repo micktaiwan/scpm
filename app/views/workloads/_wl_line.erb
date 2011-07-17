@@ -1,12 +1,12 @@
 <%
 request = wl_line.request
 if wl_line.request_id != nil
-  remaining = request.sdp_tasks_remaining_sum
+  remaining = request.sdp=="No" ? "No" : request.sdp_tasks_remaining_sum
 else
   remaining = ""
 end
 %>
-<tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 %> style="color:grey; font-style:italic;"<% end %>>
+<tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <td><%= wl_line.display_name %></td>
   <td><% if request %><%= request.status %><% end %></td>
   <td><%= remaining %></td>
