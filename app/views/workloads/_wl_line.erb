@@ -1,5 +1,15 @@
-<tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>">
+<%
+request = wl_line.request
+if wl_line.request_id != nil
+  remaining = request.sdp_tasks_remaining_sum
+else
+  remaining = ""
+end
+%>
+<tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 %> style="color:grey; font-style:italic;"<% end %>>
   <td><%= wl_line.display_name %></td>
+  <td><% if request %><%= request.status %><% end %></td>
+  <td><%= remaining %></td>
   <td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= line_sums[wl_line.id] %></td>
 <% for week in wl_weeks %>
   <td class="wl_case">

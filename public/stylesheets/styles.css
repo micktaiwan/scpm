@@ -364,7 +364,7 @@ div#bandeau {
   display: inline;
 }
 .popup {
-  cursor:move;
+  /*cursor:move;*/
   position:fixed;
   top:  100px;
   left: 200px;

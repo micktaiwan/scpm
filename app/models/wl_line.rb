@@ -1,4 +1,5 @@
 class WlLine < ActiveRecord::Base
+
   has_many :wl_loads
 
   include ApplicationHelper
@@ -20,5 +21,6 @@ class WlLine < ActiveRecord::Base
   def request
     Request.find(:first, :conditions=>["request_id=?",filled_number(self.request_id,7)])
   end
+
 end
 

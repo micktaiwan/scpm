@@ -106,7 +106,7 @@ class WorkloadsController < ApplicationController
     request_ids   = wl.wl_lines.select {|l| l.request_id != nil}.map { |l| filled_number(l.request_id,7)}
     cond = ""
     cond = " and request_id not in (#{request_ids.join(',')})" if request_ids.size > 0
-    @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}'" + cond, :order=>"project_name, summary")
+    @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}' and status!='closed' and status!='performed' and status!='cancelled'" + cond, :order=>"project_name, summary")
   end
 
   def consolidation

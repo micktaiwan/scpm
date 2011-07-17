@@ -14,23 +14,31 @@ You have <b><%=@suggested_requests.size%></b> suggested requests
   <tr>
   <th class="wl_names"></th>
   <th></th>
+  <th></th>
+  <th></th>
   <%= render(:partial=>"wl_head", :collection=>workload.months) %>
   </tr>
 
   <tr>
   <th class="wl_names"></th>
   <th></th>
+  <th></th>
+  <th></th>
   <%= render(:partial=>"wl_head", :collection=>workload.weeks) %>
   </tr>
 
   <tr>
   <th class="wl_names"></th>
-  <th class="wl_total"></th>
+  <th style="text-align:left;min-width:100px;">Status</th>
+  <th>SDP</th>
+  <th></th>
   <%= render(:partial=>"wl_head", :collection=>workload.days) %>
   </tr>
 
   <tr class="wl_opens">
   <th class="wl_names">Nb of worked days</th>
+  <th></th>
+  <th></th>
   <th></th>
   <%= render(:partial=>"wl_head", :collection=>workload.opens) %>
   </tr>
@@ -38,11 +46,15 @@ You have <b><%=@suggested_requests.size%></b> suggested requests
   <tr class="wl_total">
   <th class="wl_names">Total</th>
   <th></th>
+  <th></th>
+  <th></th>
   <%= render(:partial=>"wl_ctotal", :collection=>workload.ctotals) %>
   </tr>
 
   <tr class="wl_total">
   <th class="wl_names">Percent</th>
+  <th></th>
+  <th></th>
   <th></th>
   <%= render(:partial=>"wl_ctotal", :collection=>workload.percents) %>
   </tr>
