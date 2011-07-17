@@ -20,15 +20,19 @@ Gain: <%= tasks.inject(0) { |sum, t| t.balancei+sum } %>
 </span>
 <% end %>
 
+
+Task initial:
+<%= req_task.sdp_tasks_initial_sum %> / <%= req_task.workload2 %>
+
+
 <% if req_task.resolution=="ended" and req_task.end_date %>
 <strong>No end date</strong>
 <% end %>
 <% if req_task.resolution=="ended" and req_task.actual_m_date=="" %>
 <strong>No actual milestone date</strong>
 <% end %>
-<% if current_user.has_role?('Admin') %>
-<%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'welcome', :action=>'cut', :id=>req_task.id}) %>
-<% end %>
+
+
 <br/>
 
 <ul>

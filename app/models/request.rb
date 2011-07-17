@@ -160,8 +160,13 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    # TODO get iteration and define workload in fonction of it (2010 or 2011)
-    Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    if self.sdpiteration == "2011"
+      return Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    elsif self.sdpiteration == "2010"
+      return Loads2010[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    else
+      0
+    end
   end
 
   # calculate a start date based on the milestone date
@@ -262,6 +267,10 @@ class Request < ActiveRecord::Base
 
   def sdp_tasks
     SDPTask.find(:all, :conditions=>"request_id='#{self.request_id}'")
+  end
+
+  def sdp_tasks_initial_sum
+    sdp_tasks.inject(0.0) {|sum,t| sum += t.initial}
   end
 
   def sdp_phase_id

@@ -185,8 +185,16 @@ class ToolsController < ApplicationController
   end
 
   def sdp_add
-    @requests = Request.find(:all, :conditions=>"sdp='no' and resolution='in progress' and status!='to be validated' and complexity!='TBD'")
-    @pbs      = Request.find(:all, :conditions=>"sdp='no' and resolution='in progress' and (status='to be validated' or status='cancelled' or status='removed')")
+    @requests = Request.find(:all, :conditions=>"sdp='No' and resolution='in progress' and status!='to be validated' and complexity!='TBD'")
+    @pbs      = Request.find(:all, :conditions=>"sdp='No' and resolution='in progress' and (status='to be validated' or status='cancelled' or status='removed')")
+  end
+
+  def load_errors
+    # check if sdp loads are corrects
+    @checks = Request.find(:all, :conditions=>"sdp='Yes' and sdpiteration!=''", :order=>"request_id")
+    @checks = @checks.select {|r|
+      r.workload2.to_f != r.sdp_tasks_initial_sum
+      }
   end
 
 private

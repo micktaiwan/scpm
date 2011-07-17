@@ -7,7 +7,7 @@ class CvsRequest
     :updated, :reporter, :id, :view_status, :milestone, :priority,
     :summary, :date_submitted, :product_version,
     :severity, :platform, :work_package, :complexity, :contre_visite,
-    :start_date, :sdp, :pm, :milestone_date, :project_name,
+    :start_date, :sdp, :pm, :milestone_date, :project_name, :sdpiteration,
     :end_date, :milestone_date, :actual_m_date, :po,
     :status_to_be_validated, :status_new, :status_feedback, :status_acknowledged, :status_assigned, :status_contre_visite, :status_performed, :status_cancelled, :status_closed,
     :total_csv_severity, :total_csv_category

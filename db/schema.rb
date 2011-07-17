@@ -209,6 +209,7 @@ ActiveRecord::Schema.define(:version => 20110717135927) do
     t.date     "total_csv_category"
     t.string   "po"
     t.string   "contre_visite"
+    t.string   "sdpiteration"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
