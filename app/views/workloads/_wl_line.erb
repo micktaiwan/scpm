@@ -1,14 +1,20 @@
 <%
 request = wl_line.request
 if wl_line.request_id != nil
+  init      = request.sdp=="No" ? "No" : request.sdp_tasks_initial_sum
+  balancei  = request.sdp=="No" ? "No" : request.sdp_tasks_balancei_sum
   remaining = request.sdp=="No" ? "No" : request.sdp_tasks_remaining_sum
 else
+  init      = ""
   remaining = ""
+  balancei  = ""
 end
 %>
 <tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <td><%= wl_line.display_name %></td>
   <td><% if request %><%= request.status %><% end %></td>
+  <td><%= init %></td>
+  <td><%= balancei %></td>
   <td><%= remaining %></td>
   <td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= line_sums[wl_line.id] %></td>
 <% for week in wl_weeks %>
