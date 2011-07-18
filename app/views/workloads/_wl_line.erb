@@ -12,7 +12,7 @@ end
 %>
 <tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <td><%= wl_line.display_name %></td>
-  <td><% if request %><%= request.status %><% end %></td>
+  <td align="center"><% if request %><%= request.status %><% end %></td>
   <td><%= init %></td>
   <td><%= balancei %></td>
   <td><%= remaining %></td>

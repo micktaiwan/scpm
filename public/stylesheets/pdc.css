@@ -40,17 +40,15 @@ h2 {
 .fht-thead {
   margin: 0;
   padding:0;
-  background: #EEE;
-  border-bottom: 1px solid #888;
-  box-shadow: inset 4px 4px 4px #DDD;
-  -moz-box-shadow: inset 4px 4px 4px #DDD;
-  -webkit-box-shadow: inset 4px 4px 4px #DDD;
+  background: #555;
+  color:#FFF;
+  border-bottom: 1px solid #000;
   }
 
 th {
   text-align: center;
   min-width: 35px;
-  border: 1px solid #DDD;
+  border: 1px solid #444;
   }
 
 td {
@@ -68,7 +66,7 @@ tbody tr:hover {
 
 .wl_case {
   border: 1px solid #DDD;
-  width: 35px;
+  min-width: 35px;
   margin: 0;
   padding:0;
   }
@@ -82,10 +80,16 @@ tbody tr:hover {
   width: 40px;
   }
 
+tr.wl_total {
+  border: 1px 0 0 0 solid #DDD;
+  color: #AB8;
+  }
+
 .wl_total {
   border: 1px 0 0 0 solid #DDD;
-  color: #940;
+  color: #690;
   }
+
 
 tr.wl_opens {
   color: #999;
