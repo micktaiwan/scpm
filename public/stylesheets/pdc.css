@@ -46,10 +46,15 @@ h2 {
   -moz-box-shadow: inset 4px 4px 4px #DDD;
   -webkit-box-shadow: inset 4px 4px 4px #DDD;
   }
+
 th {
   text-align: center;
-  border: 1px solid #DDD;
   min-width: 35px;
+  border: 1px solid #DDD;
+  }
+
+td {
+  border: 1px solid #DDD;
   }
 
 tbody tr:hover {
@@ -92,11 +97,9 @@ tr.wl_opens {
 .wl_line_300 {
   background: #DFD;
   }
-
 .wl_line_200 .wl_case input {
   background: #EEF;
   }
-
 .wl_line_300 .wl_case input {
   color: #595;
   background: #EFE;
