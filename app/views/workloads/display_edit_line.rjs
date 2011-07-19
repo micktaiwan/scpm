@@ -1,0 +1,3 @@
+page.replace "edit_line", render(:partial=>'edit_line', :object=>@wl_line)
+page << "$('edit_line').appear();"
+

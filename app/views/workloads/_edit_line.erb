@@ -1,0 +1,18 @@
+<div id="edit_line" class="popup" style="display:none;">
+<%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('edit_line').fade({duration:0.2});") %><br/>
+Je sais, c'est pas encore super cool, mais c'est un début.<br/>
+<br/>
+<% if edit_line.request_id %>
+Request id: <%= edit_line.request_id %><br/>
+<br/>
+<% end %>
+<% remote_form_for :wl_line, :url => {:controller=>"workloads", :action => "edit_line", :id=>edit_line.id } do |f| %>
+  <%= f.label(:name, "Name") %>
+  <%= f.text_field(:name, {:size=>80})%><br/>
+  <%= f.label(:name, "Type") %>
+  <%= f.select(:wl_type, [["Request", 100], ["Other", 200], ["Holidays", 300]])%><br/>
+  <%= submit_tag "Edit" %>
+<% end %>
+
+</div>
+

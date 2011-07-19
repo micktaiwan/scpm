@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="robots" content="all">
-  <title>EISQ Manager</title>
+  <title>Workload - EISQ Manager</title>
   <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/pdc.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/fixed_header_table.css" />
@@ -46,9 +46,9 @@
 </div>
 
 <div id="menu_bar">
+<% if current_user.has_role?('Admin') %>
 <%= link_to('Workload', {:controller=>'workloads', :action=>'index'}, {:class=>menu_style('workloads','*')}) %>
 <%= link_to('Consolidation', {:controller=>'workloads', :action=>'consolidation'}, {:class=>menu_style('consolidation','*')}) %>
-<% if current_user.has_role?('Admin') %>
 <%= link_to('Holidays', {:controller=>'holidays', :action=>'index'}, {:class=>menu_style('holidays','*')}) %>
 <% end %>
 <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>

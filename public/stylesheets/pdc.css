@@ -30,6 +30,15 @@ h2 {
   border: 1px solid #005;
 }
 
+label {
+  display: inline;
+  float: none;
+  text-align: right;
+  vertical-align: top;
+  font-weight: bold;
+  padding-right: 5px;
+  }
+
 /* Workloads */
 
 .fht-table-wrapper {
@@ -51,7 +60,7 @@ th {
   border: 1px solid #444;
   }
 
-td {
+.fht-table-wrapper td {
   border: 1px solid #DDD;
   }
 

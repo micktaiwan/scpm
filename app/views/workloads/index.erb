@@ -1,7 +1,9 @@
+<div id="edit_line"></div>
+
+
 <div id="wl_line_add_form" class="popup" style="display:none;">
+<%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
 <div class="title">Add a line</div>
-<%= link_to_function("Close","$('wl_line_add_form').fade({duration:0.2});") %><br/>
-<br/>
 By request number
 <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
   <%= label_tag(:request_id, "Request #") %>

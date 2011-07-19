@@ -1,0 +1,3 @@
+page << "$('edit_line').fade();"
+page.replace "wl_line_#{@wl_line.id}", render(:partial=>"wl_line")
+

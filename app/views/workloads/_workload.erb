@@ -73,7 +73,7 @@ You have <b><%=@suggested_requests.size%></b> suggested requests
 </thead>
 
 <tbody class="scrollContent">
-  <%= render(:partial=>"wl_line", :collection=>workload.wl_lines, :locals=>{:line_sums=>workload.line_sums, :wl_weeks=>workload.wl_weeks}) %>
+  <%= render(:partial=>"wl_line", :collection=>workload.wl_lines) %>
 </tbody>
 
 </table>

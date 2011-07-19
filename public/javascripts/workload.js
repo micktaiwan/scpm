@@ -34,6 +34,14 @@ function wl_save_value(line_id, wlweek) {
     });
   }
 
+
+function wl_edit(line_id) {
+  new Ajax.Request('/workloads/display_edit_line?l='+line_id, {
+    asynchronous:true,
+    evalScripts:true
+    });
+}
+
 function wl_change_colors(wlweek, background, color) {
   $('cpercent_'+wlweek).style.background  = background;
   $('cpercent_'+wlweek).style.color       = color;

@@ -10,14 +10,14 @@ else
   balancei  = ""
 end
 %>
-<tr title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
-  <td><%= wl_line.display_name %></td>
+<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
+  <td><%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %></td>
   <td align="center"><% if request %><%= request.status %><% end %></td>
   <td><%= init %></td>
   <td><%= balancei %></td>
   <td><%= remaining %></td>
-  <td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= line_sums[wl_line.id] %></td>
-<% for week in wl_weeks %>
+  <td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= @workload.line_sums[wl_line.id] %></td>
+<% for week in @workload.wl_weeks %>
   <td class="wl_case">
   <%
     wlload = wl_line.get_load_by_week(week)
