@@ -114,14 +114,15 @@ class ProjectsController < ApplicationController
     last_status = p.get_status
     status      = Status.create(params[:status])
 
+    t = Time.now
     if last_status
       status.reason_updated_at  = last_status.reason_updated_at
       status.ws_updated_at      = last_status.ws_updated_at
-      status.reason_updated_at  = Time.now if status.reason     != last_status.reason
-      status.ws_updated_at      = Time.now if status.ws_report  != last_status.ws_report
+      status.reason_updated_at  = t if status.reason     != last_status.reason
+      status.ws_updated_at      = t if status.ws_report  != last_status.ws_report
     else
-      status.reason_updated_at  = Time.now
-      status.ws_updated_at      = Time.now
+      status.reason_updated_at  = t
+      status.ws_updated_at      = t
     end  
 
     status.last_modifier = current_user.id

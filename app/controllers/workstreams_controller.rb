@@ -1,7 +1,8 @@
 class WorkstreamsController < ApplicationController
 
   before_filter :require_login
-
+  layout 'tools'
+  
   def index
     @ws = Workstream.find(:all, :order=>'name')
   end

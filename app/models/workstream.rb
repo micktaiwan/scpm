@@ -10,4 +10,8 @@ class Workstream < ActiveRecord::Base
     projects.select {|p| p.has_requests and p.get_status.status > 1}
   end
   
+  def projects_with_new_reason
+    projects.select {|p| s = p.get_status; p.has_requests and s.reason_updated_at > s.ws_updated_at }
+  end
+  
 end

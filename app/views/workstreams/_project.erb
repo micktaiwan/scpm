@@ -1,5 +1,10 @@
 <% status = project.get_status %> 
-<%= link_to('Go to', {:controller=>'projects', :action=>'show', :id=>project.id}) %> <b><%= project.full_name %></b> <%= html_status(status.status) %><br/>
+<%= link_to('Go to', {:controller=>'projects', :action=>'show', :id=>project.id}) %>
+<b><%= project.full_name %></b>
+<%= html_status(status.status) %>
+<b>Reason</b>: <%= time_ago_in_words(status.reason_updated_at) %>
+<b>WS</b>: <%= time_ago_in_words(status.ws_updated_at) %>
+<br/>
 <ul>
 
 <% 

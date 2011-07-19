@@ -7,18 +7,34 @@
 <%
 projects = workstream.non_green_projects.select { |p| !p.is_ended }
 projects_without_reporting = projects.select { |p| s = p.get_status; s.ws_report == nil or s.ws_report.strip == ""}
-size = projects_without_reporting.size
+size1 = projects_without_reporting.size
+
+new_reasons = workstream.projects_with_new_reason
+size2 = new_reasons.size
 %>
 
-<% if size > 0 %>
-<strong><%= size %></strong> projects <b>without</b> a reporting<br/>
-<br/>
+<% if size1 > 0 %>
+<strong><%= size1 %></strong> projects <b>without</b> a reporting<br/>
 <% end %>
+<% if size2 > 0 %>
+<strong><%= size2 %></strong> projects have a new reason<br/>
+<% end %>
+<br/>
 
 <%= link_to_function('Projects', "$('projects_#{workstream.id}').toggle()",{:class=>"btnlnk"})%><br/>
 <br/>
 <div id="projects_<%=workstream.id%>" style="display:none;">
-<%= render(:partial=>'project', :collection=>projects) %>
+<% if size1 > 0 %>
+<b>Without a reporting</b><br/>
+<br/>
+<%= render(:partial=>'project', :collection=>projects_without_reporting) %><br/>
+<br/>
+<% end %>
+<% if size2 > 0 %>
+<b>New reason</b><br/>
+<br/>
+<%= render(:partial=>'project', :collection=>new_reasons) %><br/>
+<% end %>
 </div>
 </ul>
 <br/>
