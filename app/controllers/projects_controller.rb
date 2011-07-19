@@ -90,12 +90,55 @@ class ProjectsController < ApplicationController
     project.propagate_attributes
     redirect_to :action=>:show, :id=>project.id
   end
+  
+  def add_status_form
+    @project = Project.find(params[:id])
+    @status = Status.new
+    last = @project.get_status
+    @status.explanation       = last.explanation
+    @status.feedback          = last.feedback
+    @status.reason            = last.reason
+    @status.status            = last.status
+    @status.last_change       = last.last_change
+    @status.actions           = last.actions
+    @status.ereporting_date   = last.ereporting_date
+    @status.operational_alert = last.operational_alert
+    @status.ws_report         = last.ws_report
+  end
+
+  def add_status
+    project_id  = params[:status][:project_id]
+
+    # check changes
+    p           = Project.find(project_id)
+    last_status = p.get_status
+    status      = Status.create(params[:status])
+
+    if last_status
+      status.reason_updated_at  = last_status.reason_updated_at
+      status.ws_updated_at      = last_status.ws_updated_at
+      status.reason_updated_at  = Time.now if status.reason     != last_status.reason
+      status.ws_updated_at      = Time.now if status.ws_report  != last_status.ws_report
+    else
+      status.reason_updated_at  = Time.now
+      status.ws_updated_at      = Time.now
+    end  
+
+    status.last_modifier = current_user.id
+    status.save
+    p.update_status(params[:status][:status])
+    p.calculate_diffs
+    Mailer::deliver_status_change(p)
+    redirect_to :action=>:show, :id=>project_id
+  end
 
   def update_status
     timestamps_off if params[:update] != '1'
     status = Status.find(params[:id])
-    status.update_attributes(params[:status])
-    status.last_modifier = current_user.id
+    status.attributes = params[:status] # does not use update_attributes as it saves the record and we can not use "changed?" anymore
+    status.reason_updated_at  = Time.now if status.reason_changed?
+    status.ws_updated_at      = Time.now if status.ws_report_changed?    
+    status.last_modifier      = current_user.id
     status.save
     p = status.project
     p.update_status(params[:status][:status]) if p.get_status.id == status.id # only if we are updating the last status
@@ -184,33 +227,6 @@ class ProjectsController < ApplicationController
     @in_rmt = (all_requests - list).sort
     @no_in_rmt_but_in_sdp = (list - no_requests).sort
     #render(:text=>@list.size)
-  end
-
-  def add_status_form
-    @project = Project.find(params[:id])
-    @status = Status.new
-    last = @project.get_status
-    @status.explanation       = last.explanation
-    @status.feedback          = last.feedback
-    @status.reason            = last.reason
-    @status.status            = last.status
-    @status.last_change       = last.last_change
-    @status.actions           = last.actions
-    @status.ereporting_date   = last.ereporting_date
-    @status.operational_alert = last.operational_alert
-    @status.ws_report         = last.ws_report
-  end
-
-  def add_status
-    project_id  = params[:status][:project_id]
-    status      = Status.create(params[:status])
-    status.last_modifier = current_user.id
-    status.save
-    p           = Project.find(project_id)
-    p.update_status(params[:status][:status])
-    p.calculate_diffs
-    Mailer::deliver_status_change(p)
-    redirect_to :action=>:show, :id=>project_id
   end
 
   # link a request to a project, based on request project_name
