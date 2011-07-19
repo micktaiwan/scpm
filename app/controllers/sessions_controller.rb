@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
         session[:project_sort]      = nil
       end
       session[:context] = 'reporting'
-      redirect_to :controller=>'projects'
+      redirect_to :controller=>'context_chooser'
       return
     end
     redirect_to :action=>:login, :error=>"Could not log you in"

@@ -39,3 +39,59 @@ h2 {
   top: 16px;
   right: 16px;
 }
+
+.big_button {
+  cursor: pointer;
+  display: inline;
+  text-align: center;
+  font-family: 'Zeyada', serif;
+  font-size: 5em;
+  color:black;
+  border: 1px solid #678;
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  box-shadow: 5px 5px 5px #CCC;
+  -moz-box-shadow: 5px 5px 5px #CCC;
+  -webkit-box-shadow: 5px 5px 5px #CCC;
+}
+#logout {
+  cursor: pointer;
+  display: inline;
+  text-align: center;
+  font-family: 'Zeyada', serif;
+  font-size: 3em;
+  color: #777;
+  border: 1px solid #678;
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  box-shadow: 5px 5px 5px #CCC;
+  -moz-box-shadow: 5px 5px 5px #CCC;
+  -webkit-box-shadow: 5px 5px 5px #CCC;
+}
+
+
+#reporting.big_button {
+  background: #08A;
+  }
+#workload.big_button {
+  background: #F90;
+  }
+#tools.big_button {
+  background: #DDD;
+  }
+#welcome {
+  font-family: 'Zeyada', serif;
+  font-size: 3em;
+  color: #444;
+  padding: 10px;
+  margin: 20px 20px 20px 80px;
+}
+
+#center {
+  width: 100%;
+  text-align:center;
+}
