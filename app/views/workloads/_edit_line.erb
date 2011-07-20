@@ -10,9 +10,8 @@ Request id: <%= edit_line.request_id %><br/>
   <%= f.label(:name, "Name") %>
   <%= f.text_field(:name, {:size=>80})%><br/>
   <%= f.label(:name, "Type") %>
-  <%= f.select(:wl_type, [["Request", 100], ["Other", 200], ["Holidays", 300]])%><br/>
+  <%= f.select(:wl_type, [["Request", 100], ["Other", 200], ["Holidays", 300], ["Not EISQ", 400]])%><br/>
   <%= submit_tag "Edit" %>
 <% end %>
 
 </div>
-

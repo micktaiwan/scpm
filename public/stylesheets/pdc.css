@@ -110,6 +110,9 @@ tr.wl_opens {
 .wl_line_300 {
   background: #DFD;
   }
+.wl_line_400 {
+  background: #FDD;
+  }
 .wl_line_200 .wl_case input {
   background: #EEF;
   }
@@ -117,4 +120,7 @@ tr.wl_opens {
   color: #595;
   background: #EFE;
   }
-
+.wl_line_400 .wl_case input {
+  color: #A55;
+  background: #FEE;
+  }
