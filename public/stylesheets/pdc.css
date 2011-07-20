@@ -30,14 +30,6 @@ h2 {
   border: 1px solid #005;
 }
 
-label {
-  display: inline;
-  float: none;
-  text-align: right;
-  vertical-align: top;
-  font-weight: bold;
-  padding-right: 5px;
-  }
 
 /* Workloads */
 
@@ -124,3 +116,15 @@ tr.wl_opens {
   color: #A55;
   background: #FEE;
   }
+
+.delete {
+  padding: 10px;
+  border: 2px dashed #333;
+  color: #933;
+  float:right;
+  background: #5AF;
+  }
+.delete:hover{
+  border: 2px dashed #F33;
+  color: #F33;
+  }  

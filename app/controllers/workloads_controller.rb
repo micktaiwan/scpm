@@ -200,6 +200,11 @@ class WorkloadsController < ApplicationController
     @workload = Workload.new(@wl_line.person_id)
   end
 
+  def destroy_line
+    WlLine.find(params[:id]).destroy
+    render(:nothing=>true)
+  end
+  
   def get_sums(line, week, person_id)
     lsum = line.wl_loads.map{|l| l.wlload}.inject(:+)
     wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])

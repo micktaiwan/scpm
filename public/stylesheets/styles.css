@@ -375,7 +375,7 @@ div#bandeau {
   top:  100px;
   left: 200px;
   z-index:100;
-  background: #81BEF7;
+  background: #81BEF7 url('/images/popup_background.png') repeat-y;
   padding:3px 30px 30px 30px;
   border: 1px solid black;
   border-radius: 10px;

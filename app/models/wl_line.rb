@@ -1,6 +1,6 @@
 class WlLine < ActiveRecord::Base
 
-  has_many :wl_loads
+  has_many :wl_loads, :dependent => :destroy
 
   include ApplicationHelper
 
