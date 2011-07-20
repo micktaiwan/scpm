@@ -65,11 +65,12 @@ class Workload
 
     # sum the lines
     @line_sums = Hash.new
+    today_week = wlweek(Date.today)
     for l in @wl_lines
-      @line_sums[l.id] = l.wl_loads.map{|l| l.wlload}.inject(:+)
+      @line_sums[l.id] = l.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
     end
 
-    # calculate sums or not.... js is enough... or not, as we want to have the colors as sool as we load the page ? Can we do it by js at page load ? yes.
+    # calculate sums or not.... js is enough... or not, as we want to have the colors as soon as we load the page ? Can we do it by js at page load ? yes.
   end
 
   def col_sum(w, wl_lines)
