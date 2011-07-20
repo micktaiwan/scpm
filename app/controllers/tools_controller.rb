@@ -92,10 +92,19 @@ class ToolsController < ApplicationController
       @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
       @remaining_time       = (@remaining/NB_QR/NB_DAYS_PER_MONTH/0.01).round * 0.01
       @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH*NB_WP_LEADERS)*@remaining_time)
-      montee      = SDPActivity.find_by_title('Montee en competences').remaining
-      souscharges = SDPActivity.find_by_title('Sous charges').remaining
-      init        = SDPActivity.find_by_title('Initialization').remaining
-      @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
+      begin
+        montee      = SDPActivity.find_by_title('Montee en competences').remaining
+        souscharges = SDPActivity.find_by_title('Sous charges').remaining
+        init        = SDPActivity.find_by_title('Initialization').remaining
+        @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
+        @error = ""
+      rescue Exception => e
+        montee      = 0
+        souscharges = 0
+        init        = 0
+        @remaining_management = 0
+        @error = e.message
+      end      
       @sold                 = @operational_total
       @provisions_remaining_should_be = 0
       @provisions_remaining = 0
@@ -117,7 +126,7 @@ class ToolsController < ApplicationController
       @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - (@remaining_management - @risks_remaining))
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
     rescue Exception => e
-      render(:text=>"<b>Import error:</b> <i>#{e.message}</i>")
+      render(:text=>"<b>Error:</b> <i>#{e.message}</i>")
     end
   end
 
