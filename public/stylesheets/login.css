@@ -49,7 +49,7 @@ h2 {
   color:black;
   border: 1px solid #678;
   padding: 10px;
-  margin: 10px 10px 10px 10px;
+  margin: 10px;
   border-radius: 15px;
   -moz-border-radius: 15px;
   box-shadow: 5px 5px 5px #CCC;
@@ -87,8 +87,15 @@ h2 {
   font-family: 'Zeyada', serif;
   font-size: 3em;
   color: #444;
-  padding: 10px;
-  margin: 20px 20px 20px 80px;
+  padding: 0px;
+  margin: 0px;
+}
+#last_changes {
+  margin: 10px;
+}
+
+#last_changes  li {
+  color:#666;
 }
 
 #center {
