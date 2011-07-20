@@ -68,9 +68,9 @@ class Workload
     @line_sums = Hash.new
     today_week = wlweek(Date.today)
     @planned_total = 0
-    for l in @wl_lines.select { |line| line.wl_type <= 200}
+    for l in @wl_lines
       @line_sums[l.id] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
-      @planned_total  += (@line_sums[l.id] ? @line_sums[l.id] : 0)
+      @planned_total  += @line_sums[l.id] if l.wl_type <= 200
     end
 
     # calculate sums or not.... js is enough... or not, as we want to have the colors as soon as we load the page ? Can we do it by js at page load ? yes.
@@ -207,8 +207,8 @@ class WorkloadsController < ApplicationController
     
     today_week = wlweek(Date.today)
     planned_total = 0
-    for l in wl_lines.select { |line| line.wl_type <= 200}
-      planned_total  += l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
+    for l in wl_lines
+      planned_total  += l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+) if l.wl_type <= 200
     end
     
     [lsum, csum, cpercent, planned_total]
