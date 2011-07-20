@@ -10,6 +10,7 @@ else
   balancei  = ""
 end
 %>
+
 <tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <td><%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %></td>
   <td align="center"><% if request %><%= request.status %><% end %></td>
@@ -27,4 +28,3 @@ end
   </td>
 <% end %>
 </tr>
-

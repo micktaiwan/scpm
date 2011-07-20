@@ -62,11 +62,11 @@ You have <b><%=@suggested_requests.size%></b> suggested requests
   </tr>
 
   <tr class="wl_total">
-  <th class="wl_names">Percent</th>
+  <th class="wl_names">Sums / Percents</th>
   <th></th>
   <th></th>
   <th></th>
-  <th></th>
+  <th><%= workload.sdp_remaining_total %></th>
   <th id="planned_total"><%= workload.planned_total %></th>
   <%= render(:partial=>"wl_ctotal", :collection=>workload.percents) %>
   </tr>

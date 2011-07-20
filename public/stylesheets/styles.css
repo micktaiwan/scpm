@@ -14,13 +14,19 @@ div#banner {
   height: 80px;
 }
 div#banner #context_select {
-  position: fixed;
-  top: 0;
-  right: 0;
   background-color: transparent;
   border-radius: 5px;
   -moz-border-radius: 5px;
 }
+
+div#banner #context_select_box {
+  font-size:0.8em;
+  position: fixed;
+  top: 0;
+  right: 0;
+  text-align:right;
+}
+
 img {
   border: 0px;
 }
@@ -383,4 +389,3 @@ div#bandeau {
   font-weight: normal;
   font-size: 2em;
 }
-
