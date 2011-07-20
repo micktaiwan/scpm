@@ -47,8 +47,8 @@
 
 <div id="menu_bar">
 <% if current_user.has_role?('Admin') %>
-<%= link_to('Workload', {:controller=>'workloads', :action=>'index'}, {:class=>menu_style('workloads','*')}) %>
-<%= link_to('Consolidation', {:controller=>'workloads', :action=>'consolidation'}, {:class=>menu_style('consolidation','*')}) %>
+<%= link_to('Workload', {:controller=>'workloads', :action=>'index'}, {:class=>menu_style('workloads','index')}) %>
+<%= link_to('Consolidation', {:controller=>'workloads', :action=>'consolidation'}, {:class=>menu_style('workloads', 'consolidation')}) %>
 <%= link_to('Holidays', {:controller=>'holidays', :action=>'index'}, {:class=>menu_style('holidays','*')}) %>
 <% end %>
 <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>

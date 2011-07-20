@@ -45,6 +45,10 @@ module ApplicationHelper
     end.join
   end
 
+  def wlweek(day)
+    (day.year.to_s + filled_number(day.cweek,2)).to_i
+  end
+
   # filled_number(123, 5) => 00123
   def filled_number(n, nb)
     "0"*(nb-n.to_s.size) + n.to_s

@@ -2,4 +2,3 @@ page.replace_html "suggested_requests", render(:partial=>"suggested_request", :c
 page.replace "workload", render(:partial=>"workload")
 page << "document.body.style.cursor = 'auto';"
 page << "set_fixed_header();"
-

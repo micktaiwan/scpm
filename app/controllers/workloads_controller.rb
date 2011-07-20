@@ -3,7 +3,8 @@ class Workload
   include ApplicationHelper
 
   attr_reader :name, :weeks, :wl_weeks, :person_id, :wl_lines, :line_sums,
-              :opens, :ctotals, :percents, :months, :days, :person, :next_month_percents, :total_percents
+              :opens, :ctotals, :percents, :months, :days, :person, :next_month_percents, :total_percents,
+              :planned_total
 
   def initialize(person_id)
     @person     = Person.find(person_id)
@@ -66,8 +67,10 @@ class Workload
     # sum the lines
     @line_sums = Hash.new
     today_week = wlweek(Date.today)
-    for l in @wl_lines
-      @line_sums[l.id] = l.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
+    @planned_total = 0
+    for l in @wl_lines.select { |line| line.wl_type <= 200}
+      @line_sums[l.id] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
+      @planned_total  += (@line_sums[l.id] ? @line_sums[l.id] : 0)
     end
 
     # calculate sums or not.... js is enough... or not, as we want to have the colors as soon as we load the page ? Can we do it by js at page load ? yes.
@@ -75,10 +78,6 @@ class Workload
 
   def col_sum(w, wl_lines)
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)
-  end
-
-  def wlweek(day)
-    (day.year.to_s + filled_number(day.cweek,2)).to_i
   end
 
 end
@@ -89,7 +88,8 @@ class WorkloadsController < ApplicationController
 
   WL_LINE_REQUEST   = 100
   WL_LINE_OTHER     = 200
-  WL_LINE_HOLIDAYS  = 300
+  WL_LINE_HOLIDAYS  = 300 # not summed in the planned total
+  WL_LINE_EXCEPT    = 400 # other tasks, not in the current project, not summed in the planned total
 
   def index
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
@@ -169,24 +169,23 @@ class WorkloadsController < ApplicationController
   end
 
   def edit_load
-    line_id   = params[:l].to_i
-    wlweek    = params[:w].to_i
+    @line_id  = params[:l].to_i
+    @wlweek   = params[:w].to_i
     value     = round_to_hour(params[:v].to_f)
-    line      = WlLine.find(line_id)
+    line      = WlLine.find(@line_id)
     person_id = line.person_id
 
     if value == 0.0
-      WlLoad.delete_all(["wl_line_id=? and week=?",line_id, wlweek])
-      lsum, csum, cpercent  = get_sums(line, wlweek, person_id)
-      render(:text=>",#{lsum},#{csum},#{cpercent}")
+      WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
+      @value = ""
     else
-      wl_load = WlLoad.find_by_wl_line_id_and_week(line_id, wlweek)
-      wl_load = WlLoad.create(:wl_line_id=>line_id, :week=>wlweek) if not wl_load
+      wl_load = WlLoad.find_by_wl_line_id_and_week(@line_id, @wlweek)
+      wl_load = WlLoad.create(:wl_line_id=>@line_id, :week=>@wlweek) if not wl_load
       wl_load.wlload = value
       wl_load.save
-      lsum, csum, cpercent  = get_sums(line, wlweek, person_id)
-      render(:text=>"#{wl_load.wlload},#{lsum},#{csum},#{cpercent}")
+      @value = value
     end
+    @lsum, @csum, @cpercent, @planned_total  = get_sums(line, @wlweek, person_id)
   end
 
   def display_edit_line
@@ -205,7 +204,14 @@ class WorkloadsController < ApplicationController
     wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])
     csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
     cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
-    [lsum, csum, cpercent]
+    
+    today_week = wlweek(Date.today)
+    planned_total = 0
+    for l in wl_lines.select { |line| line.wl_type <= 200}
+      planned_total  += l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
+    end
+    
+    [lsum, csum, cpercent, planned_total]
   end
 
   def round_to_hour(f)

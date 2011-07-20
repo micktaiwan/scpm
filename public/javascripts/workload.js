@@ -17,20 +17,7 @@ function wl_add_line(person_id) {
 function wl_save_value(line_id, wlweek) {
   new Ajax.Request('/workloads/edit_load?l='+line_id+'&w='+wlweek+'&v='+$(line_id+'_'+wlweek).value, {
     asynchronous:true,
-    evalScripts:true,
-    onComplete: function(r){
-      arr = r.responseText.split(',')
-      $(line_id+'_'+wlweek).value = arr[0]
-      $('ltotal_' +line_id).innerHTML = arr[1]
-      $('ctotal_'  +wlweek).innerHTML = arr[2]
-      $('cpercent_'+wlweek).innerHTML = arr[3] + "%"
-      if(parseInt(arr[3])>110)
-        wl_change_colors(wlweek,"#F00","#FFF");
-      else if(parseInt(arr[3])<90)
-        wl_change_colors(wlweek,"#F90","#000");
-      else
-        wl_change_colors(wlweek,"#FFF","#940");
-      }
+    evalScripts:true
     });
   }
 
