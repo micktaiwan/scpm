@@ -208,7 +208,8 @@ class WorkloadsController < ApplicationController
     today_week = wlweek(Date.today)
     planned_total = 0
     for l in wl_lines
-      planned_total  += (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)) if l.wl_type <= 200
+      s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))
+      planned_total  +=  s if l.wl_type <= 200 and s
     end
     
     [lsum, csum, cpercent, planned_total]
