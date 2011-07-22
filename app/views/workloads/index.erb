@@ -7,7 +7,7 @@
 By request number
 <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
   <%= label_tag(:request_id, "Request #") %>
-  <%= text_area_tag(:request_id, nil, {:id=>'input_request', :cols=>50, :rows=>3}) %>
+  <%= text_field_tag(:request_id, nil, {:id=>'input_request', :size=>5}) %>
   <%= submit_tag("Add") %>
 <% end %>
 <br/>
