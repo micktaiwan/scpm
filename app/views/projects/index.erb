@@ -4,7 +4,6 @@
 <%= link_to_function("#{@actions.size} actions", "$('actions').toggle();") %><br/>
 
 <div id="actions" style="display:none;">
-Pierre, je ferai mieux plus tard avec des onglets et tout et tout :)<br/>
 <%= render(:file=>'actions/actions_header') %>
 <%= render(:partial=>'actions/action', :collection=>@actions) %>
 </table>

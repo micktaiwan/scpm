@@ -7,14 +7,14 @@
 By request number
 <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
   <%= label_tag(:request_id, "Request #") %>
-  <%= text_field_tag(:request_id, nil, :id=>'input_request') %>
+  <%= text_area_tag(:request_id, nil, {:id=>'input_request', :cols=>50, :rows=>3}) %>
   <%= submit_tag("Add") %>
 <% end %>
 <br/>
 By name ("Holidays", "Training",...)
 <% form_remote_tag(:url=>{:action => "add_by_name"}) do %>
   <%= label_tag(:name, "Name") %>
-  <%= text_field_tag(:name, nil, :id=>'input_name') %>
+  <%= text_area_tag(:name, nil, {:id=>'input_name', :cols=>50, :rows=>3}) %>
   <%= submit_tag("Add") %>
 <% end %>
 <br/>
