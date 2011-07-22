@@ -112,7 +112,7 @@ class ToolsController < ApplicationController
       @risks_remaining      = 0
       @provisions.each { |p|
         calculate_provision(p,@operational_total,operational)
-        @sold += p.initial_should_be
+        @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
         if p.title == 'Operational Management' or p.title == 'Project Management'
           @provisions_remaining_should_be += p.reevaluated_should_be
           @provisions_remaining += p.reevaluated
