@@ -178,7 +178,7 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def project_requests_progress_status
+  def projecmt_requests_progress_status
     status = self.requests_progress_status
     self.projects.each { |p|
       s = p.project_requests_progress_status
@@ -562,7 +562,6 @@ class Project < ActiveRecord::Base
       }
     date
   end
-
 
   def suggested_status
     rv = 1

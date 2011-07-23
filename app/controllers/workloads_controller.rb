@@ -73,7 +73,7 @@ class Workload
       @planned_total  += @line_sums[l.id] if l.wl_type <= 200 and @line_sums[l.id]
       @sdp_remaining_total += l.request.sdp_tasks_remaining_sum if l.request
     end
-    
+
     # calculate sums or not.... js is enough... or not, as we want to have the colors as soon as we load the page ? Can we do it by js at page load ? yes.
   end
 
@@ -204,20 +204,20 @@ class WorkloadsController < ApplicationController
     WlLine.find(params[:id]).destroy
     render(:nothing=>true)
   end
-  
+
   def get_sums(line, week, person_id)
     lsum = line.wl_loads.map{|l| l.wlload}.inject(:+)
     wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])
     csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
     cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
-    
+
     today_week = wlweek(Date.today)
     planned_total = 0
     for l in wl_lines
       s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))
       planned_total  +=  s if l.wl_type <= 200 and s
     end
-    
+
     [lsum, csum, cpercent, planned_total]
   end
 

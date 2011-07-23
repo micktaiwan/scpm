@@ -45,3 +45,15 @@ function set_fixed_header() {
   $j('table').fixedHeaderTable({ height: '400', footer: false, fixedColumn: false });
   }
 
+function display_milestones(text) {
+  popup = $('milestones')
+  e = window.event;
+  popup.style.top = (parseInt(Event.pointerY(e))-80)+"px"
+  popup.style.left = Event.pointerX(e)+"px"
+  popup.innerHTML = text;
+  popup.show();
+  }
+function hide_milestones(text) {
+  $('milestones').hide();
+  }
+

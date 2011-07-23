@@ -75,6 +75,11 @@ tbody tr:hover {
 .wl_case input {
   color: #555;
   }
+.wl_case input.milestone {
+  background: #FAA;
+  border: 0;
+  width: 40px;
+  }
 
 .wl_textfield {
   border: 0;
@@ -127,4 +132,5 @@ tr.wl_opens {
 .delete:hover{
   border: 2px dashed #F33;
   color: #F33;
-  }  
+  }
+
