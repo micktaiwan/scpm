@@ -1,9 +1,7 @@
 if @error
   page.alert @error
 else
-  page << "$('input_request').value='';"
   page.replace "workload", render(:partial=>'workload')
   page << "set_fixed_header();"
-  page.visual_effect(:highlight, "workload")
 end
 

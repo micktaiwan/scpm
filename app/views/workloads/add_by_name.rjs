@@ -4,5 +4,6 @@ else
   page << "$('input_name').value='';"
   page.replace "workload", render(:partial=>'workload', :object=>@workload)
   page << "set_fixed_header();"
+  page.visual_effect(:highlight, "workload")
 end
 

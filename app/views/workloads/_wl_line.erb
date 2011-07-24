@@ -4,6 +4,10 @@ if wl_line.request_id != nil
   init      = request.sdp=="No" ? "No" : request.sdp_tasks_initial_sum
   balancei  = request.sdp=="No" ? "No" : request.sdp_tasks_balancei_sum
   remaining = request.sdp=="No" ? "No" : request.sdp_tasks_remaining_sum
+elsif wl_line.sdp_task_id != nil
+  init      = wl_line.sdp_task.initial
+  balancei  = wl_line.sdp_task.balancei
+  remaining = wl_line.sdp_task.remaining
 else
   init      = ""
   remaining = ""

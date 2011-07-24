@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110719072246) do
+ActiveRecord::Schema.define(:version => 20110724210904) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(:version => 20110719072246) do
     t.datetime "last_view"
     t.integer  "has_left",      :default => 0
     t.integer  "sdp_id",        :default => -1
+    t.string   "trigram"
   end
 
   create_table "person_roles", :force => true do |t|
@@ -312,8 +313,8 @@ ActiveRecord::Schema.define(:version => 20110719072246) do
     t.integer  "locked",            :default => 0
     t.datetime "locked_time"
     t.text     "ws_report"
-    t.datetime "reason_updated_at", :default => '2011-07-19 18:18:38'
-    t.datetime "ws_updated_at",     :default => '2011-07-19 18:18:38'
+    t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
+    t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
   end
 
   create_table "topics", :force => true do |t|
@@ -343,6 +344,7 @@ ActiveRecord::Schema.define(:version => 20110719072246) do
     t.string   "color"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sdp_task_id"
   end
 
   create_table "wl_loads", :force => true do |t|

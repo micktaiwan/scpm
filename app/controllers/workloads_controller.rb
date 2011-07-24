@@ -13,7 +13,7 @@ class Workload
     @name       = @person.name
 
     # calculate lines
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?", person_id], :order=>"wl_type, name")
+    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?", person_id], :order=>"wl_type, sdp_task_id, name")
     @wl_lines  << WlLine.create(:name=>"Congés", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
     from_day    = Date.today - (Date.today.cwday-1).days
     #farest_week = @wl_lines.map{|l| m = l.wl_loads.map{|l| l.week}.max; m ? m:0}.max
@@ -72,9 +72,8 @@ class Workload
       @line_sums[l.id] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
       @planned_total  += @line_sums[l.id] if l.wl_type <= 200 and @line_sums[l.id]
       @sdp_remaining_total += l.request.sdp_tasks_remaining_sum if l.request
+      @sdp_remaining_total += l.sdp_task.remaining if l.sdp_task
     end
-
-    # calculate sums or not.... js is enough... or not, as we want to have the colors as soon as we load the page ? Can we do it by js at page load ? yes.
   end
 
   def col_sum(w, wl_lines)
@@ -102,13 +101,25 @@ class WorkloadsController < ApplicationController
     else
       get_suggested_requests(@workload)
     end
+    if @workload.person.trigram == ""
+      @sdp_tasks = []
+    else
+      get_sdp_tasks(@workload)
+    end
   end
 
   def get_suggested_requests(wl)
     request_ids   = wl.wl_lines.select {|l| l.request_id != nil}.map { |l| filled_number(l.request_id,7)}
     cond = ""
     cond = " and request_id not in (#{request_ids.join(',')})" if request_ids.size > 0
-    @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}' and status!='closed' and status!='performed' and status!='cancelled'  and status!='removed' and resolution!='ended'" + cond, :order=>"project_name, summary")
+    @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}' and status!='closed' and status!='performed' and status!='cancelled' and status!='removed' and resolution!='ended' #{cond}", :order=>"project_name, summary")
+  end
+
+  def get_sdp_tasks(wl)
+    task_ids   = wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
+    cond = ""
+    cond = " and id not in (#{task_ids.join(',')})" if task_ids.size > 0
+    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null and remaining > 0 #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{t.title} (#{t.remaining})", t.id]}
   end
 
   def consolidation
@@ -125,6 +136,7 @@ class WorkloadsController < ApplicationController
     session['workload_person_id'] = person_id
     @workload = Workload.new(person_id)
     get_suggested_requests(@workload)
+    get_sdp_tasks(@workload)
   end
 
   def add_by_request
@@ -145,11 +157,11 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_person_id_and_request_id(person_id, request_id)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>request_id, :person_id=>person_id, :wl_type=>WL_LINE_REQUEST)
+      @workload = Workload.new(person_id)
+      get_suggested_requests(@workload)
     else
       @error = "This line already exists: #{request_id}"
     end
-    @workload = Workload.new(person_id)
-    get_suggested_requests(@workload)
   end
 
   def add_by_name
@@ -164,6 +176,24 @@ class WorkloadsController < ApplicationController
       @line = WlLine.create(:name=>name, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
     else
       @error = "This line already exists: #{name}"
+    end
+    @workload = Workload.new(person_id)
+    get_suggested_requests(@workload)
+  end
+
+  def add_by_sdp_task
+    sdp_task_id = params[:sdp_task_id].to_i
+    person_id = session['workload_person_id'].to_i
+    sdp_task = SDPTask.find(sdp_task_id)
+    if not sdp_task
+      @error = "Can not find SDP Task with id #{sdp_task_id}"
+      return
+    end
+    found = WlLine.find_by_sdp_task_id(sdp_task_id)
+    if not found
+      @line = WlLine.create(:name=>sdp_task.title, :sdp_task_id=>sdp_task_id, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+    else
+      @error = "This line already exists: #{found.name}"
     end
     @workload = Workload.new(person_id)
     get_suggested_requests(@workload)
@@ -191,7 +221,13 @@ class WorkloadsController < ApplicationController
 
   def display_edit_line
     line_id   = params[:l].to_i
-    @wl_line      = WlLine.find(line_id)
+    @wl_line  = WlLine.find(line_id)
+    @workload = Workload.new(session['workload_person_id'])
+    if @workload.person.trigram == ""
+      @sdp_tasks = []
+    else
+      get_sdp_tasks(@workload)
+    end
   end
 
   def edit_line
@@ -221,19 +257,46 @@ class WorkloadsController < ApplicationController
     end
     project = request.project
     name = request.workload_name
-    @wl_line = WlLine.find(line_id)
-    @wl_line.name = name
-    @wl_line.request_id = request_id
-    @wl_line.wl_type = WL_LINE_REQUEST
-    @wl_line.save
-    @workload = Workload.new(@wl_line.person_id)
+    found = WlLine.find_by_person_id_and_request_id(person_id, request_id)
+    if not found
+      @wl_line = WlLine.find(line_id)
+      @wl_line.name = name
+      @wl_line.request_id = request_id
+      @wl_line.wl_type = WL_LINE_REQUEST
+      @wl_line.save
+      @workload = Workload.new(person_id)
+    else
+      @error = "This line already exists: #{request_id}"
+    end
   end
 
-  def unlink
+  def unlink_request
     line_id             = params[:id]
     @wl_line            = WlLine.find(line_id)
     @wl_line.request_id = nil
     @wl_line.wl_type    = WL_LINE_OTHER
+    @wl_line.save
+    @workload = Workload.new(@wl_line.person_id)
+  end
+
+  def link_to_sdp
+    sdp_task_id  = params[:sdp_task_id].to_i
+    line_id     = params[:id]
+    person_id = session['workload_person_id'].to_i
+    task = SDPTask.find(sdp_task_id)
+    @wl_line = WlLine.find(line_id)
+    @wl_line.name = task.title
+    @wl_line.sdp_task_id = sdp_task_id
+    @wl_line.wl_type = WL_LINE_OTHER
+    @wl_line.save
+    @workload = Workload.new(@wl_line.person_id)
+  end
+
+  def unlink_sdp
+    line_id               = params[:id]
+    @wl_line              = WlLine.find(line_id)
+    @wl_line.sdp_task_id  = nil
+    @wl_line.wl_type      = WL_LINE_OTHER
     @wl_line.save
     @workload = Workload.new(@wl_line.person_id)
   end
