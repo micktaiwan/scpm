@@ -130,7 +130,7 @@ class WorkloadsController < ApplicationController
   def add_by_request
     request_id = params[:request_id].strip
     if request_id.empty?
-      @error = "Please provide a request number.\nTo close this window, click again on 'Add a line'."
+      @error = "Please provide a request number."
       return
     end
     person_id = session['workload_person_id'].to_i
@@ -155,7 +155,7 @@ class WorkloadsController < ApplicationController
   def add_by_name
     name = params[:name].strip
     if name.empty?
-      @error = "Please provide a name.\nTo close this window, click again on 'Add a line'."
+      @error = "Please provide a name."
       return
     end
     person_id = session['workload_person_id'].to_i
@@ -203,6 +203,39 @@ class WorkloadsController < ApplicationController
   def destroy_line
     WlLine.find(params[:id]).destroy
     render(:nothing=>true)
+  end
+
+  def link_to_request
+    request_id  = params[:request_id].strip
+    line_id     = params[:id]
+    if request_id.empty?
+      @error = "Please provide a request number."
+      return
+    end
+    person_id = session['workload_person_id'].to_i
+    filled = filled_number(request_id,7)
+    request = Request.find_by_request_id(filled)
+    if not request
+      @error = "Can not find request with number #{request_id}"
+      return
+    end
+    project = request.project
+    name = request.workload_name
+    @wl_line = WlLine.find(line_id)
+    @wl_line.name = name
+    @wl_line.request_id = request_id
+    @wl_line.wl_type = WL_LINE_REQUEST
+    @wl_line.save
+    @workload = Workload.new(@wl_line.person_id)
+  end
+
+  def unlink
+    line_id             = params[:id]
+    @wl_line            = WlLine.find(line_id)
+    @wl_line.request_id = nil
+    @wl_line.wl_type    = WL_LINE_OTHER
+    @wl_line.save
+    @workload = Workload.new(@wl_line.person_id)
   end
 
   def get_sums(line, week, person_id)

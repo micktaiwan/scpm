@@ -1,7 +1,6 @@
 <div id="edit_line" class="popup" style="display:none;">
 <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('edit_line').fade({duration:0.2});") %><br/>
-<br/>
-<br/>
+<div class="title">Edit line</div>
 <% if edit_line.request_id %>
 Request id: <%= edit_line.request_id %><br/>
 <%= edit_line.request.workload_name %><br/>
@@ -17,11 +16,29 @@ Request id: <%= edit_line.request_id %><br/>
   <%= submit_tag "Edit" %>
 <% end %>
 <br/>
-<%= link_to_remote('Delete this line from your workload',
- {:url=>{:action=>'destroy_line', :id=>edit_line.id},
- :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
- :success=>"$('edit_line').fade(); $('wl_line_#{edit_line.id}').fade();",
- :failure=>"alert('Error:' + request.responseText);"},
- {:class=>"delete"}) %>
-
+<%= link_to_function('Options',"$('options').toggle();") %>
+<div id="options" style="display:none;">
+  <div class="title">Link to a request</div>
+  <% form_remote_tag(:url=>{:action => "link_to_request", :id=>edit_line.id}) do %>
+    <%= label_tag(:request_id, "Request #") %>
+    <%= text_field_tag(:request_id, nil, {:size=>5}) %>
+    <%= submit_tag("Link") %>
+  <% end %>
+  <br/>
+  <div class="title">Unlink</div>
+  <%= label_tag(:unlink, "&nbsp;") %>
+  <%= link_to_remote('Unlink',
+   {:url=>{:action=>'unlink', :id=>edit_line.id},
+   :confirm=>"Are you sure ?"}) %><br/>
+  <br/>
+  <div class="title">Delete line</div>
+  <%= label_tag(:delete, "&nbsp;") %>
+  <%= link_to_remote('Delete this line from your workload',
+   {:url=>{:action=>'destroy_line', :id=>edit_line.id},
+   :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
+   :success=>"$('edit_line').fade(); $('wl_line_#{edit_line.id}').fade();",
+   :failure=>"alert('Error:' + request.responseText);"},
+   {:class=>"delete"}) %>
+  </div>
 </div>
+

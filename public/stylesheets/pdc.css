@@ -123,14 +123,8 @@ tr.wl_opens {
   }
 
 .delete {
-  padding: 10px;
-  border: 2px dashed #333;
-  color: #933;
-  float:right;
-  background: #5AF;
   }
 .delete:hover{
-  border: 2px dashed #F33;
   color: #F33;
   }
 
