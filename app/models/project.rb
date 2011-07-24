@@ -178,7 +178,7 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def projecmt_requests_progress_status
+  def project_requests_progress_status
     status = self.requests_progress_status
     self.projects.each { |p|
       s = p.project_requests_progress_status
