@@ -9,6 +9,12 @@ You have <b><%=@suggested_requests.size%></b> suggested requests
 <br/>
 <b>Next month:</b> <%= workload.next_month_percents %>%<br/>
 <b>6 months:</b>   <%= workload.total_percents %>%<br/>
+<% 
+percent_planned = (((workload.planned_total / workload.sdp_remaining_total)*100)/0.1).round * 0.1
+if percent_planned < 95
+%>
+You have <%= workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
+<% end %>
 <br/>
 <table>
 

@@ -49,7 +49,7 @@ function display_milestones(text) {
   popup = $('milestones')
   e = window.event;
   popup.style.top = (parseInt(Event.pointerY(e))-80)+"px"
-  popup.style.left = Event.pointerX(e)+"px"
+  popup.style.left = (parseInt(Event.pointerX(e))-220)+"px"
   popup.innerHTML = text;
   popup.show();
   }
