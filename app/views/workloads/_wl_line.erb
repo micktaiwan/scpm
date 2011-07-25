@@ -1,10 +1,10 @@
 <%
 request = wl_line.request
-if wl_line.request_id != nil
+if request
   init      = request.sdp=="No" ? "No" : request.sdp_tasks_initial_sum
   balancei  = request.sdp=="No" ? "No" : request.sdp_tasks_balancei_sum
   remaining = request.sdp=="No" ? "No" : request.sdp_tasks_remaining_sum
-elsif wl_line.sdp_task_id != nil
+elsif wl_line.sdp_task
   init      = wl_line.sdp_task.initial
   balancei  = wl_line.sdp_task.balancei
   remaining = wl_line.sdp_task.remaining
@@ -15,7 +15,7 @@ else
 end
 %>
 
-<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
+<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and request and request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <td><%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %></td>
   <td align="center"><% if request %><%= request.status %><% end %></td>
   <td><%= init %></td>

@@ -18,8 +18,9 @@ By name ("Holidays", "Training",...)
   <%= submit_tag("Add") %>
 <% end %>
 <br/>
-<%= label_tag(:sdp_task, "SDP Task") %>
+By SDP task
 <% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
+<%= label_tag(:sdp_task, "SDP Task") %>
 <%= render(:partial=>'sdp_tasks') %>
 <%= submit_tag("Add") %>
 <% end %>
