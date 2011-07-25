@@ -122,13 +122,18 @@ class WorkloadsController < ApplicationController
     @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null and remaining > 0 #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{t.title} (#{t.remaining})", t.id]}
   end
 
+  # just for loading tabs
   def consolidation
+  end
+  
+  def conso_workloads
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name")
     @workloads = []
     for p in @people
       @workloads << Workload.new(p.id)
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.total_percents, w.person.name]}
+    render :layout => false    
   end
 
   def change_workload

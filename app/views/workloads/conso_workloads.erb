@@ -1,0 +1,10 @@
+<%= @workloads.size %> workloads<br/>
+<br/>
+<table>
+  <tr style="font-weight:bold;">
+    <td>Name</td>
+    <td>Next month</td>
+    <td>6 months</td>
+  </tr>
+  <%= render(:partial=>'conso_line', :collection=>@workloads) %>
+</table>
