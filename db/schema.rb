@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110724210904) do
+ActiveRecord::Schema.define(:version => 20110725161116) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(:version => 20110724210904) do
     t.integer  "has_left",      :default => 0
     t.integer  "sdp_id",        :default => -1
     t.string   "trigram"
+    t.integer  "is_transverse", :default => 0
   end
 
   create_table "person_roles", :force => true do |t|

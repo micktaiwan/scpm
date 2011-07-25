@@ -127,13 +127,13 @@ class WorkloadsController < ApplicationController
   end
   
   def conso_workloads
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name")
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
     for p in @people
       @workloads << Workload.new(p.id)
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.total_percents, w.person.name]}
-    render :layout => false    
+    render :layout => false
   end
 
   def change_workload
