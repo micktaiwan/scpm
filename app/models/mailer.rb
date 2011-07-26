@@ -20,6 +20,21 @@ class Mailer < ActionMailer::Base
     @subject    = "[EISQ] Risk change - #{risk.project.full_name}"
     @risk       = risk
   end
+  
+  # search all people without work and send a reminder to update the workload
+  def workloads
+    people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    @workloads = []
+    for p in people
+      @workloads << Workload.new(p.id)
+    end
+    @workloads = @workloads.select{|w| w.next_month_percents < 95 or w.next_month_percents > 115}.sort_by {|w| [w.next_month_percents, w.total_percents, w.person.name]}
+  
+    
+    @from       = "mfaivremacon@sqli.com"
+    @recipients = "mfaivremacon@sqli.com"
+    @subject    = "[EISQ] Workload alert"
+  end
 
 end
 

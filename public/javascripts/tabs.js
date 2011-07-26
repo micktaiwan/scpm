@@ -61,5 +61,5 @@ function load_contents() {
   }
 
 document.observe("dom:loaded", function() {
-  load_contents();
+  //load_contents();
 });
