@@ -30,11 +30,11 @@ class Mailer < ActionMailer::Base
     end
     @workloads = @workloads.select{|w| w.next_month_percents < 95 or w.next_month_percents > 115}.sort_by {|w| [w.next_month_percents, w.total_percents, w.person.name]}
   
-    
     @from       = "mfaivremacon@sqli.com"
     @recipients = "mfaivremacon@sqli.com"
-    @subject    = "[EISQ] Workload alert"
+    @subject    = "[EISQ] Workload alert."
+    @headers    = {}
+    content_type "text/html; charset=utf-8"
   end
 
 end
-

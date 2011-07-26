@@ -1,9 +1,13 @@
-Project "<%= @risk.project.full_name %>" risk is now:
-
-Context: <%= @risk.context %>
-Risk: <%= @risk.risk %>
-Probability: <%= @risk.probability %>
-Consequence: <%= @risk.consequence %>
-Impact: <%= @risk.impact %>
-Actions: <%= @risk.actions %>
-
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    Hello,<br/>
+    <br/>
+    <%= render(:partial=>"workload", :collection=>@workloads) %><br/>
+    <br/>
+    <a href="http://tls-srv-eisq.sqli.com/workloads">EISQ Report</a><br/>    
+  </body>
+</html>
