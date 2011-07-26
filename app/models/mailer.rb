@@ -22,7 +22,7 @@ class Mailer < ActionMailer::Base
   end
   
   # search all people without work and send a reminder to update the workload
-  def workloads
+  def workload_alerts
     people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
     for p in people
