@@ -1,36 +1,34 @@
 <div id="edit_line"></div>
 
-
 <div id="wl_line_add_form" class="popup" style="display:none;">
-<%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
-<div class="title">Add a line</div>
-By request number
-<% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
-  <%= label_tag(:request_id, "Request #") %>
-  <%= text_field_tag(:request_id, nil, {:id=>'input_request', :size=>5}) %>
-  <%= submit_tag("Add") %>
-<% end %>
-<br/>
-By name ("Holidays", "Training",...)
-<% form_remote_tag(:url=>{:action => "add_by_name"}) do %>
-  <%= label_tag(:name, "Name") %>
-  <%= text_area_tag(:name, nil, {:id=>'input_name', :cols=>50, :rows=>3}) %>
-  <%= submit_tag("Add") %>
-<% end %>
-<br/>
-By SDP task <b>(Attention, buggu&eacute;, ne pas utiliser pour l'instant)</b>
-<% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
-<%= label_tag(:sdp_task, "SDP Task") %>
-<%= render(:partial=>'sdp_tasks') %>
-<%= submit_tag("Add") %>
-<% end %>
-<br/>
+  <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
+  <div class="title">Add a line</div>
+  By request number
+  <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
+    <%= label_tag(:request_id, "Request #") %>
+    <%= text_field_tag(:request_id, nil, {:id=>'input_request', :size=>5}) %>
+    <%= submit_tag("Add") %>
+  <% end %>
+  <br/>
+  By name ("Holidays", "Training",...)
+  <% form_remote_tag(:url=>{:action => "add_by_name"}) do %>
+    <%= label_tag(:name, "Name") %>
+    <%= text_area_tag(:name, nil, {:id=>'input_name', :cols=>50, :rows=>3}) %>
+    <%= submit_tag("Add") %>
+  <% end %>
+  <br/>
+  By SDP task
+  <% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
+    <%= label_tag(:sdp_task, "SDP Task") %>
+    <%= render(:partial=>'sdp_tasks') %>
+    <%= submit_tag("Add") %>
+  <% end %>
+  <br/>
 
-<b>Suggested requests:</b><br/>
-<div id="suggested_requests" style="overflow-y:scroll; height:100px;">
-<%= render(:partial=>"suggested_request", :collection=>@suggested_requests) %>
-</div>
-
+  <b>Suggested requests:</b><br/>
+  <div id="suggested_requests" style="overflow-y:scroll; height:100px;">
+    <%= render(:partial=>"suggested_request", :collection=>@suggested_requests) %>
+  </div>
 </div>
 
 <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %><br/>
@@ -38,7 +36,6 @@ By SDP task <b>(Attention, buggu&eacute;, ne pas utiliser pour l'instant)</b>
 <%= render(:partial=>"workload") %>
 
 <script>
-set_fixed_header();
-// new Draggable(wl_line_add_form); // does not mix well with scrollbar
+  set_fixed_header();
+  // new Draggable(wl_line_add_form); // does not mix well with scrollbar
 </script>
-

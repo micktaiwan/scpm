@@ -1,9 +1,12 @@
 class WlLine < ActiveRecord::Base
 
   has_many :wl_loads, :dependent => :destroy
-  belongs_to :sdp_task, :class_name=>"SDPTask"
 
   include ApplicationHelper
+
+  def sdp_task
+    SDPTask.find_by_sdp_id(self.sdp_task_id)
+  end
 
   def load_by_week(week)
     WlLoad.find(:first, :conditions=>["wl_line_id=? and week=?", self.id, week])

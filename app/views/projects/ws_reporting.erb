@@ -157,7 +157,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['WS','Project', 'Workpackage', 'BRN', 'Current Status', 'Date', 'Reporting', 'Last milestone', 'Current milestone', 'Next milestone', 'EIS'] do
+        for column in ['WS','Project', 'Workpackage', 'BRN', 'Quality Status', 'Date', 'Reporting', 'Last milestone', 'Current milestone', 'Next milestone', 'EIS'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'

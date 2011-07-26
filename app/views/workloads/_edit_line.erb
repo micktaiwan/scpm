@@ -17,8 +17,8 @@ Request id: <%= edit_line.request_id %><br/>
 <% end %>
 <br/>
 <%= link_to_function('Options',"$('options').toggle();") %>
-<div id="options" style="display:none;">
 
+<div id="options" style="display:none;">
   <div class="title">Link to a request</div>
   <% form_remote_tag(:url=>{:action => "link_to_request", :id=>edit_line.id}) do %>
     <%= label_tag(:request_id, "Request #") %>
@@ -53,4 +53,3 @@ Request id: <%= edit_line.request_id %><br/>
    {:class=>"delete"}) %>
   </div>
 </div>
-

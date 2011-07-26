@@ -1,4 +1,3 @@
-
 class WorkloadsController < ApplicationController
 
   layout 'pdc'
@@ -36,7 +35,7 @@ class WorkloadsController < ApplicationController
     task_ids   = wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
     cond = ""
     cond = " and id not in (#{task_ids.join(',')})" if task_ids.size > 0
-    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null and remaining > 0 #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.id]}
+    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null and remaining > 0 #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
   end
 
   # just for loading tabs
@@ -106,7 +105,7 @@ class WorkloadsController < ApplicationController
   def add_by_sdp_task
     sdp_task_id = params[:sdp_task_id].to_i
     person_id = session['workload_person_id'].to_i
-    sdp_task = SDPTask.find(sdp_task_id)
+    sdp_task = SDPTask.find_by_sdp_id(sdp_task_id)
     if not sdp_task
       @error = "Can not find SDP Task with id #{sdp_task_id}"
       return
@@ -205,7 +204,7 @@ class WorkloadsController < ApplicationController
     sdp_task_id  = params[:sdp_task_id].to_i
     line_id     = params[:id]
     person_id = session['workload_person_id'].to_i
-    task = SDPTask.find(sdp_task_id)
+    task = SDPTask.find_by_sdp_id(sdp_task_id)
     @wl_line = WlLine.find(line_id)
     @wl_line.name = task.title
     @wl_line.sdp_task_id = sdp_task_id
