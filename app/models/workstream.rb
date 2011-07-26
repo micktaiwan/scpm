@@ -7,7 +7,7 @@ class Workstream < ActiveRecord::Base
   end
   
   def non_green_projects
-    projects.select {|p| p.has_requests and p.get_status.status > 1}
+    projects.select {|p| p.has_requests and p.get_status.status != 1}
   end
   
   def projects_with_new_reason

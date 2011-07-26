@@ -1,41 +1,42 @@
 <h2><%= workstream.name %></h2>
 <%= link_to('Edit', {:action=>'edit', :id=>workstream.id}, {:class=>'menu grey'}) %><br/>
-<ul>
+<br/>
 <b>Strenghts</b>: <%= my_simple_format(workstream.strenghts) %><br/>
 <b>Weaknesses</b>: <%= my_simple_format(workstream.weaknesses) %><br/>
 <br/>
 <%
-projects = workstream.non_green_projects.select { |p| !p.is_ended }
-projects_without_reporting = projects.select { |p| s = p.get_status; s.ws_report == nil or s.ws_report.strip == ""}
-size1 = projects_without_reporting.size
+  projects = workstream.non_green_projects.select { |p| !p.is_ended }
+  projects_without_reporting = projects.select { |p| s = p.get_status; s.ws_report == nil or s.ws_report.strip == ""}
+  size1 = projects_without_reporting.size
 
-new_reasons = workstream.projects_with_new_reason
-size2 = new_reasons.size
+  new_reasons = workstream.projects_with_new_reason
+  size2 = new_reasons.size
 %>
 
 <% if size1 > 0 %>
-<strong><%= size1 %></strong> projects <b>without</b> a reporting<br/>
+  <strong><%= size1 %></strong> projects <b>without</b> a reporting<br/>
 <% end %>
+
 <% if size2 > 0 %>
-<strong><%= size2 %></strong> projects have a new reason<br/>
+  <strong><%= size2 %></strong> projects have a new reason<br/>
 <% end %>
 <br/>
 
-<%= link_to_function('Projects', "$('projects_#{workstream.id}').toggle()",{:class=>"btnlnk"})%><br/>
-<br/>
-<div id="projects_<%=workstream.id%>" style="display:none;">
-<% if size1 > 0 %>
-<b>Without a reporting</b><br/>
-<br/>
-<%= render(:partial=>'project', :collection=>projects_without_reporting) %><br/>
-<br/>
+<% if size1 > 0 or size2 > 0%>
+  <%= link_to_function('Projects', "$('projects_#{workstream.id}').toggle()",{:class=>"btnlnk"})%><br/>
+  <br/>
+  <div id="projects_<%=workstream.id%>" style="display:none;">
+  <% if size1 > 0 %>
+  <b>Without a reporting</b><br/>
+  <br/>
+  <%= render(:partial=>'project', :collection=>projects_without_reporting) %><br/>
+  <br/>
+  <% end %>
+  <% if size2 > 0 %>
+  <b>New reason</b><br/>
+  <br/>
+  <%= render(:partial=>'project', :collection=>new_reasons) %><br/>
+  <% end %>
+  </div>
+  <br/>
 <% end %>
-<% if size2 > 0 %>
-<b>New reason</b><br/>
-<br/>
-<%= render(:partial=>'project', :collection=>new_reasons) %><br/>
-<% end %>
-</div>
-</ul>
-<br/>
-
