@@ -97,14 +97,18 @@ class ToolsController < ApplicationController
         souscharges = SDPActivity.find_by_title('Sous charges').remaining
         init        = SDPActivity.find_by_title('Initialization').remaining
         @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
+        @ci_remaining = SDPPhase.find_by_title('Continuous Improvement').remaining
+        @qa_remaining = SDPPhase.find_by_title('Quality Assurance').remaining
         @error = ""
       rescue Exception => e
         montee      = 0
         souscharges = 0
         init        = 0
         @remaining_management = 0
+        @ci_remaining = 0
+        @qa_remaining = 0
         @error = e.message
-      end      
+      end
       @sold                 = @operational_total
       @provisions_remaining_should_be = 0
       @provisions_remaining = 0
@@ -125,6 +129,7 @@ class ToolsController < ApplicationController
       @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
       @real_balance_and_provisions  = @provisions_diff+@balancei-(@theorical_management - (@remaining_management - @risks_remaining))
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
+      @overall_remaining            = @remaining + @theorical_management + @ci_remaining + @qa_remaining + (montee+souscharges+init)
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i>")
     end
