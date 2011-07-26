@@ -18,6 +18,7 @@ By name ("Holidays", "Training",...)
   <%= submit_tag("Add") %>
 <% end %>
 <br/>
+<!--
 By SDP task
 <% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
 <%= label_tag(:sdp_task, "SDP Task") %>
@@ -25,6 +26,8 @@ By SDP task
 <%= submit_tag("Add") %>
 <% end %>
 <br/>
+-->
+
 <b>Suggested requests:</b><br/>
 <div id="suggested_requests" style="overflow-y:scroll; height:100px;">
 <%= render(:partial=>"suggested_request", :collection=>@suggested_requests) %>
