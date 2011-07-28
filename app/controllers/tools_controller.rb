@@ -126,11 +126,10 @@ class ToolsController < ApplicationController
         end
         }
       # Management provisions are already in the management total
-      diff_theorical_actual = (@theorical_management - (@remaining_management - @risks_remaining))
       @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
-      @real_balance_and_provisions  = @provisions_diff+@balancei-diff_theorical_actual
+      @real_balance_and_provisions  = @provisions_diff+@balancei - (@theorical_management - (@remaining_management - @risks_remaining))
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
-      @remaining_DP                 = diff_theorical_actual + @ci_remaining + @qa_remaining #+ (montee+souscharges+init)
+      @remaining_DP                 = (@theorical_management-@management_minus_risk) + @ci_remaining + @qa_remaining #+ (montee+souscharges+init)
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i>")
     end
