@@ -266,23 +266,31 @@ class Request < ActiveRecord::Base
     end
   end
 
-  def sdp_tasks
-    SDPTask.find(:all, :conditions=>"request_id='#{self.request_id}'")
+  # options is a hash
+  # :trigram is the trigram of the person on which to filter
+  #  ex: sdp_tasks_remaining_sum({:trigram=>'MFM'})
+  def sdp_tasks(options=nil)
+    cond = ''
+    if options
+      cond += " and collab='#{options[:trigram]}'" if options[:trigram] and options[:trigram] != ''
+      puts cond
+    end
+
+    SDPTask.find(:all, :conditions=>"request_id='#{self.request_id}' #{cond}")
   end
 
-  def sdp_tasks_initial_sum
-    sdp_tasks.inject(0.0) {|sum,t| sum += t.initial}
+  def sdp_tasks_initial_sum(options=nil)
+    sdp_tasks(options).inject(0.0) {|sum,t| sum += t.initial}
   end
 
-  def sdp_tasks_remaining_sum
-    sdp_tasks.inject(0.0) {|sum,t| sum += t.remaining}
+  def sdp_tasks_remaining_sum(options=nil)
+    sdp_tasks(options).inject(0.0) {|sum,t| sum += t.remaining}
   end
 
-  def sdp_tasks_balancei_sum
-    sdp_tasks.inject(0.0) {|sum,t| sum += t.balancei}
+  def sdp_tasks_balancei_sum(options=nil)
+    sdp_tasks(options).inject(0.0) {|sum,t| sum += t.balancei}
   end
 
-  
   def sdp_phase_id
     SdpDB.sdp_phase_id(self.work_package)
   end

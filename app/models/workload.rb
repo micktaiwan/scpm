@@ -71,7 +71,7 @@ class Workload
     for l in @wl_lines
       @line_sums[l.id] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
       @planned_total  += @line_sums[l.id] if l.wl_type <= 200 and @line_sums[l.id]
-      @sdp_remaining_total += l.request.sdp_tasks_remaining_sum if l.request
+      @sdp_remaining_total += l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram}) if l.request
       @sdp_remaining_total += l.sdp_task.remaining if l.sdp_task
     end
   end

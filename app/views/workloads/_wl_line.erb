@@ -1,9 +1,9 @@
 <%
 request = wl_line.request
 if request
-  init      = request.sdp=="No" ? "No" : request.sdp_tasks_initial_sum
-  balancei  = request.sdp=="No" ? "No" : request.sdp_tasks_balancei_sum
-  remaining = request.sdp=="No" ? "No" : request.sdp_tasks_remaining_sum
+  init      = request.sdp=="No" ? "No" : request.sdp_tasks_initial_sum({:trigram=>wl_line.person.trigram})
+  balancei  = request.sdp=="No" ? "No" : request.sdp_tasks_balancei_sum({:trigram=>wl_line.person.trigram})
+  remaining = request.sdp=="No" ? "No" : request.sdp_tasks_remaining_sum({:trigram=>wl_line.person.trigram})
 elsif wl_line.sdp_task
   init      = wl_line.sdp_task.initial
   balancei  = wl_line.sdp_task.balancei
