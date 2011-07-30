@@ -1,3 +1,17 @@
+body {
+  background: url(/images/dot.gif) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #000;
+}
+
+#center {
+  width: 100%;
+  text-align:center;
+}
+
 div#banner {
   background: #DDD;
   border-bottom: 1px solid #005;
@@ -52,9 +66,6 @@ h2 {
   margin: 10px;
   border-radius: 15px;
   -moz-border-radius: 15px;
-  box-shadow: 5px 5px 5px #CCC;
-  -moz-box-shadow: 5px 5px 5px #CCC;
-  -webkit-box-shadow: 5px 5px 5px #CCC;
 }
 #logout {
   cursor: pointer;
@@ -62,15 +73,12 @@ h2 {
   text-align: center;
   font-family: 'Zeyada', serif;
   font-size: 3em;
-  color: #777;
-  border: 1px solid #678;
+  color: #000;
+  border: 1px solid #000;
   padding: 10px;
   margin: 10px 10px 10px 10px;
   border-radius: 15px;
   -moz-border-radius: 15px;
-  box-shadow: 5px 5px 5px #CCC;
-  -moz-box-shadow: 5px 5px 5px #CCC;
-  -webkit-box-shadow: 5px 5px 5px #CCC;
 }
 
 
@@ -86,7 +94,7 @@ h2 {
 #welcome {
   font-family: 'Zeyada', serif;
   font-size: 3em;
-  color: #444;
+  color: #000;
   padding: 0px;
   margin: 0px;
 }
@@ -95,10 +103,6 @@ h2 {
 }
 
 #last_changes  li {
-  color:#666;
+  color: #000;
 }
 
-#center {
-  width: 100%;
-  text-align:center;
-}

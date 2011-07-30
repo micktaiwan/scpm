@@ -25,6 +25,12 @@
 <%= yield %>
 </div>
 
+<script>
+  arr = new Array("01.jpg","02.jpg","03.jpg","04.jpg","05.jpg", "c1.jpg", "c2.jpg", "c3.jpg", "c4.jpg", "o1.jpg", "o2.jpg", "o3.jpg");
+  i = Math.floor(Math.random()*arr.length)
+  document.body.style.background="url(/images/bg/"+arr[i]+") no-repeat center center fixed";
+</script>
+
 </body>
 </html>
 
