@@ -10,6 +10,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Zeyada&v1' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Special+Elite	&v1' rel='stylesheet' type='text/css'>
 	<link rel="Shortcut Icon" type="image/x-icon" href="/images/favicon.ico" />
+  <%= javascript_include_tag :defaults %>
 </head>
 
 <body>
@@ -26,9 +27,11 @@
 </div>
 
 <script>
-  arr = new Array("01.jpg","02.jpg","03.jpg","04.jpg","05.jpg", "c1.jpg", "c2.jpg", "c3.jpg", "c4.jpg", "o1.jpg", "o2.jpg", "o3.jpg");
+if(Prototype.Browser.WebKit == true) {
+  arr = new Array("1.jpg","2.jpg","3.jpg","4.jpg","5.jpg", "6.jpg", "7.jpg");
   i = Math.floor(Math.random()*arr.length)
   document.body.style.background="url(/images/bg/"+arr[i]+") no-repeat center center fixed";
+  }
 </script>
 
 </body>
