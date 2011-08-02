@@ -223,12 +223,12 @@ class WorkloadsController < ApplicationController
   end
 
   def get_sums(line, week, person_id)
-    lsum = line.wl_loads.map{|l| l.wlload}.inject(:+)
+    today_week = wlweek(Date.today)
+    lsum = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
     wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])
     csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
     cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
-
-    today_week = wlweek(Date.today)
+    
     planned_total = 0
     for l in wl_lines
       s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))
