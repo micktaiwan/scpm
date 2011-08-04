@@ -74,8 +74,8 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     sdp.import
-    body = render_to_string(:action=>'sdp_index', :layout=>false)
-    Mailer::deliver_mail("mfaivremacon@sqli.com,faivrem@gmail.com","SDP Upload by #{current_user.name}",body)
+    body = render_to_string(:action=>'sdp_index', :layout=>false).size
+    Mailer::deliver_mail("mfaivremacon@sqli.com,vmudry@sqli.com","[EISQ] SDP Upload by #{current_user.name}",body)
     redirect_to '/tools/sdp_index'
   end
 
