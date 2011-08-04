@@ -76,7 +76,7 @@ class ToolsController < ApplicationController
     sdp.import
     sdp_index_prepare
     body = render_to_string(:action=>'sdp_index', :layout=>false)
-    Mailer::deliver_mail("mfaivremacon@sqli.com","[EISQ] SDP update","<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
+    Mailer::deliver_mail("mfaivremacon@sqli.com,vmudry@sqli.com","[EISQ] SDP update","<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
     redirect_to '/tools/sdp_index'
   end
 
