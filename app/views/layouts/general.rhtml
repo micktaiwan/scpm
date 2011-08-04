@@ -32,36 +32,34 @@
 <%= render :file => 'chat/main' %>
 
 <div id="banner">
-<%= render :file => 'layouts/context_select' %>
-<div id="title">Reporting</div>
-<div id="bandeau">
-<% b = get_bandeau; if b %>
-<div class="text"><%= b.text %></div>
-<div class="person"><%= b.person.name %></div>
-<% end %>
-<div class="link">
-  <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
-  <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
-</div>
-</div>
-
-
-<div id="menu_bar">
-<%= link_to('Projects', {:controller=>'projects', :action=>'index'}, {:class=>menu_style('projects','*')}) %>
-<%= link_to('Actions'+nb_actions, {:controller=>'actions', :action=>'index'}, {:class=>menu_style('actions','*')}) %>
-<%= link_to('Topics', {:controller=>'topics', :action=>'index'}, {:class=>menu_style('topics','*')}) %>
-<b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
-<% form_tag({:controller=>'projects', :action=>'filter'}, {:style=>"display:inline;"}) do %>
-<%= text_field_tag('text', '', {:size=>5}) %>
-<% end %>
-</div>
-
+  <%= render :file => 'layouts/context_select' %>
+  <div id="title">Reporting</div>
+  <div id="bandeau">
+    <% b = get_bandeau; if b %>
+      <div class="text"><%= b.text %></div>
+      <div class="person"><%= b.person.name %></div>
+    <% end %>
+    <div class="link">
+      <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+      <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
+    </div>
+  </div>
+  <div id="menu_bar">
+  <%= link_to('Projects', {:controller=>'projects', :action=>'index'}, {:class=>menu_style('projects','*')}) %>
+  <%= link_to('Actions'+nb_actions, {:controller=>'actions', :action=>'index'}, {:class=>menu_style('actions','*')}) %>
+  <%= link_to('Topics', {:controller=>'topics', :action=>'index'}, {:class=>menu_style('topics','*')}) %>
+  <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
+  <% form_tag({:controller=>'projects', :action=>'filter'}, {:style=>"display:inline;"}) do %>
+  <%= text_field_tag('text', '', {:size=>5}) %>
+  <% end %>
+  </div>
 </div>
 
 <div id="content">
-
 <%= yield %>
 </div>
 
+<%= render :file => 'layouts/footer.erb' %>
 </body>
 </html>
+

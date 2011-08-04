@@ -5,6 +5,10 @@ body {
   font-size: 0.8em;
   background: #FFF;
   }
+div#footer {
+  float:right;
+  }
+
 div#banner {
   margin: 0;
   position: fixed;
