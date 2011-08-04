@@ -74,6 +74,8 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     sdp.import
+    body = render_to_string(:action=>'sdp_index', :layout=>false)
+    Mailer::deliver_mail("mfaivremacon@sqli.com,faivrem@gmail.com","SDP Upload by #{current_user.name}",body)
     redirect_to '/tools/sdp_index'
   end
 
@@ -114,6 +116,7 @@ class ToolsController < ApplicationController
       @provisions_remaining = 0
       @provisions_diff      = 0
       @risks_remaining      = 0
+      provision_qa_ci = 0
       @provisions.each { |p|
         calculate_provision(p,@operational_total,operational)
         @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
@@ -121,6 +124,8 @@ class ToolsController < ApplicationController
           @provisions_remaining_should_be += p.reevaluated_should_be
           @provisions_remaining += p.reevaluated
           @provisions_diff      += p.difference
+        elsif p.title == 'Continuous Improvement' or p.title == 'Quality Assurance'
+          provision_qa_ci += p.reevaluated_should_be
         elsif p.title == 'Risks'
           @risks_remaining = p.reevaluated
         end
@@ -129,7 +134,7 @@ class ToolsController < ApplicationController
       @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
       @real_balance_and_provisions  = @provisions_diff+@balancei - (@theorical_management - (@remaining_management - @risks_remaining))
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
-      @remaining_DP                 = (@theorical_management-@management_minus_risk) + @ci_remaining + @qa_remaining #+ (montee+souscharges+init)
+      @remaining_DP                 = (@theorical_management-@management_minus_risk) + provision_qa_ci #+ (montee+souscharges+init)
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i>")
     end
