@@ -4,7 +4,8 @@ class Mailer < ActionMailer::Base
     @from        = "mfaivremacon@sqli.com"
     @recipients  = recipient
     @subject     = subject
-    @body["msg"] = body
+    @body        = body
+    content_type "text/html; charset=utf-8"
   end
 
   def status_change(project)
@@ -20,7 +21,7 @@ class Mailer < ActionMailer::Base
     @subject    = "[EISQ] Risk change - #{risk.project.full_name}"
     @risk       = risk
   end
-  
+
   # search all people without work and send a reminder to update the workload
   def workload_alerts
     people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
@@ -29,7 +30,7 @@ class Mailer < ActionMailer::Base
       @workloads << Workload.new(p.id)
     end
     @workloads = @workloads.select{|w| w.next_month_percents < 95 or w.next_month_percents > 115}.sort_by {|w| [w.next_month_percents]}
-  
+
     @from       = "mfaivremacon@sqli.com"
     @recipients = "mfaivremacon@sqli.com"
     @subject    = "[EISQ] Workload alerts"

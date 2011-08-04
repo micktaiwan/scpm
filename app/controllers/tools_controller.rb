@@ -74,11 +74,13 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     sdp.import
-    Mailer::deliver_mail("mfaivremacon@sqli.com","[EISQ] SDP update","#{current_user.name} just updated SDP")
+    sdp_index_prepare
+    body = render_to_string(:action=>'sdp_index', :layout=>false)
+    Mailer::deliver_mail("mfaivremacon@sqli.com","[EISQ] SDP updated by #{current_user.name}",body)
     redirect_to '/tools/sdp_index'
   end
 
-  def sdp_index
+  def sdp_index_prepare
     return if SDPTask.count.zero?
     begin
       @phases     = SDPPhase.all
@@ -137,6 +139,10 @@ class ToolsController < ApplicationController
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i>")
     end
+  end
+
+  def sdp_index
+    sdp_index_prepare
   end
 
   def sdp_yes_check
