@@ -118,6 +118,9 @@ a {text-decoration:none;}
   border-radius: 3px;
   -moz-border-radius: 5px;
 }
+.btnlnk.notimportant {
+  background: #EEE;
+}
 .btnlnk.special {
   background: #FDC;
   border: 1px solid #CBA;

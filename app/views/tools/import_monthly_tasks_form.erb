@@ -1,0 +1,22 @@
+<%= render(:file=>"tools/sdp_menu.erb") %>
+
+<% form_tag({:action=>"import_monthly_task"}) do %>
+  <%= label_tag(:qr_name, "QR task") %>
+  <%= text_field_tag(:qr_name, "MEET - Comites Operationnels #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
+  <%= label_tag(:qr_load, "Load") %>
+  <%= text_field_tag(:qr_load, "1.5", {:size=>3}) %><br/>
+
+<ul class="checkbox-list">
+  <% @qr.each do |qr| -%>
+    <li><%= check_box_tag "qr[ids][]", qr.id, true -%> <%= qr.name -%></li>
+  <% end -%>
+</ul>
+
+
+  <%= label_tag(:name, "WP Resp task") %>
+  <%= text_field_tag(:name, "WP Organisation #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
+  <%= label_tag(:name, "CP-DP task") %>
+  <%= text_field_tag(:name, "Project Management #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
+  <%= submit_tag("Search") %>
+<% end %>
+

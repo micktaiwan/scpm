@@ -1,0 +1,11 @@
+<%= link_to('SDP import',       {:controller=>'tools', :action=>'sdp_import'}, {:class=>'btnlnk'}) %>
+<%= link_to('RMT to SDP task import',          {:controller=>'tools', :action=>'sdp_add'}, {:class=>'btnlnk'}) %>
+<%= link_to('Monthly tasks SDP import', {:controller=>'tools', :action=>'import_monthly_tasks_form'}, {:class=>'btnlnk'}) %>
+<%= link_to('People stats',           {:controller=>'tools', :action=>'sdp_people'}, {:class=>'btnlnk notimportant'}) %>
+<%= link_to('CHECK Loads',{:controller=>'tools', :action=>'load_errors'}, {:class=>'btnlnk special'}) %>
+<%= link_to('CHECK RMT <=> SDP',{:controller=>'tools', :action=>'sdp_yes_check'}, {:class=>'btnlnk special'}) %>
+<%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}, {:class=>'btnlnk special'}) %>
+<%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}, {:class=>'btnlnk special'}) %>
+<br/>
+<br/>
+

@@ -1,9 +1,5 @@
+<%= render(:file=>"tools/sdp_menu.erb") %>
 <h2>Request not 'ended' but RAF is 0 in SDP</h2>
-<ul>
-<%= render(:partial=>'tools/sdp_task', :collection=>@tasks) %>
-</ul>
-
-Requests:
 <ul>
 <%= render(:partial=>'projects/request', :collection=>@requests) %>
 </ul>

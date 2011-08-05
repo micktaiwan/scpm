@@ -221,6 +221,12 @@ class ToolsController < ApplicationController
       }
   end
 
+  def import_monthly_tasks_form
+    @qr = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+  end
+  def import_monthly_tasks
+  end
+
 private
 
   def round_to_hour(f)
