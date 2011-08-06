@@ -1,6 +1,6 @@
 <%= render(:file=>"tools/sdp_menu.erb") %>
 
-<% form_tag({:action=>"import_monthly_task"}) do %>
+<% form_remote_tag(:url=>{:action=>"import_monthly_tasks"},:update => "rv") do %>
   <%= label_tag(:qr_name, "QR task") %>
   <%= text_field_tag(:qr_name, "MEET - Comites Operationnels #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
   <%= label_tag(:qr_load, "Load") %>
@@ -17,6 +17,7 @@
   <%= text_field_tag(:name, "WP Organisation #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
   <%= label_tag(:name, "CP-DP task") %>
   <%= text_field_tag(:name, "Project Management #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
-  <%= submit_tag("Search") %>
+  <%= submit_tag("Generate") %>
 <% end %>
+<div id="rv">&nbsp;</div>
 

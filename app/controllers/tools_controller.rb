@@ -225,6 +225,11 @@ class ToolsController < ApplicationController
     @qr = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
   end
   def import_monthly_tasks
+    qr_ids = params["qr"]["ids"].join(",")
+    @name = params["qr_name"]
+    @load = params["qr_load"]
+    @qr = Person.find(:all, :conditions=>"id in (#{qr_ids})", :order=>"name")
+    render(:layout=>false)
   end
 
 private
