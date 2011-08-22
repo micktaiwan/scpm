@@ -33,8 +33,13 @@ class Request < ActiveRecord::Base
   Wp_index = {
   "WP1.1 - Quality Control" 		    => 0,
   "WP1.2 - Quality Assurance" 		  => 4,
+  "WP1.3 - Quality Control + BAT"   => 0, # TODO: change the workloads
+  "WP1.4 - Quality Assurance + BAT" => 4,
   "WP2 - Quality for Maintenance" 	=> 8,
-  "WP3 - Modeling" 					        => 9,
+  "WP3.1 - Modeling Support"        => 9,
+  "WP3.2 - Modeling Conception and Production" => 9,
+  "WP3.3 - Modeling BAT specific Control"      => 9,
+  "WP3.4 - Modeling BAT specific Production"   => 9,
   "WP4 - Surveillance" 				      => 10,
   "WP4.1 - Surveillance Audit" 		  => 10,
   "WP4.2 - Surveillance Root cause" => 10,
