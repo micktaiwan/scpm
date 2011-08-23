@@ -6,15 +6,19 @@ class Workload
               :opens, :ctotals, :percents, :months, :days, :person, :next_month_percents, :total_percents,
               :planned_total, :sdp_remaining_total
 
-  def initialize(person_id)
+  def initialize(person_id, options = {})
     @person     = Person.find(person_id)
     raise "could not find this person by id '#{person_id}'" if not @person
     @person_id  = person_id
     @name       = @person.name
 
     # calculate lines
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?", person_id], :order=>"wl_type, sdp_task_id, name")
-    @wl_lines  << WlLine.create(:name=>"Cong&eacute;s", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
+    cond = ""
+    cond += " and wl_type=300" #if options[:only_holidays] == true
+    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :order=>"wl_type, sdp_task_id, name")
+    if options[:only_holidays] != true
+      @wl_lines  << WlLine.create(:name=>"Cong&eacute;s", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
+    end  
     from_day    = Date.today - (Date.today.cwday-1).days
     #farest_week = @wl_lines.map{|l| m = l.wl_loads.map{|l| l.week}.max; m ? m:0}.max
     farest_week = wlweek(from_day+6.months) # if farest_week == 0

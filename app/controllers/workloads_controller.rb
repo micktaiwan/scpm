@@ -42,7 +42,7 @@ class WorkloadsController < ApplicationController
   def consolidation
   end
   
-  def conso_workloads
+  def refresh_conso
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
     for p in @people
@@ -52,6 +52,17 @@ class WorkloadsController < ApplicationController
     render :layout => false
   end
 
+  def refresh_holidays
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    @workloads = []
+    for p in @people
+      @workloads << Workload.new(p.id, {:only_holidays=>true})
+    end
+    @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.total_percents, w.person.name]}
+    render :layout => false
+  end
+
+  
   def change_workload
     person_id = params[:person_id]
     session['workload_person_id'] = person_id

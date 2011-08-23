@@ -1,23 +1,31 @@
 <div id="tabs">
   <ul>
-    <li style="margin-left: 1px" id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,2)"><span>Stats</span></a></li>
-    <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,2)" ><span>Consolidation</span></a></li>
+    <li style="margin-left: 1px" id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,2)"><span>Consolidation</span></a></li>
+    <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,2)" ><span>Holidays</span></a></li>
   </ul>
 
   <div id="tabscontent">
     <div id="tabContent1" class="tabContent" style="display:yes;">
         <br />
-        <div>
-        Welcome !
+        <div id="conso_workloads">
+          <%= link_to_remote('Refresh',  :url => { :action => "refresh_conso" }, :loading => "$('error1').update('');$('loading1').appear()", :complete => "$('loading1').hide()", :update => { :success => "data1", :failure => "error1" }) %>
+          <br/>
+          <br/>
+          <%= image_tag('loading.gif', :id=>'loading1', :style=>"display:none;") %>
+          <div id="error1"></div>
+          <div id="data1"></div>
         </div>
     </div>
 
     <div id="tabContent2" class="tabContent" style="display:none;">
         <br />
-        <div id="conso_workloads">
-          Ca marche pas encore !<br/>
-          Please wait, updating...<br/>
-          <%= image_tag('loading.gif') %>
+        <div id="holidays">
+          <%= link_to_remote('Refresh',  :url => { :action => "refresh_holidays" }, :loading => "$('error2').update('');$('loading2').appear()", :complete => "$('loading2').hide()", :update => { :success => "data2", :failure => "error2" }) %>
+          <br/>
+          <br/>
+          <%= image_tag('loading.gif', :id=>'loading2', :style=>"display:none;") %>
+          <div id="error2"></div>
+          <div id="data2"></div>
         </div>
     </div>
   </div><!--End of tabscontent-->

@@ -1,0 +1,18 @@
+<%= @workloads.size %> workloads<br/>
+<br/>
+<table>
+  <tr style="font-weight:bold;">
+    <td>Name</td>
+    
+<%
+  for week in @workloads.first.weeks
+%>
+    <td>
+      <%= week %>
+    </td>
+<% end %>
+
+    
+  </tr>
+  <%= render(:partial=>'conso_holidays', :collection=>@workloads) %>
+</table>

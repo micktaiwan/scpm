@@ -1,0 +1,13 @@
+<tr>
+<td><%= conso_holidays.person.name %></td>
+<%
+  wl_line = conso_holidays.wl_lines.first
+  for week in conso_holidays.wl_weeks
+    wlload = wl_line.get_load_by_week(week)
+    wlload = (wlload == 0.0 ? '' : wlload)
+%>
+    <td style="border:1px solid black<% if wlload!='' %>;background:#9F9;<% end %>">
+      <%= wlload %>
+    </td>
+<% end %>
+</tr>
