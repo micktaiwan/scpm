@@ -6,7 +6,9 @@ class Project < ActiveRecord::Base
   FullGPP       = 0
   LightGPP      = 1
   Maintenance   = 2
-  LBIP          = 3
+  LBIPGx        = 3
+  LBIPgx        = 4
+  LBIPpgx       = 5
 
   belongs_to  :project
   belongs_to  :supervisor,  :class_name=>"Person"
@@ -303,8 +305,6 @@ class Project < ActiveRecord::Base
   end
 
   def create_milestones
-      #['M1-M3', 'M3-M5', 'M5-M10', 'Post-M10'].each {|m| create_milestone(m)}
-      #return
     case self.lifecycle
     when FullGPP
       ['M1', 'M3', 'QG BRD', 'QG ARD', 'M5', 'M7', 'M9', 'M10', 'QG TD', 'M10a', 'QG MIP', 'M11', 'M12', 'M13', 'M14'].each {|m| create_milestone(m)}
@@ -312,8 +312,12 @@ class Project < ActiveRecord::Base
       ['M1', 'M3', 'QG BRD', 'QG ARD', 'M5/M7', 'M9/M10', 'QG TD', 'QG MIP', 'M11', 'M12/M13', 'M14'].each {|m| create_milestone(m)}
     when Maintenance
       ['CCB', 'QG TD M', 'MIPM'].each {|m| create_milestone(m)}
-    when LBIP
-      ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'].each {|m| create_milestone(m)}
+    when LBIPGx
+      ['G0', 'G2', 'G3', 'G4', 'QG BRD', 'G5', 'G6', 'G7', 'G8', 'G9'].each {|m| create_milestone(m)}
+    when LBIPgx
+      ['g0', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9'].each {|m| create_milestone(m)}
+    when LBIPpgx
+      ['pg0', 'pg2', 'pg3', 'pg4', 'pg5', 'pg6', 'pg7', 'pg8', 'pg9'].each {|m| create_milestone(m)}
     end
   end
 
@@ -451,35 +455,53 @@ class Project < ActiveRecord::Base
     case name
     when 'M1';      0
     when 'M3';      1
-    when 'QG BRD';  2
-    when 'QG ARD';  3
-    when 'M5';      4
-    when 'M5/M7';   5
-    when 'M7';      6
-    when 'M9';      7
-    when 'M9/M10';  8
-    when 'M10';     9
-    when 'CCB';     9
-    when 'QG TD';   10
-    when 'QG TD M';   10
-    when 'MIPM';    11
-    when 'M10a';    11
-    when 'QG MIP';  12
-    when 'M11';     13
-    when 'M12';     14
-    when 'M12/M13'; 15
-    when 'M13';     16
-    when 'M14';     17
-    when 'Maintenance';  18
+    when 'QG BRD';  5
+    when 'QG ARD';  6
+    when 'M5';      7
+    when 'M5/M7';   8
+    when 'M7';      9
+    when 'M9';      10
+    when 'M9/M10';  11
+    when 'M10';     12
+    when 'CCB';     12
+    when 'QG TD';   13
+    when 'QG TD M';   13
+    when 'MIPM';    14
+    when 'M10a';    14
+    when 'QG MIP';  15
+    when 'M11';     16
+    when 'M12';     17
+    when 'M12/M13'; 18
+    when 'M13';     19
+    when 'M14';     20
+    when 'G0';  1
     when 'G2';  2
     when 'G3';  3
     when 'G4';  4
-    when 'G5';  5
-    when 'G6';  6
-    when 'G7';  7
-    when 'G8';  8
-    when 'G9';  9
-    else;           0
+    when 'G5';  6
+    when 'G6';  7
+    when 'G7';  8
+    when 'G8';  9
+    when 'G9';  10
+    when 'g0';  1
+    when 'g2';  2
+    when 'g3';  3
+    when 'g4';  4
+    when 'g5';  6
+    when 'g6';  7
+    when 'g7';  8
+    when 'g8';  9
+    when 'g9';  10
+    when 'pg0';  1
+    when 'pg2';  2
+    when 'pg3';  3
+    when 'pg4';  4
+    when 'pg5';  6
+    when 'pg6';  7
+    when 'pg7';  8
+    when 'pg8';  9
+    when 'pg9';  10
+    else;        0
     end
   end
 

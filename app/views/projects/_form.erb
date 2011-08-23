@@ -9,7 +9,6 @@
 <td>ISPL</td><td><%= text_field :project, :ispl %></td></tr>
 <td>ISPM</td><td><%= text_field :project, :ispm %></td></tr>
 <td>Supervisor</td><td><%= select(:project, :supervisor_id, @supervisors.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
-<td>Lifecycle</td><td><%= select(:project, :lifecycle, [['Full GPP',0], ['Light GPP',1], ['Maintenance',2], ['LBIP',3], ]) %></td></tr>
+<td>Lifecycle</td><td><%= select(:project, :lifecycle, [['Full GPP',0], ['Light GPP',1], ['Maintenance',2], ['LBIP Gx',3], ['LBIP gx',4], ['LBIP pgx',5] ]) %></td></tr>
 <td>Description</td><td><%= text_area :project, :description %></td></tr>
 </table>
-
