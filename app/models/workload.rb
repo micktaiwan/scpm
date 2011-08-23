@@ -14,7 +14,7 @@ class Workload
 
     # calculate lines
     cond = ""
-    cond += " and wl_type=300" #if options[:only_holidays] == true
+    cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :order=>"wl_type, sdp_task_id, name")
     if options[:only_holidays] != true
       @wl_lines  << WlLine.create(:name=>"Cong&eacute;s", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0

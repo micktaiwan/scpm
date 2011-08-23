@@ -58,7 +58,7 @@ class WorkloadsController < ApplicationController
     for p in @people
       @workloads << Workload.new(p.id, {:only_holidays=>true})
     end
-    @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.total_percents, w.person.name]}
+    @workloads = @workloads.sort_by {|w| [w.person.name]}
     render :layout => false
   end
 
