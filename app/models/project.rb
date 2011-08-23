@@ -360,16 +360,26 @@ class Project < ActiveRecord::Base
           nb += 1 and rv += "Control\n"           if m != 'Maintenance'
         when 'WP1.2 - Quality Assurance'
           nb += 1 and rv += "Assurance\n"         if m != 'Maintenance'
+        when 'WP1.3 - Quality Control + BAT'
+          nb += 1 and rv += "Control BAT\n"         if m != 'Maintenance'
+        when 'WP1.4 - Quality Assurance + BAT'
+          nb += 1 and rv += "Assurance BAT\n"         if m != 'Maintenance'
         when 'WP2 - Quality for Maintenance'
           nb += 1 and rv += "Maintenance\n"       if m == 'Maintenance'
-        when 'WP3 - Modeling'
-          nb += 1 and rv += "Modeling\n"          if m == 'M5'
+        when 'WP3.1 - Modeling Support'
+          nb += 1 and rv += "Modeling 1\n"          if m == 'M5'
+        when 'WP3.2 - Modeling Conception and Production'
+          nb += 1 and rv += "Modeling 2\n"          if m == 'M5'
+        when 'WP3.3 - Modeling BAT specific Control'
+          nb += 1 and rv += "Modeling 3\n"          if m == 'M5'
+        when 'WP3.3 - Modeling BAT specific Production'
+          nb += 1 and rv += "Modeling 4\n"          if m == 'M5'
         when 'WP4.1 - Surveillance Audit'
-          nb += 1 and rv += "Audit (TBC)\n"       if m == 'M3'
+          nb += 1 and rv += "Audit\n"       if m == 'M3'
         when 'WP4.2 - Surveillance Root cause'
-          nb += 1 and rv += "Root Cause (TBC)\n"  if m == 'M3'
+          nb += 1 and rv += "Root Cause\n"  if m == 'M3'
         when 'WP5 - Change Accompaniment'
-          nb += 1 and rv += "Change (TBC)\n"      if m == 'M3'
+          nb += 1 and rv += "Change\n"      if m == 'M3'
         when 'WP6.1 - Coaching PP'
           nb += 1 and rv += "Coaching PP\n"       if m == 'M3'
         when 'WP6.2 - Coaching BRD'
@@ -448,13 +458,13 @@ class Project < ActiveRecord::Base
 
   def sorted_milestones
     #NaturalSort::naturalsort milestones
-    milestones.sort_by { |m| milestone_order(m.name)}
+    milestones.sort_by { |m| [milestone_order(m.name), (m.date ? m.date : Date.today())]}
   end
 
   def milestone_order(name)
     case name
-    when 'M1';      0
-    when 'M3';      1
+    when 'M1';      3
+    when 'M3';      4
     when 'QG BRD';  5
     when 'QG ARD';  6
     when 'M5';      7
