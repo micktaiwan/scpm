@@ -120,7 +120,7 @@ end
   end
 
 # 15-Mars CHANGES
-
+=begin
   @xml.Worksheet 'ss:Name' => '15-Mars Changes' do
     @xml.Table do
       # Columns width
@@ -154,6 +154,7 @@ end
     end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C9', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
+=end
 
 # WEEK CHANGES
 
@@ -243,7 +244,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Old status', 'Current Status', 'Date', 'Last change', 'Status Change Reason', 'Actions', 'Operational Alert', 'M3', 'QG BRD', 'QG ARD', 'M5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10', 'QG TD', 'M10a', 'QG MIP', 'M11', 'M12', 'M12/M13', 'M13', 'M14','CCB','QG TD','MIPM'] do
+        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Old status', 'Current Status', 'Date', 'Status Change Reason', 'Last change', 'Actions', 'Operational Alert', 'M3/G3/g3/pg3', 'QG BRD', 'QG ARD', 'M5/CCB/G5/g5/pg5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10/G6/g6/pg6', 'QG TD/QG TD M', 'M10a', 'QG MIP', 'M11/G7/g7/pg7', 'M12', 'M12/M13', 'M13/G8/g8/pg8', 'M14/G9/g9/pg9'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -269,46 +270,37 @@ end
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.reason); end;      @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.actions); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.operational_alert); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M3')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('QG BRD')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('QG ARD')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M5')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M5/M7')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M7')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M9')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M9/M10')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M10')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('QG TD')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M10a')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('QG MIP')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M11')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M12')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M12/M13')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M13')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('M14')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('CCB')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('QG TD M')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          status, style = p.get_milestone_status('MIPM')
-          @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          for ms in [['M3','G2','g2','pg2'],
+                     ['G3','g3','pg3'],
+                     ['G4','g4','pg4'],
+                     ['QG BRD'],
+                     ['QG ARD'],
+                     ['G4','g4','pg4'],
+                     ['M5','G5','g5','pg5', 'CCB'],
+                     ['M5/M7'],
+                     ['M7'],
+                     ['M9'],
+                     ['M9/M10'],
+                     ['M10','G6','g6','pg6'],
+                     ['QG TD', 'QG TD M'],
+                     ['M10a'],
+                     ['QG MIP'],
+                     ['M11','G7','g7','pg7'],
+                     ['M12'],
+                     ['M12/M13'],
+                     ['M13','G8','g8','pg8','MIPM'],
+                     ['M14','G9','g9','pg9']
+                    ]
+            status, style = p.get_milestone_status(ms)
+            puts status, style
+            exit
+            @xml.Cell(style) do
+              @xml.Data('ss:Type' => 'String') do
+                @xml << excel_text(status)
+              end
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
         end
       end
 
@@ -318,7 +310,7 @@ end
 
 
 # ACTIONS
-
+=begin
   @xml.Worksheet 'ss:Name' => 'Actions' do
     @xml.Table do
 
@@ -353,6 +345,7 @@ end
     end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C6', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
+=end
 
 # REQUESTS
 

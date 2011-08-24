@@ -423,15 +423,19 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def get_milestone_status(name)
-    m = find_milestone_by_name(name)
-    if m
-      status = m.comments.split("\n").join("\r\n")
-      status += "\r\n" + m.date.to_s if m.date
-    else
-      status = ''
+  # names is a array of names mutually exclusive (if we found M5 we should not be able to found a G5)
+  # ex: ['M5','G5','g5','pg5', 'CCB']
+  def get_milestone_status(names)
+    status, style = '',''
+    for name in names
+      m = find_milestone_by_name(name)
+      if m
+        status = name + ': '+m.comments.split("\n").join("\r\n")
+        status += "\r\n" + m.date.to_s if m.date
+        style  = get_cell_style_for_milestone(m)
+        break
+      end
     end
-    style  = get_cell_style_for_milestone(m)
     [status,style]
   end
 

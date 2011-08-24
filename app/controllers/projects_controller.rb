@@ -217,18 +217,18 @@ class ProjectsController < ApplicationController
     timestamps_on
   end
 
-  def check_sdp
-    i = ImportSDP.new
-    i.open('C:\Users\faivremacon\My Documents\Downloads\Rapport.xls')
-    list = i.list
-    i.close
-    all_requests = Request.find(:all).collect {|r| r.request_id.to_i}
-    no_requests  = Request.find(:all, :conditions=>"sdp!='No' and status!='cancelled'").collect {|r| r.request_id.to_i}
-    @in_sdp = (list - all_requests).sort
-    @in_rmt = (all_requests - list).sort
-    @no_in_rmt_but_in_sdp = (list - no_requests).sort
-    #render(:text=>@list.size)
-  end
+  #def check_sdp
+  #  i = ImportSDP.new
+  #  i.open('C:\Users\faivremacon\My Documents\Downloads\Rapport.xls')
+  #  list = i.list
+  #  i.close
+  #  all_requests = Request.find(:all).collect {|r| r.request_id.to_i}
+  #  no_requests  = Request.find(:all, :conditions=>"sdp!='No' and status!='cancelled'").collect {|r| r.request_id.to_i}
+  #  @in_sdp = (list - all_requests).sort
+  #  @in_rmt = (all_requests - list).sort
+  #  @no_in_rmt_but_in_sdp = (list - no_requests).sort
+  #  #render(:text=>@list.size)
+  #end
 
   # link a request to a project, based on request project_name
   # if the project does not exists, create it
@@ -372,6 +372,7 @@ class ProjectsController < ApplicationController
     render(:nothing=>true)
   end
 
+  # generate a complete report (to be copy pasted into a Word document)
   def report
     get_projects
     @projects     = @projects.sort_by { |p| [p.supervisor_name, p.workstream, p.name] }
@@ -391,7 +392,7 @@ class ProjectsController < ApplicationController
       @wps = @wps.sort_by { |w|
         [w.supervisor_name, w.workstream, w.project_name, w.name]
         }
-      @actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
+      #@actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
       @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed' and status!='removed'", :order=>"status, workstream")
       @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
       if @wps.size > 0
@@ -407,6 +408,7 @@ class ProjectsController < ApplicationController
         @status_columns << date
         @status_progress_dates << date
         }
+=begin      
       date = "2011-03-15"
       wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
       wps.each { |r| r.reporter = "WP change" }
@@ -419,7 +421,7 @@ class ProjectsController < ApplicationController
       closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
       closed.each { |r| r.reporter = "Closed" }
       @changes = wps + complexities + news + performed + closed
-
+=end
       date = Date.today-((Date.today().wday+6).days)
 
       wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
