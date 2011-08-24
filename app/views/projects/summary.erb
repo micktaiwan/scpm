@@ -119,45 +119,9 @@ end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C5', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
 
-# 15-Mars CHANGES
-=begin
-  @xml.Worksheet 'ss:Name' => '15-Mars Changes' do
-    @xml.Table do
-      # Columns width
-      for width in ['100','60','80','60','400', '170', '80', '80', '80'] do
-        @xml.Column nil, {'ss:Width' => width}
-      end
-
-      # Header
-      @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Type', 'PO', 'Workstream', 'Request', 'Summary', 'WP', 'Phase', 'Complexity', 'Status'] do
-          @xml.Cell do
-            @xml.Data column, 'ss:Type' => 'String'
-            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-          end
-        end
-      end
-
-      # Rows
-      for p in @changes
-        style = {}
-        #style = {'ss:StyleID' => 's75'} if p.done==1
-        @xml.Row(style) do
-          for column in ['reporter', 'po', 'workstream', 'request_id', 'summary', 'work_package', 'milestone', 'complexity', 'status'] do
-            @xml.Cell do
-              @xml.Data p.send(column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-            end
-          end
-        end
-      end
-
-    end
-  @xml.AutoFilter 'x:Range' => 'R1C1:R2000C9', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
-  end
-=end
-
 # WEEK CHANGES
 
+=begin
   @xml.Worksheet 'ss:Name' => 'Week Changes' do
     @xml.Table do
       # Columns width
@@ -191,6 +155,7 @@ end
     end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C9', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
+=end
 
 # AMENDMENTS
 
@@ -292,19 +257,16 @@ end
                      ['M14','G9','g9','pg9']
                     ]
             status, style = p.get_milestone_status(ms)
-            puts status, style
-            exit
             @xml.Cell(style) do
               @xml.Data('ss:Type' => 'String') do
                 @xml << excel_text(status)
               end
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
-          end
-        end
-      end
-
-    end
+          end # for
+        end # each project
+      end # table
+    end # worksheet
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C30', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
 
@@ -384,7 +346,7 @@ end
   end
 
 # STATUS PROGRESS
-
+=begin
   @xml.Worksheet 'ss:Name' => 'Status Progress' do
     @xml.Table do
 
@@ -423,6 +385,7 @@ end
     end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C20', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
+=end
 
 end
 %>

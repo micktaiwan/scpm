@@ -90,7 +90,7 @@ class ProjectsController < ApplicationController
     project.propagate_attributes
     redirect_to :action=>:show, :id=>project.id
   end
-  
+
   def add_status_form
     @project = Project.find(params[:id])
     @status = Status.new
@@ -123,7 +123,7 @@ class ProjectsController < ApplicationController
     else
       status.reason_updated_at  = t
       status.ws_updated_at      = t
-    end  
+    end
 
     status.last_modifier = current_user.id
     status.save
@@ -138,7 +138,7 @@ class ProjectsController < ApplicationController
     status = Status.find(params[:id])
     status.attributes = params[:status] # does not use update_attributes as it saves the record and we can not use "changed?" anymore
     status.reason_updated_at  = Time.now if status.reason_changed?
-    status.ws_updated_at      = Time.now if status.ws_report_changed?    
+    status.ws_updated_at      = Time.now if status.ws_report_changed?
     status.last_modifier      = current_user.id
     status.save
     p = status.project
@@ -401,6 +401,7 @@ class ProjectsController < ApplicationController
         @amendments   = []
       end
 
+=begin
       @status_progress_series = get_status_progress
       @status_columns         = ['Centre','Status']
       @status_progress_dates  = []
@@ -408,20 +409,8 @@ class ProjectsController < ApplicationController
         @status_columns << date
         @status_progress_dates << date
         }
-=begin      
-      date = "2011-03-15"
-      wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
-      wps.each { |r| r.reporter = "WP change" }
-      complexities = Request.find(:all, :conditions=>["total_csv_severity >= ?", date], :order=>"workstream, project_id, total_csv_severity")
-      complexities.each { |r| r.reporter = "Complexity change" }
-      news         = Request.find(:all, :conditions=>["status_new >= ?", date], :order=>"workstream, project_id, status_new")
-      news.each { |r| r.reporter = "New" }
-      performed    = Request.find(:all, :conditions=>["status_performed >= ?", date], :order=>"workstream, project_id, status_performed")
-      performed.each { |r| r.reporter = "Performed" }
-      closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
-      closed.each { |r| r.reporter = "Closed" }
-      @changes = wps + complexities + news + performed + closed
 =end
+
       date = Date.today-((Date.today().wday+6).days)
 
       wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
@@ -448,17 +437,17 @@ class ProjectsController < ApplicationController
   def nb_of_wps_with_status(c,s)
     @wps.select{ |w| w.workstream==c and w.get_status.status==s}.size.to_s
   end
-  
+
   def stats_for_center(c)
     [Workstream.find_by_name(c), nb_of_wps_with_status(c,3), nb_of_wps_with_status(c,2), nb_of_wps_with_status(c,1), nb_of_wps_with_status(c,0)]
   end
-  
+
   # generate an Excel file for Workstream reporting
   def ws_reporting
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
-      
+
       @centers = ['EA', 'EI', 'EV', 'EDE', 'EDG', 'EDS', 'EDY', 'EDC', 'EM', 'EMNB', 'EMNC']
       @centers = @centers.map { |c| stats_for_center(c) }
 
@@ -481,10 +470,10 @@ class ProjectsController < ApplicationController
       render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
     end
   end
-  
+
   def week_changes
-    #date = Date.today()-7.days
-    date = "2011-03-15"
+    date = Date.today()-7.days
+    # date = "2011-03-15"
     @wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
     @complexities = Request.find(:all, :conditions=>["total_csv_severity >= ?", date], :order=>"workstream, project_id, total_csv_severity")
     @news         = Request.find(:all, :conditions=>["status_new >= ?", date], :order=>"workstream, project_id, status_new")
