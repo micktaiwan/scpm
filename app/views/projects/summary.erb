@@ -209,7 +209,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Old status', 'Current Status', 'Date', 'Status Change Reason', 'Last change', 'Actions', 'Operational Alert', 'M3/G3/g3/pg3', 'QG BRD', 'QG ARD', 'M5/CCB/G5/g5/pg5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10/G6/g6/pg6', 'QG TD/QG TD M', 'M10a', 'QG MIP', 'M11/G7/g7/pg7', 'M12', 'M12/M13', 'M13/G8/g8/pg8', 'M14/G9/g9/pg9'] do
+        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'BRN', 'Old status', 'Current Status', 'Date', 'Status Change Reason', 'Last change', 'Actions', 'Operational Alert', 'M3/G2/g2/pg2', 'G3/g3/pg3', 'G4/g4/pg4', 'QG BRD', 'QG ARD', 'M5/CCB/G5/g5/pg5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10/G6/g6/pg6', 'QG TD/QG TD M', 'M10a', 'QG MIP', 'M11/G7/g7/pg7', 'M12', 'M12/M13', 'M13/G8/g8/pg8', 'M14/G9/g9/pg9'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -231,8 +231,8 @@ end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.old_status)  do @xml.Data text_status(p.old_status),  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell { @xml.Data status.updated_at ? "#{status.updated_at.to_date} (#{time_ago_in_words(status.updated_at.to_date)})" : "",   'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          @xml.Cell { @xml.ssData('ss:Type' => 'String', 'xmlns'=>'http://www.w3.org/TR/REC-html40') do; @xml<<excel_text(status.get_last_change_excel); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.reason); end;      @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.ssData('ss:Type' => 'String', 'xmlns'=>'http://www.w3.org/TR/REC-html40') do; @xml<<excel_text(status.get_last_change_excel); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.actions); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.operational_alert); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           for ms in [['M3','G2','g2','pg2'],
@@ -240,7 +240,6 @@ end
                      ['G4','g4','pg4'],
                      ['QG BRD'],
                      ['QG ARD'],
-                     ['G4','g4','pg4'],
                      ['M5','G5','g5','pg5', 'CCB'],
                      ['M5/M7'],
                      ['M7'],
