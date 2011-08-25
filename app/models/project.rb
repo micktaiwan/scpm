@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   LBIPGx        = 3
   LBIPgx        = 4
   LBIPpgx       = 5
+  Suite         = 6
 
   belongs_to  :project
   belongs_to  :supervisor,  :class_name=>"Person"
@@ -318,6 +319,8 @@ class Project < ActiveRecord::Base
       ['g0', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9'].each {|m| create_milestone(m)}
     when LBIPpgx
       ['pg0', 'pg2', 'pg3', 'pg4', 'pg5', 'pg6', 'pg7', 'pg8', 'pg9'].each {|m| create_milestone(m)}
+    when Suite
+      ['sM1', 'sM3', 'sM5', 'sM13', 'sM14'].each {|m| create_milestone(m)}
     end
   end
 
@@ -430,10 +433,10 @@ class Project < ActiveRecord::Base
     for name in names
       m = find_milestone_by_name(name)
       if m
-        status = name + ': '+m.comments.split("\n").join("\r\n")
-        status += "\r\n" + m.date.to_s if m.date
+        status += name + ': '+m.comments.split("\n").join("\r\n")
+        status += "\r\n" + m.date.to_s if m.date 
+        status += "\r\n"
         style  = get_cell_style_for_milestone(m)
-        break
       end
     end
     [status,style]
@@ -515,6 +518,11 @@ class Project < ActiveRecord::Base
     when 'pg7';  8
     when 'pg8';  9
     when 'pg9';  10
+    when 'sM1';  3
+    when 'sM3';  4
+    when 'sM5';  7
+    when 'sM13'; 19
+    when 'sM14'; 20
     else;        0
     end
   end
