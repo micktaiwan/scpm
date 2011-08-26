@@ -398,7 +398,7 @@ class ProjectsController < ApplicationController
       @risks      = @risks.select { |r| r.project and r.severity > 0}.sort_by {|r| [r.project.supervisor.name, r.project.full_name, r.severity]}
       @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
       if @wps.size > 0
-        @amendments   = Amendment.find(:all, :conditions=>"project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
+        @amendments   = Amendment.find(:all, :conditions=>"project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"done, duedate")
       else
         @amendments   = []
       end

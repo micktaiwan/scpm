@@ -59,7 +59,6 @@ module ApplicationHelper
     str.to_s + ch*(nb-str.to_s.size)
   end
 
-
 end
 
 class Integer
