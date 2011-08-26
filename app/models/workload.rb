@@ -3,7 +3,7 @@ class Workload
   include ApplicationHelper
 
   attr_reader :name, :weeks, :wl_weeks, :person_id, :wl_lines, :line_sums,
-              :opens, :ctotals, :percents, :months, :days, :person, :next_month_percents, :total_percents,
+              :opens, :ctotals, :percents, :months, :days, :person, :next_month_percents, :three_next_months_percents,
               :planned_total, :sdp_remaining_total
 
   def initialize(person_id, options = {})
@@ -34,7 +34,7 @@ class Workload
     nb = 0
     iteration = from_day
     @next_month_percents = 0.0
-    @total_percents = 0.0
+    @three_next_months_percents = 0.0
     while true
       w = wlweek(iteration)
       break if w > farest_week or nb > 6*4
@@ -58,14 +58,14 @@ class Workload
         @ctotals << {:name=>'ctotal',    :id=>w, :value=>col_sum(w, @wl_lines)}
         percent = (@ctotals.last[:value] / @opens.last)*100
         @next_month_percents += percent if nb < 5
-        @total_percents += percent
+        @three_next_months_percents += percent if nb > 4 and nb < 13+4
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%"}
       end
       iteration = iteration + 7.days
       nb += 1
     end
     @next_month_percents = (@next_month_percents / 5).round
-    @total_percents = (@total_percents / nb).round
+    @three_next_months_percents = (@three_next_months_percents / nb).round
 
     # sum the lines
     @line_sums      = Hash.new

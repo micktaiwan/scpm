@@ -40,7 +40,7 @@
 <td valign='top'>
   <h4>Workstream level reporting</h4><%=my_simple_format(status.ws_report)%>
   <% if status.status > 1 and (status.ws_report == "" or status.ws_report == nil) %><%=image_tag("alert.gif")%><br/><br/><% end %>
-
+  <br/>
   <b>Last UP3P verification:</b> <%=status.ereporting_date%><br/>
   
 <% if current_user.has_role?('Admin')%>
@@ -63,12 +63,12 @@
 </table>
 
 <br/>
-
 <br/>
 <br/>
  
 <h3>Operational Alert</h3>
 <%=my_simple_format(status.operational_alert)%>
+
 <h3>Supervisor Feedback (internal to SQLI)</h3>
 <%=my_simple_format(status.feedback)%>
 

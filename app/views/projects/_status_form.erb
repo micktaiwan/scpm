@@ -1,8 +1,8 @@
 <table class="edit">
 <tr><td class="descr">Status</td><td><%= select(:status, :status, options_with_colors(@status.status, [["Unknown",0, "#DDD"], ["GREEN",1, "#5F5"], ["AMBER",2, "#FA0"], ["RED",3, "#F00"]]), {}, {:style=>"font-size: 1.5em"}) %></td></tr>
-<tr><td class="descr">Status Evolution Reason</td><td><%= text_area(:status, :reason, {:cols=>100, :rows=>3}) %></td></tr>
-<tr><td class="descr">Actions to mitigate status<br/>(impact analysis done or not?)</td><td><%= text_area(:status, :actions, {:cols=>100, :rows=>3}) %></td></tr>
-<tr><td class="descr">Last Change</td><td><%= text_area(:status, :last_change, {:cols=>100, :rows=>5}) %></td></tr>
+<tr><td class="descr">Status Explanation</td><td><%= text_area(:status, :reason, {:cols=>100, :rows=>3}) %></td></tr>
+<tr><td class="descr">Status mitigation actions<br/>(impact analysis done or not?)</td><td><%= text_area(:status, :actions, {:cols=>100, :rows=>3}) %></td></tr>
+<tr><td class="descr">Last 7 days changes</td><td><%= text_area(:status, :last_change, {:cols=>100, :rows=>5}) %></td></tr>
 <tr><td class="descr">Workstream level reporting</td><td><%= text_area(:status, :ws_report, {:cols=>100, :rows=>3}) %></td></tr>
 <tr><td class="descr">Operational Alert</td><td><%= text_area(:status, :operational_alert, {:cols=>100, :rows=>3}) %></td></tr>
 <tr><td class="descr">Last UP3P verification:</td><td><%= text_field(:status, :ereporting_date) %>yyyy-mm-dd</td></tr>

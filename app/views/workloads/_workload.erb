@@ -7,8 +7,8 @@ You have <b><%=@suggested_requests.size%></b> suggested requests
 
 <br/>
 <br/>
-<b>Next month:</b> <%= workload.next_month_percents %>%<br/>
-<b>6 months:</b>   <%= workload.total_percents %>%<br/>
+<b>Next 5 weeks:</b> <%= workload.next_month_percents %>%<br/>
+<b>3 next months:</b>   <%= workload.three_next_months_percents %>%<br/>
 <% 
 sdp_total = workload.sdp_remaining_total
 if sdp_total == 0
