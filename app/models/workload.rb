@@ -65,7 +65,7 @@ class Workload
       nb += 1
     end
     @next_month_percents = (@next_month_percents / 5).round
-    @three_next_months_percents = (@three_next_months_percents / nb).round
+    @three_next_months_percents = (@three_next_months_percents / 16).round
 
     # sum the lines
     @line_sums      = Hash.new

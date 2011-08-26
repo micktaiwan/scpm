@@ -62,7 +62,6 @@ class WorkloadsController < ApplicationController
     render :layout => false
   end
 
-  
   def change_workload
     person_id = params[:person_id]
     session['workload_person_id'] = person_id
