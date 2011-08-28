@@ -1,27 +1,3 @@
-<% if session[:project_filter_qr] != nil %>
-
-<h2>Actions</h2>
-<%= link_to_function("#{@actions.size} actions", "$('actions').toggle();") %><br/>
-
-<div id="actions" style="display:none;">
-<%= render(:file=>'actions/actions_header') %>
-<%= render(:partial=>'actions/action', :collection=>@actions) %>
-</table>
-</div>
-<% end %>
-
-<h2>Amendments</h2>
-
-<%= link_to_function("#{@amendments.size} amendments", "$('amendments').toggle();") %><br/>
-
-<div id="amendments" style="display:none;">
-<%= render(:file=>'amendments/amendments_header') %>
-<%= render(:partial=>'amendments/amendment', :collection=>@amendments) %>
-</table>
-</div>
-
-
-<h2>Projects</h2>
 <% if current_user.has_role?('Admin') %>
 <%= link_to('New', {:action=>'new'},{:class=>"btnlnk"}) %>
 <%= link_to('Import', {:action=>'import'},{:class=>"btnlnk"}) %>
@@ -36,80 +12,11 @@
 Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
 <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status
 </div>
-<br/>
-<br/>
-
-<div class="legend">
-  <div class="milestone">
-  <div class="milestone_name blank">
-  No date
-  </div>
-  <div class="milestone_comments status-1">
-  No request
-  </div>
-  </div>
-
-  <div class="milestone">
-  <div class="milestone_name missing">
-  No date
-  </div>
-  <div class="milestone_comments status0">
-  Some requests
-  </div>
-  </div>
-
-
-  <div class="milestone">
-  <div class="milestone_name normal">
-  Date OK
-  </div>
-  <div class="milestone_comments status0">
-  No info
-  </div>
-  </div>
-
-
-  <div class="milestone">
-  <div class="milestone_name soon">
-  2 weeks
-  </div>
-  <div class="milestone_comments status1">
-  GO
-  </div>
-  </div>
-
-  <div class="milestone">
-  <div class="milestone_name verysoon">
-  1 w / late
-  </div>
-  <div class="milestone_comments status2">
-  GO w/a
-  </div>
-  </div>
-
-  <div class="milestone">
-  <div class="milestone_name passed">
-  Passed
-  </div>
-  <div class="milestone_comments status3">
-  NO GO
-  </div>
-  </div>
-
-  <div class="milestone">
-  <div class="milestone_name skipped">
-  Skipped
-  </div>
-  <div class="milestone_comments status0">
-  no info
-  </div>
-  </div>
-</div>
 
 
 <%= link_to_function('filters', "Effect.toggle('filters','blind');",{:class=>"btnlnk"}) %>
 <% if(are_filtered) %><strong>filtered</strong><% end %>
-<div id="filters" style="display:none;">
+<div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
 <% form_tag(:action=>'filter') do %>
 <table>
 <tr valign="top"><td>
@@ -148,44 +55,40 @@ Searches project title and description, statuses, request summary and PM names
 <br/>
 <br/>
 
-<%= link_to_function('Toggle Frieze', "Effect.toggle('frieze','blind')",{:class=>"btnlnk"}) %>
-<div id="frieze">
-<% for project in @wps %>
-<h3>
-  <%= link_to('Open', {:action=>'show', :id=>project.id}, {:class=>'menu grey'}) %>
-  <% next_m_date = project.next_milestone_date;  bool = (next_m_date and next_m_date-Date.today() <= 5); if bool %>
-  <font color="red">
-  <% end %>
-  <%= next_m_date %>
-  <%= project.full_name %>
-  <% if bool %>  </font>  <% end %>
-  <%= html_status(project.last_status) %>
-  <% date = project.last_status_date
-  if date
-    days = time_ago_in_words(date) %>
-    (<%= days %> - w<%= date.to_date.cweek %>)
-  <% end %>
 
-  <% if project.read_date and current_user.has_role?('Admin')%>
-  <font color="#777777">
-  Last read: <%= time_ago_in_words(project.read_date) %>
-  </font>
-  <% end %>
+<div id="tabs">
+  <ol>
+    <li style="margin-left: 1px" id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,3)"><span>Projects</span></a></li>
+    <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,3)" ><span>Amendments</span></a></li>
+    <li id="tabHeader3"><a href="javascript:void(0)" onClick="toggleTab(3,3)" ><span>Actions</span></a></li>
+  </ol>
 
-</h3>
+  <div id="tabscontent">
+    <div id="tabContent1" class="tabContent" style="display:yes;">
+        <br />
+        <div>
+        <%= render(:file=>'projects/index_projects') %>
+        </div>
+    </div>
 
-<div class="milestone_bar">
-<%= render(:partial=>'milestones/milestone', :collection=>project.sorted_milestones) %>
-</div>
-<% end %>
-</div>
-<br/>
-<br/>
+    <div id="tabContent2" class="tabContent" style="display:none;">
+        <br />
+        <div>
+          <%= render(:file=>'amendments/amendments_header') %>
+          <%= render(:partial=>'amendments/amendment', :collection=>@amendments) %>
+          </table>
+        </div>
+    </div>
 
-<%= link_to_function('Toggle projects', "Effect.toggle('projects','blind')",{:class=>"btnlnk"}) %>
-<div id="projects" style="display:none;">
-<ul>
-<%= render(:partial=>'project', :collection=>@projects) %>
-</ul>
-</div>
+    <div id="tabContent3" class="tabContent" style="display:none;">
+        <br />
+        <div>
+          <%= render(:file=>'actions/actions_header') %>
+          <%= render(:partial=>'actions/action', :collection=>@actions) %>
+          </table>
+        </div>
+    </div>
+
+  </div><!--End of tabscontent-->
+</div><!--End of tabs-->
 

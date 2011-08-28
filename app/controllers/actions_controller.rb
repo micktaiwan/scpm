@@ -5,8 +5,8 @@ class ActionsController < ApplicationController
   def index
     @actions              = Action.find(:all, :conditions=>["person_id=? and progress in('open','in_progress')", current_user.id], :order=>"creation_date")
     @actions_closed       = Action.find(:all, :conditions=>["person_id=? and progress in('closed','abandonned')", current_user.id], :order=>"creation_date")
-    @other_actions        = Action.find(:all, :conditions=>["person_id!=? and progress in('open','in_progress')",current_user.id], :order=>"creation_date")
-    @other_actions_closed = Action.find(:all, :conditions=>["person_id!=? and progress in('closed','abandonned')",current_user.id], :order=>"creation_date")
+    #@other_actions        = Action.find(:all, :conditions=>["person_id!=? and progress in('open','in_progress')",current_user.id], :order=>"creation_date")
+    #@other_actions_closed = Action.find(:all, :conditions=>["person_id!=? and progress in('closed','abandonned')",current_user.id], :order=>"creation_date")
   end
 
   def new
