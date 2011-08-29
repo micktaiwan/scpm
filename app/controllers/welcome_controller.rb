@@ -47,7 +47,7 @@ class WelcomeController < ApplicationController
   def reminders
     @all = Request.all
     get_anomalies
-	  @rmt_users = Person.find(:all, :conditions=>"is_supervisor=0", :order=>"name")
+	  @rmt_users = Person.find(:all, :conditions=>"is_supervisor=0 and has_left=0 and is_transverse=0", :order=>"name")
   end
 
   def cut
