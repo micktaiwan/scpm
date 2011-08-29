@@ -456,6 +456,7 @@ class ProjectsController < ApplicationController
       @wps = @wps.sort_by { |w|
         [w.workstream, w.project_name, w.name]
         }
+=begin      
       @status_progress_series = get_status_progress
       @status_columns         = ['Centre','Status']
       @status_progress_dates  = []
@@ -463,7 +464,7 @@ class ProjectsController < ApplicationController
         @status_columns << date
         @status_progress_dates << date
         }
-
+=end
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="WS_Reporting.xls"'
       headers['Cache-Control']        = ''
