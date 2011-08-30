@@ -5,6 +5,10 @@
     <td>Name</td>
     <td>Next 5 weeks</td>
     <td>Next 3 months</td>
+<% for w in @workloads.first.weeks %>
+    <td><%= w %></td>
+<% end %>
+   
   </tr>
   <%= render(:partial=>'conso_line', :collection=>@workloads) %>
 </table>
