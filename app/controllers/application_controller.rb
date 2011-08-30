@@ -76,6 +76,7 @@ def month_loop(month, year, mode=:one_date)
 end
 
 def html_escape(txt)
-  txt.gsub(">","&gt;").gsub("<","&lt;")
+  return nil if txt==nil
+  return txt.gsub(">","&gt;").gsub("<","&lt;")
 end
   
