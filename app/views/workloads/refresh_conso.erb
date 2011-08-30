@@ -2,6 +2,13 @@
 <br/>
 <table>
   <tr style="font-weight:bold;">
+  <td colspan="3"></td>
+  <% for w in @workloads.first.months %>
+      <td><%= w %></td>
+  <% end %>
+  </tr>
+
+  <tr style="font-weight:bold;">
     <td>Name</td>
     <td>Next 5 weeks</td>
     <td>Next 3 months</td>
