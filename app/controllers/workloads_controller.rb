@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'google_chart'
+
 class WorkloadsController < ApplicationController
 
   layout 'pdc'
@@ -41,7 +44,7 @@ class WorkloadsController < ApplicationController
   # just for loading tabs
   def consolidation
   end
-  
+
   def refresh_conso
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
@@ -51,14 +54,20 @@ class WorkloadsController < ApplicationController
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals = []
     size    = @workloads.size
-    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.next_month_percents)} / size).round.to_s+"%"
-    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.three_next_months_percents)} / size).round.to_s+"%"
+    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.next_month_percents)} / size).round
+    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.three_next_months_percents)} / size).round
     @workloads.first.weeks.each_with_index do |tmp,i|
-      @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round.to_s+"%"
+      @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
     end
+    chart = GoogleChart::LineChart.new('1000x200', "Global workload", false)
+    chart.data "Global workload", @totals[2..-1], 'ff0000'
+    chart.axis :y, :range => [0,100], :font_size => 10, :alignment => :center
+    chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
+    chart.show_legend = false
+    @chart_url = chart.to_url
     render :layout => false
   end
-  
+
   def cap(nb)
     nb > 100 ? 100 : nb
   end
@@ -249,7 +258,7 @@ class WorkloadsController < ApplicationController
     wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])
     csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
     cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
-    
+
     planned_total = 0
     for l in wl_lines
       s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))
