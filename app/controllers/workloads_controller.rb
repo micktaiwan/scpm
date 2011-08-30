@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'google_chart'
+# http://badpopcorn.com/blog/2008/09/08/rails-google-charts-gchartrb/
 
 class WorkloadsController < ApplicationController
 
@@ -59,7 +60,7 @@ class WorkloadsController < ApplicationController
     @workloads.first.weeks.each_with_index do |tmp,i|
       @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
     end
-    chart = GoogleChart::LineChart.new('1000x200', "Global workload", false)
+    chart = GoogleChart::LineChart.new('1000x300', "Global workload", false)
     chart.data "Global workload", @totals[2..-1], 'ff0000'
     chart.axis :y, :range => [0,100], :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8

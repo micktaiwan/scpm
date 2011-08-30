@@ -22,11 +22,12 @@
   <tr style="font-weight:bold;">
     <td>Capped total</td>
     <% for w in @totals %>
-      <td align="center"><%= w %></td>
+      <td align="center"><%= w %>%</td>
     <% end %>
   </tr>
 
 </table>
-
+<br/>
+<br/>
 <%= image_tag(@chart_url) %>
 
