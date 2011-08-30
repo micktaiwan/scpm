@@ -74,3 +74,8 @@ def month_loop(month, year, mode=:one_date)
     end
   end while year < today.cwyear or (year == today.cwyear and month <= today.month)
 end
+
+def html_escape(txt)
+  txt.gsub(">","&gt;").gsub("<","&lt;")
+end
+  

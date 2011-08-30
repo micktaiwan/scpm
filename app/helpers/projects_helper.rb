@@ -52,7 +52,7 @@ module ProjectsHelper
 
   def excel_text(txt)
     return "" if not txt
-    txt.split("\r\n").join('&#10;').gsub(">","&gt;").gsub("<","&lt;")
+    txt.split("\r\n").join('&#10;')
   end
 
 end

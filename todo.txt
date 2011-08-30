@@ -1,5 +1,92 @@
-https://subversion.sqli.com/svndev/PI586/branches/dev-EISQ-pdc
+https://subversion.sqli.com/svndev/PI586/branches/dev-EISQ
 https://subversion.sqli.com/svndev/PI586/trunk/projets/interne/eisq/
+
+Checklists
+==========
+
+Pour chaque milestone créé il faut crééer la checkliste correspondante
+  En fait c'est pour chaque jalon, mais aussi pour les types de tickets (S'il n'y a que du coaching il ne faut pas tous les livrables du QR)
+Pour chaque item créé il faut le rajouter à toutes les milestones pas déjà passées
+Il faut une fonction pour rafraichir les items au cas où (si on ferme le jalon, puis on le réouvre)
+Il faut une table de vrais items et une table pour les templates à copier
+Pour les templates il faut un status: propagé ou pas
+  comme ça on peut travailler sur une liste sans la "déployer en prod"
+Il faut pouvoir supprimer (ou hider) un item de tous les milestones
+Il faut que quand un ticket est associé à un projet les items se créent
+Il faut que quand un jalon est ajouté à un projet les items se créent en fonction des types de tickets existant
+Si un ticket est performed ou fermé les questions correspondantes soient grisée (ou identifiées)
+S'il y a des tickets en double (de même type) il faut faire deux DN, donc on a deux checklistes
+Il me faudrait un utilitaire pour rentrer le numéro d'un ticket et que les checklistes associées sortent
+
+Comment gérer les exigences Bundle ?
+
+ReqCategory (interne, public, etc...)
++parent_id
++label
++public
+
+Requirement
++req_category_id
++source_name
++source_date
++requirement
++description
++version
++version_date
++status
++status_date
++is_service_req
+
+
+ChecklistItemTemplate
++requirement_id
++milestones (several)
++request_type
++parent
++type
++is_transverse
++label
++deployed
++order
++deadline
+
+ChecklistItem
++milestone_id
++request_id
++is_transverse
++hidden
++parent_id (pour la hierachie)
++template_id
++label (la question ou le texte)
++order (ce qui permet d'ordonner les tâches)
++deadline (relative au jalon, en jours)
++type (cl_checkbox, cl_question, cl_memo)
++answer (réponse pour un type cl_question)
++status un int qui reprénsente la réponse pour un type cl_checkbox
+  todo, inprogress, done, no response
+
+class ChecklistItem < ActiveRecord::Base; end
+class ClCheckbox < ChecklistItem; end
+class ClQuestion < ChecklistItem; end
+class ClMemo < ChecklistItem; end
+
+
+Au delete d'un milestone prévenir qu'on pert la checkliste
+fonction de copie d'une chekliste ?
+
+Est-ce qu'une réunion a été posée régulièrement avec qui et quand ? Memo
+Besoins de Modelling ?  ToCheck/Oui/TicketOuvert/Non
+Besoins de Coaching ?   ToCheck/Oui/TicketOuvert/Non
+Réunion des 4 jours: A poser/Posée/Faite
+MoM de la réunion: Memo
+Livrables
+  RS PP
+  RS RIA
+  Checkliste
+  Spider
+  PQP
+  DN
+
 
 Chat
 ====
@@ -37,4 +124,3 @@ Ou SWOT uniquement + Stats
     <%= link_to_remote('Add to my projects', {:url=>{:controller=>'projects', :action=>'add_to_mine', :id=>project.id}, :success=>"$('btnaddtomine_'+project.id.to_s).fade();"}, {:class=>'btnlnk special', :id=>'btnaddtomine_'+project.id.to_s}) %>
   <% end %>
 <% end %>
-
