@@ -19,9 +19,17 @@
 
   <%= render(:partial=>'conso_line', :collection=>@workloads) %>
 
+
+  <tr style="font-weight:bold;">
+    <td>Total</td>
+    <% for w in @totals %>
+      <td align="center"><%= w %>%</td>
+    <% end %>
+  </tr>
+
   <tr style="font-weight:bold;">
     <td>Capped total</td>
-    <% for w in @totals %>
+    <% for w in @cap_totals %>
       <td align="center"><%= w %>%</td>
     <% end %>
   </tr>

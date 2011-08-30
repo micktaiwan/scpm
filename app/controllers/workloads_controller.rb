@@ -15,7 +15,6 @@ class WorkloadsController < ApplicationController
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @workload = Workload.new(session['workload_person_id'])
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-
     if @workload.person.rmt_user == ""
       @suggested_requests = []
     else
@@ -26,6 +25,19 @@ class WorkloadsController < ApplicationController
     else
       get_sdp_tasks(@workload)
     end
+    get_chart
+  end
+
+  def get_chart
+    chart = GoogleChart::LineChart.new('1000x300', "#{@workload.person.name} workload", false)
+    serie = @workload.percents.map{ |p| p[:precise] }
+    chart.data "non capped", serie, '0000ff'
+    #chart.add_labels @cap_totals[2..-1]
+    chart.axis :y, :range => [0,serie.max], :font_size => 10, :alignment => :center
+    chart.axis :x, :labels => @workload.months, :font_size => 10, :alignment => :center
+    chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
+    chart.show_legend = false
+    @chart_url = chart.to_url
   end
 
   def get_suggested_requests(wl)
@@ -53,19 +65,28 @@ class WorkloadsController < ApplicationController
       @workloads << Workload.new(p.id)
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
-    @totals = []
+    @totals     = []
+    @cap_totals = []
     size    = @workloads.size
-    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.next_month_percents)} / size).round
-    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.three_next_months_percents)} / size).round
+    @totals << (@workloads.inject(0) { |sum,w| sum += w.next_month_percents} / size).round
+    @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.next_month_percents)} / size).round
+    @totals << (@workloads.inject(0) { |sum,w| sum += w.three_next_months_percents} / size).round
+    @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.three_next_months_percents)} / size).round
     @workloads.first.weeks.each_with_index do |tmp,i|
-      @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
+      @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:precise]} / size).round
+      @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
     end
-    chart = GoogleChart::LineChart.new('1000x300', "Global workload", false)
-    chart.data "Global workload", @totals[2..-1], 'ff0000'
-    chart.axis :y, :range => [0,100], :font_size => 10, :alignment => :center
+    chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
+    chart.data "capped", @cap_totals[2..-1], 'ff0000'
+    chart.data "non capped", @totals[2..-1], '0000ff'
+    #chart.add_labels @cap_totals[2..-1]
+    chart.axis :y, :range => [0,[@totals.max,@cap_totals.max].max], :font_size => 10, :alignment => :center
+    chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
-    chart.show_legend = false
-    @chart_url = chart.to_url
+    chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>1, :data_point_index=>-1, :pixel_size=>8
+    chart.show_legend = true
+    #chart.enable_interactivity = true
+    @chart_url = chart.to_url #({:enableInteractivity=>true})
     render :layout => false
   end
 
@@ -89,6 +110,7 @@ class WorkloadsController < ApplicationController
     @workload = Workload.new(person_id)
     get_suggested_requests(@workload)
     get_sdp_tasks(@workload)
+    get_chart
   end
 
   def add_by_request
