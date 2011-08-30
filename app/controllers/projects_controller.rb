@@ -21,8 +21,10 @@ class ProjectsController < ApplicationController
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
     if @wps.size > 0
       @amendments   = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
+      @risks        = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
     else
       @amendments   = []
+      @risks        = []
     end
   end
 
@@ -456,7 +458,7 @@ class ProjectsController < ApplicationController
       @wps = @wps.sort_by { |w|
         [w.workstream, w.project_name, w.name]
         }
-=begin      
+=begin
       @status_progress_series = get_status_progress
       @status_columns         = ['Centre','Status']
       @status_progress_dates  = []

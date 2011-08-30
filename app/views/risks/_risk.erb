@@ -1,0 +1,12 @@
+<tr>
+<td><%=link_to(risk.project.name, :action=>'show', :id=>risk.project.id) %></td>
+<td align="center"<%if risk.probability>=4 %> bgcolor="#A00"<%elsif risk.severity>=8  %> bgcolor="#F00"<%elsif risk.severity>=6 %> bgcolor="#FA0"<%elsif risk.severity>=3 %> bgcolor="#FF9"<%else%> bgcolor="#AFA"<%end%>><%= risk.severity %></td>
+<td align="center"><%= risk.id %></td>
+<td><%= my_simple_format(risk.context) %></td>
+<td><%= my_simple_format(risk.risk) %></td>
+<td align="center"<%if risk.probability>=4%> bgcolor="#F55"<%end%>><%= risk.probability %> / 4</td>
+<td><%= my_simple_format(risk.consequence) %></td>
+<td align="center"><%= risk.impact %> / 3</td>
+<td><%= time_ago_in_words(risk.updated_at) %></td>
+</tr>
+
