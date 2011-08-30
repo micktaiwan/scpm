@@ -51,12 +51,16 @@ class WorkloadsController < ApplicationController
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals = []
     size    = @workloads.size
-    @totals << (@workloads.inject(0) { |sum,w| sum += w.next_month_percents} / size).round.to_s+"%"
-    @totals << (@workloads.inject(0) { |sum,w| sum += w.three_next_months_percents} / size).round.to_s+"%"
+    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.next_month_percents)} / size).round.to_s+"%"
+    @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.three_next_months_percents)} / size).round.to_s+"%"
     @workloads.first.weeks.each_with_index do |tmp,i|
-      @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:precise]} / size).round.to_s+"%"
+      @totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round.to_s+"%"
     end
     render :layout => false
+  end
+  
+  def cap(nb)
+    nb > 100 ? 100 : nb
   end
 
   def refresh_holidays
