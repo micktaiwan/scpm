@@ -59,7 +59,7 @@ class Workload
         percent = (@ctotals.last[:value] / @opens.last)*100
         @next_month_percents += percent if nb < 5
         @three_next_months_percents += percent if nb > 4 and nb < 13+4
-        @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%"}
+        @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
       iteration = iteration + 7.days
       nb += 1
