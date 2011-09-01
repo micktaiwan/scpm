@@ -79,4 +79,3 @@ def html_escape(txt)
   return nil if txt==nil
   return txt.gsub(">","&gt;").gsub("<","&lt;")
 end
-  

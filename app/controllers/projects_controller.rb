@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
         @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
         @wps = @wps.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year}
       when 'alpha'
-        @projects = @projects.sort_by { |p| [p.workstream, p.name] }
+        @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
         @wps = @wps.sort_by { |p| p.full_name }
     end
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")

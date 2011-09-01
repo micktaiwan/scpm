@@ -86,6 +86,7 @@ Livrables
   Spider
   PQP
   DN
+Est-ce que la gestion de conf a été faite ?
 
 
 Chat
