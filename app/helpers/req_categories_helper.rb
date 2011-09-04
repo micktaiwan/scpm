@@ -1,0 +1,2 @@
+module ReqCategoriesHelper
+end

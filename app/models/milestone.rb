@@ -11,6 +11,11 @@ class Milestone < ActiveRecord::Base
     name
   end
 
+  def passed_style
+    return " passed" if done > 0 or status == -1
+    return ""
+  end
+
   def timealert
     return "passed" if done == 1
     return "skipped" if done == 2

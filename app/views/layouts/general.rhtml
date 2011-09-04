@@ -59,6 +59,12 @@
   </div>
 </div>
 
+<div id='checklist_popup' class='popup' style='display:none;min-width:200px;'>
+  <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('checklist_popup').fade({duration:0.2});") %>
+  <h3>Checklist</h3>
+  <div id='checklist_popup_content'></div>
+</div>
+
 <div id="content">
 <%= yield %>
 </div>

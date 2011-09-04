@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110725161116) do
+ActiveRecord::Schema.define(:version => 20110903114109) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -76,6 +76,42 @@ ActiveRecord::Schema.define(:version => 20110725161116) do
   create_table "chat_sessions", :force => true do |t|
     t.datetime "created_at"
     t.string   "title"
+  end
+
+  create_table "checklist_item_template_miletones", :id => false, :force => true do |t|
+    t.integer  "checklist_item_template_id"
+    t.string   "milestone_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "checklist_item_templates", :force => true do |t|
+    t.integer  "requirement_id"
+    t.string   "request_wp"
+    t.integer  "parent_id"
+    t.string   "type"
+    t.integer  "is_transverse",  :default => 0
+    t.string   "title"
+    t.integer  "deployed",       :default => 0
+    t.integer  "order",          :default => 0
+    t.integer  "deadline"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "checklist_items", :force => true do |t|
+    t.integer  "milestone_id"
+    t.integer  "request_id"
+    t.integer  "is_transverse"
+    t.integer  "hidden",        :default => 0
+    t.integer  "parent_id"
+    t.integer  "template_id"
+    t.date     "deadline"
+    t.string   "type"
+    t.text     "answer"
+    t.integer  "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "companies", :force => true do |t|
@@ -170,6 +206,14 @@ ActiveRecord::Schema.define(:version => 20110725161116) do
     t.string   "ispm"
   end
 
+  create_table "req_categories", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "public",     :default => 0
+    t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "requests", :force => true do |t|
     t.string   "request_id"
     t.string   "workstream"
@@ -215,6 +259,21 @@ ActiveRecord::Schema.define(:version => 20110725161116) do
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
+
+  create_table "requirements", :force => true do |t|
+    t.integer  "req_category_id"
+    t.string   "source_name"
+    t.date     "source_date"
+    t.string   "requirement"
+    t.text     "description"
+    t.integer  "version"
+    t.datetime "version_date"
+    t.integer  "status"
+    t.datetime "status_date"
+    t.integer  "is_service_req",  :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "risks", :force => true do |t|
     t.integer  "project_id"

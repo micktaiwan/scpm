@@ -1,0 +1,7 @@
+<li>
+  <%= ctemplate.title %>
+  <ul>
+    <%= render(:partial=>"ctemplate", :collection=>ctemplate.children) %>
+  </ul>
+</li>
+

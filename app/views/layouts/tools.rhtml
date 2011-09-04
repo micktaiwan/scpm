@@ -45,7 +45,6 @@
 <%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %>
 <%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %>
 <%= link_to('Bandeaux', {:controller=>'bandeaus', :action=>'index'}, {:class=>menu_style('bandeaus','*')}) %>
-<%= link_to('Gantt', {:controller=>'welcome', :action=>'workload_schedule'}, {:class=>menu_style('','*')}) %>
 
 <% if current_user.has_role?('Admin') %>
 <%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %>

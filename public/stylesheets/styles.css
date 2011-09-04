@@ -16,6 +16,7 @@ div#banner {
   left: auto;
   width: 100%;
   height: 80px;
+  z-index:100;
 }
 div#banner #context_select {
   background-color: transparent;
@@ -274,7 +275,8 @@ td    {
 .amendment1 {font-style: italic; color: #999;}
 
 .milestone_bar { margin: 10px 0 10px 0;}
-.milestone { border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
+.milestone { z-index:0; border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
+.milestone.passed { opacity:0.4;}
 .milestone_name { border-bottom:black solid 1px; font-weight: bold; border-top-left-radius: 5px;border-top-right-radius: 5px; -moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;}
 .milestone_comments {min-height:64px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;-moz-border-radius-bottomleft: 5px; -moz-border-radius-bottomright: 5px;background-color: #FFF;}
 .milestone_comments.status-1 {color: #F00;}
@@ -291,6 +293,9 @@ td    {
 .milestone_name.soon {background-color: #FA0;}
 .milestone_name.verysoon {background-color: #F00;}
 .milestone_name.passed {background-color: #3F3;}
+
+.milestone_cl {color:black;font-weight:bold;background-color: #3F3; border-bottom-left-radius: 5px;border-bottom-right-radius: 5px; -moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;}
+
 
 .legend {
   border:1px solid #999;
@@ -381,7 +386,7 @@ div#bandeau {
   top:  100px;
   left: 200px;
   z-index:100;
-  background: #81BEF7 url('/images/popup_background.png') repeat-y;
+  background: #EEE;
   padding:3px 30px 30px 30px;
   border: 1px solid black;
   border-radius: 10px;
@@ -395,3 +400,4 @@ div#bandeau {
   font-weight: normal;
   font-size: 2em;
 }
+m

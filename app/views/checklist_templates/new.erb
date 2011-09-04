@@ -1,0 +1,8 @@
+<h2>Add a checklist item</h2>
+<%= error_messages_for :ctemplate %>
+<% form_for :@ctemplate, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>
+

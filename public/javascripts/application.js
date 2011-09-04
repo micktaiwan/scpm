@@ -41,3 +41,15 @@ function change_context() {
     });
   }
 
+function open_checklist(milestone_id) {
+  content = $('checklist_popup_content');
+  content.innerHTML = "<img src='/images/loading.gif'>";
+  $('checklist_popup').show();
+  new Ajax.Request('/checklists/show/'+milestone_id, {
+    //parameters: { context: value },
+    onComplete: function(r) {
+      content.innerHTML = r.responseText
+      }
+    });
+  }
+

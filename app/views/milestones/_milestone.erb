@@ -1,14 +1,21 @@
-<div id="m_<%=milestone.id%>" class="milestone">
-<div class="milestone_name <%=milestone.timealert%>">
-<%= milestone.name %>
-<%= link_to(image_tag('edit.gif'), {:controller=>'milestones', :action=>'edit', :id=>milestone.id}) %>
-<%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'milestones', :action=>'destroy', :id=>milestone.id}, :confirm=>"Sure ?", :success=>"$('m_#{milestone.id}').hide();") %>
-</div>
-<div class="milestone_comments status<%=milestone.status%>">
-<%= my_simple_format(milestone.comments) %>
-<%= milestone.date %>
-</div>
-<% if milestone.name[0..1]!='QG' and milestone.status==2 and milestone.amendments.size == 0 %>
-No amendment<br/>
+<div id="m_<%=milestone.id%>" class="milestone<%=milestone.passed_style%>">
+  <div class="milestone_name <%=milestone.timealert%>">
+    <%= milestone.name %>
+    <%= link_to(image_tag('edit.gif'), {:controller=>'milestones', :action=>'edit', :id=>milestone.id}) %>
+    <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'milestones', :action=>'destroy', :id=>milestone.id}, :confirm=>"Sure ?", :success=>"$('m_#{milestone.id}').hide();") %>
+  </div>
+  <div class="milestone_comments status<%=milestone.status%>">
+    <%= my_simple_format(milestone.comments) %>
+    <%= milestone.date %>
+  </div>
+  <% if milestone.name[0..1]!='QG' and milestone.status==2 and milestone.amendments.size == 0 %>
+  No amendment<br/>
+  <% end %>
+<% if current_user.has_role?("Admin") %>
+  <div class="milestone_cl" onclick="open_checklist(<%=milestone.id%>)">
+  Checklist
+  </div>
 <% end %>
+
 </div>
+

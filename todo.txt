@@ -41,11 +41,11 @@ Requirement
 ChecklistItemTemplate
 +requirement_id
 +milestones (several)
-+request_type
-+parent
++request_wp
++parent_id
 +type
 +is_transverse
-+label
++title
 +deployed
 +order
 +deadline
@@ -57,8 +57,6 @@ ChecklistItem
 +hidden
 +parent_id (pour la hierachie)
 +template_id
-+label (la question ou le texte)
-+order (ce qui permet d'ordonner les tâches)
 +deadline (relative au jalon, en jours)
 +type (cl_checkbox, cl_question, cl_memo)
 +answer (réponse pour un type cl_question)

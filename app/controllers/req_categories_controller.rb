@@ -1,0 +1,2 @@
+class ReqCategoriesController < ApplicationController
+end
