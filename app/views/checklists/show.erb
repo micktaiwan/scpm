@@ -1,0 +1,6 @@
+<h3><%= @milestone.name %> checklist</h3>
+
+<ul>
+  <%= render(:partial=>"checklist_item", :collection=>@checklists, :as=> :i) %>
+</ul>
+

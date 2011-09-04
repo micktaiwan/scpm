@@ -1,0 +1,10 @@
+<li>
+  <% if i.ctemplate.ctype == "checkbox" %>
+    <%= check_box('checklist_item','status',{},'1','0') %>
+  <% end %>
+  <span class="<%= i.css_class %>"><%= i.ctemplate.title %></span>
+  <ul>
+    <%= render(:partial=>"checklist_item", :collection=>i.children, :as=>:i) %>
+  <ul>
+</li>
+

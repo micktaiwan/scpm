@@ -16,6 +16,7 @@ function addLoadEvent(func) {
 }
 
 // http://code.google.com/p/simile-widgets/wiki/Timeline_GettingStarted
+/*
 var tl;
 var resizeTimerID = null;
 function onResize() {
@@ -26,6 +27,7 @@ function onResize() {
        }, 500);
    }
 }
+*/
 
 function change_context() {
   document.body.style.cursor = 'wait';
@@ -44,7 +46,9 @@ function change_context() {
 function open_checklist(milestone_id) {
   content = $('checklist_popup_content');
   content.innerHTML = "<img src='/images/loading.gif'>";
-  $('checklist_popup').show();
+  popup = $('checklist_popup')
+  popup.style.top = '365px';
+  popup.show();
   new Ajax.Request('/checklists/show/'+milestone_id, {
     //parameters: { context: value },
     onComplete: function(r) {

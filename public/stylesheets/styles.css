@@ -275,7 +275,7 @@ td    {
 .amendment1 {font-style: italic; color: #999;}
 
 .milestone_bar { margin: 10px 0 10px 0;}
-.milestone { z-index:0; border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
+.milestone { z-index:-1; border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
 .milestone.passed { opacity:0.4;}
 .milestone_name { border-bottom:black solid 1px; font-weight: bold; border-top-left-radius: 5px;border-top-right-radius: 5px; -moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;}
 .milestone_comments {min-height:64px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;-moz-border-radius-bottomleft: 5px; -moz-border-radius-bottomright: 5px;background-color: #FFF;}
@@ -294,7 +294,7 @@ td    {
 .milestone_name.verysoon {background-color: #F00;}
 .milestone_name.passed {background-color: #3F3;}
 
-.milestone_cl {color:black;font-weight:bold;background-color: #3F3; border-bottom-left-radius: 5px;border-bottom-right-radius: 5px; -moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;}
+.milestone_cl {cursor:pointer;color:white;font-weight:bold;background-color: #699; border-bottom-left-radius: 5px;border-bottom-right-radius: 5px; -moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;}
 
 
 .legend {
@@ -386,7 +386,7 @@ div#bandeau {
   top:  100px;
   left: 200px;
   z-index:100;
-  background: #EEE;
+  background: #699;
   padding:3px 30px 30px 30px;
   border: 1px solid black;
   border-radius: 10px;
@@ -400,4 +400,7 @@ div#bandeau {
   font-weight: normal;
   font-size: 2em;
 }
-m
+.checklist_item.folder {
+  font-weight: bold;
+  }
+

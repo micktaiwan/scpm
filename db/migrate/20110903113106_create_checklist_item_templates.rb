@@ -4,7 +4,7 @@ class CreateChecklistItemTemplates < ActiveRecord::Migration
       t.integer     :requirement_id
       t.string      :request_wp # "WP3.2 - Modeling Conception and Production"
       t.integer     :parent_id
-      t.string      :type
+      t.string      :ctype # see checklist_items migration
       t.integer     :is_transverse, :default=>0
       t.string      :title
       t.integer     :deployed, :default=>0
