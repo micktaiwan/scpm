@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(:version => 20110903114109) do
     t.integer  "requirement_id"
     t.string   "request_wp"
     t.integer  "parent_id"
-    t.string   "type"
+    t.string   "ctype"
     t.integer  "is_transverse",  :default => 0
     t.string   "title"
     t.integer  "deployed",       :default => 0
@@ -107,7 +107,6 @@ ActiveRecord::Schema.define(:version => 20110903114109) do
     t.integer  "parent_id"
     t.integer  "template_id"
     t.date     "deadline"
-    t.string   "type"
     t.text     "answer"
     t.integer  "status"
     t.datetime "created_at"
