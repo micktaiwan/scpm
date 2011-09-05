@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(:version => 20110905170249) do
     t.integer  "parent_id"
     t.integer  "template_id"
     t.integer  "hidden",       :default => 0
-    t.integer  "status"
+    t.integer  "status",       :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "answer"

@@ -13,7 +13,7 @@ class Request < ActiveRecord::Base
 
   # TODO: contre-visites
 
-  WP_shortnames = {
+  WP_shortnames = { # TODO: use the new model
   "WP1.1 - Quality Control" 		    => "Control",
   "WP1.2 - Quality Assurance" 		  => "Assurance",
   "WP2 - Quality for Maintenance" 	=> "Maint.",
@@ -33,7 +33,7 @@ class Request < ActiveRecord::Base
   }
 
 
-  Wp_index = {
+  Wp_index = { # TODO: use the new model
   "WP1.1 - Quality Control" 		    => 0,
   "WP1.2 - Quality Assurance" 		  => 4,
   "WP1.3 - Quality Control + BAT"   => 0, # TODO: change the workloads
@@ -145,6 +145,16 @@ class Request < ActiveRecord::Base
     [2,2.5,3],
     [2,3,4],
     [3,4,5]]
+
+  PHASE_MILESTONES = {
+    'M1-M3'=>['M3'],
+    'M3-M5'=>['QG BRD', 'QG ARD', 'M5', 'M5/M7'],
+    'M5-M10'=>['M7', 'M9', 'M9/M10', 'M10'],
+    'Post-M10'=>['QG TD', 'M10a', 'M11', 'QG MIP', 'M12', 'M12/M13', 'M13'],
+    'WP6.1 - Coaching PP' => ['M3'],
+    'WP6.2 - Coaching BRD' => ['M5'],
+    'WP6.3 - Coaching V&V' => ['M11']
+    }
 
   def wp_index(wp, cv)
     rv = Wp_index[wp+(cv=="Yes" ? "CV":"")]
@@ -325,6 +335,22 @@ class Request < ActiveRecord::Base
   def workload_name
     ##{appended_string(project.workstream, 6, "&nbsp;")}
    "<b>#{project.full_name}</b> <u>#{WP_shortnames[self.work_package]}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
+  end
+
+  # return the corresponding milestone names for this request
+  def milestone_names
+    if self.work_package != 'N/A'
+      PHASE_MILESTONES[self.milestone]
+    else
+      PHASE_MILESTONES[self.work_package]
+    end
+  end
+
+  # return the corresponding project milestones for this request
+  def milestones
+    names = self.milestone_names
+    return [] if !names
+    self.project.milestones.select{|m| names.include?(m.name)}
   end
 
 private

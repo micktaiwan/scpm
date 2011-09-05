@@ -6,7 +6,7 @@ class CreateChecklistItems < ActiveRecord::Migration
       t.integer :parent_id
       t.integer :template_id
       t.integer :hidden, :default=>0
-      t.integer :status
+      t.integer :status, :default=>0
       t.timestamps
       t.text    :answer
     end

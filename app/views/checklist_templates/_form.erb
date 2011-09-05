@@ -25,3 +25,6 @@
 <%= Workpackage.all.map{|m| m.code}.join(', ') %>
 </p>
 
+<p><%= label_tag 'ctype' %>
+<%= select(:ctemplate, :ctype, ['folder', 'checkbox'].map{|o| [o,o]}) %></p>
+

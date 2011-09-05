@@ -18,6 +18,7 @@ class ChecklistTemplatesController < ApplicationController
     else
       @ctemplate = ChecklistItemTemplate.find(params[:id])
       @ctemplate.update_attributes(params[:ctemplate])
+      @ctemplate.deployed = 0
       @ctemplate.checklist_item_template_milestone_names.each(&:destroy)
       @ctemplate.checklist_item_template_workpackages.each(&:destroy)
     end
@@ -53,6 +54,13 @@ class ChecklistTemplatesController < ApplicationController
   def destroy
     id = params[:id]
     ChecklistItemTemplate.destroy(id)
+    ChecklistItem.destroy_all(["template_id=?",id])
+    render(:nothing=>true)
+  end
+
+  def deploy
+    id = params[:id]
+    ChecklistItemTemplate.find(id).deploy
     render(:nothing=>true)
   end
 
