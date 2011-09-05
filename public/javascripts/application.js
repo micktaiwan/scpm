@@ -45,7 +45,7 @@ function change_context() {
 
 function open_checklist(milestone_id) {
   content = $('checklist_popup_content');
-  content.innerHTML = "<img src='/images/loading.gif'>";
+  content.innerHTML = "<br/><img src='/images/loading.gif'>";
   popup = $('checklist_popup')
   popup.style.top = '365px';
   popup.show();

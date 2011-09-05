@@ -72,19 +72,24 @@ class ClMemo < ChecklistItem; end
 Au delete d'un milestone prévenir qu'on pert la checkliste
 fonction de copie d'une chekliste ?
 
-Est-ce qu'une réunion a été posée régulièrement avec qui et quand ? Memo
-Besoins de Modelling ?  ToCheck/Oui/TicketOuvert/Non
-Besoins de Coaching ?   ToCheck/Oui/TicketOuvert/Non
-Réunion des 4 jours: A poser/Posée/Faite
-MoM de la réunion: Memo
+Analyse du besoin projet (transverse)
+  Est-ce qu'une réunion a été posée régulièrement avec qui et quand ? Memo
+  Besoins de Modelling ?  ToCheck/Oui/TicketOuvert/Non
+  Besoins de Coaching ?   ToCheck/Oui/TicketOuvert/Non
+  Besoins de Change ?     ToCheck/Oui/TicketOuvert/Non
+  Besoins de Audit ?      ToCheck/Oui/TicketOuvert/Non
+Organisation
+  Réunion des 4 jours: A poser/Posée/Faite/Ne sera pas faite
+  MoM de la réunion: Memo
 Livrables
+  est-ce que la fiche de complexité est faite et attachée au ticket ?
   RS PP
   RS RIA
   Checkliste
   Spider
   PQP
   DN
-Est-ce que la gestion de conf a été faite ?
+  est-ce que la gestion de conf a été faite ?
 
 
 Chat
