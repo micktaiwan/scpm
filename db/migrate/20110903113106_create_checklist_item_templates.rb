@@ -2,7 +2,6 @@ class CreateChecklistItemTemplates < ActiveRecord::Migration
   def self.up
     create_table :checklist_item_templates do |t|
       t.integer     :requirement_id
-      t.string      :request_wp                 # "WP3.2 - Modeling Conception and Production"
       t.integer     :parent_id
       t.string      :ctype                      # see checklist_items migration
       t.integer     :is_transverse, :default=>0 # if transverse, does not apply to a milestone, but for the whole project
@@ -18,3 +17,4 @@ class CreateChecklistItemTemplates < ActiveRecord::Migration
     drop_table :checklist_item_templates
   end
 end
+

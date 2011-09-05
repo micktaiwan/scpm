@@ -4,7 +4,7 @@ https://subversion.sqli.com/svndev/PI586/trunk/projets/interne/eisq/
 Checklists
 ==========
 
-Pour chaque milestone créé il faut crééer la checkliste correspondante
+Pour chaque milestone (et chaque ticket ?) créé il faut crééer la checkliste correspondante
   En fait c'est pour chaque jalon, mais aussi pour les types de tickets (S'il n'y a que du coaching il ne faut pas tous les livrables du QR)
 Pour chaque item créé il faut le rajouter à toutes les milestones pas déjà passées
 Il faut une fonction pour rafraichir les items au cas où (si on ferme le jalon, puis on le réouvre)
@@ -14,7 +14,7 @@ Pour les templates il faut un status: propagé ou pas
 Il faut pouvoir supprimer (ou hider) un item de tous les milestones
 Il faut que quand un ticket est associé à un projet les items se créent
 Il faut que quand un jalon est ajouté à un projet les items se créent en fonction des types de tickets existant
-Si un ticket est performed ou fermé les questions correspondantes soient grisée (ou identifiées)
+Si un ticket est performed ou fermé les questions correspondantes soient grisées (ou identifiées)
 S'il y a des tickets en double (de même type) il faut faire deux DN, donc on a deux checklistes
 Il me faudrait un utilitaire pour rentrer le numéro d'un ticket et que les checklistes associées sortent
 

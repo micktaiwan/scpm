@@ -1,5 +1,27 @@
+<p><%= label_tag 'requirement' %>
+<%= select(:ctemplate, :requirement_id, [['No requirement',0]]) %></p>
+
+<p><%= label_tag 'parent' %>
+<%= select(:ctemplate, :parent_id, @template_select_options) %></p>
+
 <p><%= label_tag 'title' %>
 <%= text_field :ctemplate, :title %></p>
 
-<%= hidden_field(:ctemplate, :parent_id, :value=>0) %></p>
+<p><%= label_tag 'is_transverse' %>
+<%= radio_button :ctemplate, :is_transverse, 0 %> No
+<%= radio_button :ctemplate, :is_transverse, 1 %> Yes</p>
+
+<p><%= label_tag 'milestones' %>
+<%= text_area_tag(:milestones, @milestones) %> Ex: M3, M5</p>
+
+<p>
+<%= MilestoneName.all.map{|m| m.title}.join(', ') %>
+</p>
+
+<p><%= label_tag 'workpackages' %>
+<%= text_area_tag(:workpackages, @workpackages) %>Ex: 1.2, 6.3</p>
+
+<p>
+<%= Workpackage.all.map{|m| m.code}.join(', ') %>
+</p>
 

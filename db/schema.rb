@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110903114109) do
+ActiveRecord::Schema.define(:version => 20110905170249) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -78,16 +78,18 @@ ActiveRecord::Schema.define(:version => 20110903114109) do
     t.string   "title"
   end
 
-  create_table "checklist_item_template_miletones", :id => false, :force => true do |t|
-    t.integer  "checklist_item_template_id"
-    t.string   "milestone_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "checklist_item_template_milestone_names", :force => true do |t|
+    t.integer "checklist_item_template_id"
+    t.integer "milestone_name_id"
+  end
+
+  create_table "checklist_item_template_workpackages", :force => true do |t|
+    t.integer "checklist_item_template_id"
+    t.integer "workpackage_id"
   end
 
   create_table "checklist_item_templates", :force => true do |t|
     t.integer  "requirement_id"
-    t.string   "request_wp"
     t.integer  "parent_id"
     t.string   "ctype"
     t.integer  "is_transverse",  :default => 0
@@ -102,15 +104,13 @@ ActiveRecord::Schema.define(:version => 20110903114109) do
   create_table "checklist_items", :force => true do |t|
     t.integer  "milestone_id"
     t.integer  "request_id"
-    t.integer  "is_transverse"
-    t.integer  "hidden",        :default => 0
     t.integer  "parent_id"
     t.integer  "template_id"
-    t.date     "deadline"
-    t.text     "answer"
+    t.integer  "hidden",       :default => 0
     t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "answer"
   end
 
   create_table "companies", :force => true do |t|
@@ -130,6 +130,10 @@ ActiveRecord::Schema.define(:version => 20110903114109) do
     t.text     "params"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "milestone_names", :force => true do |t|
+    t.string "title"
   end
 
   create_table "milestones", :force => true do |t|
@@ -412,6 +416,12 @@ ActiveRecord::Schema.define(:version => 20110903114109) do
     t.float    "wlload"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "workpackages", :force => true do |t|
+    t.string "title"
+    t.string "shortname"
+    t.string "code"
   end
 
   create_table "workstreams", :force => true do |t|
