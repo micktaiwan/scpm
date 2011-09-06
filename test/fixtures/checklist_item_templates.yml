@@ -1,7 +1,23 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+dn:
+  id: 1
+  requirement_id: nil
+  parent_id: 0
+  ctype: 'folder'
+  is_transverse: 0
+  title: 'Delivery Note'
+  deployed: 0
+  order: 0
+  deadline: nil
+
+pp:
+  id: 2
+  requirement_id: nil
+  parent_id: 1
+  ctype: 'checkbox'
+  is_transverse: 0
+  title: 'PP Remark Sheet'
+  deployed: 0
+  order: 0
+  deadline: 10

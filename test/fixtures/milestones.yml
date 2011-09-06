@@ -1,11 +1,9 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+milestone:
+  id: 1
+  project_id: 1
+  name: 'M5'
+  milestone_date: '2011-09-06'
+  actual_milestone_date:
+  status: 0
+  comments: 'Test'
+  done: 0

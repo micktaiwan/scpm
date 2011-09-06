@@ -1,11 +1,29 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+request:
+  id: 1
+  request_id: '100'
+  workstream: 'EA'
+  status: 'assigned'
+  assigned_to: 'mfaivremacon'
+  resolution: 'in progress'
+  updated:
+  reporter:
+  view_status:
+  milestone: 'M3-M5'
+  priority:
+  summary: 'test'
+  date_submitted:
+  product_version:
+  severity:
+  platform:
+  work_package: 'WP1.2 - Quality Assurance'
+  complexity: 'Medium'
+  start_date:
+  sdp: 'Yes'
+  pm:
+  milestone_date:
+  project_name: 'test'
+  actual_m_date:
+  end_date:
+  project_id: 1
+  contre_visite: 'No'
+  sdpiteration: '2011'
