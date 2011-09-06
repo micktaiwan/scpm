@@ -13,7 +13,7 @@
   <% end %>
 <% if current_user.has_role?("Admin") %>
   <div class="milestone_cl" onclick="open_checklist(<%=milestone.id%>)">
-  Checklist
+  Checklist: <%=milestone.checklist_items.size%>
   </div>
 <% end %>
 

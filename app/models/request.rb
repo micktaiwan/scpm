@@ -17,6 +17,7 @@ class Request < ActiveRecord::Base
   "WP1.1 - Quality Control" 		    => "Control",
   "WP1.2 - Quality Assurance" 		  => "Assurance",
   "WP2 - Quality for Maintenance" 	=> "Maint.",
+  "WP3.0 - Old Modeling"            => "Modeling 0",
   "WP3.1 - Modeling Support"        => "Modeling 1",
   "WP3.2 - Modeling Conception and Production" => "Modeling 2",
   "WP3.3 - Modeling BAT specific Control"      => "Modeling 3",

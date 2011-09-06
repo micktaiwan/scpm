@@ -63,6 +63,9 @@
   <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('checklist_popup').fade({duration:0.2});") %>
   <div id='checklist_popup_content'></div>
 </div>
+<script>
+  new Draggable($('checklist_popup'));
+</script>
 
 <div id="content">
 <%= yield %>

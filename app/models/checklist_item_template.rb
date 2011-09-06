@@ -38,11 +38,15 @@ class ChecklistItemTemplate < ActiveRecord::Base
       r.milestones.select{|m1| self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
         p = self.find_or_deploy_parent(m,r)
         parent_id = p ? p.id : 0
-        # TODO: do not deploy if already deployed :)
-        # TODO: if already deployed, deploy again by changing title, ctype
-        # for milestones and workpackages: bon courage
-        # for is_transverse....
-        ChecklistItem.create(:milestone_id=>m.id, :request_id=>r.id, :parent_id=>parent_id, :template_id=>self.id)
+        i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id=?", self.id, m.id, r.id])
+        if not i
+          ChecklistItem.create(:milestone_id=>m.id, :request_id=>r.id, :parent_id=>parent_id, :template_id=>self.id)
+        #else
+          # if some milestone_names or workpackages have been added the new ChecklistItem will be created
+          # TODO: detect removal of milestones or workpackages and delete not already answered ChecklistItem
+          # for is_transverse: TODO: if changed from no to yes, a lto of cleanup must be done
+          # for yes to no, the ChecklistItems will be created
+        end        
         }
       }
   end

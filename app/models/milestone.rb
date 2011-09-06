@@ -1,6 +1,8 @@
 class Milestone < ActiveRecord::Base
 
-  belongs_to :project
+  belongs_to  :project
+  #has_many    :checklist_item_milestones
+  has_many    :checklist_items#, :joins=>"checklist_item_template", :conditions=>"checklist_item_template.ctype!='folder'"#, :through=>:checklist_item_milestones
 
   def date
     return self.actual_milestone_date if self.actual_milestone_date and self.actual_milestone_date!=""

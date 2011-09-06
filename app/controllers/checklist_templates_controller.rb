@@ -54,7 +54,7 @@ class ChecklistTemplatesController < ApplicationController
   def destroy
     id = params[:id]
     ChecklistItemTemplate.destroy(id)
-    ChecklistItem.destroy_all(["template_id=?",id])
+    ChecklistItem.destroy_all(["template_id=?",id]) # TODO: do not delete already answered items
     render(:nothing=>true)
   end
 

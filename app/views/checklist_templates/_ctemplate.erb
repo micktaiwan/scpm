@@ -1,11 +1,10 @@
 <li id="template_<%=ctemplate.id%>">
-  <b><%= link_to(ctemplate.title, :action=>'edit', :id=>ctemplate.id) %></b>
+  - <b><%= link_to(ctemplate.title, :action=>'edit', :id=>ctemplate.id) %></b>
   <a href="#" title="<%= ctemplate.milestone_names.map {|m| m.title}.join(', ') %>">M</a>
   <a href="#" title="<%= ctemplate.workpackages.map {|m| m.shortname}.join(', ') %>">WP</a>
-  <%= ctemplate.deployed==1 ? '' : link_to_remote('deploy', :url=>{:action=>'deploy', :id=>ctemplate.id}, :success=>"$('deploy_#{ctemplate.id}').hide()", :confirm=>'Deploy this template and all its children ?', :html=>{:id=>"deploy_#{ctemplate.id}"}) %>
+  <%= ctemplate.deployed==1 ? '' : link_to_remote('deploy', :url=>{:action=>'deploy', :id=>ctemplate.id}, :loading=>"$('deploy_#{ctemplate.id}').innerHTML='deploying...'", :success=>"$('deploy_#{ctemplate.id}').hide()", :confirm=>'Deploy this template and all its children ?', :html=>{:id=>"deploy_#{ctemplate.id}", :class=>'btnlnk'}) %>
   <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>ctemplate.id}, :success=>"$('template_#{ctemplate.id}').hide()", :confirm=>'Sure?') %>
 </li>
 <ul>
   <%= render(:partial=>"ctemplate", :collection=>ctemplate.children) %>
 </ul>
-

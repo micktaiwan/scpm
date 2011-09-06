@@ -74,18 +74,18 @@ fonction de copie d'une chekliste ?
 
 Analyse du besoin projet (transverse)
   Est-ce qu'une réunion a été posée régulièrement avec qui et quand ? Memo
-  Besoins de Modelling ?  ToCheck/Oui/TicketOuvert/Non
-  Besoins de Coaching ?   ToCheck/Oui/TicketOuvert/Non
-  Besoins de Change ?     ToCheck/Oui/TicketOuvert/Non
-  Besoins de Audit ?      ToCheck/Oui/TicketOuvert/Non
+  Besoins de Modelling ?  ToCheck/Oui/TicketValidé/Non
+  Besoins de Coaching ?   ToCheck/Oui/TicketValidé/Non
+  Besoins de Change ?     ToCheck/Oui/TicketValidé/Non
+  Besoins de Audit ?      ToCheck/Oui/TicketValidé/Non
 Organisation
   Réunion des 4 jours: A poser/Posée/Faite/Ne sera pas faite
   MoM de la réunion: Memo
 Livrables
   est-ce que la fiche de complexité est faite et attachée au ticket ?
-  RS PP
+  RS PP Pas faite/Faite/Ne sera pas faite
   RS RIA
-  Checkliste
+  Checklist
   Spider
   PQP
   DN
