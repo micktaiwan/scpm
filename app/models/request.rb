@@ -151,7 +151,7 @@ class Request < ActiveRecord::Base
     'M1-M3'=>['M3'],
     'M3-M5'=>['QG BRD', 'QG ARD', 'M5', 'M5/M7'],
     'M5-M10'=>['M7', 'M9', 'M9/M10', 'M10'],
-    'Post-M10'=>['QG TD', 'M10a', 'M11', 'QG MIP', 'M12', 'M12/M13', 'M13'],
+    'Post-M10'=>['QG TD', 'M10a', 'M11', 'QG MIP', 'M12', 'M12/M13', 'M13', 'M14'],
     'WP6.1 - Coaching PP' => ['M3'],
     'WP6.2 - Coaching BRD' => ['M5'],
     'WP6.3 - Coaching V&V' => ['M11']

@@ -35,7 +35,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
 
   def deploy
     self.requests.each { |r|
-      r.milestones.select{ |m1| self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
+      r.milestones.select{ |m1| m1.done==0 and self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
         p = self.find_or_deploy_parent(m,r)
         parent_id = p ? p.id : 0
         i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id=?", self.id, m.id, r.id])

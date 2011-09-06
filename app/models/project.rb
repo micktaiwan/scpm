@@ -388,7 +388,7 @@ class Project < ActiveRecord::Base
         when 'WP6.2 - Coaching BRD'
           nb += 1 and rv += "Coaching BRD\n"      if m == 'M5'
         when 'WP6.3 - Coaching V&V'
-          nb += 1 and rv += "Coaching V&V\n"      if m == 'M12'
+          nb += 1 and rv += "Coaching V&V\n"      if m == 'M11'
         when 'WP6.4 - Coaching ConfMgt'
           nb += 1 and rv += "Coaching ConfMgt\n"  if m == 'M14'
         when 'WP6.5 - Coaching Maintenance'
@@ -434,7 +434,7 @@ class Project < ActiveRecord::Base
       m = find_milestone_by_name(name)
       if m
         status += name + ': '+m.comments.split("\n").join("\r\n")
-        status += "\r\n" + m.date.to_s if m.date 
+        status += "\r\n" + m.date.to_s if m.date
         status += "\r\n"
         style  = get_cell_style_for_milestone(m)
       end
