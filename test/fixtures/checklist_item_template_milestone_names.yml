@@ -3,3 +3,7 @@
 dn:
   milestone_name_id: 1
   checklist_item_template_id: 1
+pp:
+  milestone_name_id: 1
+  checklist_item_template_id: 2
+

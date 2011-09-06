@@ -5,7 +5,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
   has_many :workpackages, :through => :checklist_item_template_workpackages
   has_many :checklist_item_template_milestone_names, :dependent=>:destroy
   has_many :milestone_names, :through => :checklist_item_template_milestone_names
-  belongs_to :parent, :class_name=>"ChecklistItemTemplate"#, :foreign_key=>"parent_id"
+  belongs_to :parent, :class_name=>"ChecklistItemTemplate"
 
   def full_path
     return self.title if not self.parent or self.parent_id == 0
@@ -35,18 +35,21 @@ class ChecklistItemTemplate < ActiveRecord::Base
 
   def deploy
     self.requests.each { |r|
-      r.milestones.select{|m1| self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
+      r.milestones.select{ |m1| self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
         p = self.find_or_deploy_parent(m,r)
         parent_id = p ? p.id : 0
         i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id=?", self.id, m.id, r.id])
         if not i
           ChecklistItem.create(:milestone_id=>m.id, :request_id=>r.id, :parent_id=>parent_id, :template_id=>self.id)
-        #else
+        else
+          # parent change handling
+          i.parent_id = parent_id
+          i.save
           # if some milestone_names or workpackages have been added the new ChecklistItem will be created
           # TODO: detect removal of milestones or workpackages and delete not already answered ChecklistItem
           # for is_transverse: TODO: if changed from no to yes, a lto of cleanup must be done
           # for yes to no, the ChecklistItems will be created
-        end        
+        end
         }
       }
   end
