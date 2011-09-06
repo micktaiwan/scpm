@@ -386,7 +386,7 @@ div#bandeau {
   top:  100px;
   left: 200px;
   z-index:100;
-  background: #699;
+  background: #DDF;
   padding:3px 30px 30px 30px;
   border: 1px solid black;
   border-radius: 10px;
@@ -400,6 +400,12 @@ div#bandeau {
   font-weight: normal;
   font-size: 2em;
 }
+.checklist_item {
+  display: inline;
+  }
+.checklist_item.time{
+  color: #555;
+  }
 .checklist_item.folder {
   font-weight: bold;
   }

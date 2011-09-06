@@ -47,6 +47,7 @@ function open_checklist(milestone_id) {
   content = $('checklist_popup_content');
   content.innerHTML = "<br/><img src='/images/loading.gif'>";
   popup = $('checklist_popup')
+  popup.style.width = "400px";
   popup.show();
   new Ajax.Request('/checklists/show/'+milestone_id, {
     //parameters: { context: value },

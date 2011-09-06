@@ -12,7 +12,7 @@ class ChecklistItem < ActiveRecord::Base
       when self.status > 0
         'checklist_item done'
       else
-        ''
+        'checklist_item'
     end
   end
 

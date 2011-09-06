@@ -2,7 +2,10 @@
   <% if i.ctemplate.ctype == "checkbox" %>
     <%= check_box(:cl, :s, {:checked=>i.status==1, :onclick=>"checklist_item_set_status(#{i.id},this.checked? 1:0)"},'1','0') %>
   <% end %>
-  <span class="<%= i.css_class %>"><%= i.ctemplate.title %></span>
+  <div onmouseover="$('checklist_item_time_<%=i.id%>').show();" onmouseout="$('checklist_item_time_<%=i.id%>').hide();" class="<%= i.css_class %>"><%= i.ctemplate.title %></div>
+  <% if i.ctemplate.ctype != "folder" %>
+    <div style="display:none" class="checklist_item time" id='checklist_item_time_<%=i.id%>'><%= time_ago_in_words(i.updated_at) %></div>
+  <% end %>
   <ul>
     <%= render(:partial=>"checklist_item", :collection=>i.children, :as=>:i) %>
   </ul>
