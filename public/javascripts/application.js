@@ -56,3 +56,9 @@ function open_checklist(milestone_id) {
     });
   }
 
+function checklist_item_set_status(id, status) {
+  new Ajax.Request('/checklists/set_status', {
+    parameters: { id: id, status: status }
+    });
+  }
+

@@ -403,4 +403,8 @@ div#bandeau {
 .checklist_item.folder {
   font-weight: bold;
   }
+.checklist_item.done {
+  font-style: italic;
+  color: #333;
+  }
 

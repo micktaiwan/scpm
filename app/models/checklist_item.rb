@@ -6,9 +6,11 @@ class ChecklistItem < ActiveRecord::Base
   belongs_to :parent, :class_name=>"ChecklistItem"
 
   def css_class
-    case self.ctemplate.ctype
-      when 'folder'
+    case
+      when self.ctemplate.ctype=='folder'
         'checklist_item folder'
+      when self.status > 0
+        'checklist_item done'
       else
         ''
     end

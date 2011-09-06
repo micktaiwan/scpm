@@ -7,5 +7,13 @@ class ChecklistsController < ApplicationController
     render(:layout=>false)
   end
 
+  def set_status
+    id = params[:id]
+    i = ChecklistItem.find(id)
+    i.status = params[:status].to_i
+    i.save
+    render(:nothing=>true)
+  end
+
 end
 

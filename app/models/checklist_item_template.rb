@@ -52,6 +52,9 @@ class ChecklistItemTemplate < ActiveRecord::Base
         end
         }
       }
+    self.deployed = 1
+    self.save
+    self.children.select{|c| c.deployed==0}.each(&:deploy)
   end
 
 end
