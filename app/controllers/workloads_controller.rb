@@ -132,10 +132,11 @@ class WorkloadsController < ApplicationController
     if not found
       @line = WlLine.create(:name=>name, :request_id=>request_id, :person_id=>person_id, :wl_type=>WL_LINE_REQUEST)
       @workload = Workload.new(person_id)
-      get_suggested_requests(@workload)
     else
       @error = "This line already exists: #{request_id}"
     end
+    get_suggested_requests(@workload)
+    get_chart
   end
 
   def add_by_name
@@ -153,6 +154,7 @@ class WorkloadsController < ApplicationController
     end
     @workload = Workload.new(person_id)
     get_suggested_requests(@workload)
+    get_chart
   end
 
   def add_by_sdp_task

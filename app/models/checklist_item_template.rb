@@ -33,7 +33,14 @@ class ChecklistItemTemplate < ActiveRecord::Base
     return ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.parent_id, r.id, m.id])
   end
 
+  def check_parent
+    return if !self.parent
+    diff = (self.milestone_names - self.parent.milestone_names) + (self.workpackages - self.parent.workpackages)
+    raise "Parent of #{self.title} does not contains:\n#{diff.map{|i| i.title}.join(', ')}" if (diff) != []
+  end
+
   def deploy
+    check_parent
     self.requests.each { |r|
       r.milestones.select{ |m1| m1.done==0 and self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
         p = self.find_or_deploy_parent(m,r)
@@ -52,8 +59,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
         end
         }
       }
-    self.deployed = 1
-    self.save
+    self.update_attributes(:deployed=>1)
     self.children.select{|c| c.deployed==0}.each(&:deploy)
   end
 

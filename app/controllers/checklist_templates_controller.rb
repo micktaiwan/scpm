@@ -60,8 +60,11 @@ class ChecklistTemplatesController < ApplicationController
 
   def deploy
     id = params[:id]
-    ChecklistItemTemplate.find(id).deploy
-    render(:nothing=>true)
+    begin
+      ChecklistItemTemplate.find(id).deploy
+    rescue Exception => e
+      @error =  e.message
+    end
   end
 
 end
