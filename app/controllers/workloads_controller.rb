@@ -59,6 +59,14 @@ class WorkloadsController < ApplicationController
   end
 
   def refresh_conso
+
+    # find "to be validated" requests not in the workload
+    #already_in_the_workload = WlLine.all.select(|l| l.request and l.request.status=='to be validated') 
+    @to_be_validated = Request.find(:all,:conditions=>"status='to be validated'").select {|r| r.wl_line==nil}
+    
+    # find the corresponding production days (minus 15% of gain)
+    @to_be_validated_days = @to_be_validated.inject(0) { |sum, r| sum += r.workload2} * 0.85
+
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
     for p in @people
@@ -76,6 +84,7 @@ class WorkloadsController < ApplicationController
       @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:precise]} / size).round
       @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
     end
+    
     chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
     chart.data "capped", @cap_totals[2..-1], 'ff0000'
     chart.data "non capped", @totals[2..-1], '0000ff'
