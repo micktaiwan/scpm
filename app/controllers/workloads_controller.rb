@@ -67,8 +67,11 @@ class WorkloadsController < ApplicationController
 
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
+    @total_days = 0
     for p in @people
-      @workloads << Workload.new(p.id)
+      w = Workload.new(p.id)
+      @workloads << w
+      @total_days += w.ctotals.inject(0) { |sum, t| sum += t[:value]}
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals     = []
