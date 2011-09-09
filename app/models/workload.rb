@@ -18,7 +18,7 @@ class Workload
     @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :order=>"wl_type, name")
     if options[:only_holidays] != true
       @wl_lines  << WlLine.create(:name=>"Cong&eacute;s", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
-    end  
+    end
     from_day    = Date.today - (Date.today.cwday-1).days
     #farest_week = @wl_lines.map{|l| m = l.wl_loads.map{|l| l.week}.max; m ? m:0}.max
     farest_week = wlweek(from_day+6.months) # if farest_week == 0
@@ -58,14 +58,14 @@ class Workload
         @ctotals << {:name=>'ctotal',    :id=>w, :value=>col_sum(w, @wl_lines)}
         percent = (@ctotals.last[:value] / @opens.last)*100
         @next_month_percents += percent if nb < 5
-        @three_next_months_percents += percent if nb > 4 and nb < 13+4
+        @three_next_months_percents += percent if nb >= 5 and nb <= 12+4
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
       iteration = iteration + 7.days
       nb += 1
     end
     @next_month_percents = (@next_month_percents / 5).round
-    @three_next_months_percents = (@three_next_months_percents / 16).round
+    @three_next_months_percents = (@three_next_months_percents / 12).round
 
     # sum the lines
     @line_sums      = Hash.new
