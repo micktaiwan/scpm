@@ -578,7 +578,7 @@ class Project < ActiveRecord::Base
     rv    = nil
     date  = nil
     sorted_milestones.each_with_index { |m, i|
-      next if m.done != 0 or m.status == -1 or (m.milestone_date == nil and m.actual_milestone_date == nil)
+      next if m.done != 0 or (m.milestone_date == nil and m.actual_milestone_date == nil)
       if m.actual_milestone_date and m.actual_milestone_date != ""
         if not date or m.actual_milestone_date < date
           date = m.actual_milestone_date
@@ -597,7 +597,7 @@ class Project < ActiveRecord::Base
   def next_milestone_date
     date = nil
     self.milestones.each { |m|
-      next if m.done != 0 or m.status == -1 or (m.milestone_date == nil and m.actual_milestone_date == nil)
+      next if m.done != 0 or (m.milestone_date == nil and m.actual_milestone_date == nil)
       if m.actual_milestone_date and m.actual_milestone_date != ""
         date = m.actual_milestone_date if not date or m.actual_milestone_date < date
       elsif m.milestone_date and m.milestone_date != ""
