@@ -26,7 +26,7 @@
   <br/>
 
   <b>Suggested requests:</b><br/>
-  <div id="suggested_requests" style="overflow-y:scroll; height:100px;">
+  <div id="suggested_requests">
     <%= render(:partial=>"suggested_request", :collection=>@suggested_requests) %>
   </div>
 </div>
@@ -37,5 +37,5 @@
 
 <script>
   set_fixed_header();
-  // new Draggable(wl_line_add_form); // does not mix well with scrollbar
+  new Draggable(wl_line_add_form); // does not mix well with scrollbar
 </script>

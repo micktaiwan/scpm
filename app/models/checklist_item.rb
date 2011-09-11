@@ -16,5 +16,13 @@ class ChecklistItem < ActiveRecord::Base
     end
   end
 
+  def image_name
+    self.ctemplate.values.image(self.status)
+  end
+
+  def alt
+    self.ctemplate.values.alt(self.status)
+  end
+
 end
 

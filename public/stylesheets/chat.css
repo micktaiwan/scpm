@@ -9,7 +9,7 @@
   border: 1px solid black;
   border-radius: 5px;
   -moz-border-radius: 5px;
-  z-index:100;
+  z-index:200;
   }
 #chatbox .title {
   font-family: "Stardos Stencil";
@@ -43,7 +43,7 @@ li.item:hover {
   clear: both;
   width: 200px;
   border: 1px solid #CCC;
-  z-index:101;
+  z-index:201;
 }
 .chat_window .participants {
   padding: 3px;

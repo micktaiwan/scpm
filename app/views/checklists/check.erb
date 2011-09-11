@@ -1,0 +1,7 @@
+<h2>Checklists</h2>
+<%= render(:file=>"checklist_templates/menu")%>
+
+<ul>
+  <%= render(:partial=>"milestone", :collection=>@milestones, :as=> :m) %>
+</ul>
+

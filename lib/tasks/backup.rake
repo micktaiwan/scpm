@@ -2,6 +2,7 @@ require 'find'
 require 'ftools'
 
 namespace :db do
+
   desc "Backup the database to a file. Options: DIR=base_dir RAILS_ENV=production MAX=20"
   task :backup => [:environment] do
     datestamp = Time.now.strftime("%Y-%m-%d_%H-%M-%S")
@@ -57,10 +58,14 @@ namespace :db do
   task :production_data_load do
     load 'config/environment.rb'
     abcs = ActiveRecord::Base.configurations
-    
+
     # unzip data
-    `cd db && 7za x "production_data.sql.gz" -y`
-    
+    if `uname`.chomp=='Linux'
+      `cd db && unzip "production_data.sql.gz" -y`
+    else
+      `cd db && 7za x "production_data.sql.gz" -y`
+    end
+
     case abcs[RAILS_ENV]["adapter"]
     when 'mysql'
       ActiveRecord::Base.establish_connection(abcs[RAILS_ENV])

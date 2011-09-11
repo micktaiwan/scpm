@@ -1,3 +1,28 @@
+class ItemTemplateValue
+
+  attr_accessor :options, :images
+
+  def initialize
+    @options  = ['Not done yet','Done','Will not be done']
+    @images   = ['cb0.gif','cb1.gif','cb2.gif']
+  end
+
+  def image(value)
+    @images[value]
+  end
+
+  def alt(value)
+    @options[value]
+  end
+
+  def next_value(value)
+    n = value + 1
+    n = 0 if n >= @options.size
+    n
+  end
+
+end
+
 class ChecklistItemTemplate < ActiveRecord::Base
 
   has_many :children, :class_name=>"ChecklistItemTemplate", :foreign_key=>"parent_id", :order=>"`order`", :dependent=>:nullify
@@ -5,6 +30,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
   has_many :workpackages, :through => :checklist_item_template_workpackages
   has_many :checklist_item_template_milestone_names, :dependent=>:destroy
   has_many :milestone_names, :through => :checklist_item_template_milestone_names
+  serialize :values, ItemTemplateValue
   belongs_to :parent, :class_name=>"ChecklistItemTemplate"
 
   def full_path

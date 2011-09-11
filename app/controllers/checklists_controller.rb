@@ -8,12 +8,16 @@ class ChecklistsController < ApplicationController
     render(:layout=>false)
   end
 
-  def set_status
+  def set_next_status
     id = params[:id]
     i = ChecklistItem.find(id)
-    i.status = params[:status].to_i
+    i.status = i.ctemplate.values.next_value(i.status)
     i.save
-    render(:nothing=>true)
+    render(:text=>i.image_name, :layout=>false)
+  end
+
+  def check
+    @milestones = Milestone.find(:all, :conditions=>"done=1").select{|m| m.checklist_items.size>0}
   end
 
 end

@@ -5,7 +5,7 @@
 <%= select(:ctemplate, :parent_id, @template_select_options) %></p>
 
 <p><%= label_tag 'title' %>
-<%= text_field :ctemplate, :title %></p>
+<%= text_area :ctemplate, :title, :rows=>3 %></p>
 
 <p><%= label_tag 'is_transverse' %>
 <%= radio_button :ctemplate, :is_transverse, 0 %> No

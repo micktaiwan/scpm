@@ -381,11 +381,11 @@ div#bandeau {
   display: inline;
 }
 .popup {
-  /*cursor:move;*/
+  cursor:move;
   position:fixed;
   top:  100px;
   left: 200px;
-  z-index:100;
+  z-index:300;
   background: #DDF;
   padding:3px 30px 30px 30px;
   border: 1px solid black;
@@ -413,4 +413,6 @@ div#bandeau {
   font-style: italic;
   color: #333;
   }
-
+.checkbox {
+  cursor:pointer;
+  }

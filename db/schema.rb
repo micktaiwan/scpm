@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110905170249) do
+ActiveRecord::Schema.define(:version => 20110911105840) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(:version => 20110905170249) do
     t.integer  "deadline"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "values"
   end
 
   create_table "checklist_items", :force => true do |t|

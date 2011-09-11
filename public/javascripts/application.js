@@ -47,7 +47,7 @@ function open_checklist(milestone_id) {
   content = $('checklist_popup_content');
   content.innerHTML = "<br/><img src='/images/loading.gif'>";
   popup = $('checklist_popup')
-  popup.style.width = "400px";
+  popup.style.width = "600px";
   popup.show();
   new Ajax.Request('/checklists/show/'+milestone_id, {
     //parameters: { context: value },
@@ -57,9 +57,12 @@ function open_checklist(milestone_id) {
     });
   }
 
-function checklist_item_set_status(id, status) {
-  new Ajax.Request('/checklists/set_status', {
-    parameters: { id: id, status: status }
+function checklist_item_set_next_status(id) {
+  new Ajax.Request('/checklists/set_next_status', {
+    parameters: { id: id},
+    onComplete: function(r) {
+      $('cl_image_'+id).src = '/images/'+r.responseText;
+      }
     });
   }
 
