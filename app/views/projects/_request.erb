@@ -13,10 +13,10 @@
 <% if request.resolution != 'not started' and request.resolution != 'not planned' %>
 <% tasks = request.sdp_tasks %>
 <span style="background:#AAF">
-RAF: <%= tasks.inject(0) { |sum, t| t.remaining+sum } %>
+<%= tasks.inject(0) { |sum, t| t.remaining+sum } %>
 </span>
 <span style="background:#AFA">
-Gain: <%= tasks.inject(0) { |sum, t| t.balancei+sum } %>
+<%= tasks.inject(0) { |sum, t| t.balancei+sum } %>
 </span>
 <% end %>
 

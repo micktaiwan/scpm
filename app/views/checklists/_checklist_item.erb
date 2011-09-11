@@ -1,4 +1,10 @@
 <li>
+  <% if !i.ctemplate %>
+    <strong>No template!</strong>
+    <%=i.id%>
+    <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'checklists', :action=>'destroy', :id=>i.id}) %>
+  <% else %>
+
   <% if i.ctemplate.ctype == "checkbox" %>
     <%= image_tag(i.image_name, :id=>"cl_image_#{i.id}", :onclick=>"checklist_item_set_next_status(#{i.id})", :class=>"checkbox", :title=>i.alt) %>
   <% end %>
@@ -9,5 +15,6 @@
   <ul>
     <%= render(:partial=>"checklist_item", :collection=>i.children, :as=>:i) %>
   </ul>
+  <% end %>
 </li>
 

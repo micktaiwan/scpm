@@ -9,9 +9,10 @@
     :update => { :failure => "error" },
     :confirm=>'Deploy this template and all its children ?',
     :html=>{:id=>"deploy_#{ctemplate.id}", :class=>'btnlnk'}) %>
+  <%= link_to('New', {:controller=>'checklist_templates', :action=>'new', :parent_id=>ctemplate.id}) %>
   <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>ctemplate.id}, :success=>"$('template_#{ctemplate.id}').hide()", :confirm=>'Sure?') %>
+  <ul>
+    <%= render(:partial=>"ctemplate", :collection=>ctemplate.children) %>
+  </ul>
 </li>
-<ul>
-  <%= render(:partial=>"ctemplate", :collection=>ctemplate.children) %>
-</ul>
 

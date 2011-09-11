@@ -7,7 +7,13 @@ class ChecklistTemplatesController < ApplicationController
   end
 
   def new
+    parent_id = params[:parent_id]
     @ctemplate = ChecklistItemTemplate.new
+    if parent_id
+      @ctemplate.parent_id = parent_id
+      @milestones   = @ctemplate.parent.milestone_names.map{|m| m.title}.join(', ')
+      @workpackages = @ctemplate.parent.workpackages.map{|m| m.code}.join(', ')
+    end
     @template_select_options = [["No parent", 0]] + ChecklistItemTemplate.find(:all, :select=>"id, title, parent_id").map { |t| [t.full_path,t.id]}.sort_by {|t| t[0]}
   end
 
@@ -53,8 +59,7 @@ class ChecklistTemplatesController < ApplicationController
 
   def destroy
     id = params[:id]
-    ChecklistItemTemplate.destroy(id)
-    ChecklistItem.destroy_all(["template_id=?",id]) # TODO: do not delete already answered items
+    ChecklistItemTemplate.find(id).mydestroy
     render(:nothing=>true)
   end
 
@@ -65,6 +70,11 @@ class ChecklistTemplatesController < ApplicationController
     rescue Exception => e
       @error =  e.message
     end
+  end
+
+  def deploy_all
+    ChecklistItemTemplate.all.each(&:deploy)
+    render(:nothing=>true)
   end
 
 end

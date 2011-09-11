@@ -11,12 +11,15 @@
   <% if milestone.name[0..1]!='QG' and milestone.status==2 and milestone.amendments.size == 0 %>
   No amendment<br/>
   <% end %>
-<% if current_user.has_role?("Admin") %>
-  <div class="milestone_cl" onclick="open_checklist(<%=milestone.id%>)">
-  <% items = milestone.checklist_items.select{|i| i.ctemplate.ctype!='folder'} %>
-  Checklist: <%=items.select{|i| i.status!=0}.size%>/<%=items.size%>
-  </div>
-<% end %>
 
+  <%
+    items = milestone.checklist_items.select{|i| i.ctemplate.ctype!='folder'}
+    non_zero = items.select{|i| i.status!=0}
+  %>
+  <% if items.size > 0 or current_user.has_role?('Admin') %>
+    <div class="milestone_cl<%if non_zero.size==items.size%> done<%end%>" onclick="open_checklist(<%=milestone.id%>)">
+    Checklist: <%=non_zero.size%>/<%=items.size%>
+    </div>
+  <% end %>
 </div>
 

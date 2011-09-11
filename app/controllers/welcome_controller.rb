@@ -31,6 +31,7 @@ class WelcomeController < ApplicationController
       r = Request.find_by_request_id(req.id)
       r = Request.create(:request_id=>req.id) if not r
       r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
+      #r.deploy_checklists if r.status == 'assigned' and r.status_changed?
       r.save
       }
     redirect_to '/projects/import'

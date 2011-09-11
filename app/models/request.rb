@@ -347,7 +347,7 @@ class Request < ActiveRecord::Base
 
   # return the corresponding milestone names for this request
   def milestone_names
-    if self.work_package != 'N/A'
+    if self.milestone != 'N/A'
       PHASE_MILESTONES[self.milestone]
     else
       PHASE_MILESTONES[self.work_package]
@@ -359,6 +359,18 @@ class Request < ActiveRecord::Base
     names = self.milestone_names
     return [] if !names
     self.project.milestones.select{|m| names.include?(m.name)}
+  end
+
+  def deploy_checklists
+    for t in ChecklistItemTemplate.all
+      deploy_checklist(t)
+    end
+  end
+
+  def deploy_checklist(template)
+    self.milestones.select{ |m1| m1.done==0 and template.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
+      m.deploy_checklist(template, self)
+      }
   end
 
 private

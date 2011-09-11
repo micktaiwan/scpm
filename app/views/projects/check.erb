@@ -18,3 +18,7 @@
 <%= render(:partial=>'missing', :collection=>@missing_associations) %>
 </ul>
 
+<h3>Templates</h3>
+<%= link_to_remote('Deploy all', {:url=>{:controller=>'checklist_templates', :action=>'deploy_all'}, :loading=>"$('deploy_all').innerHTML='Deploying...'", :complete=>"$('deploy_all').innerHTML='Deploy all';alert('Deployed all templates')"},{:class=>"btnlnk",:id=>"deploy_all"}) %>
+<%= link_to('Go to templates', {:controller=>'checklist_templates', :action=>'index'}, {:class=>'btnlnk'}) %>
+

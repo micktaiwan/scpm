@@ -2,6 +2,11 @@
 <%= render(:file=>"checklist_templates/menu")%>
 
 <ul>
+  <%= render(:partial=>"checklist_item", :collection=>@no_template_items, :as=> :i) %>
+</ul>
+
+
+<ul>
   <%= render(:partial=>"milestone", :collection=>@milestones, :as=> :m) %>
 </ul>
 

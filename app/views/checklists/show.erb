@@ -1,7 +1,12 @@
 <h3><%= @milestone.name %> checklist</h3>
 
-
-<ul>
-  <%= render(:partial=>"checklist_item", :collection=>@checklists, :as=> :i) %>
-</ul>
+<% for r in @requests %>
+  <% items = @checklists.select{|i| i.request_id==r.id} %>
+  <% if items.size > 0 %>
+    <b><%= r.work_package%> <%= r.milestone if r.milestone!='N/A'%> <%= r.resolution%></b><br/>
+    <ul>
+      <%= render(:partial=>"checklist_item", :collection=>items, :as=> :i) %>
+    </ul>
+  <% end %>
+<% end %>
 
