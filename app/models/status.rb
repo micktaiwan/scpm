@@ -24,4 +24,10 @@ class Status < ActiveRecord::Base
     self.operational_alert = html_escape(self.operational_alert)
   end
   
+  def copy_status_to_ws_reporting
+    self.ws_report      = self.reason
+    self.ws_updated_at  = self.reason_updated_at
+    self.save
+  end
+  
 end

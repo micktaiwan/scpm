@@ -4,17 +4,24 @@
 <%= html_status(status.status) %>
 <b>Reason</b>: <%= time_ago_in_words(status.reason_updated_at) %>
 <b>WS</b>: <%= time_ago_in_words(status.ws_updated_at) %>
+<%= link_to_remote('Copy status to WS reporting',
+  :url=>{:action=>'copy_status_to_ws_reporting', :id=>project.id},
+  :loading=>"$('copy_#{project.id}').innerHTML='Copying...'",
+  :success=>"$('copy_#{project.id}').fade()",
+  :update => { :failure => "error" },
+  :html=>{:id=>"copy_#{project.id}", :class=>'btnlnk'}) %>
 <br/>
-<ul>
 
+<ul>
+<b>Status</b>: <%= a = status.reason; a = a.strip if a; my_simple_format(a) %>
 <% 
 s = status.ws_report
 s = (s ? s.strip : "")
 if s == "" -%>
-<strong>Reporting</strong>
+  <strong>Reporting</strong>
 <% else -%>
-<b>Reporting</b>
+  <b>Reporting</b>
 <% end -%>:
-<%= s; my_simple_format(s) %>
+<%= my_simple_format(s) %>
 <b>Actions</b>: <%= a = status.actions; a = a.strip if a; my_simple_format(a) %>
 </ul>

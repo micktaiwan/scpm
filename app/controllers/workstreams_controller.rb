@@ -20,5 +20,11 @@ class WorkstreamsController < ApplicationController
       render :action => 'edit'
     end
   end
+  
+  def copy_status_to_ws_reporting
+    last_status = Project.find(params[:id]).get_status
+    last_status.copy_status_to_ws_reporting if last_status
+    render(:nothing=>true)
+  end
 
 end

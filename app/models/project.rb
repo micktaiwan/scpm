@@ -615,7 +615,7 @@ class Project < ActiveRecord::Base
       }
     rv
   end
-
+  
 private
 
   def excel(a,b)
