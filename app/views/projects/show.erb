@@ -18,7 +18,6 @@ function add(id, same_week, has_requests) {
   }
 </script>
 
-
 <div id="submenu">
 <%= @project.icon_status %>
 <h2><%= @project.full_name %> </h2>
@@ -55,14 +54,13 @@ function add(id, same_week, has_requests) {
 <% end %>
 </div>
 <br/>
-<% if @project.requests.size > 0 or @project.has_status %>
+<% if @project.requests.size > 0 or @project.has_status or @project.checklist_items.size > 0%>
 
   <h3>Timeline</h3>
 
   <div class="milestone_bar">
   <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
   </div>
-
 
   <h3>Risks</h3>
   <a href="#" onclick="return false;" title="Probability:

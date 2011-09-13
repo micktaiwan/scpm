@@ -25,7 +25,8 @@ class Project < ActiveRecord::Base
   has_many    :responsibles, :through=>:project_people
   has_many    :risks,       :order=>'id', :dependent=>:destroy
   has_many    :quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1"
-
+  has_many    :checklist_items, :through=>:milestones
+  
   def visible_actions(user_id)
     if Person.find(user_id).is_supervisor == 0
       Action.find(:all, :conditions=>["project_id=?", self.id], :order=>"progress, project_id, id")
@@ -241,7 +242,7 @@ class Project < ActiveRecord::Base
 
   def move_milestones_to_project(p)
     p.milestones.each { |m|
-      m.destroy if m.status == -1
+      m.destroy if m.status == -1 and m.checklist_items.size == 0
       }
     self.milestones.each { |m|
       m.project_id = p.id
@@ -272,7 +273,7 @@ class Project < ActiveRecord::Base
 
   def move_all(p)
     move_actions_to_project(p)
-    move_milestones_to_project(p)
+    move_milestones_to_project(p) # checklist_items will follow
     move_amendments_to_project(p)
     move_notes_to_project(p)
     move_statuses_to_project(p)
