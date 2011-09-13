@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Getting Started with the Bundle Activity Manager</title>
+
+	<meta name="description" content="A jQuery library for modern HTML presentations">
+	<meta name="author" content="Caleb Troughton">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+
+	<!-- Core and extension CSS files -->
+	<link rel="stylesheet" href="../core/deck.core.css">
+	<link rel="stylesheet" href="../extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="../extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="../extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="../extensions/status/deck.status.css">
+	<link rel="stylesheet" href="../extensions/hash/deck.hash.css">
+
+	<!-- Theme CSS files (menu swaps these out) -->
+	<link rel="stylesheet" id="style-theme-link" href="../themes/style/web-2.0.css">
+	<link rel="stylesheet" id="transition-theme-link" href="../themes/transition/horizontal-slide.css">
+
+	<!-- Custom CSS just for this page -->
+	<link rel="stylesheet" href="introduction.css">
+
+	<script src="../modernizr.custom.js"></script>
+</head>
+
+<body class="deck-container">
+
+<div class="theme-menu">
+	<h2>Themes</h2>
+
+	<label for="style-themes">Style:</label>
+	<select id="style-themes">
+		<option selected value="../themes/style/web-2.0.css">Web 2.0</option>
+		<option value="../themes/style/swiss.css">Swiss</option>
+		<option value="../themes/style/neon.css">Neon</option>
+		<option value="">None</option>
+	</select>
+
+	<label for="transition-themes">Transition:</label>
+	<select id="transition-themes">
+		<option selected value="../themes/transition/horizontal-slide.css">Horizontal Slide</option>
+		<option value="../themes/transition/vertical-slide.css">Vertical Slide</option>
+		<option value="../themes/transition/fade.css">Fade</option>
+		<option value="">None</option>
+	</select>
+</div>
+
+<div class="slide" id="title-slide">
+	<h1>BAM Help</h1>
+</div>
+
+<div class="slide" id="how-to-overview">
+	<h2>Getting started</h2>
+	<ul>
+	  <h3>A little bit of navigation help first</h3>
+		<li>Press arrow keys to navigate between slides</li>
+		<li>Press g to go to jump to any slide number</li>
+		<li>Press m to open the menu</li>
+	</ul>
+
+  <div class="slide" id="confucius-quote">
+    <blockquote cite="http://example.org">
+      <p>It does not matter how slowly you go so long as you do not stop.</p>
+      <p><cite>Confucius</cite></p>
+    </blockquote>
+  </div>
+</div>
+
+<div class="slide" id="this-is-not">
+  <h2>This help is not...</h2>
+	<ul>
+		<li class="slide">a project description: refer to your project Quality Plan</li>
+		<li class="slide">a best practices repository: refer to your Workpackage Guides</li>
+		<li class="slide">a admin guide: refer to the BAM technical guide</li>
+	</ul>
+  <h2 class="slide">This help is...</h2>
+	<ul>
+		<li class="slide">for the project operational team</li>
+		<li class="slide">for the operational project leader</li>
+	</ul>
+</div>
+
+<div class="slide" id="menu-slide">
+	<h2>Sections</h2>
+  <h3>Reporting</h3>
+	<ol>
+		<li>Project status</li>
+		<li>Fields</li>
+	</ol>
+
+  <h3>Workloads</h3>
+	<ol>
+		<li>Requests</li>
+	</ol>
+</div>
+
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<p class="deck-status">
+	<span class="deck-status-current"></span>	/	<span class="deck-status-total"></span>
+</p>
+
+<form action="." method="get" class="goto-form">
+	<label for="goto-slide">Go to slide:</label>
+	<input type="number" name="slidenum" id="goto-slide">
+	<input type="submit" value="Go">
+</form>
+
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+<script>window.jQuery || document.write('<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js">\x3C/script>')</script>
+
+<!-- Deck Core and extensions -->
+<script src="../core/deck.core.js"></script>
+<script src="../extensions/menu/deck.menu.js"></script>
+<script src="../extensions/goto/deck.goto.js"></script>
+<script src="../extensions/status/deck.status.js"></script>
+<script src="../extensions/navigation/deck.navigation.js"></script>
+<script src="../extensions/hash/deck.hash.js"></script>
+
+<!-- Specific to this page -->
+<script src="introduction.js"></script>
+
+</body>
+</html>
