@@ -4,6 +4,7 @@ class ChecklistTemplatesController < ApplicationController
 
   def index
     @templates = ChecklistItemTemplate.find(:all, :conditions=>"parent_id=0 or parent_id is null")
+    @checklist_item_count = ChecklistItem.count
   end
 
   def new

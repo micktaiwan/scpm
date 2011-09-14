@@ -1,7 +1,10 @@
 <h2>Checklist Items & Templates</h2>
 <%= render(:file=>"checklist_templates/menu")%>
+
+<%= @checklist_item_count %> items<br/>
+<br/>
+
 <div id="error"></div>
 <ul>
 <%= render(:partial=>"ctemplate", :collection=>@templates) %>
 </ul>
-
