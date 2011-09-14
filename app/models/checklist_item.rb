@@ -24,5 +24,12 @@ class ChecklistItem < ActiveRecord::Base
     self.ctemplate.values.alt(self.status)
   end
 
+  def good?
+    return false if !self.milestone
+    return false if !self.ctemplate
+    return false if !self.ctemplate.milestone_names.map{|m| m.title}.include?(self.milestone.name)
+    return true
+  end
+
 end
 

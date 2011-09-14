@@ -152,16 +152,17 @@ class Request < ActiveRecord::Base
     'M3-M5'=>   ['QG BRD', 'QG ARD', 'M5', 'M5/M7','G3','pg3','g3','G4','pg4','g4','G5','pg5','g5','sM5'],
     'M5-M10'=>  ['M7', 'M9', 'M9/M10', 'M10','G6','pg6','g6'],
     'Post-M10'=>['QG TD', 'M10a', 'M11', 'QG MIP', 'M12', 'M12/M13', 'M13', 'M14','sM13','sM14','G7','pg7','g7','G8','pg8','g8','G9','pg9','g9'],
+    'WP2 - Quality for Maintenance' 	=> ['CCB', 'QG TD M', 'MIPM'],
     'WP6.1 - Coaching PP' =>    ['M3'],
-    'WP6.2 - Coaching BRD' =>   ['M5'],
-    'WP6.3 - Coaching V&V' =>   ['M11'],
-    'WP6.4 - Coaching ConfMgt' =>     ['M3'],
+    'WP6.2 - Coaching BRD' =>   ['M5', 'M5/M7', 'G5'],
+    'WP6.3 - Coaching V&V' =>   ['M11', 'G7'],
+    'WP6.4 - Coaching ConfMgt' =>     ['M3', 'G2'],
     'WP6.5 - Coaching Maintenance' => ['M13','CCB','MIPM'],
-    'WP3.0 - Old Modeling' =>         ['M5'],
-    'WP3.1 - Modeling Support' =>     ['M5'],
-    'WP3.2 - Modeling Conception and Production' => ['M5'],
-    'WP3.3 - Modeling BAT specific Control' =>      ['M5'],
-    'WP3.4 - Modeling BAT specific Production' =>   ['M5']
+    'WP3.0 - Old Modeling' =>         ['M5', 'M5/M7', 'G5'],
+    'WP3.1 - Modeling Support' =>     ['M5', 'M5/M7', 'G5'],
+    'WP3.2 - Modeling Conception and Production' => ['M5', 'M5/M7', 'G5'],
+    'WP3.3 - Modeling BAT specific Control' =>      ['M5', 'M5/M7', 'G5'],
+    'WP3.4 - Modeling BAT specific Production' =>   ['M5', 'M5/M7', 'G5']
     }
 
   def wp_index(wp, cv)

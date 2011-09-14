@@ -24,8 +24,9 @@ class ChecklistsController < ApplicationController
         i.ctemplate.ctype!='folder' and i.status==0
         }.size > 0
      }.sort_by { |m| [m.project.full_name, m.name] }
-    # check checklist item with no template (should not append)
-    @no_template_items = ChecklistItem.all.select{|i| !i.ctemplate}
+
+    # clean up
+    ChecklistItem.all.select{|i| !i.good?}.each(&:destroy)
   end
 
   def destroy
