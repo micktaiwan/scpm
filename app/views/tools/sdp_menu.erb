@@ -1,3 +1,4 @@
+<% if current_user.has_role?('Admin') %>
 <%= link_to('SDP index',        {:controller=>'tools', :action=>'sdp_index'}, {:class=>'btnlnk'}) %>
 <%= link_to('SDP import',       {:controller=>'tools', :action=>'sdp_import'}, {:class=>'btnlnk'}) %>
 <%= link_to('RMT to SDP task import',          {:controller=>'tools', :action=>'sdp_add'}, {:class=>'btnlnk'}) %>
@@ -9,4 +10,5 @@
 <%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}, {:class=>'btnlnk special'}) %>
 <br/>
 <br/>
+<% end %>
 
