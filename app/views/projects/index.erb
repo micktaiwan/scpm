@@ -59,11 +59,12 @@ Searches project title and description, statuses, request summary and PM names
 
 <div id="tabs">
   <ol>
-    <li style="margin-left: 1px" id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,5)"><span>Projects <strong><%= @wps.size %></strong></span></a></li>
-    <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,5)" ><span>Actions <strong><%= @actions.size %></strong></span></a></li>
-    <li id="tabHeader3"><a href="javascript:void(0)" onClick="toggleTab(3,5)" ><span>Amendments <strong><%= @amendments.size %></strong></span></a></li>
-    <li id="tabHeader4"><a href="javascript:void(0)" onClick="toggleTab(4,5)" ><span>Risks <strong><%= @risks.size %></strong></span></a></li>
-    <li id="tabHeader5"><a href="javascript:void(0)" onClick="toggleTab(5,5)" ><span>Inconsistencies <strong><%= @inconsistencies.size %></strong></span></a></li>
+    <li style="margin-left: 1px" id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,6)"><span>Projects <strong><%= @wps.size %></strong></span></a></li>
+    <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,6)" ><span>Actions <strong><%= @actions.size %></strong></span></a></li>
+    <li id="tabHeader3"><a href="javascript:void(0)" onClick="toggleTab(3,6)" ><span>Amendments <strong><%= @amendments.size %></strong></span></a></li>
+    <li id="tabHeader4"><a href="javascript:void(0)" onClick="toggleTab(4,6)" ><span>Risks <strong><%= @risks.size %></strong></span></a></li>
+    <li id="tabHeader5"><a href="javascript:void(0)" onClick="toggleTab(5,6)" ><span>Inconsistencies <strong><%= @inconsistencies.size %></strong></span></a></li>
+    <li id="tabHeader6"><a href="javascript:void(0)" onClick="toggleTab(6,6)" ><span>Checklists <strong><%= @checklist_milestones.size %></strong></span></a></li>
   </ol>
 
   <div id="tabscontent">
@@ -111,6 +112,18 @@ Searches project title and description, statuses, request summary and PM names
         </table>
     </div>
 
+    <div id="tabContent6" class="tabContent" style="display:none;">
+        <br />
+        <div>
+          <table>
+          <tr style="font-weight:bold;"><td>Suggested</td><td>Current</td><td>Project</td></tr>
+          <%= render(:partial=>'risks/inconsistency', :collection=>@inconsistencies, :as=>:p) %>
+          </ul>
+        </table>
+    </div>
+    
+    
+    
   </div><!--End of tabscontent-->
 </div><!--End of tabs-->
 
