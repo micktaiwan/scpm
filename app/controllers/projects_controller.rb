@@ -22,9 +22,11 @@ class ProjectsController < ApplicationController
     if @wps.size > 0
       @amendments   = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
       @risks        = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
+      @inconsistencies = @wps.select{|wp| !wp.is_consistent_with_risks}
     else
       @amendments   = []
       @risks        = []
+      @inconsistencies = []
     end
   end
 

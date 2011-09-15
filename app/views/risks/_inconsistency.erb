@@ -1,0 +1,5 @@
+<tr>
+<td><%= html_status(p.suggested_status) %></td>
+<td><%= html_status(p.get_status.status) %> </td>
+<td><%= link_to(p.full_name,:action=>'show',:id=>p.id) %></td>
+</tr>

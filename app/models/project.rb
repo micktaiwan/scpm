@@ -617,6 +617,11 @@ class Project < ActiveRecord::Base
     rv
   end
   
+  def is_consistent_with_risks  
+    return false if self.get_status.status != self.suggested_status
+    true
+  end
+  
 private
 
   def excel(a,b)
