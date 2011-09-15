@@ -69,34 +69,7 @@
 
 <%= link_to_function('Toggle Frieze', "Effect.toggle('frieze','blind')",{:class=>"btnlnk"}) %>
 <div id="frieze">
-<% for project in @wps %>
-<h3>
-  <%= link_to('Open', {:action=>'show', :id=>project.id}, {:class=>'menu grey'}) %>
-  <% next_m_date = project.next_milestone_date;  bool = (next_m_date and next_m_date-Date.today() <= 5); if bool %>
-  <font color="red">
-  <% end %>
-  <%= next_m_date %>
-  <%= project.full_name %>
-  <% if bool %>  </font>  <% end %>
-  <%= html_status(project.last_status) %>
-  <% date = project.last_status_date
-  if date
-    days = time_ago_in_words(date) %>
-    (<%= days %> - w<%= date.to_date.cweek %>)
-  <% end %>
-
-  <% if project.read_date and current_user.has_role?('Admin')%>
-  <font color="#777777">
-  Last read: <%= time_ago_in_words(project.read_date) %>
-  </font>
-  <% end %>
-
-</h3>
-
-<div class="milestone_bar">
-<%= render(:partial=>'milestones/milestone', :collection=>project.sorted_milestones) %>
-</div>
-<% end %>
+  <%= render(:partial=>'home_project', :collection=>@wps, :as=>:project) %>
 </div>
 <br/>
 <br/>
@@ -104,7 +77,7 @@
 <%= link_to_function('Toggle projects', "Effect.toggle('projects','blind')",{:class=>"btnlnk"}) %>
 <div id="projects" style="display:none;">
 <ul>
-<%= render(:partial=>'project', :collection=>@projects) %>
+  <%= render(:partial=>'project', :collection=>@projects) %>
 </ul>
 </div>
 

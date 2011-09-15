@@ -26,7 +26,7 @@ class Project < ActiveRecord::Base
   has_many    :risks,       :order=>'id', :dependent=>:destroy
   has_many    :quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1"
   has_many    :checklist_items, :through=>:milestones
-  
+
   def visible_actions(user_id)
     if Person.find(user_id).is_supervisor == 0
       Action.find(:all, :conditions=>["project_id=?", self.id], :order=>"progress, project_id, id")
@@ -66,7 +66,7 @@ class Project < ActiveRecord::Base
 
   def get_status(before_date=Date.today+1.day)
     s = Status.find(:first, :conditions=>["project_id=? and updated_at <= ?", self.id, before_date], :order=>"updated_at desc")
-    s = Status.new({:status=>0, :explanation=>"unknown"}) if s == [] or s == nil
+    s = Status.new({:status=>0}) if s == [] or s == nil
     s
   end
 
@@ -616,14 +616,14 @@ class Project < ActiveRecord::Base
       }
     rv
   end
-  
-  def is_consistent_with_risks  
+
+  def is_consistent_with_risks
     s = self.get_status.status
     return true if s == 0
     return false if s != self.suggested_status
     true
   end
-  
+
 private
 
   def excel(a,b)

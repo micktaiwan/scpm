@@ -119,7 +119,7 @@ Searches project title and description, statuses, request summary and PM names
           <% if @checklist_milestones.size == 0 %>
             All is OK !
           <% else %>
-            These milestone are done, but the checklist is not filled:<br/><br/>
+            These milestones are done, but the checklist is not filled:<br/><br/>
           <% end %>
           <ul>
             <%= render(:partial=>"checklists/milestone", :collection=>@checklist_milestones, :as=> :m) %>
