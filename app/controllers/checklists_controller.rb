@@ -18,15 +18,15 @@ class ChecklistsController < ApplicationController
   end
 
   def check
+    # clean up
+    ChecklistItem.all.select{|i| !i.good?}.each(&:destroy)
+
     # check closed milestones with open checklist items
     @milestones = Milestone.find(:all, :conditions=>"done=1").select{ |m|
       m.checklist_items.select{ |i|
         i.ctemplate.ctype!='folder' and i.status==0
         }.size > 0
      }.sort_by { |m| [m.project.full_name, m.name] }
-
-    # clean up
-    ChecklistItem.all.select{|i| !i.good?}.each(&:destroy)
   end
 
   def destroy

@@ -1,9 +1,8 @@
 <li>
 <%= link_to(m.project.full_name, :controller=>'projects',:action=>'show',:id=>m.project.id) %>
 <b><%= m.name %></b>
-<%=m.project.assignees.join(', ')%><br>
 <ul>
-  <%= render(:partial=>'checklist_item', :collection=>m.checklist_items.select{|i| !i.parent}, :as=>:i) %>
+  <%= render(:partial=>'checklists/checklist_item', :collection=>m.checklist_items.select{|i| !i.parent}, :as=>:i) %>
 </ul>
 </li>
 

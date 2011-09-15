@@ -109,21 +109,26 @@ Searches project title and description, statuses, request summary and PM names
           <tr style="font-weight:bold;"><td>Suggested</td><td>Current</td><td>Project</td></tr>
           <%= render(:partial=>'risks/inconsistency', :collection=>@inconsistencies, :as=>:p) %>
           </ul>
-        </table>
+          </table>
+        </div>
     </div>
 
     <div id="tabContent6" class="tabContent" style="display:none;">
         <br />
         <div>
-          <table>
-          <tr style="font-weight:bold;"><td>Suggested</td><td>Current</td><td>Project</td></tr>
-          <%= render(:partial=>'risks/inconsistency', :collection=>@inconsistencies, :as=>:p) %>
+          <% if @checklist_milestones.size == 0 %>
+            All is OK !
+          <% else %>
+            These milestone are done, but the checklist is not filled:<br/><br/>
+          <% end %>
+          <ul>
+            <%= render(:partial=>"checklists/milestone", :collection=>@checklist_milestones, :as=> :m) %>
           </ul>
-        </table>
+        </div>
     </div>
-    
-    
-    
+
+
+
   </div><!--End of tabscontent-->
 </div><!--End of tabs-->
 
