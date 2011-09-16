@@ -62,10 +62,10 @@ class WorkloadsController < ApplicationController
 
   def refresh_conso
     # find "to be validated" requests not in the workload
-    already_in_the_workload = WlLine.all.select{|l| l.request and l.request.status=='to be validated'}.map{|l| l.request}
-    @to_be_validated = (Request.find(:all,:conditions=>"status='to be validated'") - already_in_the_workload).sort_by{|r| r.project.full_name}
+    already_in_the_workload = WlLine.all.select{|l| l.request and (l.request.status=='to be validated' or (l.request.status=='assigned' and l.request.resolution!='ended' and l.request.resolution!='aborted'))}.map{|l| l.request}
+    @not_in_workload = (Request.find(:all,:conditions=>"status='to be validated' or (status='assigned' and resolution!='ended' and resolution!='aborted')") - already_in_the_workload).sort_by{|r| r.project.full_name}
     # find the corresponding production days (minus 15% of gain)
-    @to_be_validated_days = @to_be_validated.inject(0) { |sum, r| sum += r.workload2} * 0.85
+    @not_in_workload_days = @not_in_workload.inject(0) { |sum, r| sum += r.workload2} * 0.85
 
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []

@@ -1,8 +1,8 @@
-<%= @to_be_validated.size %> <%= link_to_function('to be validated requests', "$('tbv_requests').toggle();")%> not in workloads<br/>
+<%= @not_in_workload.size %> <%= link_to_function('not in workload requests', "$('tbv_requests').toggle();")%><br/>
 <div id="tbv_requests" style="display:none;">
-<%= render(:partial=>'workloads/request', :collection=>@to_be_validated) %>
+<%= render(:partial=>'workloads/request', :collection=>@not_in_workload) %>
 </div>
-<%= @to_be_validated_days %> days not in the workload (including 15% gain)<br/>
+<%= @not_in_workload_days %> days not in the workload (including 15% gain)<br/>
 <%= @workloads.size %> workloads<br/>
 <%= @total_days %> total days planned.<br/>
 <br/>
