@@ -78,9 +78,10 @@ class ProjectsController < ApplicationController
   def show
     id = params['id']
     @project = Project.find(id)
-    @project.check_milestones
+    @project.check
     @status = @project.get_status
     @old_statuses = @project.statuses - [@status]
+    #@checklist_items = TransverseItems.find()
   end
 
   def check_all_milestones

@@ -12,10 +12,6 @@ class CreateChecklistItems < ActiveRecord::Migration
     end
   end
 
-# status depends on template ctype
-# folder=>{}
-# checkbox=>{Todo, Done, Will not be done}
-
   def self.down
     drop_table :checklist_items
   end

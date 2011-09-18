@@ -57,7 +57,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
 
   # return all Requests fitting the template conditions
   def requests
-    Request.find(:all, :conditions=>"resolution!='ended' and status='assigned'").select { |r|
+    Request.find(:all, :conditions=>"resolution!='aborted' and resolution!='ended' and status='assigned'").select { |r|
       self.workpackages.map{|w| w.title}.include?(r.work_package)
       }
   end
@@ -70,6 +70,15 @@ class ChecklistItemTemplate < ActiveRecord::Base
     return ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.parent_id, r.id, m.id])
   end
 
+  def find_or_deploy_transverse_parent(project_id)
+    return nil if self.parent_id == 0 or !self.parent_id
+    p = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=?", self.parent_id, project_id])
+    return p if p
+    self.parent.deploy(false)
+    return ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=?", self.parent_id, project_id])
+  end
+
+
   def check_parent
     return if !self.parent
     diff = (self.milestone_names - self.parent.milestone_names) + (self.workpackages - self.parent.workpackages)
@@ -77,10 +86,28 @@ class ChecklistItemTemplate < ActiveRecord::Base
   end
 
   def deploy(deploy_children=true)
-    check_parent
-    self.requests.each { |r|
-      r.deploy_checklist(self)
-      }
+    if self.is_transverse == 0
+      check_parent
+      self.requests.each { |r|
+        r.deploy_checklist(self)
+        }
+    else
+      for project in Project.all.select { |p| !p.is_ended}
+        parent = self.find_or_deploy_transverse_parent(project.id)
+        parent_id = parent ? parent.id : 0
+        i = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=?", self.id, project.id])
+        if not i
+          ChecklistItem.create(:project_id=>project.id, :parent_id=>parent_id, :template_id=>self.id)
+        else
+          # parent change handling
+          i.parent_id = parent_id
+          i.save
+          # TODO is_transverse:
+          # if changed from yes to no, a lot of cleanup must be done
+          # for no to yes, cleanup the ChecklistItems, the ProjectCheckItem will be created
+        end
+      end
+    end
     self.update_attributes(:deployed=>1)
     if deploy_children
       self.children.select{|c| c.deployed==0}.each(&:deploy)

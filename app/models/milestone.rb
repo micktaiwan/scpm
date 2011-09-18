@@ -44,7 +44,7 @@ class Milestone < ActiveRecord::Base
 
     self.project.requests.each { |r|
       next if r.milestone_names and !r.milestone_names.include?(self.name)
-      for t in ChecklistItemTemplate.all.select{ |t|
+      for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0").select{ |t|
           t.milestone_names.map{|n| n.title}.include?(self.name) and
           t.workpackages.map{|w| w.title}.include?(r.work_package)
           }
@@ -64,9 +64,10 @@ class Milestone < ActiveRecord::Base
       i.parent_id = parent_id
       i.save
       # if some milestone_names or workpackages have been added, the new ChecklistItem will be created
-      # TODO: detect removal of milestones or workpackages and delete not already answered ChecklistItem
-      # for is_transverse: TODO: if changed from no to yes, a lot of cleanup must be done
-      # for yes to no, the ChecklistItems will be created
+      # The detection of removal of milestones or workpackages must be done elsewhere
+      # TODO is_transverse:
+      # if changed from no to yes, a lot of cleanup must be done
+      # for yes to no, the ChecklistItems will be created, cleanup the ProjectCheckItems
     end
   end
 

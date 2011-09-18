@@ -3,7 +3,7 @@ class ChecklistTemplatesController < ApplicationController
   layout 'tools'
 
   def index
-    @templates = ChecklistItemTemplate.find(:all, :conditions=>"parent_id=0 or parent_id is null")
+    @templates = ChecklistItemTemplate.find(:all, :conditions=>"parent_id=0 or parent_id is null", :order=>"is_transverse")
     @checklist_item_count = ChecklistItem.count
   end
 

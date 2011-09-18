@@ -59,8 +59,15 @@ function add(id, same_week, has_requests) {
   <h3>Timeline</h3>
 
   <div class="milestone_bar">
-  <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
+    <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
   </div>
+
+  <h3>Checks</h3>
+
+  <ul>
+    <%= render(:partial=>'checklists/checklist_item', :collection=>@project.project_check_root_items, :as=>:i) %>
+  </ul>
+
 
   <h3>Risks</h3>
   <a href="#" onclick="return false;" title="Probability:

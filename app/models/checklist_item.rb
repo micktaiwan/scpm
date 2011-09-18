@@ -3,6 +3,7 @@ class ChecklistItem < ActiveRecord::Base
   has_many :children, :class_name=>"ChecklistItem", :foreign_key=>"parent_id"
   belongs_to :ctemplate, :class_name=>"ChecklistItemTemplate", :foreign_key=>"template_id"
   belongs_to :milestone
+  belongs_to :project
   belongs_to :parent, :class_name=>"ChecklistItem"
 
   def late?
@@ -32,10 +33,14 @@ class ChecklistItem < ActiveRecord::Base
   end
 
   def good?
-    return false if !self.milestone
-    return false if self.milestone.checklist_not_allowed?
     return false if !self.ctemplate
-    return false if !self.ctemplate.milestone_names.map{|m| m.title}.include?(self.milestone.name)
+    if self.ctemplate.is_transverse == 0
+      return false if !self.milestone
+      return false if self.milestone.checklist_not_allowed?
+      return false if !self.ctemplate.milestone_names.map{|m| m.title}.include?(self.milestone.name)
+    else
+      return false if !self.project
+    end
     return true
   end
 

@@ -363,14 +363,14 @@ class Request < ActiveRecord::Base
   end
 
   def deploy_checklists
-    for t in ChecklistItemTemplate.all
+    for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0")
       deploy_checklist(t)
     end
   end
 
-  def deploy_checklist(template)
-    self.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and template.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
-      m.deploy_checklist(template, self)
+  def deploy_checklist(ctemplate)
+    self.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and ctemplate.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
+      m.deploy_checklist(ctemplate, self)
       }
   end
 
