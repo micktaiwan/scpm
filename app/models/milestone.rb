@@ -43,7 +43,7 @@ class Milestone < ActiveRecord::Base
     return if checklist_not_allowed?
 
     self.project.requests.each { |r|
-      next if !r.milestone_names.include?(self.name)
+      next if r.milestone_names and !r.milestone_names.include?(self.name)
       for t in ChecklistItemTemplate.all.select{ |t|
           t.milestone_names.map{|n| n.title}.include?(self.name) and
           t.workpackages.map{|w| w.title}.include?(r.work_package)
@@ -52,7 +52,6 @@ class Milestone < ActiveRecord::Base
       end
       }
   end
-
 
   def deploy_checklist(template, request)
     p = template.find_or_deploy_parent(self,request)
@@ -73,6 +72,35 @@ class Milestone < ActiveRecord::Base
 
   def destroy_checklist
     ChecklistItem.destroy_all(["milestone_id=?", self.id])
+  end
+
+  def check
+    # check status
+    if self.status == -1
+      self.project.requests.each { |r|
+        if r.milestone_names and r.milestone_names.include?(self.name)
+          self.status = 0
+          self.comments.gsub!("No request","")
+          self.save
+          break
+        end
+        }
+    elsif self.status == 0
+      found = false
+      self.project.requests.each { |r|
+        if r.milestone_names and r.milestone_names.include?(self.name)
+          found = true
+          break
+        end
+        }
+      self.update_attribute('status',-1) if not found
+    end
+
+    # check done
+    self.update_attribute('done',1) if self.status > 0
+
+    # deploy checklists
+    self.deploy_checklists
   end
 
   #def rmt_alerts

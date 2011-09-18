@@ -1,0 +1,4 @@
+page <<  "$('cl_image_#{@item.id}').src = '/images/#{@item.image_name}';"
+page <<  "$('cl_image_#{@item.id}').title = '#{@item.alt}';"
+page <<  "$('checklist_item_msg_#{@item.id}').innerHTML = '#{@item.alt}';"
+

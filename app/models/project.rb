@@ -325,6 +325,12 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def check_milestones
+    self.create_milestones
+    self.milestones.each(&:check)
+  end
+
+
   def can_create(m)
     rv = case m
       when 'M5/M7'

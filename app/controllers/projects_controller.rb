@@ -78,9 +78,14 @@ class ProjectsController < ApplicationController
   def show
     id = params['id']
     @project = Project.find(id)
-    @project.create_milestones
+    @project.check_milestones
     @status = @project.get_status
     @old_statuses = @project.statuses - [@status]
+  end
+
+  def check_all_milestones
+    Project.all.each(&:check_milestones)
+    render(:nothing=>true)
   end
 
   def edit

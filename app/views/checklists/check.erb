@@ -1,6 +1,9 @@
 <h2>Checklists</h2>
 <%= render(:file=>"checklist_templates/menu")%>
 
+<%= @checklist_item_count %> items<br/>
+<br/>
+
 Closed milestones with open items:
 <ul>
   <%= render(:partial=>"milestone", :collection=>@milestones, :as=> :m) %>

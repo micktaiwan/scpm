@@ -23,13 +23,13 @@
   <% end %>
   <br/>
 
-  <% if @milestone.checklist_not_allowed? %>
+  <% if @milestone.checklist_not_allowed? and @items.size==0%>
     <strong>This milestone can not have a checklist in this state</strong><br/>
   <% end %>
 <% end %>
 
 <% for r in @requests %>
-  <% items = @checklists.select{|i| i.request_id==r.id} %>
+  <% items = @items.select{|i| i.request_id==r.id} %>
   <% if items.size > 0 %>
     <b><%= r.work_package%> <%= r.milestone if r.milestone!='N/A'%> <%= r.resolution%> <%= r.contre_visite=='Yes' ? '<strong>Contre-Visite</strong>' : ''%></b><br/>
     <ul>
