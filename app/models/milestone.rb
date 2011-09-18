@@ -51,7 +51,7 @@ class Milestone < ActiveRecord::Base
     return if checklist_not_allowed?
 
     self.project.requests.each { |r|
-      next if r.milestone_names and !r.milestone_names.include?(self.name)
+      next if !r.milestone_names or !r.milestone_names.include?(self.name)
       for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0").select{ |t|
           t.milestone_names.map{|n| n.title}.include?(self.name) and
           t.workpackages.map{|w| w.title}.include?(r.work_package)
