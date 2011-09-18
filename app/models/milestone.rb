@@ -88,7 +88,7 @@ class Milestone < ActiveRecord::Base
   end
 
   def check
-    rs = self.requests
+    rs = self.requests.select{|r| r.status=="assigned"}
     # check status
     if self.status == -1
       self.update_attribute('status',0) if rs.size > 0

@@ -29,6 +29,12 @@ class Project < ActiveRecord::Base
   has_many    :project_check_items, :class_name=>"ChecklistItem"
   has_many    :project_check_root_items, :conditions=>"parent_id=0", :class_name=>"ChecklistItem"
 
+  def project_check_items_numbers
+    cs = self.project_check_items.select{|c| c.ctemplate.ctype!="folder"}
+    ns = cs.select{|c| c.status > 0}
+    [ns.size, cs.size]
+  end
+
   def visible_actions(user_id)
     if Person.find(user_id).is_supervisor == 0
       Action.find(:all, :conditions=>["project_id=?", self.id], :order=>"progress, project_id, id")

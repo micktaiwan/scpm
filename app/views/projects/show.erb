@@ -63,8 +63,15 @@ function add(id, same_week, has_requests) {
   </div>
 
   <h3>Checks</h3>
+  <%
+    n,c = @project.project_check_items_numbers
+    check_all_done = (n==c)
+    s = "btnlnk"
+    s += " special" if !check_all_done
+  %>
 
-  <ul>
+  <%= link_to_function("#{n}/#{c} checks", "$('checks').toggle()", :class=>s) %>
+  <ul id="checks"<% if check_all_done%> style="display:none"<%end%>>
     <%= render(:partial=>'checklists/checklist_item', :collection=>@project.project_check_root_items, :as=>:i) %>
   </ul>
 
