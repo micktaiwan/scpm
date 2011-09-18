@@ -31,6 +31,14 @@ class Milestone < ActiveRecord::Base
     return "normal"
   end
 
+  def requests
+    rv = []
+    self.project.requests.each { |r|
+      rv << r if r.milestone_names and r.milestone_names.include?(self.name)
+      }
+    rv
+  end
+
   def amendments
     self.project.amendments.select{|a| a.milestone == self.name}
   end
@@ -75,27 +83,19 @@ class Milestone < ActiveRecord::Base
     ChecklistItem.destroy_all(["milestone_id=?", self.id])
   end
 
+  def shortnames(rs)
+    rs.map{|r| r.shortname}.join("\n")
+  end
+
   def check
+    rs = self.requests
     # check status
     if self.status == -1
-      self.project.requests.each { |r|
-        if r.milestone_names and r.milestone_names.include?(self.name)
-          self.status = 0
-          self.comments.gsub!("No request","")
-          self.save
-          break
-        end
-        }
+      self.update_attribute('status',0) if rs.size > 0
     elsif self.status == 0
-      found = false
-      self.project.requests.each { |r|
-        if r.milestone_names and r.milestone_names.include?(self.name)
-          found = true
-          break
-        end
-        }
-      self.update_attribute('status',-1) if not found
+      self.update_attribute('status',-1) if rs.size == 0
     end
+    self.update_attribute('comments', self.comments.gsub("No request",shortnames(rs))) if rs.size > 0 and self.comments
 
     # check done
     self.update_attribute('done',1) if self.status > 0
@@ -103,12 +103,6 @@ class Milestone < ActiveRecord::Base
     # deploy checklists
     self.deploy_checklists
   end
-
-  #def rmt_alerts
-  #  alerts = []
-  #  alerts << "RMT milestone date is not the same" if self.name == 'm3' and project.requests.select{|r| r.milestone=="M1-M3"}.size > 0
-  #  alerts
-  #end
 
 end
 

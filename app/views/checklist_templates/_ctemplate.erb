@@ -1,7 +1,11 @@
 <li id="template_<%=ctemplate.id%>">
   - <b><%= link_to(ctemplate.title, :action=>'edit', :id=>ctemplate.id) %></b>
-  <a href="#" title="<%= ctemplate.milestone_names.map {|m| m.title}.join(', ') %>">M</a>
-  <a href="#" title="<%= ctemplate.workpackages.map {|m| m.shortname}.join(', ') %>">WP</a>
+  <% if ctemplate.is_transverse==1 %>
+    Transverse
+  <% else %>
+    <a href="#" title="<%= ctemplate.milestone_names.map {|m| m.title}.join(', ') %>">M</a>
+    <a href="#" title="<%= ctemplate.workpackages.map {|m| m.shortname}.join(', ') %>">WP</a>
+  <% end %>
   <%= ctemplate.deployed==1 ? '' : link_to_remote('deploy',
     :url=>{:action=>'deploy', :id=>ctemplate.id},
     :loading=>"$('deploy_#{ctemplate.id}').innerHTML='deploying...'",

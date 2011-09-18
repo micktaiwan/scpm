@@ -341,9 +341,13 @@ class Request < ActiveRecord::Base
     return p.sdp_id
   end
 
+  def shortname
+    WP_shortnames[self.work_package]
+  end
+
   def workload_name
     ##{appended_string(project.workstream, 6, "&nbsp;")}
-   "<b>#{project.full_name}</b> <u>#{WP_shortnames[self.work_package]}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
+   "<b>#{project.full_name}</b> <u>#{self.shortname}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
   end
 
   # return the corresponding milestone names for this request
