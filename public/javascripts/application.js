@@ -60,10 +60,7 @@ function open_checklist(milestone_id) {
 function checklist_item_set_next_status(id) {
   $('cl_image_'+id).src = '/images/loading2.gif';
   new Ajax.Request('/checklists/set_next_status', {
-    parameters: { id: id},
-    onComplete: function(r) {
-      $('cl_image_'+id).src = '/images/'+r.responseText;
-      }
+    parameters: { id: id}
     });
   }
 

@@ -11,10 +11,9 @@ class ChecklistsController < ApplicationController
 
   def set_next_status
     id = params[:id]
-    i = ChecklistItem.find(id)
-    i.status = i.ctemplate.values.next_value(i.status)
-    i.save
-    render(:text=>i.image_name, :layout=>false)
+    @item = ChecklistItem.find(id)
+    @item.status = @item.ctemplate.values.next_value(@item.status)
+    @item.save
   end
 
   def check

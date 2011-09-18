@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110915201717) do
+ActiveRecord::Schema.define(:version => 20110918131707) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -151,7 +151,8 @@ ActiveRecord::Schema.define(:version => 20110915201717) do
     t.text     "comments"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "done",                  :default => 0
+    t.integer  "done",                     :default => 0
+    t.integer  "checklist_not_applicable", :default => 0
   end
 
   create_table "notes", :force => true do |t|

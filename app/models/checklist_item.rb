@@ -5,10 +5,17 @@ class ChecklistItem < ActiveRecord::Base
   belongs_to :milestone
   belongs_to :parent, :class_name=>"ChecklistItem"
 
+  def late?
+    (self.status == 0 and self.ctemplate.deadline and self.milestone.date and
+    ((self.milestone.date-self.ctemplate.deadline.days) <= Date.today()))
+  end
+
   def css_class
     case
       when self.ctemplate.ctype=='folder'
         'checklist_item folder'
+      when self.late?
+        'checklist_item late'
       when self.status > 0
         'checklist_item done'
       else
@@ -26,6 +33,7 @@ class ChecklistItem < ActiveRecord::Base
 
   def good?
     return false if !self.milestone
+    return false if self.milestone.checklist_not_allowed?
     return false if !self.ctemplate
     return false if !self.ctemplate.milestone_names.map{|m| m.title}.include?(self.milestone.name)
     return true

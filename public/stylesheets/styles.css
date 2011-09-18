@@ -407,8 +407,16 @@ div#bandeau {
 .checklist_item.time{
   color: #555;
   }
+.checklist_item.msg{
+  display:inline;
+  font-weight: bold;
+  color: #0A0;
+  }
 .checklist_item.folder {
   font-weight: bold;
+  }
+.checklist_item.late {
+  color: #A33;
   }
 .checklist_item.done {
   font-style: italic;

@@ -25,6 +25,12 @@
 <%= Workpackage.all.map{|m| m.code}.join(', ') %>
 </p>
 
+<p><%= label_tag 'values' %>
+<%= text_area(:ctemplate, :values) %></p>
+
+<p><%= label_tag 'deadline' %>
+<%= text_field(:ctemplate, :deadline) %></p>
+
 <p><%= label_tag 'ctype' %>
-<%= select(:ctemplate, :ctype, ['folder', 'checkbox'].map{|o| [o,o]}) %></p>
+<%= select(:ctemplate, :ctype, ['checkbox', 'folder'].map{|o| [o,o]}) %></p>
 

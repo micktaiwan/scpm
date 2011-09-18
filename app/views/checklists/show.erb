@@ -1,5 +1,33 @@
 <h3><%= @milestone.name %> checklist</h3>
 
+<% if current_user.has_role?('Admin') %>
+  <% if @milestone.checklist_not_applicable == 0 %>
+    <li><%= link_to_remote('Make this checklist not applicable for this milestone',
+      :url=>{:controller=>'milestones', :action=>'set_checklist_not_applicable', :id=>@milestone.id},
+      :complete=>"open_checklist(#{@milestone.id});",
+      :confirm=>"delete this checklist ?",
+      :html=>{:id=>"not_applicable"})
+    %></li>
+    <li><%= link_to_remote('Refresh',
+      :url=>{:controller=>'milestones', :action=>'deploy_checklists', :id=>@milestone.id},
+      :complete=>"open_checklist(#{@milestone.id});",
+      :html=>{:id=>"deploy_checklists"})
+    %></li>
+  <% else %>
+    <li><%= link_to_remote('Currently not applicable',
+      :url=>{:controller=>'milestones', :action=>'set_checklist_applicable', :id=>@milestone.id},
+      :complete=>"open_checklist(#{@milestone.id});",
+      :confirm=>"Make this milestone checklist applicable ?",
+      :html=>{:id=>"not_applicable"})
+    %></li>
+  <% end %>
+  <br/>
+
+  <% if @milestone.checklist_not_allowed? %>
+    <strong>This milestone can not have a checklist in this state</strong><br/>
+  <% end %>
+<% end %>
+
 <% for r in @requests %>
   <% items = @checklists.select{|i| i.request_id==r.id} %>
   <% if items.size > 0 %>

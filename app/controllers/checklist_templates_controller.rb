@@ -10,6 +10,19 @@ class ChecklistTemplatesController < ApplicationController
   def new
     parent_id = params[:parent_id]
     @ctemplate = ChecklistItemTemplate.new
+    @ctemplate.values = "--- !ruby/object:ItemTemplateValue
+images:
+- cb0.gif
+- cb1.gif
+- cb2.gif
+- na.jpg
+- question.gif
+options:
+- Not done yet
+- Done
+- Not done
+- N/A
+- Don't know"
     if parent_id
       @ctemplate.parent_id = parent_id
       @milestones   = @ctemplate.parent.milestone_names.map{|m| m.title}.join(', ')

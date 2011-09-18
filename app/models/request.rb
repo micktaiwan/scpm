@@ -369,7 +369,7 @@ class Request < ActiveRecord::Base
   end
 
   def deploy_checklist(template)
-    self.milestones.select{ |m1| m1.done==0 and template.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
+    self.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and template.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
       m.deploy_checklist(template, self)
       }
   end

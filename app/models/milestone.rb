@@ -35,6 +35,25 @@ class Milestone < ActiveRecord::Base
     self.project.amendments.select{|a| a.milestone == self.name}
   end
 
+  def checklist_not_allowed?
+    self.checklist_not_applicable==1 or self.status!=0 or self.done!=0
+  end
+
+  def deploy_checklists
+    return if checklist_not_allowed?
+
+    self.project.requests.each { |r|
+      next if !r.milestone_names.include?(self.name)
+      for t in ChecklistItemTemplate.all.select{ |t|
+          t.milestone_names.map{|n| n.title}.include?(self.name) and
+          t.workpackages.map{|w| w.title}.include?(r.work_package)
+          }
+        deploy_checklist(t,r)
+      end
+      }
+  end
+
+
   def deploy_checklist(template, request)
     p = template.find_or_deploy_parent(self,request)
     parent_id = p ? p.id : 0
@@ -50,6 +69,10 @@ class Milestone < ActiveRecord::Base
       # for is_transverse: TODO: if changed from no to yes, a lot of cleanup must be done
       # for yes to no, the ChecklistItems will be created
     end
+  end
+
+  def destroy_checklist
+    ChecklistItem.destroy_all(["milestone_id=?", self.id])
   end
 
   #def rmt_alerts

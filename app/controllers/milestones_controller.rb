@@ -37,7 +37,29 @@ class MilestonesController < ApplicationController
     render(:nothing=>true)
   end
 
-  private
+  def set_checklist_not_applicable
+    id = params[:id]
+    m = Milestone.find(id)
+    m.update_attribute('checklist_not_applicable',1)
+    m.destroy_checklist
+    render(:nothing=>true)
+  end
+
+  def set_checklist_applicable
+    id = params[:id]
+    m = Milestone.find(id)
+    m.update_attribute('checklist_not_applicable',0)
+    m.deploy_checklists
+    render(:nothing=>true)
+  end
+
+  def deploy_checklists
+    id = params[:id]
+    Milestone.find(id).deploy_checklists
+    render(:nothing=>true)
+  end
+
+private
 
   def get_infos
     @projects = Project.find(:all)
