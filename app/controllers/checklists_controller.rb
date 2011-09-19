@@ -1,5 +1,7 @@
 class ChecklistsController < ApplicationController
 
+  layout 'tools'
+
   def show
     milestone_id = params[:id]
     @milestone = Milestone.find(milestone_id)
@@ -7,6 +9,11 @@ class ChecklistsController < ApplicationController
     @items = ChecklistItem.find(:all, :conditions=>["milestone_id=? and checklist_items.parent_id=0",milestone_id], :order=>"checklist_item_templates.order", :joins=>"LEFT OUTER JOIN checklist_item_templates ON checklist_item_templates.id=checklist_items.template_id")
     @items = @items.select{|i| i.ctemplate.ctype!='folder' or i.children.size > 0}
     render(:layout=>false)
+  end
+
+  def last
+    @items = ChecklistItem.find(:all, :conditions=>"status!=0", :order=>"updated_at desc", :limit=>20)
+    @projects = @items.map{|i| i.ctemplate.is_transverse==1? i.project : i.milestone.project }.uniq
   end
 
   def set_next_status

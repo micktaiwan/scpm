@@ -1,0 +1,10 @@
+<h2>Last</h2>
+<%= render(:file=>"checklist_templates/menu")%>
+
+<% for p in @projects %>
+<b><%= p.full_name %></b>
+<ul>
+  <%= render(:partial=>"last", :collection=>@items.select{|i| p.id == (i.ctemplate.is_transverse==1? i.project.id : i.milestone.project.id)}, :as=> :i) %>
+</ul>
+<% end %>
+

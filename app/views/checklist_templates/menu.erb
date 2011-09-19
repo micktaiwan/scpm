@@ -1,6 +1,7 @@
 <%= link_to('Templates', {:controller=>'checklist_templates', :action=>'index'}, {:class=>'btnlnk'}) %>
 <%= link_to('New template', {:controller=>'checklist_templates', :action=>'new'}, {:class=>'btnlnk'}) %>
 <%= link_to('Check items', {:controller=>'checklists', :action=>'check'}, {:class=>'btnlnk'}) %>
+<%= link_to('Last', {:controller=>'checklists', :action=>'last'}, {:class=>"btnlnk"}) %>
 <%= link_to_remote('Deploy all', {:url=>{:controller=>'checklist_templates', :action=>'deploy_all'}, :loading=>"$('deploy_all').innerHTML='Deploying...'", :complete=>"$('deploy_all').innerHTML='Deploy all';alert('Deployed all templates')"},{:class=>"btnlnk",:id=>"deploy_all"}) %>
 <%= link_to_remote('Clean up', {:url=>{:controller=>'checklists', :action=>'cleanup'}, :loading=>"$('cleanup').innerHTML='Cleaning up...'", :complete=>"$('cleanup').innerHTML='Clean up';alert('Cleaned up')"},{:class=>"btnlnk",:id=>"cleanup"}) %>
 <%= link_to_remote('Check all milestones', {:url=>{:controller=>'projects', :action=>'check_all_milestones'}, :loading=>"$('check_milestones').innerHTML='Checking up...'", :complete=>"$('check_milestones').innerHTML='Check all milestones';alert('Checked all milestones')"},{:class=>"btnlnk",:id=>"check_milestones"}) %>

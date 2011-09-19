@@ -98,7 +98,7 @@ class Milestone < ActiveRecord::Base
     self.update_attribute('comments', self.comments.gsub("No request",shortnames(rs))) if rs.size > 0 and self.comments
 
     # check done
-    self.update_attribute('done',1) if self.status > 0 and self.done == 0
+    self.update_attribute('done',1) if self.status == 1 and self.done == 0
 
     # deploy checklists
     self.deploy_checklists
