@@ -67,7 +67,12 @@
 </div>
 
 
-<%= link_to_function('Toggle Frieze', "Effect.toggle('frieze','blind')",{:class=>"btnlnk"}) %>
+<%= link_to_function('Toggle Frieze', "Effect.toggle('frieze','blind')",{:class=>"btnlnk"}) %><br/>
+<br/>
+<% if current_user.has_role?('Admin') %>
+  <%= select_tag('project_sort', options_for_select([['Alpha','alpha'], ['Update date','update']], session[:project_sort]), :onchange=>"refresh_projects(this.value)") %>
+<% end %>
+
 <div id="frieze">
   <%= render(:partial=>'home_project', :collection=>@wps, :as=>:project) %>
 </div>

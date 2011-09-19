@@ -334,7 +334,7 @@ class Project < ActiveRecord::Base
   end
 
   def check
-    check_milestones
+    self.check_milestones
   end
 
   def check_milestones

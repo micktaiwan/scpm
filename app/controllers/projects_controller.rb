@@ -6,15 +6,8 @@ class ProjectsController < ApplicationController
 
   def index
     get_projects
+    sort_projects
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
-    case session[:project_sort]
-      when nil
-        @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
-        @wps = @wps.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year}
-      when 'alpha'
-        @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
-        @wps = @wps.sort_by { |p| p.full_name }
-    end
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_transverse=0 and is_supervisor=0 and has_left=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
@@ -37,6 +30,25 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def sort_projects
+    case 
+      when session[:project_sort]==nil
+        @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
+        @wps = @wps.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year}
+      when session[:project_sort]=='alpha'
+        @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
+        @wps = @wps.sort_by { |p| p.full_name }
+    end
+  end
+  
+  def refresh_projects
+    s = params[:sort]
+    session[:project_sort] = s
+    get_projects
+    sort_projects
+    render(:partial=>'home_project', :collection=>@wps, :as=>:project, :layout=>false)    
+  end
+  
   def new
     @project = Project.new(:project_id=>nil, :name=>'')
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
