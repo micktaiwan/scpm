@@ -83,15 +83,10 @@ ActiveRecord::Schema.define(:version => 20110918194448) do
     t.integer "milestone_name_id"
   end
 
-  add_index "checklist_item_template_milestone_names", ["checklist_item_template_id"], :name => "index_cl_item_template_m_names_on_cl_item_template_id"
-  add_index "checklist_item_template_milestone_names", ["milestone_name_id"], :name => "index_cl_item_template_m_names_on_m_name_id"
-
   create_table "checklist_item_template_workpackages", :force => true do |t|
     t.integer "checklist_item_template_id"
     t.integer "workpackage_id"
   end
-
-  add_index "checklist_item_template_workpackages", ["checklist_item_template_id"], :name => "index_cl_item_template_wp_on_cl_item_template_id"
 
   create_table "checklist_item_templates", :force => true do |t|
     t.integer  "requirement_id"
