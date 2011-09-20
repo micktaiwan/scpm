@@ -1,11 +1,13 @@
-<%= @not_in_workload.size %> <%= link_to_function('not in workload requests', "$('tbv_requests').toggle();")%><br/>
+<b><%= @not_in_workload.size %></b> <%= link_to_function('requests are not in workloads', "$('tbv_requests').toggle();")%>:
+<b><%= @not_in_workload_days %></b> days not in the workload (including 20% gain)<br/>
 <div id="tbv_requests" style="display:none;">
 <%= render(:partial=>'workloads/request', :collection=>@not_in_workload) %>
 </div>
-<%= @not_in_workload_days %> days not in the workload (including 15% gain)<br/>
-<%= @workloads.size %> workloads<br/>
-<%= @total_days %> total days planned.<br/>
+<b><%= @total_planned_days %></b> days planned on <b><%= @total_days %></b> SDP or "to be validated" days (<%= ((@total_planned_days*100 / @total_days /0.1).round * 0.1) %>%) (minus 20% for to be validated requests)<br/>
 <br/>
+<%= @workloads.size %> workloads<br/>
+<br/>
+
 <table>
   <tr style="font-weight:bold;">
     <td colspan="3"></td>
@@ -43,4 +45,7 @@
 <br/>
 <br/>
 <%= image_tag(@chart_url) %>
+<br/>
+<br/>
+render time: <%= @render_time %> secs<br/>
 

@@ -2,6 +2,8 @@ class WlLine < ActiveRecord::Base
 
   has_many :wl_loads, :dependent => :destroy
   belongs_to :person
+  belongs_to :request
+  belongs_to :sdp_task, :class_name=>"SDPTask"
 
   include ApplicationHelper
 

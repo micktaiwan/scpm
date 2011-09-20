@@ -47,6 +47,10 @@ class ApplicationController < ActionController::Base
     session[:context] = params[:context]
   end
 
+  def round_to_hour(f)
+    (f/0.125).round*0.125
+  end
+
 end
 
 class MyLinkRenderer < WillPaginate::LinkRenderer

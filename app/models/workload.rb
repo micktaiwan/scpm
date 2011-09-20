@@ -15,7 +15,7 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :order=>"wl_type, name")
+    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>"wl_type, name")
     if options[:only_holidays] != true
       @wl_lines  << WlLine.create(:name=>"Cong&eacute;s", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
     end
@@ -75,19 +75,32 @@ class Workload
     @planned_total  = 0
     @sdp_remaining_total = 0
     for l in @wl_lines
-      @line_sums[l.id] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
-      @planned_total  += @line_sums[l.id] if l.wl_type <= 200 and @line_sums[l.id]
+      @line_sums[l.id] = Hash.new
+      @line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
+      @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
       if l.sdp_task
         @sdp_remaining_total += l.sdp_task.remaining
+        @line_sums[l.id][:init]      = l.sdp_task.initial
+        @line_sums[l.id][:balance]   = l.sdp_task.balancei
+        @line_sums[l.id][:remaining] = l.sdp_task.remaining
       elsif l.request
-        # TODO: see _wl_line.erb and refactor this to be in the workload.rb class
-        # make a WlLine class that includes the WlLine DB object ?
         if l.request.status == "to be validated"
-          @sdp_remaining_total += l.request.workload2
+          s = round_to_hour(l.request.workload2 * 0.8)
+          @sdp_remaining_total        += s
+          @line_sums[l.id][:init]      = s
+          @line_sums[l.id][:balance]   = s
+          @line_sums[l.id][:remaining] = s
         else
           @sdp_remaining_total += l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram})
-        end        
-      end  
+          @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.person.trigram})
+          @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.person.trigram})
+          @line_sums[l.id][:remaining] = l.request.sdp_tasks_remaining_sum({:trigram=>l.person.trigram})
+        end
+      else
+        @line_sums[l.id][:init]      = ""
+        @line_sums[l.id][:remaining] = ""
+        @line_sums[l.id][:balancei]  = ""
+      end
     end
   end
 
@@ -98,5 +111,11 @@ class Workload
   def col_prod_sum(w, wl_lines)
     wl_lines.select{|l| l.wl_type==100}.map{|l| l.get_load_by_week(w)}.inject(:+)
   end
-  
+
+  # not DRY (already in application_controller)
+  def round_to_hour(f)
+    (f/0.125).round*0.125
+  end
+
 end
+

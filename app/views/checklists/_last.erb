@@ -2,6 +2,9 @@
   <% if i.ctemplate.ctype == "checkbox" %>
     <%= image_tag(i.image_name, :id=>"cl_image_#{i.id}", :onclick=>"checklist_item_set_next_status(#{i.id})", :class=>"checkbox", :title=>i.alt) %>
   <% end %>
+  <% if i.milestone %>
+    <b><%= i.milestone.name %></b>
+  <% end %>
   <div class="<%= i.css_class %>"><%= i.ctemplate.title %></div>
   <% if i.ctemplate.ctype != "folder" %>
     <div class="checklist_item msg" id='checklist_item_msg_<%=i.id%>'><%= i.alt %></div>

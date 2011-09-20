@@ -61,19 +61,22 @@ class WorkloadsController < ApplicationController
   end
 
   def refresh_conso
+    start = Time.now
     # find "to be validated" requests not in the workload
     already_in_the_workload = WlLine.all.select{|l| l.request and (l.request.status=='to be validated' or (l.request.status=='assigned' and l.request.resolution!='ended' and l.request.resolution!='aborted'))}.map{|l| l.request}
     @not_in_workload = (Request.find(:all,:conditions=>"status='to be validated' or (status='assigned' and resolution!='ended' and resolution!='aborted')") - already_in_the_workload).sort_by{|r| r.project.full_name}
-    # find the corresponding production days (minus 15% of gain)
-    @not_in_workload_days = @not_in_workload.inject(0) { |sum, r| sum += r.workload2} * 0.85
+    # find the corresponding production days (minus 20% of gain)
+    @not_in_workload_days = @not_in_workload.inject(0) { |sum, r| sum += r.workload2} * 0.80
 
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
     @total_days = 0
+    @total_planned_days = 0
     for p in @people
       w = Workload.new(p.id)
       @workloads << w
-      @total_days += w.cprodtotals.inject(0) { |sum, t| sum += t[:value]}
+      @total_days += w.line_sums.inject(0) { |sum, (k,v)| sum += v[:remaining] == '' ? 0 : v[:remaining]}
+      @total_planned_days += w.cprodtotals.inject(0) { |sum, t| sum += t[:value]}
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals     = []
@@ -99,6 +102,7 @@ class WorkloadsController < ApplicationController
     chart.show_legend = true
     #chart.enable_interactivity = true
     @chart_url = chart.to_url #({:enableInteractivity=>true})
+    @render_time = Time.now-start
     render :layout => false
   end
 
@@ -304,10 +308,6 @@ class WorkloadsController < ApplicationController
     end
 
     [lsum, csum, cpercent, planned_total]
-  end
-
-  def round_to_hour(f)
-    (f/0.125).round*0.125
   end
 
 end
