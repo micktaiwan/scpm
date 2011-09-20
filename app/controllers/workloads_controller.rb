@@ -33,9 +33,11 @@ class WorkloadsController < ApplicationController
     serie = @workload.percents.map{ |p| p[:precise] }
     chart.data "non capped", serie, '0000ff'
     #chart.add_labels @cap_totals[2..-1]
-    chart.axis :y, :range => [0,serie.max], :font_size => 10, :alignment => :center
+    max = serie.max
+    chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workload.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
+    chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>93.0/max, :end_point=>100.0/max
     chart.show_legend = false
     @chart_url = chart.to_url
   end
@@ -95,13 +97,16 @@ class WorkloadsController < ApplicationController
     chart.data "capped", @cap_totals[2..-1], 'ff0000'
     chart.data "non capped", @totals[2..-1], '0000ff'
     #chart.add_labels @cap_totals[2..-1]
-    chart.axis :y, :range => [0,[@totals.max,@cap_totals.max].max], :font_size => 10, :alignment => :center
+    max = [@totals.max,@cap_totals.max].max
+    chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>1, :data_point_index=>-1, :pixel_size=>8
+    chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>93.0/max, :end_point=>100.0/max
     chart.show_legend = true
     #chart.enable_interactivity = true
-    @chart_url = chart.to_url #({:enableInteractivity=>true})
+    #chart.params[:chm] = "h,FF0000,0,-1,1"
+    @chart_url = chart.to_url #({:chm=>"r,DDDDDD,0,#{100.0/max-0.01},#{100.0/max}"}) #({:enableInteractivity=>true})
     @render_time = Time.now-start
     render :layout => false
   end
