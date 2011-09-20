@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
       if not current_user.has_role?('Admin')
         session[:project_sort]      = 'alpha'
       else
-        session[:project_sort]      = nil
+        session[:project_sort]      = 'update'
       end
       session[:context] = 'reporting'
       redirect_to :controller=>'context_chooser'

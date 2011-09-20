@@ -35,6 +35,7 @@ function wl_change_colors(wlweek, background, color) {
 
 function change_workload(person_id) {
   document.body.style.cursor = 'wait';
+  $('loading').show();
   new Ajax.Request('/workloads/change_workload', {
     parameters: { person_id: person_id }
     });

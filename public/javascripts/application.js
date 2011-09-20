@@ -65,11 +65,12 @@ function checklist_item_set_next_status(id) {
   }
 
 function refresh_projects(sort) {
-  
+  $('loading').show();
   new Ajax.Request('/projects/refresh_projects', {
     parameters: { sort: sort },
     onComplete: function(r) {
       $('frieze').update(r.responseText);
+      $('loading').hide();
       }
     });
   

@@ -3,6 +3,9 @@
 <% if @suggested_requests.size > 0 %>
 You have <b><%=@suggested_requests.size%></b> suggested requests
 <% end %>
+
+<%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;") %>
+
 <div id="milestones" class="popup" style="display:none;"></div>
 
 <br/>
