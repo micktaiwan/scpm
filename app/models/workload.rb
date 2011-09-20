@@ -77,8 +77,17 @@ class Workload
     for l in @wl_lines
       @line_sums[l.id] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
       @planned_total  += @line_sums[l.id] if l.wl_type <= 200 and @line_sums[l.id]
-      @sdp_remaining_total += l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram}) if l.request
-      @sdp_remaining_total += l.sdp_task.remaining if l.sdp_task
+      if l.sdp_task
+        @sdp_remaining_total += l.sdp_task.remaining
+      elsif l.request
+        # TODO: see _wl_line.erb and refactor this to be in the workload.rb class
+        # make a WlLine class that includes the WlLine DB object ?
+        if l.request.status == "to be validated"
+          @sdp_remaining_total += l.request.workload2
+        else
+          @sdp_remaining_total += l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram})
+        end        
+      end  
     end
   end
 
