@@ -3,7 +3,7 @@ class Workload
   include ApplicationHelper
 
   attr_reader :name, :weeks, :wl_weeks, :person_id, :wl_lines, :line_sums,
-              :opens, :ctotals, :percents, :months, :days, :person, :next_month_percents, :three_next_months_percents,
+              :opens, :ctotals, :cprodtotals, :percents, :months, :days, :person, :next_month_percents, :three_next_months_percents,
               :planned_total, :sdp_remaining_total
 
   def initialize(person_id, options = {})
@@ -25,7 +25,8 @@ class Workload
     @wl_weeks   = []
     @weeks      = []
     @opens      = []
-    @ctotals    = []
+    @ctotals    = [] # total days planned including not project days (holidays and other lines)
+    @cprodtotals= [] # total days planned on production only
     @percents   = []
     @months     = []
     @days       = []
@@ -55,7 +56,8 @@ class Workload
       @weeks    << iteration.cweek
       @opens    << 5 - WlHoliday.get_from_week(w)
       if @wl_lines.size > 0
-        @ctotals << {:name=>'ctotal',    :id=>w, :value=>col_sum(w, @wl_lines)}
+        @ctotals      << {:name=>'ctotal',    :id=>w, :value=>col_sum(w, @wl_lines)}
+        @cprodtotals  << {:name=>'cprodtotal',:id=>w, :value=>col_prod_sum(w, @wl_lines)}
         percent = (@ctotals.last[:value] / @opens.last)*100
         @next_month_percents += percent if nb < 5
         @three_next_months_percents += percent if nb >= 5 and nb <= 12+4
@@ -84,4 +86,8 @@ class Workload
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)
   end
 
+  def col_prod_sum(w, wl_lines)
+    wl_lines.select{|l| l.wl_type==100}.map{|l| l.get_load_by_week(w)}.inject(:+)
+  end
+  
 end

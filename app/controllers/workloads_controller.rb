@@ -73,7 +73,7 @@ class WorkloadsController < ApplicationController
     for p in @people
       w = Workload.new(p.id)
       @workloads << w
-      @total_days += w.ctotals.inject(0) { |sum, t| sum += t[:value]}
+      @total_days += w.cprodtotals.inject(0) { |sum, t| sum += t[:value]}
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals     = []
