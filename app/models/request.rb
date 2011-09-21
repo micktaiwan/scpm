@@ -153,7 +153,7 @@ class Request < ActiveRecord::Base
     'M5-M10'=>  ['M7', 'M9', 'M9/M10', 'M10','G6','pg6','g6'],
     'Post-M10'=>['QG TD', 'M10a', 'M11', 'QG MIP', 'M12', 'M12/M13', 'M13', 'M14','sM13','sM14','G7','pg7','g7','G8','pg8','g8','G9','pg9','g9'],
     'WP2 - Quality for Maintenance' 	=> ['CCB', 'QG TD M', 'MIPM'],
-    'WP6.1 - Coaching PP' =>    ['M3'],
+    'WP6.1 - Coaching PP' =>    ['M3', 'G2'],
     'WP6.2 - Coaching BRD' =>   ['M5', 'M5/M7', 'G5'],
     'WP6.3 - Coaching V&V' =>   ['M11', 'G7'],
     'WP6.4 - Coaching ConfMgt' =>     ['M3', 'G2'],

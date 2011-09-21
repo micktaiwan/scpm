@@ -417,6 +417,7 @@ div#bandeau {
   }
 .checklist_item.late {
   color: #A33;
+  font-weight: bold;
   }
 .checklist_item.done {
   font-style: italic;

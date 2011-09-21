@@ -85,8 +85,8 @@ class Workload
         @line_sums[l.id][:remaining] = l.sdp_task.remaining
       elsif l.request
         s = round_to_hour(l.request.workload2 * 0.8)
-        if l.request.status == "to be validated"
-          @line_sums[l.id][:init]      = 'TBV'
+        if l.request.sdp == "No"
+          @line_sums[l.id][:init]      = 'no sdp'
           @line_sums[l.id][:balance]   = 'N/A'
           @line_sums[l.id][:remaining] = s
           @sdp_remaining_total        += s
