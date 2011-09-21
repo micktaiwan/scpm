@@ -92,7 +92,7 @@ class Workload
           @sdp_remaining_total        += s
         else
           r = l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram})
-          r = s if r == 0.0
+          #r = s if r == 0.0
           @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.person.trigram})
           @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.person.trigram})
           @line_sums[l.id][:remaining] = r
