@@ -1,10 +1,15 @@
-<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if @workload.line_sums[wl_line.id][:remaining]==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
+<%
+  remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
+  planned_total = @workload.line_sums[wl_line.id][:sums].to_f
+  error         = ((planned_total/remaining < 0.875) or (planned_total > remaining))
+%>
+<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <td><%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %></td>
   <td align="center"><% if wl_line.request %><%= wl_line.request.status %><% end %></td>
   <td><%= @workload.line_sums[wl_line.id][:init] %></td>
   <td><%= @workload.line_sums[wl_line.id][:balance] %></td>
-  <td><%= @workload.line_sums[wl_line.id][:remaining] %></td>
-  <td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= @workload.line_sums[wl_line.id][:sums] %></td>
+  <td<% if error %> class="wlerror"<% end %>><%= remaining %></td>
+  <td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
 <%
   for week in @workload.wl_weeks
     milestones = wl_line.milestones(week)
@@ -20,4 +25,3 @@
     </td>
 <% end %>
 </tr>
-

@@ -84,22 +84,24 @@ class Workload
         @line_sums[l.id][:balance]   = l.sdp_task.balancei
         @line_sums[l.id][:remaining] = l.sdp_task.remaining
       elsif l.request
+        s = round_to_hour(l.request.workload2 * 0.8)
         if l.request.status == "to be validated"
-          s = round_to_hour(l.request.workload2 * 0.8)
-          @sdp_remaining_total        += s
-          @line_sums[l.id][:init]      = s
-          @line_sums[l.id][:balance]   = s
+          @line_sums[l.id][:init]      = 'TBV'
+          @line_sums[l.id][:balance]   = 'N/A'
           @line_sums[l.id][:remaining] = s
+          @sdp_remaining_total        += s
         else
-          @sdp_remaining_total += l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram})
+          r = l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram})
+          r = s if r == 0.0
           @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.person.trigram})
           @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.person.trigram})
-          @line_sums[l.id][:remaining] = l.request.sdp_tasks_remaining_sum({:trigram=>l.person.trigram})
+          @line_sums[l.id][:remaining] = r
+          @sdp_remaining_total        += r
         end
       else
-        @line_sums[l.id][:init]      = ""
-        @line_sums[l.id][:remaining] = ""
-        @line_sums[l.id][:balancei]  = ""
+        @line_sums[l.id][:init]      = 0.0
+        @line_sums[l.id][:remaining] = 0.0
+        @line_sums[l.id][:balancei]  = 0.0
       end
     end
   end

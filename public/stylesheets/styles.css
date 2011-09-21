@@ -425,3 +425,6 @@ div#bandeau {
 .checkbox {
   cursor:pointer;
   }
+.wlerror {
+  background: #FAA;
+  }
