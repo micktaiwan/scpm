@@ -4,7 +4,7 @@ class Workload
 
   attr_reader :name, :weeks, :wl_weeks, :person_id, :wl_lines, :line_sums,
               :opens, :ctotals, :cprodtotals, :percents, :months, :days, :person, :next_month_percents, :three_next_months_percents,
-              :planned_total, :sdp_remaining_total
+              :planned_total, :sdp_remaining_total, :to_be_validated_in_wl_remaining_total
 
   def initialize(person_id, options = {})
     @person     = Person.find(person_id)
@@ -74,6 +74,7 @@ class Workload
     today_week      = wlweek(Date.today)
     @planned_total  = 0
     @sdp_remaining_total = 0
+    @to_be_validated_in_wl_remaining_total = 0
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
       @line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
@@ -90,6 +91,7 @@ class Workload
           @line_sums[l.id][:balance]   = 'N/A'
           @line_sums[l.id][:remaining] = s
           @sdp_remaining_total        += s
+          @to_be_validated_in_wl_remaining_total += s
         else
           r = l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram})
           #r = s if r == 0.0

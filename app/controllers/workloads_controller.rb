@@ -74,11 +74,13 @@ class WorkloadsController < ApplicationController
     @workloads = []
     @total_days = 0
     @total_planned_days = 0
+    @to_be_validated_in_wl_remaining_total = 0
     for p in @people
       w = Workload.new(p.id)
       @workloads << w
       @total_days += w.line_sums.inject(0) { |sum, (k,v)| sum += v[:remaining] == '' ? 0 : v[:remaining]}
       @total_planned_days += w.cprodtotals.inject(0) { |sum, t| sum += t[:value]}
+      @to_be_validated_in_wl_remaining_total += w.to_be_validated_in_wl_remaining_total
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals     = []

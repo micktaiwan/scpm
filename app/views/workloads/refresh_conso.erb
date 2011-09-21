@@ -4,6 +4,7 @@
 <%= render(:partial=>'workloads/request', :collection=>@not_in_workload) %>
 </div>
 <b><%= @total_planned_days %></b> days planned on <b><%= @total_days %></b> SDP or "to be validated" days (<%= ((@total_planned_days*100 / @total_days /0.1).round * 0.1) %>%) (minus 20% for to be validated requests)<br/>
+To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaining_total %><br/>
 <br/>
 <%= @workloads.size %> workloads<br/>
 <br/>
