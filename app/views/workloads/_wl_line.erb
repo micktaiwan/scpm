@@ -1,7 +1,7 @@
 <%
   remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
-  error         = ((planned_total/remaining < 0.875) or (planned_total > remaining))
+  error         = (wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.875) or (planned_total > remaining))
 %>
 <tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <td><%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %></td>

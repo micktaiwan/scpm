@@ -162,7 +162,8 @@ class Request < ActiveRecord::Base
     'WP3.1 - Modeling Support' =>     ['M5', 'M5/M7', 'G5'],
     'WP3.2 - Modeling Conception and Production' => ['M5', 'M5/M7', 'G5'],
     'WP3.3 - Modeling BAT specific Control' =>      ['M5', 'M5/M7', 'G5'],
-    'WP3.4 - Modeling BAT specific Production' =>   ['M5', 'M5/M7', 'G5']
+    'WP3.4 - Modeling BAT specific Production' =>   ['M5', 'M5/M7', 'G5'],
+    'WP5 - Change Accompaniment' 		  => ['M11']
     }
 
   def wp_index(wp, cv)
