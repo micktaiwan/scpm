@@ -36,7 +36,7 @@ class ChecklistItem < ActiveRecord::Base
     return false if !self.ctemplate
     if self.ctemplate.is_transverse == 0
       return false if !self.milestone
-      return false if self.milestone.checklist_not_allowed?
+      # return false if self.milestone.checklist_not_allowed?
       return false if !self.ctemplate.milestone_names.map{|m| m.title}.include?(self.milestone.name)
     else
       return false if !self.project
