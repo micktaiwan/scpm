@@ -37,7 +37,7 @@ class WorkloadsController < ApplicationController
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workload.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
-    chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>93.0/max, :end_point=>100.0/max
+    chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>95.0/max, :end_point=>105.0/max
     chart.show_legend = false
     @chart_url = chart.to_url
   end
@@ -104,7 +104,7 @@ class WorkloadsController < ApplicationController
     chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>1, :data_point_index=>-1, :pixel_size=>8
-    chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>93.0/max, :end_point=>100.0/max
+    chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>95.0/max, :end_point=>105.0/max
     chart.show_legend = true
     #chart.enable_interactivity = true
     #chart.params[:chm] = "h,FF0000,0,-1,1"
