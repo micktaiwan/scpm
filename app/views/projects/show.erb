@@ -39,19 +39,19 @@ function add(id, same_week, has_requests) {
 
 <div id="subcontent">
 <%= link_to_function('Informations', '$("infos").toggle();', :class=>"menu") %><br/>
-
 <div class="panel" id="infos"<% if @project.requests.size > 0 %> style="display:none"<%end%>>
-<b>Supervisor</b>: <% if not @project.supervisor_id %>?<% else %><%= @project.supervisor.name %><% end %><br/>
-<b>WS</b>: <%= @project.workstream %><br/>
-<b>BRN</b>: <%= @project.brn %><br/>
-<b>Coordinator</b>: <%= @project.coordinator %><br/>
-<b>PM</b>: <%= @project.pm %> (from RMT: <%=@project.request_pm.join(', ')%>)<br/>
-<b>BPL</b>: <%= @project.bpl %><br/>
-<b>ISPL</b>: <%= @project.ispl %><br/>
-<b>SQLI:</b> <%=@project.assignees.join(', ')%>
-<% if @project.description and @project.description!=''%>
-  <%= simple_format(@project.description) %>
-<% end %>
+  <b>Supervisor</b>: <% if not @project.supervisor_id %>?<% else %><%= @project.supervisor.name %><% end %><br/>
+  <b>WS</b>: <%= @project.workstream %><br/>
+  <b>BRN</b>: <%= @project.brn %><br/>
+  <b>Coordinator</b>: <%= @project.coordinator %><br/>
+  <b>PM</b>: <%= @project.pm %> (from RMT: <%=@project.request_pm.join(', ')%>)<br/>
+  <b>BPL</b>: <%= @project.bpl %><br/>
+  <b>ISPL</b>: <%= @project.ispl %><br/>
+  <b>Request resp:</b> <%=@project.assignees.join(', ')%><br/>
+  <b>Associations:</b> <%=@project.responsibles.map{|r| r.name}.join(', ')%><br/>
+  <% if @project.description and @project.description!=''%>
+    <%= simple_format(@project.description) %>
+  <% end %>
 </div>
 <br/>
 <% if @project.requests.size > 0 or @project.has_status or @project.checklist_items.size > 0%>
