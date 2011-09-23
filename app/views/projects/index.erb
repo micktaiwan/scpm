@@ -11,7 +11,8 @@
 
 <div class="stats">
 Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
-<%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status
+<b>Filter</b>: <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status.<br/>
+<b>Total</b>: <%= @total_wps %> WPs, <%= @total_status %> statuses.
 </div>
 
 

@@ -12,6 +12,8 @@ class ProjectsController < ApplicationController
     @qr           = Person.find(:all, :conditions=>"is_transverse=0 and is_supervisor=0 and has_left=0", :order=>"name asc")
     @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
+    @total_wps    = Project.count
+    @total_status = Status.count
     if @wps.size > 0
       @amendments   = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
       @risks        = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
