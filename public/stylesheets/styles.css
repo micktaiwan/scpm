@@ -296,6 +296,7 @@ td    {
 
 .milestone_cl {cursor:pointer;color:white;font-weight:bold;background-color: #699; border-bottom-left-radius: 5px;border-bottom-right-radius: 5px; -moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;}
 .milestone_cl.done{background-color: #3A3}
+.milestone_cl.alert{background-color: #A33}
 
 
 .legend {

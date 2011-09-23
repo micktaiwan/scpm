@@ -104,5 +104,18 @@ class Milestone < ActiveRecord::Base
     self.deploy_checklists
   end
 
-end
+  def checklist_div(cu)
+    items     = self.checklist_items.select{|i| i.ctemplate.ctype!='folder'}
+    return "" if items.size == 0 and !cu.has_role?('Admin')
+    non_zero  = items.select{|i| i.status!=0}
+    modif = ""
+    if non_zero.size==items.size
+      modif = " done"
+    elsif self.checklist_items.select{|i| i.late?}.size > 0
+      modif = " alert"
+    end  
+    css_class = "milestone_cl#{modif}"
+    "<div class='#{css_class}' onclick='open_checklist(#{self.id})'>Checks: #{non_zero.size}/#{items.size}</div>"
+  end
 
+end

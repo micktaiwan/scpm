@@ -12,13 +12,5 @@
     <% end %>
   </div>
 
-  <%
-    items = milestone.checklist_items.select{|i| i.ctemplate.ctype!='folder'}
-    non_zero = items.select{|i| i.status!=0}
-  %>
-  <% if items.size > 0 or current_user.has_role?('Admin') %>
-    <div class="milestone_cl<%if non_zero.size==items.size%> done<%end%>" onclick="open_checklist(<%=milestone.id%>)">
-    Checks: <%=non_zero.size%>/<%=items.size%>
-    </div>
-  <% end %>
+  <%= milestone.checklist_div(current_user) %>
 </div>
