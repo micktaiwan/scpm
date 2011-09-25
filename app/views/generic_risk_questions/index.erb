@@ -1,0 +1,7 @@
+<h2>Generic risks</h2>
+<%= link_to('Add question', {:controller=>'generic_risk_questions', :action=>'new'}, {:class=>'btnlnk'}) %>
+
+<ul>
+  <%= render(:partial=>'question', :collection=>@questions, :as=>:q) %>
+</ul>
+

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110918194448) do
+ActiveRecord::Schema.define(:version => 20110924154620) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -42,6 +42,12 @@ ActiveRecord::Schema.define(:version => 20110918194448) do
     t.integer  "person_id"
     t.datetime "last_display"
     t.integer  "nb_displays",  :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "capi_axes", :force => true do |t|
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -119,6 +125,23 @@ ActiveRecord::Schema.define(:version => 20110918194448) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "generic_risk_questions", :force => true do |t|
+    t.text     "question"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "generic_risks", :force => true do |t|
+    t.integer  "generic_risk_question_id"
+    t.integer  "is_quality"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "context"
+    t.text     "risk"
+    t.text     "consequence"
+    t.text     "actions"
   end
 
   create_table "logs", :force => true do |t|

@@ -1,0 +1,8 @@
+<h2>Add an generic risk</h2>
+<%= error_messages_for :risk %>
+<% form_for @generic_risk, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>
+

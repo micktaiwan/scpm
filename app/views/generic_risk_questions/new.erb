@@ -1,0 +1,8 @@
+<h2>Add an question</h2>
+<%= error_messages_for :question %>
+<% form_for :@question, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>
+
