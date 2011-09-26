@@ -1,0 +1,5 @@
+Running generic risk checklist to <b><%= @project.full_name %></b>
+
+<ul>
+  <%= render(:partial=>'question_run', :collection=>@questions, :as=>:q) %>
+</ul>

@@ -1,0 +1,12 @@
+<li id="q_<%=q.id%>">
+<b><%= q.question %></b>
+
+<%= radio_button :question, "answer_#{q.id}", :yes, :onclick=>"$('risks_#{q.id}').hide();" %> Yes
+<%= radio_button :question, "answer_#{q.id}", :no, :onclick=>"$('risks_#{q.id}').show();" %> No
+
+<ul id="risks_<%=q.id%>" style="display:none;">
+  <%= render(:partial=>'generic_risks/generic_risk_run', :collection=>q.generic_risks, :as=>:r) %>
+</ul>
+
+</li>
+

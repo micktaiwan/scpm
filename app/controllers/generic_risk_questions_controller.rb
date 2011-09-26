@@ -35,7 +35,7 @@ class GenericRiskQuestionsController < ApplicationController
     render(:nothing=>true)
   end
 
-  def apply
+  def run
     @project = Project.find(params[:id])
     @questions = GenericRiskQuestion.all
     render(:layout=>'general')

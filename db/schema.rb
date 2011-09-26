@@ -436,13 +436,8 @@ ActiveRecord::Schema.define(:version => 20110924154620) do
     t.integer  "sdp_task_id"
   end
 
-  create_table "wl_loads", :force => true do |t|
-    t.integer  "wl_line_id"
-    t.integer  "week"
-    t.float    "wlload"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+# Could not dump table "wl_loads" because of following ActiveRecord::StatementInvalid
+#   Mysql::Error: Can't create/write to file 'C:\TEMP\#sql_598_0.MYI' (Errcode: 13): describe `wl_loads`
 
   create_table "workpackages", :force => true do |t|
     t.string "title"
