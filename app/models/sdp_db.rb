@@ -14,7 +14,7 @@ module SdpDB
 	  'WP6.1 - Coaching PP'=>[24116,22058],     #WP6.1 - Coaching for Project setting-up
 	  'WP6.2 - Coaching BRD'=>[24117,22058],    #WP6.2 - Coaching for Business Requirements
 	  'WP6.3 - Coaching V&V'=>[24118,22058],    #WP6.3 - Coaching for Verification and Validation
-	  'WP6.4 - Coaching for ConfMgt'=>[24119,22058],  #WP6.4 - Coaching for Configuration Management
+	  'WP6.4 - Coaching ConfMgt'=>[24119,22058],  #WP6.4 - Coaching for Configuration Management
 	  'WP6.5 - Coaching Maintenance'=>[24120,22058]   #WP6.5 - Coaching for Maintenance
 	  }
 
@@ -26,7 +26,7 @@ module SdpDB
     ['All','WP6.1 - Coaching PP']=>102851,
     ['All','WP6.2 - Coaching BRD']=>102852,
     ['All','WP6.3 - Coaching V&V']=>102853,
-    ['All','WP6.4 - Coaching for ConfMgt']=>102854,
+    ['All','WP6.4 - Coaching ConfMgt']=>102854,
     ['All','WP6.5 - Coaching Maintenance']=>102855,
     ['All','WP2 - Quality for Maintenance']=>102847,
     ['Audit',nil]=>102849,
