@@ -1,22 +1,22 @@
 <li id="r_<%= r.id %>" class="generic_risk_section">
 
 <p><%= label_tag 'context' %>
-<%= text_area "r_#{r.id}", :context, {:rows=>3, :value=>r.context} %></p>
+<%= text_area "r_#{r.id}", :context, {:cols=>60, :rows=>2, :value=>r.context} %></p>
 
 <p><%= label_tag 'risk' %>
-<%= text_area "r_#{r.id}", :risk, {:rows=>3, :value=>r.risk} %></p>
+<%= text_area "r_#{r.id}", :risk, {:cols=>60, :rows=>2, :value=>r.risk} %></p>
 
 <p><%= label_tag 'probability' %>
 <%= select "r_#{r.id}", :probability, Risk::PROBABILITY %></p>
 
 <p><%= label_tag 'consequence' %>
-<%= text_area "r_#{r.id}", :consequence, {:rows=>3, :value=>r.consequence} %></p>
+<%= text_area "r_#{r.id}", :consequence, {:cols=>60, :rows=>2, :value=>r.consequence} %></p>
 
 <p><%= label_tag 'impact' %>
 <%= select "r_#{r.id}", :impact, Risk::IMPACT %></p>
 
 <p><%= label_tag 'actions and status' %>
-<%= text_area "r_#{r.id}", :actions, {:rows=>3, :value=>r.actions} %></p>
+<%= text_area "r_#{r.id}", :actions, {:cols=>60, :rows=>2, :value=>r.actions} %></p>
 
 <p><%= label_tag 'is_quality' %>
 <%= radio_button "r_#{r.id}", :is_quality, 1, {:checked=>r.is_quality==1} %>Yes <%= radio_button "r_#{r.id}", :is_quality, 0, {:checked=>r.is_quality==0}%>No </p>
