@@ -78,7 +78,11 @@ function add(id, same_week, has_requests) {
 
   <h3>Risks</h3>
   <% if current_user.has_role?('Admin') %>
-    <%= link_to('Run risk checklist', {:controller=>'generic_risk_questions', :action=>'run', :id=>@project.id}, :class=>"btnlnk") %><br/>
+    <%= link_to('Run risk checklist', {
+        :controller=>'generic_risk_questions',
+        :action=>'run',
+        :id=>@project.id},
+      :class=>"btnlnk") %><br/>
     <br/>
   <% end %>
 

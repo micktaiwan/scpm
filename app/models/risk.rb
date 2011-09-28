@@ -1,6 +1,7 @@
 class Risk < ActiveRecord::Base
 
   belongs_to :project
+  belongs_to :generic_risk
 
   PROBABILITY = [0,1,2,3,4]
   IMPACT      = [1,2,3]

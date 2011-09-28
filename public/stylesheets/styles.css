@@ -8,7 +8,6 @@ body {
 div#footer {
   float:right;
   }
-
 div#banner {
   margin: 0;
   position: fixed;
@@ -23,7 +22,6 @@ div#banner #context_select {
   border-radius: 5px;
   -moz-border-radius: 5px;
 }
-
 div#banner #context_select_box {
   font-size:0.8em;
   position: fixed;
@@ -31,7 +29,6 @@ div#banner #context_select_box {
   right: 0;
   text-align:right;
 }
-
 img {
   border: 0px;
 }
@@ -432,13 +429,8 @@ div#bandeau {
   }
   
 .generic_risk_section{
-  background: #EEE;
+  background: #EEF;
   margin: 20px;
   padding:5px;
   border: 1px solid black;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  box-shadow: 5px 5px 5px #CCC;
-  -moz-box-shadow: 5px 5px 5px #CCC;
-  -webkit-box-shadow: 5px 5px 5px #CCC;
   }  

@@ -7,10 +7,10 @@
   <div class="milestone_comments status<%=milestone.status%>">
     <%= my_simple_format(milestone.comments) %>
     <%= milestone.date %><br/>
-    <% if milestone.name[0..1]!='QG' and milestone.status==2 and milestone.amendments.size == 0 %>
-      <strong>No amend.</strong><br/>
-    <% end %>
   </div>
 
   <%= milestone.checklist_div(current_user) %>
+  <% if milestone.name[0..1]!='QG' and milestone.status==2 and milestone.amendments.size == 0 %>
+    <strong>No amend.</strong><br/>
+  <% end %>
 </div>

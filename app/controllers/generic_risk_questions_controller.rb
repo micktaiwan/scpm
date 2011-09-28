@@ -40,6 +40,26 @@ class GenericRiskQuestionsController < ApplicationController
     @questions = GenericRiskQuestion.all
     render(:layout=>'general')
   end
+  
+  def import
+    questions = params['question']
+    risks     = params['r']
+    project_id = params[:id].to_i
+    questions.each do |index, answer|
+      next if answer=="yes"
+      next if !risks[index]
+      next if risks[index][:probability] == "0"
+      next if Risk.find(:first, :conditions=>["project_id=? and generic_risk_id=?", project_id, risks[index][:id]])
+      Risk.create(:project_id=>project_id,
+        :generic_risk_id=>risks[index][:id],
+        :context=>risks[index][:context],
+        :risk=>risks[index][:risk],
+        :probability=>risks[index][:probability],
+        :consequence=>risks[index][:consequence],
+        :impact=>risks[index][:impact],
+        :actions=>risks[index][:actions])
+    end
+    redirect_to :controller=>'projects', :action=>'show', :id=>project_id
+  end
 
 end
-

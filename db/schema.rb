@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110924154620) do
+ActiveRecord::Schema.define(:version => 20110928151843) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(:version => 20110924154620) do
     t.text     "question"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "capis_axis_id"
   end
 
   create_table "generic_risks", :force => true do |t|
@@ -142,6 +143,7 @@ ActiveRecord::Schema.define(:version => 20110924154620) do
     t.text     "risk"
     t.text     "consequence"
     t.text     "actions"
+    t.integer  "milestone_name_id"
   end
 
   create_table "logs", :force => true do |t|
@@ -314,7 +316,8 @@ ActiveRecord::Schema.define(:version => 20110924154620) do
     t.text     "actions"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "is_quality",  :default => 1
+    t.integer  "is_quality",      :default => 1
+    t.integer  "generic_risk_id"
   end
 
   create_table "roles", :force => true do |t|
@@ -436,8 +439,13 @@ ActiveRecord::Schema.define(:version => 20110924154620) do
     t.integer  "sdp_task_id"
   end
 
-# Could not dump table "wl_loads" because of following ActiveRecord::StatementInvalid
-#   Mysql::Error: Can't create/write to file 'C:\TEMP\#sql_598_0.MYI' (Errcode: 13): describe `wl_loads`
+  create_table "wl_loads", :force => true do |t|
+    t.integer  "wl_line_id"
+    t.integer  "week"
+    t.float    "wlload"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "workpackages", :force => true do |t|
     t.string "title"
