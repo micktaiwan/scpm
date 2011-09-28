@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110928151843) do
+ActiveRecord::Schema.define(:version => 20110928195815) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(:version => 20110928151843) do
     t.datetime "updated_at"
     t.integer  "milestone_name_id"
     t.integer  "capi_axis_id"
+    t.integer  "deployed",          :default => 0
   end
 
   create_table "generic_risks", :force => true do |t|

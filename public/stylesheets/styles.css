@@ -427,10 +427,25 @@ div#bandeau {
 .wlerror {
   background: #FAA;
   }
-  
+
 .generic_risk_section{
   background: #EEF;
   margin: 20px;
   padding:5px;
   border: 1px solid black;
-  }  
+  }
+
+.generic_risk_question.not_deployed {
+  font-style: italic;
+  font-weight: normal;
+  color: #AAA;
+  }
+.generic_risk_question.deployed {
+  font-weight: bold;
+  font-style: normal;
+  color: #000;
+  }
+.generic_risks {
+  font-weight: normal;
+  font-style: normal;
+}

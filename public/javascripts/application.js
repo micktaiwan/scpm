@@ -73,5 +73,13 @@ function refresh_projects(sort) {
       $('loading').hide();
       }
     });
-  
+
   }
+
+function deploy_question(id,value) {
+  value = (value==true? 1 : 0)
+  new Ajax.Updater('q_'+id, '/generic_risk_questions/deploy', {
+    parameters: { id: id, value: value }
+    });
+  }
+

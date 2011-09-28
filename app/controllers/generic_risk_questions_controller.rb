@@ -30,7 +30,7 @@ class GenericRiskQuestionsController < ApplicationController
     @milestone_names = MilestoneName.find(:all).select{|m| ['M3','M5','G2','G5'].include?(m.title)}.map{|m| [m.title, m.id]}
     @capi_axes = CapiAxis.find(:all).map{|m| [m.name, m.id]}
   end
-  
+
   def update
     q = GenericRiskQuestion.find(params[:id])
     q.update_attributes(params[:question])
@@ -44,10 +44,10 @@ class GenericRiskQuestionsController < ApplicationController
 
   def run
     @project = Project.find(params[:id])
-    @questions = GenericRiskQuestion.all
+    @questions = GenericRiskQuestion.find(:all, :conditions=>"deployed='1'")
     render(:layout=>'general')
   end
-  
+
   def import
     questions = params['question']
     risks     = params['r']
@@ -69,4 +69,13 @@ class GenericRiskQuestionsController < ApplicationController
     redirect_to :controller=>'projects', :action=>'show', :id=>project_id
   end
 
+  def deploy
+    id = params[:id]
+    value = params[:value].to_i
+    q = GenericRiskQuestion.find(id)
+    q.update_attribute('deployed',value)
+    render(:partial=>"question", :locals=>{:q=>q})
+  end
+
 end
+
