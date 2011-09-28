@@ -131,7 +131,8 @@ ActiveRecord::Schema.define(:version => 20110928151843) do
     t.text     "question"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "capis_axis_id"
+    t.integer  "milestone_name_id"
+    t.integer  "capi_axis_id"
   end
 
   create_table "generic_risks", :force => true do |t|
@@ -143,7 +144,6 @@ ActiveRecord::Schema.define(:version => 20110928151843) do
     t.text     "risk"
     t.text     "consequence"
     t.text     "actions"
-    t.integer  "milestone_name_id"
   end
 
   create_table "logs", :force => true do |t|

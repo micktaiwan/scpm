@@ -8,6 +8,7 @@ class GenericRiskQuestionsController < ApplicationController
 
   def new
     @question = GenericRiskQuestion.new
+    get_milestones
   end
 
   def create
@@ -22,8 +23,14 @@ class GenericRiskQuestionsController < ApplicationController
   def edit
     id = params[:id]
     @question = GenericRiskQuestion.find(id)
+    get_milestones
   end
 
+  def get_milestones
+    @milestone_names = MilestoneName.find(:all).select{|m| ['M3','M5','G2','G5'].include?(m.title)}.map{|m| [m.title, m.id]}
+    @capi_axes = CapiAxis.find(:all).map{|m| [m.name, m.id]}
+  end
+  
   def update
     q = GenericRiskQuestion.find(params[:id])
     q.update_attributes(params[:question])
