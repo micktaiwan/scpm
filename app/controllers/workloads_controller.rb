@@ -79,13 +79,18 @@ class WorkloadsController < ApplicationController
       w = Workload.new(p.id)
       @workloads << w
       @total_days += w.line_sums.inject(0) { |sum, (k,v)| sum += v[:remaining] == '' ? 0 : v[:remaining]}
-      @total_planned_days += w.cprodtotals.inject(0) { |sum, t| sum += t[:value]}
+      @total_planned_days += w.planned_total
       @to_be_validated_in_wl_remaining_total += w.to_be_validated_in_wl_remaining_total
+      #break
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals     = []
     @cap_totals = []
     size    = @workloads.size
+
+    @totals << (@workloads.inject(0) { |sum,w| sum += w.remain_to_plan_days })
+    @cap_totals << ''
+
     @totals << (@workloads.inject(0) { |sum,w| sum += w.next_month_percents} / size).round
     @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.next_month_percents)} / size).round
     @totals << (@workloads.inject(0) { |sum,w| sum += w.three_next_months_percents} / size).round
@@ -96,10 +101,10 @@ class WorkloadsController < ApplicationController
     end
 
     chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
-    chart.data "capped", @cap_totals[2..-1], 'ff0000'
-    chart.data "non capped", @totals[2..-1], '0000ff'
-    #chart.add_labels @cap_totals[2..-1]
-    max = [@totals.max,@cap_totals.max].max
+    chart.data "capped", @cap_totals[3..-1], 'ff0000'
+    chart.data "non capped", @totals[3..-1], '0000ff'
+    #chart.add_labels @cap_totals[3..-1]
+    max = [@totals[3..-1].max,@cap_totals[3..-1].max].max
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8

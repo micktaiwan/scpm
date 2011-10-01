@@ -4,7 +4,8 @@ class Workload
 
   attr_reader :name, :weeks, :wl_weeks, :person_id, :wl_lines, :line_sums,
               :opens, :ctotals, :cprodtotals, :percents, :months, :days, :person, :next_month_percents, :three_next_months_percents,
-              :planned_total, :sdp_remaining_total, :to_be_validated_in_wl_remaining_total
+              :planned_total, :sdp_remaining_total,
+              :to_be_validated_in_wl_remaining_total
 
   def initialize(person_id, options = {})
     @person     = Person.find(person_id)
@@ -119,6 +120,10 @@ class Workload
   # not DRY (already in application_controller)
   def round_to_hour(f)
     (f/0.125).round*0.125
+  end
+
+  def remain_to_plan_days
+    @sdp_remaining_total - @planned_total
   end
 
 end
