@@ -1,0 +1,8 @@
+<h2>Add a axis</h2>
+<%= error_messages_for :axis %>
+<% form_for @axis, :url=>{:action=>'update'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>
+

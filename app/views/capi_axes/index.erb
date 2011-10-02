@@ -1,0 +1,10 @@
+<%= render(:file=>"tools/menu")%>
+
+<h2>Capitalisation Axes</h2>
+<%= render(:file=>"capi_axes/menu")%>
+
+<div id="error"></div>
+<ul>
+  <%= render(:partial=>"axis", :collection=>@axes) %>
+</ul>
+

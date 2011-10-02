@@ -3,7 +3,7 @@ class GenericRiskQuestionsController < ApplicationController
   layout 'tools'
 
   def index
-    @questions = GenericRiskQuestion.all
+    @axes = CapiAxis.all
   end
 
   def new

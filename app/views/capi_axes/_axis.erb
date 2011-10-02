@@ -1,0 +1,6 @@
+<li id="axis_<%=axis.id%>">
+  <%= axis.name %>
+  <%= link_to(image_tag('edit.gif'), :action=>'edit', :id=>axis.id) %>
+  <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>axis.id}, :success=>"$('axis_#{axis.id}').hide()", :confirm=>'Sure?') %>
+</li>
+

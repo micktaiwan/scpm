@@ -1,0 +1,2 @@
+module CapiAxesHelper
+end

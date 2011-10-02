@@ -1,8 +1,11 @@
 <p><%= label_tag 'Capi Axis' %>
-<%= select(:question, :capi_axis_id, options_for_select(@capi_axes)) %></p>
+<%= select(:question, :capi_axis_id, options_for_select(@capi_axes, @question.capi_axis_id)) %>
+<%= link_to('New axis', {:controller=>'capi_axes', :action=>'new'}, {:class=>'btnlnk'}) %>
+</p>
 
 <p><%= label_tag 'milestone' %>
-<%= select(:question, :milestone_name_id, options_for_select(@milestone_names)) %></p>
+<%= select(:question, :milestone_name_id, options_for_select(@milestone_names, @question.milestone_name_id)) %></p>
 
 <p><%= label_tag 'question' %>
 <%= text_area :question, :question, {:cols=>60, :rows=>3} %></p>
+

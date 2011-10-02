@@ -2,11 +2,28 @@ class Workload
 
   include ApplicationHelper
 
-  attr_reader :name, :weeks, :wl_weeks, :person_id, :wl_lines, :line_sums,
-              :opens, :ctotals, :cprodtotals, :percents, :months, :days, :person, :next_month_percents, :three_next_months_percents,
-              :planned_total, :sdp_remaining_total,
-              :to_be_validated_in_wl_remaining_total
+  attr_reader
+    :name,        # person's name
+    :weeks,       # arrays of week's names '43', '44', ...
+    :wl_weeks,    # array of week ids '201143'
+    :person_id,
+    :wl_lines,    # arrays of loads
+    :line_sums,
+    :opens,
+    :ctotals,
+    :cprodtotals,
+    :percents,
+    :months,
+    :days,
+    :person,
+    :next_month_percents,
+    :three_next_months_percents,
+    :planned_total,
+    :sdp_remaining_total,
+    :to_be_validated_in_wl_remaining_total
 
+  # options can have
+  # :only_holidays => true
   def initialize(person_id, options = {})
     @person     = Person.find(person_id)
     raise "could not find this person by id '#{person_id}'" if not @person
