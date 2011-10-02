@@ -2,8 +2,7 @@ class Workload
 
   include ApplicationHelper
 
-  attr_reader
-    :name,        # person's name
+  attr_reader :name,        # person's name
     :weeks,       # arrays of week's names '43', '44', ...
     :wl_weeks,    # array of week ids '201143'
     :person_id,
