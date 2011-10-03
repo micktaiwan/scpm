@@ -7,6 +7,7 @@
   <div class="milestone_comments status<%=milestone.status%>">
     <%= my_simple_format(milestone.comments) %>
     <%= milestone.date %><br/>
+    <%= milestone.delay_in_words %>
   </div>
 
   <%= milestone.checklist_div(current_user) %>

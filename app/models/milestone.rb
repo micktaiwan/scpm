@@ -1,5 +1,6 @@
 class Milestone < ActiveRecord::Base
 
+  include ActionView::Helpers::DateHelper
   belongs_to  :project
   has_many    :checklist_items, :dependent=>:destroy
 
@@ -116,6 +117,13 @@ class Milestone < ActiveRecord::Base
     end  
     css_class = "milestone_cl#{modif}"
     "<div class='#{css_class}' onclick='open_checklist(#{self.id})'>Checks: #{non_zero.size}/#{items.size}</div>"
+  end
+  
+  def delay_in_words
+    return "" if !self.milestone_date or self.milestone_date=="" or
+                 !self.actual_milestone_date or self.actual_milestone_date=="" or
+                 self.actual_milestone_date <= self.milestone_date
+    time_ago_in_words(Time.now-(self.actual_milestone_date-self.milestone_date).to_i.days) + " delay"
   end
 
 end
