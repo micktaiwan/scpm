@@ -1,0 +1,9 @@
+<li>
+  <b><%= role.display %></b>
+  <%= link_to(image_tag('edit.gif'), {:controller=>'roles', :action=>'edit', :id=>role.id}) %>
+   (<%= role.name %>) <%= role.description %>
+  <ul>
+    <%= render(:partial=>'people/person', :collection=>Person.find(:all, :conditions=>"has_left=0").select{|p|
+      p.has_role?(role.name)}) %>
+  </ul>
+</li>

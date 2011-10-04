@@ -1,0 +1,7 @@
+<h2>Application Roles</h2>
+<%= render(:file=>'roles/menu') %>
+
+Role codes (or names) are used in the BAM source directly and have a special meaning to BAM developpers. Don't change them.
+<ul>
+  <%= render(:partial=>'role', :collection=>@roles) %>
+</ul>

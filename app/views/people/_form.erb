@@ -29,15 +29,15 @@
 
 <p><%= label_tag 'is_transverse' %>
 <%= radio_button :person, :is_transverse, 0 %> No
-<%= radio_button :person, :is_transverse, 1 %> Yes</p>
+<%= radio_button :person, :is_transverse, 1 %> Yes (Will not appear in operational consolidations)</p>
 
 <p><%= label_tag 'has_left' %>
 <%= radio_button :person, :has_left, 0 %> No
-<%= radio_button :person, :has_left, 1 %> Yes</p>
+<%= radio_button :person, :has_left, 1 %> Yes (Account will be suspended)</p>
 
 <p><%= label_tag 'is_supervisor' %>
 <%= radio_button :person, :is_supervisor, 0 %> No
-<%= radio_button :person, :is_supervisor, 1 %> Yes</p>
+<%= radio_button :person, :is_supervisor, 1 %> Yes (Is customer)</p>
 
 <% @roles.each { |r| %>
 <p><%= label_tag r.name %>
@@ -46,6 +46,4 @@
 </p>
 <% } %>
 
-
 <% end %>
-

@@ -1,22 +1,22 @@
 <li<% if person.has_left==1%> style="color:grey;"<%end%>>
 <% if current_user.has_role?('Admin') %>
-<%= link_to('Edit', {:action=>'edit', :id=>person.id},{:class=>"btnlnk"}) %>
+<%= link_to(image_tag('edit.gif'), {:controller=>'people', :action=>'edit', :id=>person.id}) %>
 <% end %>
 <% if person.company %><%= person.company.name %><% else %>???<% end %>
 <%= link_to(person.name, :action=>'show', :id=>person.id) %>
 
 <%
-if current_user.has_role?('Admin')
-  nb = person.active_requests.size
-  l  = person.load
-  a = (l/nb).to_s[0..3]
-end
+#if current_user.has_role?('Admin')
+#  nb = person.active_requests.size
+#  l  = person.load
+#  a = (l/nb).to_s[0..3]
+#end
 %>
 
 
 <% if person.is_supervisor==1 %>
   <b>supervisor</b>:  <%= person.projects.size %> projects
-<% elsif current_user.has_role?('Admin') %>
+<% elsif false #current_user.has_role?('Admin') %>
   <b>nb</b>: <%= nb %> / <%= person.requests.size %>
   <b>load</b>: <%= l %>
   <b>average</b>: <%= a %>
@@ -26,4 +26,3 @@ end
 <% end %>
 
 </li>
-

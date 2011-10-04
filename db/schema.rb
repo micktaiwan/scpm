@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110928195815) do
+ActiveRecord::Schema.define(:version => 20111004062046) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -323,6 +323,8 @@ ActiveRecord::Schema.define(:version => 20110928195815) do
 
   create_table "roles", :force => true do |t|
     t.string "name"
+    t.text   "description"
+    t.string "display"
   end
 
   add_index "roles", ["name"], :name => "index_roles_on_name"

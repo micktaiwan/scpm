@@ -10,7 +10,9 @@ class ProjectsController < ApplicationController
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
     @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr           = Person.find(:all, :conditions=>"is_transverse=0 and is_supervisor=0 and has_left=0", :order=>"name asc")
-    @workstreams  = Project.all.collect{|p| p.workstream}.uniq.sort
+    @workstreams  = ['EA','EI','EV','EDC','EDE','EDG','EDS','EDY','EM','EMNB','EMNC','EZMB','EZMC']
+    #Project.all.collect{|p| p.workstream}.uniq.sort
+
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
     @total_wps    = Project.count
     @total_status = Status.count
