@@ -6,17 +6,26 @@
   <%= label_tag(:qr_load, "Load") %>
   <%= text_field_tag(:qr_load, "1.5", {:size=>3}) %><br/>
 
-<ul class="checkbox-list">
-  <% @qr.each do |qr| -%>
-    <li><%= check_box_tag "qr[ids][]", qr.id, true -%> <%= qr.name -%></li>
-  <% end -%>
-</ul>
+  <ul class="checkbox-list">
+    <% @ope.each do |qr| -%>
+      <li><%= check_box_tag "qr[ids][]", qr.id, true -%> <%= qr.name -%></li>
+    <% end -%>
+  </ul>
 
 
-  <%= label_tag(:name, "WP Resp task") %>
-  <%= text_field_tag(:name, "WP Organisation #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
-  <%= label_tag(:name, "CP-DP task") %>
-  <%= text_field_tag(:name, "Project Management #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
+  <%= label_tag(:resp_name, "WP Resp task") %>
+  <%= text_field_tag(:resp_name, "WP Organisation #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
+
+  <ul class="checkbox-list">
+    <% @service_resp.each do |p| -%>
+      <li><%= check_box_tag "resp[ids][]", p.id, true -%> <%= p.name -%></li>
+    <% end -%>
+  </ul>
+
+
+
+  <%= label_tag(:cp_name, "CP-DP task") %>
+  <%= text_field_tag(:cp_name, "Project Management #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
   <%= submit_tag("Generate") %>
 <% end %>
 <div id="rv">&nbsp;</div>

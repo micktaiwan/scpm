@@ -323,8 +323,8 @@ ActiveRecord::Schema.define(:version => 20111004062046) do
 
   create_table "roles", :force => true do |t|
     t.string "name"
-    t.text   "description"
     t.string "display"
+    t.text   "description"
   end
 
   add_index "roles", ["name"], :name => "index_roles_on_name"

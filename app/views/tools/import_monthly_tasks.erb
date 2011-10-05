@@ -1,4 +1,3 @@
-<ul>
-<%= render(:partial=>"qr_sdp_task_import", :collection=>@qr, :as=>:qr, :locals=>{:name=>@name, :load=>@load}) %>
-</ul>
+<%= render(:partial=>"qr_sdp_task_import", :collection=>@ope, :as=>:p, :locals=>{:name=>@oname, :load=>@oload}) %>
+<%= render(:partial=>"resp_sdp_task_import", :collection=>@resp, :as=>:p, :locals=>{:name=>@rname, :load=>@rload}) %>
 

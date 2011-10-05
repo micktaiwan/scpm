@@ -222,13 +222,19 @@ class ToolsController < ApplicationController
   end
 
   def import_monthly_tasks_form
-    @qr = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    @ope = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    @service_resp = @ope.select{ |p| p.has_role?('ServiceLineResp')}
   end
+
   def import_monthly_tasks
-    qr_ids = params["qr"]["ids"].join(",")
-    @name = params["qr_name"]
-    @load = params["qr_load"]
-    @qr = Person.find(:all, :conditions=>"id in (#{qr_ids})", :order=>"name")
+    ope_ids = params["qr"]["ids"].join(",")
+    @oname = params["qr_name"]
+    @oload = params["qr_load"]
+    @ope = Person.find(:all, :conditions=>"id in (#{ope_ids})", :order=>"name")
+    resp_ids = params["resp"]["ids"].join(",")
+    @rname = params["resp_name"]
+    @rload = params["resp_load"]
+    @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
     render(:layout=>false)
   end
 
