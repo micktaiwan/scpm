@@ -7,6 +7,11 @@ module SdpDB
 	  'WP1.1 - Quality Control'=>[23733,22053],
 	  'WP1.2 - Quality Assurance'=>[23734,22053],
 	  'WP2 - Quality for Maintenance'=>[24122,22054], # WP2 - Maintenance
+    'WP3.0 - Old Modeling'            => [23735,22055],
+    'WP3.1 - Modeling Support'        => [23735,22055],
+    'WP3.2 - Modeling Conception and Production' => [23735,22055],
+    'WP3.3 - Modeling BAT specific Control'      => [23735,22055],
+    'WP3.4 - Modeling BAT specific Production'   => [23735,22055],
 	  'WP3 - Modeling'=>[23735,22055],
 	  'WP4.1 - Surveillance Audit'=>[23736,22056], # does not exist in SDP (just WP4)
 	  'WP4.2 - Surveillance Root cause'=>[23736,22056],
