@@ -24,6 +24,11 @@ module SdpDB
 	  }
 
   ActivityDB = {
+    ['All','WP3.0 - Old Modeling']=>102848,
+    ['All','WP3.1 - Modeling Support']=>102848,
+    ['All','WP3.2 - Modeling Conception and Production']=>102848,
+    ['All','WP3.3 - Modeling BAT specific Control']=>102848,
+    ['All','WP3.4 - Modeling BAT specific Production']=>102848,
     ['All','WP3 - Modeling']=>102848,
     ['All','WP4.1 - Surveillance Audit']=>102849,
     ['All','WP4.2 - Surveillance Root cause']=>103036,
