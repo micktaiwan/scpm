@@ -84,20 +84,28 @@ class WorkloadsController < ApplicationController
       #break
     end
     @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
-    @totals     = []
-    @cap_totals = []
-    size    = @workloads.size
+    @totals       = []
+    @cap_totals   = []
+    @avail_totals = []
+    size          = @workloads.size
 
+    # to plan
     @totals << (@workloads.inject(0) { |sum,w| sum += w.remain_to_plan_days })
     @cap_totals << ''
-
+    @avail_totals << ''
+    # next 5 weeks
     @totals << (@workloads.inject(0) { |sum,w| sum += w.next_month_percents} / size).round
     @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.next_month_percents)} / size).round
+    @avail_totals << ''
+    # next 3 months
     @totals << (@workloads.inject(0) { |sum,w| sum += w.three_next_months_percents} / size).round
     @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.three_next_months_percents)} / size).round
+    @avail_totals << ''
+    # per weeks
     @workloads.first.weeks.each_with_index do |tmp,i|
       @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:precise]} / size).round
       @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
+      @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.availability[i][:avail]})
     end
 
     chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
@@ -123,7 +131,7 @@ class WorkloadsController < ApplicationController
   end
 
   def refresh_holidays
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name")
     @workloads = []
     for p in @people
       @workloads << Workload.new(p.id, {:only_holidays=>true})
@@ -221,7 +229,7 @@ class WorkloadsController < ApplicationController
       wl_load.save
       @value = value
     end
-    @lsum, @csum, @cpercent, @planned_total  = get_sums(line, @wlweek, person_id)
+    @lsum, @csum, @cpercent, @planned_total, @avail  = get_sums(line, @wlweek, person_id)
   end
 
   def display_edit_line
@@ -312,14 +320,17 @@ class WorkloadsController < ApplicationController
     wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])
     csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
     cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
-
+    open    = 5 - WlHoliday.get_from_week(week)
+    avail   = [0,(open-csum)].max 
+    avail   = (avail==0 ? '' : avail)
+        
     planned_total = 0
     for l in wl_lines
       s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))
       planned_total  +=  s if l.wl_type <= 200 and s
     end
 
-    [lsum, csum, cpercent, planned_total]
+    [lsum, csum, cpercent, planned_total, avail]
   end
 
 end

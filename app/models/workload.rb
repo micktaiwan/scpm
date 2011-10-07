@@ -2,24 +2,25 @@ class Workload
 
   include ApplicationHelper
 
-  attr_reader :name,        # person's name
-    :weeks,       # arrays of week's names '43', '44', ...
-    :wl_weeks,    # array of week ids '201143'
-    :person_id,
-    :wl_lines,    # arrays of loads
-    :line_sums,
-    :opens,
-    :ctotals,
-    :cprodtotals,
-    :percents,
-    :months,
-    :days,
+  attr_reader :name,  # person's name
+    :weeks,           # arrays of week's names '43', '44', ...
+    :wl_weeks,        # array of week ids '201143'
+    :months,          # "Oct"
+    :days,            # week days display per week: "17-21"
+    :opens,           # total of worked days per week (5 - nb of holidays)
     :person,
-    :next_month_percents,
-    :three_next_months_percents,
-    :planned_total,
-    :sdp_remaining_total,
-    :to_be_validated_in_wl_remaining_total
+    :person_id,
+    :wl_lines,        # arrays of loads
+    :line_sums,       # sum of days per line of workload
+    :ctotals,         # total days planned per week including not bundle days (holidays and other lines) {:id=>w, :value=>col_sum(w, @wl_lines)}
+    :availability,    # total days of availability {:days=>xxx, :percent=>yyy}
+    :cprodtotals,     # total days planned per week on production only {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
+    :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
+    :next_month_percents,         # next 5 weeks (including current)
+    :three_next_months_percents,  # next 3 months _after_ the 5 coming weeks
+    :planned_total,               # total number of days planned
+    :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
+    :to_be_validated_in_wl_remaining_total # total of requests to be validated planned in workloads
 
   # options can have
   # :only_holidays => true
@@ -37,26 +38,25 @@ class Workload
       @wl_lines  << WlLine.create(:name=>"Cong&eacute;s", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
     end
     from_day    = Date.today - (Date.today.cwday-1).days
-    #farest_week = @wl_lines.map{|l| m = l.wl_loads.map{|l| l.week}.max; m ? m:0}.max
-    farest_week = wlweek(from_day+6.months) # if farest_week == 0
+    farest_week = wlweek(from_day+6.months)
     @wl_weeks   = []
     @weeks      = []
     @opens      = []
-    @ctotals    = [] # total days planned including not project days (holidays and other lines)
-    @cprodtotals= [] # total days planned on production only
+    @ctotals    = []
+    @cprodtotals= []
+    @availability = []
     @percents   = []
     @months     = []
     @days       = []
     month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
     month_displayed = false
     nb = 0
-    iteration = from_day
-    @next_month_percents = 0.0
+    iteration                   = from_day
+    @next_month_percents        = 0.0
     @three_next_months_percents = 0.0
     while true
-      w = wlweek(iteration)
+      w = wlweek(iteration) # output: year + week ("201143")
       break if w > farest_week or nb > 6*4
-
       # months
       if Date::ABBR_MONTHNAMES[(iteration+4.days).month] != month
         month = Date::ABBR_MONTHNAMES[(iteration+4.days).month]
@@ -73,24 +73,28 @@ class Workload
       @weeks    << iteration.cweek
       @opens    << 5 - WlHoliday.get_from_week(w)
       if @wl_lines.size > 0
-        @ctotals      << {:name=>'ctotal',    :id=>w, :value=>col_sum(w, @wl_lines)}
-        @cprodtotals  << {:name=>'cprodtotal',:id=>w, :value=>col_prod_sum(w, @wl_lines)}
+        col_sum = col_sum(w, @wl_lines)
+        @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
+        @cprodtotals    << {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
         percent = (@ctotals.last[:value] / @opens.last)*100
+        open    = @opens.last
+        avail   = [0,(open-col_sum)].max
+        @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>(avail/open).round}
         @next_month_percents += percent if nb < 5
-        @three_next_months_percents += percent if nb >= 5 and nb <= 12+4
+        @three_next_months_percents += percent if nb >= 5 and nb < 5+12
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
       iteration = iteration + 7.days
       nb += 1
     end
-    @next_month_percents = (@next_month_percents / 5).round
+    @next_month_percents        = (@next_month_percents / 5).round
     @three_next_months_percents = (@three_next_months_percents / 12).round
 
     # sum the lines
-    @line_sums      = Hash.new
-    today_week      = wlweek(Date.today)
-    @planned_total  = 0
-    @sdp_remaining_total = 0
+    @line_sums            = Hash.new
+    today_week            = wlweek(Date.today)
+    @planned_total        = 0
+    @sdp_remaining_total  = 0
     @to_be_validated_in_wl_remaining_total = 0
     for l in @wl_lines
       @line_sums[l.id] = Hash.new

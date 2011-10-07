@@ -44,6 +44,13 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
       <td align="center"><%= w %>%</td>
     <% end %>
   </tr>
+  
+  <tr style="font-weight:bold;">
+    <td>Availability</td>
+    <% for w in @avail_totals %>
+      <td align="center"><%= w %></td>
+    <% end %>
+  </tr>
 
 </table>
 <br/>

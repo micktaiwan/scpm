@@ -86,6 +86,16 @@ You have <%= workload.sdp_remaining_total %> remaining days in SDP but only <str
   <th id="planned_total"><%= workload.planned_total %></th>
   <%= render(:partial=>"wl_ctotal", :collection=>workload.percents) %>
   </tr>
+
+  <tr class="wl_total">
+  <th class="wl_names">Availability</th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th id="availability_total"></th>
+  <%= render(:partial=>"wl_ctotal", :collection=>workload.availability) %>
+  </tr>
 </thead>
 
 <tbody class="scrollContent">
