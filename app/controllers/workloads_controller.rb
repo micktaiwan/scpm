@@ -20,13 +20,18 @@ class WorkloadsController < ApplicationController
   def change_workload(person_id=nil)
     person_id = params[:person_id] if !person_id
     session['workload_person_id'] = person_id
-    @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
     @workload = Workload.new(person_id)
+    get_last_sdp_update
     get_suggested_requests(@workload)
     get_sdp_tasks(@workload)
     get_chart
     get_sdp_gain(@workload.person)
   end
+
+  def get_last_sdp_update
+    @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
+  end
+
 
   def get_chart
     chart = GoogleChart::LineChart.new('1000x300', "#{@workload.person.name} workload", false)
@@ -173,6 +178,7 @@ class WorkloadsController < ApplicationController
     else
       @error = "This line already exists: #{request_id}"
     end
+    get_last_sdp_update
     get_suggested_requests(@workload)
     get_chart
   end
@@ -191,6 +197,7 @@ class WorkloadsController < ApplicationController
       @error = "This line already exists: #{name}"
     end
     @workload = Workload.new(person_id)
+    get_last_sdp_update
     get_suggested_requests(@workload)
     get_sdp_gain(@workload.person)
     get_chart
@@ -211,6 +218,7 @@ class WorkloadsController < ApplicationController
       @error = "This line already exists: #{found.name}"
     end
     @workload = Workload.new(person_id)
+    get_last_sdp_update
     get_suggested_requests(@workload)
     get_sdp_gain(@workload.person)
     get_chart

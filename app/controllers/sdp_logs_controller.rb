@@ -1,7 +1,7 @@
 class SdpLogsController < ApplicationController
 
   def create
-    date = Date.today
+    date = params[:date]
     person_id = params[:person_id]
     initial   = params[:initial]
     sdp_remaining = params[:sdp_remaining]

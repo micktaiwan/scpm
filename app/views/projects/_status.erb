@@ -19,7 +19,7 @@
     <% end %>
 
     <% if status.project %>
-      <h4>Status explanation (<%=html_status(status.project.old_status)%> => <%=html_status(status.project.last_status)%>)</h4>
+      <h4>Status explanation</h4>
       <%=my_simple_format(status.reason)%>
       <% if status.project.old_status != status.project.last_status and status.reason == ""%><%=image_tag("alert.gif")%><br/><% end %>
 

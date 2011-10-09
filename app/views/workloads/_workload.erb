@@ -55,6 +55,7 @@
     <% if current_user.has_role?('ServiceLineResp') %>
     <%= link_to_remote(image_tag('add.png', :id=>'sdp_add'),
       :url=>{:controller=>'sdp_logs', :action=>'create',
+        :date=>@last_sdp_update.to_date,
         :person_id=>workload.person_id,
         :initial=>@balance[:initial],
         :sdp_remaining=>@balance[:remaining],
