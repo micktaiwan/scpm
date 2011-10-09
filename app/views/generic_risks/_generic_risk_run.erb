@@ -1,27 +1,25 @@
 <li id="r_<%= r.id %>" class="generic_risk_section">
 
-<%= hidden_field "r[#{r.id}]", :id, :value=>r.id %>
-
 <p><%= label_tag 'context' %>
-<%= text_area "r[#{r.id}]", :context, {:cols=>60, :rows=>2, :value=>r.context} %></p>
+<%= text_area "r[#{r.generic_risk_question.id}]", :context, {:cols=>60, :rows=>2, :value=>r.context} %></p>
 
 <p><%= label_tag 'risk' %>
-<%= text_area "r[#{r.id}]", :risk, {:cols=>60, :rows=>2, :value=>r.risk} %></p>
+<%= text_area "r[#{r.generic_risk_question.id}]", :risk, {:cols=>60, :rows=>2, :value=>r.risk} %></p>
 
 <p><%= label_tag 'probability' %>
-<%= select "r[#{r.id}]", :probability, Risk::PROBABILITY %></p>
+<%= select "r[#{r.generic_risk_question.id}]", :probability, Risk::PROBABILITY %></p>
 
 <p><%= label_tag 'consequence' %>
-<%= text_area "r[#{r.id}]", :consequence, {:cols=>60, :rows=>2, :value=>r.consequence} %></p>
+<%= text_area "r[#{r.generic_risk_question.id}]", :consequence, {:cols=>60, :rows=>2, :value=>r.consequence} %></p>
 
 <p><%= label_tag 'impact' %>
-<%= select "r[#{r.id}]", :impact, Risk::IMPACT %></p>
+<%= select "r[#{r.generic_risk_question.id}]", :impact, Risk::IMPACT %></p>
 
 <p><%= label_tag 'actions and status' %>
-<%= text_area "r[#{r.id}]", :actions, {:cols=>60, :rows=>2, :value=>r.actions} %></p>
+<%= text_area "r[#{r.generic_risk_question.id}]", :actions, {:cols=>60, :rows=>2, :value=>r.actions} %></p>
 
 <p><%= label_tag 'is_quality' %>
-<%= radio_button "r[#{r.id}]", :is_quality, 1, {:checked=>r.is_quality==1} %> Yes
-<%= radio_button "r[#{r.id}]", :is_quality, 0, {:checked=>r.is_quality==0}%> No</p>
+<%= radio_button "r[#{r.generic_risk_question.id}]", :is_quality, 1, {:checked=>r.is_quality==1} %> Yes
+<%= radio_button "r[#{r.generic_risk_question.id}]", :is_quality, 0, {:checked=>r.is_quality==0}%> No</p>
 
 </li>

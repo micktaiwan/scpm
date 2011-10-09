@@ -19,6 +19,7 @@ class Project < ActiveRecord::Base
   has_many    :actions,     :dependent => :destroy, :order=>"progress"
   has_many    :current_actions, :class_name=>'Action', :conditions=>"progress in('open','in_progress')"
   has_many    :amendments,  :dependent => :destroy, :order=>"done, id"
+  has_many    :current_amendments, :class_name=>'Amendment', :conditions=>"done = 0"
   has_many    :milestones,  :dependent => :destroy
   has_many    :notes,       :dependent => :destroy
   has_many    :project_people

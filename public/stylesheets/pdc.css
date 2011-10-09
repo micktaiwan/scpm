@@ -56,7 +56,7 @@ th {
   border: 1px solid #DDD;
   }
 
-tbody tr:hover {
+#workload_table tr:hover {
   background: #FFA;
   }
 

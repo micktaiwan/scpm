@@ -52,19 +52,19 @@ class GenericRiskQuestionsController < ApplicationController
     questions = params['question']
     risks     = params['r']
     project_id = params[:id].to_i
-    questions.each do |index, answer|
+    questions.each do |id, answer|
       next if answer=="yes"
-      next if !risks[index]
-      next if risks[index][:probability] == "0"
-      next if Risk.find(:first, :conditions=>["project_id=? and generic_risk_id=?", project_id, risks[index][:id]])
+      next if !risks[id]
+      next if risks[id][:probability] == "0"
+      next if Risk.find(:first, :conditions=>["project_id=? and generic_risk_id=?", project_id, id])
       Risk.create(:project_id=>project_id,
-        :generic_risk_id=>risks[index][:id],
-        :context=>risks[index][:context],
-        :risk=>risks[index][:risk],
-        :probability=>risks[index][:probability],
-        :consequence=>risks[index][:consequence],
-        :impact=>risks[index][:impact],
-        :actions=>risks[index][:actions])
+        :generic_risk_id=>id,
+        :context=>risks[id][:context],
+        :risk=>risks[id][:risk],
+        :probability=>risks[id][:probability],
+        :consequence=>risks[id][:consequence],
+        :impact=>risks[id][:impact],
+        :actions=>risks[id][:actions])
     end
     redirect_to :controller=>'projects', :action=>'show', :id=>project_id
   end

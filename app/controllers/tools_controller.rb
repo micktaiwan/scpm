@@ -4,11 +4,12 @@ class ToolsController < ApplicationController
 
   include WelcomeHelper
 
-  NB_QR 					            = 14.9
+  NB_QR 					            = 17
+  NB_FTE 					            = 14.9
   NB_DAYS_PER_MONTH			      = 18
   MEETINGS_LOAD_PER_MONTH 	  = 1.5
-  PM_LOAD_PER_MONTH 		      = 22 + 13
-  WP_LEADERS_DAYS_PER_MONTH   = 2
+  PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
+  WP_LEADERS_DAYS_PER_MONTH   = 3
   NB_WP_LEADERS 			        = 4.5 # 0.5 pour Vero
 
   def index
@@ -93,7 +94,7 @@ class ToolsController < ApplicationController
       @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
       @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
-      @remaining_time       = (@remaining/NB_QR/NB_DAYS_PER_MONTH/0.01).round * 0.01
+      @remaining_time       = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.01).round * 0.01
       @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH*NB_WP_LEADERS)*@remaining_time)
       begin
         montee      = SDPActivity.find_by_title('Montee en competences').remaining

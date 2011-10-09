@@ -1,4 +1,4 @@
-<li<% if person.has_left==1%> style="color:grey;"<%end%>>
+<li style="<%= person.css_style %>">
 <% if current_user.has_role?('Admin') %>
 <%= link_to(image_tag('edit.gif'), {:controller=>'people', :action=>'edit', :id=>person.id}) %>
 <% end %>
@@ -15,7 +15,7 @@
 
 
 <% if person.is_supervisor==1 %>
-  <b>supervisor</b>:  <%= person.projects.size %> projects
+  <b>supervisor</b>
 <% elsif false #current_user.has_role?('Admin') %>
   <b>nb</b>: <%= nb %> / <%= person.requests.size %>
   <b>load</b>: <%= l %>

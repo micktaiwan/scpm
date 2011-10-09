@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111004062046) do
+ActiveRecord::Schema.define(:version => 20111008161048) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -344,6 +344,19 @@ ActiveRecord::Schema.define(:version => 20111004062046) do
     t.float    "balancei"
     t.float    "balancer"
     t.float    "balancea"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sdp_logs", :force => true do |t|
+    t.integer  "person_id"
+    t.date     "date"
+    t.float    "initial"
+    t.float    "sdp_remaining"
+    t.float    "wl_remaining"
+    t.float    "delay"
+    t.float    "balance"
+    t.float    "percent"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

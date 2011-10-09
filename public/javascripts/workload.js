@@ -42,7 +42,7 @@ function change_workload(person_id) {
   }
 
 function set_fixed_header() {
-  $j('table').fixedHeaderTable({ height: '600', footer: false, fixedColumn: false });
+  $j('#workload_table').fixedHeaderTable({ height: '600', footer: false, fixedColumn: false });
   }
 
 function display_milestones(text) {

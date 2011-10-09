@@ -13,19 +13,19 @@ class WorkloadsController < ApplicationController
 
   def index
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
-    @workload = Workload.new(session['workload_person_id'])
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    if @workload.person.rmt_user == ""
-      @suggested_requests = []
-    else
-      get_suggested_requests(@workload)
-    end
-    if @workload.person.trigram == ""
-      @sdp_tasks = []
-    else
-      get_sdp_tasks(@workload)
-    end
+    change_workload(session['workload_person_id'])
+  end
+
+  def change_workload(person_id=nil)
+    person_id = params[:person_id] if !person_id
+    session['workload_person_id'] = person_id
+    @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
+    @workload = Workload.new(person_id)
+    get_suggested_requests(@workload)
+    get_sdp_tasks(@workload)
     get_chart
+    get_sdp_gain(@workload.person)
   end
 
   def get_chart
@@ -43,6 +43,10 @@ class WorkloadsController < ApplicationController
   end
 
   def get_suggested_requests(wl)
+    if wl.person.rmt_user == ""
+      @suggested_requests = []
+      return
+    end
     request_ids   = wl.wl_lines.select {|l| l.request_id != nil}.map { |l| filled_number(l.request_id,7)}
     cond = ""
     cond = " and request_id not in (#{request_ids.join(',')})" if request_ids.size > 0
@@ -50,12 +54,19 @@ class WorkloadsController < ApplicationController
   end
 
   def get_sdp_tasks(wl)
+    if wl.person.trigram == ""
+      @sdp_tasks = []
+      return
+    end
     task_ids   = wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
-    #puts task_ids.join(', ')
-    #raise 'stop'
     cond = ""
     cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
     @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null and remaining > 0 #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
+  end
+
+  def get_sdp_gain(person)
+    @balance = person.sdp_balance
+    @sdp_logs = SdpLog.find(:all, :conditions=>["person_id=?", person.id], :order=>"`date`", :limit=>3)
   end
 
   # just for loading tabs
@@ -140,15 +151,6 @@ class WorkloadsController < ApplicationController
     render :layout => false
   end
 
-  def change_workload
-    person_id = params[:person_id]
-    session['workload_person_id'] = person_id
-    @workload = Workload.new(person_id)
-    get_suggested_requests(@workload)
-    get_sdp_tasks(@workload)
-    get_chart
-  end
-
   def add_by_request
     request_id = params[:request_id].strip
     if request_id.empty?
@@ -190,6 +192,7 @@ class WorkloadsController < ApplicationController
     end
     @workload = Workload.new(person_id)
     get_suggested_requests(@workload)
+    get_sdp_gain(@workload.person)
     get_chart
   end
 
@@ -209,6 +212,7 @@ class WorkloadsController < ApplicationController
     end
     @workload = Workload.new(person_id)
     get_suggested_requests(@workload)
+    get_sdp_gain(@workload.person)
     get_chart
   end
 
@@ -321,9 +325,9 @@ class WorkloadsController < ApplicationController
     csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
     cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
     open    = 5 - WlHoliday.get_from_week(week)
-    avail   = [0,(open-csum)].max 
+    avail   = [0,(open-csum)].max
     avail   = (avail==0 ? '' : avail)
-        
+
     planned_total = 0
     for l in wl_lines
       s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))

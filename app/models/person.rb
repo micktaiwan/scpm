@@ -17,12 +17,36 @@ class Person < ActiveRecord::Base
 
   attr_accessor :password
 
+  # calculate initial, remaining, balance, balance% and remaining delay
+  def sdp_balance
+    tasks = SDPTask.find(:all, :conditions=>"collab LIKE '%#{self.trigram}%'")
+    init    = tasks.inject(0.0) { |sum, t| sum+t.initial}
+    balance = tasks.inject(0.0) { |sum, t| sum+t.balancea}
+    if init > 0
+      percent   = ((balance / init )*100 / 0.1).round * 0.1
+    else
+      percent   = 0
+    end
+    remaining = tasks.inject(0.0) { |sum, t| sum+t.remaining}
+    delay = (remaining/18/0.1).round * 0.1
+    {:trigram=>self.trigram, :initial=>init, :balance=>balance, :percent=>percent, :remaining=>remaining, :delay=>delay}
+  end
+
+  def css_style
+    if self.has_left == 1
+      'color: grey;'
+    elsif self.is_transverse==0
+      'font-weight:bold;'
+    else
+      ''
+    end
+  end
+
   def short_name
     arr = self.name.split(" ")
     return self.name if arr.size < 2
     arr[0] + " " + arr[1][0].chr + "."
   end
-
 
   def has_role?(role)
     self.roles.count(:conditions => ['name = ?', role]) > 0
@@ -48,7 +72,6 @@ class Person < ActiveRecord::Base
     Request.find(:all, :conditions => "assigned_to='#{self.rmt_user}' and status='assigned' and resolution!='closed' and resolution!='aborted'", :order=>"workstream, project_name")
   end
 
-
   def load
     active_requests.inject(0.0) { |sum, r| sum + r.workload}
   end
@@ -69,7 +92,6 @@ class Person < ActiveRecord::Base
     return self.find_by_login(login[4..-1]) if login[0..3] == "test" and password=="sqlitlse"
     return nil if login.empty? or password.empty?
     #return self.find_by_login(login) # temporaire.....
-
     if login_by_ldap(login,password)
       self.find_by_login(login)
     else

@@ -15,7 +15,6 @@ Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>
 <b>Total</b>: <%= @total_wps %> WPs, <%= @total_status %> statuses.
 </div>
 
-
 <%= link_to_function('filters', "Effect.toggle('filters','blind');",{:class=>"btnlnk"}) %>
 <% if(are_filtered) %><strong>filtered</strong><% end %>
 <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
@@ -127,9 +126,6 @@ Searches project title and description, statuses, request summary and PM names
           </ul>
         </div>
     </div>
-
-
-
   </div><!--End of tabscontent-->
 </div><!--End of tabs-->
 

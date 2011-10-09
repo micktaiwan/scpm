@@ -105,7 +105,7 @@ h3 {
   padding: 10px 0 5px 0;
 }
 #subcontent {
-  padding: 80px 0 0 0;
+  padding: 60px 0 0 0;
 }
 a {text-decoration:none;}
 .btnlnk {
@@ -189,10 +189,10 @@ td    {
   }
 .grid td    {
   padding: 3px;
-  border: #5A5 1px solid;
+  border: #555 1px solid;
   }
 .grid .header  {
-  background: #8F8;
+  background: #AAF;
   font-weight: bold;
   }
 

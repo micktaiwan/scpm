@@ -31,11 +31,15 @@
   </div>
 </div>
 
+<div class="stats">Last SDP update: <%= time_ago_in_words(@last_sdp_update) %> ago</div>
+
 <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %><br/>
 <br/>
+
 <%= render(:partial=>"workload") %>
 
 <script>
   set_fixed_header();
   new Draggable(wl_line_add_form); // does not mix well with scrollbar
 </script>
+
