@@ -56,6 +56,16 @@ function add(id, same_week, has_requests) {
                 :id=>@project.id},
               :class=>"btnlnk") %><br/>
             <br/>
+            Suggested status:
+            <% suggested_status = @project.suggested_status %>
+            <%= html_status(suggested_status) %>
+            <% if  suggested_status < @status.status %>
+              <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are not identified</strong>            <br/>
+            <% end %>
+            <% if @status.status > 0 and suggested_status > @status.status %>
+              <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are too high</strong>            <br/>
+            <% end %>
+            <br/>
 
             <a href="#" onclick="return false;" title="Probability:
             0:can not occur
@@ -83,19 +93,8 @@ function add(id, same_week, has_requests) {
             <td>Modif.</td>
             <td></td>
             </tr>
-              <%= render(:partial=>'risk', :collection=>@project.risks) %>
+              <%= render(:partial=>'risk', :collection=>@project.risks.sort_by {|r| [-r.severity, r.id]}) %>
             </table>
-
-            Suggested status:
-            <% suggested_status = @project.suggested_status %>
-            <%= html_status(suggested_status) %>
-            <% if  suggested_status < @status.status %>
-              <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are not identified</strong>
-            <% end %>
-            <% if @status.status > 0 and suggested_status > @status.status %>
-              <strong>If the current status <%=html_status(@status.status)%> is correct, then some risks are too high</strong>
-            <% end %>
-
           </div>
       </div>
 
