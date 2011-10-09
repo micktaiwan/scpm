@@ -11,7 +11,8 @@ class SessionsController < ApplicationController
     if logged_in?
       session[:project_filter_qr] = [current_user.id]
       if not current_user.has_role?('Admin')
-        session[:project_sort]      = 'alpha'
+        session[:project_sort]        = 'alpha'
+        session['workload_person_id'] = current_user.id
       else
         session[:project_sort]      = 'update'
       end
