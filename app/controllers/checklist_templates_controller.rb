@@ -22,7 +22,7 @@ options:
 - Done
 - Not done
 - N/A
-- Don't know"
+- Don\'t know"
     if parent_id
       @ctemplate.parent_id = parent_id
       @milestones   = @ctemplate.parent.milestone_names.map{|m| m.title}.join(', ')

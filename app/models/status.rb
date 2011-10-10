@@ -2,7 +2,7 @@ class Status < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :modifier, :class_name=>'Person', :foreign_key=>'last_modifier'
-  
+
   before_save :escape
 
   def is_current?
@@ -13,7 +13,7 @@ class Status < ActiveRecord::Base
     return self.last_change_excel if self.last_change_excel
     self.last_change
   end
-  
+
   def escape
     self.reason       = html_escape(self.reason)
     self.explanation  = html_escape(self.explanation)
@@ -23,11 +23,14 @@ class Status < ActiveRecord::Base
     self.actions      = html_escape(self.actions)
     self.operational_alert = html_escape(self.operational_alert)
   end
-  
+
   def copy_status_to_ws_reporting
+    Status.record_timestamps  = false
     self.ws_report      = self.reason
     self.ws_updated_at  = self.reason_updated_at
     self.save
+    Status.record_timestamps  = true
   end
-  
+
 end
+

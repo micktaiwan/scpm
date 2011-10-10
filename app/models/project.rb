@@ -388,6 +388,8 @@ class Project < ActiveRecord::Base
           nb += 1 and rv += "Assurance BAT\n"         if m != 'Maintenance'
         when 'WP2 - Quality for Maintenance'
           nb += 1 and rv += "Maintenance\n"       if m == 'Maintenance'
+        when 'WP3.0 - Old Modeling'
+          nb += 1 and rv += "Old Modeling\n"        if m == 'M5'
         when 'WP3.1 - Modeling Support'
           nb += 1 and rv += "Modeling 1\n"          if m == 'M5'
         when 'WP3.2 - Modeling Conception and Production'
