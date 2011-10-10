@@ -14,7 +14,8 @@ class WelcomeController < ApplicationController
   end
 
   def update
-    @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
+    @last_update     = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc").updated_at
+    @last_sdp_update = SDPPhase.find(:first,:select=>"updated_at", :order=>'updated_at desc').updated_at
   end
 
   def upload

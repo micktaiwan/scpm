@@ -8,6 +8,7 @@ Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>
 </form>
 
 <h2>SDP import</h2>
+Last SDP update: <%= time_ago_in_words(@last_sdp_update) %> ago (<%= @last_sdp_update %>)<br/>
 <%= form_tag({:controller=>'tools', :action => 'do_sdp_upload'}, :multipart => true) %>
 <p><label for="upload_file">SDP CSV</label>
 <%= file_field 'upload', 'datafile' %>
