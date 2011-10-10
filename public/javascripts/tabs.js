@@ -53,6 +53,8 @@ function toggleTab(num,numelems,opennum,animate) {
         }
     }
 }
+
+// A virer ?
 function load_contents() {
   new Ajax.Updater('conso_workloads', '/workloads/conso_workloads', {
     asynchronous:true,
