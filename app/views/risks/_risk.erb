@@ -1,7 +1,7 @@
 <tr id="risk_<%=risk.id%>"<% if risk.probability==0 %> style="color:#999;"<% end %>>
 <td>
 <% if risk.project %>
-  <%=link_to(risk.project.name, :action=>'show', :id=>risk.project.id) %>
+  <%=link_to(risk.project.name, :controller=>'projects', :action=>'show', :id=>risk.project.id) %>
 <% end %>
 </td>
 <% if risk.probability %>
