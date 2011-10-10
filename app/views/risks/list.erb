@@ -1,0 +1,7 @@
+<%= render(:file=>"tools/menu")%>
+
+<h2>Risks</h2>
+<table>
+  <%= render(:file=>"risks/risks_header")%>
+  <%= render(:partial=>'risks/risk', :collection=>@risks) %>
+</table>
