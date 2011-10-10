@@ -1,11 +1,31 @@
-<tr<% if risk.probability==0 %> style="color:#555;"<% end %>>
-<td><%=link_to(risk.project.name, :action=>'show', :id=>risk.project.id) %></td>
-<td align="center"<%if risk.probability>=4 %> bgcolor="#A00"<%elsif risk.severity>=8  %> bgcolor="#F00"<%elsif risk.severity>=6 %> bgcolor="#FA0"<%elsif risk.severity>=3 %> bgcolor="#FF9"<%else%> bgcolor="#AFA"<%end%>><%= risk.severity %></td>
-<td align="center"><%= risk.id %></td>
-<td><%= my_simple_format(risk.context) %></td>
-<td><%= my_simple_format(risk.risk) %></td>
-<td align="center"<%if risk.probability>=4%> bgcolor="#F55"<%end%>><%= risk.probability %> / 4</td>
+<tr id="risk_<%=risk.id%>"<% if risk.probability==0 %> style="color:#999;"<% end %>>
+<td>
+<% if risk.project %>
+  <%=link_to(risk.project.name, :action=>'show', :id=>risk.project.id) %>
+<% end %>
+</td>
+<% if risk.probability %>
+  <td align="center"<%if risk.probability>=4 %> bgcolor="#A00"<%elsif risk.severity>=8  %> bgcolor="#F00"<%elsif risk.severity>=6 %> bgcolor="#FA0"<%elsif risk.severity>=3 %> bgcolor="#FF9"<%else%> bgcolor="#AFA"<%end%>><%= risk.severity %></td>
+  <td align="center"><%= risk.id %></td>
+  <td><%= my_simple_format(risk.context) %></td>
+  <td><%= my_simple_format(risk.risk) %></td>
+  <td align="center"<%if risk.probability>=4%> bgcolor="#F55"<%end%>><%= risk.probability %> / 4</td>
+<% else %>
+  <td align="center">No proba</td>
+  <td align="center"><%= risk.id %></td>
+  <td><%= my_simple_format(risk.context) %></td>
+  <td><%= my_simple_format(risk.risk) %></td>
+  <td align="center">No proba</td>
+<% end %>
+
 <td><%= my_simple_format(risk.consequence) %></td>
 <td align="center"><%= risk.impact %> / 3</td>
-<td><%= time_ago_in_words(risk.updated_at) %></td>
+<td>
+<%= time_ago_in_words(risk.updated_at) %>
+<% if current_user.has_role?('Admin') %>
+  <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'risks',
+   :action=>'destroy', :id=>risk.id}, :confirm=>"Sure?",
+   :success=>"new Effect.SwitchOff('risk_#{risk.id}');")%>
+<% end %>
+</td>
 </tr>

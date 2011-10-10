@@ -27,8 +27,17 @@ class RisksController < ApplicationController
     Mailer::deliver_risk_change(r)
     redirect_to "/projects/show/#{r.project_id}"
   end
-
-
+  
+  def list
+    @risks = Risk.find(:all, :order=>"probability*impact desc")
+    render(:layout=>'tools')
+  end
+  
+  def destroy
+    Risk.find(params[:id].to_i).destroy
+    render(:nothing=>true)
+  end
+  
 private
 
   def get_infos
