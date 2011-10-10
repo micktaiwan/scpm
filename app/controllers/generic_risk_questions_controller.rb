@@ -55,16 +55,18 @@ class GenericRiskQuestionsController < ApplicationController
     questions.each do |id, answer|
       next if answer=="yes"
       next if !risks[id]
-      next if risks[id][:probability] == "0"
-      next if Risk.find(:first, :conditions=>["project_id=? and generic_risk_id=?", project_id, id])
-      Risk.create(:project_id=>project_id,
-        :generic_risk_id=>id,
-        :context=>risks[id][:context],
-        :risk=>risks[id][:risk],
-        :probability=>risks[id][:probability],
-        :consequence=>risks[id][:consequence],
-        :impact=>risks[id][:impact],
-        :actions=>risks[id][:actions])
+      risks[id].each { |r_id, fields|
+        next if fields[:probability] == "0"
+        next if Risk.find(:first, :conditions=>["project_id=? and generic_risk_id=?", project_id, r_id])
+        Risk.create(:project_id=>project_id,
+          :generic_risk_id=>r_id,
+          :context=>fields[:context],
+          :risk=>fields[:risk],
+          :probability=>fields[:probability],
+          :consequence=>fields[:consequence],
+          :impact=>fields[:impact],
+          :actions=>fields[:actions])
+        }
     end
     redirect_to :controller=>'projects', :action=>'show', :id=>project_id
   end
