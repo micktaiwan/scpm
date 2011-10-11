@@ -378,6 +378,13 @@ class Request < ActiveRecord::Base
       m.deploy_checklist(ctemplate, self)
       }
   end
+  
+  def wl_load_by_year(year)
+    # get workload line
+    line = WlLine.find_by_request_id(self.request_id)
+    return nil if !line
+    line.wl_loads.select{|l| l.week.to_s[0..3]==year.to_s}.inject(0) { |sum, load| sum+=load.wlload}
+  end
 
 private
 

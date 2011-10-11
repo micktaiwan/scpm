@@ -1,0 +1,17 @@
+<table class="grid">
+<tr class="header">
+<td>ID</td>
+<td>WS</td>
+<td>Request</td>
+<td>Phase</td>
+<td>Type</td>
+<td>Status</td>
+<td>Theorical load</td>
+<% for y in @years  %>
+  <td><%= y %></td>
+<% end %>
+</tr>
+
+<%= render(:partial=>'request_by_year', :collection=>@requests, :as=>:r) %>
+
+</table>

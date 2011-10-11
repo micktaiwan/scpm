@@ -238,6 +238,11 @@ class ToolsController < ApplicationController
     @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
     render(:layout=>false)
   end
+  
+  def requests_by_year
+    @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"workstream, summary, milestone")
+    @years = [2011, 2012]
+  end
 
 private
 

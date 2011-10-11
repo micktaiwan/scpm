@@ -1,0 +1,21 @@
+<%
+  loads = []
+  for y in @years
+    loads << r.wl_load_by_year(y)
+  end
+%>
+
+<tr<% if !loads[0] %> style="background-color:#DDD"<%end%>>
+<td><a href="http://toulouse.sqli.com/EMN/view.php?id=<%=r.request_id %>"><%=r.request_id %></a></td>
+<td><%= r.workstream %></td>
+<td><%= r.summary %></td>
+<td><%= r.milestone %></td>
+<td><%= r.work_package %></td>
+<td><%= r.status %></td>
+<td><%= r.workload2 %></td>
+<% for l in loads  %>
+  <td>
+  <%= l==0? '':l %>
+  </td>
+<% end %>
+</tr>
