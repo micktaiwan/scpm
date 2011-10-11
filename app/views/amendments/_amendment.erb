@@ -25,7 +25,7 @@
 </td>
 
 <td>
-<% if amendment.done==0 and amendment.duedate  and amendment.duedate <= Date.today()-4 %>
+<% if amendment.done==0 and amendment.duedate  and amendment.duedate <= Date.today()+4.days %>
 <strong><%= amendment.duedate %></strong>
 <% else %>
 <%= amendment.duedate %>
