@@ -58,6 +58,22 @@ module ApplicationHelper
   def appended_string(str, nb, ch=" ")
     str.to_s + ch*(nb-str.to_s.size)
   end
+  
+  def tab_menu(id, arr)
+    size = arr.size
+    rv = ""
+    cookies["tab_menu_"+id] = "0" if !cookies["tab_menu_"+id]
+    arr.each_with_index { |title, index|
+      rv += "<li "
+      if cookies["tab_menu_"+id] == (index+1).to_s
+        rv += "id='tabHeaderActive'" 
+      else
+        rv += "id='tabHeader#{index+1}'"
+      end
+      rv += "><a href='javascript:void(0)' onClick='toggleTab(\"#{id}\", #{index+1},#{size})'><span>#{title}</span></a></li>"
+      }
+    rv  
+  end
 
 end
 

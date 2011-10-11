@@ -18,6 +18,10 @@ function add(id, same_week, has_requests) {
   }
 </script>
 
+<%
+  cookies["tab_menu_project_show"] = "1" if !cookies["tab_menu_project_show"]
+%>
+
 
 <div id="submenu">
   <%= @project.icon_status %>
@@ -26,20 +30,21 @@ function add(id, same_week, has_requests) {
 <div id="subcontent">
   <div id="tabs">
     <ol>
-      <li id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,7)"><span>Timeline</span></a></li>
-      <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,7)" ><span>Risks <strong><%= @project.risks.size %></strong></span></a></li>
-      <li id="tabHeader3"><a href="javascript:void(0)" onClick="toggleTab(3,7)" ><span>Status</span></a></li>
-      <li id="tabHeader4"><a href="javascript:void(0)" onClick="toggleTab(4,7)" ><span>Amendments <strong><%= @project.current_amendments.size %></strong></span></a></li>
-      <li id="tabHeader5"><a href="javascript:void(0)" onClick="toggleTab(5,7)" ><span>Actions <strong><%= @project.current_actions.size %></strong></span></a></li>
-      <li id="tabHeader6"><a href="javascript:void(0)" onClick="toggleTab(6,7)" ><span>Notes <strong><%= @project.visible_notes(current_user.id).size %></strong></span></a></li>
-      <li id="tabHeader7"><a href="javascript:void(0)" onClick="toggleTab(7,7)" ><span>Informations</span></a></li>
+      <%= tab_menu("project_show", [
+        "Timeline",
+        "Risks <strong>#{@project.risks.size}</strong>",
+        "Status",
+        "Amendments <strong>#{@project.current_amendments.size}</strong>",
+        "Actions <strong>#{@project.current_actions.size}</strong>",
+        "Notes <strong>#{@project.visible_notes(current_user.id).size}</strong>",
+        "Informations"        
+        ]) %>
     </ol>
 
-
     <div id="tabscontent">
-      <div id="tabContent1" class="tabContent" style="display:yes;">
+      <div id="tabContent1" class="tabContent" style="display:<%= cookies["tab_menu_project_show"]=="1"? "block" : "none"%>;">
           <div>
-            <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
+          <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
             <br/>
             <div class="milestone_bar">
               <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
@@ -47,7 +52,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent2" class="tabContent" style="display:none;">
+      <div id="tabContent2" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="2"? "block":"none"%>;">
           <div>
             <%= link_to('Add risk', {:controller=>'risks', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
             <%= link_to('Run risk checklist', {
@@ -98,7 +103,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent3" class="tabContent" style="display:none;">
+      <div id="tabContent3" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="3"? "block":"none"%>;">
           <div>
             <% if @project.requests.size > 0 %>
               <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
@@ -124,7 +129,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent4" class="tabContent" style="display:none;">
+      <div id="tabContent4" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="4"? "block":"none"%>;">
           <div>
             <%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br />
             <br />
@@ -134,7 +139,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent5" class="tabContent" style="display:none;">
+      <div id="tabContent5" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="5"? "block":"none"%>;">
           <div>
             <%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
             <br/>
@@ -144,7 +149,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent6" class="tabContent" style="display:none;">
+      <div id="tabContent6" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="6"? "block":"none"%>;">
           <div>
             <%= link_to('Add note', {:controller=>'notes', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br />
             <br />
@@ -152,7 +157,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent7" class="tabContent" style="display:none;">
+      <div id="tabContent7" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="7"? "block":"none"%>;">
           <div>
             <%= link_to('Edit project', {:action=>'edit', :id=>@project.id}, {:class=>'btnlnk'}) %>
             <% if @project.responsibles.exists?(current_user) %>

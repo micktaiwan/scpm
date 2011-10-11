@@ -1,11 +1,17 @@
+<%
+  cookies["tab_menu_wl_conso"] = "1" if !cookies["tab_menu_wl_conso"]
+%>
+
 <div id="tabs">
   <ol>
-    <li style="margin-left: 1px" id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,2)"><span>Consolidation</span></a></li>
-    <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,2)" ><span>Holidays</span></a></li>
+      <%= tab_menu("wl_conso", [
+        "Consolidation",
+        "Holidays"
+        ]) %>    
   </ol>
 
   <div id="tabscontent">
-    <div id="tabContent1" class="tabContent" style="display:yes;">
+    <div id="tabContent1" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="1"? "block" : "none"%>;">
         <br />
         <div id="conso_workloads">
           <%= link_to_remote('Refresh',  :url => { :action => "refresh_conso" }, :loading => "$('error1').update('');$('loading1').appear()", :complete => "$('loading1').hide()", :update => { :success => "data1", :failure => "error1" }) %>
@@ -17,7 +23,7 @@
         </div>
     </div>
 
-    <div id="tabContent2" class="tabContent" style="display:none;">
+    <div id="tabContent2" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="2"? "block" : "none"%>;">
         <br />
         <div id="holidays">
           <%= link_to_remote('Refresh',  :url => { :action => "refresh_holidays" }, :loading => "$('error2').update('');$('loading2').appear()", :complete => "$('loading2').hide()", :update => { :success => "data2", :failure => "error2" }) %>
@@ -30,4 +36,3 @@
     </div>
   </div><!--End of tabscontent-->
 </div><!--End of tabs-->
-

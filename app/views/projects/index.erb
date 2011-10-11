@@ -56,26 +56,31 @@ Searches project title and description, statuses, request summary and PM names
 <br/>
 <br/>
 
+<%
+  cookies["tab_menu_project_index"] = "1" if !cookies["tab_menu_project_index"]
+%>
 
 <div id="tabs">
   <ol>
-    <li style="margin-left: 1px" id="tabHeaderActive"><a href="javascript:void(0)" onClick="toggleTab(1,6)"><span>Projects <strong><%= @wps.size %></strong></span></a></li>
-    <li id="tabHeader2"><a href="javascript:void(0)" onClick="toggleTab(2,6)" ><span>Actions <strong><%= @actions.size %></strong></span></a></li>
-    <li id="tabHeader3"><a href="javascript:void(0)" onClick="toggleTab(3,6)" ><span>Amendments <strong><%= @amendments.size %></strong></span></a></li>
-    <li id="tabHeader4"><a href="javascript:void(0)" onClick="toggleTab(4,6)" ><span>Risks <strong><%= @risks.size %></strong></span></a></li>
-    <li id="tabHeader5"><a href="javascript:void(0)" onClick="toggleTab(5,6)" ><span>Inconsistencies <strong><%= @inconsistencies.size %></strong></span></a></li>
-    <li id="tabHeader6"><a href="javascript:void(0)" onClick="toggleTab(6,6)" ><span>Checklists <strong><%= @checklist_milestones.size %></strong></span></a></li>
+      <%= tab_menu("project_index", [
+        "Projects <strong>#{@wps.size}</strong>",
+        "Actions <strong>#{@actions.size}</strong>",
+        "Amendments <strong>#{@amendments.size}</strong>",
+        "Risks <strong>#{@risks.size}</strong>",
+        "Inconsistencies <strong>#{@inconsistencies.size}</strong>",
+        "Checklists <strong>#{@checklist_milestones.size}</strong>"
+        ]) %>  
   </ol>
 
   <div id="tabscontent">
-    <div id="tabContent1" class="tabContent" style="display:yes;">
+    <div id="tabContent1" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="1"? "block" : "none"%>;">
         <br />
         <div>
         <%= render(:file=>'projects/index_projects') %>
         </div>
     </div>
 
-    <div id="tabContent2" class="tabContent" style="display:none;">
+    <div id="tabContent2" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="2"? "block" : "none"%>;">
         <br />
         <div>
           <%= render(:file=>'actions/actions_header') %>
@@ -84,7 +89,7 @@ Searches project title and description, statuses, request summary and PM names
         </div>
     </div>
 
-    <div id="tabContent3" class="tabContent" style="display:none;">
+    <div id="tabContent3" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="3"? "block" : "none"%>;">
         <br />
         <div>
           <%= render(:file=>'amendments/amendments_header') %>
@@ -93,7 +98,7 @@ Searches project title and description, statuses, request summary and PM names
         </div>
     </div>
 
-    <div id="tabContent4" class="tabContent" style="display:none;">
+    <div id="tabContent4" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="4"? "block" : "none"%>;">
         <br />
         <div>
           <%= render(:file=>'risks/risks_header') %>
@@ -102,7 +107,7 @@ Searches project title and description, statuses, request summary and PM names
         </div>
     </div>
 
-    <div id="tabContent5" class="tabContent" style="display:none;">
+    <div id="tabContent5" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="5"? "block" : "none"%>;">
         <br />
         <div>
           <table>
@@ -113,7 +118,7 @@ Searches project title and description, statuses, request summary and PM names
         </div>
     </div>
 
-    <div id="tabContent6" class="tabContent" style="display:none;">
+    <div id="tabContent6" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="6"? "block" : "none"%>;">
         <br />
         <div>
           <% if @checklist_milestones.size == 0 %>

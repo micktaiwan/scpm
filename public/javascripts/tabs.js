@@ -20,8 +20,9 @@ function toggleDisp() {
                     4.(optional)Pass in true or false whether or not to animate the open/close of the tabs
     Output: none
     ---------------------------------------------------------*/
-function toggleTab(num,numelems,opennum,animate) {
+function toggleTab(name, num,numelems,opennum,animate) {
     if ($('tabContent'+num).style.display == 'none'){
+        createCookie("tab_menu_"+name,num);
         for (var i=1;i<=numelems;i++){
             if ((opennum == null) || (opennum != i)){
                 var temph = 'tabHeader'+i;
