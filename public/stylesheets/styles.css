@@ -213,8 +213,15 @@ td    {
   background: #FAF;
   }
 .cancelled   {
-  background: #AAA;
+  background: #F00;
   }
+.removed   {
+  background: #DDD;
+  }
+.performed   {
+  background: #AFA;
+  }
+
 
 .status {
   font-weight:bold;

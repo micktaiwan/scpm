@@ -116,7 +116,15 @@ h2 {
   margin: 0px;
 }
 #last_changes {
+  background: #FFD;
+  opacity: 0.8;
+  padding:10px;
   margin: 10px;
+  border: 1px solid #666;
+  border-radius: 15px;
+  color: black;
+  -moz-border-radius: 15px;
+  text-align: left;
 }
 
 #last_changes  li {

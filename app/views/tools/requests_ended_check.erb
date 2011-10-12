@@ -1,6 +1,12 @@
 <%= render(:file=>"tools/sdp_menu.erb") %>
 <h2>Request 'ended' but existing open task in SDP</h2>
 <ul>
-<%= render(:partial=>'projects/request', :collection=>@requests) %>
+  <%= render(:partial=>'projects/request', :collection=>@requests) %>
+</ul>
+
+<h2>No end date</h2>
+Specially verify assigned and performed requests.
+<ul>
+  <%= render(:partial=>'projects/request', :collection=>@no_end_date) %>
 </ul>
 

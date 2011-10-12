@@ -165,6 +165,7 @@ class ToolsController < ApplicationController
     else
       @requests = Request.find(:all, :conditions=>"request_id in (#{ids})")
     end
+    @no_end_date = Request.find(:all, :conditions=>"(resolution='ended' or resolution='aborted') and end_date=''")
   end
 
   def requests_should_be_ended_check
@@ -238,7 +239,7 @@ class ToolsController < ApplicationController
     @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
     render(:layout=>false)
   end
-  
+
   def requests_by_year
     @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"workstream, summary, milestone")
     @years = [2011, 2012]
