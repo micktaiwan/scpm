@@ -20,8 +20,8 @@ function add(id, same_week, has_requests) {
 
 <%
   cookies["tab_menu_project_show"] = "1" if !cookies["tab_menu_project_show"]
+  # TODO: do this check inside tab_menu
 %>
-
 
 <div id="submenu">
   <%= @project.icon_status %>
@@ -31,24 +31,48 @@ function add(id, same_week, has_requests) {
   <div id="tabs">
     <ol>
       <%= tab_menu("project_show", [
-        "Timeline",
+        "Timeline and status",
         "Risks <strong>#{@project.risks.size}</strong>",
-        "Status",
         "Amendments <strong>#{@project.current_amendments.size}</strong>",
         "Actions <strong>#{@project.current_actions.size}</strong>",
         "Notes <strong>#{@project.visible_notes(current_user.id).size}</strong>",
-        "Informations"        
+        "Information"        
         ]) %>
     </ol>
 
     <div id="tabscontent">
       <div id="tabContent1" class="tabContent" style="display:<%= cookies["tab_menu_project_show"]=="1"? "block" : "none"%>;">
           <div>
-          <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
+            <i>Roooh la la, encore un changement dans le BAM</i> -- Entendu en point QR :)<br/>
+            <br/>
+            <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
             <br/>
             <div class="milestone_bar">
               <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
             </div>
+            
+            <% if @project.requests.size > 0 %>
+              <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
+              <%
+                n,c = @project.project_check_items_numbers
+                check_all_done = (n==c)
+                s = "btnlnk"
+                s += " special" if !check_all_done
+              %>
+              <%= link_to_function("#{n}/#{c} checks", "$('checks').toggle()", :class=>s) %>
+              <ul id="checks" style="display:none">
+                <%= render(:partial=>'checklists/checklist_item', :collection=>@project.project_check_root_items, :as=>:i) %>
+              </ul>
+            <% end %>
+            <%= render(:partial=>'status', :object=>@status) %>
+            <br/>
+            <%= link_to_function("Old (#{@old_statuses.size})", "$('old_statuses').toggle();", :class=>"menu") %>
+            <div id='old_statuses' style="display:none;">
+              <% for s in @old_statuses %>
+                <%= render(:partial=>'status', :object=>s) %>
+              <% end %>
+            </div>
+            
           </div>
       </div>
 
@@ -105,32 +129,6 @@ function add(id, same_week, has_requests) {
 
       <div id="tabContent3" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="3"? "block":"none"%>;">
           <div>
-            <% if @project.requests.size > 0 %>
-              <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
-              <%
-                n,c = @project.project_check_items_numbers
-                check_all_done = (n==c)
-                s = "btnlnk"
-                s += " special" if !check_all_done
-              %>
-              <%= link_to_function("#{n}/#{c} checks", "$('checks').toggle()", :class=>s) %>
-              <ul id="checks" style="display:none">
-                <%= render(:partial=>'checklists/checklist_item', :collection=>@project.project_check_root_items, :as=>:i) %>
-              </ul>
-            <% end %>
-            <%= render(:partial=>'status', :object=>@status) %>
-            <br/>
-            <%= link_to_function("Old (#{@old_statuses.size})", "$('old_statuses').toggle();", :class=>"menu") %>
-            <div id='old_statuses' style="display:none;">
-              <% for s in @old_statuses %>
-                <%= render(:partial=>'status', :object=>s) %>
-              <% end %>
-            </div>
-          </div>
-      </div>
-
-      <div id="tabContent4" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="4"? "block":"none"%>;">
-          <div>
             <%= link_to('Add amendment', {:controller=>'amendments', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br />
             <br />
             <%= render(:file=>'amendments/amendments_header') %>
@@ -139,7 +137,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent5" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="5"? "block":"none"%>;">
+      <div id="tabContent4" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="4"? "block":"none"%>;">
           <div>
             <%= link_to('Add action', {:controller=>'actions', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
             <br/>
@@ -149,7 +147,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent6" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="6"? "block":"none"%>;">
+      <div id="tabContent5" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="5"? "block":"none"%>;">
           <div>
             <%= link_to('Add note', {:controller=>'notes', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br />
             <br />
@@ -157,7 +155,7 @@ function add(id, same_week, has_requests) {
           </div>
       </div>
 
-      <div id="tabContent7" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="7"? "block":"none"%>;">
+      <div id="tabContent6" class="tabContent" style="display:<%=cookies["tab_menu_project_show"]=="6"? "block":"none"%>;">
           <div>
             <%= link_to('Edit project', {:action=>'edit', :id=>@project.id}, {:class=>'btnlnk'}) %>
             <% if @project.responsibles.exists?(current_user) %>

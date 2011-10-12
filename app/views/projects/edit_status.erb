@@ -1,3 +1,20 @@
+<script type="text/javascript">
+  var checkIsDirty  = 1;
+  var formChanged   = 0;
+  window.onbeforeunload = function() {
+    if(checkIsDirty and formChanged) return "Caution! The changes are not saved!";
+    }
+  function formChanged() {
+    formChanged   = 1;
+    }
+  
+  function formSave() {
+    checkIsDirty = 0;
+    document.forms[0].submit();
+    }
+</script>
+
+
 <h2><%= @project.name %> Status</h2>
 
 <strong>You should add a new status rather than edit an old one unless it is a minor edit</strong>
@@ -7,11 +24,6 @@
   <%= render(:partial => 'status_form') %>
   <p><label>&nbsp;</label>
   <%= check_box_tag(:update, '1', @project.get_status.is_current?) %> update timestamp
-  <%= submit_tag 'Update' %></p>
+  <%= submit_tag 'Update', :onclick=>"formSave();" %></p>
 <% end -%>
 
-<script>
-  window.onbeforeunload = function() {
-    if(0) return "Caution! The changes are not saved!";
-    }
-</script>
