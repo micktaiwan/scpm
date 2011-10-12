@@ -194,6 +194,7 @@ class ProjectsController < ApplicationController
     Request.find(:all, :conditions=>"project_id is null", :order=>"workstream").each { |r|
       @import << {:id=>r.id, :project_name=>r.project_name, :summary=>r.summary, :workstream=>r.workstream}
       }
+    render(:layout=>'tools')  
   end
 
   # for each request rename project if necessary
@@ -254,6 +255,7 @@ class ProjectsController < ApplicationController
     @display_actions  = true
     @missing_associations = find_missing_project_person_associations
     timestamps_on
+    render(:layout=>'tools')  
   end
 
   # link a request to a project, based on request project_name
