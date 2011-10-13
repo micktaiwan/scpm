@@ -1,15 +1,14 @@
 <script type="text/javascript">
-  var checkIsDirty  = 1;
-  var formChanged   = 0;
+  var _checkIsDirty  = 1;
+  var _formChanged   = 0;
   window.onbeforeunload = function() {
-    if(checkIsDirty and formChanged) return "Caution! The changes are not saved!";
+    if(_checkIsDirty && _formChanged) return "Caution! The changes are not saved!";
     }
   function formChanged() {
-    formChanged   = 1;
+    _formChanged   = 1;
     }
-  
   function formSave() {
-    checkIsDirty = 0;
+    _checkIsDirty = 0;
     document.forms[0].submit();
     }
 </script>
