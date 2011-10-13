@@ -43,8 +43,6 @@ function add(id, same_week, has_requests) {
     <div id="tabscontent">
       <div id="tabContent1" class="tabContent" style="display:<%= cookies["tab_menu_project_show"]=="1"? "block" : "none"%>;">
           <div>
-            <i>Roooh la la, encore un changement dans le BAM</i> -- Entendu en point QR :)<br/>
-            <br/>
             <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
             <br/>
             <div class="milestone_bar">
