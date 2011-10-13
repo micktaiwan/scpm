@@ -5,7 +5,15 @@
     <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'checklists', :action=>'destroy', :id=>i.id}) %>
   <% else %>
     <% if i.ctemplate.ctype == "checkbox" %>
-      <%= image_tag(i.image_name, :id=>"cl_image_#{i.id}", :onclick=>"checklist_item_set_next_status(#{i.id})", :class=>"checkbox", :title=>i.alt) %>
+      <% if !i.image_name %>
+        <strong>No image name!</strong>
+      <% else %>
+        <%= image_tag(i.image_name,
+          :id=>"cl_image_#{i.id}",
+          :onclick=>"checklist_item_set_next_status(#{i.id})",
+          :class=>"checkbox",
+          :title=>i.alt) %>
+      <% end %>
     <% end %>
     <div <% if i.ctemplate.ctype != "folder" %>onmouseover="$('checklist_item_time_<%=i.id%>').show();" onmouseout="$('checklist_item_time_<%=i.id%>').hide();"<% end %> class="<%= i.css_class %>"><%= i.ctemplate.title %></div>
     <% if i.ctemplate.ctype != "folder" %>
