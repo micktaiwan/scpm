@@ -297,11 +297,11 @@ class Request < ActiveRecord::Base
 
   # options is a hash
   # :trigram is the trigram of the person on which to filter
-  #  ex: sdp_tasks_remaining_sum({:trigram=>'MFM'})
+  #  ex: sdp_tasks({:trigram=>'MFM'})
   def sdp_tasks(options=nil)
     cond = ''
     if options
-      cond += " and collab='#{options[:trigram]}'" if options[:trigram] and options[:trigram] != ''
+      cond += " and collab LIKE '%#{options[:trigram]}%'" if options[:trigram] and options[:trigram] != ''
     end
 
     SDPTask.find(:all, :conditions=>"request_id='#{self.request_id}' #{cond}")
