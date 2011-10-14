@@ -4,7 +4,14 @@
   error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.8) or (planned_total > remaining)))
 %>
 <tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
-  <td><%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %></td>
+  <td align='center'>
+    <% if wl_line.request %>
+      <%= link_to(image_tag("link.gif"), :controller=>'projects', :action=>'show', :id=>wl_line.request.project.id) %>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %>
+  </td>
   <td align="center"><% if wl_line.request %><%= wl_line.request.status %><% end %></td>
   <td><%= @workload.line_sums[wl_line.id][:init] %></td>
   <td><%= @workload.line_sums[wl_line.id][:balance] %></td>

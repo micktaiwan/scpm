@@ -32,7 +32,6 @@ class WorkloadsController < ApplicationController
     @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
   end
 
-
   def get_chart
     chart = GoogleChart::LineChart.new('1000x300', "#{@workload.person.name} workload", false)
     serie = @workload.percents.map{ |p| p[:precise] }
@@ -180,6 +179,7 @@ class WorkloadsController < ApplicationController
     end
     get_last_sdp_update
     get_suggested_requests(@workload)
+    get_sdp_gain(@workload.person)
     get_chart
   end
 

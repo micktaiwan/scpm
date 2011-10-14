@@ -4,13 +4,13 @@ class ToolsController < ApplicationController
 
   include WelcomeHelper
 
-  NB_QR 					            = 17
-  NB_FTE 					            = 14.9
+  NB_QR 					            = 18
+  NB_FTE 					            = 15.4
   NB_DAYS_PER_MONTH			      = 18
   MEETINGS_LOAD_PER_MONTH 	  = 1.5
   PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
-  WP_LEADERS_DAYS_PER_MONTH   = 3
-  NB_WP_LEADERS 			        = 4.5 # 0.5 pour Vero
+  WP_LEADERS_DAYS_PER_MONTH   = 3 # 2 + WP1
+  NB_WP_LEADERS 			        = 4.5 # 0.5 for WP5
 
   def index
   end
