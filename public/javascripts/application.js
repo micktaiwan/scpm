@@ -5,7 +5,7 @@
 function confirm_page_change() {
   alert('test');
   }
-  
+
 function createCookie(name,value,days) {
     if (days) {
         var date = new Date();
@@ -15,7 +15,7 @@ function createCookie(name,value,days) {
     else var expires = "";
     document.cookie = name+"="+value+expires+"; path=/";
 }
- 
+
 function readCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
@@ -26,7 +26,7 @@ function readCookie(name) {
     }
     return null;
 }
- 
+
 function eraseCookie(name) {
     createCookie(name,"",-1);
 }
@@ -99,7 +99,7 @@ function refresh_projects(sort) {
   new Ajax.Request('/projects/refresh_projects', {
     parameters: { sort: sort },
     onComplete: function(r) {
-      $('frieze').update(r.responseText);
+      $('timeline').update(r.responseText);
       $('loading').hide();
       }
     });

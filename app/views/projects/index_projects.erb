@@ -66,13 +66,13 @@
   </div>
 </div>
 
-<%= link_to_function('Toggle Frieze', "Effect.toggle('frieze','blind')",{:class=>"btnlnk"}) %><br/>
+<%= link_to_function('Toggle Timeline', "Effect.toggle('timeline','blind')",{:class=>"btnlnk"}) %><br/>
 <br/>
 
 Sorting: <%= select_tag('project_sort', options_for_select([['Alpha','alpha'], ['Workstream','workstream'], ['Update date','update'], ['Read','read']], session[:project_sort]), :onchange=>"refresh_projects(this.value)") %>
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;") %>
 
-<div id="frieze">
+<div id="timeline">
   <%= render(:partial=>'home_project', :collection=>@wps, :as=>:project) %>
 </div>
 <br/>
