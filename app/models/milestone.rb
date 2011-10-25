@@ -56,6 +56,8 @@ class Milestone < ActiveRecord::Base
       for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0").select{ |t|
           t.milestone_names.map{|n| n.title}.include?(self.name) and
           t.workpackages.map{|w| w.title}.include?(r.work_package)
+          # and
+          #(request.contre_visite=="No" or contre_visite_milestone==self.name)
           }
         deploy_checklist(t,r)
       end
@@ -114,11 +116,11 @@ class Milestone < ActiveRecord::Base
       modif = " done"
     elsif self.checklist_items.select{|i| i.late?}.size > 0
       modif = " alert"
-    end  
+    end
     css_class = "milestone_cl#{modif}"
     "<div class='#{css_class}' onclick='open_checklist(#{self.id})'>Checks: #{non_zero.size}/#{items.size}</div>"
   end
-  
+
   def delay_in_words
     return "" if !self.milestone_date or self.milestone_date=="" or
                  !self.actual_milestone_date or self.actual_milestone_date=="" or

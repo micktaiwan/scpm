@@ -66,7 +66,7 @@
   </div>
 </div>
 
-<%= link_to_function('Toggle Timeline', "Effect.toggle('timeline','blind')",{:class=>"btnlnk"}) %><br/>
+<%= link_to_function('Toggle Timelines', "Effect.toggle('timeline','blind')",{:class=>"btnlnk"}) %><br/>
 <br/>
 
 Sorting: <%= select_tag('project_sort', options_for_select([['Alpha','alpha'], ['Workstream','workstream'], ['Update date','update'], ['Read','read']], session[:project_sort]), :onchange=>"refresh_projects(this.value)") %>
