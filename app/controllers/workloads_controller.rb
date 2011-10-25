@@ -70,7 +70,7 @@ class WorkloadsController < ApplicationController
 
   def get_sdp_gain(person)
     @balance = person.sdp_balance
-    @sdp_logs = SdpLog.find(:all, :conditions=>["person_id=?", person.id], :order=>"`date`", :limit=>3)
+    @sdp_logs = SdpLog.find(:all, :conditions=>["person_id=?", person.id], :order=>"`date` desc", :limit=>3).reverse
   end
 
   # just for loading tabs
