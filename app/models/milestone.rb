@@ -19,7 +19,7 @@ class Milestone < ActiveRecord::Base
   end
 
   def timealert
-    return "passed" if done == 1
+    return "passed"  if done == 1
     return "skipped" if done == 2
     d = date
     if d.blank?
@@ -55,9 +55,8 @@ class Milestone < ActiveRecord::Base
       next if !r.milestone_names or !r.milestone_names.include?(self.name)
       for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0").select{ |t|
           t.milestone_names.map{|n| n.title}.include?(self.name) and
-          t.workpackages.map{|w| w.title}.include?(r.work_package)
-          # and
-          #(request.contre_visite=="No" or contre_visite_milestone==self.name)
+          t.workpackages.map{|w| w.title}.include?(r.work_package) and
+          (r.contre_visite=="No" or r.contre_visite_milestone==self.name)
           }
         deploy_checklist(t,r)
       end

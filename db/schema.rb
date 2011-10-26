@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111026140003) do
+ActiveRecord::Schema.define(:version => 20111026154927) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -288,6 +288,7 @@ ActiveRecord::Schema.define(:version => 20111026140003) do
     t.string   "po"
     t.string   "contre_visite"
     t.string   "sdpiteration"
+    t.string   "contre_visite_milestone"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
