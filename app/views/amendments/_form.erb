@@ -13,14 +13,13 @@
 
 <p><%= label_tag 'status' %>
 <%= text_area :amendment, :action, {:rows=>3} %>
-31-Août: Come décidé en réunion d'avancement, Cela a changé! C'est maintenant le status de l'amendement. Mettez-y la dernière date à laquelle vous l'avez vérifié et où ça en est.
 </p>
 
 <p><%= label_tag 'responsible' %>
 <%= text_field :amendment, :responsible %></p>
 
 <p><%= label_tag 'duedate' %>
-<%= text_field :amendment, :duedate %> yyyy-mm-dd (was milestone date, but the due date is more appropriate, so check this date)</p>
+<%= text_field :amendment, :duedate %> yyyy-mm-dd
 
 <p><%= label_tag 'done' %>
 <%= check_box :amendment, :done %></p>
