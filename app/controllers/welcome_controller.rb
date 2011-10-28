@@ -4,12 +4,14 @@ class WelcomeController < ApplicationController
   before_filter :require_login
 
   def index
-    @report = Report.new(Request.all)
-    @sdp = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned'", Date.today()+8], :order=>"start_date")
-    @not_assigned = Request.find(:all, :conditions=>["(status='new' or status='acknowledged') and start_date < ?", Date.today()+15], :order=>"start_date")
+    @report     = Report.new(Request.all)
+    @report_without_cancelled_and_removed   = Report.new(Request.find(:all, :conditions=>"status!='removed' and status!='cancelled'"))
+    @report2011 = Report.new(Request.find(:all, :conditions=>"status!='removed' and status!='cancelled' and PO != '2010'"))
+    #@sdp = Request.find(:all, :conditions=>["sdp!='Yes' and start_date < ? and status='assigned'", Date.today()+8], :order=>"start_date")
+    #@not_assigned = Request.find(:all, :conditions=>["(status='new' or status='acknowledged') and start_date < ?", Date.today()+15], :order=>"start_date")
     @sdp_cancelled    = Request.find(:all, :conditions=>["sdp='Yes' and status='cancelled'", Date.today()], :order=>"milestone_date")
     @not_performed    = Request.find(:all, :conditions=>["resolution='ended' and status!='performed' and status!='closed' and status!='cancelled'", Date.today()], :order=>"milestone_date")
-    @next_milestones =  Request.find(:all, :conditions=>["resolution != 'ended' and  (milestone_date !='' and milestone_date <= ?)", Date.today()+10], :order=>"milestone_date")
+    #@next_milestones =  Request.find(:all, :conditions=>["resolution != 'ended' and  (milestone_date !='' and milestone_date <= ?)", Date.today()+10], :order=>"milestone_date")
     get_anomalies
   end
 

@@ -6,11 +6,6 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
   <%= report_by(title, rs, "sta") %>
 <% } %>
 
-<h2>TODO</h2>
-<%= report_by("SDP", @sdp, "sdp_mfm") %>
-<%= report_by("Not assigned", @not_assigned, "not_ass_mfm") %>
-<%= report_by("Next milestones", @next_milestones, "next_milestones") %>
-
 <h2>Anomalies</h2>
 
 <%= report_by("should have started", @not_started, "not_started") %>
@@ -21,10 +16,38 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
 <%= report_by("ended, but not cancelled, performed or closed", @not_performed, "ended") %>
 <%= report_by("cancelled with sdp", @sdp_cancelled, "sdp_cancelled") %>
 
+<h2>By WP</h2>
+
+2011:<br/>
+<%@report2011.by_work_package { |title, rs| %>
+  <%= report_by(title, rs, "wp1") %>
+<% } %>
+
+All without cancelled and removed:<br/>
+<%@report_without_cancelled_and_removed.by_work_package { |title, rs| %>
+  <%= report_by(title, rs, "wp2") %>
+<% } %>
+
+All:<br/>
+<%@report.by_work_package { |title, rs| %>
+  <%= report_by(title, rs, "wp3") %>
+<% } %>
+
 <h2>By workstream</h2>
 
+2011:<br/>
+<%@report2011.by_workstream { |title, rs| %>
+  <%= report_by(title, rs, "wos1") %>
+<% } %>
+
+All without cancelled and removed::<br/>
+<%@report_without_cancelled_and_removed.by_workstream { |title, rs| %>
+  <%= report_by(title, rs, "wos1") %>
+<% } %>
+
+All:<br/>
 <%@report.by_workstream { |title, rs| %>
-  <%= report_by(title, rs, "wos") %>
+  <%= report_by(title, rs, "wos3") %>
 <% } %>
 
 <h2>By assigned</h2>
@@ -37,12 +60,6 @@ Total: <b><%= @report.requests.size %></b> requests<br/>
 
 <%@report.by_resolution { |title, rs| %>
   <%= report_by(title, rs, "res") %>
-<% } %>
-
-<h2>By WP</h2>
-
-<%@report.by_work_package { |title, rs| %>
-  <%= report_by(title, rs, "wp") %>
 <% } %>
 
 <h2>By project name</h2>
