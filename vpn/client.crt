@@ -1,0 +1,72 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 59 (0x3b)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=FR, ST=France, L=Paris, O=SQLI, OU=CRCI, CN=vpn.sqli.com/emailAddress=maperriere@sqli.com
+        Validity
+            Not Before: Nov  8 08:58:51 2010 GMT
+            Not After : Nov  5 08:58:51 2020 GMT
+        Subject: C=FR, ST=France, L=Paris, O=SQLI, OU=CRCI, CN=mfaivremacon/emailAddress=mfaivremacon@sqli.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:bd:76:da:82:ed:5f:c8:85:7c:7f:dc:90:33:f3:
+                    ac:8a:2b:ad:03:0c:d6:32:7a:42:71:c3:31:38:09:
+                    1e:44:83:76:73:46:6e:a5:25:96:28:cb:4a:0f:99:
+                    e9:66:78:8a:56:c9:27:14:12:97:d3:d1:7b:fe:b5:
+                    85:57:45:ae:55:a3:f4:6c:f4:47:93:5a:2c:79:31:
+                    6f:63:19:78:54:cb:99:e4:80:4d:85:91:a6:f3:c9:
+                    02:6a:57:2d:26:db:8a:64:52:ce:45:f8:6f:6b:2b:
+                    45:d4:6a:a0:c7:71:7f:98:b2:be:a6:8b:81:7a:b6:
+                    0b:53:2e:68:ba:9c:fa:fc:1b
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                D3:30:1F:EE:8A:7A:72:D3:42:EF:59:04:1E:20:60:EA:D7:43:D5:79
+            X509v3 Authority Key Identifier: 
+                keyid:CB:4D:02:BC:8E:01:DE:D1:80:91:F7:90:31:4D:B1:A2:07:60:44:15
+                DirName:/C=FR/ST=France/L=Paris/O=SQLI/OU=CRCI/CN=vpn.sqli.com/emailAddress=maperriere@sqli.com
+                serial:FC:93:37:9B:0C:FA:C5:7D
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication, TLS Web Server Authentication
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+    Signature Algorithm: sha1WithRSAEncryption
+        7b:7e:56:0d:18:78:81:d5:df:b3:15:96:4e:15:5b:26:87:73:
+        2b:2d:92:30:d3:ba:ac:ea:f2:b1:46:55:eb:68:d2:ac:98:d1:
+        e7:fa:1e:c5:60:43:44:11:96:cc:e3:36:05:13:50:6b:c7:80:
+        47:2c:f5:24:32:cf:21:db:56:30:d8:5d:8d:ae:de:48:de:a6:
+        b7:15:2f:f4:ed:48:6c:f3:90:c4:6b:de:ac:01:d4:6a:29:10:
+        19:e1:1f:62:92:97:9b:67:34:f5:95:18:13:80:94:bf:7a:b7:
+        53:79:5a:c8:42:4a:1e:9d:06:14:7f:0a:ad:86:7b:77:b8:91:
+        66:4b
+-----BEGIN CERTIFICATE-----
+MIID0jCCAzugAwIBAgIBOzANBgkqhkiG9w0BAQUFADCBhzELMAkGA1UEBhMCRlIx
+DzANBgNVBAgTBkZyYW5jZTEOMAwGA1UEBxMFUGFyaXMxDTALBgNVBAoTBFNRTEkx
+DTALBgNVBAsTBENSQ0kxFTATBgNVBAMTDHZwbi5zcWxpLmNvbTEiMCAGCSqGSIb3
+DQEJARYTbWFwZXJyaWVyZUBzcWxpLmNvbTAeFw0xMDExMDgwODU4NTFaFw0yMDEx
+MDUwODU4NTFaMIGJMQswCQYDVQQGEwJGUjEPMA0GA1UECBMGRnJhbmNlMQ4wDAYD
+VQQHEwVQYXJpczENMAsGA1UEChMEU1FMSTENMAsGA1UECxMEQ1JDSTEVMBMGA1UE
+AxMMbWZhaXZyZW1hY29uMSQwIgYJKoZIhvcNAQkBFhVtZmFpdnJlbWFjb25Ac3Fs
+aS5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAL122oLtX8iFfH/ckDPz
+rIorrQMM1jJ6QnHDMTgJHkSDdnNGbqUllijLSg+Z6WZ4ilbJJxQSl9PRe/61hVdF
+rlWj9Gz0R5NaLHkxb2MZeFTLmeSATYWRpvPJAmpXLSbbimRSzkX4b2srRdRqoMdx
+f5iyvqaLgXq2C1MuaLqc+vwbAgMBAAGjggFIMIIBRDAJBgNVHRMEAjAAMC0GCWCG
+SAGG+EIBDQQgFh5FYXN5LVJTQSBHZW5lcmF0ZWQgQ2VydGlmaWNhdGUwHQYDVR0O
+BBYEFNMwH+6KenLTQu9ZBB4gYOrXQ9V5MIG8BgNVHSMEgbQwgbGAFMtNAryOAd7R
+gJH3kDFNsaIHYEQVoYGNpIGKMIGHMQswCQYDVQQGEwJGUjEPMA0GA1UECBMGRnJh
+bmNlMQ4wDAYDVQQHEwVQYXJpczENMAsGA1UEChMEU1FMSTENMAsGA1UECxMEQ1JD
+STEVMBMGA1UEAxMMdnBuLnNxbGkuY29tMSIwIAYJKoZIhvcNAQkBFhNtYXBlcnJp
+ZXJlQHNxbGkuY29tggkA/JM3mwz6xX0wHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsG
+AQUFBwMBMAsGA1UdDwQEAwIFoDANBgkqhkiG9w0BAQUFAAOBgQB7flYNGHiB1d+z
+FZZOFVsmh3MrLZIw07qs6vKxRlXraNKsmNHn+h7FYENEEZbM4zYFE1Brx4BHLPUk
+Ms8h21Yw2F2Nrt5I3qa3FS/07Uhs85DEa96sAdRqKRAZ4R9ikpebZzT1lRgTgJS/
+erdTeVrIQkoenQYUfwqthnt3uJFmSw==
+-----END CERTIFICATE-----
