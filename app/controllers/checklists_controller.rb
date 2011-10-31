@@ -44,5 +44,6 @@ class ChecklistsController < ApplicationController
     render(:nothing=>true)
   end
 
+
 end
 

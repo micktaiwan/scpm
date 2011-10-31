@@ -1,0 +1,7 @@
+<tr>
+<td><%= link_to(item.project.full_name, :controller=>'projects', :action=>'show', :id=>item.project.id) %></td>
+<td><% if item.person %><b><%= item.person.name %></b><br/><% end %></td>
+<td><%= my_simple_format(item.note) %></td>
+<td><%= item.created_at.to_date %></td>
+</tr>
+

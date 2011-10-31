@@ -1,0 +1,15 @@
+<%= render(:file=>"tools/menu")%>
+
+<h2>Checklist Items indicators</h2>
+<%= render(:file=>"checklist_templates/menu")%>
+
+<h3><%= @ctemplate.title %></h3>
+<%= @items.size %> items<br/>
+<br/>
+<% for value in @values %>
+  <b><%= value.last %></b>
+  <ul>
+    <%= render(:partial=>"detail_item", :collection=>@items.select{|i| i.status==value.first}, :as=>:i) %>
+  </ul>
+<% end %>
+

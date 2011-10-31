@@ -1,4 +1,9 @@
 <%= render(:file=>"tools/sdp_menu.erb") %>
+<h2>No SDP iteration</h2>
+<ul>
+  <%= render(:partial=>'req_task', :collection=>@empty_sdp_iteration) %>
+</ul>
+
 <h2>SDP loads check</h2>
 <ul>
   <%= render(:partial=>'req_task', :collection=>@checks) %>

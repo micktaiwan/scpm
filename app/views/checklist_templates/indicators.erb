@@ -1,0 +1,12 @@
+<%= render(:file=>"tools/menu")%>
+
+<h2>Checklist Items indicators</h2>
+<%= render(:file=>"checklist_templates/menu")%>
+
+<%= @template_count %> templates<br/>
+<br/>
+
+<ul>
+  <%= render(:partial=>"indicator", :collection=>@templates, :as=>:t) %>
+</ul>
+

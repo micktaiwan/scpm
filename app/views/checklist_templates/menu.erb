@@ -1,5 +1,6 @@
 <%= link_to('Templates', {:controller=>'checklist_templates', :action=>'index'}, {:class=>'btnlnk'}) %>
 <%= link_to('New template', {:controller=>'checklist_templates', :action=>'new'}, {:class=>'btnlnk'}) %>
+<%= link_to('Indicators', {:controller=>'checklist_templates', :action=>'indicators'}, {:class=>'btnlnk'}) %>
 <%= link_to('Check items', {:controller=>'checklists', :action=>'check'}, {:class=>'btnlnk'}) %>
 <%= link_to('Last', {:controller=>'checklists', :action=>'last'}, {:class=>"btnlnk"}) %>
 <%= link_to_remote('Deploy all', {:url=>{:controller=>'checklist_templates', :action=>'deploy_all'}, :loading=>"$('deploy_all').innerHTML='Deploying...'", :complete=>"$('deploy_all').innerHTML='Deploy all';alert('Deployed all templates')"},{:class=>"btnlnk special",:id=>"deploy_all"}) %>

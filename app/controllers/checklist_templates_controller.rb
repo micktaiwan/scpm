@@ -37,11 +37,19 @@ options:
       @ctemplate = ChecklistItemTemplate.new(params[:ctemplate])
     else
       @ctemplate = ChecklistItemTemplate.find(params[:id])
+      old_nb_options = @ctemplate.values.options ? @ctemplate.values.options.size : 0
       @ctemplate.update_attributes(params[:ctemplate])
+      new_nb = @ctemplate.values.options ? @ctemplate.values.options.size : 0
+      if old_nb_options > new_nb
+        # careful when you are editing a template ! All previous values are lost.
+        reset_checklist_items_values(@ctemplate.id)
+      end
       @ctemplate.deployed = 0
+      # destroy and recreate associations (later)
       @ctemplate.checklist_item_template_milestone_names.each(&:destroy)
       @ctemplate.checklist_item_template_workpackages.each(&:destroy)
     end
+    # create associations
     params[:milestones].split(',').each { |txt|
       m = MilestoneName.find_by_title(txt.strip)
       @ctemplate.milestone_names << m if m and not @ctemplate.milestone_names.include?(m)
@@ -59,6 +67,10 @@ options:
       return
     end
     redirect_to('/checklist_templates')
+  end
+
+  def reset_checklist_items_values(template_id)
+    ChecklistItem.update_all("status=0", ["template_id=?",template_id])
   end
 
   def edit
@@ -90,6 +102,19 @@ options:
     ChecklistItemTemplate.all.each(&:deploy)
     render(:nothing=>true)
   end
-
+  
+  def indicators
+    @templates = ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0 and parent_id!=0", :order=>"is_transverse, `order`, id")
+    @template_count = @templates.size
+  end
+  
+  def ind_details
+    template_id = params[:id]
+    @ctemplate = ChecklistItemTemplate.find(template_id)
+    @items = @ctemplate.checklist_items.select{|i| i.milestone.done==1 and i.request.contre_visite=="No"}.sort_by{ |i| [i.milestone.project.full_name, i.milestone.name]}
+    @values = @items.map{|i| [i.status, i.ctemplate.values.alt(i.status)]}.uniq
+  end
+  
 end
+
 

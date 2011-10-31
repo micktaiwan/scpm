@@ -55,6 +55,7 @@ class WorkloadsController < ApplicationController
     cond = ""
     cond = " and request_id not in (#{request_ids.join(',')})" if request_ids.size > 0
     @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}' and status!='closed' and status!='performed' and status!='cancelled' and status!='removed' and resolution!='ended' #{cond}", :order=>"project_name, summary")
+    @suggested_requests = @suggested_requests.select { |r| r.sdp_tasks_remaining_sum > 0 }
   end
 
   def get_sdp_tasks(wl)

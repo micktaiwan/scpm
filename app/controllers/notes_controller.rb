@@ -32,4 +32,9 @@ class NotesController < ApplicationController
     render(:nothing=>true)
   end
 
+  def list
+    @notes = Note.find(:all, :conditions=>"private=0", :order=>"created_at desc")
+  end
+
 end
+

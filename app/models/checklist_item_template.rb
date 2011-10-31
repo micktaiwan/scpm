@@ -27,6 +27,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
 
   belongs_to  :parent, :class_name=>"ChecklistItemTemplate"
   has_many    :children, :class_name=>"ChecklistItemTemplate", :foreign_key=>"parent_id", :order=>"`order`", :dependent=>:nullify
+  has_many    :checklist_items, :class_name=>"ChecklistItem", :foreign_key=>"template_id", :dependent=>:nullify
   has_many    :checklist_item_template_workpackages, :dependent=>:destroy
   has_many    :workpackages, :through => :checklist_item_template_workpackages
   has_many    :checklist_item_template_milestone_names, :dependent=>:destroy
@@ -112,6 +113,25 @@ class ChecklistItemTemplate < ActiveRecord::Base
     if deploy_children
       self.children.select{|c| c.deployed==0}.each(&:deploy)
     end
+  end
+
+  def items_done_count
+    ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=?", self.id]).select { |i| i.milestone.done==1 and i.request.contre_visite=="No"}.size
+  end
+  
+  def items_values_count(value)
+    ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=? and status=?", self.id, value]).select { |i| i.milestone.done==1 and i.request.contre_visite=="No"}.size
+  end
+  
+  PIE_COLORS = ['DD6666', '2FAF24', 'BBBBBB', '3F9EA0', 'D2690E']
+  def partition_graph_url
+    chart = GoogleChart::PieChart.new('250x250', nil, false)
+    self.values.options.each_with_index do |d,i|
+      chart.data d, self.items_values_count(i), PIE_COLORS[i]
+    end
+    chart.show_legend = true
+    chart.show_labels = false
+    chart.to_url
   end
 
 end

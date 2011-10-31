@@ -1,0 +1,8 @@
+<%= render(:file=>"tools/menu")%>
+
+<h2>Capi</h2>
+<table>
+  <%= render(:file=>"notes/notes_header")%>
+  <%= render(:partial=>'notes/item', :collection=>@notes) %>
+</table>
+

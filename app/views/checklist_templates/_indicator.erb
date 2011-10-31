@@ -1,0 +1,6 @@
+<li>
+  <b><%= t.items_done_count %></b> milestones done with
+  <%= link_to(t.title,:action=>'ind_details', :id=>t.id) %><br/>
+  <%= image_tag(t.partition_graph_url) %><br/>
+</li>
+
