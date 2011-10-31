@@ -123,7 +123,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
     ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=? and status=?", self.id, value]).select { |i| i.milestone.done==1 and i.request.contre_visite=="No"}.size
   end
   
-  PIE_COLORS = ['DD6666', '2FAF24', 'BBBBBB', '3F9EA0', 'D2690E']
+  PIE_COLORS = ['DD6666', '2FAF24', 'BBBBBB', '3F9EA0', 'D29900']
   def partition_graph_url
     chart = GoogleChart::PieChart.new('250x250', nil, false)
     self.values.options.each_with_index do |d,i|
