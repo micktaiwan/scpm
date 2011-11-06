@@ -12,6 +12,7 @@ class Person < ActiveRecord::Base
   has_many :project_people
   has_many :projects, :through=>:project_people
   has_many :wl_lines
+  has_many :sdp_logs, :order=>"id"
 
   before_save :encrypt_password
 

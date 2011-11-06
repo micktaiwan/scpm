@@ -43,7 +43,7 @@
 
   <tbody id="sdp_table">
     <%= render(:partial=>"sdp_logs/log", :collection=>@sdp_logs) %>
-    <tr>
+    <tr style="background-color: #EEE;">
     <td align="right"><%= @last_sdp_update.to_date %></td>
     <td align="right"><%= @balance[:initial] %></td>
     <td align="right"><%= @balance[:remaining] %></td>

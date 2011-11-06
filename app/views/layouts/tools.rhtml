@@ -26,44 +26,44 @@
 <%#= render :file => 'chat/main' %>
 
 <div id="banner">
-<%= render :file => 'layouts/context_select' %>
-<div id="title">Tools</div>
-<div id="bandeau">
-<% b = get_bandeau; if b %>
-<div class="text"><%= b.text %></div>
-<div class="person"><%= b.person.name %></div>
-<% end %>
-<div class="link">
-  <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
-  <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
-</div>
-</div>
+  <%= render :file => 'layouts/context_select' %>
+  <div id="title">Tools</div>
+  <div id="bandeau">
+    <% b = get_bandeau; if b %>
+    <div class="text"><%= b.text %></div>
+    <div class="person"><%= b.person.name %></div>
+    <% end %>
+    <div class="link">
+      <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+      <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
+    </div>
+  </div>
 
-<div id="menu_bar">
-<%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','*')}) %>
-<%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
-<%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %>
-<%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %>
-<%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %>
-<%= link_to('Bandeaux', {:controller=>'bandeaus', :action=>'index'}, {:class=>menu_style('bandeaus','*')}) %>
+  <div id="menu_bar">
+    <%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','*')}) %>
+    <%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
+    <%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %>
+    <%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %>
+    <%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %>
+    <%= link_to('Bandeaux', {:controller=>'bandeaus', :action=>'index'}, {:class=>menu_style('bandeaus','*')}) %>
 
-<% if current_user.has_role?('Admin') %>
-<%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %>
-<%= link_to('Tools', {:controller=>'tools', :action=>'index'}, {:class=>menu_style('tools','*')}) %>
-<% end %>
+    <% if cu.has_role?('Admin') %>
+      <%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %>
+      <%= link_to('Tools', {:controller=>'tools', :action=>'index'}, {:class=>menu_style('tools','*')}) %>
+    <% end %>
 
-<% if current_user.has_role?('Super') %>
-<%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %>
-<% end %>
-
-<%= link_to 'Updates', '/changes.txt', {:class=>'menu'} -%>
-
-</div>
+    <% if cu.has_role?('Super') %>
+      <%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %>
+    <% end %>
+    <% new_requests = Request.count(:conditions=>"status='new'"); if new_requests > 0 %>
+      <div class="notif"><strong><%=new_requests%></strong> new requests</div>
+    <% end %>
+  </div>
 
 </div>
 
 <div id="content">
-<%= yield %>
+  <%= yield %>
 </div>
 
 <%= render :file => 'layouts/footer.erb' %>

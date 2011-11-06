@@ -209,6 +209,11 @@ class ToolsController < ApplicationController
       }
     @people = @people.sort_by { |p| [-p[3],-p[1]]}
   end
+  
+  def sdp_logs
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
+  end
 
   def sdp_add
     @requests = Request.find(:all, :conditions=>"sdp='No' and resolution='in progress' and status!='to be validated' and complexity!='TBD'")

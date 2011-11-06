@@ -204,7 +204,7 @@ td    {
   background: #FAA;
   }
 .assigned {
-  background: #DFD;
+  background: #FF9;
   }
 .acknowledged {
   background: #FD6;
@@ -302,7 +302,15 @@ td    {
 .milestone_cl.done{background-color: #3A3}
 .milestone_cl.alert{background-color: #A33}
 
-
+.notif {
+  display: inline;
+  border:1px solid #999;
+  background: #FAA;
+  margin: 10px 0 20px 0;
+  padding: 5px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  }
 .legend {
   border:1px solid #999;
   background: #EEE;

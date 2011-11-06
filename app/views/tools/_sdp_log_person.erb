@@ -1,0 +1,44 @@
+<b><%= p.name %></b><br/>
+<ul>
+  <table class="grid">
+  <tr class="grid header">
+  <td>Date</td>
+  <td>Initial</td>
+  <td>SDP Rem.</td>
+  <td>WL Rem.</td>
+  <td>Months</td>
+  <td>Balance</td>
+  <td>Gain</td>
+  <td>Action</td>
+  </tr>
+<% @balance = p.sdp_balance %>
+  <tbody id="sdp_table">
+    <%= render(:partial=>"sdp_logs/log", :object=>p.sdp_logs.last) %>
+    <tr style="background-color: #FFA;">
+    <td align="right"><%= @last_sdp_update.to_date %></td>
+    <td align="right"><%= @balance[:initial] %></td>
+    <td align="right"><%= @balance[:remaining] %></td>
+    <td align="right"></td>
+    <td align="right"></td>
+    <td align="right"><%= @balance[:balance] %></td>
+    <td align="right"><%= @balance[:percent] %>%</td>
+    <td align="center">
+    <% if current_user.has_role?('ServiceLineResp') %>
+    <%#= link_to_remote(image_tag('add.png', :id=>'sdp_add'),
+      :url=>{:controller=>'sdp_logs', :action=>'create',
+        :date=>@last_sdp_update.to_date,
+        :person_id=>p.id,
+        :initial=>@balance[:initial],
+        :sdp_remaining=>@balance[:remaining],
+        :wl_remaining=>nil,
+        :delay=>nil,
+        :balance=>@balance[:balance],
+        :percent=>@balance[:percent]},
+       :update=>'sdp_table',
+       :loading=>"$('sdp_add').src='/images/loading.gif'") %></td>
+    <% end %>
+    </tr>
+  </tbody>
+  </table>
+</ul>
+
