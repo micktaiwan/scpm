@@ -27,9 +27,13 @@ class MilestonesController < ApplicationController
   end
 
   def update
-    a = Milestone.find(params[:id])
-    a.update_attributes(params[:milestone])
-    redirect_to "/projects/show/#{a.project_id}"
+    m = Milestone.find(params[:id])
+    m.update_attributes(params[:milestone])
+    if m.done == 1
+      redirect_to "/notes/new?project_id=#{m.project_id}&done=1"
+    else
+      redirect_to "/projects/show/#{m.project_id}"
+    end
   end
 
   def destroy

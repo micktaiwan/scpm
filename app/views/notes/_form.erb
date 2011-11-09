@@ -1,9 +1,32 @@
+<script>
+function note_capi_change(value) {
+  if(value==-1)
+    $('type_section').show();
+  else {
+    $('pub').checked = true;
+    $('type_section').hide();
+    }
+  }
+</script>
+
 <%= hidden_field :note, :project_id %>
 
-<p><%= label_tag 'note' %>
+<% if @milestone_done=="1" %>
+<strong>You just closed a milestone. Please capitalize, and add a note on what should have been done to do it better</strong><br/>
+<% end %>
+
+<p><%= label_tag 'Note / Best Practice' %>
 <%= text_area :note, :note, {:rows=>10, :cols=>70} %></p>
 
-<p><%= label_tag 'Type' %>
-<%= radio_button :note, :private, 0 %> Public for SQLI (only)
+<p><%= label_tag 'Capi Axis' %>
+<%= select(:note, :capi_axis_id, options_for_select(@capi_axes, @note.capi_axis_id), {}, {:onchange=>"note_capi_change(this.value)"}) %>
+<% if current_user.has_role?('Admin') %>
+<%= link_to('New axis', {:controller=>'capi_axes', :action=>'new'}, {:class=>'btnlnk'}) %>
+<% end %>
+</p>
+
+<p id="type_section" <% if @note.capi_axis_id!=-1 %>style="display:none"<% end %>><%= label_tag 'Type' %>
+<%= radio_button :note, :private, 0, :id=>'pub' %> Public for SQLI (only)
 <%= radio_button :note, :private, 1 %> Private to me only
 </p>
+

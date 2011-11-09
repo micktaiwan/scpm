@@ -4,6 +4,8 @@ class NotesController < ApplicationController
 
   def new
     @note = Note.new(:private=>1, :person_id=>current_user.id, :project_id=>params[:project_id])
+    @capi_axes = [['Simple Note', -1]]+CapiAxis.find(:all).map{|m| [m.name, m.id]}
+    @milestone_done = params[:done]
   end
 
   def create
@@ -19,6 +21,7 @@ class NotesController < ApplicationController
   def edit
     id = params[:id]
     @note = Note.find(id)
+    @capi_axes = [['Simple Note', -1]]+CapiAxis.find(:all).map{|m| [m.name, m.id]}
   end
 
   def update

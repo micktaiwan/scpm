@@ -346,8 +346,14 @@ ins.differ {
   border-left: 1px solid #BBB;
   padding: 0 0 0 10px;
   }
+
 .note_box {
   margin: 0 0 10px 0;
+  padding:10px;
+  }
+.note_box.capi {
+  background: #FDD;
+  border: 1px black solid;
   }
 .note_header {
   float: left;
