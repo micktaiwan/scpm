@@ -36,7 +36,16 @@ class NotesController < ApplicationController
   end
 
   def list
-    @notes = Note.find(:all, :conditions=>"private=0", :order=>"created_at desc")
+    @notes = Note.find(:all, :conditions=>"capi_axis_id!=-1", :order=>"created_at desc")
+  end
+
+  def filter
+    if params['id']=="1"
+      @notes = Note.find(:all, :conditions=>"capi_axis_id!=-1", :order=>"created_at desc")
+    else
+      @notes = Note.find(:all, :conditions=>"private=0", :order=>"created_at desc")
+    end
+    render(:partial=>"capi_table")
   end
 
 end

@@ -1,8 +1,10 @@
 <%= render(:file=>"tools/menu")%>
 
 <h2>Capi</h2>
-<table>
-  <%= render(:file=>"notes/notes_header")%>
-  <%= render(:partial=>'notes/item', :collection=>@notes) %>
-</table>
+<input type="radio" name="filter" checked="true" onclick="new Ajax.Updater('capi_table', '/notes/filter/1')"> Show only capitalisations<br/>
+<input type="radio" name="filter" onclick="new Ajax.Updater('capi_table', '/notes/filter/0')"> Show all public notes<br/>
+<br/>
+<div id="capi_table">
+  <%= render(:partial=>"capi_table") %>
+</div>
 
