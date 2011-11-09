@@ -1,0 +1,7 @@
+<h2>Create a req wave</h2>
+<%= error_messages_for :wave %>
+<% form_for :@wave, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Create' %></p>
+<% end -%>

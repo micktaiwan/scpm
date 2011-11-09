@@ -1,0 +1,18 @@
+<p><%= label_tag 'requirement' %>
+<%= text_area :req, :description, :rows=>3 %></p>
+
+<p><%= label_tag 'short_name' %>
+<%= text_field :req, :short_name %></p>
+
+<p><%= label_tag 'source' %>
+<%= text_field :req, :source_name %></p>
+
+<p><%= label_tag 'category' %>
+<%= select(:req, :req_category_id, @cats, {:prompt => 'Select a category...'}) %></p>
+
+<p><%= label_tag 'wave' %>
+<%= select(:req, :req_wave_id, @waves, {:prompt => 'Select a wave...'}) %></p>
+
+<p><%= label_tag 'status' %>
+<%= select(:req, :status, @status) %></p>
+

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111109160431) do
+ActiveRecord::Schema.define(:version => 20111109190905) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -247,6 +247,13 @@ ActiveRecord::Schema.define(:version => 20111109160431) do
     t.datetime "updated_at"
   end
 
+  create_table "req_waves", :force => true do |t|
+    t.string   "name"
+    t.integer  "status",     :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "requests", :force => true do |t|
     t.string   "request_id"
     t.string   "workstream"
@@ -294,19 +301,37 @@ ActiveRecord::Schema.define(:version => 20111109160431) do
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
 
+  create_table "requirement_versions", :force => true do |t|
+    t.integer  "requirement_id"
+    t.integer  "version"
+    t.integer  "req_category_id"
+    t.string   "source_name"
+    t.string   "short_name"
+    t.text     "description"
+    t.integer  "status"
+    t.datetime "status_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "req_wave_id"
+    t.integer  "linked_req_id"
+    t.integer  "person_id"
+  end
+
+  add_index "requirement_versions", ["requirement_id"], :name => "index_requirement_versions_on_requirement_id"
+
   create_table "requirements", :force => true do |t|
     t.integer  "req_category_id"
     t.string   "source_name"
-    t.date     "source_date"
-    t.string   "requirement"
+    t.string   "short_name"
     t.text     "description"
-    t.integer  "version"
-    t.datetime "version_date"
     t.integer  "status"
     t.datetime "status_date"
-    t.integer  "is_service_req",  :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "req_wave_id",     :null => false
+    t.integer  "linked_req_id"
+    t.integer  "person_id"
+    t.integer  "version"
   end
 
   create_table "risks", :force => true do |t|

@@ -1,0 +1,9 @@
+<%= render(:file=>"tools/menu") %>
+
+<h2>Requirements categories</h2>
+<%= render(:file=>"req_categories/menu") %>
+
+<ul>
+  <%= render(:partial=>'cat', :collection=>@cats) %>
+</ul>
+
