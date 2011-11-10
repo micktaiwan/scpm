@@ -14,5 +14,5 @@
 <%= select(:req, :req_wave_id, @waves, {:prompt => 'Select a wave...'}) %></p>
 
 <p><%= label_tag 'status' %>
-<%= select(:req, :status, @status) %></p>
+<%= select(:req, :status, Requirement::Req_Status) %></p>
 

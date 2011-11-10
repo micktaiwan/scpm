@@ -1,6 +1,11 @@
-<%= req.id %>-<%= req.version %>
-<b><%= req.short_name %></b>
-<u><i><%= req.description %></i></u>
+<tr>
+<td><%= req.id %>-<%= req.version %></td>
+<td><b><%= req.short_name %></b></td>
+<td><%= req.description %></td>
+<td><%= req.status_name %></td>
+<td><%= req.req_category.label %></td>
+<td><%= req.req_wave.name %></td>
+<td><i><%= req.source_name %></i></td>
+<td><%= link_to(image_tag('edit.gif'), {:controller=>'requirements', :action=>'edit', :id=>req.id}) %></td>
+</tr>
 
-[<%= req.req_category.label %> -
-<%= req.req_wave.name %>]

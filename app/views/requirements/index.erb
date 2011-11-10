@@ -2,8 +2,20 @@
 
 <h2>Requirements</h2>
 <%= render(:file=>"requirements/menu") %>
+<br/>
 
-<ul>
+<table class="grid">
+  <tr class="header">
+  <td>ID</td>
+  <td>Short Name</td>
+  <td>Requirement</td>
+  <td>State</td>
+  <td>Type</td>
+  <td>Wave</td>
+  <td>Source</td>
+  <td></td>
+  </tr>
+
   <%= render(:partial=>'req', :collection=>@reqs) %>
-</ul>
+</table>
 

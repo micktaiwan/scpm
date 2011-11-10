@@ -1,0 +1,9 @@
+<h2>Edit</h2>
+
+<%= error_messages_for :req %>
+<% form_for @req, :url=>{:action=>'update', :id=>@req.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Edit' %></p>
+<% end -%>
+

@@ -20,15 +20,27 @@ class RequirementsController < ApplicationController
     redirect_to('/requirements')
   end
 
+  def edit
+    @req    = Requirement.find(params[:id])
+    get_attributes
+  end
+
+  def update
+    id = params[:id]
+    @req = Requirement.find(id)
+    if @req.update_attributes(params[:req]) # do a save
+      redirect_to "/requirements"
+    else
+      render :action => 'edit'
+    end
+  end
+
+
 private
 
   def get_attributes
     @cats   = ReqCategory.all.map {|p| [ p.label, p.id ] }
     @waves  = ReqWave.all.map {|p| [ p.name, p.id ] }
-    @status = [['Proposed', 100], ['Reviewed', 200], ['Approved by SQLI', 300],
-     ['Conception in progress', 400], ['Validated by SQLI', 500], ['Refused by customer', 600],
-     ['Accepted by customer', 700], ['Realisation in progress', 800], ['Deployed', 900],
-     ['Superseded', 1000], ['Deleted', 1100]]
   end
 
   def select_reqs()#wave_id=nil)
