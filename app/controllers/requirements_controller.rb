@@ -28,6 +28,8 @@ class RequirementsController < ApplicationController
   def update
     id = params[:id]
     @req = Requirement.find(id)
+    @req.person_id = current_user.id
+    @req.status_date = Date.today() if params[:req][:status].to_i != @req.status
     if @req.update_attributes(params[:req]) # do a save
       redirect_to "/requirements"
     else
@@ -35,6 +37,20 @@ class RequirementsController < ApplicationController
     end
   end
 
+  # generate an Excel file with reqs
+  def excel
+    begin
+      @xml = Builder::XmlMarkup.new(:indent => 1)
+      select_reqs
+
+      headers['Content-Type']         = "application/vnd.ms-excel"
+      headers['Content-Disposition']  = 'attachment; filename="Requirements.xls"'
+      headers['Cache-Control']        = ''
+      render(:layout=>false)
+    rescue Exception => e
+      render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
+    end
+  end
 
 private
 

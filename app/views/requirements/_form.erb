@@ -1,3 +1,6 @@
+<p><%= label_tag 'source_identifier' %>
+<%= text_field :req, :source_identifier %></p>
+
 <p><%= label_tag 'requirement' %>
 <%= text_area :req, :description, :rows=>3 %></p>
 
@@ -7,6 +10,9 @@
 <p><%= label_tag 'source' %>
 <%= text_field :req, :source_name %></p>
 
+<p><%= label_tag 'Requirement date' %>
+<%= text_field :req, :source_date %></p>
+
 <p><%= label_tag 'category' %>
 <%= select(:req, :req_category_id, @cats, {:prompt => 'Select a category...'}) %></p>
 
@@ -15,4 +21,10 @@
 
 <p><%= label_tag 'status' %>
 <%= select(:req, :status, Requirement::Req_Status) %></p>
+
+<p><%= label_tag 'priority' %>
+<%= select(:req, :priority, Requirement::Req_Priority) %></p>
+
+<p><%= label_tag 'impact' %>
+<%= select(:req, :impact, Requirement::Req_Impact) %></p>
 

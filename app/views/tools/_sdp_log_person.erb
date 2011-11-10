@@ -13,7 +13,8 @@
   </tr>
 <% @balance = p.sdp_balance %>
   <tbody id="sdp_table">
-    <%= render(:partial=>"sdp_logs/log", :object=>p.sdp_logs.last) %>
+    <% o = p.sdp_logs.last %>
+    <%= render(:partial=>"sdp_logs/log", :object=>o) if o %>
     <tr style="background-color: #FFA;">
     <td align="right"><%= @last_sdp_update.to_date %></td>
     <td align="right"><%= @balance[:initial] %></td>
@@ -35,8 +36,8 @@
         :balance=>@balance[:balance],
         :percent=>@balance[:percent]},
        :update=>'sdp_table',
-       :loading=>"$('sdp_add').src='/images/loading.gif'") %></td>
-    <% end %>
+       :loading=>"$('sdp_add').src='/images/loading.gif'") %>
+    <% end %></td>
     </tr>
   </tbody>
   </table>

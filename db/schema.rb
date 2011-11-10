@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111109190905) do
+ActiveRecord::Schema.define(:version => 20111110160630) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -249,9 +249,11 @@ ActiveRecord::Schema.define(:version => 20111109190905) do
 
   create_table "req_waves", :force => true do |t|
     t.string   "name"
-    t.integer  "status",     :default => 0
+    t.integer  "status",                          :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "deployment_target_date"
+    t.date     "deployment_target_date_revision"
   end
 
   create_table "requests", :force => true do |t|
@@ -315,6 +317,10 @@ ActiveRecord::Schema.define(:version => 20111109190905) do
     t.integer  "req_wave_id"
     t.integer  "linked_req_id"
     t.integer  "person_id"
+    t.integer  "impact"
+    t.date     "source_date"
+    t.string   "source_identifier"
+    t.integer  "priority"
   end
 
   add_index "requirement_versions", ["requirement_id"], :name => "index_requirement_versions_on_requirement_id"
@@ -328,10 +334,14 @@ ActiveRecord::Schema.define(:version => 20111109190905) do
     t.datetime "status_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "req_wave_id",     :null => false
+    t.integer  "req_wave_id",       :null => false
     t.integer  "linked_req_id"
     t.integer  "person_id"
     t.integer  "version"
+    t.date     "source_date"
+    t.string   "source_identifier"
+    t.integer  "priority"
+    t.integer  "impact"
   end
 
   create_table "risks", :force => true do |t|

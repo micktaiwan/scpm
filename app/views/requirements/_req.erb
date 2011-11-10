@@ -1,11 +1,16 @@
 <tr>
-<td><%= req.id %>-<%= req.version %></td>
+<td width="30"><%= req.id %>-<%= req.version %></td>
+<td width="80"><%= req.source_identifier %></td>
 <td><b><%= req.short_name %></b></td>
 <td><%= req.description %></td>
+<td width="80"><%= my_date(req.source_date) %></i></td>
+<td><%= req.priority_name %></td>
 <td><%= req.status_name %></td>
+<td width="80"><%= my_date(req.status_date) %></i></td>
 <td><%= req.req_category.label %></td>
 <td><%= req.req_wave.name %></td>
 <td><i><%= req.source_name %></i></td>
+<td width="80"><%= req.person.short_name %></td>
 <td><%= link_to(image_tag('edit.gif'), {:controller=>'requirements', :action=>'edit', :id=>req.id}) %></td>
 </tr>
 

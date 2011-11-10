@@ -1,2 +1,9 @@
+<%= render(:file=>"tools/sdp_menu.erb") %>
+
+<h2>Gains</h2>
+
+<%= link_to('Table', {:action=>'sdp_people'}, {:class=>'btnlnk'}) %><br/>
+<br/>
+
 <%= render(:partial=>'sdp_log_person', :collection=>@people, :as=>:p) %>
 
