@@ -6,8 +6,23 @@ body {
   background: #FFF;
   }
 div#footer {
-  float:right;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background: #000;
+  padding:3px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  -moz-border-top-left-radius: 5px;
+  -moz-border-top-right-radius: 5px;
   }
+div#footer a {
+  color:#FFF;
+  }
+div#footer a:visited {
+  color:#FFF;
+  }
+
 div#banner {
   margin: 0;
   position: fixed;
@@ -394,6 +409,7 @@ div#bandeau {
   font-size: 0.8em;
   color: #000;
   display: inline;
+
   }
 #bandeau .link {
   font-size: 0.8em;
@@ -467,3 +483,4 @@ div#bandeau {
   font-weight: normal;
   font-style: normal;
 }
+
