@@ -1,6 +1,6 @@
 <h2>Add a requirement</h2>
 <%= error_messages_for :req %>
-<% form_for @req, :url=>{:action=>'create'} do |f| -%>
+<% form_for @req, :url=>{:action=>'create'}, :html => {:onsubmit=>'return check_requirement(this)'} do |f| -%>
   <%= render(:partial => f) %>
   <p><label>&nbsp;</label>
   <%= submit_tag 'Add' %></p>

@@ -1,8 +1,9 @@
-<tr>
-<td><%= p[0] %></td>
-<td><%= p[1] %></td>
+<tr <% if p[1]==-1 or p[2]==-1 or p[3]==-1%> style="background-color:#DDD"<%end%>>
+<td><%= link_to(p[0], :controller=>'projects', :action=>'show',:id=>p[5]) %></td>
+<td><%= p[1] if p[1]!=-1 %></td>
 <td><%= p[2] %></td>
 <td><%= p[3] %></td>
-<td><%= p[2]-p[3] %></td>
+<td><%= p[2]-p[3]  if p[1]!=-1 %></td>
+<td><%= p[4] %></td>
 </tr>
 

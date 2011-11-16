@@ -29,6 +29,17 @@ class Requirement < ActiveRecord::Base
     return "Error: unknown priority #{s[1]}"
   end
 
+  def css_class
+    case self.status_name
+    when "Deleted"
+      return "req_deleted"
+    when "Proposed"
+      return "req_proposed"
+    when "Deployed"
+      return "req_deployed"
+    end
+    "req_normal"
+  end
 
 end
 

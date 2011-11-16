@@ -2,13 +2,14 @@
 
 <h2>Projects length</h2>
 
-<table class="grid">
+<table class="sortable">
   <tr class="header">
   <td>Project</td>
   <td>Milestones</td>
   <td>Length</td>
   <td>Planned length</td>
   <td>Diff</td>
+  <td>%</td>
   </tr>
 
   <%= render(:partial=>"projects_length", :collection=>@results, :as=>:p) %>

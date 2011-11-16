@@ -113,3 +113,15 @@ function deploy_question(id,value) {
     });
   }
 
+function check_requirement(form) {
+  if($('req_req_category_id').value=="") {
+    alert('Category can not be blank');
+    return false;
+    }
+  if($('req_req_wave_id').value=="") {
+    alert('Wave can not be blank');
+    return false;
+    }
+  return true;
+  }
+

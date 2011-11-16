@@ -51,18 +51,19 @@ class Project < ActiveRecord::Base
     # find the first milestone to have a date
     first = nil
     milestones.each_with_index { |m,i|
-      first = m and break if m.milestone_date
+      first = m and break if m.actual_milestone_date or m.milestone_date
       }
     # find the last milestone to have a date
     last = nil
     milestones.reverse.each_with_index { |m,i|
-      last = m and break if m.milestone_date
+      last = m and break if m.actual_milestone_date or m.milestone_date
       }
     l = -1
     l = last.actual_milestone_date-first.actual_milestone_date if first and
        first.actual_milestone_date and last and last.actual_milestone_date
     pl = -1
-    pl = last.milestone_date-first.milestone_date if first and last
+    pl = last.milestone_date-first.milestone_date if first and
+       first.milestone_date and last and last.milestone_date
     [[first,last],l,pl]
   end
 

@@ -252,13 +252,23 @@ class ToolsController < ApplicationController
   end
 
   def projects_length
-    @projects = Project.find(:all)#.sort_by { |p| p.full_name.upcase}
+    @projects = Project.find(:all).select { |p| p.projects.size==0}
     @results  = []
     for p in @projects
       m,l,pl = p.length
-      @results << [p.full_name, m.join('-'), l, pl]
+      if m[0]==m[1]
+        mt = -1
+      else
+        mt = m.join('-')
+      end
+      if pl <= 0
+        percent = 0.0
+      else
+        percent = (((l-pl).to_f / pl )*100).round
+      end
+      @results << [p.full_name, mt, l, pl, percent, p.id]
     end
-    @results = @results.sort_by { |p| -(p[2]-p[3])}
+    @results = @results.sort_by { |p| [-p[4], -p[3]]}
   end
 
 private

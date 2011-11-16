@@ -180,36 +180,6 @@ strong {
   font-weight: bold;
   }
 
-/* TABLES */
-table, th {
-  }
-tr    {
-  padding: 0px;
-  margin: 0px;
-  }
-td    {
-  padding: 2px;
-  }
-
-.grid {
-  font-family: Arial;
-  padding: 0px;
-  margin: 0px;
-  border-collapse:collapse;
-  border: #999 1px solid;
-  }
-.grid tr    {
-  padding: 0px;
-  margin: 0px;
-  }
-.grid td    {
-  padding: 3px;
-  border: #555 1px solid;
-  }
-.grid .header  {
-  background: #AAF;
-  font-weight: bold;
-  }
 
 /* STATUSES */
  .to_be_validated  {
@@ -482,5 +452,81 @@ div#bandeau {
 .generic_risks {
   font-weight: normal;
   font-style: normal;
+}
+
+
+/* TABLES */
+table, th {
+  }
+tr    {
+  padding: 0px;
+  margin: 0px;
+  }
+td    {
+  padding: 2px;
+  }
+
+.grid {
+  font-family: Arial;
+  padding: 0px;
+  margin: 0px;
+  border-collapse:collapse;
+  border: #999 1px solid;
+  }
+.grid tr    {
+  padding: 0px;
+  margin: 0px;
+  }
+.grid td    {
+  padding: 3px;
+  border: #555 1px solid;
+  }
+.grid .header  {
+  background: #AAF;
+  font-weight: bold;
+  }
+
+/* Sortable tables */
+table.sortable thead {
+  background-color:#eee;
+  font-weight: bold;
+  cursor: pointer;
+}
+table.sortable {
+  font-family: Arial;
+  padding: 0px;
+  margin: 0px;
+  border-collapse:collapse;
+  border: #999 1px solid;
+  }
+table.sortable tr    {
+  padding: 0px;
+  margin: 0px;
+  }
+table.sortable td    {
+  padding: 3px;
+  border: #555 1px solid;
+  }
+table.sortable .header  {
+  background: #AAF;
+  font-weight: bold;
+  cursor: pointer;
+  }
+
+
+.req_deleted {
+  background-color: #DDD;
+  font-style:italic;
+  color:#888;
+}
+.req_proposed {
+  background-color: #FDD;
+}
+.req_normal {
+  background-color: #FFD;
+}
+.req_deployed {
+  background-color: #EFE;
+  color:#555;
 }
 
