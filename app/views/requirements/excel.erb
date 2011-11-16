@@ -28,13 +28,13 @@
   @xml.Worksheet 'ss:Name' => 'Requirements' do
     @xml.Table do
       # Columns width
-      for width in ['30','130','430','120','120','120','120'] do
+      for width in ['30','130','130','430','120','120','120','120'] do
         @xml.Column nil, {'ss:Width' => width}
       end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['ID','Short Name', 'Requirement','Status', 'Type', 'Wave', 'Source'] do
+        for column in ['ID','Source ID','Short Name', 'Requirement','Status', 'Type', 'Wave', 'Source'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -47,7 +47,7 @@
         style = {}
         #style = {'ss:StyleID' => 's75'} if p.done==1
         @xml.Row(style) do
-          for column in ['id', 'short_name', 'description', 'status_name', 'req_category.label', 'req_wave.name', 'source_name'] do
+          for column in ['id','source_identifier', 'short_name', 'description', 'status_name', 'req_category.label', 'req_wave.name', 'source_name'] do
             @xml.Cell do
               @xml.Data cascade_send(r, column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
