@@ -1,0 +1,7 @@
+<tr>
+<td width="20"><%= impact.id %></td>
+<td><%= impact.impact %></td>
+<td><i><%= impact.person.name %></i></td>
+<td><%= link_to(image_tag('edit.gif'), {:controller=>'req_impact', :action=>'edit', :id=>impact.id}) %></td>
+</tr>
+

@@ -2,7 +2,13 @@
 <td width="30"><%= req.id %>-<%= req.version %></td>
 <td width="80"><%= req.source_identifier %></td>
 <td><b><%= req.short_name %></b></td>
-<td><%= req.description %></td>
+<td>
+  <%= req.description %><br/>
+  <% if req.req_impacts.size > 0 %>
+    <b>Impacts:</b><br/>
+    <%= render(:partial=>'req_impacts/simple_impact', :collection=>req.req_impacts, :as=>:i) %>
+  <% end %>
+</td>
 <td width="80"><%= my_date(req.source_date) %></i></td>
 <td><%= req.priority_name %></td>
 <td><%= req.status_name %></td>
@@ -12,5 +18,6 @@
 <td><i><%= req.source_name %></i></td>
 <td width="80"><%= req.person.short_name %></td>
 <td><%= link_to(image_tag('edit.gif'), {:controller=>'requirements', :action=>'edit', :id=>req.id}) %></td>
+<td><%= link_to(image_tag('add.png', :title=>"Add an impact"), {:controller=>'req_impacts', :action=>'new', :id=>req.id}) %></td>
 </tr>
 

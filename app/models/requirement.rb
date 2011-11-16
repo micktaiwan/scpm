@@ -3,9 +3,10 @@ require 'acts_as_versioned'
 class Requirement < ActiveRecord::Base
   acts_as_versioned
 
-  belongs_to :req_category
-  belongs_to :req_wave
-  belongs_to :person
+  belongs_to  :req_category
+  belongs_to  :req_wave
+  belongs_to  :person
+  has_many    :req_impacts
 
   Req_Status = [['Proposed', 100], ['Reviewed', 200], ['Approved by SQLI', 300],
    ['Conception in progress', 400], ['Validated by SQLI', 500], ['Refused by customer', 600],

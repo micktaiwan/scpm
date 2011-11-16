@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111110160630) do
+ActiveRecord::Schema.define(:version => 20111116174450) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -243,6 +243,15 @@ ActiveRecord::Schema.define(:version => 20111110160630) do
     t.integer  "parent_id"
     t.integer  "public",     :default => 0
     t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "req_impacts", :force => true do |t|
+    t.integer  "requirement_id"
+    t.integer  "person_id"
+    t.text     "impact"
+    t.integer  "level"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

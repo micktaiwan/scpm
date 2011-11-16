@@ -1,0 +1,8 @@
+<h2>Add a impact</h2>
+<%= error_messages_for :impact %>
+<% form_for @impact, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>
+
