@@ -209,7 +209,7 @@ class ToolsController < ApplicationController
       }
     @people = @people.sort_by { |p| [-p[3],-p[1]]}
   end
-  
+
   def sdp_logs
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
@@ -249,6 +249,16 @@ class ToolsController < ApplicationController
   def requests_by_year
     @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"workstream, summary, milestone")
     @years = [2011, 2012]
+  end
+
+  def projects_length
+    @projects = Project.find(:all)#.sort_by { |p| p.full_name.upcase}
+    @results  = []
+    for p in @projects
+      m,l,pl = p.length
+      @results << [p.full_name, m.join('-'), l, pl]
+    end
+    @results = @results.sort_by { |p| -(p[2]-p[3])}
   end
 
 private

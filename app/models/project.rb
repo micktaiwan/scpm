@@ -44,6 +44,28 @@ class Project < ActiveRecord::Base
     end
   end
 
+  # return [[the 2 milestones that has been taken for the length calcul],
+  # the actual length, the initial planned length]
+  def length
+    milestones = self.sorted_milestones
+    # find the first milestone to have a date
+    first = nil
+    milestones.each_with_index { |m,i|
+      first = m and break if m.milestone_date
+      }
+    # find the last milestone to have a date
+    last = nil
+    milestones.reverse.each_with_index { |m,i|
+      last = m and break if m.milestone_date
+      }
+    l = -1
+    l = last.actual_milestone_date-first.actual_milestone_date if first and
+       first.actual_milestone_date and last and last.actual_milestone_date
+    pl = -1
+    pl = last.milestone_date-first.milestone_date if first and last
+    [[first,last],l,pl]
+  end
+
   def visible_notes(user_id)
     Note.find(:all, :conditions=>["project_id=? and (person_id=? or (person_id!=? and private=0))", self.id, user_id, user_id], :order=>"id desc")
   end

@@ -1,0 +1,17 @@
+<%= render(:file=>'tools/menu')%>
+
+<h2>Projects length</h2>
+
+<table class="grid">
+  <tr class="header">
+  <td>Project</td>
+  <td>Milestones</td>
+  <td>Length</td>
+  <td>Planned length</td>
+  <td>Diff</td>
+  </tr>
+
+  <%= render(:partial=>"projects_length", :collection=>@results, :as=>:p) %>
+
+</table>
+
