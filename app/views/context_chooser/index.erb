@@ -8,16 +8,28 @@
 
   <br/>
   <br/>
+  <div class="center">
+    <div onclick="location='/projects'"         class="big_button reporting">Reporting</div>
+    <div onclick="location='/workloads'"        class="big_button workload">Workload</div>
+    <div onclick="location='/tools/sdp_index'"           class="big_button tools"
+      onmouseover="$('manage_sub').appear({duration:0.3});">
+      <div class="btitle">Manage</div>
+      <ul class="submenu" style="display:none" id="manage_sub">
+        <li><a href="/tools/sdp_index">SDP</a></li>
+        <li><a href="/requirements">Requirements</a></li>
+        <li><a href="/notes/list">Capitalisations</a></li>
+        <li><a href="/generic_risk_questions">Standard risks</a></li>
+        <li><a href="http://www.amazon.com/How-Manage-Your-Mother-Understanding/dp/0060988339">Your mother</a></li>
+        <li><a href="/tools/">Other awesome tools</a></li>
+      </ul>
 
-  <div onclick="location='/projects'"   id="reporting" class="big_button">Reporting</div>
-  <div onclick="location='/workloads'"  id="workload" class="big_button">Workload</div>
-  <div onclick="location='/tools/sdp_index'"      id="tools" class="big_button">&nbsp;&nbsp;Tools&nbsp;&nbsp;</div>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <div onclick="location='/sessions/logout'" id="logout" class="big_button">Log out</div>
+      </div>
+  </div>
+  <% 15.times do %>
+    <br/>
+  <% end  %>
+  <div class="center">
+    <div onclick="location='/sessions/logout'" class="big_button logout">Log out</div>
+  </div>
 </div>
 

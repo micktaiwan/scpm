@@ -53,10 +53,13 @@ h2 {
   top: 16px;
   right: 16px;
 }
-
+.center {
+    margin-left:  auto;
+    margin-right: auto;
+    width: 80%;
+  }
 .big_button {
   cursor: pointer;
-  display: inline;
   text-align: center;
   font-family: 'Zeyada', serif;
   font-size: 5em;
@@ -66,48 +69,46 @@ h2 {
   margin: 10px;
   border-radius: 15px;
   -moz-border-radius: 15px;
+  opacity: 0.8;
+  width: 200px;
+  float: left;
 }
-#logout {
-  cursor: pointer;
-  display: inline;
-  text-align: center;
-  font-family: 'Zeyada', serif;
-  font-size: 3em;
-  color: #777;
-  border: 1px solid #777;
-  padding: 10px;
-  margin: 10px 10px 10px 10px;
-  border-radius: 15px;
-  -moz-border-radius: 15px;
-  background: #FFF;
-  opacity: 0.7;
-}
-#logout:hover {
-  opacity: 1;
+.big_button ul {
+  margin: 0px;
+  margin-top:-20px;
+  }
+.submenu li {
+  font-size: 0.25em;
+  font-family: 'Arial', serif;
+  text-align: left;
+  font-family: 'Stardos Stencil', serif;
+  }
+.submenu li a:visited {
+  color:#444;
   }
 
-#reporting.big_button {
+.big_button:hover {
+  opacity: 1;
+  }
+.big_button.reporting {
   background: #08A;
-  opacity: 0.7;
   }
-#reporting.big_button:hover {
-  opacity: 1;
+.big_button.workload {
+  background: #F90;
+  }
+.big_button.sdp {
+  background: #DDD;
+  }
+.big_button.tools {
+  background: #DDD;
+  }
+.big_button.logout {
+  background: #FFF;
+  font-size: 3em;
+  float:right;
+  width:auto;
   }
 
-#workload.big_button {
-  background: #F90;
-  opacity: 0.7;
-  }
-#workload.big_button:hover {
-  opacity: 1;
-  }
-#tools.big_button {
-  background: #DDD;
-  opacity: 0.7;
-  }
-#tools.big_button:hover {
-  opacity: 1;
-  }
 #welcome {
   font-family: 'Zeyada', serif;
   font-size: 3em;
@@ -126,8 +127,7 @@ h2 {
   -moz-border-radius: 15px;
   text-align: left;
 }
-
-#last_changes  li {
+#last_changes li {
   color: #000;
 }
 

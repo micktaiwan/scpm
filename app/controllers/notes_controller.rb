@@ -1,6 +1,7 @@
 class NotesController < ApplicationController
 
   before_filter :require_login
+  layout 'tools', :only=>'list'
 
   def new
     @note = Note.new(:private=>1, :person_id=>current_user.id, :project_id=>params[:project_id])
