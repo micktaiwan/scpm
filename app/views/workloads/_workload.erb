@@ -1,7 +1,7 @@
 <div id="workload" class="workload">
 <table width="100%">
-<tr><td>
-  <%= link_to_function('Add a line', "wl_add_line(#{workload.person_id})", :class=>"btnlnk") %>
+<tr><td valign="top">
+  <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
   <% if @suggested_requests.size > 0 %>
   You have <b><%=@suggested_requests.size%></b> suggested requests
   <% end %>
@@ -12,66 +12,30 @@
 
   <br/>
   <br/>
-  <b>Next 5 weeks:</b> <%= workload.next_month_percents %>%<br/>
-  <b>3 next months:</b>   <%= workload.three_next_months_percents %>%<br/>
+  <b>Next 5 weeks:</b> <%= @workload.next_month_percents %>%<br/>
+  <b>3 next months:</b>   <%= @workload.three_next_months_percents %>%<br/>
   <%
-  sdp_total = workload.sdp_remaining_total
+  sdp_total = @workload.sdp_remaining_total
   if sdp_total == 0
     percent_planned = 0
   else
-    percent_planned = (((workload.planned_total / sdp_total)*100)/0.1).round * 0.1
+    percent_planned = (((@workload.planned_total / sdp_total)*100)/0.1).round * 0.1
   end
   if percent_planned < 95
   %>
-    You have <%= workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
+    You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
   <% end %>
 
 </td>
 <td align="right">
 
-  <table class="grid">
-  <tr class="grid header">
-  <td>Date</td>
-  <td>Initial</td>
-  <td>SDP Rem.</td>
-  <td>WL Rem.</td>
-  <td>Months</td>
-  <td>Balance</td>
-  <td>Gain</td>
-  <td>Action</td>
-  </tr>
+  <%= render(:file=>"workloads/sdp_table", :locals=>{:workload=>@workload}) %>
 
-  <tbody id="sdp_table">
-    <%= render(:partial=>"sdp_logs/log", :collection=>@sdp_logs) %>
-    <tr style="background-color: #EEE;">
-    <td align="right"><%= @last_sdp_update.to_date %></td>
-    <td align="right"><%= @balance[:initial] %></td>
-    <td align="right"><%= @balance[:remaining] %></td>
-    <td align="right"><%= workload.sdp_remaining_total %></td>
-    <td align="right"><%= delay=(workload.sdp_remaining_total / 18 / 0.1).round * 0.1 %></td>
-    <td align="right"><%= @balance[:balance] %></td>
-    <td align="right"><%= @balance[:percent] %>%</td>
-    <td align="center">
-    <% if current_user.has_role?('ServiceLineResp') %>
-    <%= link_to_remote(image_tag('add.png', :id=>'sdp_add'),
-      :url=>{:controller=>'sdp_logs', :action=>'create',
-        :date=>@last_sdp_update.to_date,
-        :person_id=>workload.person_id,
-        :initial=>@balance[:initial],
-        :sdp_remaining=>@balance[:remaining],
-        :wl_remaining=>workload.sdp_remaining_total,
-        :delay=>delay,
-        :balance=>@balance[:balance],
-        :percent=>@balance[:percent]},
-       :update=>'sdp_table',
-       :loading=>"$('sdp_add').src='/images/loading.gif'") %></td>
-    <% end %>
-    </tr>
-  </tbody>
-  </table>
 </td></tr>
 </table>
 <br/>
+
+</div>
 <table id="workload_table">
 <thead>
   <tr>
@@ -82,7 +46,7 @@
   <th></th>
   <th></th>
   <th></th>
-  <%= render(:partial=>"wl_head", :collection=>workload.months) %>
+  <%= render(:partial=>"wl_head", :collection=>@workload.months) %>
   </tr>
 
   <tr>
@@ -93,7 +57,7 @@
   <th></th>
   <th></th>
   <th></th>
-  <%= render(:partial=>"wl_head", :collection=>workload.weeks) %>
+  <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
   </tr>
 
   <tr>
@@ -104,7 +68,7 @@
   <th style="min-width:45px;">Gain</th>
   <th style="min-width:45px;">Rem.</th>
   <th class="wl_total" style="min-width:45px;">Sum</th>
-  <%= render(:partial=>"wl_head", :collection=>workload.days) %>
+  <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
   </tr>
 
   <tr class="wl_opens">
@@ -115,7 +79,7 @@
   <th></th>
   <th></th>
   <th></th>
-  <%= render(:partial=>"wl_head", :collection=>workload.opens) %>
+  <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
   </tr>
 
   <tr class="wl_total">
@@ -126,7 +90,7 @@
   <th></th>
   <th></th>
   <th></th>
-  <%= render(:partial=>"wl_ctotal", :collection=>workload.ctotals) %>
+  <%= render(:partial=>"wl_ctotal", :collection=>@workload.ctotals) %>
   </tr>
 
   <tr class="wl_total">
@@ -135,9 +99,9 @@
   <th></th>
   <th></th>
   <th></th>
-  <th><%= workload.sdp_remaining_total %></th>
-  <th id="planned_total"><%= workload.planned_total %></th>
-  <%= render(:partial=>"wl_ctotal", :collection=>workload.percents) %>
+  <th><%= @workload.sdp_remaining_total %></th>
+  <th id="planned_total"><%= @workload.planned_total %></th>
+  <%= render(:partial=>"wl_ctotal", :collection=>@workload.percents) %>
   </tr>
 
   <tr class="wl_total">
@@ -148,12 +112,12 @@
   <th></th>
   <th></th>
   <th id="availability_total"></th>
-  <%= render(:partial=>"wl_ctotal", :collection=>workload.availability) %>
+  <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
   </tr>
 </thead>
 
 <tbody class="scrollContent">
-  <%= render(:partial=>"wl_line", :collection=>workload.wl_lines) %>
+  <%= render(:partial=>"wl_line", :collection=>@workload.wl_lines) %>
 </tbody>
 
 </table>

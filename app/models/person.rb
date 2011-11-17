@@ -120,6 +120,32 @@ class Person < ActiveRecord::Base
     Digest::SHA1.hexdigest("SuperSalt--#{password}--")
   end
 
+  def get_series(method)
+    serie   = []
+    labels  = []
+    first   = SdpLog.first(:first, :select=>"date", :conditions=>["person_id=?", self.id], :limit=>1, :order=>"date").date
+    for l in self.sdp_logs
+      serie << [l.date-first, l.send(method)]
+      labels << l.date
+    end
+    min = serie.map{|p| p[1]}.min
+    max = serie.map{|p| p[1]}.max
+    serie = serie.map{ |l| [l[0], l[1]-min]}
+    [serie, min, max, labels]
+  end
+
+  def sdp_graph
+    chart = GoogleChart::LineChart.new('450x150', "Chart", true)
+    serie, min, max, labels = get_series(:percent)
+    chart.data "Gain", serie, '0000ff'
+    chart.axis :y, :range => [min,max], :font_size => 10, :alignment => :center
+    #chart.axis :x, :labels => labels, :font_size => 10, :alignment => :center
+    chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
+    #chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>95.0/max, :end_point=>105.0/max
+    #chart.show_legend = false
+    @chart_url = chart.to_url
+  end
+
   #def remember_token?
   #  remember_token_expires_at && Time.now.utc < remember_token_expires_at
   #end

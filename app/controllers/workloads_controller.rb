@@ -21,6 +21,7 @@ class WorkloadsController < ApplicationController
     person_id = params[:person_id] if !person_id
     session['workload_person_id'] = person_id
     @workload = Workload.new(person_id)
+    @person   = @workload.person
     get_last_sdp_update
     get_suggested_requests(@workload)
     get_sdp_tasks(@workload)
