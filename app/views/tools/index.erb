@@ -1,3 +1,8 @@
 <%= render(:file=>"tools/menu")%>
-Some tools to ease admins life !
+<div id="canvas"></div>
+
+<script>
+  c = Raphael($("canvas"),500,400)
+  t = c.text(50, 10, "Awesome tools")
+</script>
 

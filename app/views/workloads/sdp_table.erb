@@ -39,7 +39,9 @@
   </tbody>
   </table>
 
+<% if @sdp_logs.size > 0 %>
 <%= link_to_function('Show chart', "$('sdp_chart').toggle()") %>
 <div id="sdp_chart" style="display:none;">
   <%= image_tag(@person.sdp_graph) %>
 </div>
+<% end %>
