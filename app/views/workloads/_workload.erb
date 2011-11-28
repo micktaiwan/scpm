@@ -1,41 +1,40 @@
 <div id="workload" class="workload">
-<table width="100%">
-<tr><td valign="top">
-  <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
-  <% if @suggested_requests.size > 0 %>
-  You have <b><%=@suggested_requests.size%></b> suggested requests
-  <% end %>
+  <table width="100%">
+  <tr><td valign="top">
+    <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
+    <% if @suggested_requests.size > 0 %>
+    You have <b><%=@suggested_requests.size%></b> suggested requests
+    <% end %>
 
-  <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;") %>
+    <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;") %>
 
-  <div id="milestones" class="popup" style="display:none;"></div>
+    <div id="milestones" class="popup" style="display:none;"></div>
 
+    <br/>
+    <br/>
+    <b>Next 5 weeks:</b> <%= @workload.next_month_percents %>%<br/>
+    <b>3 next months:</b>   <%= @workload.three_next_months_percents %>%<br/>
+    <%
+    sdp_total = @workload.sdp_remaining_total
+    if sdp_total == 0
+      percent_planned = 0
+    else
+      percent_planned = (((@workload.planned_total / sdp_total)*100)/0.1).round * 0.1
+    end
+    if percent_planned < 95
+    %>
+      You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
+    <% end %>
+
+  </td>
+  <td align="right">
+
+    <%= render(:file=>"workloads/sdp_table", :locals=>{:workload=>@workload}) %>
+
+  </td></tr>
+  </table>
   <br/>
-  <br/>
-  <b>Next 5 weeks:</b> <%= @workload.next_month_percents %>%<br/>
-  <b>3 next months:</b>   <%= @workload.three_next_months_percents %>%<br/>
-  <%
-  sdp_total = @workload.sdp_remaining_total
-  if sdp_total == 0
-    percent_planned = 0
-  else
-    percent_planned = (((@workload.planned_total / sdp_total)*100)/0.1).round * 0.1
-  end
-  if percent_planned < 95
-  %>
-    You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
-  <% end %>
 
-</td>
-<td align="right">
-
-  <%= render(:file=>"workloads/sdp_table", :locals=>{:workload=>@workload}) %>
-
-</td></tr>
-</table>
-<br/>
-
-</div>
 <table id="workload_table">
 <thead>
   <tr>
