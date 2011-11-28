@@ -45,7 +45,7 @@ class Milestone < ActiveRecord::Base
   end
 
   def checklist_not_allowed?
-    self.checklist_not_applicable==1 or self.status!=0 or self.done!=0
+    self.checklist_not_applicable==1 # or self.status!=0 or self.done!=0
   end
 
   def deploy_checklists

@@ -317,7 +317,7 @@ class Project < ActiveRecord::Base
   end
 
   def active_requests
-    self.requests.select { |r| r.resolution != "ended" and r.resolution != "aborted" and r.status == "assigned"}
+    self.requests.select { |r| r.status == "assigned" and r.resolution != "ended" and r.resolution != "aborted"}
   end
 
   def project_name
