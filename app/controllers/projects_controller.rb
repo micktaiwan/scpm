@@ -423,7 +423,7 @@ class ProjectsController < ApplicationController
       #@actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
       @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed' and status!='removed'", :order=>"status, workstream")
       @risks      = Risk.find(:all) #, :conditions=>"", :order=>"status, workstream")
-      @risks      = @risks.select { |r| r.project and r.severity > 0}.sort_by {|r| [r.project.supervisor.name, r.project.full_name, r.severity]}
+      @risks      = @risks.select { |r| r.project and r.severity > 0}.sort_by {|r| raise "no supervisor for #{r.project.full_name}" if !r.project.supervisor; [r.project.supervisor.name, r.project.full_name, r.severity]}
       @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
       if @wps.size > 0
         @amendments   = Amendment.find(:all, :conditions=>"project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"done, duedate")
