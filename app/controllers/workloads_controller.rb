@@ -347,5 +347,22 @@ class WorkloadsController < ApplicationController
     [lsum, csum, cpercent, planned_total, avail]
   end
 
+  def transfert
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    @lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']],
+      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+  end
+
+  def do_transfert
+    lines = params['lines'] # array of ids (as strings)
+    p_id  = params['person_id']
+    lines.each { |l_id|
+      l = WlLine.find(l_id.to_i)
+      l.person_id = p_id.to_i
+      l.save
+      }
+    redirect_to(:action=>"transfert")
+  end
+
 end
 
