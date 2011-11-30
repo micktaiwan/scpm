@@ -1,7 +1,6 @@
 class NotesController < ApplicationController
 
   before_filter :require_login
-  layout 'tools', :only=>'list'
 
   def new
     @note = Note.new(:private=>1, :person_id=>current_user.id, :project_id=>params[:project_id])
@@ -38,6 +37,7 @@ class NotesController < ApplicationController
 
   def list
     @notes = Note.find(:all, :conditions=>"capi_axis_id!=-1", :order=>"created_at desc")
+    render(:layout=>'tools')
   end
 
   def filter
