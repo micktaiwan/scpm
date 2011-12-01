@@ -1,7 +1,7 @@
 <tr>
   <td><%= r.assigned_to %></td>
   <td><a href="http://toulouse.sqli.com/EMN/view.php?id=<%=r.request_id.to_i%>"><%= r.request_id.to_i %></a></td>
-  <td><%= r.project.full_name %></td>
+  <td><%= link_to(r.project.full_name, :controller=>'projects', :action=>'show', :id=>r.project.id) %></td>
   <td><%= r.work_package %></td>
   <td><%= r.milestone %></td>
   
