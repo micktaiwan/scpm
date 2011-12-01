@@ -48,7 +48,7 @@ class WorkloadsController < ApplicationController
   end
 
   def get_suggested_requests(wl)
-    if wl.person.rmt_user == ""
+    if !wl or !wl.person or wl.person.rmt_user == ""
       @suggested_requests = []
       return
     end
@@ -158,11 +158,12 @@ class WorkloadsController < ApplicationController
   end
 
   def add_by_request
-    request_id = params[:request_id].strip
-    if request_id.empty?
+    request_id = params[:request_id]
+    if !request_id or request_id.empty?
       @error = "Please provide a request number."
       return
     end
+    request_id.strip!
     person_id = session['workload_person_id'].to_i
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
@@ -176,13 +177,14 @@ class WorkloadsController < ApplicationController
     if not found
       @line = WlLine.create(:name=>name, :request_id=>request_id, :person_id=>person_id, :wl_type=>WL_LINE_REQUEST)
       @workload = Workload.new(person_id)
+      get_last_sdp_update
+      get_suggested_requests(@workload)
+      get_sdp_gain(@workload.person)
+      get_chart
+      get_sdp_gain(@workload.person)
     else
       @error = "This line already exists: #{request_id}"
     end
-    get_last_sdp_update
-    get_suggested_requests(@workload)
-    get_sdp_gain(@workload.person)
-    get_chart
   end
 
   def add_by_name
@@ -195,14 +197,15 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+      @workload = Workload.new(person_id)
+      get_last_sdp_update
+      get_suggested_requests(@workload)
+      get_sdp_gain(@workload.person)
+      get_chart
+      get_sdp_gain(@workload.person)
     else
       @error = "This line already exists: #{name}"
     end
-    @workload = Workload.new(person_id)
-    get_last_sdp_update
-    get_suggested_requests(@workload)
-    get_sdp_gain(@workload.person)
-    get_chart
   end
 
   def add_by_sdp_task

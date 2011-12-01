@@ -1,0 +1,24 @@
+<%= render(:file=>'tools/menu')%>
+
+<h2>Date check</h2>
+
+<%= @requests.size %> ended requests<br/>
+Click on table header to sort it<br/>
+<br/>
+
+<table class="sortable">
+  <tr class="header">
+  <td>Assignee</td>
+  <td bgcolor="#CCC">Request</td>
+  <td bgcolor="#CCC">Project</td>
+  <td bgcolor="#CCC">Type</td>
+  <td bgcolor="#CCC">Milestone</td>
+  <td>RMT Initial Date</td>
+  <td bgcolor="#FFC">BAM Initial Date</td>
+  <td>RMT Actual Date</td>
+  <td bgcolor="#FFC">BAM Actual Date</td>
+  </tr>
+
+  <%= render(:partial=>"request_date_check", :collection=>@requests, :as=>:r) %>
+
+</table>

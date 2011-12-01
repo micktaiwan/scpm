@@ -248,7 +248,7 @@ class ToolsController < ApplicationController
 
   def requests_by_year
     @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"workstream, summary, milestone")
-    @years = [2011, 2012]
+    @years = [2011, 2012, 2013]
   end
 
   def projects_length
@@ -271,6 +271,11 @@ class ToolsController < ApplicationController
     @results = @results.sort_by { |p| [-p[4], -p[3]]}
   end
 
+  def rmt_date_check
+    wp = "'WP1.1 - Quality Control', 'WP1.2 - Quality Assurance'"
+    @requests = Request.find(:all, :conditions=>"status!='cancelled' and status!='removed' and resolution='ended' and work_package in (#{wp})")
+  end
+  
 private
 
   def round_to_hour(f)

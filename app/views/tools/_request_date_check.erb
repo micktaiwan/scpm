@@ -1,0 +1,11 @@
+<tr>
+  <td><%= r.assigned_to %></td>
+  <td><a href="http://toulouse.sqli.com/EMN/view.php?id=<%=r.request_id.to_i%>"><%= r.request_id.to_i %></a></td>
+  <td><%= r.project.full_name %></td>
+  <td><%= r.work_package %></td>
+  <td><%= r.milestone %></td>
+  <td<% if r.milestone_date.to_s!=r.bam_milestone.milestone_date.to_s %> bgcolor="#FAA"<%end%>><%= r.milestone_date %></td>
+  <td><%= r.bam_milestone.milestone_date %> (<%= r.bam_milestone.name %>)</td>
+  <td<% if r.actual_m_date.to_s!=r.bam_milestone.actual_milestone_date.to_s %> bgcolor="#FAA"<%end%>><%= r.actual_m_date %></td>
+  <td><%= r.bam_milestone.actual_milestone_date %> (<%= r.bam_milestone.name %>)</td>
+</tr>
