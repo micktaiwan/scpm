@@ -96,23 +96,13 @@ class ToolsController < ApplicationController
       @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
       @remaining_time       = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.01).round * 0.01
       @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH*NB_WP_LEADERS)*@remaining_time)
-      begin
-        montee      = SDPActivity.find_by_title('Montee en competences').remaining
-        souscharges = SDPActivity.find_by_title('Sous charges').remaining
-        init        = SDPActivity.find_by_title('Initialization').remaining
-        @remaining_management = SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init)
-        @ci_remaining = SDPPhase.find_by_title('Continuous Improvement').remaining
-        @qa_remaining = SDPPhase.find_by_title('Quality Assurance').remaining
-        @error = ""
-      rescue Exception => e
-        montee      = 0
-        souscharges = 0
-        init        = 0
-        @remaining_management = 0
-        @ci_remaining = 0
-        @qa_remaining = 0
-        @error = e.message
-      end
+      montee      = default_to_zero { SDPActivity.find_by_title('Montee en competences').remaining }
+      souscharges = default_to_zero { SDPActivity.find_by_title('Sous charges').remaining }
+      init        = default_to_zero { SDPActivity.find_by_title('Initialization').remaining }
+      @remaining_management = default_to_zero {  SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init) }
+      @ci_remaining = default_to_zero { SDPPhase.find_by_title('Continuous Improvement').remaining }
+      @qa_remaining = default_to_zero { SDPPhase.find_by_title('Quality Assurance').remaining }
+      @error = ""
       @sold                 = @operational_total
       @provisions_remaining_should_be = 0
       @provisions_remaining = 0
@@ -138,7 +128,15 @@ class ToolsController < ApplicationController
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
       @remaining_DP                 = (@theorical_management-@management_minus_risk) + provision_qa_ci #+ (montee+souscharges+init)
     rescue Exception => e
-      render(:text=>"<b>Error:</b> <i>#{e.message}</i>")
+      render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
+    end
+  end
+  
+  def default_to_zero(&block)
+    begin
+      yield block
+    rescue
+      return 0
     end
   end
 
@@ -293,7 +291,7 @@ private
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total * 0.02)-p.initial-47.125
+        p.difference = round_to_hour(total * 0.02)-p.initial #-47.125
       when 'Continuous Improvement'
         p.difference = round_to_hour(total * 0.05)-p.initial
       else

@@ -1,40 +1,40 @@
 <%= render(:file=>"tools/sdp_menu.erb") %>
-<strong><%= @error %></strong>
+<%= @error %>
 <table>
-<tr>
-<td>Title</td>
-<td>Remaining</td>
-<td>Balance</td>
-<td>Gain %</td>
-</tr>
+  <tr>
+  <td>Title</td>
+  <td>Remaining</td>
+  <td>Balance</td>
+  <td>Gain %</td>
+  </tr>
 
-<%= render(:partial=>'phase', :collection=>@phases) %>
+  <%= render(:partial=>'phase', :collection=>@phases) %>
 </table><br/>
 
 <br/>
 
 <table>
-<tr><td>SDP Initial Balance:</td><td><%= @balancei %>, real initial: <%=@real_balance%>, plus provisions: <b><%=@real_balance_and_provisions%></b></td></tr>
-<tr><td>Operational remaining:</td><td> <%= @remaining %></td></tr>
-<tr><td>Remaining time:</td><td> <%= @remaining_time %> months</td></tr>
-<tr><td>Theorical management remaining:</td><td> <%= @theorical_management %> (actual: <%= @management_minus_risk %>, total provisions to release: <%= @provisions_remaining_should_be %>)</td></tr>
-<tr><td>Not included remaining:</td><td> <%= @remaining_DP %> (diff between theorical management remaining and actual + (CI + QA real remaining provisions))</td></tr>
-<tr><td>Operational Total:</td><td> <%= @operational_total %> (includes Operational Management provisions)</td></tr>
-<tr><td>Sold:</td><td> <%= @sold %> (<%= @sold ? (@sold*421).to_i.pretty_number : 0 %> Euros)</td></tr>
+  <tr><td>SDP Initial Balance:</td><td><%= @balancei %>, real initial: <%=@real_balance%>, plus provisions: <b><%=@real_balance_and_provisions%></b></td></tr>
+  <tr><td>Operational remaining:</td><td> <%= @remaining %></td></tr>
+  <tr><td>Remaining time:</td><td> <%= @remaining_time %> months</td></tr>
+  <tr><td>Theorical management remaining:</td><td> <%= @theorical_management %> (actual: <%= @management_minus_risk %>, total provisions to release: <%= @provisions_remaining_should_be %>)</td></tr>
+  <tr><td>Not included remaining:</td><td> <%= @remaining_DP %> (diff between theorical management remaining and actual + (CI + QA real remaining provisions))</td></tr>
+  <tr><td>Operational Total:</td><td> <%= @operational_total %> (includes Operational Management provisions)</td></tr>
+  <tr><td>Sold:</td><td> <%= @sold %> (<%= @sold ? (@sold*421).to_i.pretty_number : 0 %> Euros)</td></tr>
 </table><br/>
 <br/>
 
 <b>Provisions:</b>
 <table>
-<tr>
-<td>Title</td>
-<td>Initial</td>
-<td>Initial should be</td>
-<td>Remaining</td>
-<td>Remaining should be</td>
-<td>Difference</td>
-</tr>
+  <tr>
+  <td>Title</td>
+  <td>Initial</td>
+  <td>Initial should be</td>
+  <td>Remaining</td>
+  <td>Remaining should be</td>
+  <td>Difference</td>
+  </tr>
 
-<%= render(:partial=>'provision', :collection=>@provisions) %>
+  <%= render(:partial=>'provision', :collection=>@provisions) %>
 </table>
 
