@@ -1,5 +1,5 @@
 body {
-  background: url(/images/bg/autumn.jpg) no-repeat center center fixed;
+  background: url(/images/bg/1.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -13,21 +13,23 @@ body {
 }
 
 div#banner {
-  background: #AC8;
+  /*background: #AC8; */ /* automn */
+  background: #446391; /* winter */
   border-bottom: 1px solid #005;
 }
 
 .title {
   font-family: 'Stardos Stencil', serif;
   font-size: 3em;
-  color: #444;
+  /*color: #444; */ /* automn */
+  color: #9e9a96;
 }
 
 .subt {
   font-family: 'Zeyada', serif;
   font-size: 2.5em;
   margin: -10px 0 0 0;
-  color: #FFF;
+  color: #e3e3e1;
 }
 
 .tag {
@@ -36,8 +38,25 @@ div#banner {
   left: 430px;
   font-family: 'Special Elite', serif;
   font-size: 1.8em;
-  color: #A00;
+  /*color: #A00; */ /* automn */
+  color: #c04250;
 }
+
+#last_changes {
+  background: #FFF;
+  opacity: 0.7;
+  padding:10px;
+  margin: 10px;
+  border: 1px solid #666;
+  border-radius: 15px;
+  color: black;
+  -moz-border-radius: 15px;
+  text-align: left;
+}
+#last_changes li {
+  color: #000;
+}
+
 
 h2 {
   font-family: 'Stardos Stencil', serif;
@@ -69,7 +88,7 @@ h2 {
   margin: 10px;
   border-radius: 15px;
   -moz-border-radius: 15px;
-  opacity: 0.8;
+  opacity: 0.6;
   width: 200px;
   float: left;
 }
@@ -77,13 +96,22 @@ h2 {
   margin: 0px;
   margin-top:-20px;
   }
-.submenu li {
+.submenu.reporting li {
   font-size: 0.25em;
   font-family: 'Arial', serif;
   text-align: left;
   font-family: 'Stardos Stencil', serif;
   }
-.submenu li a:visited {
+.submenu.reporting li a:visited {
+  color:#FFF;
+  }
+.submenu.manage li {
+  font-size: 0.25em;
+  font-family: 'Arial', serif;
+  text-align: left;
+  font-family: 'Stardos Stencil', serif;
+  }
+.submenu.manage li a:visited {
   color:#444;
   }
 
@@ -100,7 +128,7 @@ h2 {
   background: #DDD;
   }
 .big_button.tools {
-  background: #DDD;
+  background: #FFF;
   }
 .big_button.logout {
   background: #FFF;
@@ -115,19 +143,5 @@ h2 {
   color: #000;
   padding: 0px;
   margin: 0px;
-}
-#last_changes {
-  background: #FFD;
-  opacity: 0.8;
-  padding:10px;
-  margin: 10px;
-  border: 1px solid #666;
-  border-radius: 15px;
-  color: black;
-  -moz-border-radius: 15px;
-  text-align: left;
-}
-#last_changes li {
-  color: #000;
 }
 

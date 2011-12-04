@@ -2,19 +2,25 @@
   <div id="welcome">Welcome <%= current_user.name %> !</div>
 
   <ul id="last_changes">
-    <li><b>01-Dec:</b> Nouveau: check entre RMT et BAM sur les dates de milestones dans Tools</li>
-    <li><b>01-Dec:</b> Yavait un bug sur l'ajout d'une ligne dans les workloads depuis que j'ai mis le graph SDP. Personne a rien dit donc à priori ça gênait personne.... hum....</li>
-    <li><b>30-Nov:</b> Les lignes d'un workload peuvent être transférées à qqn d'autre en masse facilement. JF, tu as les lignes :)</li>
-    <li><b>28-Nov:</b> Fixé un bug sur changement de workload</li>
+    <li><b>04-Dec:</b> Migré vers le nouvel SDP et fait marché l'import (phase, activités, etc. Tous les ID ont été changés)</li>
   </ul>
 
   <div class="center">
-    <div onclick="location='/projects'"         class="big_button reporting">Reporting</div>
+    <div onclick="location='/projects'"         class="big_button reporting"
+      onmouseover="$('reporting_sub').appear({duration:0.3});">
+      <div class="btitle">Reporting</div>
+      <ul class="submenu reporting" style="display:none" id="reporting_sub">
+        <li><a href="/projects">Reporting</a></li>
+        <li><a href="/topics">Topics</a></li>
+      </ul>
+    </div>
+
     <div onclick="location='/workloads'"        class="big_button workload">Workload</div>
-    <div onclick="location='/tools/sdp_index'"           class="big_button tools"
+
+    <div onclick="location='/tools/sdp_index'"  class="big_button tools"
       onmouseover="$('manage_sub').appear({duration:0.3});">
       <div class="btitle">Manage</div>
-      <ul class="submenu" style="display:none" id="manage_sub">
+      <ul class="submenu manage" style="display:none" id="manage_sub">
         <li><a href="/tools/sdp_index">SDP</a></li>
         <li><a href="/requirements">Requirements</a></li>
         <li><a href="/notes/list">Capitalisations</a></li>
