@@ -7,10 +7,9 @@ class ToolsController < ApplicationController
   NB_QR 					            = 18
   NB_FTE 					            = 15  # TODO: should be automatically calculated from workloads
   NB_DAYS_PER_MONTH			      = 18
-  MEETINGS_LOAD_PER_MONTH 	  = 2.7 # TODO: to be changed later
+  MEETINGS_LOAD_PER_MONTH 	  = 2 # TODO: to be changed later
   PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
-  WP_LEADERS_DAYS_PER_MONTH   = 3   # 2 + WP1
-  NB_WP_LEADERS 			        = 4.5 # 0.5 for WP5
+  WP_LEADERS_DAYS_PER_MONTH   = 18
 
   def index
   end
@@ -69,6 +68,7 @@ class ToolsController < ApplicationController
 
   def do_sdp_upload
     post = params[:upload]
+    redirect_to '/tools/sdp_import' and return if post.nil? or post['datafile'].nil?
     name =  post['datafile'].original_filename
     directory = "public/data"
     path = File.join(directory, name)
@@ -89,13 +89,14 @@ class ToolsController < ApplicationController
       @balancei   = @phases.inject(0) { |sum, p| p.balancei+sum}
       tasks2010   = SDPTask.find(:all, :conditions=>"iteration='2010'")
       tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
+      op2010      = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011      = tasks2011.inject(0) { |sum, t| t.initial+sum}
       operational = round_to_hour(op2011*0.11111111111)
-      @operational_total = tasks2010.inject(0) { |sum, t| t.initial+sum} + op2011 + operational
-      @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
+      @operational_total = op2010 + op2011 + operational
       @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
       @remaining_time       = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.01).round * 0.01
-      @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH*NB_WP_LEADERS)*@remaining_time)
+      @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
+      @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH)*@remaining_time)
       montee      = default_to_zero { SDPActivity.find_by_title('Montee en competences').remaining }
       souscharges = default_to_zero { SDPActivity.find_by_title('Sous charges').remaining }
       init        = default_to_zero { SDPActivity.find_by_title('Initialization').remaining }
@@ -126,12 +127,12 @@ class ToolsController < ApplicationController
       @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
       @real_balance_and_provisions  = @provisions_diff+@balancei - (@theorical_management - (@remaining_management - @risks_remaining))
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
-      @remaining_DP                 = (@theorical_management-@management_minus_risk) + provision_qa_ci #+ (montee+souscharges+init)
+      @remaining_DP                 = (@theorical_management-@management_minus_risk) + provision_qa_ci
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
     end
   end
-  
+
   def default_to_zero(&block)
     begin
       yield block
@@ -273,7 +274,7 @@ class ToolsController < ApplicationController
     wp = "'WP1.1 - Quality Control', 'WP1.2 - Quality Assurance'"
     @requests = Request.find(:all, :conditions=>"status!='cancelled' and status!='removed' and resolution='ended' and work_package in (#{wp})")
   end
-  
+
 private
 
   def round_to_hour(f)

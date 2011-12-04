@@ -1,6 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  require File.join(File.dirname(__FILE__), '../../config/constants')
   include Authentication
 
   def my_simple_format(text)

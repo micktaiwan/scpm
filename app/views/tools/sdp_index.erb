@@ -15,7 +15,7 @@
 
 <table>
   <tr><td>SDP Initial Balance:</td><td><%= @balancei %>, real initial: <%=@real_balance%>, plus provisions: <b><%=@real_balance_and_provisions%></b></td></tr>
-  <tr><td>Operational remaining:</td><td> <%= @remaining %></td></tr>
+  <tr><td>Operational remaining:</td><td> <%= @remaining %> / <%= @operational_total-@provisions_remaining_should_be %> (operational - provisions)</td></tr>
   <tr><td>Remaining time:</td><td> <%= @remaining_time %> months</td></tr>
   <tr><td>Theorical management remaining:</td><td> <%= @theorical_management %> (actual: <%= @management_minus_risk %>, total provisions to release: <%= @provisions_remaining_should_be %>)</td></tr>
   <tr><td>Not included remaining:</td><td> <%= @remaining_DP %> (diff between theorical management remaining and actual + (CI + QA real remaining provisions))</td></tr>
