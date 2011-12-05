@@ -2,10 +2,10 @@
 <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('edit_line').fade({duration:0.2});") %><br/>
 <div class="title">Edit line</div>
 <% if edit_line.request_id %>
-Request id: <%= edit_line.request_id %><br/>
-<%= edit_line.request.workload_name %><br/>
-<%= link_to_function('Copy this name', "$('name_text_input').value='#{escape_javascript(edit_line.request.workload_name)}'") %><br/>
-<br/>
+  Request id: <%= edit_line.request_id %><br/>
+  <%= edit_line.request.workload_name %><br/>
+  <%= link_to_function('Copy this name', "$('name_text_input').value='#{escape_javascript(edit_line.request.workload_name)}'") %><br/>
+  <br/>
 <% end %>
 <% remote_form_for :wl_line, :url => {:controller=>"workloads", :action => "edit_line", :id=>edit_line.id } do |f| %>
   <%= f.label(:name, "Name") %>
@@ -38,6 +38,12 @@ Request id: <%= edit_line.request_id %><br/>
     <%= submit_tag("Link") %>
   <% end %>
   <%= label_tag(:unlink, "&nbsp;") %>
+  <br/>
+  Debug:<br/>
+  SDP Task id: <%= edit_line.sdp_task_id %><br/>
+  SDP Task: <%= edit_line.sdp_task.title if edit_line.sdp_task %>
+  <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if edit_line.wl_type == 300 and not edit_line.sdp_task %>
+  <br/>
   <%= link_to_remote('Unlink',
    {:url=>{:action=>'unlink_sdp', :id=>edit_line.id},
    :confirm=>"Are you sure ?"}) %><br/>

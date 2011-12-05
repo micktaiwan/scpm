@@ -10,7 +10,9 @@
     <% end %>
   </td>
   <td>
-    <%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>  <%= wl_line.display_name %>
+    <%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>
+    <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
+    <%= wl_line.display_name %>
   </td>
   <td align="center"><% if wl_line.request %><%= wl_line.request.status %><% end %></td>
   <td><%= @workload.line_sums[wl_line.id][:init] %></td>

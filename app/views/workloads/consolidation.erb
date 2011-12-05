@@ -6,8 +6,9 @@
   <ol>
       <%= tab_menu("wl_conso", [
         "Consolidation",
-        "Holidays"
-        ]) %>    
+        "Holidays",
+        "Missing tasks"
+        ]) %>
   </ol>
 
   <div id="tabscontent">
@@ -34,5 +35,18 @@
           <div id="data2"></div>
         </div>
     </div>
+
+    <div id="tabContent3" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="3"? "block" : "none"%>;">
+        <br />
+        <div id="missing_tasks">
+          <%= link_to_remote('Refresh',  :url => { :action => "refresh_missing_tasks" }, :loading => "$('error3').update('');$('loading3').appear()", :complete => "$('loading3').hide()", :update => { :success => "data3", :failure => "error3" }) %>
+          <br/>
+          <br/>
+          <%= image_tag('loading.gif', :id=>'loading3', :style=>"display:none;") %>
+          <div id="error3"></div>
+          <div id="data3"></div>
+        </div>
+    </div>
+
   </div><!--End of tabscontent-->
 </div><!--End of tabs-->

@@ -1,0 +1,13 @@
+<tr id="wl_line_<%=line.id%>">
+<td><%= line.person.name if line.person%></td>
+<td align="right"><%= line.planned_sum %></td>
+<td>
+  <%= link_to_remote(image_tag('delete.gif', :alt=>'Delete this line'),
+   {:url=>{:action=>'destroy_line', :id=>line.id},
+   :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
+   :success=>"$('wl_line_#{line.id}').fade();",
+   :failure=>"alert('Error:' + request.responseText);"},
+   {:class=>"delete"}) %>
+</td>
+<td><%= line.name %></td>
+</tr>

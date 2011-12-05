@@ -1,0 +1,11 @@
+<%= @lines.size %> lines without SDP tasks<br/>
+<br/>
+<table>
+  <tr style="font-weight:bold;">
+    <td>Person</td>
+    <td>Sum</td>
+    <td>Del</td>
+    <td>Line</td>
+  </tr>
+  <%= render(:partial=>'conso_missing_task_line', :collection=>@lines, :as=>:line) %>
+</table>

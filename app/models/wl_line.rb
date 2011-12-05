@@ -20,6 +20,10 @@ class WlLine < ActiveRecord::Base
     l ? l.wlload : 0.0
   end
 
+  def planned_sum
+    wl_loads.inject(0) { |sum, l| sum+l.wlload}
+  end
+
   def display_name
     #"<a href='#' title='#{name}'>#{name}</a>"
     name

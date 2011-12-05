@@ -157,6 +157,11 @@ class WorkloadsController < ApplicationController
     render :layout => false
   end
 
+  def refresh_missing_tasks
+    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"person_id")
+    render :layout => false
+  end
+
   def add_by_request
     request_id = params[:request_id]
     if !request_id or request_id.empty?
