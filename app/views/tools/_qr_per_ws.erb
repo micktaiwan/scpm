@@ -1,1 +1,6 @@
-<b><%= ws[0] %>:</b> <%= ws[1].sort_by{|qr| -qr[:projects].size}.map{|qr| "#{qr[:name]} (#{qr[:projects].size})"}.join(', ') %><br/>
+<tr>
+<td style="font-weight:bold;"><%= ws[0] %></td>
+<td align="center"><%= ws[1][:ws_projects] %></td>
+<td><%= ws[1][:qr].sort_by{|qr| -qr[:projects].size}.map{|qr| "#{qr[:name]} (#{qr[:projects].size})"}.join(', ') %><br/></td>
+</tr>
+

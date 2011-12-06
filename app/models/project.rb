@@ -667,6 +667,12 @@ class Project < ActiveRecord::Base
     true
   end
 
+
+  def self.active_projects_by_workstream(ws_name)
+    projects = Project.find(:all, :conditions=>["workstream=?", ws_name])
+    projects.select { |p| p.active_requests.size > 0}
+  end
+
 private
 
   def excel(a,b)

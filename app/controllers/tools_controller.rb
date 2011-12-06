@@ -286,8 +286,10 @@ class ToolsController < ApplicationController
       @qr.each { |qr|
         projects = qr.active_projects_by_workstream(ws.name)
         if projects.size > 0
-          @associations[ws.name] ||= Array.new
-          @associations[ws.name] << {:name=>qr.name, :projects=>projects}
+          @associations[ws.name] ||= Hash.new
+          @associations[ws.name][:ws_projects] ||= Project.active_projects_by_workstream(ws.name).size
+          @associations[ws.name][:qr] ||= Array.new
+          @associations[ws.name][:qr] << {:name=>qr.name, :projects=>projects}
         end
         next
         }

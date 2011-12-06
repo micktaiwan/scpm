@@ -3,4 +3,13 @@
 <h2>QR per DWS</h2>
 
 DWS: <%= @associations.keys.size %><br/>
+<table class="grid sortable">
+<tr>
+<td>WS</td>
+<td>Total active projects</td>
+<td>QR</td>
+</tr>
+
 <%= render(:partial=>'qr_per_ws', :collection=>@associations.sort_by { |ws| ws[0]}, :as=>:ws) %>
+</table>
+
