@@ -234,11 +234,14 @@ class ToolsController < ApplicationController
   end
 
   def import_monthly_tasks
+    # operational people
     ope_ids = params["qr"]["ids"].join(",")
     @oname = params["qr_name"]
     @oload = params["qr_load"]
     @ope = Person.find(:all, :conditions=>"id in (#{ope_ids})", :order=>"name")
-    resp_ids = params["resp"]["ids"].join(",")
+    # line responsible people
+    resp_ids = params["resp"]
+    if not resp_ids; resp_ids = "0"; else; resp_ids = resp_ids["ids"].join(","); end
     @rname = params["resp_name"]
     @rload = params["resp_load"]
     @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
