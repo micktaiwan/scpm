@@ -72,7 +72,7 @@ class Request < ActiveRecord::Base
   "Post-M10" 	=> 3,
   "N/A" 		  => 0
   }
-  
+
   Loads2011 = [
     # WP 1.1
     [4.0, 4.75, 7.0],
@@ -153,7 +153,7 @@ class Request < ActiveRecord::Base
     'M5-M10'=>  ['M9/M10', 'M10','G6','pg6','g6'],
     'Post-M10'=>['M12/M13', 'M13', 'sM13','G9','pg9','g9'],
      }
-    
+
   PHASE_MILESTONES = {
     'M1-M3'=>   ['M3','G2','pg2','g2','sM3'],
     'M3-M5'=>   ['QG BRD', 'QG ARD', 'M5', 'M5/M7','G3','pg3','g3','G4','pg4','g4','G5','pg5','g5','sM5'],
@@ -197,7 +197,7 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    if self.sdpiteration == "2011"
+    if self.sdpiteration == "2011" or self.sdpiteration == "2011-Y2"
       return Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2010"
       return Loads2010[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
@@ -384,14 +384,14 @@ class Request < ActiveRecord::Base
       m.deploy_checklist(ctemplate, self)
       }
   end
-  
+
   def wl_load_by_year(year)
     # get workload line
     line = WlLine.find_by_request_id(self.request_id)
     return nil if !line
     line.wl_loads.select{|l| l.week.to_s[0..3]==year.to_s}.inject(0) { |sum, load| sum+=load.wlload}
   end
-  
+
   def bam_milestone
     return nil if self.milestone=='N/A'
     RMT_TO_BAM[self.milestone].each { |m_name|
