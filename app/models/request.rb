@@ -310,7 +310,6 @@ class Request < ActiveRecord::Base
     if options
       cond += " and collab LIKE '%#{options[:trigram]}%'" if options[:trigram] and options[:trigram] != ''
     end
-
     SDPTask.find(:all, :conditions=>"request_id='#{self.request_id}' #{cond}")
   end
 

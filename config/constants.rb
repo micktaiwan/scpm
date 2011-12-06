@@ -1,7 +1,8 @@
 # operational team weekly meetings
 # see /tools/import_monthly_tasks_form
 SDP_MONTHLY_IMPORT_Phase_ID       = 29255 # Bundle_Management
-SDP_MONTHLY_IMPORT_Activity_ID    = 127647 # Bundle_Management_during_the_project
+SDP_RESP_MONTHLY_IMPORT_Activity_ID         = 127647 # Bundle_Management_during_the_project # not used
+SDP_OPERATIONAL_MONTHLY_IMPORT_Activity_ID  = 127649 # Operational Management
 SDP_MONTHLY_IMPORT_Ref_Task_ID    = 110 # Encadrement
 SDP_MONTHLY_IMPORT_Macro_Task_ID  = -1
 SDP_MONTHLY_IMPORT_Workpackage_ID = -1

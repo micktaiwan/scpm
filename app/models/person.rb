@@ -145,6 +145,15 @@ class Person < ActiveRecord::Base
     #chart.show_legend = false
     @chart_url = chart.to_url
   end
+  
+  # active project only
+  def active_projects_have_workstream(ws)
+    self.projects.each { |p|
+      next if p.active_requests.size == 0
+      return true if p.workstream == ws    
+      }
+    return false
+  end
 
   #def remember_token?
   #  remember_token_expires_at && Time.now.utc < remember_token_expires_at
