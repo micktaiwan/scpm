@@ -1,2 +1,6 @@
-nb: <%= @associations.size %>
-<%= render(:partial=>'qr_per_ws', :collection=>@associations, :as=>:ws) %>
+<%= render(:file=>"tools/menu.erb") %>
+
+<h2>QR per DWS</h2>
+
+DWS: <%= @associations.keys.size %><br/>
+<%= render(:partial=>'qr_per_ws', :collection=>@associations.sort_by { |ws| ws[0]}, :as=>:ws) %>

@@ -277,16 +277,18 @@ class ToolsController < ApplicationController
     wp = "'WP1.1 - Quality Control', 'WP1.2 - Quality Assurance'"
     @requests = Request.find(:all, :conditions=>"status!='cancelled' and status!='removed' and resolution='ended' and work_package in (#{wp})")
   end
-  
+
   def qr_per_ws
     @ws = Workstream.all
-    @qr = Person.all
-    @associations = Hash.new(Array.new)
+    @qr = Person.find(:all, :conditions=>"has_left=0 and is_transverse=0")
+    @associations = Hash.new
     @ws.each { |ws|
       @qr.each { |qr|
-        @associations[ws] << qr.name if qr.active_projects_have_workstream(ws.name)
-        #puts "====#{ws.name}===#{qr.name}==============================================================="
-        #puts qr.active_projects_have_workstream(ws.name)
+        projects = qr.active_projects_by_workstream(ws.name)
+        if projects.size > 0
+          @associations[ws.name] ||= Array.new
+          @associations[ws.name] << {:name=>qr.name, :projects=>projects}
+        end
         next
         }
       }

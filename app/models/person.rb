@@ -145,14 +145,15 @@ class Person < ActiveRecord::Base
     #chart.show_legend = false
     @chart_url = chart.to_url
   end
-  
+
   # active project only
-  def active_projects_have_workstream(ws)
+  def active_projects_by_workstream(ws)
+    ap = []
     self.projects.each { |p|
       next if p.active_requests.size == 0
-      return true if p.workstream == ws    
+      ap << p if p.workstream == ws
       }
-    return false
+    ap
   end
 
   #def remember_token?

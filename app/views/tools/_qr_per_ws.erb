@@ -1,1 +1,1 @@
-<%= ws.key %>: <%= ws.value.join(', ') %><br/>
+<b><%= ws[0] %>:</b> <%= ws[1].sort_by{|qr| -qr[:projects].size}.map{|qr| "#{qr[:name]} (#{qr[:projects].size})"}.join(', ') %><br/>
