@@ -1,8 +1,10 @@
+<% date = "#{Date.today().year}-#{filled_number(Date.today().month,2)}" %>
+
 <%= render(:file=>"tools/sdp_menu.erb") %>
 
 <% form_remote_tag(:url=>{:action=>"import_monthly_tasks"},:update => "rv") do %>
   <%= label_tag(:qr_name, "QR task") %>
-  <%= text_field_tag(:qr_name, "MEET - Comites Operationnels #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
+  <%= text_field_tag(:qr_name, "MEET - Comites Operationnels #{date}", {:size=>40}) %><br/>
   <%= label_tag(:qr_load, "Load") %>
   <%= text_field_tag(:qr_load, "1.5", {:size=>3}) %><br/>
 
@@ -14,10 +16,10 @@
 
 
   <%= label_tag(:resp_name, "WP Resp task") %>
-  <%= text_field_tag(:resp_name, "WP Organisation #{filled_number(Date.today().month,2)}-#{Date.today().year}", {:size=>40}) %><br/>
+  <%= text_field_tag(:resp_name, "WP Organisation #{date}", {:size=>40}) %><br/>
   <%= label_tag(:qr_load, "Load") %>
   <%= text_field_tag(:resp_load, "2", {:size=>3}) %><br/>
-  
+
   <ul class="checkbox-list">
     <% @service_resp.each do |p| -%>
       <li><%= check_box_tag "resp[ids][]", p.id, true -%> <%= p.name -%></li>
