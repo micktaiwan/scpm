@@ -58,6 +58,9 @@ function add(id, same_week, has_requests) {
                 s += " special" if !check_all_done
               %>
               <%= link_to_function("#{n}/#{c} checks", "$('checks').toggle()", :class=>s) %>
+              <font color="#777777">
+              Last read: <%= time_ago_in_words(@project.read_date) %>
+              </font>
               <ul id="checks" style="display:none">
                 <%= render(:partial=>'checklists/checklist_item', :collection=>@project.project_check_root_items, :as=>:i) %>
               </ul>

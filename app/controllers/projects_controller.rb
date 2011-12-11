@@ -166,7 +166,9 @@ class ProjectsController < ApplicationController
 
     status.last_modifier = current_user.id
     status.save
+    p.update_attribute('read_date', Time.now) if current_user.has_role?('Admin')
     p.update_status(params[:status][:status])
+    #p.save
     p.calculate_diffs
     Mailer::deliver_status_change(p)
     redirect_to :action=>:show, :id=>project_id
@@ -182,6 +184,7 @@ class ProjectsController < ApplicationController
     status.save
     p = status.project
     p.update_status(params[:status][:status]) if p.get_status.id == status.id # only if we are updating the last status
+    p.update_attribute('read_date', Time.now) if current_user.has_role?('Admin')
     p.calculate_diffs
     Mailer::deliver_status_change(p)
     timestamps_on if params[:update] != '1'

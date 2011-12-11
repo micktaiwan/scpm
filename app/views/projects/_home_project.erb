@@ -18,6 +18,12 @@
     Last read: <%= time_ago_in_words(project.read_date) %>
     </font>
   <% end %>
+  <% if current_user.has_role?('Admin')%>
+    <%= link_to_remote('Mark as read', {:url=>{:controller=>'projects',
+     :action=>'mark_as_read', :id=>project.id},
+     :success=>"$('markasread_#{project.id}').fade();"},
+     {:class=>'btnlnk special', :id=>"markasread_#{project.id}"}) %>
+  <% end %>
 </h3>
 
 <div class="milestone_bar">
