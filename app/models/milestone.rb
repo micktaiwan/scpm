@@ -3,6 +3,7 @@ class Milestone < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
   belongs_to  :project
   has_many    :checklist_items, :dependent=>:destroy
+  MILESTONE_ELIGIBLE_FOR_NOTE = ['M3', 'M5', 'QG TD', 'M11']
 
   def date
     return self.actual_milestone_date if self.actual_milestone_date and self.actual_milestone_date!=""
@@ -125,6 +126,10 @@ class Milestone < ActiveRecord::Base
                  !self.actual_milestone_date or self.actual_milestone_date=="" or
                  self.actual_milestone_date <= self.milestone_date
     time_ago_in_words(Time.now-(self.actual_milestone_date-self.milestone_date).to_i.days) + " delay"
+  end
+
+  def is_eligible_for_note?
+    MILESTONE_ELIGIBLE_FOR_NOTE.include?(self.name)
   end
 
 end

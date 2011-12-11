@@ -27,9 +27,10 @@ class MilestonesController < ApplicationController
   end
 
   def update
-    m = Milestone.find(params[:id])
+    m   = Milestone.find(params[:id])
+    old = m.done
     m.update_attributes(params[:milestone])
-    if m.done == 1
+    if m.done == 1 and old == 0 and m.is_eligible_for_note?
       redirect_to "/notes/new?project_id=#{m.project_id}&done=1"
     else
       redirect_to "/projects/show/#{m.project_id}"
