@@ -4,10 +4,10 @@ class ToolsController < ApplicationController
 
   include WelcomeHelper
 
-  NB_QR 					            = 18
-  NB_FTE 					            = 15  # TODO: should be automatically calculated from workloads
+  NB_QR 					            = 20
+  NB_FTE 					            = 16.5  # TODO: should be automatically calculated from workloads
   NB_DAYS_PER_MONTH			      = 18
-  MEETINGS_LOAD_PER_MONTH 	  = 2 # TODO: to be changed later
+  MEETINGS_LOAD_PER_MONTH 	  = 1.5 # TODO: to be changed later
   PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
   WP_LEADERS_DAYS_PER_MONTH   = 18
 
