@@ -6,32 +6,28 @@ You have <%= @new_notes.size %> new or modified notes on your projects.<br/>
     <% for n in @new_notes -%>
       <li><b><%= n.project.full_name %>:</b>  <%= n.note.strip %></li>
     <% end -%>
-  </ul><br/>
-  <br/>
+  </ul>
 <% end %>
 
 You have <%= @requests_to_close.size %> requests to close.<br/>
 <% if @requests_to_close.size > 0 %>
   <ul>
     <%= render(:partial=>'projects/request2', :collection=>@requests_to_close) %>
-  </ul><br/>
-  <br/>
+  </ul>
 <% end %>
 
-You have <%= @amendments.size %> open amendments with passed deadlines.<br/>
+You have <%= @amendments.size %> open amendments with passed deadlines, please verify the status.<br/>
 <% if @amendments.size > 0 %>
   <ul>
     <%= render(:partial=>'amendments/text_amendment', :collection=>@amendments, :as=>:a) %>
-  </ul><br/>
-  <br/>
+  </ul>
 <% end %>
 
 You have <%= @actions.size %> actions.<br/>
 <% if @actions.size > 0 %>
   <ul>
     <%= render(:partial=>'actions/text_action', :collection=>@actions, :as=>:a) %>
-  </ul><br/>
-  <br/>
+  </ul>
 <% end %>
 <br/>
 
