@@ -38,12 +38,12 @@ class Mailer < ActionMailer::Base
     content_type "text/html; charset=utf-8"
   end
 
-  def daily(person, subject = "Hi", body = "Test de mail")
+  def daily(person, n, r, am, ac)
     render(:nothing=>true) and return if !person or person.email.empty?
     @from        = "mfaivremacon@sqli.com"
-    @recipients  = person.email
-    @subject     = subject
-    @body        = body
+    @recipients  = "mfaivremacon@sqli.com" #person.email
+    @subject     = "[BAM] Daily reminders"
+    @person, @new_notes, @requests_to_close, @amendments, @actions = person, n, r, am, ac
     content_type "text/html; charset=utf-8"
   end
 end

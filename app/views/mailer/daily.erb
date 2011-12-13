@@ -1,5 +1,37 @@
-<%= @person.name %>,
+<%= @person.name %>,<br/>
+<br/>
+You have <%= @new_notes.size %> new or modified notes on your projects.<br/>
+<% if @new_notes.size > 0 %>
+  <ul>
+    <% for n in @new_notes -%>
+      <li><b><%= n.project.full_name %>:</b>  <%= n.note.strip %></li>
+    <% end -%>
+  </ul><br/>
+  <br/>
+<% end %>
 
-You have <%= @request_to_close.size %> requests to close.
+You have <%= @requests_to_close.size %> requests to close.<br/>
+<% if @requests_to_close.size > 0 %>
+  <ul>
+    <li><%= render(:partial=>'projects/request2', :collection=>@requests_to_close) %> </li>
+  </ul><br/>
+  <br/>
+<% end %>
 
-Amendements
+You have <%= @amendments.size %> open amendments with passed deadlines.<br/>
+<% if @amendments.size > 0 %>
+  <ul>
+    <%= render(:partial=>'amendments/text_amendment', :collection=>@amendments, :as=>:a) %>
+  </ul><br/>
+  <br/>
+<% end %>
+
+You have <%= @actions.size %> actions.<br/>
+<% if @actions.size > 0 %>
+  <ul>
+    <%= render(:partial=>'actions/text_action', :collection=>@actions, :as=>:a) %>
+  </ul><br/>
+  <br/>
+<% end %>
+<br/>
+

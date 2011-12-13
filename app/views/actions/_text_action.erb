@@ -1,0 +1,9 @@
+<li>
+<b><%= a.project.full_name %></b>
+<%= a.action %>
+<% if a.due_date %>
+<%= a.due_date %>
+(<%= time_ago_in_words(a.due_date) %>)
+<% end %>
+<u><%= a.result %></u>
+</li>

@@ -156,6 +156,47 @@ class Person < ActiveRecord::Base
     ap
   end
 
+  def active_projects
+    ap = []
+    self.projects.each { |p|
+      next if p.active_requests.size == 0
+      ap << p
+      }
+    ap
+  end
+
+  def new_notes
+    ap = self.active_projects.map{|p| p.id}
+    return [] if ap.empty?
+    Note.find(:all, :conditions=>["private=0 and project_id in (#{ap.join(',')}) and updated_at >= ?", Date.today()-1.day])
+  end
+
+  def requests_to_close
+    reqs = Request.find(:all, :conditions=>"assigned_to='#{self.rmt_user}' and status='assigned' and resolution!='ended' and resolution!='aborted'")
+    @tasks = []
+    reqs.each { |r|
+      tmp = SDPTask.find(:all, :conditions=>"collab='#{self.trigram}' and request_id='#{r.request_id}'")
+      remaining = tmp.inject(0.0)  { |sum, t| sum+t.remaining}
+      @tasks += tmp if remaining == 0
+      }
+    ids = @tasks.collect {|t| t.request_id}.uniq.join(',')
+    if ids == ""
+      @requests = []
+    else
+      @requests = Request.find(:all, :conditions=>"request_id in (#{ids})", :order=>"assigned_to")
+    end
+  end
+
+  def late_amendments
+    ap = self.active_projects.map{|p| p.id}
+    return [] if ap.empty?
+    Amendment.find(:all, :conditions=>["project_id in (#{ap.join(',')}) and duedate <= ?", Date.today()])
+  end
+
+  def late_actions
+    Action.find(:all, :conditions=>["person_id=? and (progress='open' or progress='in_progress')", self.id])
+  end
+
   #def remember_token?
   #  remember_token_expires_at && Time.now.utc < remember_token_expires_at
   #end
