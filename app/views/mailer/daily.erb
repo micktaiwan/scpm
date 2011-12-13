@@ -13,7 +13,7 @@ You have <%= @new_notes.size %> new or modified notes on your projects.<br/>
 You have <%= @requests_to_close.size %> requests to close.<br/>
 <% if @requests_to_close.size > 0 %>
   <ul>
-    <li><%= render(:partial=>'projects/request2', :collection=>@requests_to_close) %> </li>
+    <%= render(:partial=>'projects/request2', :collection=>@requests_to_close) %>
   </ul><br/>
   <br/>
 <% end %>
