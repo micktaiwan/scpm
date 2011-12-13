@@ -1,7 +1,7 @@
-<%= @person.name %>,<br/>
+Dear <%= @person.name %>,<br/>
 <br/>
-You have <%= @new_notes.size %> new or modified notes on your projects.<br/>
 <% if @new_notes.size > 0 %>
+  You have <%= @new_notes.size %> new or modified notes on your projects.<br/>
   <ul>
     <% for n in @new_notes -%>
       <li><b><%= n.project.full_name %>:</b>  <%= n.note.strip %></li>
@@ -9,25 +9,29 @@ You have <%= @new_notes.size %> new or modified notes on your projects.<br/>
   </ul>
 <% end %>
 
-You have <%= @requests_to_close.size %> requests to close.<br/>
 <% if @requests_to_close.size > 0 %>
+  You have <%= @requests_to_close.size %> requests to close.<br/>
   <ul>
     <%= render(:partial=>'projects/request2', :collection=>@requests_to_close) %>
   </ul>
 <% end %>
 
-You have <%= @amendments.size %> open amendments with passed deadlines, please verify the status.<br/>
 <% if @amendments.size > 0 %>
+  You have <%= @amendments.size %> open amendments with passed deadlines, please verify the status.<br/>
   <ul>
     <%= render(:partial=>'amendments/text_amendment', :collection=>@amendments, :as=>:a) %>
   </ul>
 <% end %>
 
-You have <%= @actions.size %> actions.<br/>
 <% if @actions.size > 0 %>
+  You have <%= @actions.size %> actions.<br/>
   <ul>
     <%= render(:partial=>'actions/text_action', :collection=>@actions, :as=>:a) %>
   </ul>
 <% end %>
 <br/>
+<br/>
+<br/>
+Your kind secretary,
+The <a href="http://tls-srv-eisq.sqli.com/">BAM</a>.
 

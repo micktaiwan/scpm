@@ -190,7 +190,7 @@ class Person < ActiveRecord::Base
   def late_amendments
     ap = self.active_projects.map{|p| p.id}
     return [] if ap.empty?
-    Amendment.find(:all, :conditions=>["done=0 and project_id in (#{ap.join(',')}) and duedate <= ?", Date.today()])
+    Amendment.find(:all, :conditions=>["done=0 and project_id in (#{ap.join(',')}) and (duedate <= ? or duedate='')", Date.today()])
   end
 
   def late_actions
