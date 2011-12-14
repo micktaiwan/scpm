@@ -51,8 +51,12 @@
 
     <% if cu.has_role?('Admin') %>
       <%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %>
+    <% end %>
+
+    <% if cu.has_role?('Admin') or cu.has_role?('ServiceLineResp')%>
       <%= link_to('Tools', {:controller=>'tools', :action=>'index'}, {:class=>menu_style('tools','*')}) %>
     <% end %>
+
 
     <% if cu.has_role?('Super') %>
       <%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %>
