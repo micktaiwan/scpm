@@ -1,0 +1,14 @@
+<script type="text/javascript">
+  var _checkIsDirty  = 1;
+  var _formChanged   = 0;
+  window.onbeforeunload = function() {
+    if(_checkIsDirty && _formChanged) return "Caution! The changes are not saved!";
+    }
+  function formChanged() {
+    _formChanged   = 1;
+    }
+  function formSave() {
+    _checkIsDirty = 0;
+    document.forms[0].submit();
+    }
+</script>
