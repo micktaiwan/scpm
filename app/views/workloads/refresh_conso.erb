@@ -58,5 +58,5 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
 <%= image_tag(@chart_url) %>
 <br/>
 <br/>
-render time: <%= @render_time %> secs<br/>
+render time: <%= @render_time %> secs. <%= Time.now().to_formatted_s(:db) %><br/>
 

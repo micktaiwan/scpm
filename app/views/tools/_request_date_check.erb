@@ -12,9 +12,11 @@
   <td>no milestone ?</td>
 <% else %>
   <td<% if r.milestone_date.to_s!=r.bam_milestone.milestone_date.to_s %> bgcolor="#FAA"<%end%>><%= r.milestone_date %></td>
-  <td><%= r.bam_milestone.milestone_date %> (<%= r.bam_milestone.name %>)</td>
+  <td><%= r.bam_milestone.milestone_date %></td>
+  <td><%= r.bam_milestone.name %></td>
   <td<% if r.actual_m_date.to_s!=r.bam_milestone.actual_milestone_date.to_s %> bgcolor="#FAA"<%end%>><%= r.actual_m_date %></td>
-  <td><%= r.bam_milestone.actual_milestone_date %> (<%= r.bam_milestone.name %>)</td>
+  <td><%= r.bam_milestone.actual_milestone_date %></td>
+  <td><%= r.bam_milestone.name %></td>
 <% end %>
 
 </tr>
