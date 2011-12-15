@@ -1,0 +1,13 @@
+<%= render(:file=>"tools/menu.erb") %>
+
+<h2>Last projects</h2>
+<table class="grid sortable">
+  <tr>
+  <td>Creation</td>
+  <td>Project</td>
+  <td>PM</td>
+  </tr>
+
+  <%= render(:partial=>'last_project', :collection=>@projects, :as=>:p) %>
+</table>
+

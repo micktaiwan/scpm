@@ -297,6 +297,10 @@ class ToolsController < ApplicationController
       }
   end
 
+  def last_projects
+    @projects = Project.find(:all, :limit=>50, :order=>"created_at desc")
+  end
+
 private
 
   def round_to_hour(f)

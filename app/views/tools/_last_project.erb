@@ -1,0 +1,6 @@
+<tr>
+  <td><%= p.created_at.to_formatted_s(:db) %></td>
+  <td><%= link_to(p.name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
+  <td><%= p.pm %></td>
+</tr>
+
