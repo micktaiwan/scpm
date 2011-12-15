@@ -25,7 +25,7 @@ class Project < ActiveRecord::Base
   has_many    :project_people
   has_many    :responsibles, :through=>:project_people
   has_many    :risks,       :order=>'id', :dependent=>:destroy
-  has_many    :quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1"
+  has_many    :qauality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1"
   has_many    :checklist_items, :through=>:milestones
   has_many    :project_check_items, :class_name=>"ChecklistItem"
   has_many    :project_check_root_items, :conditions=>"parent_id=0", :class_name=>"ChecklistItem"
@@ -313,7 +313,8 @@ class Project < ActiveRecord::Base
   end
 
   def open_requests
-    self.requests.select { |r| r.status != 'cancelled' and r.status != 'removed' and r.resolution != "ended" and r.resolution != 'aborted'} # good to keep "to be validated" requests
+    self.requests.select { |r| r.status != 'cancelled' and r.status != 'removed' and r.resolution != "ended" and r.resolution != 'aborted'}
+    # good to keep "to be validated" requests
   end
 
   def active_requests

@@ -298,7 +298,7 @@ class ToolsController < ApplicationController
   end
 
   def last_projects
-    @projects = Project.find(:all, :limit=>50, :order=>"created_at desc")
+    @projects = Project.find(:all, :limit=>50, :order=>"created_at desc").select{|p| p.open_requests.size > 0}
   end
 
 private
