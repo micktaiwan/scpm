@@ -1,6 +1,6 @@
 <span class="<%= request.sanitized_status %>">
 <a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= request.request_id %>"><%= request.request_id %></a>
-<b><%= request.project.full_name %></b>
+<b><%= request.project.full_name if request.project %></b>
 <%= request.work_package %>
 <%= request.milestone %>
 <%= request.complexity %>
@@ -21,4 +21,3 @@
 <%= link_to_remote('associate', {:url=>{:controller=>'projects', :action=>'associate', :id=>request.id}, :success=>"if (request.responseText!='') alert(request.responseText); else $('ass_#{request.id}').fade(); return false;"}, {:id=>"ass_#{request.id}"}) %>
 <% end %>
 <br/>
-

@@ -35,6 +35,10 @@ class Project < ActiveRecord::Base
     ns = cs.select{|c| c.status > 0}
     [ns.size, cs.size]
   end
+  
+  def transverse_checklists
+    self.project_check_items.select{|c| c.ctemplate.ctype!="folder" and c.ctemplate.is_transverse==1 }
+  end
 
   def visible_actions(user_id)
     if Person.find(user_id).is_supervisor == 0

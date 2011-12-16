@@ -1,10 +1,13 @@
 <tr>
   <td><%= p.created_at.to_formatted_s(:short) %></td>
-  <td><%= link_to(p.name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
+  <td><%= link_to(p.name[0..30], :controller=>'projects', :action=>'show', :id=>p.id) %></td>
   <td><%= p.workstream %></td>
   <td>
-    <%= p.pm %>
-    <%= p.requests.map{|r| r.pm}.uniq.join(', ') if p.pm.nil? or p.pm.empty? %></td>
+    <%= p.transverse_checklists.size %>
+  </td>
+  <td>
+    <%= p.requests.map{|r| r.work_package[0..4]}.uniq.join(', ') %>
+  </td>
   <td>
     <%= p.responsibles.map{|pe| pe.short_name }.join(', ') %>
     <%= p.requests.map{|r| r.assigned_to}.uniq.join(', ') if p.responsibles.size == 0%>
