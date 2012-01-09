@@ -11,6 +11,12 @@ class ToolsController < ApplicationController
   PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
   WP_LEADERS_DAYS_PER_MONTH   = 18
 
+  PM_PROVISION_ADJUSTMENT     = 0
+  QA_PROVISION_ADJUSTMENT     = 22.5
+  RK_PROVISION_ADJUSTMENT     = 21
+  CI_PROVISION_ADJUSTMENT     = 53.5
+  OP_PROVISION_ADJUSTMENT     = 0.5
+
   def index
   end
 
@@ -310,17 +316,17 @@ private
   def calculate_provision(p, total, operational)
     case p.title
       when 'Project Management'
-        p.difference = round_to_hour(total * 0.09)-p.initial
+        p.difference = round_to_hour(total * 0.09)-p.initial  + PM_PROVISION_ADJUSTMENT
       when 'Risks'
-        p.difference = round_to_hour(total * 0.04)-p.initial
+        p.difference = round_to_hour(total * 0.04)-p.initial  + RK_PROVISION_ADJUSTMENT
       when 'Operational Management'
-        p.difference = operational - p.initial
+        p.difference = operational - p.initial                + OP_PROVISION_ADJUSTMENT
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total * 0.02)-p.initial #-47.125
+        p.difference = round_to_hour(total * 0.02)-p.initial  + QA_PROVISION_ADJUSTMENT
       when 'Continuous Improvement'
-        p.difference = round_to_hour(total * 0.05)-p.initial
+        p.difference = round_to_hour(total * 0.05)-p.initial  + CI_PROVISION_ADJUSTMENT
       else
         p.difference = 0
     end
