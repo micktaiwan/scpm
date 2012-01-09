@@ -42,28 +42,51 @@
   </div>
 
   <div id="menu_bar">
-    <%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','*')}) %>
-    <%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
-    <%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %>
-    <%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %>
-    <%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %>
-    <%= link_to('Bandeaux', {:controller=>'bandeaus', :action=>'index'}, {:class=>menu_style('bandeaus','*')}) %>
+    <ul>
+    <li><%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','sdp_index')}) %></li>
+    <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %></li>
+    <li><%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %></li>
+    <li><%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %></li>
+    <li><%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %></li>
+    <li><%= link_to('Bandeaux', {:controller=>'bandeaus', :action=>'index'}, {:class=>menu_style('bandeaus','*')}) %></li>
 
     <% if cu.has_role?('Admin') %>
-      <%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %>
+      <li><%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %></li>
     <% end %>
 
     <% if cu.has_role?('Admin') or cu.has_role?('ServiceLineResp')%>
-      <%= link_to('Tools', {:controller=>'tools', :action=>'index'}, {:class=>menu_style('tools','*')}) %>
+      <li>
+        <%= link_to('Tools', "", {:class=>menu_style('tools','*'), :onclick=>"return false;"}) %>
+        <ul>
+          <li class="hsep">Management</li>
+          <li><%= link_to('Requirements', {:controller=>'requirements', :action=>'index'}) %></li>
+          <li><%= link_to('Checklists', {:controller=>'checklist_templates', :action=>'index'}) %></li>
+          <li><%= link_to('Risks', {:controller=>'risks', :action=>'list'}) %></li>
+          <li><%= link_to('Generic Risks', {:controller=>'generic_risk_questions', :action=>'index'}) %></li>
+          <li><%= link_to('Capi', {:controller=>'notes', :action=>'list'}) %></li>
+          <li><%= link_to('Capi Axes', {:controller=>'capi_axes', :action=>'index'}) %></li>
+          <li class="hsep">Stats</li>
+          <li><%= link_to('Requests by year', {:controller=>'tools', :action=>'requests_by_year'}) %></li>
+          <li><%= link_to('Projects length', {:controller=>'tools', :action=>'projects_length'}) %></li>
+          <li><%= link_to('Check dates RMT <=> BAM', {:controller=>'tools', :action=>'rmt_date_check'}) %></li>
+          <li><%= link_to('QR per DWS', {:controller=>'tools', :action=>'qr_per_ws'}) %></li>
+          <li><%= link_to('Last projects', {:controller=>'tools', :action=>'last_projects'}) %></li>
+          <li class="hsep">Old stuff</li>
+          <li><%= link_to('Workload Gantt', {:controller=>'welcome', :action=>'workload_schedule'}) %></li>
+          <li><%= link_to('Stats open projects', {:controller=>'tools', :action=>'stats_open_projects'}) %></li>
+          <li><%= link_to('Test email', {:controller=>'tools', :action=>'test_email'}) %></li>
+        </ul> 
+      </li>
     <% end %>
 
 
     <% if cu.has_role?('Super') %>
-      <%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %>
+      <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
     <% end %>
     <% new_requests = Request.count(:conditions=>"status='new'"); if new_requests > 0 %>
-      <div class="notif"><strong><%=new_requests%></strong> new requests</div>
+      <li><div class="notif"><strong><%=new_requests%></strong> new requests</div></li>
     <% end %>
+    </ul>
   </div>
 
 </div>

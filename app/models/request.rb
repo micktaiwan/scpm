@@ -395,7 +395,7 @@ class Request < ActiveRecord::Base
   def bam_milestone
     return nil if self.milestone=='N/A'
     RMT_TO_BAM[self.milestone].each { |m_name|
-      m = self.project.find_milestone_by_name(m_name)
+      m = self.project.find_milestone_by_name(m_name) if self.project
       return m if m
       }
     return nil
