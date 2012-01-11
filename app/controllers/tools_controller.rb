@@ -307,6 +307,10 @@ class ToolsController < ApplicationController
     @projects = Project.find(:all, :limit=>50, :order=>"created_at desc").select{|p| p.open_requests.size > 0}
   end
 
+  def next_milestones
+    @next_milestones = (Milestone.find(:all) + Request.all).select{|m| m.date and m.date >= Date.today()-2.days and m.date <= Date.today()+2.months}.sort_by{|m| m.date ? m.date : Date.today()}
+  end
+
 private
 
   def round_to_hour(f)
@@ -335,4 +339,3 @@ private
   end
 
 end
-

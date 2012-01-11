@@ -184,6 +184,16 @@ class Request < ActiveRecord::Base
     raise "no milestone #{m}" if not rv
     rv
   end
+  
+  def date
+    return Date.parse(self.actual_m_date) if self.actual_m_date and self.actual_m_date!=""
+    Date.parse(self.milestone_date) if self.milestone_date and self.milestone_date!=""
+    Date.parse("1974-06-16")
+  end
+
+  def name # so it is the same as Milestone#name
+    self.milestone
+  end
 
   def comp_index(c)
     rv = Comp_index[c]
