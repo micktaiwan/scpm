@@ -113,28 +113,30 @@ width: 100%; /* width is based on the containing block */
   display: block;
   width: 200px;
   position: absolute;
-  background: #DEF;
+  background: #AAA;
   border: 1px solid #ABC;
-  -moz-box-shadow: 10px 10px 5px #888;
-  -webkit-box-shadow: 10px 10px 5px #888;
-  box-shadow: 10px 10px 5px #888;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
+  -moz-box-shadow: 5px 5px 5px #888;
+  -webkit-box-shadow: 5px 5px 5px #888;
+  box-shadow: 5px 5px 5px #888;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
 }
 
 #menu_bar ul li:hover ul li {
   display: block;
-  border-bottom: 1px solid #DDD;
-  background: #EFF;
+  /*border-bottom: 1px solid #AAA;*/
+  background: #EEE;
+  background: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#DDD));
   padding: 5px;
   margin: 2px;
 }
 
 #menu_bar ul li:hover ul li.hsep {
   padding: 5px;
-  background: #88F;
-  background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#AAF));
+  background: #000;
+  background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#000));
   font-weight: bold;
+  color: #FFF;
 }
 
 #menu_bar ul li:hover ul li a {
