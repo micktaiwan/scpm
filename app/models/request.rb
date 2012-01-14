@@ -265,6 +265,12 @@ class Request < ActiveRecord::Base
     rv
   end
 
+    def wp_index_RFP2012(wp, cv)
+    rv = Wp_index_RFP2012[wp+(cv=="Yes" ? "CV":"")]
+    raise "no workpackage #{wp}" if not rv
+    rv
+  end
+
   def milestone_index(m)
     rv = Milestone_index[m]
     raise "no milestone #{m}" if not rv
