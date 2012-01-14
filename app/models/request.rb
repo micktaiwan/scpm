@@ -37,7 +37,7 @@ class Request < ActiveRecord::Base
   Wp_index = { # TODO: use the new model
   "WP1.1 - Quality Control" 		    => 0,
   "WP1.2 - Quality Assurance" 		  => 4,
-  "WP1.3 - Quality Control + BAT"   => 0, # TODO: change the workloads
+  "WP1.3 - Quality Control + BAT"   => 0,
   "WP1.4 - Quality Assurance + BAT" => 4,
   "WP2 - Quality for Maintenance" 	=> 8,
   "WP3.0 - Old Modeling"            => 9,
@@ -58,6 +58,31 @@ class Request < ActiveRecord::Base
   "WP1.2 - Quality AssuranceCV"     => 21
   }
 
+  # with BAT
+  Wp_index_RFP2012 = { # TODO: use the new model
+  "WP1.1 - Quality Control"         => 0,
+  "WP1.2 - Quality Assurance"       => 4,
+  "WP1.3 - Quality Control + BAT"   => 8,
+  "WP1.4 - Quality Assurance + BAT" => 12,
+  "WP2 - Quality for Maintenance"   => 16,
+  "WP3.0 - Old Modeling"            => 17,
+  "WP3.1 - Modeling Support"        => 18,
+  "WP3.2 - Modeling Conception and Production" => 19,
+  "WP3.3 - Modeling BAT specific Control"      => 20,
+  "WP3.4 - Modeling BAT specific Production"   => 21,
+  "WP4 - Surveillance"              => 22,
+  "WP4.1 - Surveillance Audit"      => 22,
+  "WP4.2 - Surveillance Root cause" => 22,
+  "WP5 - Change Accompaniment"      => 23,
+  "WP6.1 - Coaching PP"             => 24,
+  "WP6.2 - Coaching BRD"            => 25,
+  "WP6.3 - Coaching V&V"            => 26,
+  "WP6.4 - Coaching ConfMgt"        => 27,
+  "WP6.5 - Coaching Maintenance"    => 28,
+  "WP1.1 - Quality ControlCV"       => 28,
+  "WP1.2 - Quality AssuranceCV"     => 30
+  }
+
   Comp_index = {
   "Easy" 		  => 0,
   "Medium" 		=> 1,
@@ -73,7 +98,7 @@ class Request < ActiveRecord::Base
   "N/A" 		  => 0
   }
 
-
+  # reminder: minus 10% for operational meetings
   LoadsRFP2012 = [
     # WP 1.1
     [4.0, 4.75, 7.0],
@@ -82,13 +107,35 @@ class Request < ActiveRecord::Base
     [4.0, 4.75, 7.0],
     # WP 1.2
     [3.0, 3.5, 4.0],
-    [5.75, 7.375, 9.875],
+    [5.75, 7.375, 9.75], # minus 0.125 for difficult only (for operational -10%)
     [5.5, 6.125, 7.125],
     [5.375, 7.0, 9.25],
+
+    # BAT minus 10% is 4.75, 6.5, 9.25
+    # WP 1.3 (BAT)
+    [4.0, 4.75, 7.0], # M1-M3 unchanged
+    [8.125, 11.25, 14.75],
+    [7.375, 10.75, 15.125],
+    [8.75, 12, 16.25],
+    # WP 1.4 (BAT)
+    [3.0, 3.5, 4.0],  # M1-M3 unchanged
+    [10.5, 12.875, 19.125],
+    [10.25, 12.625, 16.375],
+    [10.125, 13.5, 18.5],
+
     # WP 2
     [5.125, 7.75, 11.875],
-    # WP 3
+
+    # WP 3.0 Old
     [8.5, 16.25, 22.5],
+    # WP 3.1
+    [8.5, 16.25, 22.5],
+    # WP 3.2
+    [18.5, 42.75, 58.75],
+    # WP 3.3
+    [3.625, 6.25, 10],
+    # WP 3.4
+    [7.625, 14, 19.375],
     # WP 4
     [5.5, 7.625, 12.125],
     # WP 5
@@ -247,7 +294,7 @@ class Request < ActiveRecord::Base
 
   def workload2
     if self.status_new >= Date.parse('2012-01-10')
-      return LoadsRFP2012[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
+      return LoadsRFP2012[wp_index_RFP2012(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2011" or self.sdpiteration == "2011-Y2"
       return Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2010"
