@@ -73,6 +73,45 @@ class Request < ActiveRecord::Base
   "N/A" 		  => 0
   }
 
+
+  LoadsRFP2012 = [
+    # WP 1.1
+    [4.0, 4.75, 7.0],
+    [3.375, 4, 5.5],
+    [2.625, 3.5, 5.875],
+    [4.0, 4.75, 7.0],
+    # WP 1.2
+    [3.0, 3.5, 4.0],
+    [5.75, 7.375, 9.875],
+    [5.5, 6.125, 7.125],
+    [5.375, 7.0, 9.25],
+    # WP 2
+    [5.125, 7.75, 11.875],
+    # WP 3
+    [8.5, 16.25, 22.5],
+    # WP 4
+    [5.5, 7.625, 12.125],
+    # WP 5
+    [10.75, 23.125, 42.5],
+    # WP 6
+    [4.75, 11.25, 20.75],
+    [3.375, 10.375, 21.625],
+    [2.0, 5.875, 14.375],
+    [2.75, 13.5, 31.5],
+    [7.875, 11.875, 16.375],
+    # WP 1.1 CV
+    [0.5, 0.5, 0.625],
+    [0.875, 0.875, 1.375],
+    [0.375, 0.375, 0.5],
+    [1.75, 2.25, 2.75],
+    # WP 1.2 CV
+    [0.5, 0.5, 0.5],
+    [1.75, 2.25, 2.75],
+    [1.75, 2.75, 3.625],
+    [2.75, 3.625, 4.5]
+    ]
+
+
   Loads2011 = [
     # WP 1.1
     [4.0, 4.75, 7.0],
@@ -207,7 +246,9 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    if self.sdpiteration == "2011" or self.sdpiteration == "2011-Y2"
+    if self.status_new >= Date.parse('2012-01-10')
+      return LoadsRFP2012[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    elsif self.sdpiteration == "2011" or self.sdpiteration == "2011-Y2"
       return Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2010"
       return Loads2010[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
