@@ -16,6 +16,7 @@ class Request < ActiveRecord::Base
   WP_shortnames = { # TODO: use the new model
   "WP1.1 - Quality Control" 		    => "Control",
   "WP1.2 - Quality Assurance" 		  => "Assurance",
+  "WP1.3 - BAT"                     => "BAT",
   "WP2 - Quality for Maintenance" 	=> "Maint.",
   "WP3.0 - Old Modeling"            => "Modeling 0",
   "WP3.1 - Modeling Support"        => "Modeling 1",
@@ -62,25 +63,24 @@ class Request < ActiveRecord::Base
   Wp_index_RFP2012 = { # TODO: use the new model
   "WP1.1 - Quality Control"         => 0,
   "WP1.2 - Quality Assurance"       => 4,
-  "WP1.3 - Quality Control + BAT"   => 8,
-  "WP1.4 - Quality Assurance + BAT" => 12,
-  "WP2 - Quality for Maintenance"   => 16,
-  "WP3.0 - Old Modeling"            => 17,
-  "WP3.1 - Modeling Support"        => 18,
-  "WP3.2 - Modeling Conception and Production" => 19,
-  "WP3.3 - Modeling BAT specific Control"      => 20,
-  "WP3.4 - Modeling BAT specific Production"   => 21,
-  "WP4 - Surveillance"              => 22,
-  "WP4.1 - Surveillance Audit"      => 22,
-  "WP4.2 - Surveillance Root cause" => 22,
-  "WP5 - Change Accompaniment"      => 23,
-  "WP6.1 - Coaching PP"             => 24,
-  "WP6.2 - Coaching BRD"            => 25,
-  "WP6.3 - Coaching V&V"            => 26,
-  "WP6.4 - Coaching ConfMgt"        => 27,
-  "WP6.5 - Coaching Maintenance"    => 28,
-  "WP1.1 - Quality ControlCV"       => 28,
-  "WP1.2 - Quality AssuranceCV"     => 30
+  "WP1.3 - BAT"                     => 8,
+  "WP2 - Quality for Maintenance"   => 9,
+  "WP3.0 - Old Modeling"            => 10,
+  "WP3.1 - Modeling Support"        => 11,
+  "WP3.2 - Modeling Conception and Production" => 12,
+  "WP3.3 - Modeling BAT specific Control"      => 13,
+  "WP3.4 - Modeling BAT specific Production"   => 14,
+  "WP4 - Surveillance"              => 15,
+  "WP4.1 - Surveillance Audit"      => 15,
+  "WP4.2 - Surveillance Root cause" => 15,
+  "WP5 - Change Accompaniment"      => 16,
+  "WP6.1 - Coaching PP"             => 17,
+  "WP6.2 - Coaching BRD"            => 18,
+  "WP6.3 - Coaching V&V"            => 19,
+  "WP6.4 - Coaching ConfMgt"        => 20,
+  "WP6.5 - Coaching Maintenance"    => 21,
+  "WP1.1 - Quality ControlCV"       => 22,
+  "WP1.2 - Quality AssuranceCV"     => 26
   }
 
   Comp_index = {
@@ -107,21 +107,13 @@ class Request < ActiveRecord::Base
     [4.0, 4.75, 7.0],
     # WP 1.2
     [3.0, 3.5, 4.0],
-    [5.75, 7.375, 9.75], # minus 0.125 for difficult only (for operational -10%)
+    [5.75, 7.375, 9.75],
     [5.5, 6.125, 7.125],
     [5.375, 7.0, 9.25],
 
-    # BAT minus 10% is 4.75, 6.5, 9.25
+    # BAT minus 10%
     # WP 1.3 (BAT)
-    [4.0, 4.75, 7.0], # M1-M3 unchanged
-    [8.125, 11.25, 14.75],
-    [7.375, 10.75, 15.125],
-    [8.75, 12, 16.25],
-    # WP 1.4 (BAT)
-    [3.0, 3.5, 4.0],  # M1-M3 unchanged
-    [10.5, 12.875, 19.125],
-    [10.25, 12.625, 16.375],
-    [10.125, 13.5, 18.5],
+    [4.75, 6.5, 9.25],
 
     # WP 2
     [5.125, 7.75, 11.875],
