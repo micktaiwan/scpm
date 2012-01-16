@@ -42,7 +42,7 @@ class Mailer < ActionMailer::Base
     render(:nothing=>true) and return if !person or person.email.empty?
     @from        = "mfaivremacon@sqli.com"
     @recipients  = "#{person.email}, mfaivremacon@sqli.com"
-    @subject     = "[BAM] Daily reminders (#{person.name})"
+    @subject     = "[BAM] Reminders for #{person.name}"
     @person, @new_notes, @requests_to_close, @amendments, @actions, @milestones_with_open_checklists = person, n, r, am, ac, om
     content_type "text/html; charset=utf-8"
   end
