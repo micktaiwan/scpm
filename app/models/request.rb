@@ -64,23 +64,23 @@ class Request < ActiveRecord::Base
   "WP1.1 - Quality Control"         => 0,
   "WP1.2 - Quality Assurance"       => 4,
   "WP1.3 - BAT"                     => 8,
-  "WP2 - Quality for Maintenance"   => 9,
-  "WP3.0 - Old Modeling"            => 10,
-  "WP3.1 - Modeling Support"        => 11,
-  "WP3.2 - Modeling Conception and Production" => 12,
-  "WP3.3 - Modeling BAT specific Control"      => 13,
-  "WP3.4 - Modeling BAT specific Production"   => 14,
-  "WP4 - Surveillance"              => 15,
-  "WP4.1 - Surveillance Audit"      => 15,
-  "WP4.2 - Surveillance Root cause" => 15,
-  "WP5 - Change Accompaniment"      => 16,
-  "WP6.1 - Coaching PP"             => 17,
-  "WP6.2 - Coaching BRD"            => 18,
-  "WP6.3 - Coaching V&V"            => 19,
-  "WP6.4 - Coaching ConfMgt"        => 20,
-  "WP6.5 - Coaching Maintenance"    => 21,
-  "WP1.1 - Quality ControlCV"       => 22,
-  "WP1.2 - Quality AssuranceCV"     => 26
+  "WP2 - Quality for Maintenance"   => 12,
+  "WP3.0 - Old Modeling"            => 13,
+  "WP3.1 - Modeling Support"        => 14,
+  "WP3.2 - Modeling Conception and Production" => 15,
+  "WP3.3 - Modeling BAT specific Control"      => 16,
+  "WP3.4 - Modeling BAT specific Production"   => 17,
+  "WP4 - Surveillance"              => 18,
+  "WP4.1 - Surveillance Audit"      => 18,
+  "WP4.2 - Surveillance Root cause" => 18,
+  "WP5 - Change Accompaniment"      => 19,
+  "WP6.1 - Coaching PP"             => 20,
+  "WP6.2 - Coaching BRD"            => 21,
+  "WP6.3 - Coaching V&V"            => 22,
+  "WP6.4 - Coaching ConfMgt"        => 23,
+  "WP6.5 - Coaching Maintenance"    => 24,
+  "WP1.1 - Quality ControlCV"       => 25,
+  "WP1.2 - Quality AssuranceCV"     => 29
   }
 
   Comp_index = {
@@ -111,9 +111,12 @@ class Request < ActiveRecord::Base
     [5.5, 6.125, 7.125],
     [5.375, 7.0, 9.25],
 
-    # BAT minus 10%
+    # BAT minus 10% total is [4.75, 6.5, 9.25]
     # WP 1.3 (BAT)
-    [4.75, 6.5, 9.25],
+    [0, 0, 0], # no M1-M3
+    [2.25, 3.25, 4],
+    [0.625, 0.875, 1.375],
+    [1.75, 2.5, 3.875],
 
     # WP 2
     [5.125, 7.75, 11.875],
