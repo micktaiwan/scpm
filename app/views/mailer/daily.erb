@@ -29,9 +29,15 @@ Dear <%= @person.name %>,<br/>
     <%= render(:partial=>'actions/text_action', :collection=>@actions, :as=>:a) %>
   </ul>
 <% end %>
+
+<% if @milestones_with_open_checklists.size > 0 %>
+  You have <%= @milestones_with_open_checklists.size %> open checklists.<br/>
+  <ul>
+    <%= render(:partial=>'milestones/text_milestone', :collection=>@milestones_with_open_checklists, :as=>:m) %>
+  </ul>
+<% end %>
 <br/>
 <br/>
 Your very kind secretary,<br/>
 The <a href="http://tls-srv-eisq.sqli.com/">BAM</a>.<br/>
-
 

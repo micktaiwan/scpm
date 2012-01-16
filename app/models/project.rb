@@ -176,11 +176,11 @@ class Project < ActiveRecord::Base
   end
 
   # return true if the project or subprojects request is assigned to one of the users in the array
-  def has_responsible(user_arr)
-    user_arr.each { |id|
+  def has_responsible(user_id_arr)
+    user_id_arr.each { |id|
       return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
       self.projects.each { |p|
-        return true if p.has_responsible(user_arr)
+        return true if p.has_responsible(user_id_arr)
         }
       }
 

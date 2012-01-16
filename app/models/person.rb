@@ -5,11 +5,11 @@ class Person < ActiveRecord::Base
   #include Authentication
 
   belongs_to :company
-  has_many :projects, :foreign_key=>"supervisor_id"
   has_many :person_roles
   has_many :roles, :through => :person_roles
   has_many :open_actions, :class_name=>"Action", :conditions=>"progress='open' or progress='in_progress'"
   has_many :project_people
+  has_many :projects, :foreign_key=>"supervisor_id"
   has_many :projects, :through=>:project_people
   has_many :wl_lines
   has_many :sdp_logs, :order=>"id"
@@ -195,6 +195,16 @@ class Person < ActiveRecord::Base
 
   def late_actions
     Action.find(:all, :conditions=>["person_id=? and (progress='open' or progress='in_progress')", self.id])
+  end
+
+  def milestones_with_open_checklists
+    # Look at this beautiful include !
+    Milestone.find(:all, :conditions=>"done=1", :include=>[{:project=>:project_people},:checklist_items]).select { |m|
+      m.project and m.project.has_responsible([self.id]) and
+      m.checklist_items.select{ |i|
+        i.ctemplate.ctype!='folder' and i.status==0
+        }.size > 0
+      }.sort_by { |m| [m.project.full_name, m.name] }  
   end
 
   #def remember_token?
