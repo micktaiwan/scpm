@@ -114,12 +114,10 @@ width: 100%; /* width is based on the containing block */
   width: 200px;
   position: absolute;
   background: #AAA;
-  border: 1px solid #ABC;
+  border: 1px solid #666;
   -moz-box-shadow: 5px 5px 5px #888;
   -webkit-box-shadow: 5px 5px 5px #888;
   box-shadow: 5px 5px 5px #888;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
 }
 
 #menu_bar ul li:hover ul li {
@@ -128,13 +126,13 @@ width: 100%; /* width is based on the containing block */
   background: #EEE;
   background: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#DDD));
   padding: 5px;
-  margin: 2px;
+  margin: 1px;
 }
 
 #menu_bar ul li:hover ul li.hsep {
   padding: 5px;
-  background: #000;
-  background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#000));
+  background: #AAF;
+  background: -webkit-gradient(linear, left top, left bottom, from(#779), to(#005));
   font-weight: bold;
   color: #FFF;
 }
@@ -144,7 +142,7 @@ width: 100%; /* width is based on the containing block */
 }
 
 #menu_bar ul li ul li:hover {
-  background: #FF8;
+  background: -webkit-gradient(linear, left top, left bottom, from(#FF8), to(#FFD));
 }
 
 .grey {

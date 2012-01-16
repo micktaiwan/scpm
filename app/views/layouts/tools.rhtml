@@ -43,7 +43,25 @@
 
   <div id="menu_bar">
     <ul>
-    <li><%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','sdp_index')}) %></li>
+    <li><%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','sdp_index')}) %>
+    <% if current_user.has_role?('Admin') %>
+    <ul>
+      <li class="hsep">Index</li>
+      <li><%= link_to('SDP index',        {:controller=>'tools', :action=>'sdp_index'}) %></li>
+      <li class="hsep">Imports</li>
+      <li><%= link_to('SDP import',       {:controller=>'tools', :action=>'sdp_import'}) %></li>
+      <li><%= link_to('RMT to SDP task import',          {:controller=>'tools', :action=>'sdp_add'}) %></li>
+      <li><%= link_to('Monthly tasks SDP import', {:controller=>'tools', :action=>'import_monthly_tasks_form'}) %></li>
+      <li class="hsep">Checks</li>
+      <li><%= link_to('CHECK Loads',{:controller=>'tools', :action=>'load_errors'}) %></li>
+      <li><%= link_to('CHECK RMT <=> SDP',{:controller=>'tools', :action=>'sdp_yes_check'}) %></li>
+      <li><%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}) %></li>
+      <li><%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}) %></li>
+      <li class="hsep">Stuff</li>
+      <li><%= link_to('People stats',     {:controller=>'tools', :action=>'sdp_logs'}) %></li>
+    </ul>
+    <% end %>
+    </li>
     <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %></li>
     <li><%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %></li>
     <li><%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %></li>
