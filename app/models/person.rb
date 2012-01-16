@@ -168,7 +168,7 @@ class Person < ActiveRecord::Base
   def new_notes
     ap = self.active_projects.map{|p| p.id}
     return [] if ap.empty?
-    Note.find(:all, :conditions=>["private=0 and project_id in (#{ap.join(',')}) and updated_at >= ?", Date.today()-1.day])
+    Note.find(:all, :conditions=>["private=0 and project_id in (#{ap.join(',')}) and updated_at >= ?", Date.today()-10.day])
   end
 
   def requests_to_close
