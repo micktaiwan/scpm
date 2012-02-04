@@ -1,10 +1,10 @@
 module SdpDB
 
   PhaseDB = { # name => [phase_id, proposal_id]
-	  'Bundle Management'=>[29255,28067],
-	  'Continuous Improvement'=>[29257,28068],
-	  'Quality Assurance'=>[29256,28069],
-	  'WP1.1 - Quality Control'=>[29244,28061],
+	  'Bundle Management'        =>[29255,28067],
+	  'Continuous Improvement'   =>[29257,28068],
+	  'Quality Assurance'        =>[29256,28069],
+	  'WP1.1 - Quality Control'  =>[29244,28061],
 	  'WP1.2 - Quality Assurance'=>[29245,28061],
       'WP1.3 - Quality Control + BAT'=>[29633,28061],
       'WP1.4 - Quality Assurance + BAT'=>[29634,28061],
@@ -20,9 +20,9 @@ module SdpDB
 	  'WP5 - Change Accompaniment'=>[29249,28065],
 	  'WP6.1 - Coaching PP'=>[29250,28066],     #WP6.1 - Coaching for Project setting-up
 	  'WP6.2 - Coaching BRD'=>[29251,28066],    #WP6.2 - Coaching for Business Requirements
-	  'WP6.3 - Coaching V&V'=>[29251,28066],    #WP6.3 - Coaching for Verification and Validation
-	  'WP6.4 - Coaching ConfMgt'=>[29251,28066],  #WP6.4 - Coaching for Configuration Management
-	  'WP6.5 - Coaching Maintenance'=>[29251,28066]   #WP6.5 - Coaching for Maintenance
+	  'WP6.3 - Coaching V&V'=>[29252,28066],    #WP6.3 - Coaching for Verification and Validation
+	  'WP6.4 - Coaching ConfMgt'=>[29253,28066],  #WP6.4 - Coaching for Configuration Management
+	  'WP6.5 - Coaching Maintenance'=>[29254,28066]   #WP6.5 - Coaching for Maintenance
 	  }
 
   ActivityDB = {
@@ -63,15 +63,15 @@ module SdpDB
     }
 
   DomainDB = {
-    'EA'=>2865,
-    'EV'=>2866,
-    'EDE'=>2867,
-    'EDY'=>2868,
-    'EDG'=>2869,
-    'EDS'=>2870,
-    'EM'=>2872,
-    'EI'=>2873,
-    'EDC'=>2871,
+    'EA'  =>2865,
+    'EV'  =>2866,
+    'EDE' =>2867,
+    'EDY' =>2868,
+    'EDG' =>2869,
+    'EDS' =>2870,
+    'EM'  =>2872,
+    'EI'  =>2873,
+    'EDC' =>2871,
     'EMNC'=>2860,
     'EMNB'=>2861
     }
