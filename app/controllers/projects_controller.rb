@@ -320,7 +320,7 @@ class ProjectsController < ApplicationController
   end
 
   def cut
-    session[:cut]         = params[:id]
+    session[:cut]       = params[:id]
     session[:action_cut]  = nil
     session[:status_cut]  = nil
     session[:request_cut] = nil
@@ -484,7 +484,7 @@ class ProjectsController < ApplicationController
       @centers = ['EA', 'EI', 'EV', 'EDE', 'EDG', 'EDS', 'EDY', 'EDC', 'EM', 'EMNB', 'EMNC']
       @centers = @centers.map { |c| stats_for_center(c) }
 
-      @wps = @wps.sort_by { |w|
+      @wps = @wps.select{ |w| w.get_status.status > 0}.sort_by { |w|
         [w.workstream, w.project_name, w.name]
         }
 =begin
