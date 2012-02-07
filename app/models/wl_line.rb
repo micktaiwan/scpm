@@ -35,7 +35,7 @@ class WlLine < ActiveRecord::Base
 
   # get milestones for request by week
   def milestones(w)
-    return [] if !request or request.project
+    return [] if !request or !request.project
     str = w.to_s
     year = str[0..3].to_i
     week = str[4..5].to_i
