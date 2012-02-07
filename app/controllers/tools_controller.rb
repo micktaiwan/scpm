@@ -92,13 +92,13 @@ class ToolsController < ApplicationController
     begin
       @phases     = SDPPhase.all
       @provisions = SDPTask.find(:all, :conditions=>"iteration='P'", :order=>'title')
-      @balancei   = @phases.inject(0) { |sum, p| p.balancei+sum}
+      @sdp_balance= @phases.inject(0) { |sum, p| p.balancei+sum}
       tasks2010   = SDPTask.find(:all, :conditions=>"iteration='2010'")
       tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
       op2010      = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011      = tasks2011.inject(0) { |sum, t| t.initial+sum}
-      operational = round_to_hour(op2011*0.11111111111)
-      @operational_total = op2010 + op2011 + operational
+      operational2011_10percent = round_to_hour(op2011*0.11111111111)
+      @operational_total = op2010 + op2011 + operational2011_10percent
       @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
       @remaining_time       = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.01).round * 0.01
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
@@ -112,12 +112,12 @@ class ToolsController < ApplicationController
       @error = ""
       @sold                 = @operational_total
       @provisions_remaining_should_be = 0
-      @provisions_remaining = 0
+      @provisions_remaining = 0 # Project management provision + operational provisions  (10% of 2011)
       @provisions_diff      = 0
       @risks_remaining      = 0
       provision_qa_ci = 0
       @provisions.each { |p|
-        calculate_provision(p,@operational_total,operational)
+        calculate_provision(p,@operational_total,operational2011_10percent)
         @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
         if p.title == 'Operational Management' or p.title == 'Project Management'
           @provisions_remaining_should_be += p.reevaluated_should_be
@@ -130,8 +130,11 @@ class ToolsController < ApplicationController
         end
         }
       # Management provisions are already in the management total
+      
       @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
-      @real_balance_and_provisions  = @provisions_diff+@balancei - (@theorical_management - (@remaining_management - @risks_remaining))
+      @real_balance_and_provisions  = @sdp_balance - (@theorical_management - (@remaining_management - @risks_remaining))
+      # 05 feb 2012: I was adding @provisions_diff to @real_balance_and_provisions. Why ?
+      
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
       @remaining_DP                 = (@theorical_management-@management_minus_risk) + provision_qa_ci
     rescue Exception => e
@@ -317,18 +320,18 @@ private
     (f/0.125).round * 0.125
   end
 
-  def calculate_provision(p, total, operational)
+  def calculate_provision(p, total, operational2011_10percent)
     case p.title
       when 'Project Management'
         p.difference = round_to_hour(total * 0.09)-p.initial  + PM_PROVISION_ADJUSTMENT
       when 'Risks'
         p.difference = round_to_hour(total * 0.04)-p.initial  + RK_PROVISION_ADJUSTMENT
       when 'Operational Management'
-        p.difference = operational - p.initial                + OP_PROVISION_ADJUSTMENT
+        p.difference = operational2011_10percent - p.initial      + OP_PROVISION_ADJUSTMENT
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total * 0.02)-p.initial  + QA_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total * 0.02) - p.initial  + QA_PROVISION_ADJUSTMENT
       when 'Continuous Improvement'
         p.difference = round_to_hour(total * 0.05)-p.initial  + CI_PROVISION_ADJUSTMENT
       else
