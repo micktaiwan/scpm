@@ -46,7 +46,12 @@ class WorkloadsController < ApplicationController
     #chart.add_labels @cap_totals[2..-1]
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workload.months, :font_size => 10, :alignment => :center
-    chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
+    chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>7
+    serie.each_with_index do |p,index|
+      if p > high_limit
+        chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>index, :pixel_size=>8
+      end
+    end
     chart.range_marker :horizontal, :color=>'DDDDDD', :start_point=>97.0/max, :end_point=>103.0/max
     chart.show_legend = false
     @chart_url = chart.to_url({:chd=>"t:#{serie.join(',')}", :chds=>"0,#{high_limit}"})
