@@ -271,7 +271,7 @@ class Request < ActiveRecord::Base
     raise "no milestone #{m}" if not rv
     rv
   end
-  
+
   def date
     return Date.parse(self.actual_m_date) if self.actual_m_date and self.actual_m_date!=""
     Date.parse(self.milestone_date) if self.milestone_date and self.milestone_date!=""
@@ -294,7 +294,7 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    if self.status_new and self.status_new >= Date.parse('2012-01-10')
+    if self.date_submitted >= Date.parse('2012-01-10') or (self.status_new and self.status_new >= Date.parse('2012-01-10'))
       return LoadsRFP2012[wp_index_RFP2012(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2011" or self.sdpiteration == "2011-Y2"
       return Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
@@ -512,4 +512,3 @@ private
   end
 
 end
-
