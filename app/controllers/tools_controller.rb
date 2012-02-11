@@ -7,7 +7,7 @@ class ToolsController < ApplicationController
   NB_QR 					            = 20
   NB_FTE 					            = 16.5  # TODO: should be automatically calculated from workloads
   NB_DAYS_PER_MONTH			      = 18
-  MEETINGS_LOAD_PER_MONTH 	  = 1.5 # TODO: to be changed later
+  MEETINGS_LOAD_PER_MONTH 	  = 1.5
   PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
   WP_LEADERS_DAYS_PER_MONTH   = 18
 
@@ -100,7 +100,7 @@ class ToolsController < ApplicationController
       operational2011_10percent = round_to_hour(op2011*0.11111111111)
       @operational_total = op2010 + op2011 + operational2011_10percent
       @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
-      @remaining_time       = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.01).round * 0.01
+      @remaining_time       = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.001).round * 0.001
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
       @theorical_management = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH)*@remaining_time)
       montee      = default_to_zero { SDPActivity.find_by_title('Montee en competences').remaining }
@@ -112,6 +112,7 @@ class ToolsController < ApplicationController
       @qa_remaining = default_to_zero { SDPPhase.find_by_title('Quality Assurance').remaining }
       @error = ""
       @sold                 = @operational_total
+      @provisions_initial   = 0
       @provisions_remaining_should_be = 0
       @provisions_remaining = 0 # Project management provision + operational provisions  (10% of 2011)
       @provisions_diff      = 0
@@ -122,6 +123,7 @@ class ToolsController < ApplicationController
         calculate_provision(p,@operational_total,operational2011_10percent)
         @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
         if p.title == 'Operational Management' or p.title == 'Project Management'
+          @provisions_initial += p.initial
           @provisions_remaining_should_be += p.reevaluated_should_be
           @provisions_remaining += p.reevaluated
           @provisions_diff      += p.difference
@@ -132,15 +134,9 @@ class ToolsController < ApplicationController
           @risks_remaining_should_be  = p.reevaluated_should_be
         end
         }
-      # Note: Management provisions are already in the management total
-      @management_minus_risk        = @remaining_management - (@provisions_remaining) # 11 feb 2012: that was an error: + @risks_remaining)
-      @real_balance_and_provisions  = @sdp_balance - (@theorical_management - (@remaining_management - @risks_remaining))
-      # 05 feb 2012: I was adding @provisions_diff to @real_balance_and_provisions. Why ?
-      # 11 feb 2012: because I thought remaining is different from remainning_should_be, but I forgot
-      # that "total provisions to release" take should_be into account
-      
-      @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
-      @remaining_DP                 = (@theorical_management-@management_minus_risk) + provision_qa_ci
+      @real_balance                 = @sdp_balance - (@theorical_management - @remaining_management)
+      @real_balance_and_provisions  = @real_balance + @provisions_remaining_should_be
+      @remaining_DP                 = (@theorical_management-@remaining_management) + provision_qa_ci
       @other_provisions             = provision_qa_ci + @risks_remaining_should_be
       @total_provisions             = @other_provisions + @provisions_remaining_should_be
     rescue Exception => e

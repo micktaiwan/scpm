@@ -3,6 +3,7 @@
 <table>
   <tr>
   <td>Title</td>
+  <td>Initial</td>
   <td>Remaining</td>
   <td>Balance</td>
   <td>Gain %</td>
@@ -14,12 +15,11 @@
 <br/>
 
 <table>
-  <tr><td>SDP Initial Balance:</td><td><%= @sdp_balance %>, real balance: <%=@real_balance%> (balance minus not yet included management), plus provisions: <b><%=@real_balance_and_provisions%></b> (total provisions to release: <%= @provisions_remaining_should_be %>)</td></tr>
-  <tr><td>Operational remaining:</td><td> <%= @remaining %> / <%= @operational_total-@provisions_remaining_should_be %> (operational - provisions)</td></tr>
+  <tr><td>SDP Initial Balance:</td><td><%= @sdp_balance %>, real balance: <%=@real_balance%> (balance minus lacking  management), plus provisions: <b><%=@real_balance_and_provisions%></b> (total provisions to release: <%= @provisions_remaining_should_be %>)</td></tr>
+  <tr><td>Operational:</td><td> <%= @remaining %> / <%= @operational_total-@provisions_initial %> /  <%= @operational_total %> (Remaining  / Total minus PM/OM provisions / including PM/OM provisions)</td></tr>
   <tr><td>Remaining time:</td><td> <%= @remaining_time %> months</td></tr>
-  <tr><td>Theorical management remaining:</td><td> <%= @theorical_management %> (actual management minus risk: <%= @management_minus_risk %>)</td></tr>
+  <tr><td>Theorical management remaining:</td><td> <%= @theorical_management %> (in SDP: <%= @remaining_management %>, diff: <%= @theorical_management - @remaining_management%>)</td></tr>
   <tr><td>Not included remaining:</td><td> <%= @remaining_DP %> (diff between theorical management remaining and actual + (CI + QA real remaining provisions))</td></tr>
-  <tr><td>Operational Total:</td><td> <%= @operational_total %> (includes Project and Operational Management provisions)</td></tr>
   <tr><td>Sold:</td><td> <%= @sold %> (<%= @sold ? (@sold*421).to_i.pretty_number : 0 %> Euros)</td></tr>
 </table><br/>
 <br/>
@@ -41,5 +41,4 @@
   <tr><td>Finances:</td><td> <%= @provisions_remaining_should_be %></td><td colspan="2">(PM+OM)</td></tr>
   <tr><td>Other provisions:</td><td> <%= @other_provisions %></td><td colspan="2">(CI+QA+Risks)</td></tr>
   <tr><td>Total provisions:</td><td> <%= @total_provisions %></td><td colspan="2">(PM+OM+CI+QA+Risks)</td></tr>
-
 </table>
