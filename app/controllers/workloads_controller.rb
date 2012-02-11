@@ -36,15 +36,20 @@ class WorkloadsController < ApplicationController
   def get_chart
     chart = GoogleChart::LineChart.new('1000x300', "#{@workload.person.name} workload", false)
     serie = @workload.percents.map{ |p| p[:precise] }
+    realmax = serie.max
+    high_limit = 150.0
+    max = realmax > high_limit ? high_limit : realmax
+    high_limit = high_limit > max ? max : high_limit
+    #serie = serie.map{ |p| rand(300)}
+    #chart.max_value 200
     chart.data "non capped", serie, '0000ff'
     #chart.add_labels @cap_totals[2..-1]
-    max = serie.max
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workload.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
-    chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>95.0/max, :end_point=>105.0/max
+    chart.range_marker :horizontal, :color=>'DDDDDD', :start_point=>97.0/max, :end_point=>103.0/max
     chart.show_legend = false
-    @chart_url = chart.to_url
+    @chart_url = chart.to_url({:chd=>"t:#{serie.join(',')}", :chds=>"0,#{high_limit}"})
   end
 
   def get_suggested_requests(wl)
@@ -373,4 +378,3 @@ class WorkloadsController < ApplicationController
   end
 
 end
-
