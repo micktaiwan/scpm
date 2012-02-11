@@ -106,7 +106,8 @@ class ToolsController < ApplicationController
       montee      = default_to_zero { SDPActivity.find_by_title('Montee en competences').remaining }
       souscharges = default_to_zero { SDPActivity.find_by_title('Sous charges').remaining }
       init        = default_to_zero { SDPActivity.find_by_title('Initialization').remaining }
-      @remaining_management = default_to_zero {  SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init) }
+      bmc_avv     = default_to_zero { SDPActivity.find_by_title('AVV BMC and other').remaining }
+      @remaining_management = default_to_zero {  SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init+bmc_avv) }
       @ci_remaining = default_to_zero { SDPPhase.find_by_title('Continuous Improvement').remaining }
       @qa_remaining = default_to_zero { SDPPhase.find_by_title('Quality Assurance').remaining }
       @error = ""
@@ -115,6 +116,7 @@ class ToolsController < ApplicationController
       @provisions_remaining = 0 # Project management provision + operational provisions  (10% of 2011)
       @provisions_diff      = 0
       @risks_remaining      = 0
+      @risks_remaining_should_be = 0
       provision_qa_ci = 0
       @provisions.each { |p|
         calculate_provision(p,@operational_total,operational2011_10percent)
@@ -126,17 +128,21 @@ class ToolsController < ApplicationController
         elsif p.title == 'Continuous Improvement' or p.title == 'Quality Assurance'
           provision_qa_ci += p.reevaluated_should_be
         elsif p.title == 'Risks'
-          @risks_remaining = p.reevaluated
+          @risks_remaining            = p.reevaluated
+          @risks_remaining_should_be  = p.reevaluated_should_be
         end
         }
-      # Management provisions are already in the management total
-      
-      @management_minus_risk        = @remaining_management - (@provisions_remaining + @risks_remaining)
+      # Note: Management provisions are already in the management total
+      @management_minus_risk        = @remaining_management - (@provisions_remaining) # 11 feb 2012: that was an error: + @risks_remaining)
       @real_balance_and_provisions  = @sdp_balance - (@theorical_management - (@remaining_management - @risks_remaining))
       # 05 feb 2012: I was adding @provisions_diff to @real_balance_and_provisions. Why ?
+      # 11 feb 2012: because I thought remaining is different from remainning_should_be, but I forgot
+      # that "total provisions to release" take should_be into account
       
       @real_balance                 = @real_balance_and_provisions - @provisions_remaining_should_be
       @remaining_DP                 = (@theorical_management-@management_minus_risk) + provision_qa_ci
+      @other_provisions             = provision_qa_ci + @risks_remaining_should_be
+      @total_provisions             = @other_provisions + @provisions_remaining_should_be
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
     end
