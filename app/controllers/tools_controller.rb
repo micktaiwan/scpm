@@ -5,7 +5,7 @@ class ToolsController < ApplicationController
   include WelcomeHelper
 
   NB_QR 					            = 20
-  NB_FTE 					            = 16.5  # TODO: should be automatically calculated from workloads
+  NB_FTE 					            = 17.5  # TODO: should be automatically calculated from workloads
   NB_DAYS_PER_MONTH			      = 18
   MEETINGS_LOAD_PER_MONTH 	  = 1.5
   PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
@@ -90,6 +90,8 @@ class ToolsController < ApplicationController
   def sdp_index_prepare
     return if SDPTask.count.zero?
     begin
+      @nb_qr  = NB_QR
+      @fte    = NB_FTE
       @phases     = SDPPhase.all
       @provisions = SDPTask.find(:all, :conditions=>"iteration='P'", :order=>'title')
       @sdp_balance= @phases.inject(0) { |sum, p| p.balancei+sum}
