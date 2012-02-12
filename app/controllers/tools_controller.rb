@@ -97,8 +97,8 @@ class ToolsController < ApplicationController
       tasks2011   = SDPTask.find(:all, :conditions=>"iteration='2011'")
       op2010      = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011      = tasks2011.inject(0) { |sum, t| t.initial+sum}
-      operational2011_10percent = round_to_hour(op2011*0.11111111111)
-      @operational_total = op2010 + op2011 + operational2011_10percent
+      @operational2011_10percent = round_to_hour(op2011*0.11111111111)
+      @operational_total = op2010 + op2011 + @operational2011_10percent
       @remaining            = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
       @remaining_time       = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.001).round * 0.001
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
@@ -120,7 +120,7 @@ class ToolsController < ApplicationController
       @risks_remaining_should_be = 0
       provision_qa_ci = 0
       @provisions.each { |p|
-        calculate_provision(p,@operational_total,operational2011_10percent)
+        calculate_provision(p,@operational_total,@operational2011_10percent)
         @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
         if p.title == 'Operational Management' or p.title == 'Project Management'
           @provisions_initial += p.initial
