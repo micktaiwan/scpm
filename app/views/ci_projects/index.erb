@@ -1,0 +1,10 @@
+<%= render(:file=>"tools/sdp_menu.erb") %>
+<h2>Mantis import</h2>
+<%= form_tag({:action => 'do_upload'}, :multipart => true) %>
+  <p>
+    <label for="upload_file">Mantis CSV</label>
+    <%= file_field 'upload', 'datafile' %>
+    <%= submit_tag "Upload" %>
+  </p>
+</form>
+

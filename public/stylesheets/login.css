@@ -124,6 +124,11 @@ h2 {
 .big_button.workload {
   background: #F90;
   }
+
+.big_button.ci {
+  background: #C000C0;
+  }
+
 .big_button.sdp {
   background: #DDD;
   }

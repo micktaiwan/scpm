@@ -13,14 +13,17 @@
   <div class="center">
     <div onclick="location='/projects'"         class="big_button reporting"
       onmouseover="$('reporting_sub').appear({duration:0.3});">
-      <div class="btitle">Reporting</div>
+      <div class="btitle">Report</div>
       <ul class="submenu reporting" style="display:none" id="reporting_sub">
         <li><a href="/projects">Reporting</a></li>
         <li><a href="/topics">Topics</a></li>
       </ul>
     </div>
 
-    <div onclick="location='/workloads'"        class="big_button workload">Workload</div>
+    <div onclick="location='/workloads'"        class="big_button workload">Plan</div>
+<% if current_user.has_role?('Super') %>
+    <div onclick="location='/ci_projects'"        class="big_button ci">Improve</div>
+<% end %>
 
     <div onclick="location='/tools/sdp_index'"  class="big_button tools"
       onmouseover="$('manage_sub').appear({duration:0.3});">

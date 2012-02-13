@@ -331,17 +331,17 @@ private
       when 'Risks'
         p.difference = round_to_hour(total * 0.04)-p.initial  + RK_PROVISION_ADJUSTMENT
       when 'Operational Management'
-        p.difference = operational2011_10percent - p.initial      + OP_PROVISION_ADJUSTMENT
+        p.difference = operational2011_10percent - p.initial  + OP_PROVISION_ADJUSTMENT
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total * 0.02) - p.initial  + QA_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total * 0.02) - p.initial+ QA_PROVISION_ADJUSTMENT
       when 'Continuous Improvement'
         p.difference = round_to_hour(total * 0.05)-p.initial  + CI_PROVISION_ADJUSTMENT
       else
         p.difference = 0
     end
-    p.initial_should_be = p.initial + p.difference
+    p.initial_should_be     = p.initial     + p.difference
     p.reevaluated_should_be = p.reevaluated + p.difference
   end
 

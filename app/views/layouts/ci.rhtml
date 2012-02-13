@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="all">
+  <title>CI - BAM</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/ci.css" />
+	<link href='http://fonts.googleapis.com/css?family=Stardos+Stencil&v1' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Zeyada&v1' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Kameron&v1' rel='stylesheet' type='text/css'>
+  <%= javascript_include_tag :defaults %>
+  <link rel="Shortcut Icon" type="image/x-icon" href="/images/favicon.ico" />
+</head>
+
+<body>
+<%
+  cu = current_user
+  cu.last_view = Time.now
+  cu.save
+%>
+
+<%#= render :file => 'chat/main' %>
+
+<div id="banner">
+<%= render :file => 'layouts/context_select' %>
+<div id="title">Improve</div>
+<div id="bandeau">
+<% b = get_bandeau; if b %>
+<div class="text"><%= b.text %></div>
+<div class="person"><%= b.person.name %></div>
+<% end %>
+<div class="link">
+  <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+  <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
+</div>
+</div>
+
+<div id="menu_bar">
+<% if current_user.has_role?('Admin') %>
+<!--
+<%= link_to('Workload', {:controller=>'workloads', :action=>'index'}, {:class=>menu_style('workloads','index')}) %>
+<%= link_to('Consolidation', {:controller=>'workloads', :action=>'consolidation'}, {:class=>menu_style('workloads', 'consolidation')}) %>
+<%= link_to('Holidays', {:controller=>'holidays', :action=>'index'}, {:class=>menu_style('holidays','*')}) %>
+-->
+<% end %>
+<b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
+</div>
+
+</div>
+
+<div id="content">
+<%= yield %>
+</div>
+
+<%= render :file => 'layouts/footer.erb' %>
+</body>
+</html>
+

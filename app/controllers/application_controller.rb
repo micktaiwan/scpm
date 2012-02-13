@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   before_filter :verify_auth
   before_filter :set_timezone
 
-  # Scrub sensitive parameters from your log
+  # Scrub sensitive parameters from logs
   filter_parameter_logging :password
 
   def set_timezone
