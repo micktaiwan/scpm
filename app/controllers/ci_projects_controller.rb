@@ -30,6 +30,16 @@ class CiProjectsController < ApplicationController
       ci.save
       }
     redirect_to '/ci_projects/index'
-  end  
+  end
 
+  def edit
+    id = params[:id]
+    @project = CiProject.find(id)
+  end
+
+  def update
+    p = CiProject.find(params[:id])
+    p.update_attributes(params[:project])
+    redirect_to "/ci_projects/index"
+  end
 end

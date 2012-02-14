@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20120213142709) do
     t.date     "airbus_validation_date"
     t.date     "deployment_date"
     t.date     "deployment_date_review"
+    t.integer  "strategic",                        :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

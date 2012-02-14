@@ -4,7 +4,9 @@
 	<td><%= p.status %></td>
 	<td><%= p.visibility %></td>
 	<td><%= p.assigned_to %></td>
+	<td><% if p.strategic==1 %><%=image_tag('danger.gif')%><%end%></td>
 	<td><%= p.summary %></td>
 	<td><b><%= p.short_stage %></b></td>
 	<td><b><%= p.validation_date_objective %></b></td>
+	<td><%= link_to(image_tag('edit.gif'), :action=>"edit", :id=>p.id)%></td>
 </tr>

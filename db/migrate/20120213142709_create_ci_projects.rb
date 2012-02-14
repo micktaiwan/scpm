@@ -36,6 +36,7 @@ class CreateCiProjects < ActiveRecord::Migration
       t.date :airbus_validation_date
       t.date :deployment_date
       t.date :deployment_date_review
+      t.integer :strategic, :default=>0
       t.timestamps
     end
   end
