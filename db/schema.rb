@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(:version => 20120213142709) do
     t.date     "validation_date_objective"
     t.date     "airbus_validation_date_objective"
     t.date     "deployment_date_objective"
-    t.date     "sali_validation_date"
+    t.date     "sqli_validation_date"
     t.date     "airbus_validation_date"
     t.date     "deployment_date"
     t.date     "deployment_date_review"

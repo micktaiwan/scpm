@@ -33,7 +33,7 @@ class CsvCi
     :validation_date_objective,
     :airbus_validation_date_objective,
     :deployment_date_objective,
-    :sali_validation_date,
+    :sqli_validation_date,
     :airbus_validation_date,
     :deployment_date,
     :deployment_date_review
@@ -59,9 +59,9 @@ class CsvCiReport
   attr_reader :projects
 
   def initialize(path)
-    @path = path
+    @path     = path
     @projects = []
-    @columns = Hash.new
+    @columns  = Hash.new
   end
 
   def parse
@@ -93,6 +93,9 @@ private
   def sanitize_value(value)
     return nil if !value
     value.gsub!("\"","'")
+    if value =~ /(\d\d)\/(\d\d)\/(\d\d\d\d)/
+      value = "#{$2}/#{$1}/#{$3}"
+    end
     value
   end
 
@@ -105,7 +108,7 @@ private
     name.gsub!("-","_")
     name.gsub!(".","")
     name.gsub!(/\d\d\_/,"")
-    name.gsub!(/\_\d\d/ ,"")
+    #name.gsub!(/\_\d\d/ ,"")
     name = "internal_id" if name == "internal"
     name = "external_id" if name == "id"
     name
