@@ -28,8 +28,8 @@
 <div id="title">Improve</div>
 <div id="bandeau">
 <% b = get_bandeau; if b %>
-<div class="text"><%= b.text %></div>
-<div class="person"><%= b.person.name %></div>
+  <div class="text"><%= b.text %></div>
+  <div class="person"><%= b.person.name %></div>
 <% end %>
 <div class="link">
   <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
@@ -37,24 +37,17 @@
 </div>
 </div>
 
-<div id="menu_bar">
-<% if current_user.has_role?('Admin') %>
-<!--
-<%= link_to('Workload', {:controller=>'workloads', :action=>'index'}, {:class=>menu_style('workloads','index')}) %>
-<%= link_to('Consolidation', {:controller=>'workloads', :action=>'consolidation'}, {:class=>menu_style('workloads', 'consolidation')}) %>
-<%= link_to('Holidays', {:controller=>'holidays', :action=>'index'}, {:class=>menu_style('holidays','*')}) %>
--->
-<% end %>
-<b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
-</div>
-
+  <div id="menu_bar">
+    <%= link_to('Projects', {:controller=>'ci_projects', :action=>'index'}, {:class=>menu_style('ci_projects','index')}) %>
+    <%= link_to('Late', {:controller=>'ci_projects', :action=>'late'}, {:class=>menu_style('ci_projects', 'late')}) %>
+  <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
+  </div>
 </div>
 
 <div id="content">
-<%= yield %>
+  <%= yield %>
 </div>
 
 <%= render :file => 'layouts/footer.erb' %>
 </body>
 </html>
-

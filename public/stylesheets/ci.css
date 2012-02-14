@@ -1,7 +1,7 @@
 div#banner {
   background: #C090C0;
   border-bottom: 1px solid #000;
-}
+  }
 
 #title {
   color: #707;
@@ -15,17 +15,17 @@ div#banner {
   }
 
 .menu.active {
-  background: #F80;
+  background: #F8F;
   }
 
 .menu.active:hover {
-  background: #F80;
-  box-shadow: inset 4px 4px 4px #F90;
-  -moz-box-shadow: inset 4px 4px 4px #F90;
-  -webkit-box-shadow: inset 4px 4px 4px #F90;
+  background: #F8F;
+  box-shadow: inset 4px 4px 4px #F6F;
+  -moz-box-shadow: inset 4px 4px 4px #F6F;
+  -webkit-box-shadow: inset 4px 4px 4px #F6F;
   }
 
 h2 {
   background: #FDF;
   border: 1px solid #005;
-}
+  }
