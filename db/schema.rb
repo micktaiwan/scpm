@@ -436,14 +436,14 @@ ActiveRecord::Schema.define(:version => 20120215205506) do
   end
 
   create_table "sdp_import_logs", :force => true do |t|
-    t.float    "sdp_initial_balance"
-    t.float    "sdp_real_balance"
-    t.float    "sdp_real_balance_and_provisions"
-    t.float    "operational_total_minus_om"
-    t.float    "not_included_remaining"
-    t.float    "provisions"
-    t.float    "sold"
-    t.float    "remaining_time"
+    t.decimal  "sdp_initial_balance",             :precision => 10, :scale => 3
+    t.decimal  "sdp_real_balance",                :precision => 10, :scale => 3
+    t.decimal  "sdp_real_balance_and_provisions", :precision => 10, :scale => 3
+    t.decimal  "operational_total_minus_om",      :precision => 10, :scale => 3
+    t.decimal  "not_included_remaining",          :precision => 10, :scale => 3
+    t.decimal  "provisions",                      :precision => 10, :scale => 3
+    t.decimal  "sold",                            :precision => 10, :scale => 3
+    t.decimal  "remaining_time",                  :precision => 10, :scale => 3
     t.datetime "created_at"
     t.datetime "updated_at"
   end
