@@ -86,13 +86,14 @@ class ToolsController < ApplicationController
     Mailer::deliver_mail("mfaivremacon@sqli.com,vmudry@sqli.com","[EISQ] SDP update","<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
     sdp_index_prepare
     SdpImportLog.create(
-        :sdp_initial_balance=>@sdp_initial_balance,
-        :sdp_real_balance=>@real_balance,
-        :sdp_real_balance_and_provisions=>@real_balance_and_provisions,
-        :operational_total_minus_om=>@operational_total-@operational2011_10percent,
-        :not_included_remaining=>@not_included_remaining,
-        :sold=>@sold,
-        :remaining_time=>@remaining_time
+        :sdp_initial_balance             =>@sdp_initial_balance,
+        :sdp_real_balance                =>@real_balance,
+        :sdp_real_balance_and_provisions =>@real_balance_and_provisions,
+        :operational_total_minus_om      =>@operational_total-@operational2011_10percent,
+        :not_included_remaining          =>@not_included_remaining,
+        :provisions                      =>@provisions_remaining_should_be,
+        :sold                            =>@sold,
+        :remaining_time                  =>@remaining_time
         )
     redirect_to '/tools/sdp_index'
   end
@@ -164,8 +165,24 @@ class ToolsController < ApplicationController
     end
   end
 
+  def history_comparison
+    logs = SdpImportLog.find(:all, :limit=>2, :order=>"id desc")
+    return if logs.size < 2
+    now  = logs[0]
+    last = logs[1]
+    @sdp_initial_balance_diff         = now.sdp_initial_balance - last.sdp_initial_balance
+    @real_balance_and_provisions_diff = now.sdp_real_balance_and_provisions - last.sdp_real_balance_and_provisions
+    @theorical_diff                   = (now.sdp_real_balance - now.sdp_initial_balance) - (last.sdp_real_balance - last.sdp_initial_balance)
+    @provisions_diff                  = now.provisions - last.provisions
+    @remaining_time_diff              = now.remaining_time - last.remaining_time
+    @operational_diff                 = now.operational_total_minus_om - last.operational_total_minus_om
+    @not_included_remaining_diff      = now.not_included_remaining - last.not_included_remaining
+    @sold_diff                        = now.sold - last.sold
+  end
+
   def sdp_index
     sdp_index_prepare
+    history_comparison
   end
 
   def sdp_yes_check

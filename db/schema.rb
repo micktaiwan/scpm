@@ -441,6 +441,7 @@ ActiveRecord::Schema.define(:version => 20120215205506) do
     t.float    "sdp_real_balance_and_provisions"
     t.float    "operational_total_minus_om"
     t.float    "not_included_remaining"
+    t.float    "provisions"
     t.float    "sold"
     t.float    "remaining_time"
     t.datetime "created_at"
