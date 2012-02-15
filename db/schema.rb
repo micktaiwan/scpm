@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120213142709) do
+ActiveRecord::Schema.define(:version => 20120215205506) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -431,6 +431,18 @@ ActiveRecord::Schema.define(:version => 20120213142709) do
     t.float    "balancei"
     t.float    "balancer"
     t.float    "balancea"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sdp_import_logs", :force => true do |t|
+    t.float    "sdp_initial_balance"
+    t.float    "sdp_real_balance"
+    t.float    "sdp_real_balance_and_provisions"
+    t.float    "operational_total_minus_om"
+    t.float    "not_included_remaining"
+    t.float    "sold"
+    t.float    "remaining_time"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
