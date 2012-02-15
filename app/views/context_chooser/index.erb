@@ -22,10 +22,7 @@
     </div>
 
     <div onclick="location='/workloads'"        class="big_button workload">Plan</div>
-<% if current_user.has_role?('Super') %>
     <div onclick="location='/ci_projects'"        class="big_button ci">Improve</div>
-<% end %>
-
     <div onclick="location='/tools/sdp_index'"  class="big_button tools"
       onmouseover="$('manage_sub').appear({duration:0.3});">
       <div class="btitle">Manage</div>
