@@ -352,19 +352,20 @@ private
   end
 
   def calculate_provision(p, total, operational2011_10percent)
+    factor = 1 # devrait etre 1.25
     case p.title
       when 'Project Management'
-        p.difference = round_to_hour(total * 0.09)-p.initial  + PM_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total*factor*0.09)-p.initial + PM_PROVISION_ADJUSTMENT
       when 'Risks'
-        p.difference = round_to_hour(total * 0.04)-p.initial  + RK_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total*factor*0.04)-p.initial + RK_PROVISION_ADJUSTMENT
       when 'Operational Management'
-        p.difference = operational2011_10percent - p.initial  + OP_PROVISION_ADJUSTMENT
+        p.difference = operational2011_10percent - p.initial    + OP_PROVISION_ADJUSTMENT
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total * 0.02) - p.initial+ QA_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total*factor*0.02) - p.initial+ QA_PROVISION_ADJUSTMENT
       when 'Continuous Improvement'
-        p.difference = round_to_hour(total * 0.05)-p.initial  + CI_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total*factor*0.05)-p.initial  + CI_PROVISION_ADJUSTMENT
       else
         p.difference = 0
     end
