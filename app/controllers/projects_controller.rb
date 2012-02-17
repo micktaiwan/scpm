@@ -33,6 +33,13 @@ class ProjectsController < ApplicationController
       @inconsistencies      = []
       @checklist_milestones = []
     end
+    f = session[:project_filter_qr]
+    if f and f.size == 1
+      filtered_person = Person.find(f[0].to_i) || current_user
+      @ci = CiProject.find(:all, :conditions=>["assigned_to=?", filtered_person.rmt_user], :order=>"validation_date_objective desc")
+    else
+      @ci = []
+    end
   end
 
   def sort_projects

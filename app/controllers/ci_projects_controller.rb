@@ -4,11 +4,11 @@ class CiProjectsController < ApplicationController
 	layout 'ci'
 
 	def index
-			@projects = CiProject.find(:all).sort_by {|p| [p.order, p.assigned_to]}
+  	@projects = CiProject.find(:all).sort_by {|p| [p.order, p.assigned_to]}
 	end
 
   def late
-      @projects = CiProject.find(:all, :conditions=>"status='New' or status='Accepted' or status='Assigned' or status='Comment'", :order=>"validation_date_objective desc")
+    @projects = CiProject.find(:all, :conditions=>"status='New' or status='Accepted' or status='Assigned' or status='Comment'", :order=>"validation_date_objective desc")
   end
 
 
