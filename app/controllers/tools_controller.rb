@@ -83,7 +83,6 @@ class ToolsController < ApplicationController
     sdp.import
     sdp_index_prepare
     body = render_to_string(:action=>'sdp_index', :layout=>false)
-    Mailer::deliver_mail("mfaivremacon@sqli.com,vmudry@sqli.com","[EISQ] SDP update","<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
     sdp_index_prepare
     SdpImportLog.create(
         :sdp_initial_balance             =>@sdp_initial_balance,
@@ -95,6 +94,8 @@ class ToolsController < ApplicationController
         :sold                            =>@sold,
         :remaining_time                  =>@remaining_time
         )
+    history_comparison        
+    Mailer::deliver_mail("mfaivremacon@sqli.com,vmudry@sqli.com","[EISQ] SDP update","<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
     redirect_to '/tools/sdp_index'
   end
 
