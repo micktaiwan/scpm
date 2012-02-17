@@ -119,9 +119,10 @@ class ToolsController < ApplicationController
       @theorical_management              = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH)*@remaining_time)
       montee                             = default_to_zero { SDPActivity.find_by_title('Montee en competences').remaining }
       souscharges                        = default_to_zero { SDPActivity.find_by_title('Sous charges').remaining }
+      incidents                          = default_to_zero { SDPActivity.find_by_title('Incidents').remaining }
       init                               = default_to_zero { SDPActivity.find_by_title('Initialization').remaining }
       bmc_avv                            = default_to_zero { SDPActivity.find_by_title('AVV BMC and other').remaining }
-      @remaining_management              = default_to_zero { SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init+bmc_avv) }
+      @remaining_management              = default_to_zero { SDPPhase.find_by_title('Bundle Management').remaining - (montee+souscharges+init+bmc_avv+incidents) }
       @ci_remaining                      = default_to_zero { SDPPhase.find_by_title('Continuous Improvement').remaining }
       @qa_remaining                      = default_to_zero { SDPPhase.find_by_title('Quality Assurance').remaining }
       @error                             = ""
@@ -353,7 +354,7 @@ private
   end
 
   def calculate_provision(p, total, operational2011_10percent)
-    factor = 1 # devrait etre 1.25
+    factor = 1.25 # 20% of PM (reciprocal)
     case p.title
       when 'Project Management'
         p.difference = round_to_hour(total*factor*0.09)-p.initial + PM_PROVISION_ADJUSTMENT
