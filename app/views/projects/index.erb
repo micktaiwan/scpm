@@ -1,18 +1,18 @@
 <h2>Projects</h2>
 <% if current_user.has_role?('Admin') %>
-  <%= link_to('New', {:action=>'new'},{:class=>"btnlnk"}) %>
+  <%= link_to('New',    {:action=>'new'},{:class=>"btnlnk"}) %>
   <%= link_to('Import', {:action=>'import'},{:class=>"btnlnk"}) %>
-  <%= link_to('Check', {:action=>'check'},{:class=>"btnlnk"}) %>
+  <%= link_to('Check',  {:action=>'check'},{:class=>"btnlnk"}) %>
 <% end %>
-<%= link_to('Report', {:action=>'report'},{:class=>"btnlnk"}) %>
-<%= link_to('Summary', {:action=>'summary'},{:class=>"btnlnk"}) %>
+<%= link_to('Report',       {:action=>'report'},{:class=>"btnlnk"}) %>
+<%= link_to('Summary',      {:action=>'summary'},{:class=>"btnlnk"}) %>
 <%= link_to('WS Reporting', {:action=>'ws_reporting'},{:class=>"btnlnk"}) %>
 <%= link_to('Request changes', {:action=>'week_changes'}, {:class=>'btnlnk'}) %>
 
 <div class="stats">
-Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
-<b>Filter</b>: <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status.<br/>
-<b>Total</b>: <%= @total_wps %> WPs, <%= @total_status %> statuses.
+  Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
+  <b>Filter</b>: <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status.<br/>
+  <b>Total</b>: <%= @total_wps %> WPs, <%= @total_status %> statuses.
 </div>
 
 <%= link_to_function('filters', "Effect.toggle('filters','blind');",{:class=>"btnlnk"}) %>
@@ -20,34 +20,34 @@ Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>
 <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
 <% form_tag(:action=>'filter') do %>
 <table>
-<tr valign="top"><td>
-<b>Status</b><br/>
-<%= check_box_tag('st[]', 0) %> unknown<br/>
-<%= check_box_tag('st[]', 1) %> green<br/>
-<%= check_box_tag('st[]', 2) %> amber<br/>
-<%= check_box_tag('st[]', 3) %> red<br/>
-</td><td>
-<b>Workstreams</b><br/>
-<% for workstream in @workstreams %>
-  <%= check_box_tag('ws[]',workstream) %> <%= workstream %><br/>
-<% end %>
-</td><td>
-<b>Supervisors</b><br/>
-<% for s in @supervisors %>
-  <%= check_box_tag('sup[]',s.id) %> <%= s.name %><br/>
-<% end %>
-</td><td>
-<b>QR</b><br/>
-<% for s in @qr %>
-  <%= check_box_tag('qr[]',s.id) %> <%= s.name %><br/>
-<% end %>
-</td></tr>
-<tr>
-<td colspan=4>
-Text: <%= text_field_tag('text') %> precedence on other filters<br/>
-Searches project title and description, statuses, request summary and PM names
-</td>
-</tr>
+  <tr valign="top"><td>
+  <b>Status</b><br/>
+  <%= check_box_tag('st[]', 0) %> unknown<br/>
+  <%= check_box_tag('st[]', 1) %> green<br/>
+  <%= check_box_tag('st[]', 2) %> amber<br/>
+  <%= check_box_tag('st[]', 3) %> red<br/>
+  </td><td>
+  <b>Workstreams</b><br/>
+  <% for workstream in @workstreams %>
+    <%= check_box_tag('ws[]',workstream) %> <%= workstream %><br/>
+  <% end %>
+  </td><td>
+  <b>Supervisors</b><br/>
+  <% for s in @supervisors %>
+    <%= check_box_tag('sup[]',s.id) %> <%= s.name %><br/>
+  <% end %>
+  </td><td>
+  <b>QR</b><br/>
+  <% for s in @qr %>
+    <%= check_box_tag('qr[]',s.id) %> <%= s.name %><br/>
+  <% end %>
+  </td></tr>
+  <tr>
+  <td colspan=4>
+  Text: <%= text_field_tag('text') %> precedence on other filters<br/>
+  Searches project title and description, statuses, request summary and PM names
+  </td>
+  </tr>
 </table>
 <%= submit_tag('Filter') %>
 <% end %>
@@ -134,3 +134,4 @@ Searches project title and description, statuses, request summary and PM names
   </div><!--End of tabscontent-->
 </div><!--End of tabs-->
 
+render time: <%= Time.now - @time %>

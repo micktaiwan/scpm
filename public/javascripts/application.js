@@ -68,6 +68,7 @@ function change_context() {
       if(value=='reporting') location = '/projects';
       if(value=='workloads') location = '/workloads';
       if(value=='tools')     location = '/tools/sdp_index';
+      if(value=='ci_projects')  location = '/ci_projects';
       if(value=='logout')    location = '/sessions/logout';
       }
     });

@@ -5,21 +5,22 @@ class ProjectsController < ApplicationController
   before_filter :require_login
 
   def index
+    @time = Time.now
     get_projects
     sort_projects
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
-    @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
-    @qr           = Person.find(:all, :conditions=>"is_transverse=0 and is_supervisor=0 and has_left=0", :order=>"name asc")
-    @workstreams  = ['EA','EI','EV','EDC','EDE','EDG','EDS','EDY','EM','EMNB','EMNC','EZMB','EZMC']
+    @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
+    @qr          = Person.find(:all, :conditions=>"is_transverse=0 and is_supervisor=0 and has_left=0", :order=>"name asc")
+    @workstreams = ['EA','EI','EV','EDC','EDE','EDG','EDS','EDY','EM','EMNB','EMNC','EZMB','EZMC']
     #Project.all.collect{|p| p.workstream}.uniq.sort
 
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
     @total_wps    = Project.count
     @total_status = Status.count
     if @wps.size > 0
-      @amendments   = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
-      @risks        = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
-      @inconsistencies = @wps.select{|wp| !wp.is_consistent_with_risks}
+      @amendments           = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
+      @risks                = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
+      @inconsistencies      = @wps.select{|wp| !wp.is_consistent_with_risks}
       @checklist_milestones = @wps.map{|p| p.milestones}.flatten.select{ |m|
         m.done == 1 and
         m.checklist_items.select{ |i|
@@ -60,8 +61,8 @@ class ProjectsController < ApplicationController
   end
   
   def new
-    @project = Project.new(:project_id=>nil, :name=>'')
-    @supervisors  = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+    @project     = Project.new(:project_id=>nil, :name=>'')
+    @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
   end
 
   def create
@@ -550,7 +551,7 @@ private
   def get_projects
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
-      @wps = @projects #.select {|wp| wp.has_status and wp.has_requests }
+      @wps      = @projects #.select {|wp| wp.has_status and wp.has_requests }
       return
     end
     cond = []

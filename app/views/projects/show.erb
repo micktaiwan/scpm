@@ -35,7 +35,7 @@ function add(id, same_week, has_requests) {
         "Risks <strong>#{@project.risks.size}</strong>",
         "Amendments <strong>#{@project.current_amendments.size}</strong>",
         "Actions <strong>#{@project.current_actions.size}</strong>",
-        "Notes <strong>#{@project.visible_notes(current_user.id).size}</strong>",
+        "Notes/Capi <strong>#{@project.visible_notes(current_user.id).size}</strong>",
         "Information"        
         ]) %>
     </ol>
