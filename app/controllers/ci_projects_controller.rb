@@ -8,7 +8,9 @@ class CiProjectsController < ApplicationController
 	end
 
   def late
-    @projects = CiProject.find(:all, :conditions=>"status='New' or status='Accepted' or status='Assigned' or status='Comment'", :order=>"validation_date_objective desc")
+    @toassign = CiProject.find(:all, :conditions=>"assigned_to='' and status!='Closed' and status!='Delivered' and status!='Rejected'", :order=>"validation_date_objective desc")
+    @sqli     = CiProject.find(:all, :conditions=>"status='Accepted' or status='Assigned'", :order=>"validation_date_objective desc")
+    @airbus   = CiProject.find(:all, :conditions=>"status='Verified'", :order=>"validation_date_objective desc")
   end
 
 

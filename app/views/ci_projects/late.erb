@@ -1,4 +1,14 @@
-<h2>Late projects</h2>
+<h2>SQLI</h2>
 <%= render(:file=>'ci_projects/ci_header') %>
-	<%= render(:partial=>"ci_project", :collection=>@projects, :as=>:p) %>
+	<%= render(:partial=>"ci_project", :collection=>@sqli, :as=>:p) %>
+</table>
+
+<h2>To assign</h2>
+<%= render(:file=>'ci_projects/ci_header') %>
+	<%= render(:partial=>"ci_project", :collection=>@toassign, :as=>:p) %>
+</table>
+
+<h2>Airbus</h2>
+<%= render(:file=>'ci_projects/ci_header') %>
+	<%= render(:partial=>"ci_project", :collection=>@airbus, :as=>:p) %>
 </table>
