@@ -17,6 +17,8 @@ class CiProject < ActiveRecord::Base
 			return "ci_project cancelled"
 		elsif self.status == "Verified"
 			return "ci_project to_be_validated"
+		elsif self.status == "Validated"
+			return "ci_project validated"
 		end
 		""
 	end
@@ -47,10 +49,14 @@ class CiProject < ActiveRecord::Base
 			40
 		when "Verified"
 			50
+		when "Validated"
+			80
 		when "Delivered"
 			90
 		when "Rejected"
 			110
+		else	
+			0
 		end
 	end
 

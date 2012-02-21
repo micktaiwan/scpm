@@ -269,6 +269,9 @@ strong {
 .performed   {
   background: #AFA;
   }
+.validated   {
+  background: #6F6;
+  }
 
 
 .status {

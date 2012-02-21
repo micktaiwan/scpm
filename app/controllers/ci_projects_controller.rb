@@ -4,7 +4,7 @@ class CiProjectsController < ApplicationController
 	layout 'ci'
 
 	def index
-  	@projects = CiProject.find(:all).sort_by {|p| p.order}
+  	@projects = CiProject.find(:all).sort_by {|p| [p.order, p.assigned_to]}
 	end
 
   def late
