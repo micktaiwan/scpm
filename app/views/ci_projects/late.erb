@@ -8,6 +8,12 @@
 	<%= render(:partial=>"ci_project", :collection=>@toassign, :as=>:p) %>
 </table>
 
+<h2>To deploy</h2>
+<%= render(:file=>'ci_projects/ci_header') %>
+	<%= render(:partial=>"ci_project", :collection=>@todeploy, :as=>:p) %>
+</table>
+
+
 <h2>Airbus</h2>
 <%= render(:file=>'ci_projects/ci_header') %>
 	<%= render(:partial=>"ci_project", :collection=>@airbus, :as=>:p) %>
