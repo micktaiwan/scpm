@@ -24,7 +24,8 @@ function wl_save_value(line_id, wlweek) {
 function wl_edit(line_id) {
   new Ajax.Request('/workloads/display_edit_line?l='+line_id, {
     asynchronous:true,
-    evalScripts:true
+    evalScripts:true,
+    onComplete: function(r) {new Draggable($('edit_line'));}
     });
 }
 

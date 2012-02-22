@@ -34,28 +34,27 @@
 <%#= render :file => 'chat/main' %>
 
 <div id="banner">
-<%= render :file => 'layouts/context_select' %>
-<div id="title">Workloads</div>
-<div id="bandeau">
-<% b = get_bandeau; if b %>
-<div class="text"><%= b.text %></div>
-<div class="person"><%= b.person.name %></div>
-<% end %>
-<div class="link">
-  <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
-  <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
-</div>
-</div>
+  <%= render :file => 'layouts/context_select' %>
+  <div id="title">Workloads</div>
+  <div id="bandeau">
+  <% b = get_bandeau; if b %>
+  <div class="text"><%= b.text %></div>
+  <div class="person"><%= b.person.name %></div>
+  <% end %>
+  <div class="link">
+    <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+    <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
+  </div>
+  </div>
 
-<div id="menu_bar">
-<% if current_user.has_role?('Admin') %>
-<%= link_to('Workload', {:controller=>'workloads', :action=>'index'}, {:class=>menu_style('workloads','index')}) %>
-<%= link_to('Consolidation', {:controller=>'workloads', :action=>'consolidation'}, {:class=>menu_style('workloads', 'consolidation')}) %>
-<%= link_to('Holidays', {:controller=>'holidays', :action=>'index'}, {:class=>menu_style('holidays','*')}) %>
-<% end %>
-<b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
-</div>
-
+  <div id="menu_bar">
+  <% if current_user.has_role?('Admin') %>
+  <%= link_to('Workload', {:controller=>'workloads', :action=>'index'}, {:class=>menu_style('workloads','index')}) %>
+  <%= link_to('Consolidation', {:controller=>'workloads', :action=>'consolidation'}, {:class=>menu_style('workloads', 'consolidation')}) %>
+  <%= link_to('Holidays', {:controller=>'holidays', :action=>'index'}, {:class=>menu_style('holidays','*')}) %>
+  <% end %>
+  <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
+  </div>
 </div>
 
 <div id="content">
