@@ -23,6 +23,15 @@ class CiProject < ActiveRecord::Base
 		""
 	end
 
+	def is_late_css
+		if self.validation_date_objective and (self.status=="Accepted" or self.status=="Assigned") and self.validation_date_objective <= Date.today()
+			return "ci_late_report"
+		elsif  self.airbus_validation_date_objective and self.status=="Verified" and self.airbus_validation_date_objective <= Date.today()
+			return "ci_late_report"
+		end
+		""		
+	end
+
 	def short_stage
 		return case self.stage
 		when 'Continuous Improvement' 

@@ -36,7 +36,8 @@ class CsvCi
     :sqli_validation_date,
     :airbus_validation_date,
     :deployment_date,
-    :deployment_date_review
+    :deployment_date_review,
+    :airbus_responsible
 
   def initialize
   end

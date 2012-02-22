@@ -1,3 +1,7 @@
+Hello,<br/>
+<br/>
+This is the current status (<%=my_date(Date.today)%>) of our mutual actions on Continuous Improvement projects.<br/>
+<br/>
 <b>SQLI actions</b> (projects in progress)<br/>
 <%= render(:file=>'ci_projects/ci_header_report') %>
 	<%= render(:partial=>"ci_project_report_sqli", :collection=>@sqli, :as=>:p) %>

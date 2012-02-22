@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120215205506) do
+ActiveRecord::Schema.define(:version => 20120222200600) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(:version => 20120215205506) do
     t.integer  "strategic",                        :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "airbus_responsible"
   end
 
   create_table "companies", :force => true do |t|

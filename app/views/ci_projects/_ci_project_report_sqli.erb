@@ -1,7 +1,7 @@
-<tr>
-	<td align="right"><b><%=link_to(p.external_id, "https://sqli.steering-project.com/mantis/view.php?id=#{p.internal_id}")%></b></td>
-	<td><%= p.status %></td>
-	<td><%= p.assigned_to %></td>
+<tr class="<%=p.is_late_css%>">
+	<td align="right"><%= p.external_id %></td>
+	<td><%= p.airbus_responsible %></td>
+	<td><%= p.assigned_to %> <%= "(#{p.status})" if p.status=="Accepted"%></td>
 	<td><%= p.summary %></td>
 	<td><b><%= p.validation_date_objective %></b></td>
 </tr>
