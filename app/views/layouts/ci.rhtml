@@ -38,8 +38,9 @@
 </div>
 
   <div id="menu_bar">
-    <%= link_to('Projects', {:controller=>'ci_projects', :action=>'index'}, {:class=>menu_style('ci_projects','index')}) %>
-    <%= link_to('Late', {:controller=>'ci_projects', :action=>'late'}, {:class=>menu_style('ci_projects', 'late')}) %>
+    <%= link_to('Projects', {:controller=>'ci_projects', :action=>'index'}, {:class=>menu_style('ci_projects','index')  }) %>
+    <%= link_to('Late',     {:controller=>'ci_projects', :action=>'late'},  {:class=>menu_style('ci_projects', 'late')  }) %>
+    <%= link_to('Report',   {:controller=>'ci_projects', :action=>'report'},{:class=>menu_style('ci_projects', 'report')}) %>
   <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
   </div>
 </div>
