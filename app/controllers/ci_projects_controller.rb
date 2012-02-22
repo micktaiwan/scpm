@@ -14,6 +14,10 @@ class CiProjectsController < ApplicationController
     @airbus   = CiProject.find(:all, :conditions=>"status='Verified'", :order=>"validation_date_objective desc")
   end
 
+  def report
+    @sqli     = CiProject.find(:all, :conditions=>"visibility='Public' and (status='Accepted' or status='Assigned')", :order=>"validation_date_objective")
+    @airbus   = CiProject.find(:all, :conditions=>"visibility='Public' and (status='Verified')", :order=>"airbus_validation_date_objective")
+  end
 
   def do_upload
     post = params[:upload]

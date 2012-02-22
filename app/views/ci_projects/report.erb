@@ -1,0 +1,9 @@
+<h2>SQLI actions</h2>
+<%= render(:file=>'ci_projects/ci_header_report') %>
+	<%= render(:partial=>"ci_project_report_sqli", :collection=>@sqli, :as=>:p) %>
+</table>
+
+<h2>Airbus actions</h2>
+<%= render(:file=>'ci_projects/ci_header_report') %>
+	<%= render(:partial=>"ci_project_report", :collection=>@airbus, :as=>:p) %>
+</table>
