@@ -1,7 +1,6 @@
-<tr class="<%= p.css_class %>">
+<tr>
 	<td align="right"><b><%=link_to(p.external_id, "https://sqli.steering-project.com/mantis/view.php?id=#{p.internal_id}")%></b></td>
 	<td><%= p.status %></td>
-	<td><%= p.visibility %></td>
 	<td><%= p.assigned_to %></td>
 	<td><%= p.summary %></td>
 	<td><b><%= p.validation_date_objective %></b></td>
