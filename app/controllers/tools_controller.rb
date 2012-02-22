@@ -8,7 +8,7 @@ class ToolsController < ApplicationController
   NB_FTE 					            = 19.5  # TODO: should be automatically calculated from workloads
   NB_DAYS_PER_MONTH			      = 18
   MEETINGS_LOAD_PER_MONTH 	  = 1.5
-  PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH + NB_DAYS_PER_MONTH/1.5 # CP + DP
+  PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
   WP_LEADERS_DAYS_PER_MONTH   = 18 # 10 + 4*2
 
   PM_PROVISION_ADJUSTMENT     = 0
@@ -24,8 +24,9 @@ class ToolsController < ApplicationController
     @xml = Builder::XmlMarkup.new(:indent => 1)
     @stats = []
     # global stats
-    @workpackages = Request.find(:all, :conditions=>"status !='cancelled' and status != 'to be validated'").map{|r| r.project_name + " / " + get_workpackage_name_from_summary(r.summary, 'No WP')}.uniq.sort
-    @projects     = Request.find(:all, :conditions=>"status !='cancelled' and status != 'to be validated'").map{|r| r.project_name}.uniq.sort
+    tmp_projects  = Request.find(:all, :conditions=>"status !='cancelled' and status != 'to be validated'")
+    @workpackages = tmp_projects.map{|r| r.project_name + " / " + get_workpackage_name_from_summary(r.summary, 'No WP')}.uniq.sort
+    @projects     = tmp_projects.map{|r| r.project_name}.uniq.sort
     begin
       month_loop(5,2010) { |d|
         requests = Request.find(:all, :conditions=>"date_submitted <= '#{d.to_s}' and status!='to be validated' and status!='cancelled'")
