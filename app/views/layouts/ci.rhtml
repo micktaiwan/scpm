@@ -24,21 +24,22 @@
 <%#= render :file => 'chat/main' %>
 
 <div id="banner">
-<%= render :file => 'layouts/context_select' %>
-<div id="title">Improve</div>
-<div id="bandeau">
-<% b = get_bandeau; if b %>
-  <div class="text"><%= b.text %></div>
-  <div class="person"><%= b.person.name %></div>
-<% end %>
-<div class="link">
-  <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
-  <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
-</div>
-</div>
+  <%= render :file => 'layouts/context_select' %>
+  <div id="title">Improve</div>
+  <div id="bandeau">
+    <% b = get_bandeau; if b %>
+      <div class="text"><%= b.text %></div>
+      <div class="person"><%= b.person.name %></div>
+    <% end %>
+    <div class="link">
+      <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+      <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
+    </div>
+  </div>
 
   <div id="menu_bar">
-    <%= link_to('Projects', {:controller=>'ci_projects', :action=>'index'}, {:class=>menu_style('ci_projects','index')  }) %>
+    <%= link_to('Mine', {:controller=>'ci_projects', :action=>'mine'}, {:class=>menu_style('ci_projects','mine')  }) %>
+    <%= link_to('All', {:controller=>'ci_projects', :action=>'all'}, {:class=>menu_style('ci_projects','all')  }) %>
     <%= link_to('Late',     {:controller=>'ci_projects', :action=>'late'},  {:class=>menu_style('ci_projects', 'late')  }) %>
     <%= link_to('Report',   {:controller=>'ci_projects', :action=>'report'},{:class=>menu_style('ci_projects', 'report')}) %>
   <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>

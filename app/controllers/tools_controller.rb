@@ -347,6 +347,17 @@ class ToolsController < ApplicationController
     @next_milestones = (Milestone.find(:all) + Request.all).select{|m| m.date and m.date >= Date.today()-2.days and m.date <= Date.today()+2.months}.sort_by{|m| m.date ? m.date : Date.today()}
   end
 
+  def project_list
+    @projects = Project.find(:all).select{|p| p.has_requests}.sort_by {|p|
+      u = p.get_status.updated_at
+      if !u
+        Time.parse("2000/01/01")
+      else
+        u
+      end
+      }.reverse
+  end
+
 private
 
   def round_to_hour(f)

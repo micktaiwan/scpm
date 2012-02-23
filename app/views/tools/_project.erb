@@ -1,0 +1,13 @@
+<% status = p.get_status %>
+<tr>
+  <td><%= status.updated_at.to_formatted_s(:short) if status.updated_at%></td>
+  <td><%= link_to(p.name[0..30], :controller=>'projects', :action=>'show', :id=>p.id) %></td>
+  <td><%= p.workstream %></td>
+  <td>
+    <%= html_status(status.status) %>
+  </td>
+  <td width="600">
+    <%= my_simple_format(status.reason) %>
+  </td>
+</tr>
+

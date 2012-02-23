@@ -4,8 +4,16 @@ class CiProjectsController < ApplicationController
 	layout 'ci'
 
 	def index
-  	@projects = CiProject.find(:all).sort_by {|p| [p.order, p.assigned_to]}
+  	redirect_to :action=>:mine
 	end
+
+  def mine
+    @projects = CiProject.find(:all, :conditions=>["assigned_to=?", current_user.rmt_user]).sort_by {|p| [p.order]}
+  end
+
+  def all
+    @projects = CiProject.find(:all).sort_by {|p| [p.order, p.assigned_to]}
+  end
 
   def late
     @toassign = CiProject.find(:all, :conditions=>"assigned_to='' and status!='Closed' and status!='Delivered' and status!='Rejected'", :order=>"validation_date_objective desc")

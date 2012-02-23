@@ -1,0 +1,4 @@
+<h2>My projects</h2>
+<%= render(:file=>'ci_projects/ci_header') %>
+	<%= render(:partial=>"ci_project", :collection=>@projects, :as=>:p) %>
+</table>
