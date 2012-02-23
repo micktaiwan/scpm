@@ -1,6 +1,6 @@
 Hello,<br/>
 <br/>
-This is the current status (<%=my_date(Date.today)%>) of our mutual actions on Continuous Improvement projects.<br/>
+This is the current status (<%=my_date(Date.today)%>) of our mutual actions on Continuous Improvement projects with external deployment.<br/>
 <br/>
 <b>SQLI actions</b> (projects in progress)<br/>
 <%= render(:file=>'ci_projects/ci_header_report') %>
@@ -11,3 +11,5 @@ This is the current status (<%=my_date(Date.today)%>) of our mutual actions on C
 <%= render(:file=>'ci_projects/ci_header_report') %>
 	<%= render(:partial=>"ci_project_report", :collection=>@airbus, :as=>:p) %>
 </table><br/>
+<br/>
+Kind regards,<br/>
