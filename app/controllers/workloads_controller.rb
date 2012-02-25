@@ -90,7 +90,7 @@ class WorkloadsController < ApplicationController
   end
 
   def refresh_conso
-    start = Time.now
+    @start_time = Time.now
     # find "to be validated" requests not in the workload
     already_in_the_workload = WlLine.all.select{|l| l.request and (l.request.status=='to be validated' or (l.request.status=='assigned' and l.request.resolution!='ended' and l.request.resolution!='aborted'))}.map{|l| l.request}
     @not_in_workload = (Request.find(:all,:conditions=>"status='to be validated' or (status='assigned' and resolution!='ended' and resolution!='aborted')") - already_in_the_workload).sort_by{|r| (r.project ? r.project.full_name : "")}
@@ -149,7 +149,6 @@ class WorkloadsController < ApplicationController
     #chart.enable_interactivity = true
     #chart.params[:chm] = "h,FF0000,0,-1,1"
     @chart_url = chart.to_url #({:chm=>"r,DDDDDD,0,#{100.0/max-0.01},#{100.0/max}"}) #({:enableInteractivity=>true})
-    @render_time = Time.now-start
     render :layout => false
   end
 
