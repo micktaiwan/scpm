@@ -129,6 +129,7 @@ class ProjectsController < ApplicationController
     id = params['id']
     @status = Status.find(id)
     @project = @status.project
+    get_risk_status_string
   end
 
   def update
@@ -141,6 +142,7 @@ class ProjectsController < ApplicationController
   def add_status_form
     @project = Project.find(params[:id])
     @status = Status.new
+    get_risk_status_string
     last = @project.get_status
     @status.explanation       = last.explanation
     @status.feedback          = last.feedback
@@ -587,6 +589,15 @@ private
     Project.all.select { |p|
       no_responsible(p)
       }
+  end
+
+  def get_risk_status_string
+    raise "@project must be defined" if not @project
+    @risks = "Risks:<br/>"
+    for r in @project.risks
+      @risks += "- #{r.context} => #{r.risk} (#{r.consequence})<br/>"
+    end
+    @risks
   end
 
 end
