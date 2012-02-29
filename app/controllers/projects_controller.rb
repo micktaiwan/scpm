@@ -594,7 +594,7 @@ private
   def get_risk_status_string
     raise "@project must be defined" if not @project
     @risks = "Risks:<br/>"
-    for r in @project.risks
+    for r in @project.open_quality_risks
       @risks += "- #{r.context} => #{r.risk} (#{r.consequence})<br/>"
     end
     @risks
