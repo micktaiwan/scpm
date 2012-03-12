@@ -89,7 +89,7 @@ class Request < ActiveRecord::Base
   "Difficult" => 2,
   "TBD"       => 0
   }
-
+  
   Milestone_index = {
   "M1-M3" 		=> 0,
   "M3-M5" 		=> 1,
