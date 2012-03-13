@@ -348,7 +348,10 @@ class ToolsController < ApplicationController
   end
 
   def project_list
-    @projects = Project.find(:all).select{|p| p.has_requests}.sort_by {|p|
+    # verify session filter
+    # TODO
+
+    @projects = Project.find(:all).select{ |p| p.has_requests }.sort_by { |p|
       u = p.get_status.updated_at
       if !u
         Time.parse("2000/01/01")
