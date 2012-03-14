@@ -11,6 +11,7 @@ class ProjectsController < ApplicationController
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr          = Person.find(:all, :conditions=>"is_transverse=0 and is_supervisor=0 and has_left=0", :order=>"name asc")
+    # TODO: use model "workstream"
     @workstreams = ['EE','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC']
     #Project.all.collect{|p| p.workstream}.uniq.sort
 
@@ -491,7 +492,8 @@ class ProjectsController < ApplicationController
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
 
-      @centers = ['EA', 'EI', 'EV', 'EDE', 'EDG', 'EDS', 'EDY', 'EDC', 'EM', 'EMNB', 'EMNC']
+      # TODO: use model "workstream"
+      @centers = ['EA', 'EI', 'EV', 'EE', 'EG', 'ES', 'EY', 'EZC', 'EZ', 'EZMB', 'EZMC']
       @centers = @centers.map { |c| stats_for_center(c) }
 
       @wps = @wps.select{ |w| w.get_status.status > 0}.sort_by { |w|
