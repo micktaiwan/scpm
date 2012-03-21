@@ -89,7 +89,7 @@ private
       begin
         eval("r.#{attr_name} = \"#{sanitize_value(row[index])}\"")  # r.id = row[1]
       rescue Exception => e
-        puts "Error: #{e} attr_name=#{attr_name}, value=#{sanitize_value(row[index])}"
+        raise "Error: #{e} attr_name=#{attr_name}, value=#{sanitize_value(row[index])}"
       end
       }
     @projects << r

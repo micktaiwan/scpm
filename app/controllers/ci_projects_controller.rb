@@ -12,7 +12,7 @@ class CiProjectsController < ApplicationController
   end
 
   def all
-    @projects = CiProject.find(:all).sort_by {|p| [p.order, p.assigned_to]}
+    @projects = CiProject.find(:all).sort_by {|p| [p.order||0, p.assigned_to||'']}
   end
 
   def late
