@@ -41,6 +41,16 @@ class Milestone < ActiveRecord::Base
     rv
   end
 
+  def active_requests
+    rv = []
+    self.project.active_requests.each { |r|
+      rv << r if r.milestone_names and r.milestone_names.include?(self.name)
+      }
+    rv
+  end
+
+
+
   def amendments
     self.project.amendments.select{|a| a.milestone == self.name}
   end

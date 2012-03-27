@@ -340,7 +340,18 @@ class ToolsController < ApplicationController
   end
 
   def last_projects
-    @projects = Project.find(:all, :limit=>50, :order=>"created_at desc").select{|p| p.open_requests.size > 0}
+    filter = params[:filter]
+    session["last_projects_filter"] = filter
+    case filter
+    when "m5"
+      @projects = Project.find(:all, :order=>"created_at desc").select{|p| 
+        m3 = p.find_milestone_by_name("M3")
+        m5 = p.find_milestone_by_name("M5") || p.find_milestone_by_name("M5/M7")
+        m5 and m5.done == 0 and (m5.active_requests.size > 0 or (m3 and m3.active_requests.size>0))
+        }
+    else
+      @projects = Project.find(:all, :limit=>50, :order=>"created_at desc").select{|p| p.open_requests.size > 0}
+    end
   end
 
   def next_milestones

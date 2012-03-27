@@ -579,11 +579,7 @@ class Project < ActiveRecord::Base
 
   # give a list of corresponding requests PM
   def request_pm
-    rv = []
-    requests.each { |r|
-      rv << r.pm if not rv.include?(r.pm)
-      }
-    rv
+    requests.map{|r| r.pm}.uniq
   end
 
   # give a list of corresponding requests QR

@@ -1,6 +1,15 @@
 <%= render(:file=>"tools/menu.erb") %>
 
-<h2>Last projects</h2>
+<h2>Projects</h2>
+
+<% form_tag :action=>:last_projects do %>
+<%= select_tag(:filter, options_for_select([["Last Projects", "last"], ["M5 not passed","m5"]], session["last_projects_filter"])) %>
+<%= submit_tag("filter") %>
+<%end%>
+
+<b><%=@projects.size %> projects</b><br/>
+<br/>
+PM in bold are PM from projects info, else from requests<br/>
 <table class="grid sortable">
   <tr>
   <td>Creation</td>
@@ -15,4 +24,3 @@
 
   <%= render(:partial=>'last_project', :collection=>@projects, :as=>:p) %>
 </table>
-
