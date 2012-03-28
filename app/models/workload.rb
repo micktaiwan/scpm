@@ -17,7 +17,7 @@ class Workload
     :cprodtotals,     # total days planned per week on production only {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
     :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
     :next_month_percents,         # next 5 weeks (including current)
-    :three_next_months_percents,  # next 3 months _after_ the 5 coming weeks
+    :three_next_months_percents,  # next 3 months (was _after_ the 5 coming weeks but changed later including next 5 weeks)
     :planned_total,               # total number of days planned
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
     :to_be_validated_in_wl_remaining_total # total of requests to be validated planned in workloads
@@ -81,7 +81,7 @@ class Workload
         avail   = [0,(open-col_sum)].max
         @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>(avail/open).round}
         @next_month_percents += percent if nb < 5
-        @three_next_months_percents += percent if nb >= 5 and nb < 5+12
+        @three_next_months_percents += percent if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
       iteration = iteration + 7.days

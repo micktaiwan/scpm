@@ -1,0 +1,551 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"attr",
+				"attr_name"
+			],
+			[
+				"or",
+				"order"
+			],
+			[
+				"st",
+				"status"
+			],
+			[
+				"A",
+				"Accepted"
+			],
+			[
+				"sa",
+				"sanitize_value"
+			],
+			[
+				"gsu",
+				"gsub"
+			],
+			[
+				"in",
+				"index"
+			],
+			[
+				"ci",
+				"ci_projects"
+			],
+			[
+				"depl",
+				"deployment_date"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/c/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/TODO.txt",
+			"settings":
+			{
+				"buffer_size": 452,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "•         LL\n•         Risks Management\n•         Matrice de complexité\n•         Maj des one pagers and co\n•         Mise en place du fichier Excel permettant de suivre les “futures » cdes BAT, Change, Modelling\nLL\n	Action Amine: Renvoyer le planning des LL\n	Collect: agréé par EY\n	Faire un progress par email (diffuser une newsletter)\n	Republier les éléments de la dernière réunio (Cathie les as pas vu passer)\n\nRisk Management\n	Jens Bergmann a commencé qqch (?)\n		How to mature this subject ?\n		Voir Steph\n	coté physical yaurait un chantier \"risques et opportunités management process\" (Joan est en copie, avec Palombieri)\n\nSatisfaction Survey, pb d'accès toujours ou pas ?\n\nMatrice de complexité\n	On est d'accord\n\nOne pagers QM\n	Nigris pas contente, à cause du vocabulaire \"check\"\n	Vu avec Steph, on porte pas le bon msg\n	STE: Action de revoir ça avec un oeil marketing car l'info est au début dans une slide (proactivité et pas check) mais plus ensuite\n\nAwareness\n	BAT, change, modelling\n	Dois-je en conclure qu'il faut que je remonte ces tâches transverses en priorité 1 ?\n		Cathie pose la question à Sylvie\n\nBMC\n	Fichier Excel partagé, il faut se mettre d'accord sur le format\n	Ensuite le ticket est mis dans RMT\n	Clos dans RMT\n	Et clos ensuite dans fichier Excel\n	Faire proposition de format, de quelle info on a besoin\n	Le process est disponible dans l'iShare\n\nAmine\n	PDC Amine en baisse\n	EVR Agile\n\n==================================\n\nBMC\n	Le supervisor et Fanya sont responsable de la mise à jour du fichier\n	Tenir informer Patrice des démarches. Surtout modelling.\n\n( )  Réunion Véro + Ben de lundi soir décalée\n(!)  Cathie: Intégrer les risques dans le status DW\nConstruire une réponse avec Cathie sur les checklistes GPP 4.1/4.2\n	D'abord donner la définition d'un status\n	Faire une proposition de réponse (vers qui ? ICT ? DW ? QM ?)\nQuestions des spiders à revoir (action en cours par Sophie, JP, Amine)\nPoser réunion avec supervisor pour avoir un retour sur la nouvelle organisation du lundi\n	Meeting to be planned between MFM and all the supervisors to define the structure of the reporting.  \n		Chers supervisors, je vous propose de faire un point sur la nouvelle organisation mise en place le 9 janvier sur le progress meeting supervisors du lundi.\n		Quels sont vos retours ? Qu'est-ce qui est à améliorer ?\n			Colette absente (M11)\nMaxime Cussac pour nettoyage iShare (me donner les droits pour suppression en masse)\n	Pas de solution....\nAmine: envoyer le progress meeting LL !!!\n	Fait\nJens Bergmann sur Risk Management, dernière réunion 5 janvier avec Steph\n(!)  Chantiers CI prioritaires. Risk Management (Jens), Onepagers, LL, se donner des jalons. Plan de travail (voir template donné par Patrice). Gérer comme des projets.\n	Tagger les importants.\nSpider consolidation: pas de migration mais alors combien de projets 2011 on couvre par la consolidation\n77: le probleme min max a été résolu mais Airbus n'a pas de retour. Partie Amine faite, en attente de la partie de Séb sur la consolidation.\n152: OK pour la remontée des anomalies progressive: renvoyer un rapport (consolidation) début mars pour EZMC\nKPI projects: mettre un responsable en face (Sylvie LAGASSE) RAL doit la contacter\n	Proposer 1h avec Cathie, pour identifier les resp\nLL sur Suites (faire un point avec Patrice)\n(!)  Kit coaching définir différence avec Peer Review et Peer production. Donner retour Cathie pour quand on peut l'avoir.\nChecklistes M&T : les QR ont remonté à Cathie des anomalies. Qui ? Lesquelles ? Quelles actions sont lancées ?\n\nES\n==\n\nMettre à jour status qualité ACSA\n\nRetour supervisors sur Réorg Reporting\n======================================\n27-Feb-2012\n\nFlorent:\n- Pas de discussion interne entre responsable de centre et autres QR.\n- Pb récurrents: mises à jour UP. Appeller Florent si PM veut pas le mettre à jour.\n\nPoint régulier (une fois par mois?) avec supervisor\nFaire remonter les points dans les topics.\nFaire redescendre (MFM) aux supervisors le suivi au supervisors une fois par mois.\n\n\n29-Feb-2012 - Progress Meeting Bundle\n=====================================\n\nBMC\n	Virer les versions de eM&T BMC follow\n	Le supervisor doit être invité \n	Attention à EG, on a pas rencontré le DW BARTH\n	Pour Cathie contacter le DW pour que ce soit lui qui pose la réunion de prospecting avec le PM\n\nIGQ: est-ce qu'on aurait des retours ? Faire synthèse. Monter une réunion pour décider sur la priorité de ces chantiers\n	- Agilité\n		SD au M5 ? Pourquoi ? QUels impacts (en full)\n	- LL\n		PCR utile ?\n	- Réunion avec Cathie pour status qualité dispersé\n	- et pb sur milestone checklist quality status\n	- Maintenance\n	- Synthèse anomalies GPP\nGPP 4.1/4.2 approved\nHLR: on fait\n	29-Feb: mail envoyé à Steph\nAction SteeringProject: Merger EI et EA, et réaligner les noms (EDS => ES)\n	Chantier de CI à ouvrir\n	29-Feb: Développeur demandé à VMU\nSophie: Cathie avait demandé quel PM sur EV avait un besoin de coaching. Retours ?\n	29-Feb: mail envoyé à Sophie\nPM Surveys\n	Refaire un point avec les QR\n	Fin du ticket, pas fin de la mission\n	Repréciser ça dans les slides de présentation du PM Survey\n	Focus mensuel à organiser\nCI\n	Mettre le lien dans les notes Mantis et dans le report à Airbus de l'origine de la demande du chantier de CI, exemple: docmentation validation vient de Jens Bergmann\n	On y arrive pas, trop d'actions. Comment faire ?\n		Remettre des réunions de validation avec Airbus\n	Comment suivre les actions de Airbus de leur coté (ingérence ???)\n	Provoquer réunion pour\n		Spiders\n		Risk Management\n		PP/PQP adequacy\n		Docs validation\n		RMT Guide\n		Tous les chantiers externes ?\n\n\nEnvoyer un mail sur la consolidation des status qualité dans les spiders à Cathie et Patrice\nDONE Faire suivre le mail de cathie sur le mail de Jens sur Maintenance où l'attachement est la propale SQLI\n\n============================================\n05-Mars-2012: mail à Cathie et Patrice\n\nCathie, Patrice,\n\nEn plus du compte-rendu d'avancement hebdomadaire sur le CI envoyé à l'instant, voici un état plus détaillé sur les actions prises mercredi dernier avec vous.\n\nBMC\n	Ôter les versions de eM&T BMC follow-up de l'iShare\n             Fait\n	Le supervisor doit être invité\n             Communiqué\n	Attention à EG, on a pas rencontré le DW BARTH\n            En attente du retour de Colette qui a relancé Barth\n	Pour EI, EV, EE, contacter le DW pour que ce soit lui qui pose la réunion de prospecting avec le PM\n             Communiqué\n\nIGQ: est-ce qu'on aurait des améliorations ? Faire synthèse. Planifier une réunion pour décider sur la priorité de ces chantiers\n	- Agilité et GPP.  Quels impacts ?\n	- LL\n	- Maintenance\n	- Synthèse anomalies GPP\n       Je dois poser une réunion (je dois le faire à Airbus pour avoir accès à vos agendas)\n\nEnvoyer un mail sur la consolidation des status qualité dans les spiders à Cathie et Patrice\n       Fait\n\nAction SteeringProject: Merger EI et EA, et réaligner les noms (EDS => ES)\n	Chantier de CI ouvert\n        Développement commencé, doit être fini ce soir, vérification et déploiement: dans la semaine\n\nCathie avait demandé à Sophie quel PM sur EV avait un besoin de coaching.\n	Vu avec Sophie: elle attend des retours avant de t'en parler.\n        A aujourd'hui, il y en faudrait pour PANTHER (à confirmer, Sophie voit le PM lundi) et MENETI (Sophie en reparle à la PM)\nPM Surveys\n	Refaire un point avec les QR: fin du ticket, pas fin de la mission\n          Fait\n	Repréciser ça dans les slides de présentation du PM Survey\n          A faire\n	Focus mensuel à organiser\n          MFM: à organiser avec vous\n\nCI\n        Réunions de validation avec Airbus\n          A faire\n		- Spiders\n		- Risk Management\n		- PP/PQP adequacy\n		- Docs validation\n		- RMT Guide\n		- Tous les chantiers externes ?\n\n\nStatus cancelled à virer\nAttention Workpackage est dit deux fois\n- Il faudrait renommer workpackage \"SQLI Service Line\"\n- Renommer WBS Element au lieu de workpackage du projet\nMettre la prez sur l'iShare\n\n\nUn seul status et dégrader la note du spider\n\n\nAirbus actions (projects to be validated)\nID	Airbus Resp			Assigned to		Summary							Target date\n63	Patrice DE STEFANI	stessier		66-PP/PQP adequacy analyze		2011-09-30\n77	Patrice DE STEFANI	aaladlouni		81 - Spider en control			2011-12-09\n67	Patrice DE STEFANI	spallas			74-Consolidate spider diagram data	2012-01-05\n55	Catherine POTTIER	mbuscail		78 - Mini guide on project document validation	2012-01-17\n143	Catherine POTTIER	bteillard		Improve the Change Management Action plan	2012-02-27\n150	Catherine POTTIER	mbuscail		Risk Management - Standard project risks	2012-03-10\n153	Catherine POTTIER	rallin			Write a RMT guide for EZMC		2012-03-10\n163	Catherine POTTIER	aaladlouni		Modification of Spider Diagram questions : ID Card / UP3P	2012-03-17\n147	Catherine POTTIER	mbuscail		Update one pagers - new RFP		2012-03-22\n146	Catherine POTTIER	mbuscail		Update mini guides - new RFP	2012-03-22\n161	Catherine POTTIER	mfaivremacon	Give quality status definition and explain spider and reporting status in a presentation	2012-04-13\n\n\n155	Catherine POTTIER	vlemaitre	Analysis of communication and contact for change activities	2012-03-01\n74		rallin	79-Propose Airbus project KPI	2011-12-01\n157	Catherine POTTIER	stessier	One pager QR - Ergonomy improvement	2012-02-20\n\nRéunion d'avancement Cathie 20-Mar-2012\n=======================================\n\nPM Survey:\n- Action SQLI: Vérifier à chaque fin de ticket si le PM a rempli le questionnaire.\n\nRisk Management:\n- manque l'analyse de la root cause (5 why par exemple, dire qu'il existe des techniques faciles pour y arriver)\n- préciser qu'on est pas obligé de mettre des actions en face d'un rique (dnnner les conditions) et qu'on peut transferer des risques\n- Voir le site d'ARM et mettre le lien dans la prez http://people10.airbus.corp/Finance_R2/eSites/risk_management/en/ROM%20Plan%20&%20process/Risk_and_Opportunity_Management.htm\n- partir des objectifs du projet pour identifier les risques\n- est-ce que les catégories données dans le guide sont celles données par le GPP ?\n- parler des issues\n- les risques qualité doivent apparaitre dans le RIA\n- modifier slide 12 pour mieux introduire la liste dans les slides suivantes\n- enlever engineering\n\n- remonter à GPP le pb de 4.2 sur les risques (??)\n\n\nSpiders:\n- consolidation, reprise de l'historique, et analyse à faire\n- le mettre dans l'iShare une fois validé\n- faire un chiffrage et donner une date (Tak)\n\nAnomalies GPP\n- Envoyer la liste des anomalies GPP dans l'état actuel\n- Faire une consolidation et analyse pour début mai.\n- faire le point avec Amine sur mail de Juliette qui liste des ano GPP: voir si ces anos ont été notées.\n\nMiniguides:\n- ATTENDRE CATHIE (\"QM deeply involved or not\") Inclure le QM dans la slide added value du onepager QR où on dit qu'on maintient une relation étroite avec le supervisor\n- nouvelles version avec relecture\n- lien vers common activities (à déplacer à la fin des slides)\n\nCoaching\n- Faire valider les booklets Coaching par EZMC (6.2, 6.3, et booklet)\n- Donner la définition des niveaux de complexité (awareness, peer review, peer production)\n- faire une relecture de l'anglais\n\nWP2 Maintenance guide to validate\n- Mettre ce sujet au prochain comité avec Patrice\n\nV&V\n- EY avec Régine, mail à florent envoyé le 20-Mars pour lui demandé ce qu'on en fait\n- EE\n- Initiative ICT\n- SQLI\n\nMinimap: quel objectifs sur tous les miniguides ? Donner les définitions.\n- Miniguides\n- Onepagers\n- Guidelines: supports de coaching (uniquement?) \n- Booklets\n\nChanger le titre EMN dans la prez 6.2\n\nIntervention d'ICT tôt dans le recueillement du besoin\n- alerter EZMC si le besoin n'est pas clair qd ICT intervient\n- placer une QG HL spéciale needs avant intervention d'ICT\n\nHLR\n- Attention à nos termes utilisés ex: business process, quel niveau de l'AOPM ?\n- en fait les HLR EZMC viennent du fait qu'il faut réfléchir aux besoins business très tôt, pas plus que ça (TCQ Improvement)\n- recensement de ce qu'on dispose au M3\n\n\n\n150 Risk Management - Standard project risks\n\nActions: rajouter:\n- l'analyse de la root cause (5 why par exemple, dire qu'il existe des techniques faciles pour y arriver)\n- préciser qu'on est pas obligé de mettre des actions en face d'un rique (donner les conditions) et qu'on peut transferer des risques\n- Voir le site d'ARM et mettre le lien dans la prez http://people10.airbus.corp/Finance_R2/eSites/risk_management/en/ROM%20Plan%20&%20process/Risk_and_Opportunity_Management.htm\n- partir des objectifs du projet pour identifier les risques\n- parler des issues\n- les risques qualité doivent apparaitre dans le RIA\n- modifier slide 12 pour mieux introduire la liste dans les slides suivantes\n- enlever engineering\n\n157 - One pager QR - Ergonomy improvement\n147 - Update one pagers - new RFP	2012-03-22\n146	- Update mini guides - new RFP\n\nActions:\n- Attendre Cathie pour la réponse EG (\"QM deeply involved or not\") avant d'inclure le QM dans la slide added value du onepager QR où on dit qu'on maintient une relation étroite avec le supervisor\n- faire et envoyer une nouvelle version avec la fin de la relecture (détails)\n- lien vers common activities dans chaque slide (à déplacer à la fin des slides)\n\n77 - Spider en control\n67 - Consolidate spider diagram data\n163 - Modification of Spider Diagram questions : ID Card / UP3P\n\n- Action SQLI: faire un chiffrage et donner une date de réalisation possible pour la consolidation, reprise de l'historique, et analyse à faire\n- mettre le spider dans l'iShare une fois validé\n\n\nSteering CI 22-Mar-2012\n=======================\n\nplus de CI sur BMC\nplus-value et retours sur le terrain\n	=> consolidation Spiders (outil d'adhérence au process)\n	mesurer adhérence au process, quelle est la valeur ajouté de notre action ?\n	Mission: Adding Value\n	pas de train train, amener du plus\n	(en plus du classique)\n	communiquer, afficher ce qu'on fait (plus haut que le PM => DWL), être proactif\n	commercialement, comment prouver ce qu'on a apporté (en vu du renouvellement)\n!	revenir dans 15 jours avec des objectifs, proposition de chantiers\n\nonepagers: \"toujours en mode draft avec des remarques de base\"\nPeut-être faire un spider sur les objectifs prévus et réél (ref + actual)\nTraiter les actions lié aux retours des PM Surveys (qu'est-ce qu'on fait quand on met en cause le QR ? On doit traiter et informer le PM.)\n!  Airmiss, ProjectDoc\nValidation de lancement des chantiers\n	Faire valider le lancement des chantiers de CI (HLR... Cycle de validation des docs...)\n	Mettre les ID Card sur les iShares\n	Provoquer un Kick-Off pour chaque chantier externe\n\n\nLe dernier process vu avec vous était:\n- on fourni les fichier excel au PM s'il le demande (et non de manière systématique).\n- les slides PPT sont systématiquement vu avec le PM et discuté avec lui. Donc le fichier Excel n'a pas lieu d'être fourni sauf si demandé.",
+			"file": "/C/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/Cathie.txt",
+			"file_size": 15080,
+			"file_write_time": 129769616004218750,
+			"settings":
+			{
+				"buffer_size": 14809,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/EY_reorg_2012.txt",
+			"settings":
+			{
+				"buffer_size": 3148,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/c/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/EG 2012.txt",
+			"settings":
+			{
+				"buffer_size": 403,
+				"line_ending": "Windows",
+				"name": "EG 2012"
+			}
+		},
+		{
+			"file": "/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/context_select.erb",
+			"settings":
+			{
+				"buffer_size": 364,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/stylesheets/login.css",
+			"settings":
+			{
+				"buffer_size": 2496,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/login.rhtml",
+			"settings":
+			{
+				"buffer_size": 1498,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "164	Update PQP following validation of project 63 on PQP/PP analysis	CI	2012-03-31	\n78	Study on the relationship that we can put in place between output of LL and WP4	CI		\n90	ICT satisfaction KPI	CI		\n154 Change management service line by SQLI	CI		\n60 Poster/Dashboard - QR/Quality activities	CI		\n169 Automatiser la generation des livrables (Remark Sheets, Milestone preparation checklists)	CI		\n172 Guide de la masterisation	CI		\n",
+			"settings":
+			{
+				"buffer_size": 432,
+				"line_ending": "Windows",
+				"name": "164	Update PQP following validation of project 63"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 311.0,
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 472.0
+	},
+	"console":
+	{
+		"height": 132.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/context_chooser/index.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/tools_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/milestones/new.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/projects_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/models/sdp_db.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/workstreams_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/projects/ws_reporting.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/lib/csv_ci.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/ci_projects_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/eisq/.svn/entries",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/_project.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/_ci_project_report_sqli.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/_ci_project_report.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/ci_header_report.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/ci.rhtml",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/projects/_status_form.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/models/project.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/models/request.rb",
+		"/C/Users/faivremacon/My Documents/My Dropbox/music.txt",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/requirements/_form.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/db/migrate/20120224130830_add_long_description_to_reqs.rb",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/mine.erb",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/project_list.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/index.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/menu.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/index.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/tools.rhtml",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/last_projects.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/helpers/application_helper.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/_last_project.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/ci_header.erb",
+		"/c/Users/faivremacon/Desktop/EY.txt",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/workloads_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/workloads/edit_line.rjs",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/workloads/_edit_line.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/pdc.rhtml",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/workloads/index.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/projects/index.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/javascripts/workload.js",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/javascripts/application.js",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/checklists_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/general.rhtml",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/ci_header_report.erb",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/_ci_project_report_sqli.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/projects/index_projects.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/stylesheets/styles.css",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/models/ci_project.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/_ci_project.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/workstreams/index.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/workstreams/_workstream.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/sdp_index.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/stylesheets/general.css",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/ci_header.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/projects/show.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/config/database.yml",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/db/migrate/20120213142709_create_ci_projects.rb",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/ci_projects/_ci_project.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/eisq/test",
+		"//csdtoulouse/Ingenierie/Projet_Externe/EISQ/100_Activities/Continuous_Improvement/EISQ CI project Progress Report Template v1.0.xml",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/stylesheets/login.css",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/rmt_date_check.erb",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/stylesheets/ci.css",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/lib/sdp.rb",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/ci.rhtml",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/welcome_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/lib/test.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/config/environment.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/lib/cvs_report.rb",
+		"/c/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/lib/cvs_ci.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/application_controller.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/tools/sdp_import.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/context_select.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/EMN/CI/chantiers.txt",
+		"/c/Users/faivremacon/Desktop/drag_drop_fix.reg",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/models/wl_line.rb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/workloads/_wl_line.erb",
+		"/c/Users/faivremacon/Desktop/SAQ.txt",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/footer.erb",
+		"/C/Users/faivremacon/My Documents/Mickael/SQLI/Status_PSE.txt",
+		"/C/Users/faivremacon/My Documents/Downloads/mfaivremacon (16).csv"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"calculate",
+			"Person",
+			"problem",
+			"new",
+			"workload",
+			"9.875"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/c/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/TODO.txt",
+					"settings":
+					{
+						"buffer_size": 452,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								452,
+								452
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/Cathie.txt",
+					"settings":
+					{
+						"buffer_size": 14809,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14737,
+								14737
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4467.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/EY_reorg_2012.txt",
+					"settings":
+					{
+						"buffer_size": 3148,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1078,
+								1084
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 630.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/c/Users/faivremacon/My Documents/My Dropbox/SQLI/EISQ/EG 2012.txt",
+					"settings":
+					{
+						"buffer_size": 403,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								403,
+								403
+							]
+						],
+						"settings":
+						{
+							"auto_name": "EG 2012",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/context_select.erb",
+					"settings":
+					{
+						"buffer_size": 364,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								349,
+								349
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Rails/HTML (Rails).tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/public/stylesheets/login.css",
+					"settings":
+					{
+						"buffer_size": 2496,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								44,
+								44
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/views/layouts/login.rhtml",
+					"settings":
+					{
+						"buffer_size": 1498,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1481,
+								1481
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Rails/HTML (Rails).tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"settings":
+					{
+						"buffer_size": 432,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								432,
+								432
+							]
+						],
+						"settings":
+						{
+							"auto_name": "164	Update PQP following validation of project 63",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"to",
+				"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/app/controllers/tools_controller.rb"
+			],
+			[
+				"d",
+				"/C/Users/faivremacon/My Documents/Mickael/SQLI/Projects Internes/trunk/projets/interne/eisq/config/database.yml"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 197.0,
+	"status_bar_visible": true
+}
