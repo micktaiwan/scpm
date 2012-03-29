@@ -273,7 +273,7 @@ class ToolsController < ApplicationController
 
   def import_monthly_tasks_form
     @ope = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
-    @service_resp = @ope.select{ |p| p.has_role?('ServiceLineResp')}
+    @service_resp = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").select{ |p| p.has_role?('ServiceLineResp')}
   end
 
   def import_monthly_tasks
