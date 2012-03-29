@@ -7,6 +7,9 @@
 <p><%= label_tag 'long description' %>
 <%= text_area :req, :long_description, :rows=>3 %></p>
 
+<p><%= label_tag 'compliance means' %>
+<%= text_area :req, :compliance_means, :rows=>3 %></p>
+
 <p><%= label_tag 'short_name' %>
 <%= text_field :req, :short_name %></p>
 
@@ -30,4 +33,3 @@
 
 <p><%= label_tag 'impact' %>
 <%= select(:req, :impact, Requirement::Req_Impact) %></p>
-

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120224130830) do
+ActiveRecord::Schema.define(:version => 20120329154318) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -373,6 +373,7 @@ ActiveRecord::Schema.define(:version => 20120224130830) do
     t.string   "source_identifier"
     t.integer  "priority"
     t.text     "long_description"
+    t.text     "compliance_means"
   end
 
   add_index "requirement_versions", ["requirement_id"], :name => "index_requirement_versions_on_requirement_id"
@@ -395,6 +396,7 @@ ActiveRecord::Schema.define(:version => 20120224130830) do
     t.integer  "priority"
     t.integer  "impact"
     t.text     "long_description"
+    t.text     "compliance_means"
   end
 
   create_table "risks", :force => true do |t|
