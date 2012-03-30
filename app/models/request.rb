@@ -1,7 +1,7 @@
 class Request < ActiveRecord::Base
 
   belongs_to :project
-  has_one    :wl_line, :primary _key=>"request_id"
+  has_one    :wl_line, :primary_key=>"request_id"
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
 
   include WelcomeHelper
