@@ -7,7 +7,8 @@
       <%= tab_menu("wl_conso", [
         "Consolidation",
         "Holidays",
-        "Missing tasks"
+        "Missing tasks",
+        "Requests to validate"
         ]) %>
   </ol>
 
@@ -45,6 +46,18 @@
           <%= image_tag('loading.gif', :id=>'loading3', :style=>"display:none;") %>
           <div id="error3"></div>
           <div id="data3"></div>
+        </div>
+    </div>
+
+    <div id="tabContent4" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="4"? "block" : "none"%>;">
+        <br />
+        <div id="missing_tasks">
+          <%= link_to_remote('Refresh',  :url => { :action => "refresh_requests_to_validate" }, :loading => "$('error3').update('');$('loading4').appear()", :complete => "$('loading4').hide()", :update => { :success => "data4", :failure => "error4" }) %>
+          <br/>
+          <br/>
+          <%= image_tag('loading.gif', :id=>'loading4', :style=>"display:none;") %>
+          <div id="error4"></div>
+          <div id="data4"></div>
         </div>
     </div>
 

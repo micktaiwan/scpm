@@ -1,0 +1,6 @@
+<tr>
+	<td><%= link_to(r.request_id.to_i, "http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id.to_i}") %></td>
+	<td><%= r.summary %></td>
+	<td><%= l = r.wl_line.get_load_by_week(@week1);l if l > 0 %></td>
+	<td><%= l = r.wl_line.get_load_by_week(@week2);l if l > 0 %></td>
+</tr>

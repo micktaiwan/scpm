@@ -1,7 +1,7 @@
 class Request < ActiveRecord::Base
 
   belongs_to :project
-  belongs_to :wl_line
+  has_one    :wl_line, :primary _key=>"request_id"
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
 
   include WelcomeHelper
@@ -314,7 +314,7 @@ class Request < ActiveRecord::Base
     rv
   end
 
-    def wp_index_RFP2012(wp, cv)
+  def wp_index_RFP2012(wp, cv)
     rv = Wp_index_RFP2012[wp+(cv=="Yes" ? "CV":"")]
     raise "no workpackage #{wp}" if not rv
     rv

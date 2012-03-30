@@ -1,0 +1,11 @@
+<%= @requests.size %> requests to be validated (based on your workloads)<br/>
+<br/>
+<table>
+  <tr style="font-weight:bold;">
+    <td>RMT ID</td>
+    <td>Name</td>
+    <td>Current week</td>
+    <td>Next week</td>
+  </tr>
+  <%= render(:partial=>'conso_requests_to_validate', :collection=>@requests, :as=>:r) %>
+</table>
