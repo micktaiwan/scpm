@@ -42,7 +42,7 @@ class ToolsController < ApplicationController
 
     # by centres
     @centres = []
-    for centre in ["EA", "EDE", "EV", "EDC", "EDG", "EDS", "EI", "EDY", "EM", "EMNB", "EMNC"] do
+    for centre in ["EA", "EDE", "EV", "EDC", "EDG", "EDS", "EI", "EDY", "EM", "EMNB", "EMNC", "TBCE"] do
       stats = Array.new
       @centres << {:name=>centre, :stats=>stats}
       begin

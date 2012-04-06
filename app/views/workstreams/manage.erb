@@ -1,0 +1,4 @@
+<%= link_to('Add', {:action=>'new'}, {:class=>'btnlnk'}) %><br/>
+<br/>
+<div id="error"></div>
+<%= render(:partial=>'list', :collection=>@ws, :as=>:w) %>

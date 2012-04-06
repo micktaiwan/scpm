@@ -62,7 +62,13 @@
     </ul>
     <% end %>
     </li>
-    <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %></li>
+    <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
+      <ul>
+        <li class="hsep">WS Reporting</li>
+        <li><%= link_to('Reporting',        {:controller=>'workstreams', :action=>'index'}) %></li>
+        <li><%= link_to('Manage',        {:controller=>'workstreams', :action=>'manage'}) %></li>
+      </ul>
+    </li>
     <li><%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %></li>
     <li><%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %></li>
     <li><%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %></li>

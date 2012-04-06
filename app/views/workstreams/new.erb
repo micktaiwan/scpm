@@ -1,0 +1,7 @@
+<h2>Add a Delivery Workstream</h2>
+<%= error_messages_for :workstream %>
+<% form_for :@workstream, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>

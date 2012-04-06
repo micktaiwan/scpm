@@ -1,0 +1,6 @@
+<b><%= w.name %></b>
+<%= link_to(image_tag('edit.gif'), {:action=>'edit', :id=>w.id}) %>
+<%= link_to(image_tag('delete.gif'), {:action=>'delete', :id=>w.id}, {:confirm=>'Sure?'}) %><br/>
+<b>Strenghts</b>: <%= my_simple_format(w.strenghts) %><br/>
+<b>Weaknesses</b>: <%= my_simple_format(w.weaknesses) %><br/>
+<br/>
