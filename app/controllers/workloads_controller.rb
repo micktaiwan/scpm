@@ -201,7 +201,7 @@ class WorkloadsController < ApplicationController
       @workload = Workload.new(person_id)
       get_last_sdp_update
       get_suggested_requests(@workload)
-      get_sdp_gain(@workload.person)
+      #get_sdp_gain(@workload.person)
       get_chart
       get_sdp_gain(@workload.person)
     else
@@ -222,7 +222,7 @@ class WorkloadsController < ApplicationController
       @workload = Workload.new(person_id)
       get_last_sdp_update
       get_suggested_requests(@workload)
-      get_sdp_gain(@workload.person)
+      #get_sdp_gain(@workload.person)
       get_chart
       get_sdp_gain(@workload.person)
     else

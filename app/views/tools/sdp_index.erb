@@ -16,14 +16,24 @@
 
 <% if @real_balance_and_provisions_diff %>
   <table>
-    <tr><td>SDP Initial Gain:</td><td><%= @sdp_initial_balance_diff %></td></tr>
-    <tr><td>Provision Gain:</td><td><%= @provisions_diff %> (PM+OM)</td></tr>
-    <tr><td>Theorical m. Gain:</td><td><%= @theorical_diff %></td></tr>
-    <tr style="font-weight:bold;"><td>Total Gain:</td><td><%= @real_balance_and_provisions_diff %></td></tr>
-    <tr><td>Operational diff:</td><td><%= @operational_diff %> (nb of days for new requests minus OM)</td></tr>
-    <tr><td>Not included rem diff:</td><td><%= @not_included_remaining_diff %></td></tr>
-    <tr><td>Sold Gain:</td><td><%= @sold_diff %> (<%= (@sold_diff*421).to_i.pretty_number %> Euros)</td></tr>
-  </table><br/>
+    <tr>
+      <td valign="top">
+        <table>
+          <tr><td>SDP Initial Gain:</td><td><%= @sdp_initial_balance_diff %></td></tr>
+          <tr><td>Provision Gain:</td><td><%= @provisions_diff %> (PM+OM)</td></tr>
+          <tr><td>Theorical m. Gain:</td><td><%= @theorical_diff %></td></tr>
+          <tr style="font-weight:bold;"><td>Total Gain:</td><td><%= @real_balance_and_provisions_diff %></td></tr>
+          <tr><td>Operational diff:</td><td><%= @operational_diff %> (nb of days for new requests minus OM)</td></tr>
+          <tr><td>Not included rem diff:</td><td><%= @not_included_remaining_diff %></td></tr>
+          <tr><td>Sold Gain:</td><td><%= @sold_diff %> (<%= (@sold_diff*421).to_i.pretty_number %> Euros)</td></tr>
+        </table>
+      </td>
+      <td valign="top">
+        <%= image_tag(@sdp_graph) %>
+      </td>
+    </tr>
+  </table>
+  <br/>
 <% end %>
 
 <table>

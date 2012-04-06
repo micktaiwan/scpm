@@ -1,3 +1,5 @@
+require 'google_chart'
+
 class ToolsController < ApplicationController
 
   layout 'tools'
@@ -154,9 +156,36 @@ class ToolsController < ApplicationController
       @not_included_remaining       = (@theorical_management-@remaining_management) + provision_qa_ci
       @other_provisions             = provision_qa_ci + @risks_remaining_should_be
       @total_provisions             = @other_provisions + @provisions_remaining_should_be
+      sdp_graph
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
     end
+  end
+
+
+  def get_sdp_graph_series(method)
+    serie   = []
+    labels  = []
+    logs = SdpImportLog.find(:all, :order=>"id")
+    first = logs.first.created_at
+    for l in logs
+      serie << [l.created_at-first, l.send(method)]
+      labels << l.created_at.to_date
+    end
+    min = serie.map{|p| p[1]}.min
+    max = serie.map{|p| p[1]}.max
+    serie = serie.map{ |l| [l[0], l[1]-min]}
+    [serie, min, max, labels]
+  end  
+
+  def sdp_graph
+    chart = GoogleChart::LineChart.new('600x200', "Gain", true)
+    serie, min, max, labels = get_sdp_graph_series(:sdp_real_balance_and_provisions)
+    chart.data "Total gain", serie, '0000ff'
+    chart.axis :y, :range => [min,max], :font_size => 10, :alignment => :center
+    #chart.axis :x, :labels => labels, :font_size => 10, :alignment => :center
+    chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>7
+    @sdp_graph = chart.to_url#({:chd=>"t:#{serie.join(',')}", :chds=>"#{min},#{max}"})    
   end
 
   def default_to_zero(&block)
