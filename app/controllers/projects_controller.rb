@@ -493,7 +493,7 @@ class ProjectsController < ApplicationController
       get_projects
 
       # TODO: use model "workstream"
-      @centers = ['EA', 'EI', 'EV', 'EE', 'EG', 'ES', 'EY', 'EZC', 'EZ', 'EZMB', 'EZMC']
+      @centers = ['EI', 'EV', 'EE', 'EG', 'ES', 'EY', 'EZC', 'EZ', 'EZMB', 'EZMC', 'TBCE']
       @centers = @centers.map { |c| stats_for_center(c) }
 
       @wps = @wps.select{ |w| w.get_status.status > 0}.sort_by { |w|
@@ -513,7 +513,7 @@ class ProjectsController < ApplicationController
       headers['Cache-Control']        = ''
       render(:layout=>false)
     rescue Exception => e
-      render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
+      render(:text=>"<b>#{e}</b><br/>#{e.backtrace.join("<br/>")}")
     end
   end
 
