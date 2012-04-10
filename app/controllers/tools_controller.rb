@@ -86,15 +86,16 @@ class ToolsController < ApplicationController
     sdp.import
     sdp_index_prepare
     SdpImportLog.create(
-        :sdp_initial_balance             =>@sdp_initial_balance,
-        :sdp_real_balance                =>@real_balance,
-        :sdp_real_balance_and_provisions =>@real_balance_and_provisions,
-        :operational_total_minus_om      =>@operational_total-@operational2011_10percent,
-        :not_included_remaining          =>@not_included_remaining,
-        :provisions                      =>@provisions_remaining_should_be,
-        :sold                            =>@sold,
-        :remaining_time                  =>@remaining_time
+        :sdp_initial_balance             => @sdp_initial_balance,
+        :sdp_real_balance                => @real_balance,
+        :sdp_real_balance_and_provisions => @real_balance_and_provisions,
+        :operational_total_minus_om      => @operational_total-@operational2011_10percent,
+        :not_included_remaining          => @not_included_remaining,
+        :provisions                      => @provisions_remaining_should_be,
+        :sold                            => @sold,
+        :remaining_time                  => @remaining_time
         )
+    sdp_graph # aleady in sdp_index_prepare, but repeated here so grap in email is updated
     history_comparison        
     body = render_to_string(:action=>'sdp_index', :layout=>false)
     Mailer::deliver_mail("mfaivremacon@sqli.com,vmudry@sqli.com,bmonteils@sqli.com","[EISQ] SDP update","<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)

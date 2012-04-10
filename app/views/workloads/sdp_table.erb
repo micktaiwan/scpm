@@ -21,7 +21,7 @@
     <td align="right"><%= @balance[:balance] %></td>
     <td align="right"><%= @balance[:percent] %>%</td>
     <td align="center">
-    <% if current_user.has_role?('ServiceLineResp') %>
+    <% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
     <%= link_to_remote(image_tag('add.png', :id=>'sdp_add'),
       :url=>{:controller=>'sdp_logs', :action=>'create',
         :date=>@last_sdp_update.to_date,
