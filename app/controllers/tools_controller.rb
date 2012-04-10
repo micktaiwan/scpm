@@ -386,16 +386,14 @@ class ToolsController < ApplicationController
     ws_id = params['id'].to_i
     @ws = Workstream.find(ws_id)
     @qr = Person.find(:all, :conditions=>"has_left=0 and is_transverse=0")
-    @associations = Hash.new
+    @associations = Array.new
     @qr.each { |qr|
       projects = qr.active_projects_by_workstream(@ws.name)
       if projects.size > 0
-        @associations[:qr] = qr
-        @associations[:projects] = projects
+        @associations << {:qr=>qr, :projects=>projects}
       end
       }
   end
-
 
   def last_projects
     filter = params[:filter]

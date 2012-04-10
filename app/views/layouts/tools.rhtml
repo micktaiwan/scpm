@@ -44,7 +44,6 @@
   <div id="menu_bar">
     <ul>
     <li><%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','sdp_index')}) %>
-    <% if current_user.has_role?('Admin') %>
     <ul>
       <li class="hsep">Index</li>
       <li><%= link_to('SDP index',        {:controller=>'tools', :action=>'sdp_index'}) %></li>
@@ -57,10 +56,11 @@
       <li><%= link_to('CHECK RMT <=> SDP',{:controller=>'tools', :action=>'sdp_yes_check'}) %></li>
       <li><%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}) %></li>
       <li><%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}) %></li>
-      <li class="hsep">Stuff</li>
-      <li><%= link_to('People stats',     {:controller=>'tools', :action=>'sdp_logs'}) %></li>
+      <% if current_user.has_role?('Admin') %>
+        <li class="hsep">Stuff</li>
+        <li><%= link_to('Gains per person',     {:controller=>'tools', :action=>'sdp_logs'}) %></li>
+      <% end %>
     </ul>
-    <% end %>
     </li>
     <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
       <ul>
@@ -77,35 +77,30 @@
     <% if cu.has_role?('Admin') %>
       <li><%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %></li>
     <% end %>
-
-    <% if cu.has_role?('Admin') or cu.has_role?('ServiceLineResp')%>
-      <li>
-        <%= link_to('Tools', "", {:class=>menu_style('tools','*'), :onclick=>"return false;"}) %>
-        <ul>
-          <li class="hsep">Management</li>
-          <li><%= link_to('Requirements',   {:controller=>'requirements', :action=>'index'}) %></li>
-          <li><%= link_to('Checklists',     {:controller=>'checklist_templates', :action=>'index'}) %></li>
-          <li><%= link_to('Risks',          {:controller=>'risks', :action=>'list'}) %></li>
-          <li><%= link_to('Generic Risks',  {:controller=>'generic_risk_questions', :action=>'index'}) %></li>
-          <li><%= link_to('Capi',           {:controller=>'notes', :action=>'list'}) %></li>
-          <li><%= link_to('Capi Axes',      {:controller=>'capi_axes', :action=>'index'}) %></li>
-          <li class="hsep">Stats</li>
-          <li><%= link_to('Requests by year', {:controller=>'tools', :action=>'requests_by_year'}) %></li>
-          <li><%= link_to('Projects length',  {:controller=>'tools', :action=>'projects_length'}) %></li>
-          <li><%= link_to('Check dates RMT <=> BAM', {:controller=>'tools', :action=>'rmt_date_check'}) %></li>
-          <li><%= link_to('QR per DWS',     {:controller=>'tools', :action=>'qr_per_ws'}) %></li>
-          <li><%= link_to('Last projects',  {:controller=>'tools', :action=>'last_projects'}) %></li>
-          <li><%= link_to('Projects status',{:controller=>'tools', :action=>'project_list'}) %></li>
-          <li><%= link_to('Next milestones',{:controller=>'tools', :action=>'next_milestones'}) %></li>
-          <li class="hsep">Old stuff</li>
-          <li><%= link_to('Workload Gantt', {:controller=>'welcome', :action=>'workload_schedule'}) %></li>
-          <li><%= link_to('Stats open projects', {:controller=>'tools', :action=>'stats_open_projects'}) %></li>
-          <li><%= link_to('Test email',     {:controller=>'tools', :action=>'test_email'}) %></li>
-        </ul> 
-      </li>
-    <% end %>
-
-
+    <li>
+      <%= link_to('Tools', "", {:class=>menu_style('tools','*'), :onclick=>"return false;"}) %>
+      <ul>
+        <li class="hsep">Management</li>
+        <li><%= link_to('Requirements',   {:controller=>'requirements', :action=>'index'}) %></li>
+        <li><%= link_to('Checklists',     {:controller=>'checklist_templates', :action=>'index'}) %></li>
+        <li><%= link_to('Risks',          {:controller=>'risks', :action=>'list'}) %></li>
+        <li><%= link_to('Generic Risks',  {:controller=>'generic_risk_questions', :action=>'index'}) %></li>
+        <li><%= link_to('Capi',           {:controller=>'notes', :action=>'list'}) %></li>
+        <li><%= link_to('Capi Axes',      {:controller=>'capi_axes', :action=>'index'}) %></li>
+        <li class="hsep">Stats</li>
+        <li><%= link_to('Requests by year', {:controller=>'tools', :action=>'requests_by_year'}) %></li>
+        <li><%= link_to('Projects length',  {:controller=>'tools', :action=>'projects_length'}) %></li>
+        <li><%= link_to('Check dates RMT <=> BAM', {:controller=>'tools', :action=>'rmt_date_check'}) %></li>
+        <li><%= link_to('QR per DWS',     {:controller=>'tools', :action=>'qr_per_ws'}) %></li>
+        <li><%= link_to('Last projects',  {:controller=>'tools', :action=>'last_projects'}) %></li>
+        <li><%= link_to('Projects status',{:controller=>'tools', :action=>'project_list'}) %></li>
+        <li><%= link_to('Next milestones',{:controller=>'tools', :action=>'next_milestones'}) %></li>
+        <li class="hsep">Old stuff</li>
+        <li><%= link_to('Workload Gantt', {:controller=>'welcome', :action=>'workload_schedule'}) %></li>
+        <li><%= link_to('Stats open projects', {:controller=>'tools', :action=>'stats_open_projects'}) %></li>
+        <li><%= link_to('Test email',     {:controller=>'tools', :action=>'test_email'}) %></li>
+      </ul> 
+    </li>
     <% if cu.has_role?('Super') %>
       <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
     <% end %>
