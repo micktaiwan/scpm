@@ -375,11 +375,27 @@ class ToolsController < ApplicationController
           @associations[ws.name][:ws_projects] ||= Project.active_projects_by_workstream(ws.name).size
           @associations[ws.name][:qr] ||= Array.new
           @associations[ws.name][:qr] << {:name=>qr.name, :projects=>projects}
+          @associations[ws.name][:ws_id] = ws.id
         end
         next
         }
       }
   end
+
+  def qr_per_ws_detail
+    ws_id = params['id'].to_i
+    @ws = Workstream.find(ws_id)
+    @qr = Person.find(:all, :conditions=>"has_left=0 and is_transverse=0")
+    @associations = Hash.new
+    @qr.each { |qr|
+      projects = qr.active_projects_by_workstream(@ws.name)
+      if projects.size > 0
+        @associations[:qr] = qr
+        @associations[:projects] = projects
+      end
+      }
+  end
+
 
   def last_projects
     filter = params[:filter]

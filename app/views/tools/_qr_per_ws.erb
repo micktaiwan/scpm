@@ -1,6 +1,5 @@
 <tr>
-<td style="font-weight:bold;"><%= ws[0] %></td>
+<td style="font-weight:bold;"><%= ws[0] %> <%= link_to("details", :action=>'qr_per_ws_detail', :id=>ws[1][:ws_id]) %> </td>
 <td align="center"><%= ws[1][:ws_projects] %></td>
-<td><%= ws[1][:qr].sort_by{|qr| -qr[:projects].size}.map{|qr| "#{qr[:name]} (#{qr[:projects].size})"}.join(', ') %><br/></td>
+<td><%= ws[1][:qr].sort_by{|qr| -qr[:projects].size}.map{|qr| "<a href='#' title='#{qr[:projects].map{|p| p.full_name}.join('.../...')}' >#{qr[:name]}</a> (#{qr[:projects].size})"}.join(', ') %><br/></td>
 </tr>
-
