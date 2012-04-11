@@ -1,3 +1,8 @@
+# not beautful but.....
+def protect_against_forgery?
+	false
+end
+
 for p in Person.find(:all, :conditions=>"is_supervisor=0 and has_left=0 and is_transverse=0")
   n   = p.new_notes
   r   = p.requests_to_close

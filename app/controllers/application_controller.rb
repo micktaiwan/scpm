@@ -8,16 +8,13 @@ Differ.format = :html
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-
   layout 'general'
   include Authentication
   include ApplicationHelper
   before_filter :log_action
   before_filter :verify_auth
   before_filter :set_timezone
-
-  # Scrub sensitive parameters from logs
-  filter_parameter_logging :password
+  filter_parameter_logging :password # Scrub sensitive parameters from logs
 
   def set_timezone
     Time.zone = 'Paris'
