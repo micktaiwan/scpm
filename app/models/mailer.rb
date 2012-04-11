@@ -1,5 +1,7 @@
 class Mailer < ActionMailer::Base
 
+  include ApplicationHelper
+
   def mail(recipient, subject = "Hi", body = "Test de mail")
     @from        = "mfaivremacon@sqli.com"
     @recipients  = recipient
@@ -43,6 +45,8 @@ class Mailer < ActionMailer::Base
     @from        = "mfaivremacon@sqli.com"
     @recipients  = "#{person.email}, mfaivremacon@sqli.com"
     @subject     = "[BAM] Reminders for #{person.name}"
+    @week1    = wlweek(Date.today)
+    @week2    = wlweek(Date.today+7.days)
     @person, @new_notes, @requests_to_close, @amendments, @actions, @milestones_with_open_checklists, @tbv = person, n, r, am, ac, om, tbv
     content_type "text/html; charset=utf-8"
   end
