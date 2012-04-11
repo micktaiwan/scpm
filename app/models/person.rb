@@ -3,6 +3,7 @@ require 'net/ldap'
 class Person < ActiveRecord::Base
 
   #include Authentication
+  include ApplicationHelper # for wlweek
 
   belongs_to :company
   has_many :person_roles
@@ -205,6 +206,14 @@ class Person < ActiveRecord::Base
         i.ctemplate.ctype!='folder' and i.status==0
         }.size > 0
       }.sort_by { |m| [m.project.full_name, m.name] }  
+  end
+
+  # based on workload, find tbv requests that need to be validated asap
+  def tbv_based_on_wl
+    @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"summary")
+    @week1    = wlweek(Date.today)
+    @week2    = wlweek(Date.today+7.days)
+    return @requests.select {|r| wl = r.wl_line; wl and wl.person.id == self.id and (wl.get_load_by_week(@week1) > 0 or wl.get_load_by_week(@week2) > 0)}
   end
 
   #def remember_token?

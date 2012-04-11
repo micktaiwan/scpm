@@ -173,8 +173,8 @@ class WorkloadsController < ApplicationController
 
   def refresh_requests_to_validate
     @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"summary")
-    @week1      = wlweek(Date.today)
-    @week2      = wlweek(Date.today+7.days)
+    @week1    = wlweek(Date.today)
+    @week2    = wlweek(Date.today+7.days)
     @requests = @requests.select {|r| wl = r.wl_line; wl and (wl.get_load_by_week(@week1) > 0 or wl.get_load_by_week(@week2) > 0)}
     render :layout => false
   end

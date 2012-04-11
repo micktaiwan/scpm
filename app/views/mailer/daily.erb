@@ -30,6 +30,20 @@ Dear <%= @person.name %>,<br/>
   </ul>
 <% end %>
 
+<% if @tbv.size > 0 %>
+  You have <%= @tbv.size %> requests to validate (based on your workload).<br/>
+  <br/>
+  <table>
+    <tr style="font-weight:bold;">
+      <td>RMT ID</td>
+      <td>Name</td>
+      <td>Current week</td>
+      <td>Next week</td>
+    </tr>
+    <%= render(:partial=>'workloads/conso_requests_to_validate', :collection=>@tbv, :as=>:r) %>
+  </table>
+<% end %>
+
 <% if @milestones_with_open_checklists.size > 0 %>
   You have <%= @milestones_with_open_checklists.size %> open checklists.<br/>
   <ul>
