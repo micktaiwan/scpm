@@ -62,6 +62,7 @@ module SdpDB
     ['Sous charges',nil]=>127651
     }
 
+  # SDP Doamin
   DomainDB = {
     #'EA'  =>2865,
     'EV'  =>2866,
@@ -73,7 +74,8 @@ module SdpDB
     'EI'  =>2873,
     'EZC' =>2871,
     'EZMC'=>2860,
-    'EZMB'=>2861
+    'EZMB'=>2861,
+    'TBCE' => 3213
     }
 
   def self.sdp_phase_id(name)
