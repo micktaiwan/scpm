@@ -43,8 +43,9 @@ class GenericRiskQuestionsController < ApplicationController
   end
 
   def run
-    @project = Project.find(params[:id])
-    @questions = GenericRiskQuestion.find(:all, :conditions=>"deployed='1'")
+    @project    = Project.find(params[:id])
+    @questions  = GenericRiskQuestion.find(:all, :conditions=>"deployed='1'")
+    @axes       = @questions.map {|q| q.capi_axis}.uniq.sort_by {|a| a.name}
     render(:layout=>'general')
   end
 

@@ -1,11 +1,14 @@
 <%= link_to('Back', :controller=>'projects', :action=>'show', :id=>@project.id) %>
 <h2>Running generic risk checklist for <%= @project.full_name %></h2>
 Risks with probability set to 0 will not be imported<br/>
-
+<br/>
 <% form_tag(:action=>'import') do %>
   <%= hidden_field_tag('id', @project.id) %>
-  <ol>
-    <%= render(:partial=>'question_run', :collection=>@questions, :as=>:q) %>
-  </ol>
+  <% for axe in @axes %>
+	  <b><%= axe.name %></b>
+	  <ol>
+	    <%= render(:partial=>'question_run', :collection=>@questions.select {|q| q.capi_axis.id == axe.id}, :as=>:q) %>
+	  </ol>
+  <% end %>
   <%= submit_tag('Import theses risks') %>
 <% end %>
