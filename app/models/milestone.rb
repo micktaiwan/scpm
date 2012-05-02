@@ -132,10 +132,14 @@ class Milestone < ActiveRecord::Base
   end
 
   def delay_in_words
+    begin
     return "" if !self.milestone_date or self.milestone_date=="" or
                  !self.actual_milestone_date or self.actual_milestone_date=="" or
                  self.actual_milestone_date <= self.milestone_date
     time_ago_in_words(Time.now-(self.actual_milestone_date-self.milestone_date).to_i.days) + " delay"
+    rescue Exception => e
+      return "#{e}"
+    end
   end
 
   def is_eligible_for_note?
