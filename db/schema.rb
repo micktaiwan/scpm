@@ -526,8 +526,8 @@ ActiveRecord::Schema.define(:version => 20120329154318) do
     t.integer  "locked",            :default => 0
     t.datetime "locked_time"
     t.text     "ws_report"
-    t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
-    t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
+    t.datetime "reason_updated_at", :default => '2012-05-03 07:29:29'
+    t.datetime "ws_updated_at",     :default => '2012-05-03 07:29:29'
   end
 
   create_table "topics", :force => true do |t|
