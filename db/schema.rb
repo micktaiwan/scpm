@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120329154318) do
+ActiveRecord::Schema.define(:version => 20120521075704) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(:version => 20120329154318) do
     t.string   "accountable"
     t.string   "deployment"
     t.date     "launching_date"
-    t.date     "validation_date_objective"
+    t.date     "sqli_validation_date_objective"
     t.date     "airbus_validation_date_objective"
     t.date     "deployment_date_objective"
     t.date     "sqli_validation_date"
@@ -161,6 +161,8 @@ ActiveRecord::Schema.define(:version => 20120329154318) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "airbus_responsible"
+    t.date     "sqli_validation_date_review"
+    t.date     "airbus_validation_date_review"
   end
 
   create_table "companies", :force => true do |t|
@@ -526,8 +528,8 @@ ActiveRecord::Schema.define(:version => 20120329154318) do
     t.integer  "locked",            :default => 0
     t.datetime "locked_time"
     t.text     "ws_report"
-    t.datetime "reason_updated_at", :default => '2012-05-03 07:29:29'
-    t.datetime "ws_updated_at",     :default => '2012-05-03 07:29:29'
+    t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
+    t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
   end
 
   create_table "topics", :force => true do |t|

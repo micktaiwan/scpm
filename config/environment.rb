@@ -21,9 +21,9 @@ end
 Rails::Initializer.run do |config|
   config.time_zone = 'UTC'
   config.action_mailer.delivery_method = :sendmail
-  config.gem 'ruby-net-ldap', :version => '0.0.4', :lib => 'net/ldap'
-  config.gem 'differ', :version=> '0.1.2'
-  config.gem 'will_paginate', :version => '2.3.16'
+  #config.gem 'ruby-net-ldap', :version => '0.0.4', :lib => 'net/ldap'
+  #config.gem 'differ', :version=> '0.1.2'
+  #config.gem 'will_paginate', :version => '2.3.16'
   #config.gem 'gchartrb' # 1.6.8 ?
 end
 

@@ -16,15 +16,21 @@ class CiProjectsController < ApplicationController
   end
 
   def late
-    @toassign = CiProject.find(:all, :conditions=>"assigned_to='' and status!='Closed' and status!='Delivered' and status!='Rejected'", :order=>"validation_date_objective desc")
-    @sqli     = CiProject.find(:all, :conditions=>"status='Accepted' or status='Assigned'", :order=>"validation_date_objective desc")
-    @todeploy = CiProject.find(:all, :conditions=>"status='Validated'", :order=>"validation_date_objective desc")
-    @airbus   = CiProject.find(:all, :conditions=>"status='Verified'", :order=>"validation_date_objective desc")
+    @toassign = CiProject.find(:all, :conditions=>"assigned_to='' and status!='Closed' and status!='Delivered' and status!='Rejected'", :order=>"sqli_validation_date_review desc")
+    @sqli     = CiProject.find(:all, :conditions=>"status='Accepted' or status='Assigned'", :order=>"sqli_validation_date_review desc")
+    @todeploy = CiProject.find(:all, :conditions=>"status='Validated'", :order=>"sqli_validation_date_review desc")
+    @airbus   = CiProject.find(:all, :conditions=>"status='Verified'", :order=>"sqli_validation_date_review desc")
   end
 
   def report
-    @sqli     = CiProject.find(:all, :conditions=>"deployment='External' and visibility='Public' and (status='Accepted' or status='Assigned')", :order=>"validation_date_objective")
-    @airbus   = CiProject.find(:all, :conditions=>"deployment='External' and visibility='Public' and (status='Verified')", :order=>"airbus_validation_date_objective")
+    CiProject.all.each {|p| 
+      p.sqli_validation_date_review = p.sqli_validation_date_objective if !p.sqli_validation_date_review
+      p.airbus_validation_date_review = p.airbus_validation_date_objective if !p.airbus_validation_date_review
+      p.save
+    }
+
+    @sqli     = CiProject.find(:all, :conditions=>"deployment='External' and visibility='Public' and (status='Accepted' or status='Assigned')", :order=>"sqli_validation_date_review")
+    @airbus   = CiProject.find(:all, :conditions=>"deployment='External' and visibility='Public' and (status='Verified')", :order=>"airbus_validation_date_review")
   end
 
   def do_upload

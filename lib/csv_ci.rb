@@ -30,8 +30,10 @@ class CsvCi
     :accountable,
     :deployment,
     :launching_date,
-    :validation_date_objective,
+    :sqli_validation_date_objective,
     :airbus_validation_date_objective,
+    :sqli_validation_date_review,
+    :airbus_validation_date_review,
     :deployment_date_objective,
     :sqli_validation_date,
     :airbus_validation_date,
@@ -79,6 +81,7 @@ private
     row.each_with_index { |r,i|
       @columns[sanitize_attr(r)] = i
       #puts sanitize_attr(r)
+      #exit
       }
   end
 
