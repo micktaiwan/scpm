@@ -37,7 +37,7 @@ class ProjectsController < ApplicationController
     f = session[:project_filter_qr]
     if f and f.size == 1
       filtered_person = Person.find(f[0].to_i) || current_user
-      @ci = CiProject.find(:all, :conditions=>["assigned_to=?", filtered_person.rmt_user], :order=>"validation_date_objective desc")
+      @ci = CiProject.find(:all, :conditions=>["assigned_to=?", filtered_person.rmt_user], :order=>"sqli_validation_date_review desc")
     else
       @ci = []
     end

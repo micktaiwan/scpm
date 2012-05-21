@@ -1,6 +1,6 @@
-EISQ Quality Bundle manager
-===========================
+Bundle Activity Manager
+=======================
 
-A Rails application to manage EISQ Activities (and anything catalog related actually....)
+A Rails application to manage (and anything catalog or service related)
 
-
+(c) Copyright 2010-2012 Mickael Faivre-Maçon
