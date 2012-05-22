@@ -7,7 +7,8 @@
 	<td><% if p.strategic==1 %><%=image_tag('danger.gif')%><%end%></td>
 	<td><%= p.summary %></td>
 	<td><b><%= p.short_stage %></b></td>
-	<td><b><%= p.sqli_validation_date_objective %></b></td>
-	<td><b><%= p.sqli_validation_date_review %></b></td>
+	<td class="<%=CiProject.late_css(p.sqli_validation_date_review)%>"><b><%= p.sqli_validation_date_review %></b> 	<%= p.sqli_delay %></td>
+	<td class="<%=CiProject.late_css(p.airbus_validation_date_review)%>"><b><%= p.airbus_validation_date_review %></b> 	<%= p.airbus_delay %></td>
+	<td class="<%=CiProject.late_css(p.deployment_date_review)%>"><b><%= p.deployment_date_review %></b> 			<%= p.deployment_delay %></td>
 	<td><%= link_to(image_tag('edit.gif'), :action=>"edit", :id=>p.id)%></td>
 </tr>

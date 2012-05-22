@@ -8,10 +8,12 @@ class CiProjectsController < ApplicationController
 	end
 
   def mine
+    verif
     @projects = CiProject.find(:all, :conditions=>["assigned_to=?", current_user.rmt_user]).sort_by {|p| [p.order]}
   end
 
   def all
+    verif
     @projects = CiProject.find(:all).sort_by {|p| [p.order||0, p.assigned_to||'']}
   end
 
@@ -22,13 +24,16 @@ class CiProjectsController < ApplicationController
     @airbus   = CiProject.find(:all, :conditions=>"status='Verified'", :order=>"sqli_validation_date_review desc")
   end
 
-  def report
-    CiProject.all.each {|p| 
-      p.sqli_validation_date_review = p.sqli_validation_date_objective if !p.sqli_validation_date_review
+  def verif
+    CiProject.all.each { |p| 
+      p.sqli_validation_date_review   = p.sqli_validation_date_objective if !p.sqli_validation_date_review
       p.airbus_validation_date_review = p.airbus_validation_date_objective if !p.airbus_validation_date_review
+      p.deployment_date_review        = p.deployment_date_objective if !p.deployment_date_review
       p.save
     }
+  end
 
+  def report
     @sqli     = CiProject.find(:all, :conditions=>"deployment='External' and visibility='Public' and (status='Accepted' or status='Assigned')", :order=>"sqli_validation_date_review")
     @airbus   = CiProject.find(:all, :conditions=>"deployment='External' and visibility='Public' and (status='Verified')", :order=>"airbus_validation_date_review")
   end

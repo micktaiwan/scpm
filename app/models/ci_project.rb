@@ -32,6 +32,27 @@ class CiProject < ActiveRecord::Base
 		""		
 	end
 
+	def self.late_css(date)
+		return "" if !date
+		return "ci_late" if date <= Date.today()
+		""		
+	end
+
+	def sqli_delay
+		return nil if !self.sqli_validation_date_objective
+		return self.sqli_validation_date_review - self.sqli_validation_date_objective
+	end
+
+	def airbus_delay
+		return nil if !self.airbus_validation_date_objective
+		return self.airbus_validation_date_review - self.airbus_validation_date_objective
+	end
+
+	def deployment_delay
+		return nil if !self.deployment_date_objective
+		return self.deployment_date_review - self.deployment_date_objective
+	end
+
 	def short_stage
 		return case self.stage
 		when 'Continuous Improvement' 
