@@ -116,11 +116,11 @@ class ChecklistItemTemplate < ActiveRecord::Base
   end
 
   def items_done_count
-    ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=?", self.id]).select { |i| i.milestone.done==1 and i.request.contre_visite=="No"}.size
+    ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=?", self.id]).select { |i| i.milestone and i.milestone.done==1 and i.request.contre_visite=="No"}.size
   end
   
   def items_values_count(value)
-    ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=? and status=?", self.id, value]).select { |i| i.milestone.done==1 and i.request.contre_visite=="No"}.size
+    ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=? and status=?", self.id, value]).select { |i| i.milestone and i.milestone.done==1 and i.request.contre_visite=="No"}.size
   end
   
   PIE_COLORS = ['DD6666', '2FAF24', 'BBBBBB', '3F9EA0', 'D29900']
