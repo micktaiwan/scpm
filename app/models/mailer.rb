@@ -34,7 +34,7 @@ class Mailer < ActionMailer::Base
     @workloads = @workloads.select{|w| w.next_month_percents < 95 or w.next_month_percents > 115}.sort_by {|w| [w.next_month_percents]}
 
     @from       = "mfaivremacon@sqli.com"
-    @recipients = "mfaivremacon@sqli.com,bmonteils@sqli.com,stessier@sqli.com"
+    @recipients = "mfaivremacon@sqli.com,bmonteils@sqli.com,stessier@sqli.com,jmondy@sqli.com"
     @subject    = "[EISQ] Workload alerts"
     @headers    = {}
     content_type "text/html; charset=utf-8"
@@ -43,7 +43,7 @@ class Mailer < ActionMailer::Base
   def daily(person, n, r, am, ac, om, tbv)
     render(:nothing=>true) and return if !person or person.email.empty?
     @from        = "mfaivremacon@sqli.com"
-    @recipients  = "#{person.email}, mfaivremacon@sqli.com"
+    @recipients  = "#{person.email}, mfaivremacon@sqli.com, stessier@sqli.com"
     @subject     = "[BAM] Reminders for #{person.name}"
     @week1    = wlweek(Date.today)
     @week2    = wlweek(Date.today+7.days)
