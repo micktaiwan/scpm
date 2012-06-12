@@ -1,7 +1,7 @@
 Service Catalog Project Manager
 ===============================
 
-A Rails application to manage (and anything catalog or service related)
+A Rails application to manage CMMI Service projects and anything catalog or service related
 
 I don't like the name but I don't like to spent too much time to think about a project name :)
 
