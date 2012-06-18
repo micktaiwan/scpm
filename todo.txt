@@ -1,6 +1,3 @@
-https://subversion.sqli.com/svndev/PI586/branches/dev-EISQ
-https://subversion.sqli.com/svndev/PI586/trunk/projets/interne/eisq/
-
 Checklists
 ==========
 
