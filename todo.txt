@@ -1,24 +1,21 @@
-https://subversion.sqli.com/svndev/PI586/branches/dev-EISQ
-https://subversion.sqli.com/svndev/PI586/trunk/projets/interne/eisq/
-
 Checklists
 ==========
 
-Pour chaque milestone (et chaque ticket ?) créé il faut crééer la checkliste correspondante
+Pour chaque milestone (et chaque ticket ?) crï¿½ï¿½ il faut crï¿½ï¿½er la checkliste correspondante
   En fait c'est pour chaque jalon, mais aussi pour les types de tickets (S'il n'y a que du coaching il ne faut pas tous les livrables du QR)
-Pour chaque item créé il faut le rajouter à toutes les milestones pas déjà passées
-Il faut une fonction pour rafraichir les items au cas où (si on ferme le jalon, puis on le réouvre)
-Il faut une table de vrais items et une table pour les templates à copier
-Pour les templates il faut un status: propagé ou pas
-  comme ça on peut travailler sur une liste sans la "déployer en prod"
+Pour chaque item crÃ©Ã© il faut le rajouter ï¿½ toutes les milestones pas dï¿½jï¿½ passï¿½es
+Il faut une fonction pour rafraichir les items au cas oï¿½ (si on ferme le jalon, puis on le rï¿½ouvre)
+Il faut une table de vrais items et une table pour les templates ï¿½ copier
+Pour les templates il faut un status: propagï¿½ ou pas
+  comme ï¿½a on peut travailler sur une liste sans la "dï¿½ployer en prod"
 Il faut pouvoir supprimer (ou hider) un item de tous les milestones
-Il faut que quand un ticket est associé à un projet les items se créent
-Il faut que quand un jalon est ajouté à un projet les items se créent en fonction des types de tickets existant
-Si un ticket est performed ou fermé les questions correspondantes soient grisées (ou identifiées)
-S'il y a des tickets en double (de même type) il faut faire deux DN, donc on a deux checklistes
-Il me faudrait un utilitaire pour rentrer le numéro d'un ticket et que les checklistes associées sortent
+Il faut que quand un ticket est associï¿½ ï¿½ un projet les items se crï¿½ent
+Il faut que quand un jalon est ajoutï¿½ ï¿½ un projet les items se crï¿½ent en fonction des types de tickets existant
+Si un ticket est performed ou fermï¿½ les questions correspondantes soient grisï¿½es (ou identifiï¿½es)
+S'il y a des tickets en double (de mï¿½me type) il faut faire deux DN, donc on a deux checklistes
+Il me faudrait un utilitaire pour rentrer le numï¿½ro d'un ticket et que les checklistes associï¿½es sortent
 
-Comment gérer les exigences Bundle ?
+Comment gï¿½Ã©er les exigences Bundle ?
 
 ReqCategory (interne, public, etc...)
 +parent_id
@@ -59,8 +56,8 @@ ChecklistItem
 +template_id
 +deadline (relative au jalon, en jours)
 +type (cl_checkbox, cl_question, cl_memo)
-+answer (réponse pour un type cl_question)
-+status un int qui reprénsente la réponse pour un type cl_checkbox
++answer (rï¿½ponse pour un type cl_question)
++status un int qui reprï¿½nsente la rï¿½ponse pour un type cl_checkbox
   todo, inprogress, done, no response
 
 class ChecklistItem < ActiveRecord::Base; end
@@ -69,27 +66,27 @@ class ClQuestion < ChecklistItem; end
 class ClMemo < ChecklistItem; end
 
 
-Au delete d'un milestone prévenir qu'on pert la checkliste
+Au delete d'un milestone prï¿½venir qu'on pert la checkliste
 fonction de copie d'une chekliste ?
 
 Analyse du besoin projet (transverse)
-  Est-ce qu'une réunion a été posée régulièrement avec qui et quand ? Memo
-  Besoins de Modelling ?  ToCheck/Oui/TicketValidé/Non
-  Besoins de Coaching ?   ToCheck/Oui/TicketValidé/Non
-  Besoins de Change ?     ToCheck/Oui/TicketValidé/Non
-  Besoins de Audit ?      ToCheck/Oui/TicketValidé/Non
+  Est-ce qu'une rï¿½union a ï¿½tï¿½ posï¿½e rï¿½guliï¿½rement avec qui et quand ? Memo
+  Besoins de Modelling ?  ToCheck/Oui/TicketValidï¿½/Non
+  Besoins de Coaching ?   ToCheck/Oui/TicketValidï¿½/Non
+  Besoins de Change ?     ToCheck/Oui/TicketValidï¿½/Non
+  Besoins de Audit ?      ToCheck/Oui/TicketValidï¿½/Non
 Organisation
-  Réunion des 4 jours: A poser/Posée/Faite/Ne sera pas faite
-  MoM de la réunion: Memo
+  Rï¿½union des 4 jours: A poser/Posï¿½e/Faite/Ne sera pas faite
+  MoM de la rï¿½union: Memo
 Livrables
-  est-ce que la fiche de complexité est faite et attachée au ticket ?
+  est-ce que la fiche de complexitï¿½ est faite et attachï¿½e au ticket ?
   RS PP Pas faite/Faite/Ne sera pas faite
   RS RIA
   Checklist
   Spider
   PQP
   DN
-  est-ce que la gestion de conf a été faite ?
+  est-ce que la gestion de conf a ï¿½tï¿½ faite ?
 
 
 Chat
@@ -107,17 +104,17 @@ chat_messages
   id, person_id, chat_session_id, created_at
 chat_message_reads
 
-récupération d'une session ?
+rï¿½cupï¿½ration d'une session ?
 - si une seule personne et date de moins d'un heure
-- par une liste de récente sessions
+- par une liste de rï¿½cente sessions
 
-Externaliser dans des helpers pour centraliser les noms des models utilisés ?
+Externaliser dans des helpers pour centraliser les noms des models utilisï¿½s ?
 
 
 Status WP
 =========
 
-Organiser sous forme de catégories et notes ?
+Organiser sous forme de catï¿½gories et notes ?
 Ou SWOT uniquement + Stats
 
 
