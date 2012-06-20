@@ -1,6 +1,7 @@
 Checklists
 ==========
 
+Todo de christophe.
 Pour chaque milestone (et chaque ticket ?) cr�� il faut cr��er la checkliste correspondante
   En fait c'est pour chaque jalon, mais aussi pour les types de tickets (S'il n'y a que du coaching il ne faut pas tous les livrables du QR)
 Pour chaque item créé il faut le rajouter � toutes les milestones pas d�j� pass�es
