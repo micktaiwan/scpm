@@ -295,7 +295,12 @@ class ToolsController < ApplicationController
 
   def sdp_logs
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
-    @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
+    @last_sdp_phase = SDPPhase.find(:first, :order=>'updated_at desc')
+    if @last_sdp_phase != nil
+      @last_sdp_update = @last_sdp_phase.updated_at
+    else
+      @last_sdp_update = nil
+    end
   end
 
   def sdp_add

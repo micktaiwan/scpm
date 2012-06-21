@@ -1,5 +1,12 @@
 <h2>RMT import</h2>
-Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
+<% if @last_update != nil %>
+	<% last_rmt_update_ago_in_words = time_ago_in_words(@last_update) %>
+	<% last_rmt_update_ago = @last_update %>
+<% else %>
+	<% last_rmt_update_ago_in_words = "Never" %>
+	<% last_rmt_update_ago = "Never" %>
+<% end %>
+Last RMT update: <%= last_rmt_update_ago_in_words %> ago (<%= last_rmt_update_ago %>)<br/>
 <br/>
 <%= form_tag({:action => 'upload'}, :multipart => true) %>
 <p><label for="upload_file">Mantis CSV</label>
@@ -8,7 +15,14 @@ Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>
 </form>
 
 <h2>SDP import</h2>
-Last SDP update: <%= time_ago_in_words(@last_sdp_update) %> ago (<%= @last_sdp_update %>)<br/>
+<% if @last_sdp_update != nil %>
+	<% last_sdp_update_ago_in_words = time_ago_in_words(@last_sdp_update) %>
+	<% last_sdp_update_ago = @last_sdp_update %>
+<% else %>
+	<% last_sdp_update_ago_in_words = "Never" %>
+	<% last_sdp_update_ago = "Never" %>
+<% end %>
+Last SDP update: <%= last_sdp_update_ago_in_words %> ago (<%= last_sdp_update_ago %>)<br/>
 <%= form_tag({:controller=>'tools', :action => 'do_sdp_upload'}, :multipart => true) %>
 <p><label for="upload_file">SDP CSV</label>
 <%= file_field 'upload', 'datafile' %>

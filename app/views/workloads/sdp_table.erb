@@ -13,7 +13,13 @@
   <tbody id="sdp_table">
     <%= render(:partial=>"sdp_logs/log", :collection=>@sdp_logs) %>
     <tr style="background-color: #EEE;">
-    <td align="right"><%= @last_sdp_update.to_date %></td>
+	<% 	if @last_sdp_update != nil
+	   		table_date = @last_sdp_update.to_date
+		else
+			table_date = "Never"
+		end
+	%>
+    <td align="right"><%= table_date %></td>
     <td align="right"><%= @balance[:initial] %></td>
     <td align="right"><%= @balance[:remaining] %></td>
     <td align="right"><%= workload.sdp_remaining_total %></td>
@@ -21,10 +27,10 @@
     <td align="right"><%= @balance[:balance] %></td>
     <td align="right"><%= @balance[:percent] %>%</td>
     <td align="center">
-    <% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
+    <% if (current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp')) and @last_sdp_update != nil %>
     <%= link_to_remote(image_tag('add.png', :id=>'sdp_add'),
       :url=>{:controller=>'sdp_logs', :action=>'create',
-        :date=>@last_sdp_update.to_date,
+        :date=>table_date,
         :person_id=>workload.person_id,
         :initial=>@balance[:initial],
         :sdp_remaining=>@balance[:remaining],
