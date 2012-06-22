@@ -14,6 +14,7 @@ class Workload
     :line_sums,       # sum of days per line of workload
     :ctotals,         # total days planned per week including not bundle days (holidays and other lines) {:id=>w, :value=>col_sum(w, @wl_lines)}
     :availability,    # total days of availability {:days=>xxx, :percent=>yyy}
+    :sum_availability,# Sum of availabity days for the next 8 weeks
     :cprodtotals,     # total days planned per week on production only {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
     :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
     :next_month_percents,         # next 5 weeks (including current)
@@ -54,6 +55,7 @@ class Workload
     iteration                   = from_day
     @next_month_percents        = 0.0
     @three_next_months_percents = 0.0
+    @sum_availability           = 0
     while true
       w = wlweek(iteration) # output: year + week ("201143")
       break if w > farest_week or nb > 6*4
@@ -80,6 +82,7 @@ class Workload
         open    = @opens.last
         avail   = [0,(open-col_sum)].max
         @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>(avail/open).round}
+        @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
         @next_month_percents += percent if nb < 5
         @three_next_months_percents += percent if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}

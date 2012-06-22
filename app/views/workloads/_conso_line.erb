@@ -3,9 +3,16 @@
   <td align="center"><%= conso_line.remain_to_plan_days %></td>
   <td align="center"><%= conso_line.next_month_percents %>%</td>
   <td align="center"><%= conso_line.three_next_months_percents %>% (<%= conso_line.three_next_months_percents-conso_line.next_month_percents %>)</td>
-
-  <% for w in conso_line.percents %>
-      <td><%= w[:value] %></td>
-  <% end %>
+  <td align="center"><%= conso_line.sum_availability.round %></td>
+	<% indexWeek = 0 %>
+	<% for w in conso_line.percents %>
+		<%
+			w_avail_value = 0
+			w_avail_value += conso_line.availability[indexWeek][:value].to_f.round
+			w_avail_css = "availability_"+w_avail_value.to_s
+		%>
+		<td class="<%= w_avail_css %>"><%= w[:value] %></td>
+		<% indexWeek += 1 %>
+	<% end %>
 </tr>
 

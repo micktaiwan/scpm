@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   before_filter :log_action
   before_filter :verify_auth
   before_filter :set_timezone
-  filter_parameter_logging :password # Scrub sensitive parameters from logs
+  filter_parameter_logging :pwd # Scrub sensitive parameters from logs
 
   def set_timezone
     Time.zone = 'Paris'
@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
 
   def log_action
     return if controller_name == "chat" and (action_name == "refresh_sessions" or action_name == "refresh")
+    
     @action_log                   = Log.new
     # who is doing the activity?
     @action_log.person_id         = session[:user_id]
@@ -36,7 +37,7 @@ class ApplicationController < ActionController::Base
     @action_log.controller        = controller_name
     @action_log.action            = action_name
     @action_log.controller_action = controller_name + "/" + action_name
-    @action_log.params            = params.inspect # wrap this in an unless block if it might contain a password
+    @action_log.params            = params.inspect.gsub(/"pwd"=>"(.[^"]*)"/i, "\"pwd=>\"[FILTERED]") # Obfuscation of password
     @action_log.save!
   end
 

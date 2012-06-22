@@ -16,9 +16,22 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
 <%= @workloads.size %> workloads<br/>
 <br/>
 
-<table>
+<!-- Legends -->
+<table id='availabilities_legends_table'>
+<tr><td colspan="6">Legends of Availabilities</td></tr>
+<tr>
+	<td class="availability_0">0 day available</td>
+	<td class="availability_1">1 day available</td>
+	<td class="availability_2">2 days available</td>
+	<td class="availability_3">3 days available</td>
+	<td class="availability_4">4 days available</td>
+	<td class="availability_5">5 days available</td>
+</tr>	
+</table>
+
+<table class="refresh_conso_table">
   <tr style="font-weight:bold;">
-    <td colspan="4"></td>
+    <td colspan="5"></td>
     <% for w in @workloads.first.months %>
         <td><%= w %></td>
     <% end %>
@@ -29,6 +42,7 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
     <td>To plan</td>
     <td>Next 5 weeks</td>
     <td>Next 3 months</td>
+	<td>Availability 2 mths</td>
     <% for w in @workloads.first.weeks %>
         <td><%= w %></td>
     <% end %>
@@ -39,7 +53,11 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
   <tr style="font-weight:bold;">
     <td>Total</td>
     <td align="center"><%= @totals[0] %></td>
-    <% for w in @totals[1..-1] %>
+    <% for w in @totals[1..2] %>
+      <td align="center"><%= w %>%</td>
+    <% end %>
+    <td align="center"><%= @totals[3] %></td>
+    <% for w in @totals[4..-1] %>
       <td align="center"><%= w %>%</td>
     <% end %>
   </tr>
@@ -47,14 +65,18 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
   <tr style="font-weight:bold;">
     <td>Capped total</td>
     <td align="center"><%= @cap_totals[0] %></td>
-    <% for w in @cap_totals[1..-1] %>
+    <% for w in @cap_totals[1..2] %>
+      <td align="center"><%= w %>%</td>
+    <% end %>
+    <td align="center"><%= @cap_totals[3] %></td>
+    <% for w in @cap_totals[4..-1] %>
       <td align="center"><%= w %>%</td>
     <% end %>
   </tr>
   
   <tr style="font-weight:bold;">
     <td>Availability</td>
-    <% for w in @avail_totals %>
+    <% for w in @avail_totals[0..-1] %>
       <td align="center"><%= w %></td>
     <% end %>
   </tr>
