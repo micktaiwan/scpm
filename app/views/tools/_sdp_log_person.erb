@@ -16,7 +16,13 @@
     <% o = p.sdp_logs.last %>
     <%= render(:partial=>"sdp_logs/log", :object=>o) if o %>
     <tr style="background-color: #FFA;">
-    <td align="right"><%= @last_sdp_update.to_date %></td>
+	<% 	if @last_sdp_update != nil
+			table_date = @last_sdp_update.to_date
+		else
+			table_date = "Never"
+		end
+	%>
+    <td align="right"><%= table_date %></td>
     <td align="right"><%= @balance[:initial] %></td>
     <td align="right"><%= @balance[:remaining] %></td>
     <td align="right"></td>

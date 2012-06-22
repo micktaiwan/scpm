@@ -30,7 +30,12 @@ class WorkloadsController < ApplicationController
   end
 
   def get_last_sdp_update
-    @last_sdp_update = SDPPhase.find(:first, :order=>'updated_at desc').updated_at
+    @last_sdp_phase = SDPPhase.find(:first, :order=>'updated_at desc')
+    if @last_sdp_phase != nil
+      @last_sdp_update = @last_sdp_phase.updated_at
+    else
+      @last_sdp_update = nil
+    end
   end
 
   def get_chart
