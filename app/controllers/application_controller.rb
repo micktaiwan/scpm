@@ -27,7 +27,8 @@ class ApplicationController < ActionController::Base
   def log_action
     return if controller_name == "chat" and (action_name == "refresh_sessions" or action_name == "refresh")
     
-    # Password obfuscation
+    # Password obfuscation 
+    # Todo : Regex
     params_inspect_log = ""
     if action_name == "do_login"
       params_inspect_log = '{"person"=>{"login"=>"'+params[:person][:login]+'", "pwd"=>"[FILTERED]"}, "commit"=>"'+params[:commit]+' >>", "authenticity_token"=>"'+params[:authenticity_token]+'=", "action"=>"do_login", "controller"=>"sessions"}'

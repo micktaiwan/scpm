@@ -106,12 +106,12 @@
 
   <tr class="wl_total">
   <th></th>
-  <th class="wl_names">Availability</th>
+  <th class="wl_names">Availability (Sum for the 2 next months)</th>
   <th></th>
   <th></th>
   <th></th>
   <th></th>
-  <th id="availability_total"></th>
+  <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
   <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
   </tr>
 </thead>
