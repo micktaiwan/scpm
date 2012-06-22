@@ -3,7 +3,7 @@
   <td align="center"><%= conso_line.remain_to_plan_days %></td>
   <td align="center"><%= conso_line.next_month_percents %>%</td>
   <td align="center"><%= conso_line.three_next_months_percents %>% (<%= conso_line.three_next_months_percents-conso_line.next_month_percents %>)</td>
-
+  <td align="center"><%= conso_line.sum_availability.round %></td>
 	<% indexWeek = 0 %>
 	<% for w in conso_line.percents %>
 		<%

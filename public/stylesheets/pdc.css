@@ -135,3 +135,31 @@ tr.wl_opens {
 .wlerror.no_sdp{
   background: #AAF;
   }
+
+
+/* STATUSES AVAILABILITY */
+#availabilities_legends_table {
+	float:right;
+}
+.refresh_conso_table td {
+	padding : 2px 0 2px 2px;
+}
+td.availability_0 {
+	background-color: #EEEEEE;
+}
+td.availability_1 {
+	background-color: #FFFFA0;
+}
+td.availability_2 {
+	background-color: #FFEEA0;
+}
+td.availability_3 {
+	background-color: #FFD9A1;
+}
+td.availability_4 {
+	background-color: #FFA1A1;
+}
+td.availability_5 {
+	background-color: #000000;
+	color: #FFFFFF;
+}

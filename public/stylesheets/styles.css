@@ -595,24 +595,3 @@ table.sortable .header  {
   background-color: #EFE;
   color:#555;
 }
-
-/* STATUSES AVAILABILITY */
-td.availability_0{
-	background-color: #CFCFCF;
-}
-td.availability_1{
-	background-color: #AADD88;
-}
-td.availability_2{
-	background-color: #FFFFA0;
-}
-td.availability_3{
-	background-color: #FFD9A1;
-}
-td.availability_4{
-	background-color: #FFA1A1;
-}
-td.availability_5{
-	background-color: #000000;
-	color: #FFFFFF;
-}

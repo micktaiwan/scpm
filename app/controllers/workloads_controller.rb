@@ -133,6 +133,10 @@ class WorkloadsController < ApplicationController
     @totals << (@workloads.inject(0) { |sum,w| sum += w.three_next_months_percents} / size).round
     @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.three_next_months_percents)} / size).round
     @avail_totals << ''
+    # availability 2 mths
+    @totals << ''
+    @cap_totals << ''
+    @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.sum_availability })
     # per weeks
     @workloads.first.weeks.each_with_index do |tmp,i|
       @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:precise]} / size).round
@@ -141,10 +145,10 @@ class WorkloadsController < ApplicationController
     end
 
     chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
-    chart.data "capped", @cap_totals[3..-1], 'ff0000'
-    chart.data "non capped", @totals[3..-1], '0000ff'
+    chart.data "capped", @cap_totals[4..-1], 'ff0000'
+    chart.data "non capped", @totals[4..-1], '0000ff'
     #chart.add_labels @cap_totals[3..-1]
-    max = [@totals[3..-1].max,@cap_totals[3..-1].max].max
+    max = [@totals[4..-1].max,@cap_totals[4..-1].max].max
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
