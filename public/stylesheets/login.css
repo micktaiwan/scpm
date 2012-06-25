@@ -81,7 +81,7 @@ h2 {
   cursor: pointer;
   text-align: center;
   font-family: 'Zeyada', serif;
-  font-size: 5em;
+  font-size: 4em;
   color:black;
   border: 1px solid #678;
   padding: 10px;
@@ -89,7 +89,7 @@ h2 {
   border-radius: 15px;
   -moz-border-radius: 15px;
   opacity: 0.6;
-  width: 200px;
+  width: 180px;
   float: left;
 }
 .big_button ul {
@@ -137,7 +137,7 @@ h2 {
   }
 .big_button.logout {
   background: #FFF;
-  font-size: 3em;
+  font-size: 2em;
   float:right;
   width:auto;
   }

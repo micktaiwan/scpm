@@ -1,3 +1,5 @@
 
 /config/database.yml
 /tmp
+/Capfile
+/config/deploy.rb
