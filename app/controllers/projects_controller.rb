@@ -486,7 +486,8 @@ class ProjectsController < ApplicationController
   end
 
   def stats_for_center(c)
-    [Workstream.find_by_name(c), nb_of_wps_with_status(c,3), nb_of_wps_with_status(c,2), nb_of_wps_with_status(c,1), nb_of_wps_with_status(c,0)]
+    #[Workstream.find_by_name(c), nb_of_wps_with_status(c,3), nb_of_wps_with_status(c,2), nb_of_wps_with_status(c,1), nb_of_wps_with_status(c,0)]
+    [c, nb_of_wps_with_status(c.name,3), nb_of_wps_with_status(c.name,2), nb_of_wps_with_status(c.name,1), nb_of_wps_with_status(c.name,0)]
   end
 
   # generate an Excel file for Workstream reporting
@@ -496,7 +497,8 @@ class ProjectsController < ApplicationController
       get_projects
 
       # TODO: use model "workstream"
-      @centers = ['EI', 'EV', 'EE', 'EG', 'ES', 'EY', 'EZC', 'EZ', 'EZMB', 'EZMC', 'TBCE']
+      # @centers = ['EI', 'EV', 'EE', 'EG', 'ES', 'EY', 'EZC', 'EZ', 'EZMB', 'EZMC', 'TBCE']
+      @centers = Workstream.all()
       @centers = @centers.map { |c| stats_for_center(c) }
 
       @wps = @wps.select{ |w| w.get_status.status > 0}.sort_by { |w|
