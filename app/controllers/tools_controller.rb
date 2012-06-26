@@ -432,6 +432,17 @@ class ToolsController < ApplicationController
       end
       }.reverse
   end
+  
+  def check_sdp_remaining_workload
+    @sdp_wrong_tasks = []
+    sdp_tasks = SDPTask.all
+    sdp_tasks.each_with_index do |sdp_task, index|
+      rem_coef = sdp_task.remaining.modulo(0.125)
+      if sdp_task.remaining > 0 and rem_coef > 0
+          @sdp_wrong_tasks << sdp_task
+      end
+    end
+  end
 
 private
 
