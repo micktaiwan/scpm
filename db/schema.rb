@@ -480,7 +480,7 @@ ActiveRecord::Schema.define(:version => 20120625151642) do
     t.float    "gained"
     t.float    "iteration"
     t.float    "collab"
-    t.float    "balancei"
+    t.decimal  "balancei",    :precision => 10, :scale => 3
     t.float    "balancer"
     t.float    "balancea"
     t.datetime "created_at"
