@@ -39,7 +39,8 @@ class CsvCi
     :airbus_validation_date,
     :deployment_date,
     :deployment_date_review,
-    :airbus_responsible
+    :airbus_responsible,
+    :kick_off_date
 
   def initialize
   end

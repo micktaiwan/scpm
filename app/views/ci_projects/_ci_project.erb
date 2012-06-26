@@ -10,5 +10,6 @@
 	<td class="<%=CiProject.late_css(p.sqli_validation_date_review)%>"><b><%= p.sqli_validation_date_review %></b> 	<%= p.sqli_delay %></td>
 	<td class="<%=CiProject.late_css(p.airbus_validation_date_review)%>"><b><%= p.airbus_validation_date_review %></b> 	<%= p.airbus_delay %></td>
 	<td class="<%=CiProject.late_css(p.deployment_date_review)%>"><b><%= p.deployment_date_review %></b> 			<%= p.deployment_delay %></td>
+	<td> <%= p.kick_off_date %> </td>
 	<td><%= link_to(image_tag('edit.gif'), :action=>"edit", :id=>p.id)%></td>
 </tr>

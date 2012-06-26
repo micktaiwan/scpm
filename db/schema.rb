@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120521075704) do
+ActiveRecord::Schema.define(:version => 20120625151642) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(:version => 20120521075704) do
     t.string   "airbus_responsible"
     t.date     "sqli_validation_date_review"
     t.date     "airbus_validation_date_review"
+    t.date     "kick_off_date"
   end
 
   create_table "companies", :force => true do |t|
