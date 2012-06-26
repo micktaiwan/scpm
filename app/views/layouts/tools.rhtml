@@ -56,6 +56,7 @@
       <li><%= link_to('CHECK RMT <=> SDP',{:controller=>'tools', :action=>'sdp_yes_check'}) %></li>
       <li><%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}) %></li>
       <li><%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}) %></li>
+      <li><%= link_to('CHECK wrong Remaining Workload', {:controller=>'tools', :action=>'check_sdp_remaining_workload'}) %></li>
       <% if current_user.has_role?('Admin') %>
         <li class="hsep">Stuff</li>
         <li><%= link_to('Gains per person',     {:controller=>'tools', :action=>'sdp_logs'}) %></li>
