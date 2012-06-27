@@ -1,0 +1,14 @@
+<tr>
+  <!-- <td><%= link_to invalid_request.request_id.gsub(/(0{3,})[^1-9]*/,''),"http://toulouse.sqli.com/EMN/view.php?id="+invalid_request.request_id  %></td> -->
+  <td><%= link_to invalid_request.request_id,"http://toulouse.sqli.com/EMN/view.php?id="+invalid_request.request_id  %></td>
+  <td><%= invalid_request.workstream %></td>
+  <td><%= invalid_request.status %></td>
+  <td><%= invalid_request.reporter %></td>
+  <td><%= invalid_request.summary %></td>
+  <td><%= invalid_request.assigned_to %></td>
+  <td><%= invalid_request.work_package %></td>
+  <td><%= invalid_request.milestone %></td>
+  <td class="req_proposed"><%= invalid_request.milestone_date %></td>
+  <td class="req_proposed"><%= invalid_request.po %></td>
+</tr>
+
