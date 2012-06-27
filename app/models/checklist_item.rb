@@ -44,14 +44,6 @@ class ChecklistItem < ActiveRecord::Base
     end
     return true
   end
-  
-  def self.cleanup
-    self.delete_all
-    puts "ChecklistItems datas deleted"
-    #   ChecklistItemTemplateWorkpackage.delete_all
-    #   puts "ChecklistItemTemplateWorkpackage datas deleted"
-    #   ChecklistItemTemplateMilestoneName.delete_all
-    #   puts "ChecklistItemTemplateMilestoneName datas deleted"
-  end
+
 end
 
