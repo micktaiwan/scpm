@@ -106,52 +106,10 @@ private
     p.title  = t
     r_id = /^\[(\d+)\].*$/.match(t)
     p.request_id = r_id[1] if r_id
-    
-    # don't save sdp task if RMT request is cancelled and sdp set to no
-    save_task = true
-    if r_id
-      task_request = Request.first(:conditions=>["request_id = ?",r_id[1]])
-      if task_request.status == "cancelled" and task_request.sdp == "No"
-        save_task = false
-      end
-    end
-    if save_task
-      populate(p)
-      p.save
-    else
-      remove_task_from_activity
-      remove_task_from_phase
-    end
+    populate(p)
+    p.save
   end
 
-  def remove_task_from_activity
-    @current_activity.initial -= @row[INTIAL].to_f
-    @current_activity.reevaluated -= @row[REEVALUATED].to_f
-    @current_activity.assigned -= @row[ASSIGNED].to_f
-    @current_activity.consumed -= @row[CONSUMED].to_f
-    @current_activity.remaining -= @row[REMAINING].to_f
-    @current_activity.revised -= @row[REVISED].to_f
-    @current_activity.gained -= @row[GAINED].to_f
-    @current_activity.balancei -= @row[BALANCEI].to_f
-    @current_activity.balancer -= @row[BALANCER].to_f
-    @current_activity.balancea -= @row[BALANCEA].to_f
-    @current_activity.save
-  end
-  
-  def remove_task_from_phase
-    @current_phase.initial -= @row[INTIAL].to_f
-    @current_phase.reevaluated -= @row[REEVALUATED].to_f
-    @current_phase.assigned -= @row[ASSIGNED].to_f
-    @current_phase.consumed -= @row[CONSUMED].to_f
-    @current_phase.remaining -= @row[REMAINING].to_f
-    @current_phase.revised -= @row[REVISED].to_f
-    @current_phase.gained -= @row[GAINED].to_f
-    @current_phase.balancei -= @row[BALANCEI].to_f
-    @current_phase.balancer -= @row[BALANCER].to_f
-    @current_phase.balancea -= @row[BALANCEA].to_f
-    @current_phase.save
-  end
-  
   def insert
     #puts @row.join(', ')
     #puts @row[ID]
