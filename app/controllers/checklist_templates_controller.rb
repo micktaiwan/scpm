@@ -115,6 +115,16 @@ options:
     @values = @items.map{|i| [i.status, i.ctemplate.values.alt(i.status)]}.uniq
   end
   
+  def list_per_wr
+    # Parents
+    @templates_parent = []
+    templates_parent_local = ChecklistItemTemplate.find(:all, :conditions=>"parent_id=0 or parent_id is null", :order=>"is_transverse")
+    templates_parent_local.each do |t|
+      @templates_parent[t.id] = t.title
+    end
+    # Workpackages
+    @workpackages = Workpackage.all
+  end
 end
 
 

@@ -1,0 +1,37 @@
+<%= render(:file=>"tools/menu")%>
+<h2>Checklist Templates per Workpackages</h2>
+<%= render(:file=>"checklist_templates/menu")%>
+
+<% 
+# Workpackages loop
+@workpackages.each do |w| 
+  w_checklist_item_templates = w.checklist_item_templates.sort_by { |c| [ c.parent_id ] }  
+  check_current_parent = 0
+%>
+  
+  <p><b><%= w.title %></b></p>
+  <ul>
+  <%
+  # Checklist item templates loop 
+  w_checklist_item_templates.each_with_index do |c,i| 
+  %>
+	<!-- PARENT 0 -->
+	<% if (c.parent_id != check_current_parent or check_current_parent == 0 ) and (c.parent_id != 0 and c.parent_id != nil) %>
+	  <li><%= @templates_parent[c.parent_id] %></li>
+	  <ul>
+	  <% check_current_parent = c.parent_id %>
+	<% end %>
+    
+	<!-- CHILD -->
+	<% if c.parent_id != 0  %>
+      <li>- <%= c.title %></li>
+    <% end %>
+
+	<!-- LAST CHILD -->
+	<% if w_checklist_item_templates[i+1]==nil or w_checklist_item_templates[i+1].parent_id != check_current_parent %>
+		</ul>
+	<% end
+  end # End checklist item templates loop
+  concat "</ul>"
+end # End Workpackage loop
+%>
