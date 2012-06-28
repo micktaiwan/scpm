@@ -123,7 +123,7 @@ options:
       @templates_parent[t.id] = t.title
     end
     # Workpackages
-    @workpackages = Workpackage.all
+    @workpackages = Workpackage.all.sort_by { |w| [ w.title ] }
   end
 end
 
