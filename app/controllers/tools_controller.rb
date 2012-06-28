@@ -456,6 +456,7 @@ class ToolsController < ApplicationController
         @invalid_requests << request
       end
     end
+    @invalid_requests.sort! { |a,b| a.milestone_date <=> b.milestone_date }
   end
 
 private
