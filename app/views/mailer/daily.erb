@@ -51,6 +51,11 @@ Dear <%= @person.name %>,<br/>
   </table><br/>
 <% end %>
 
+<% if @wl_percent_planned < 80 %>
+	<span style="font-weight:bold;">To plan</span><br />
+	You have <%= @wl_to_plan %> days to plan.
+<% end %>
+
 <br/>
 <br/>
 Your very kind secretary,<br/>
