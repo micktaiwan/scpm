@@ -446,7 +446,7 @@ class ToolsController < ApplicationController
   
   def check_difference_po_milestone_date
     @invalid_requests = []
-    Request.all.each do |request|
+    Request.find(:all, :conditions=>"status='to be validated'").each do |request|
       milestone_date = "0001-01-01"
       # If request.milestone_date is valid (content and format)
       if request.milestone_date != "" and /^(\d{4,4}-\d{2}-\d{2})$/.match(request.milestone_date)!=nil
