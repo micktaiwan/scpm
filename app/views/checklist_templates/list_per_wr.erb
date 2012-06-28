@@ -1,0 +1,14 @@
+<%= render(:file=>"tools/menu")%>
+<h2>Checklist Templates per Workpackages</h2>
+<%= render(:file=>"checklist_templates/menu")%>
+
+<% 
+# Workpackages loop
+@workpackages.each do |w| 
+  w_checklist_item_templates = w.checklist_item_templates.select{ |c| c.parent_id == 0 or c.parent_id == nil }
+%>
+  <p><b><%= w.title %></b></p>
+  <ul><%= render :partial=>"ctemplate_per_wr", :collection=>w_checklist_item_templates, :locals => { :current_wp => w } %></ul>
+<%
+end # End Workpackage loop
+%>

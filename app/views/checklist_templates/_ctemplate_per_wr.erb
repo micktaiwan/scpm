@@ -1,0 +1,12 @@
+<% 
+	# ctemplate_per_wr_workpackages = ctemplate_per_wr.workpackages.map { |w| w.id }
+	if ctemplate_per_wr.workpackages.include? current_wp 
+%>
+<li id="template_<%=ctemplate_per_wr.id%>">
+  - <%= ctemplate_per_wr.title %>
+  <ul>
+    <%= render(:partial=>"ctemplate_per_wr", :collection=>ctemplate_per_wr.children, :locals => { :current_wp => current_wp } ) %>
+  </ul>
+</li>
+<% end %>
+
