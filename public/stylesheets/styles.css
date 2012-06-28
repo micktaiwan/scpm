@@ -111,7 +111,7 @@ width: 100%; /* width is based on the containing block */
 #menu_bar ul li:hover ul {
   z-index: 100;
   display: block;
-  width: 220px;
+  width: 240px;
   position: absolute;
   background: #AAA;
   border: 1px solid #666;

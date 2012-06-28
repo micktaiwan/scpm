@@ -443,6 +443,20 @@ class ToolsController < ApplicationController
       end
     end
   end
+  
+  def check_difference_po_milestone_date
+    @invalid_requests = []
+    Request.all.each do |request|
+      milestone_date = "0001-01-01"
+      # If request.milestone_date is valid (content and format)
+      if request.milestone_date != "" and /^(\d{4,4}-\d{2}-\d{2})$/.match(request.milestone_date)!=nil
+        milestone_date = request.milestone_date
+      end
+      if Date.strptime(milestone_date, "%Y-%m-%d").year.to_s!=request.po
+        @invalid_requests << request
+      end
+    end
+  end
 
 private
 
