@@ -314,7 +314,7 @@ class ToolsController < ApplicationController
     # TODO: not portable
     @checks = Request.find(:all, :conditions=>"sdp='Yes' and sdpiteration!='' and sdpiteration!='2011' and sdpiteration!='2010'", :order=>"request_id")
     @checks = @checks.select {|r|
-      r.workload2.to_f != r.sdp_tasks_initial_sum
+      r.workload.to_f != r.sdp_tasks_initial_sum
       }
   end
 

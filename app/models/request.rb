@@ -343,7 +343,7 @@ class Request < ActiveRecord::Base
   end
 
   def workload
-    return 0 if self.status == "cancelled" or self.status == "feedback" or self.status == "performed" or self.resolution == "ended"
+    return 0  if self.status == "cancelled" or self.status=="removed" or self.status == "feedback" or self.status == "performed" or self.resolution == "ended"
     workload2
   end
 
