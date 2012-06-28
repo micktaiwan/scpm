@@ -449,7 +449,7 @@ class ToolsController < ApplicationController
     Request.find(:all, :conditions=>"status='to be validated'").each do |request|
       @invalid_requests << request if !request.date or request.date.year.to_s != request.po.strip
     end
-    @invalid_requests = @invalid_requests.sort_by { |r| [r.milestone_date, r.workstream] }
+    @invalid_requests = @invalid_requests.sort_by { |r| [r.workstream, r.summary, (r.date ? r.date.to_s : ""), r.po] }
   end
 
 private
