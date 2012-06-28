@@ -447,7 +447,7 @@ class ToolsController < ApplicationController
   def check_difference_po_milestone_date
     @invalid_requests = []
     Request.find(:all, :conditions=>"status='to be validated'").each do |request|
-      @invalid_requests << request if request.date and request.date.year.to_s != request.po.strip
+      @invalid_requests << request if !request.date or request.date.year.to_s != request.po.strip
     end
     @invalid_requests = @invalid_requests.sort_by { |r| [r.milestone_date, r.workstream] }
   end
