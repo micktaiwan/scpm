@@ -117,13 +117,14 @@ options:
   
   def list_per_wr
     # Parents
-    @templates_parent = []
-    templates_parent_local = ChecklistItemTemplate.find(:all, :conditions=>"parent_id=0 or parent_id is null", :order=>"is_transverse")
-    templates_parent_local.each do |t|
-      @templates_parent[t.id] = t.title
-    end
-    # Workpackages
+    # @templates_parent = []
+    #     templates_parent_local = ChecklistItemTemplate.find(:all, :conditions=>"parent_id=0 or parent_id is null", :order=>"is_transverse")
+    #     templates_parent_local.each do |t|
+    #       @templates_parent[t.id] = t.title
+    #     end
+    
     @workpackages = Workpackage.all.sort_by { |w| [ w.title ] }
+    @milestones = MilestoneName.all.sort_by { |m| [ m.title ] }
   end
 end
 
