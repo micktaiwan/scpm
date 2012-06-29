@@ -126,3 +126,20 @@ function check_requirement(form) {
   return true;
   }
 
+function check_list_per_wr(){
+  $$('.milestone_title').each(function(item,index){
+    if (item.next("ul") && (item.next("ul").childElements().length==0))
+    {
+      item.hide();
+      //console.log(item.innerHTML + "--->" + item.next("ul").childElements());
+    }
+  });
+		// $$('.checklist_item_template_title').each(function(item,index){
+		// 		console.log(item.select("ul")[0]);
+		// 	if (item.select("ul").length > 1 && (item.select("ul")[0].childElements().length==0))
+		// 	{
+		// 		//item.hide();
+		// 		console.log(item.innerHTML + "--->" + item.next("ul").childElements());
+		// 	}
+		// });
+}

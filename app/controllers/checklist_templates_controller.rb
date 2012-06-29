@@ -115,16 +115,23 @@ options:
     @values = @items.map{|i| [i.status, i.ctemplate.values.alt(i.status)]}.uniq
   end
   
-  def list_per_wr
-    # Parents
-    # @templates_parent = []
-    #     templates_parent_local = ChecklistItemTemplate.find(:all, :conditions=>"parent_id=0 or parent_id is null", :order=>"is_transverse")
-    #     templates_parent_local.each do |t|
-    #       @templates_parent[t.id] = t.title
-    #     end
-    
+  def list_per_wr_filter
     @workpackages = Workpackage.all.sort_by { |w| [ w.title ] }
     @milestones = MilestoneName.all.sort_by { |m| [ m.title ] }
+    @checklists = ChecklistItemTemplate.all( :conditions => ["parent_id = 0 or parent_id = null"])
+  end
+  
+  def list_per_wr
+    if !params[:workpackages] or !params[:milestones] or !params[:checklists]
+      redirect_to :action => "list_per_wr_filter"
+    else
+      workpages_filtered = Workpackage.find(params[:workpackages])
+      milestones_filtered = MilestoneName.find(params[:milestones])
+      checklists_filtered = ChecklistItemTemplate.all( :conditions => ["(parent_id = 0 or parent_id = null) and id IN (?)",params[:checklists]])
+      @workpackages = workpages_filtered.sort_by { |w| [ w.title ] }
+      @milestones = milestones_filtered.sort_by { |m| [ m.title ] }
+      @checklists = checklists_filtered
+    end
   end
 end
 
