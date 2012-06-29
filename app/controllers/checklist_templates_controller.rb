@@ -110,9 +110,9 @@ options:
   
   def ind_details
     template_id = params[:id]
-    @ctemplate = ChecklistItemTemplate.find(template_id)
-    @items = @ctemplate.checklist_items.select{|i| i.milestone.done==1 and i.request.contre_visite=="No"}.sort_by{ |i| [i.milestone.project.full_name, i.milestone.name]}
-    @values = @items.map{|i| [i.status, i.ctemplate.values.alt(i.status)]}.uniq
+    @ctemplate  = ChecklistItemTemplate.find(template_id)
+    @items      = @ctemplate.checklist_items.select{|i| i.milestone.done==1 and i.request.contre_visite=="No"}.sort_by{ |i| [i.milestone.project.full_name, i.milestone.name]}
+    @values     = @items.map{|i| [i.status, i.ctemplate.values.alt(i.status)]}.uniq
   end
   
   def list_per_wp
@@ -124,8 +124,6 @@ options:
     #     end
     
     @workpackages = Workpackage.all.sort_by { |w| [ w.title ] }
-    @milestones = MilestoneName.all.sort_by { |m| [ m.title ] }
+    @milestones   = MilestoneName.all.sort_by { |m| [ m.title ] }
   end
 end
-
-
