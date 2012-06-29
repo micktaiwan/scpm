@@ -2,7 +2,7 @@
 <h2>Checklist Templates per Workpackages : Filters</h2>
 <%= render(:file=>"checklist_templates/menu")%>
 
-<% form_tag (:controller => "checklist_templates", :action => "list_per_wr", :method => "post") do %>
+<% form_tag (:controller => "checklist_templates", :action => "list_per_wp", :method => "post") do %>
 <div id="list_wp">
   <h3>Workpackages</h3>
   <%= select_tag "workpackages", options_for_select(@workpackages.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @workpackages.size  %>
@@ -19,6 +19,6 @@
 </div>
 
 <div>
-<%= submit_tag "Show list per workpackage", :id => "list_per_wr_filter_submit" %>
+<%= submit_tag "Show list per workpackage", :id => "list_per_wp_filter_submit" %>
 </div>
 <% end %>

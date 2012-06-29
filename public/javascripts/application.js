@@ -126,7 +126,7 @@ function check_requirement(form) {
   return true;
   }
 
-function check_list_per_wr(){
+function check_list_per_wp(){
   $$('.milestone_title').each(function(item,index){
     if (item.next("ul") && (item.next("ul").childElements().length==0))
     {

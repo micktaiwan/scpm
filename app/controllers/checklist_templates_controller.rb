@@ -115,15 +115,15 @@ options:
     @values = @items.map{|i| [i.status, i.ctemplate.values.alt(i.status)]}.uniq
   end
   
-  def list_per_wr_filter
+  def list_per_wp_filter
     @workpackages = Workpackage.all.sort_by { |w| [ w.title ] }
     @milestones = MilestoneName.all.sort_by { |m| [ m.title ] }
     @checklists = ChecklistItemTemplate.all( :conditions => ["parent_id = 0 or parent_id = null"])
   end
   
-  def list_per_wr
+  def list_per_wp
     if !params[:workpackages] or !params[:milestones] or !params[:checklists]
-      redirect_to :action => "list_per_wr_filter"
+      redirect_to :action => "list_per_wp_filter"
     else
       workpages_filtered = Workpackage.find(params[:workpackages])
       milestones_filtered = MilestoneName.find(params[:milestones])

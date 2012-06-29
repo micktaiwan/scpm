@@ -11,7 +11,7 @@
 	concat "<li class='milestone_title'>" + m.title + "</li>"
 %>
   <ul>
-    <%= render :partial=>"ctemplate_per_wr", :collection=>@checklists, :locals => { :current_wp => w, :current_m => m } %>
+    <%= render :partial=>"ctemplate_per_wp", :collection=>@checklists, :locals => { :current_wp => w, :current_m => m } %>
   </ul>
 <%
   end # End Milestones loop
@@ -19,4 +19,4 @@
 end # End Workpackage loop
 %>
 
-<%=javascript_tag "check_list_per_wr()" -%>
+<%=javascript_tag "check_list_per_wp()" -%>
