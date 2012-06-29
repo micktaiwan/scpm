@@ -78,6 +78,7 @@ private
   end
 
   def sanitize_attr(name)
+    raise "no name for attribute (importing requests). Check if you really importing a request export file." if !name
     name = name.downcase
     name.gsub!(" #","")
     name.gsub!("/","")

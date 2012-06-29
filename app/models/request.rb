@@ -554,6 +554,18 @@ class Request < ActiveRecord::Base
     return nil
   end
 
+  def background_for_po
+    if self.po.strip=="2012"
+      if self.date
+        return " style='background: #FAA'"
+      else
+        return " style='background: #FFA'"
+      end
+    else
+      return ""
+    end    
+  end
+
 private
 
   def sanitize(name)
