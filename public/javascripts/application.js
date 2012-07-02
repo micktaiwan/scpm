@@ -131,7 +131,6 @@ function check_list_per_wp(){
     if (item.next("ul") && (item.next("ul").childElements().length==0))
     {
       item.hide();
-      //console.log(item.innerHTML + "--->" + item.next("ul").childElements());
     }
   });
 		// $$('.checklist_item_template_title').each(function(item,index){
@@ -142,4 +141,18 @@ function check_list_per_wp(){
 		// 		console.log(item.innerHTML + "--->" + item.next("ul").childElements());
 		// 	}
 		// });
+}
+
+function check_submit_form_list_per_wp()
+{
+  $("list_per_wp_filter_submit").observe('click', function() {
+    if(($('workpackages').selectedIndex!=-1)&&($('milestones').selectedIndex!=-1)&&($('checklists').selectedIndex!=-1))
+    {
+      $("list_per_wp_form").submit();
+    }
+    else
+    {
+	  alert("Select one or more elements in each list.");
+    }
+  });
 }

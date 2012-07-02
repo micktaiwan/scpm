@@ -2,23 +2,28 @@
 <h2>Checklist Templates per Workpackages : Filters</h2>
 <%= render(:file=>"checklist_templates/menu")%>
 
-<% form_tag (:controller => "checklist_templates", :action => "list_per_wp", :method => "post") do %>
+<% form_tag ({:controller => "checklist_templates", :action => "list_per_wp"}, :method => "post", :id => "list_per_wp_form") do %>
 <div id="list_wp">
   <h3>Workpackages</h3>
   <%= select_tag "workpackages", options_for_select(@workpackages.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @workpackages.size  %>
+  <p class="list_per_wp_list_legend">Select one or many</p>
 </div>
 
 <div id="list_m">
   <h3>Milestones</h3>
-  <%= select_tag "milestones", options_for_select(@milestones.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @milestones.size  %>
+  <%= select_tag "milestones", options_for_select(@milestones.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @workpackages.size  %>
+  <p class="list_per_wp_list_legend">Select one or many</p>
 </div>
 
 <div id="list_c">
-  <h3>Checklist items templates</h3>
-  <%= select_tag "checklists", options_for_select(@checklists.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @checklists.size  %>
+  <h3>Checklist items templates parents</h3>
+  <%= select_tag "checklists", options_for_select(@checklists.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @workpackages.size  %>
+  <p class="list_per_wp_list_legend">Select one or many</p>
 </div>
 
 <div>
-<%= submit_tag "Show list per workpackage", :id => "list_per_wp_filter_submit" %>
+	<%= button_to "Show list per workpackage", {},:id => "list_per_wp_filter_submit", :onclick => "return false;" %>
 </div>
 <% end %>
+
+<%=javascript_tag "check_submit_form_list_per_wp()" -%>
