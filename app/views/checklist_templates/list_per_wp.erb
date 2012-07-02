@@ -8,9 +8,7 @@
   concat "<p><b> Workpackage : " + w.title + "</b></p><ul>"
   # Milestones loop
   @milestones.each do |m|
-	concat "<li>" + m.title + "</li>"
-	
-	#checklist_item_templates = ChecklistItemTemplate.all(:joins => [:workpackages, :milestone_names], :conditions => ["(parent_id = 0 or parent_id = null) and workpackages.id = ? and milestone_names.id = ? ", w.id, m.id])
+  concat "<li class='milestone_title'>" + m.title + "</li>"
 %>
   <ul>
     <%= render :partial=>"ctemplate_per_wp", :collection=>@checklists, :locals => { :current_wp => w, :current_m => m } %>
@@ -20,3 +18,5 @@
   concat "</ul>"
 end # End Workpackage loop
 %>
+
+<%=javascript_tag "check_list_per_wp()" -%>
