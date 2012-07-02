@@ -1,0 +1,24 @@
+<%= render(:file=>"tools/menu")%>
+<h2>Checklist Templates per Workpackages : Filters</h2>
+<%= render(:file=>"checklist_templates/menu")%>
+
+<% form_tag (:controller => "checklist_templates", :action => "list_per_wp", :method => "post") do %>
+<div id="list_wp">
+  <h3>Workpackages</h3>
+  <%= select_tag "workpackages", options_for_select(@workpackages.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @workpackages.size  %>
+</div>
+
+<div id="list_m">
+  <h3>Milestones</h3>
+  <%= select_tag "milestones", options_for_select(@milestones.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @milestones.size  %>
+</div>
+
+<div id="list_c">
+  <h3>Checklist items templates</h3>
+  <%= select_tag "checklists", options_for_select(@checklists.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @checklists.size  %>
+</div>
+
+<div>
+<%= submit_tag "Show list per workpackage", :id => "list_per_wp_filter_submit" %>
+</div>
+<% end %>

@@ -34,3 +34,12 @@ h2 {
   background: #DDD;
   border: 1px solid #005;
 }
+
+#list_wp, #list_m, #list_c {
+	float:left;
+	display:inline;
+	margin-left:40px;
+}
+#list_per_wp_filter_submit {
+	margin-top: 80px;
+}

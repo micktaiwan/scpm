@@ -1,0 +1,11 @@
+<% 
+if ctemplate_per_wp.workpackages.include? current_wp and ctemplate_per_wp.milestone_names.include? current_m
+%>
+  <li class="checklist_item_template_title" id="template_<%=ctemplate_per_wp.id%>">
+    - <%= ctemplate_per_wp.title %>
+    <ul>
+      <%= render(:partial=>"ctemplate_per_wp", :collection=>ctemplate_per_wp.children, :locals => { :current_wp => current_wp, :current_m => current_m  } ) %>
+    </ul>
+  </li>
+<% end %>
+
