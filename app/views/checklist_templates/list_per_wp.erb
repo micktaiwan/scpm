@@ -3,7 +3,6 @@
 <%= render(:file=>"checklist_templates/menu")%>
 
 <% 
-checklist_item_templates = ChecklistItemTemplate.all( :conditions => ["parent_id = 0 or parent_id = null"])
 # Workpackages loop
 @workpackages.each do |w| 
   concat "<p><b> Workpackage : " + w.title + "</b></p><ul>"
@@ -14,7 +13,7 @@ checklist_item_templates = ChecklistItemTemplate.all( :conditions => ["parent_id
 	#checklist_item_templates = ChecklistItemTemplate.all(:joins => [:workpackages, :milestone_names], :conditions => ["(parent_id = 0 or parent_id = null) and workpackages.id = ? and milestone_names.id = ? ", w.id, m.id])
 %>
   <ul>
-    <%= render :partial=>"ctemplate_per_wp", :collection=>checklist_item_templates, :locals => { :current_wp => w, :current_m => m } %>
+    <%= render :partial=>"ctemplate_per_wp", :collection=>@checklists, :locals => { :current_wp => w, :current_m => m } %>
   </ul>
 <%
   end # End Milestones loop
