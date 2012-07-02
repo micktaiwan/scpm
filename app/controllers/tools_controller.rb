@@ -312,9 +312,9 @@ class ToolsController < ApplicationController
     # check if sdp loads are corrects
     @empty_sdp_iteration = Request.find(:all, :conditions=>"sdpiteration='' and status!='removed'", :order=>"request_id")
     # TODO: not portable
-    @checks = Request.find(:all, :conditions=>"sdp='Yes' and sdpiteration!='' and sdpiteration!='2011' and sdpiteration!='2010'", :order=>"request_id")
+    @checks = Request.find(:all, :conditions=>"status!='removed' and sdp='Yes' and sdpiteration!='' and sdpiteration!='2011' and sdpiteration!='2010'", :order=>"request_id")
     @checks = @checks.select {|r|
-      r.workload.to_f != r.sdp_tasks_initial_sum
+      r.workload2.to_f != r.sdp_tasks_initial_sum
       }
   end
 
