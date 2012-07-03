@@ -1,5 +1,5 @@
 <% log = p.sdp_logs.last %>
-<tr>
+<tr<% if p.has_left==1 %> style="background-color:#CCC"<% elsif p.is_transverse==1 %> style="background-color:#FFC"<% end %>>
 <td><b><%= link_to(p.name, :controller=>"people", :action=>"edit", :id=>p.id) %></b></td>
 <td><% if p.is_transverse==1 %>Y<% end %></td>
 <td align="right" <%=log.css_class%>><%= log.date %></td>

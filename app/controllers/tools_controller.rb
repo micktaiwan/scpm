@@ -304,7 +304,7 @@ class ToolsController < ApplicationController
   end
 
   def sdp_conso
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0").select {|p| p.sdp_logs.last}.sort_by { |p| p.sdp_logs.last.percent }
+    @people = Person.find(:all, :conditions=>"is_supervisor=0").select {|p| p.sdp_logs.last}.sort_by { |p| p.sdp_logs.last.percent }
   end
 
   def sdp_add
