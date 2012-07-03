@@ -1,4 +1,4 @@
-<b><%= p.name %></b><br/>
+<b><%= link_to(p.name, :controller=>"people", :action=>"edit", :id=>p.id) %></b><% if p.is_transverse==1 %> (transverse)<% end %><br/>
 <ul>
   <table class="grid">
   <tr class="grid header">
