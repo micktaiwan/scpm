@@ -303,6 +303,10 @@ class ToolsController < ApplicationController
     end
   end
 
+  def sdp_conso
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0").select {|p| p.sdp_logs.last}.sort_by { |p| p.sdp_logs.last.percent }
+  end
+
   def sdp_add
     @requests = Request.find(:all, :conditions=>"sdp='No' and resolution='in progress' and status!='to be validated' and complexity!='TBD' and status!='cancelled'")
     @pbs      = Request.find(:all, :conditions=>"sdp='No' and resolution='in progress' and (status='to be validated' or status='cancelled' or status='removed')")

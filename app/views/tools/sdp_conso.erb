@@ -1,0 +1,17 @@
+<%= render(:file=>"tools/sdp_menu.erb") %>
+<%= render(:file=>"tools/sdp_logs_menu.erb") %>
+
+<table class="grid sortable">
+	<tr class="header">
+	<td>Name</td>
+	<td>Trans?</td>
+	<td>Date</td>
+	<td>Initial</td>
+	<td>SDP Rem.</td>
+	<td>WL Rem.</td>
+	<td>Months</td>
+	<td>Balance</td>
+	<td>Gain</td>
+	</tr>
+	<%= render(:partial=>'sdp_log_person_conso', :collection=>@people, :as=>:p) %>
+</table>

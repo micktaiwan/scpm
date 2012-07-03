@@ -1,4 +1,7 @@
+<% log = p.sdp_logs.last %>
 <tr>
+<td><b><%= link_to(p.name, :controller=>"people", :action=>"edit", :id=>p.id) %></b></td>
+<td><% if p.is_transverse==1 %>Y<% end %></td>
 <td align="right" <%=log.css_class%>><%= log.date %></td>
 <td align="right"><%= log.initial %></td>
 <td align="right"><%= log.sdp_remaining %></td>
@@ -6,5 +9,4 @@
 <td align="right"><%= log.delay %></td>
 <td align="right"><%= log.balance %></td>
 <td align="right"><%= log.percent %>%</td>
-<td></td>
 </tr>

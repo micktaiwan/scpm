@@ -47,6 +47,9 @@
     <ul>
       <li class="hsep">Index</li>
       <li><%= link_to('SDP index',        {:controller=>'tools', :action=>'sdp_index'}) %></li>
+      <% if current_user.has_role?('Admin') %>
+        <li><%= link_to('Gains conso',     {:controller=>'tools', :action=>'sdp_conso'}) %></li>
+      <% end %>
       <li class="hsep">Imports</li>
       <li><%= link_to('SDP import',       {:controller=>'tools', :action=>'sdp_import'}) %></li>
       <li><%= link_to('RMT to SDP task import',          {:controller=>'tools', :action=>'sdp_add'}) %></li>
@@ -57,10 +60,6 @@
       <li><%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}) %></li>
       <li><%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}) %></li>
       <li><%= link_to('CHECK wrong Remaining Workload', {:controller=>'tools', :action=>'check_sdp_remaining_workload'}) %></li>
-      <% if current_user.has_role?('Admin') %>
-        <li class="hsep">Stuff</li>
-        <li><%= link_to('Gains per person',     {:controller=>'tools', :action=>'sdp_logs'}) %></li>
-      <% end %>
     </ul>
     </li>
     <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
