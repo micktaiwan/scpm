@@ -103,6 +103,7 @@ class WorkloadsController < ApplicationController
     @not_in_workload_days = @not_in_workload.inject(0) { |sum, r| sum += r.workload2} * 0.80
 
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    @transverse_people = Person.find(:all, :conditions=>"has_left=0 and is_transverse=1", :order=>"name").map{|p| p.name.split(" ")[0]}.join(", ")
     @workloads = []
     @total_days = 0
     @total_planned_days = 0
