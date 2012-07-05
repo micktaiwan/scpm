@@ -305,6 +305,9 @@ class ToolsController < ApplicationController
 
   def sdp_conso
     @people = Person.find(:all, :conditions=>"is_supervisor=0").select {|p| p.sdp_logs.last}.sort_by { |p| p.sdp_logs.last.percent }
+    @init_total     = @people.map{|p| p.sdp_logs.last.initial}.inject(0) { |i, sum| sum+i}
+    @balance        = @people.map{|p| p.sdp_logs.last.balance}.inject(0) { |i, sum| sum+i}
+    @percent_total  = ((@balance / @init_total)*100 / 0.01).round * 0.01
   end
 
   def sdp_add

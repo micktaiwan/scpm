@@ -1,5 +1,10 @@
 <%= render(:file=>"tools/sdp_menu.erb") %>
 <%= @error %>
+
+<%
+  return "No data. Please do an import." if not @operational_total
+%>
+
 <table>
   <tr>
   <td>Title</td>
@@ -29,7 +34,7 @@
         </table>
       </td>
       <td valign="top">
-        <%= image_tag(@sdp_graph) %>
+        <%= image_tag(@sdp_graph) if @sdp_graph%>
       </td>
     </tr>
   </table>
