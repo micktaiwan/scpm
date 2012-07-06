@@ -105,8 +105,8 @@
     <% if cu.has_role?('Super') %>
       <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
     <% end %>
-    <% new_requests = Request.count(:conditions=>"status='new'"); if new_requests > 0 %>
-      <li><div class="notif"><strong><%=new_requests%></strong> new requests</div></li>
+    <% new_requests = Request.count(:conditions=>"status='new' or status='acknowledged'"); if new_requests > 0 %>
+      <li><div class="notif"><strong><%=new_requests%></strong> new or ackn requests</div></li>
     <% end %>
     </ul>
   </div>
