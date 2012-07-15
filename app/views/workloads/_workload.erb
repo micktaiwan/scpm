@@ -1,5 +1,5 @@
 <div id="workload" class="workload">
-  <table width="100%">
+  <table width="100%" id="wmenu">
   <tr><td valign="top">
     <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
     <%= link_to('Transfert', {:action=>'transfert'}, {:class=>"btnlnk"}) %>
@@ -34,7 +34,13 @@
 
   </td></tr>
   </table>
-  <br/>
+
+<b>
+<%= @workload.nb_current_lines %> lines
+(<%= @workload.nb_hidden_lines %> hidden)
+</b>
+
+<%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload
 
 <table id="workload_table">
 <thead>
@@ -121,7 +127,7 @@
 </tbody>
 
 </table>
-<%= image_tag(@chart_url) %>
+<%= image_tag(@chart_url) if @chart_url %>
 </div>
 <br/>
 

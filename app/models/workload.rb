@@ -21,7 +21,10 @@ class Workload
     :three_next_months_percents,  # next 3 months (was _after_ the 5 coming weeks but changed later including next 5 weeks)
     :planned_total,               # total number of days planned
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
-    :to_be_validated_in_wl_remaining_total # total of requests to be validated planned in workloads
+    :to_be_validated_in_wl_remaining_total, # total of requests to be validated planned in workloads
+    :nb_total_lines,  # total before filters
+    :nb_current_lines,# total after filters
+    :nb_hidden_lines  # difference (filtered)
 
   # options can have
   # :only_holidays => true
@@ -35,9 +38,17 @@ class Workload
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+    Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
-      @wl_lines  << WlLine.create(:name=>"Cong&eacute;s", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
+      @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
     end
+    @nb_total_lines = @wl_lines.size
+    # must be after the preceding test as we suppress line and if wl_lines.size is 0 then we create a new Holidays line
+    if options[:hide_lines_with_no_workload]
+      @wl_lines   = @wl_lines.select{|l| l.planned_sum > 0}
+    end
+    @nb_current_lines = @wl_lines.size
+    @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
     farest_week = wlweek(from_day+6.months)
     @wl_weeks   = []
@@ -101,7 +112,8 @@ class Workload
     @to_be_validated_in_wl_remaining_total = 0
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
-      @line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
+      #@line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
+      @line_sums[l.id][:sums] = l.planned_sum
       @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
       if l.sdp_task
         @sdp_remaining_total += l.sdp_task.remaining

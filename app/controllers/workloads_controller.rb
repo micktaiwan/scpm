@@ -20,7 +20,7 @@ class WorkloadsController < ApplicationController
   def change_workload(person_id=nil)
     person_id = params[:person_id] if !person_id
     session['workload_person_id'] = person_id
-    @workload = Workload.new(person_id)
+    @workload = Workload.new(person_id, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
     @person   = @workload.person
     get_last_sdp_update
     get_suggested_requests(@workload)
@@ -41,6 +41,7 @@ class WorkloadsController < ApplicationController
   def get_chart
     chart = GoogleChart::LineChart.new('1000x300', "#{@workload.person.name} workload", false)
     serie = @workload.percents.map{ |p| p[:precise] }
+    return if serie.size == 0
     realmax = serie.max
     high_limit = 150.0
     max = realmax > high_limit ? high_limit : realmax
@@ -397,6 +398,18 @@ class WorkloadsController < ApplicationController
       l.save
       }
     redirect_to(:action=>"transfert")
+  end
+
+  def hide_lines_with_no_workload
+    on = params[:on].to_s == 'true'
+    session['workload_hide_lines_with_no_workload'] = on
+    @workload = Workload.new(session['workload_person_id'], {:hide_lines_with_no_workload => on})
+    @person   = @workload.person
+    get_last_sdp_update
+    get_suggested_requests(@workload)
+    get_sdp_tasks(@workload)
+    get_chart
+    get_sdp_gain(@workload.person)
   end
 
 end

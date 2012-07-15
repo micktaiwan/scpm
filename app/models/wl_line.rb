@@ -21,8 +21,14 @@ class WlLine < ActiveRecord::Base
   end
 
   def planned_sum
-    wl_loads.inject(0) { |sum, l| sum+l.wlload}
+    #wl_loads.inject(0) { |sum, l| sum+l.wlload}
+    return 0 if wl_loads.size == 0
+    today_week            = wlweek(Date.today)
+    sum = wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
+    raise "ooops, sum is nil" if not sum
+    sum
   end
+
 
   def display_name
     #"<a href='#' title='#{name}'>#{name}</a>"

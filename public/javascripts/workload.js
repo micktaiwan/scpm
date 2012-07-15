@@ -1,3 +1,15 @@
+function hide_lines_with_no_workload() {
+  document.body.style.cursor = 'wait';
+  $('loading').show();
+  new Ajax.Request('/workloads/hide_lines_with_no_workload', {
+    parameters: { on: $('hide_lines_with_no_workload').checked }
+    });  
+}
+
+function hide_workload_menu() {
+  $('wmenu').toggle();
+}
+
 Ajax.Replacer = Class.create(Ajax.Updater, {
   initialize: function($super, container, url, options) {
     options = options || { };
