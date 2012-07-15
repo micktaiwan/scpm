@@ -1,5 +1,5 @@
 <div id="workload" class="workload">
-    <%= link_to_function(image_tag('close.png'), 'hide_workload_menu()', :id=>'wmenu_close') %>
+    <%= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
     <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
     <table width="100%">
     <tr><td valign="top">
