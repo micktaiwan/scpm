@@ -412,4 +412,9 @@ class WorkloadsController < ApplicationController
     get_sdp_gain(@workload.person)
   end
 
+  def hide_wmenu
+    session['wmenu_hidden'] = params[:on]
+    render(:nothing=>true)
+  end
+
 end

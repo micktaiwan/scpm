@@ -10,7 +10,8 @@ class Workload
     :opens,           # total of worked days per week (5 - nb of holidays)
     :person,
     :person_id,
-    :wl_lines,        # arrays of loads
+    :wl_lines,        # arrays of loads, all lines (filtered and not filtered)
+    :displayed_lines, # only filtered lines
     :line_sums,       # sum of days per line of workload
     :ctotals,         # total days planned per week including not bundle days (holidays and other lines) {:id=>w, :value=>col_sum(w, @wl_lines)}
     :availability,    # total days of availability {:days=>xxx, :percent=>yyy}
@@ -45,9 +46,11 @@ class Workload
     @nb_total_lines = @wl_lines.size
     # must be after the preceding test as we suppress line and if wl_lines.size is 0 then we create a new Holidays line
     if options[:hide_lines_with_no_workload]
-      @wl_lines   = @wl_lines.select{|l| l.planned_sum > 0}
+      @displayed_lines = @wl_lines.select{|l| l.near_workload > 0}
+    else
+      @displayed_lines = @wl_lines
     end
-    @nb_current_lines = @wl_lines.size
+    @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
     farest_week = wlweek(from_day+6.months)
