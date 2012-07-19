@@ -52,10 +52,15 @@ module ApplicationHelper
     end.join
   end
 
-  def wlweek(day)
-    (day.year.to_s + filled_number(day.cweek,2)).to_i
+  def wlweek(date)
+    year = date.year.to_s
+    dateMonday = date - (date.cwday-1).days
+    if dateMonday.month == 12 and dateMonday.day >= 29
+      year = (date.year + 1).to_s
+    end
+    (year + filled_number(date.cweek,2)).to_i
   end
-
+  
   # filled_number(123, 5) => 00123
   def filled_number(n, nb)
     "0"*(nb-n.to_s.size) + n.to_s
