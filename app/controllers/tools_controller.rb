@@ -459,6 +459,13 @@ class ToolsController < ApplicationController
     @invalid_requests = @invalid_requests.sort_by { |r| [r.workstream, r.summary, (r.date ? r.date.to_s : ""), r.po] }
   end
 
+  def export_database
+    #puts `ls`
+    db_config = ActiveRecord::Base.configurations[RAILS_ENV]
+    `/Applications/MAMP/Library/bin/mysqldump -h localhost -P 8889 -u #{db_config['username']} -p#{db_config['password']} --databases [#{db_config['database']}] > public/data/dump_bdd.sql`
+    
+  end
+  
 private
 
   def round_to_hour(f)
