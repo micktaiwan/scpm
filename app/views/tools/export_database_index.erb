@@ -1,0 +1,19 @@
+
+<script type="text/javascript">
+
+function download_database()
+{
+	var iframe = document.createElement("iframe");
+	iframe.src = "http://0.0.0.0:3000/tools/download_dump_database";
+	iframe.width = 0;
+	iframe.height = 0;
+	iframe.frameborder = 0;
+	iframe.onload = function(){
+	    alert("Iframe is now loaded.");
+	};
+	document.body.appendChild(iframe);
+}
+</script>
+
+<%= link_to_remote "Download database dump", :url => {:controller => "tools", :action => "create_dump_database" }, :success => "download_database();" %>
+
