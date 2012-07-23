@@ -482,8 +482,8 @@ class ToolsController < ApplicationController
     scriptPath = RAILS_ROOT+"/script"
     #system("/Applications/MAMP/htdocs/aptana/BAM/scpm/script/./clean_dump_database.sh")
     dataPath = Rails.public_path + "/data"
-    system('echo "rm #{dataPath}/dump_bdd.sql" | at now +1minute')
-    system('echo "rm #{dataPath}/dump_bdd.tar.gz" | at now +1minute')
+    system('echo "rm #{dataPath}/dump_bdd.sql" | at now +2minute')
+    system('echo "rm #{dataPath}/dump_bdd.tar.gz" | at now +2minute')
     send_file "#{dataPath}/dump_bdd.tar.gz"
   end
   

@@ -1,19 +1,32 @@
-
 <script type="text/javascript">
 
-function download_database()
-{
-	var iframe = document.createElement("iframe");
-	iframe.src = "http://0.0.0.0:3000/tools/download_dump_database";
-	iframe.width = 0;
-	iframe.height = 0;
-	iframe.frameborder = 0;
-	iframe.onload = function(){
-	    alert("Iframe is now loaded.");
-	};
-	document.body.appendChild(iframe);
-}
+function download_database() 
+{ 
+	$("result").update("Archive générée. Exécution du téléchargement.")
+    $("overlay").hide();
+	var target = document.getElementById('target'); 
+    var myFrame = document.createElement('iframe'); 
+	myFrame.width = 0;
+	myFrame.height = 0;
+	myFrame.frameborder = 0;
+    myFrame.setAttribute('src', "javascript:"); 
+    myFrame.setAttribute('onload', "this.src='/tools/download_dump_database'"); 
+    target.appendChild(myFrame);
+	myFrame.hide();
+	//new Ajax.Request('/tools/delete_bdd_dump_files');
+} 
 </script>
 
-<%= link_to_remote "Download database dump", :url => {:controller => "tools", :action => "create_dump_database" }, :success => "download_database();" %>
+<%= link_to_remote "Télécharger le contenu de la base de données", {:url => {:controller => "tools", :action => "create_dump_database" }, :success => "download_database();"},{:id => 'download_button'} %>
 
+<div id="target"></div>
+<div id="result"></div>
+<div style="display:none;position:absolute;background-color:black;color:white;" id="overlay"><br />Génération du dump. Merci d'attendre le lancement du téléchargement.<br /><%= image_tag("ajax-loader.gif") %><br /></div>
+
+<script type="text/javascript">
+$("download_button").observe('click', function() {
+    $("overlay").show();
+	$("download_button").hide();
+});
+
+</script>
