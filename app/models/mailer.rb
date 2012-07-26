@@ -40,14 +40,14 @@ class Mailer < ActionMailer::Base
     content_type "text/html; charset=utf-8"
   end
 
-  def daily(person, n, r, am, ac, om, tbv, wl_to_plan, wl_percent_planned)
+  def daily(person, n, r, am, ac, om, tbv, wl_to_plan, wl_percent_planned, ciproject_reminder_hash)
     render(:nothing=>true) and return if !person or person.email.empty?
     @from        = "mfaivremacon@sqli.com"
     @recipients  = "#{person.email}, mfaivremacon@sqli.com, stessier@sqli.com"
     @subject     = "[BAM] Reminders for #{person.name}"
     @week1    = wlweek(Date.today)
     @week2    = wlweek(Date.today+7.days)
-    @person, @new_notes, @requests_to_close, @amendments, @actions, @milestones_with_open_checklists, @tbv, @wl_to_plan, @wl_percent_planned = person, n, r, am, ac, om, tbv, wl_to_plan, wl_percent_planned
+    @person, @new_notes, @requests_to_close, @amendments, @actions, @milestones_with_open_checklists, @tbv, @wl_to_plan, @wl_percent_planned, @ciproject_reminder_hash = person, n, r, am, ac, om, tbv, wl_to_plan, wl_percent_planned, ciproject_reminder_hash
     content_type "text/html; charset=utf-8"
   end
 end

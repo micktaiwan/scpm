@@ -233,6 +233,24 @@ class Person < ActiveRecord::Base
   #  save(false)
   #end
 
+  def get_ciproject_reminder
+    allTickets = CiProject.find(:all, :conditions=>["assigned_to=?", self.rmt_user])
+    # CiProject.late_css(p.sqli_validation_date_review) -> get if late for this date
+    late = CiProject.find(:all, :conditions=>["(status='Accepted' or status='Assigned') and assigned_to=?", self.rmt_user], :order=>"sqli_validation_date_review desc")
+    assignedNotKickoff = CiProject.find(:all, :conditions=>["kick_off_date IS NULL and assigned_to=?", self.rmt_user], :order=>"sqli_validation_date_review desc")
+    #returnHash = {"all" => allTickets, "late" => late, "notKickoff" => assignedNotKickoff}
+    returnHash = {}
+    if allTickets.size > 0
+      returnHash["all"] = allTickets;
+    end
+    if late.size > 0
+      returnHash["late"] = late;
+    end
+    if assignedNotKickoff.size > 0
+      returnHash["notKickoff"] = assignedNotKickoff;
+    end
+    return returnHash
+  end
 protected
 
   # before filter

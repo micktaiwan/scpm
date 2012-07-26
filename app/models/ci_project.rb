@@ -38,6 +38,12 @@ class CiProject < ActiveRecord::Base
 		""		
 	end
 
+  def self.is_late(date)
+    return false if !date
+    return true if date <= Date.today()
+    return false
+  end
+
 	def sqli_delay
 		return nil if !self.sqli_validation_date_objective
 		return self.sqli_validation_date_review - self.sqli_validation_date_objective

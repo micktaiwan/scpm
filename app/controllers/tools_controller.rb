@@ -460,12 +460,12 @@ class ToolsController < ApplicationController
   end
 
   def export_database_index
-  
   end
+  
   def export_database
     dataPath = Rails.public_path + "/data"
     db_config = ActiveRecord::Base.configurations[RAILS_ENV]
-    system("/Applications/MAMP/Library/bin/./mysqldump -u#{db_config['username']} -p#{db_config['password']} -P 8889 -h localhost #{db_config['database']} > #{dataPath}/dump_bdd.sql")
+    system("mysqldump -u#{db_config['username']} -p#{db_config['password']} -P 8889 -h localhost #{db_config['database']} > #{dataPath}/dump_bdd.sql")
     system("cd #{dataPath} && tar -zcvf #{dataPath}/dump_bdd.tar.gz dump_bdd.sql")
     send_file "#{dataPath}/dump_bdd.tar.gz"
   end
@@ -473,14 +473,13 @@ class ToolsController < ApplicationController
   def create_dump_database
      dataPath = Rails.public_path + "/data"
      db_config = ActiveRecord::Base.configurations[RAILS_ENV]
-     system("/Applications/MAMP/Library/bin/./mysqldump -u#{db_config['username']} -p#{db_config['password']} -P 8889 -h localhost #{db_config['database']} > #{dataPath}/dump_bdd.sql")
+     system("mysqldump -u#{db_config['username']} -p#{db_config['password']} -P 8889 -h localhost #{db_config['database']} > #{dataPath}/dump_bdd.sql")
      system("cd #{dataPath} && tar -zcvf #{dataPath}/dump_bdd.tar.gz dump_bdd.sql")
      render :nothing => true
   end
   
   def download_dump_database
     scriptPath = RAILS_ROOT+"/script"
-    #system("/Applications/MAMP/htdocs/aptana/BAM/scpm/script/./clean_dump_database.sh")
     dataPath = Rails.public_path + "/data"
     system('echo "rm #{dataPath}/dump_bdd.sql" | at now +2minute')
     system('echo "rm #{dataPath}/dump_bdd.tar.gz" | at now +2minute')

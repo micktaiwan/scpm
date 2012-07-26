@@ -1,0 +1,34 @@
+<tr>
+	<td align="right"><b><%=link_to(p.external_id, "https://sqli.steering-project.com/mantis/view.php?id=#{p.internal_id}")%></b></td>
+	<td><%= p.order %></td>
+	<td><%= p.status %></td>
+	<td><%= p.visibility %></td>
+	<td><%= p.assigned_to %></td>
+	<td><%= p.summary %></td>
+	<td><b><%= p.short_stage %></b></td>
+	<td><b><%= p.sqli_validation_date_review %></b> 	<%= p.sqli_delay %></td>
+	<td><b><%= p.airbus_validation_date_review %></b> 	<%= p.airbus_delay %></td>
+	<td><b><%= p.deployment_date_review %></b> 			<%= p.deployment_delay %></td>
+	<td> <%= p.kick_off_date %> </td>
+	<% 
+		if (check_date)
+			late_dates = ""
+			if CiProject.is_late(p.sqli_validation_date_review)
+				late_dates += "SQLI"
+			end
+			if CiProject.is_late(p.airbus_validation_date_review)
+				if late_dates.size > 0
+					late_dates += ", "
+				end
+				late_dates += "Airbus"
+			end
+			if CiProject.is_late(p.deployment_date_review)
+				if late_dates.size > 0
+					late_dates += ", "
+				end
+				late_dates += "Deployment"
+			end
+	%>
+			<td><%= late_dates %></td>
+		<% end %>
+</tr>
