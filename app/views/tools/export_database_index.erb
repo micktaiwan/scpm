@@ -2,7 +2,7 @@
 
 function download_database() 
 { 
-	$("result").update("Archive générée. Exécution du téléchargement.")
+	$("result").update("Archive generated. Download started.")
     $("overlay").hide();
 	var target = document.getElementById('target'); 
     var myFrame = document.createElement('iframe'); 
@@ -17,11 +17,15 @@ function download_database()
 } 
 </script>
 
-<%= link_to_remote "Télécharger le contenu de la base de données", {:url => {:controller => "tools", :action => "create_dump_database" }, :success => "download_database();"},{:id => 'download_button'} %>
+<%= link_to_remote "Download database dump", {:url => {:controller => "tools", :action => "create_dump_database" }, :success => "download_database();"},{:id => 'download_button'} %>
 
 <div id="target"></div>
 <div id="result"></div>
-<div style="display:none;position:absolute;background-color:black;color:white;" id="overlay"><br />Génération du dump. Merci d'attendre le lancement du téléchargement.<br /><%= image_tag("ajax-loader.gif") %><br /></div>
+<div style="display:none;position:absolute;background-color:black;color:white;" id="overlay">
+	<br />
+	Dump generation in progress. Downloading will automatically start in a few seconds.<br />
+	<%= image_tag("ajax-loader.gif") %><br />
+</div>
 
 <script type="text/javascript">
 $("download_button").observe('click', function() {
