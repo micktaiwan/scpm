@@ -98,6 +98,62 @@ class Request < ActiveRecord::Base
   "N/A" 		  => 0
   }
 
+  # reminder: minus 8% for operational meetings
+  LoadsRFP2012_8percent = [
+    # WP 1.1
+    [1.875, 2, 2.375],
+    [3.125, 3.75, 5.25],
+    [2.375, 3.25, 5.5],
+    [3.75, 4.5, 6.5],
+    # WP 1.2
+    [2.875, 3.25, 3.75],
+    [5.375, 6.875, 9.25],
+    [5.25, 5.75, 6.625],
+    [5.125, 6.5, 8.625],
+
+    # BAT minus 10% total is [4.75, 6.5, 9.25]
+    # WP 1.3 (BAT)
+    [0, 0, 0], # no M1-M3
+    [2.125, 3, 3.875],
+    [0.625, 0.875, 1.25],
+    [1.75, 2.375, 3.625],
+
+    # WP 2
+    [4.875, 7.25, 11.25],
+
+    # WP 3.0 Old
+    [8.5, 16.25, 22.5],
+    # WP 3.1
+    [8.5, 16.25, 22.5],
+    # WP 3.2
+    [18.5, 42.75, 58.75],
+    # WP 3.3
+    [3.625, 6.25, 10],
+    # WP 3.4
+    [7.625, 14, 19.375],
+    # WP 4
+    [5.125, 7.25, 11.375],
+    # WP 5
+    [10, 21.75, 40],
+    # WP 6
+    [4.5, 10.625, 19.5],
+    [3.125, 9.75, 20.375],
+    [1.875, 5.5, 13.5],
+    [2.5, 12.75, 29.625],
+    [7.375, 11.25, 15.5],
+    # WP 1.1 CV
+    [0.375, 0.375, 0.625],
+    [0.875, 0.875, 1.25],
+    [0.375, 0.375, 0.375],
+    [1.75, 2.125, 2.5],
+    # WP 1.2 CV
+    [0.375, 0.375, 0.375],
+    [1.75, 2.125, 2.5],
+    [1.75, 2.5, 3.375],
+    [2.5, 3.375, 4.25]
+    ]
+
+
   # reminder: minus 10% for operational meetings
   LoadsRFP2012 = [
     # WP 1.1
@@ -348,6 +404,8 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
+    if self.sdpiteration == "2012"
+      return LoadsRFP2012_8percent[wp_index_RFP2012(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     if Date.parse(self.date_submitted) >= Date.parse('2012-01-10') or (self.status_new and self.status_new >= Date.parse('2012-01-10'))
       return LoadsRFP2012[wp_index_RFP2012(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2011" or self.sdpiteration == "2011-Y2"
