@@ -27,7 +27,7 @@ class GenericRiskQuestionsController < ApplicationController
   end
 
   def get_milestones
-    @milestone_names = MilestoneName.find(:all).select{|m| ['M3','M5','G2','G5'].include?(m.title)}.map{|m| [m.title, m.id]}
+    @milestone_names = MilestoneName.find(:all).select{|m| ['M3','M5','M7','M9','M10','M10a','M11','M12','M13','M14','G2','G3','G4','G5','G6','G7','G8','G9','sM3','sM5','sM13','sM14'].include?(m.title)}.map{|m| [m.title, m.id]}
     @capi_axes = CapiAxis.find(:all).map{|m| [m.name, m.id]}
   end
 
