@@ -1,0 +1,68 @@
+<%= render(:file=>"tools/sdp_menu.erb") %>
+<%= @error %>
+
+<%
+  return "No data. Please do an import." if not @operational_total
+%>
+
+<h2>Physical</h2>
+<table>
+  <tr>
+  <td>Title</td>
+  <td>Initial</td>
+  <td>Remaining</td>
+  <td>Balance</td>
+  <td>Gain %</td>
+  </tr>
+  <%= render(:partial=>'phase_by_type', :collection=>@phasesYes) %>
+</table>
+<br />
+
+<h2>Physical Suite</h2>
+<table>
+  <tr>
+  <td>Title</td>
+  <td>Initial</td>
+  <td>Remaining</td>
+  <td>Balance</td>
+  <td>Gain %</td>
+  </tr>
+  <%= render(:partial=>'phase_by_type', :collection=>@phasesSuite) %>
+</table>
+<br />
+
+<h2>Functional</h2>
+<table>
+  <tr>
+  <td>Title</td>
+  <td>Initial</td>
+  <td>Remaining</td>
+  <td>Balance</td>
+  <td>Gain %</td>
+  </tr>
+  <%= render(:partial=>'phase_by_type', :collection=>@phasesNo) %>
+</table>
+
+<h2>Unclassed</h2>
+<table>
+  <tr>
+  <td>Title</td>
+  <td>Initial</td>
+  <td>Remaining</td>
+  <td>Balance</td>
+  <td>Gain %</td>
+  </tr>
+  <%= render(:partial=>'phase_by_type', :collection=>@phasesUnclassed) %>
+</table>
+
+<h2>Global</h2>
+<table>
+  <tr>
+  <td>Title</td>
+  <td>Initial</td>
+  <td>Remaining</td>
+  <td>Balance</td>
+  <td>Gain %</td>
+  </tr>
+  <%= render(:partial=>'phase_by_type', :collection=>@phasesGlobal) %>
+</table>
