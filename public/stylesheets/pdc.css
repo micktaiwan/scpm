@@ -136,7 +136,6 @@ tr.wl_opens {
   background: #AAF;
   }
 
-
 /* STATUSES AVAILABILITY */
 #availabilities_legends_table {
 	float:right;
@@ -162,4 +161,14 @@ td.availability_4 {
 td.availability_5 {
 	background-color: #000000;
 	color: #FFFFFF;
+}
+
+#wmenu {
+  border: 2px solid #DDD;
+  margin: 0;
+  padding:10px;
+}
+#wmenu_close {
+  right:5px;
+  position:fixed;
 }

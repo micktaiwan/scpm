@@ -128,11 +128,10 @@ options:
     else
       workpages_filtered  = Workpackage.find(params[:workpackages])
       milestones_filtered = MilestoneName.find(params[:milestones])
-      checklists_filtered = ChecklistItemTemplate.find(:all, :conditions => ["(parent_id = 0 or parent_id = null) and id IN (?)", params[:checklists]])
-      #Rails.logger.info("---->>>>"+params.inspect)
-      @workpackages = workpages_filtered.sort_by  { |w| [ w.title ] }
-      @milestones   = milestones_filtered.sort_by { |m| [ m.title ] }
-      @checklists   = checklists_filtered
+      checklists_filtered = ChecklistItemTemplate.find(:all, :conditions => ["(parent_id = 0 or parent_id = null) and id IN (?)",params[:checklists]])
+      @workpackages = workpages_filtered.sort_by { |w| [ w.title ] }
+      @milestones = milestones_filtered.sort_by { |m| [ m.title ] }
+      @checklists = checklists_filtered
     end
   end
 end

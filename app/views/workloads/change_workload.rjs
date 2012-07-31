@@ -2,5 +2,6 @@ page.replace_html "suggested_requests", render(:partial=>"suggested_request", :c
 page.replace_html "sdp_tasks", render(:partial=>"sdp_tasks")
 page.replace "workload", render(:partial=>"workload")
 page << "document.body.style.cursor = 'auto';"
+page << "$('loading').hide();"
 page << "set_fixed_header();"
 

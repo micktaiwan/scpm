@@ -8,6 +8,9 @@ function hide_lines_with_no_workload() {
 
 function hide_workload_menu() {
   $('wmenu').toggle();
+  new Ajax.Request('/workloads/hide_wmenu', {
+    parameters: { on: $('wmenu').style.display=='none' }
+    });  
 }
 
 Ajax.Replacer = Class.create(Ajax.Updater, {

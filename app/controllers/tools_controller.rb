@@ -6,12 +6,12 @@ class ToolsController < ApplicationController
 
   include WelcomeHelper
 
-  NB_QR 					            = 20
-  NB_FTE 					            = 18.5  # TODO: should be automatically calculated from workloads
+  NB_QR 					            = 24
+  NB_FTE 					            = 20  # TODO: should be automatically calculated from workloads
   NB_DAYS_PER_MONTH			      = 18
-  MEETINGS_LOAD_PER_MONTH 	  = 1.5
-  PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
-  WP_LEADERS_DAYS_PER_MONTH   = 18 # 10 + 4*2
+  MEETINGS_LOAD_PER_MONTH 	  = 1
+  PM_LOAD_PER_MONTH 		      = 48 #was: NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
+  WP_LEADERS_DAYS_PER_MONTH   = 12 #was: 18 # 10 + 4*2
 
   PM_PROVISION_ADJUSTMENT     = 0
   QA_PROVISION_ADJUSTMENT     = 22.5
@@ -89,7 +89,7 @@ class ToolsController < ApplicationController
         :sdp_initial_balance             => @sdp_initial_balance,
         :sdp_real_balance                => @real_balance,
         :sdp_real_balance_and_provisions => @real_balance_and_provisions,
-        :operational_total_minus_om      => @operational_total-@operational2011_10percent,
+        :operational_total_minus_om      => @operational_total-@operational_percent_total,
         :not_included_remaining          => @not_included_remaining,
         :provisions                      => @provisions_remaining_should_be,
         :sold                            => @sold,
@@ -112,10 +112,16 @@ class ToolsController < ApplicationController
       @sdp_initial_balance               = @phases.inject(0) { |sum, p| p.balancei+sum}
       tasks2010                          = SDPTask.find(:all, :conditions=>"iteration='2010'")
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")
+      tasks2012                          = SDPTask.find(:all, :conditions=>"iteration='2012'")
       op2010                             = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011                             = tasks2011.inject(0) { |sum, t| t.initial+sum}
+      op2012                             = tasks2012.inject(0) { |sum, t| t.initial+sum}
       @operational2011_10percent         = round_to_hour(op2011*0.11111111111)
-      @operational_total                 = op2010 + op2011 + @operational2011_10percent
+      @operational2012_10percent         = round_to_hour(op2012*0.11111111111)
+      @operational_percent_total         = @operational2011_10percent + @operational2012_10percent
+      @operational_total_2011            = op2010 + op2011 + @operational2011_10percent
+      @operational_total_2012            = op2012 + @operational2012_10percent
+      @operational_total                 = @operational_total_2011 + @operational_total_2012
       @remaining                         = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
       @remaining_time                    = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.001).round * 0.001
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
@@ -138,7 +144,7 @@ class ToolsController < ApplicationController
       @risks_remaining_should_be         = 0
       provision_qa_ci                    = 0
       @provisions.each { |p|
-        calculate_provision(p,@operational_total,@operational2011_10percent)
+        calculate_provision(p,@operational_total_2011, @operational_total_2012, @operational_percent_total)
         @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
         if p.title == 'Operational Management' or p.title == 'Project Management'
           @provisions_initial             += p.initial
@@ -459,27 +465,60 @@ class ToolsController < ApplicationController
     @invalid_requests = @invalid_requests.sort_by { |r| [r.workstream, r.summary, (r.date ? r.date.to_s : ""), r.po] }
   end
 
+  def export_database_index
+  end
+  
+  def export_database
+    dataPath = Rails.public_path + "/data"
+    db_config = ActiveRecord::Base.configurations[RAILS_ENV]
+    system("mysqldump -u#{db_config['username']} -p#{db_config['password']} -P 8889 -h localhost #{db_config['database']} > #{dataPath}/dump_bdd.sql")
+    system("cd #{dataPath} && tar -zcvf #{dataPath}/dump_bdd.tar.gz dump_bdd.sql")
+    send_file "#{dataPath}/dump_bdd.tar.gz"
+  end
+  
+  def create_dump_database
+     dataPath = Rails.public_path + "/data"
+     db_config = ActiveRecord::Base.configurations[RAILS_ENV]
+     system("mysqldump -u#{db_config['username']} -p#{db_config['password']} -P 8889 -h localhost #{db_config['database']} > #{dataPath}/dump_bdd.sql")
+     system("cd #{dataPath} && tar -zcvf #{dataPath}/dump_bdd.tar.gz dump_bdd.sql")
+     render :nothing => true
+  end
+  
+  def download_dump_database
+    scriptPath = RAILS_ROOT+"/script"
+    dataPath = Rails.public_path + "/data"
+    system('echo "rm #{dataPath}/dump_bdd.sql" | at now +3minute')
+    system('echo "rm #{dataPath}/dump_bdd.tar.gz" | at now +3minute')
+    send_file "#{dataPath}/dump_bdd.tar.gz"
+  end
+  
+  def delete_bdd_dump_files
+    dataPath = Rails.public_path + "/data"
+    system("rm -f -r #{dataPath}/dump_bdd.sql && rm -f -r #{dataPath}/dump_bdd.tar.gz")
+    render :nothing => true
+  end
+  
 private
 
   def round_to_hour(f)
     (f/0.125).round * 0.125
   end
 
-  def calculate_provision(p, total, operational2011_10percent)
+  def calculate_provision(p, total2011, total2012, operational_percent)
     factor = 1.25 # 20% of PM (reciprocal)
     case p.title
       when 'Project Management'
-        p.difference = round_to_hour(total*factor*0.09)-p.initial + PM_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.09) + round_to_hour(total2012*factor*0.12) - p.initial + PM_PROVISION_ADJUSTMENT
       when 'Risks'
-        p.difference = round_to_hour(total*factor*0.04)-p.initial + RK_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.04) + round_to_hour(total2012*factor*0.02) - p.initial + RK_PROVISION_ADJUSTMENT
       when 'Operational Management'
-        p.difference = operational2011_10percent - p.initial    + OP_PROVISION_ADJUSTMENT
+        p.difference = operational_percent - p.initial      + OP_PROVISION_ADJUSTMENT
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total*factor*0.02) - p.initial+ QA_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.02) + round_to_hour(total2012*factor*0.01) - p.initial+ QA_PROVISION_ADJUSTMENT
       when 'Continuous Improvement'
-        p.difference = round_to_hour(total*factor*0.05)-p.initial  + CI_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour((total2011+total2012)*factor*0.05) - p.initial  + CI_PROVISION_ADJUSTMENT
       else
         p.difference = 0
     end

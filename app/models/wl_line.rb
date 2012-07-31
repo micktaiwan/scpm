@@ -21,14 +21,18 @@ class WlLine < ActiveRecord::Base
   end
 
   def planned_sum
-    #wl_loads.inject(0) { |sum, l| sum+l.wlload}
+    #wl_loads.inject(0) { |sum, l| sum+l.wlload} # did not take into account the fact that we should not sum the past
     return 0 if wl_loads.size == 0
     today_week            = wlweek(Date.today)
-    sum = wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
-    raise "ooops, sum is nil" if not sum
-    sum
+    wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
   end
 
+  def near_workload
+    return 0 if wl_loads.size == 0
+    today_week            = wlweek(Date.today)
+    near_week            = wlweek(Date.today + 8.week)
+    wl_loads.map{|load| ( (load.week < today_week or load.week >= near_week)  ? 0.0 : load.wlload)}.inject(:+)
+  end
 
   def display_name
     #"<a href='#' title='#{name}'>#{name}</a>"

@@ -1,133 +1,134 @@
 <div id="workload" class="workload">
-  <table width="100%" id="wmenu">
-  <tr><td valign="top">
-    <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
-    <%= link_to('Transfert', {:action=>'transfert'}, {:class=>"btnlnk"}) %>
-    <% if @suggested_requests.size > 0 %>
-    You have <b><%=@suggested_requests.size%></b> suggested requests
-    <% end %>
+    <%= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
+    <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
+    <table width="100%">
+    <tr><td valign="top">
+      <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
+      <%= link_to('Transfert', {:action=>'transfert'}, {:class=>"btnlnk"}) %>
+      <% if @suggested_requests.size > 0 %>
+      You have <b><%=@suggested_requests.size%></b> suggested requests
+      <% end %>
 
-    <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;") %>
+      <div id="milestones" class="popup" style="display:none;"></div>
+      <br/>
+      <br/>
+      <b>Next 5 weeks:</b> <%= @workload.next_month_percents %>%<br/>
+      <b>3 next months:</b>   <%= @workload.three_next_months_percents %>%<br/>
+      <%
+      sdp_total = @workload.sdp_remaining_total
+      if sdp_total == 0
+        percent_planned = 0
+      else
+        percent_planned = (((@workload.planned_total / sdp_total)*100)/0.1).round * 0.1
+      end
+      if percent_planned < 95
+      %>
+        You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
+      <% end %>
 
-    <div id="milestones" class="popup" style="display:none;"></div>
+    </td>
+    <td align="right">
 
-    <br/>
-    <br/>
-    <b>Next 5 weeks:</b> <%= @workload.next_month_percents %>%<br/>
-    <b>3 next months:</b>   <%= @workload.three_next_months_percents %>%<br/>
-    <%
-    sdp_total = @workload.sdp_remaining_total
-    if sdp_total == 0
-      percent_planned = 0
-    else
-      percent_planned = (((@workload.planned_total / sdp_total)*100)/0.1).round * 0.1
-    end
-    if percent_planned < 95
-    %>
-      You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
-    <% end %>
+      <%= render(:file=>"workloads/sdp_table", :locals=>{:workload=>@workload}) %>
 
-  </td>
-  <td align="right">
+    </td></tr>
+    </table>
+    </div>
 
-    <%= render(:file=>"workloads/sdp_table", :locals=>{:workload=>@workload}) %>
+  <b>
+  <%= @workload.nb_current_lines %> lines
+  <% if @workload.nb_hidden_lines > 0 %><strong><%end%>
+  (<%= @workload.nb_hidden_lines %> hidden)
+  <% if @workload.nb_hidden_lines > 0 %></strong><%end%>
+  </b>
 
-  </td></tr>
+  <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
+
+  <table id="workload_table">
+  <thead>
+    <tr>
+    <th></th>
+    <th class="wl_names"></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.months) %>
+    </tr>
+
+    <tr>
+    <th></th>
+    <th class="wl_names"></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
+    </tr>
+
+    <tr>
+    <th></th>
+    <th class="wl_names"></th>
+    <th style="min-width:100px;">Status</th>
+    <th style="min-width:45px;">Init.</th>
+    <th style="min-width:45px;">Gain</th>
+    <th style="min-width:45px;">Rem.</th>
+    <th class="wl_total" style="min-width:45px;">Sum</th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
+    </tr>
+
+    <tr class="wl_opens">
+    <th></th>
+    <th class="wl_names">Nb of worked days</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
+    </tr>
+
+    <tr class="wl_total">
+    <th></th>
+    <th class="wl_names">Total</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.ctotals) %>
+    </tr>
+
+    <tr class="wl_total">
+    <th></th>
+    <th class="wl_names">Sums / Percents</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th><%= @workload.sdp_remaining_total %></th>
+    <th id="planned_total"><%= @workload.planned_total %></th>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.percents) %>
+    </tr>
+
+    <tr class="wl_total">
+    <th></th>
+    <th class="wl_names">Availability (Sum for the 2 next months)</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
+    </tr>
+  </thead>
+
+  <tbody class="scrollContent">
+    <%= render(:partial=>"wl_line", :collection=>@workload.displayed_lines) %>
+  </tbody>
+
   </table>
-
-<b>
-<%= @workload.nb_current_lines %> lines
-(<%= @workload.nb_hidden_lines %> hidden)
-</b>
-
-<%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload
-
-<table id="workload_table">
-<thead>
-  <tr>
-  <th></th>
-  <th class="wl_names"></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <%= render(:partial=>"wl_head", :collection=>@workload.months) %>
-  </tr>
-
-  <tr>
-  <th></th>
-  <th class="wl_names"></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
-  </tr>
-
-  <tr>
-  <th></th>
-  <th class="wl_names"></th>
-  <th style="min-width:100px;">Status</th>
-  <th style="min-width:45px;">Init.</th>
-  <th style="min-width:45px;">Gain</th>
-  <th style="min-width:45px;">Rem.</th>
-  <th class="wl_total" style="min-width:45px;">Sum</th>
-  <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
-  </tr>
-
-  <tr class="wl_opens">
-  <th></th>
-  <th class="wl_names">Nb of worked days</th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
-  </tr>
-
-  <tr class="wl_total">
-  <th></th>
-  <th class="wl_names">Total</th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <%= render(:partial=>"wl_ctotal", :collection=>@workload.ctotals) %>
-  </tr>
-
-  <tr class="wl_total">
-  <th></th>
-  <th class="wl_names">Sums / Percents</th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th><%= @workload.sdp_remaining_total %></th>
-  <th id="planned_total"><%= @workload.planned_total %></th>
-  <%= render(:partial=>"wl_ctotal", :collection=>@workload.percents) %>
-  </tr>
-
-  <tr class="wl_total">
-  <th></th>
-  <th class="wl_names">Availability (Sum for the 2 next months)</th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
-  <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
-  </tr>
-</thead>
-
-<tbody class="scrollContent">
-  <%= render(:partial=>"wl_line", :collection=>@workload.wl_lines) %>
-</tbody>
-
-</table>
-<%= image_tag(@chart_url) if @chart_url %>
+  <%= image_tag(@chart_url) if @chart_url %>
 </div>
 <br/>
-
