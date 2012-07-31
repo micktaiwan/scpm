@@ -1,10 +1,10 @@
 require 'acts_as_versioned'
-require 'workflow_manager'
+#require 'workflow_manager'
 
 class Requirement < ActiveRecord::Base
   acts_as_versioned
-  include WorkflowManager
-  workflow :class_name => :req_status
+  #include WorkflowManager
+  #workflow :class_name => :req_status
 
   belongs_to  :req_category
   belongs_to  :req_wave
