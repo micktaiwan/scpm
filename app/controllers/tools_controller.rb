@@ -6,12 +6,12 @@ class ToolsController < ApplicationController
 
   include WelcomeHelper
 
-  NB_QR 					            = 20
-  NB_FTE 					            = 18.5  # TODO: should be automatically calculated from workloads
+  NB_QR 					            = 24
+  NB_FTE 					            = 20  # TODO: should be automatically calculated from workloads
   NB_DAYS_PER_MONTH			      = 18
-  MEETINGS_LOAD_PER_MONTH 	  = 1.5
-  PM_LOAD_PER_MONTH 		      = NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
-  WP_LEADERS_DAYS_PER_MONTH   = 18 # 10 + 4*2
+  MEETINGS_LOAD_PER_MONTH 	  = 1
+  PM_LOAD_PER_MONTH 		      = 48 #was: NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
+  WP_LEADERS_DAYS_PER_MONTH   = 12 #was: 18 # 10 + 4*2
 
   PM_PROVISION_ADJUSTMENT     = 0
   QA_PROVISION_ADJUSTMENT     = 22.5
@@ -509,8 +509,8 @@ class ToolsController < ApplicationController
   def download_dump_database
     scriptPath = RAILS_ROOT+"/script"
     dataPath = Rails.public_path + "/data"
-    system('echo "rm #{dataPath}/dump_bdd.sql" | at now +2minute')
-    system('echo "rm #{dataPath}/dump_bdd.tar.gz" | at now +2minute')
+    system('echo "rm #{dataPath}/dump_bdd.sql" | at now +3minute')
+    system('echo "rm #{dataPath}/dump_bdd.tar.gz" | at now +3minute')
     send_file "#{dataPath}/dump_bdd.tar.gz"
   end
   
