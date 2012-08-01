@@ -9,56 +9,49 @@ class SDPTask < ActiveRecord::Base
     @difference             = 0.0
   end
 
-  
+  # Analyze all sdpTasks and generate SDPphases/SDPActivities by specific types from RMT
   def self.formatStatsByType
+    # Reset data
     ActiveRecord::Base.connection.execute("TRUNCATE sdp_phases_by_type")
     ActiveRecord::Base.connection.execute("TRUNCATE sdp_activities_by_type")
-    @allSdpTasks = SDPTask.find(:all)
-     
+    
+    @allSdpTasks = SDPTask.find(:all) 
     @allSdpTasks.each { |sdpTask|
-      
+      # Reset params of the task
       sdpTask.phase_by_type_id = nil
       sdpTask.activity_by_type_id = nil
       sdpTask.save
        
       # If we have a request id for this sdpTask
       if(sdpTask.request_id != nil)
-         
         requestSdp = Request.find(sdpTask.request_id) 
-         
-        if ((requestSdp != nil) and (requestSdp.is_physical != nil))
-          # Phase
-          #if (sdpTask.phase_by_type_id == nil)
-            self.managePhase(sdpTask,requestSdp)
-          #end  
-          # Activity
-          #if (sdpTask.activity_by_type_id == nil)
-            self.manageActivity(sdpTask,requestSdp)
-          #end
-        elsif(requestSdp != nil)
-          # No request or is_physical to null
-          requestSdp.is_physical = "Unclassed"
+        
+        if ((requestSdp != nil) and (requestSdp.request_type != nil)) # With Specific type
           self.managePhase(sdpTask,requestSdp)
           self.manageActivity(sdpTask,requestSdp)
-        else  
-          requestSdp.is_physical = "Global"
+        elsif(requestSdp != nil) # With request but without specific type
+          requestSdp.request_type = "Unclassed"
+          self.managePhase(sdpTask,requestSdp)
+          self.manageActivity(sdpTask,requestSdp)
+        else  # Without request
+          requestSdp.request_type = "Global"
           self.managePhase(sdpTask,requestSdp)
           self.manageActivity(sdpTask,requestSdp)
         end
-         
       end
     }
   end
   
+  # Generate SDPPhaseByType for the SDPtask given
   def self.managePhase(sdpTask,requestSdp)
-    # identification of correct phase by name and is_physical value
+    # identification of correct phase by name and request_type value
     phase = SDPPhase.find(sdpTask.phase_id)
-    phaseByType = SDPPhaseByType.first(:conditions => ["title = ? AND isPhysical = ?", phase.title, requestSdp.is_physical])
+    phaseByType = SDPPhaseByType.first(:conditions => ["title = ? AND request_type = ?", phase.title, requestSdp.request_type])
     if(phaseByType == nil)
       # Create
       phaseByType = SDPPhaseByType.new
       phaseByType.title = phase.title
-      phaseByType.isPhysical = requestSdp.is_physical
+      phaseByType.request_type = requestSdp.request_type
       phaseByType.initial = sdpTask.initial
       phaseByType.reevaluated = sdpTask.reevaluated
       phaseByType.assigned = sdpTask.assigned
@@ -90,16 +83,16 @@ class SDPTask < ActiveRecord::Base
     sdpTask.save
   end
   
-  
+  # Generate SDPActivityByType for the SDPtask given
   def self.manageActivity(sdpTask,requestSdp)
-    # identification of correct activity by name and is_physical value
+    # identification of correct activity by name and request_type value
     activity = SDPActivity.find(sdpTask.activity_id)
-    activityByType = SDPActivityByType.first(:conditions => ["title = ? AND isPhysical = ?", activity.title, requestSdp.is_physical])
+    activityByType = SDPActivityByType.first(:conditions => ["title = ? AND request_type = ?", activity.title, requestSdp.request_type])
     if(activityByType == nil)
       # Create
       activityByType = SDPActivityByType.new
       activityByType.title = activity.title
-      activityByType.isPhysical = requestSdp.is_physical
+      activityByType.request_type = requestSdp.request_type
       activityByType.phase_id = sdpTask.phase_by_type_id
       activityByType.initial = sdpTask.initial
       activityByType.reevaluated = sdpTask.reevaluated

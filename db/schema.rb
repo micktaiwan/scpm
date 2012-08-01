@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 201207271801800) do
+ActiveRecord::Schema.define(:version => 20120801121101) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -353,7 +353,7 @@ ActiveRecord::Schema.define(:version => 201207271801800) do
     t.string   "contre_visite"
     t.string   "sdpiteration"
     t.string   "contre_visite_milestone"
-    t.string   "is_physical"
+    t.string   "request_type"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
@@ -446,7 +446,7 @@ ActiveRecord::Schema.define(:version => 201207271801800) do
 
   create_table "sdp_activities_by_type", :force => true do |t|
     t.integer  "phase_id"
-    t.string   "isPhysical"
+    t.string   "request_type"
     t.string   "title"
     t.float    "initial"
     t.float    "reevaluated"
@@ -509,7 +509,7 @@ ActiveRecord::Schema.define(:version => 201207271801800) do
   end
 
   create_table "sdp_phases_by_type", :force => true do |t|
-    t.string   "isPhysical"
+    t.string   "request_type"
     t.string   "title"
     t.float    "initial"
     t.float    "reevaluated"

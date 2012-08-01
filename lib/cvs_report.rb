@@ -10,7 +10,7 @@ class CvsRequest
     :start_date, :sdp, :pm, :milestone_date, :project_name, :sdpiteration,
     :end_date, :milestone_date, :actual_m_date, :po,
     :status_to_be_validated, :status_new, :status_feedback, :status_acknowledged, :status_assigned, :status_contre_visite, :status_performed, :status_cancelled, :status_closed,
-    :total_csv_severity, :total_csv_category, :contre_visite_milestone, :is_physical
+    :total_csv_severity, :total_csv_category, :contre_visite_milestone, :request_type
 
   def initialize
   end
@@ -26,6 +26,13 @@ class CvsRequest
       }
     h
   end
+  
+  # EISQ Override
+  def is_physical=(isPhysicalParameter)
+    #puts "request_type = '#{isPhysicalParameter}'"
+    @request_type = isPhysicalParameter
+  end
+  
 end
 
 class CvsReport
@@ -71,7 +78,7 @@ private
   def parse_row(row)
     r = CvsRequest.new
     @columns.each { |attr_name, index|
-      #puts "#{attr_name} = '#{row[index]}'"
+      #puts "#{attr_name} ----> '#{row[index]}'"
       eval("r.#{attr_name} = '#{row[index]}'") # r.id = row[1]
       }
     @requests << r
