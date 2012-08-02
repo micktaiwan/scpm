@@ -24,7 +24,7 @@
     milestones = wl_line.milestones(week)
     m_names    = milestones.map { |m| "<b>#{m.name}</b>: #{m.date}"}.join("<br/>")
 %>
-    <td class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones('<%=m_names%>');" onmouseout="hide_milestones();"<% end %>>
+    <td class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones(event,'<%=m_names%>');" onmouseout="hide_milestones();"<% end %>>
     <%
       wlload = wl_line.get_load_by_week(week)
       wlload = wlload == 0.0 ? '' : wlload

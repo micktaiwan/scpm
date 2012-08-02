@@ -61,14 +61,14 @@ function set_fixed_header() {
   $j('#workload_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
   }
 
-function display_milestones(text) {
-  popup = $('milestones')
-  e = window.event;
-  popup.style.top = (parseInt(Event.pointerY(e))-80)+"px"
-  popup.style.left = (parseInt(Event.pointerX(e))-220)+"px"
+function display_milestones(evt,text) {
+  var popup = $('milestones')
+  var e = evt;
+  popup.style.top = parseInt(Event.pointerY(e))+"px"
+  popup.style.left = parseInt(Event.pointerX(e))+"px"
   popup.innerHTML = text;
   popup.show();
-  }
+}
 function hide_milestones(text) {
   $('milestones').hide();
   }
