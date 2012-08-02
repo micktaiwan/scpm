@@ -5,6 +5,8 @@ class PeopleController < ApplicationController
 
   def index
     @people = Person.find(:all, :order=>"company_id, has_left, is_transverse, name")
+    @allCompanies = Person.all(:select => "DISTINCT(company_id)") 
+    
   end
 
   def new

@@ -356,6 +356,7 @@ class ToolsController < ApplicationController
   def import_monthly_tasks_form
     @ope = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @service_resp = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").select{ |p| p.has_role?('ServiceLineResp')}
+    @cpdp_people = Person.find(:all, :conditions=>"has_left=0 and is_cpdp=1", :order=>"name")
   end
 
   def import_monthly_tasks
@@ -370,6 +371,12 @@ class ToolsController < ApplicationController
     @rname = params["resp_name"]
     @rload = params["resp_load"]
     @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
+    # cp/dp people
+    cpdp_ids = params["cpdp"]
+    if not cpdp_ids; cpdp_ids = "0"; else; cpdp_ids = cpdp_ids["ids"].join(","); end
+    @cpdpName = params["cpdp_name"]
+    @cpdpLoad = params["cpdp_load"]
+    @cpdp = Person.find(:all, :conditions=>"id in(#{cpdp_ids})", :order=>"name")
     render(:layout=>false)
   end
 

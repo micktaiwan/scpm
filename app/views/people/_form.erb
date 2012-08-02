@@ -27,6 +27,10 @@
 <p><%= label_tag 'Password' %>
 <%= password_field :person, :password %></p>
 
+<p><%= label_tag 'is_cp/dp' %>
+<%= radio_button :person, :is_cpdp, 0 %> No
+<%= radio_button :person, :is_cpdp, 1 %> Yes</p>
+
 <p><%= label_tag 'is_transverse' %>
 <%= radio_button :person, :is_transverse, 0 %> No
 <%= radio_button :person, :is_transverse, 1 %> Yes (Will not appear in operational consolidations)</p>
