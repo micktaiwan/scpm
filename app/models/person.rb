@@ -36,7 +36,7 @@ class Person < ActiveRecord::Base
 
   def css_style
     if self.has_left == 1
-      'color: grey;'
+      'color: grey;text-decoration:line-through;'
     elsif self.is_transverse==0
       'font-weight:bold;'
     else

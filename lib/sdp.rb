@@ -47,6 +47,7 @@ class SDP
       insert
       break if @state == :end
     end
+    SDPTask.formatStatsByType()
   end
 
 private
@@ -145,7 +146,7 @@ private
       else; raise "state error #{@state.to_s}"
     end
   end
-
+  
 end
 
 #=begin
