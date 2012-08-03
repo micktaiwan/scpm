@@ -1,0 +1,25 @@
+<%= render(:file=>"tools/sdp_menu.erb") %>
+<%= @error %>
+<%
+  return "No data. Please do an import." if not @operational_total
+%>
+
+<% @allPhaseRequestTypes.each{|phase_request_type| 
+	# Filter phases for current type
+	phasesForCurrentType = @phases.find_all{|phase| (phase.request_type == phase_request_type.request_type) and (phase.request_type != nil)}
+%>
+	<h2>Type : <%= phase_request_type.request_type %></h2>
+	<table>
+	  <tr>
+	  <td>Title</td>
+	  <td>Initial</td>
+	  <td>Remaining</td>
+	  <td>Balance</td>
+	  <td>Gain %</td>
+	  </tr>
+	  <%= render(:partial=>'phase_by_type', :collection=>phasesForCurrentType) %>
+	</table>
+	<br />
+<% } %>
+
+

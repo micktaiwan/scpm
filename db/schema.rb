@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120625151642) do
+ActiveRecord::Schema.define(:version => 20120802123646) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(:version => 20120625151642) do
     t.integer  "sdp_id",        :default => -1
     t.string   "trigram"
     t.integer  "is_transverse", :default => 0
+    t.integer  "is_cpdp",       :default => 0
   end
 
   create_table "person_roles", :force => true do |t|
@@ -353,6 +354,7 @@ ActiveRecord::Schema.define(:version => 20120625151642) do
     t.string   "contre_visite"
     t.string   "sdpiteration"
     t.string   "contre_visite_milestone"
+    t.string   "request_type"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
@@ -443,6 +445,26 @@ ActiveRecord::Schema.define(:version => 20120625151642) do
     t.datetime "updated_at"
   end
 
+  create_table "sdp_activities_by_type", :force => true do |t|
+    t.integer  "phase_id"
+    t.string   "request_type"
+    t.string   "title"
+    t.float    "initial"
+    t.float    "reevaluated"
+    t.float    "assigned"
+    t.float    "consumed"
+    t.float    "remaining"
+    t.float    "revised"
+    t.float    "gained"
+    t.float    "iteration"
+    t.float    "collab"
+    t.float    "balancei"
+    t.float    "balancer"
+    t.float    "balancea"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sdp_import_logs", :force => true do |t|
     t.decimal  "sdp_initial_balance",             :precision => 10, :scale => 3
     t.decimal  "sdp_real_balance",                :precision => 10, :scale => 3
@@ -487,13 +509,32 @@ ActiveRecord::Schema.define(:version => 20120625151642) do
     t.datetime "updated_at"
   end
 
+  create_table "sdp_phases_by_type", :force => true do |t|
+    t.string   "request_type"
+    t.string   "title"
+    t.float    "initial"
+    t.float    "reevaluated"
+    t.float    "assigned"
+    t.float    "consumed"
+    t.float    "remaining"
+    t.float    "revised"
+    t.float    "gained"
+    t.float    "iteration"
+    t.float    "collab"
+    t.float    "balancei"
+    t.float    "balancer"
+    t.float    "balancea"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sdp_tasks", :force => true do |t|
     t.integer  "sdp_id"
     t.integer  "activity_id"
     t.integer  "phase_id"
     t.string   "title"
     t.string   "request_id"
-    t.integer  "done",        :default => 0
+    t.integer  "done",                :default => 0
     t.float    "initial"
     t.float    "reevaluated"
     t.float    "assigned"
@@ -508,6 +549,8 @@ ActiveRecord::Schema.define(:version => 20120625151642) do
     t.float    "balancea"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "activity_by_type_id"
+    t.integer  "phase_by_type_id"
   end
 
   create_table "statuses", :force => true do |t|

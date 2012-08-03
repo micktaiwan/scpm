@@ -1,4 +1,3 @@
-<h2>People</h2>
 <% if current_user.has_role?('Admin') %>
 <%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
 <%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
@@ -6,7 +5,18 @@
 <% end %>
 <br/>
 
+<h2>People</h2>
+<% @allCompanies.each { |company| %>
+	<% peopleNotLeft = @people.find_all{|person| ((person.has_left == 0) and (person.company_id == company.company_id )) } %>
+	<% if ((peopleNotLeft.count > 0) and (peopleNotLeft[0].company)) %><%= peopleNotLeft[0].company.name %><% else %>???<% end %>
+	<ul>
+	  <%= render(:partial=>'person', :collection=>peopleNotLeft) %>
+	</ul>
+<% } %>
+
+<% peopleLeft = @people.find_all{|person| (person.has_left == 1)} %>
+<h2>People who have left the project</h2>
 <ul>
-  <%= render(:partial=>'person', :collection=>@people) %>
+  <%= render(:partial=>'person', :collection=>peopleLeft) %>
 </ul>
 

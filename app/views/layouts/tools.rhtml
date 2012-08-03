@@ -47,6 +47,7 @@
     <ul>
       <li class="hsep">Index</li>
       <li><%= link_to('SDP index',        {:controller=>'tools', :action=>'sdp_index'}) %></li>
+      <li><%= link_to('SDP index by specific type',        {:controller=>'tools', :action=>'sdp_index_by_type'}) %></li>
       <% if current_user.has_role?('Admin') %>
         <li><%= link_to('Gains conso',     {:controller=>'tools', :action=>'sdp_conso'}) %></li>
       <% end %>
