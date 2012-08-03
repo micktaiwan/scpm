@@ -3,3 +3,4 @@
 /tmp
 /Capfile
 /config/deploy.rb
+config/config.yml
