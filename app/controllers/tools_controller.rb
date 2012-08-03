@@ -98,7 +98,7 @@ class ToolsController < ApplicationController
     sdp_graph # aleady in sdp_index_prepare, but repeated here so grap in email is updated
     history_comparison        
     body = render_to_string(:action=>'sdp_index', :layout=>false)
-    Mailer::deliver_mail("mfaivremacon@sqli.com,vmudry@sqli.com,bmonteils@sqli.com","[EISQ] SDP update","<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
+    Mailer::deliver_mail(APP_CONFIG['sdp_import_email_destination'],APP_CONFIG['sdp_import_email_object'],"<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
     redirect_to '/tools/sdp_index'
   end
 
