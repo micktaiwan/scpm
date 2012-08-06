@@ -10,7 +10,7 @@ class SDPTask < ActiveRecord::Base
   end
 
   # Analyze all sdpTasks and generate SDPphases/SDPActivities by specific types from RMT
-  def self.formatStatsByType
+  def self.format_stats_by_type
     # Reset data
     ActiveRecord::Base.connection.execute("TRUNCATE sdp_phases_by_type")
     ActiveRecord::Base.connection.execute("TRUNCATE sdp_activities_by_type")
@@ -24,105 +24,132 @@ class SDPTask < ActiveRecord::Base
        
       # If we have a request id for this sdpTask
       if(sdpTask.request_id != nil)
-        requestSdp = Request.find(sdpTask.request_id) 
-        
-        if ((requestSdp != nil) and (requestSdp.request_type != nil)) # With Specific type
-          self.managePhase(sdpTask,requestSdp)
-          self.manageActivity(sdpTask,requestSdp)
-        elsif(requestSdp != nil) # With request but without specific type
-          requestSdp.request_type = "Unclassed"
-          self.managePhase(sdpTask,requestSdp)
-          self.manageActivity(sdpTask,requestSdp)
-        else  # Without request
+        requestSdp = Request.find(:first, :conditions => { :id => sdpTask.request_id })
+        if (requestSdp != nil)
+          if (requestSdp.request_type != nil)
+            self.manage_phase(sdpTask,requestSdp)
+            self.manage_activity(sdpTask,requestSdp)
+          else
+            requestSdp.request_type = "Unclassed"
+            self.manage_phase(sdpTask,requestSdp)
+            self.manage_activity(sdpTask,requestSdp)
+          end
+        else
+          requestSdp = Request.new()
           requestSdp.request_type = "Global"
-          self.managePhase(sdpTask,requestSdp)
-          self.manageActivity(sdpTask,requestSdp)
+          self.manage_phase(sdpTask,requestSdp)
+          self.manage_activity(sdpTask,requestSdp)
         end
+        # if ((requestSdp != nil) and (requestSdp.request_type != nil)) # With Specific type
+        #           self.managePhase(sdpTask,requestSdp)
+        #           self.manageActivity(sdpTask,requestSdp)
+        #         elsif(requestSdp != nil) # With request but without specific type
+        #           requestSdp.request_type = "Unclassed"
+        #           self.managePhase(sdpTask,requestSdp)
+        #           self.manageActivity(sdpTask,requestSdp)
+        #         else  # Without request
+        #           requestSdp.request_type = "Global"
+        #           self.managePhase(sdpTask,requestSdp)
+        #           self.manageActivity(sdpTask,requestSdp)
+        #         end
       end
     }
   end
   
   # Generate SDPPhaseByType for the SDPtask given
-  def self.managePhase(sdpTask,requestSdp)
+  def self.manage_phase(sdpTask,requestSdp)
     # identification of correct phase by name and request_type value
-    phase = SDPPhase.find(sdpTask.phase_id)
-    phaseByType = SDPPhaseByType.first(:conditions => ["title = ? AND request_type = ?", phase.title, requestSdp.request_type])
-    if(phaseByType == nil)
-      # Create
-      phaseByType = SDPPhaseByType.new
-      phaseByType.title = phase.title
-      phaseByType.request_type = requestSdp.request_type
-      phaseByType.initial = sdpTask.initial
-      phaseByType.reevaluated = sdpTask.reevaluated
-      phaseByType.assigned = sdpTask.assigned
-      phaseByType.consumed = sdpTask.consumed
-      phaseByType.remaining = sdpTask.remaining
-      phaseByType.revised = sdpTask.revised
-      phaseByType.gained = sdpTask.gained
-      phaseByType.iteration = sdpTask.iteration
-      phaseByType.collab = sdpTask.collab
-      phaseByType.balancei = sdpTask.balancei
-      phaseByType.balancer = sdpTask.balancer
-      phaseByType.balancea = sdpTask.balancea
-      phaseByType.save
-    else
-      # Add stats
-      phaseByType.initial = phaseByType.initial + sdpTask.initial
-      phaseByType.reevaluated = phaseByType.reevaluated + sdpTask.reevaluated
-      phaseByType.assigned = phaseByType.assigned + sdpTask.assigned
-      phaseByType.consumed = phaseByType.consumed + sdpTask.consumed
-      phaseByType.remaining = phaseByType.remaining + sdpTask.remaining
-      phaseByType.revised = phaseByType.revised + sdpTask.revised
-      phaseByType.gained = phaseByType.gained + sdpTask.gained
-      phaseByType.balancei = phaseByType.balancei + sdpTask.balancei
-      phaseByType.balancer = phaseByType.balancer + sdpTask.balancer
-      phaseByType.balancea = phaseByType.balancea + sdpTask.balancea
-      phaseByType.save
+    phase = SDPPhase.find(:first, :conditions => { :id => sdpTask.phase_id })
+    if ((phase != nil) and (sdpTask != nil))
+      phaseByType = SDPPhaseByType.first(:conditions => ["title = ? AND request_type = ?", phase.title, requestSdp.request_type])
+      if(phaseByType == nil)
+        # Create
+        phaseByType = SDPPhaseByType.new
+        phaseByType.title = phase.title
+        phaseByType.request_type = requestSdp.request_type
+        phaseByType.initial = self.field_is_null(sdpTask.initial)
+        phaseByType.reevaluated = self.field_is_null(sdpTask.reevaluated)
+        phaseByType.assigned = self.field_is_null(sdpTask.assigned)
+        phaseByType.consumed = self.field_is_null(sdpTask.consumed)
+        phaseByType.remaining = self.field_is_null(sdpTask.remaining)
+        phaseByType.revised = self.field_is_null(sdpTask.revised)
+        phaseByType.gained = self.field_is_null(sdpTask.gained)
+        phaseByType.iteration = self.field_is_null(sdpTask.iteration)
+        phaseByType.collab = self.field_is_null(sdpTask.collab)
+        phaseByType.balancei = self.field_is_null(sdpTask.balancei)
+        phaseByType.balancer = self.field_is_null(sdpTask.balancer)
+        phaseByType.balancea = self.field_is_null(sdpTask.balancea)
+        phaseByType.save
+      else
+        # Add stats
+        phaseByType.initial = phaseByType.initial + self.field_is_null(sdpTask.initial)
+        phaseByType.reevaluated = phaseByType.reevaluated + self.field_is_null(sdpTask.reevaluated)
+        phaseByType.assigned = phaseByType.assigned + self.field_is_null(sdpTask.assigned)
+        phaseByType.consumed = phaseByType.consumed + self.field_is_null(sdpTask.consumed)
+        phaseByType.remaining = phaseByType.remaining + self.field_is_null(sdpTask.remaining)
+        phaseByType.revised = phaseByType.revised + self.field_is_null(sdpTask.revised)
+        phaseByType.gained = phaseByType.gained + self.field_is_null(sdpTask.gained)
+        phaseByType.balancei = phaseByType.balancei + self.field_is_null(sdpTask.balancei)
+        phaseByType.balancer = phaseByType.balancer + self.field_is_null(sdpTask.balancer)
+        phaseByType.balancea = phaseByType.balancea + self.field_is_null(sdpTask.balancea)
+        phaseByType.save
+      end
+      sdpTask.phase_by_type_id = phaseByType.id
+      sdpTask.save
     end
-    sdpTask.phase_by_type_id = phaseByType.id
-    sdpTask.save
   end
   
   # Generate SDPActivityByType for the SDPtask given
-  def self.manageActivity(sdpTask,requestSdp)
+  def self.manage_activity(sdpTask,requestSdp)
     # identification of correct activity by name and request_type value
-    activity = SDPActivity.find(sdpTask.activity_id)
-    activityByType = SDPActivityByType.first(:conditions => ["title = ? AND request_type = ?", activity.title, requestSdp.request_type])
-    if(activityByType == nil)
-      # Create
-      activityByType = SDPActivityByType.new
-      activityByType.title = activity.title
-      activityByType.request_type = requestSdp.request_type
-      activityByType.phase_id = sdpTask.phase_by_type_id
-      activityByType.initial = sdpTask.initial
-      activityByType.reevaluated = sdpTask.reevaluated
-      activityByType.assigned = sdpTask.assigned
-      activityByType.consumed = sdpTask.consumed
-      activityByType.remaining = sdpTask.remaining
-      activityByType.revised = sdpTask.revised
-      activityByType.gained = sdpTask.gained
-      activityByType.iteration = sdpTask.iteration
-      activityByType.collab = sdpTask.collab
-      activityByType.balancei = sdpTask.balancei
-      activityByType.balancer = sdpTask.balancer
-      activityByType.balancea = sdpTask.balancea
-      activityByType.save
-    else
-      # Add stats
-      activityByType.initial = activityByType.initial + sdpTask.initial
-      activityByType.reevaluated = activityByType.reevaluated + sdpTask.reevaluated
-      activityByType.assigned = activityByType.assigned + sdpTask.assigned
-      activityByType.consumed = activityByType.consumed + sdpTask.consumed
-      activityByType.remaining = activityByType.remaining + sdpTask.remaining
-      activityByType.revised = activityByType.revised + sdpTask.revised
-      activityByType.gained = activityByType.gained + sdpTask.gained
-      activityByType.balancei = activityByType.balancei + sdpTask.balancei
-      activityByType.balancer = activityByType.balancer + sdpTask.balancer
-      activityByType.balancea = activityByType.balancea + sdpTask.balancea
-      activityByType.save
+    activity = SDPActivity.find(:first, :conditions => { :id => sdpTask.activity_id })
+    if ((activity != nil) and (sdpTask != nil))
+      activityByType = SDPActivityByType.first(:conditions => ["title = ? AND request_type = ?", activity.title, requestSdp.request_type])
+      if(activityByType == nil)
+        # Create
+        activityByType = SDPActivityByType.new
+        activityByType.title = activity.title
+        activityByType.request_type = requestSdp.request_type
+        activityByType.phase_id = self.field_is_null(sdpTask.phase_by_type_id)
+        activityByType.initial = self.field_is_null(sdpTask.initial)
+        activityByType.reevaluated = self.field_is_null(sdpTask.reevaluated)
+        activityByType.assigned = self.field_is_null(sdpTask.assigned)
+        activityByType.consumed = self.field_is_null(sdpTask.consumed)
+        activityByType.remaining = self.field_is_null(sdpTask.remaining)
+        activityByType.revised = self.field_is_null(sdpTask.revised)
+        activityByType.gained = self.field_is_null(sdpTask.gained)
+        activityByType.iteration = self.field_is_null(sdpTask.iteration)
+        activityByType.collab = self.field_is_null(sdpTask.collab)
+        activityByType.balancei = self.field_is_null(sdpTask.balancei)
+        activityByType.balancer = self.field_is_null(sdpTask.balancer)
+        activityByType.balancea = self.field_is_null(sdpTask.balancea)
+        activityByType.save
+      else
+        # Add stats
+        activityByType.initial = activityByType.initial + self.field_is_null(sdpTask.initial)
+        activityByType.reevaluated = activityByType.reevaluated + self.field_is_null(sdpTask.reevaluated)
+        activityByType.assigned = activityByType.assigned + self.field_is_null(sdpTask.assigned)
+        activityByType.consumed = activityByType.consumed + self.field_is_null(sdpTask.consumed)
+        activityByType.remaining = activityByType.remaining + self.field_is_null(sdpTask.remaining)
+        activityByType.revised = activityByType.revised + self.field_is_null(sdpTask.revised)
+        activityByType.gained = activityByType.gained + self.field_is_null(sdpTask.gained)
+        activityByType.balancei = activityByType.balancei + self.field_is_null(sdpTask.balancei)
+        activityByType.balancer = activityByType.balancer + self.field_is_null(sdpTask.balancer)
+        activityByType.balancea = activityByType.balancea + self.field_is_null(sdpTask.balancea)
+        activityByType.save
+      end
+      sdpTask.activity_by_type_id = activityByType.id
+      sdpTask.save
     end
-    sdpTask.activity_by_type_id = activityByType.id
-    sdpTask.save
   end
+  
+  def self.field_is_null(fieldValue)
+    if(fieldValue)
+      return fieldValue
+    else
+      return 0
+    end
+  end
+  
 end
 

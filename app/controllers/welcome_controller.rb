@@ -49,7 +49,7 @@ class WelcomeController < ApplicationController
       #r.deploy_checklists if r.status == 'assigned' and r.status_changed?
       r.save
       }
-    SDPTask.formatStatsByType()
+    SDPTask.format_stats_by_type()
     redirect_to '/projects/import'
   end
 
