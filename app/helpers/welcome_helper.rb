@@ -41,8 +41,45 @@ module WelcomeHelper
       }
     rv += "</table>"
     rv += "</ul>"
-  end      
-
+  end     
+   
+  def ci_project_report_by(title, cis, id, expanded = false)    
+    title = "nil" if not title
+    rv = ""
+    if not expanded
+      rv  += "<a href='#' onclick=\"$('#{id}_#{title}').toggle();return false;\">"
+      rv += ((title=="" ? "(empty)" : title) + "</a>: <b>#{cis.size}</b><br/>")
+      rv += "<ul id='"+id+"_"+title+"' style='display:none'>"
+    else
+      rv = ((title=="" ? "(empty)" : title) + ": <b>#{cis.size}</b><br/>")
+      rv += "<ul id='"+id+"_"+title+"'>"
+    end
+    
+    rv += "<table><tr class='theader'><td>#</td><td></td><td>Status</td><td>Visibility</td><td>Assigned to</td><td></td><td>Summary</td><td>Stage</td><td>SQLI</td><td>Airbus</td><td>Deployment</td><td>Kick-Off Date</td><td></td></tr>"
+    cis.each { |p|
+      rv += "<tr class=\"closed\">"
+      rv += "<td><b>"+ link_to(p.external_id, "https://sqli.steering-project.com/mantis/view.php?id=#{p.internal_id}") + "</b></td>"
+    	rv += "<td>#{p.order}</td>"
+    	rv += "<td>#{p.status}</td>"
+    	rv += "<td>#{p.visibility}</td>"
+    	rv += "<td>#{p.assigned_to}</td>"
+    	rv += "<td>"
+    	if p.strategic==1
+    	  rv += image_tag('danger.gif')
+    	end
+    	rv += "</td>"
+    	rv += "<td>#{p.summary}</td>"
+    	rv += "<td><b>#{p.short_stage}</b></td>"
+      rv += "<td class=\"" + CiProject.late_css(p.sqli_validation_date_review) + "\"><b>#{p.sqli_validation_date_review}</b> 	#{p.sqli_delay}</td>"
+    	rv += "<td class=\"" + CiProject.late_css(p.airbus_validation_date_review) + "\"><b>#{p.airbus_validation_date_review}</b> 	#{p.airbus_delay}</td>"
+    	rv += "<td class=\"" + CiProject.late_css(p.deployment_date_review) + "\"><b>#{p.deployment_date_review}</b> 			#{p.deployment_delay}</td>"
+    	rv += "<td> #{p.kick_off_date} </td>"
+      rv += "</tr>"
+      }
+    rv += "</table>"
+    rv += "</ul>"
+  end
+  
   def get_workpackage_name_from_summary(summary, default)
     wpn = summary.split(/\[([^\]]*)\]/)[3] 
     wpn = default if wpn == nil or wpn == ""

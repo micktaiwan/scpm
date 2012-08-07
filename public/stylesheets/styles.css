@@ -598,3 +598,12 @@ table.sortable .header  {
 .sdp_log_late {
   background-color: #FAA;
 }
+
+/* CI PROJECTS */
+.ci_late_report {
+  color:red;
+}
+
+.ci_late {
+  color:red;
+}

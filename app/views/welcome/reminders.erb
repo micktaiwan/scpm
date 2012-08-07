@@ -15,11 +15,15 @@ voici les anomalies (informations contradictoires) renseignées dans RMT qu'il f
 <%= report_by("Sans milestone date (ça peut être vide mais c'est rare)", @null_milestones.select {|r| r.assigned_to == resp.rmt_user}, "nullm", true) %>
 <%= report_by("Jalons passés (le status devrait être ended si c'est vraiment fini ou bien la date de actual milestone doit être redéfinie)", @past_milestones.select {|r| r.assigned_to == resp.rmt_user}, "pastm", true) %>
 <%= report_by("Ended, mais il manque la actual milestone date", @ended_without_amdate.select {|r| r.assigned_to == resp.rmt_user}, "ended", true) %>
+<%= ci_project_report_by("Vos Ci-projects", @ci_projects_all.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true) %>
+<%= ci_project_report_by("Vos Ci-projects en retard", @ci_projects_late.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true) %>
+<%= ci_project_report_by("Vos Ci-projects sans Kick-off date", @ci_projects_assigned_without_kickoff.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true) %>
+
 <br/>
 
 A+,<br/>
-Mickael.<br/>
-(Mail autogénéré. Plaintes à déposer auprès du geek.)<br/>
+Stéphanie.<br/>
+(Mail autogénéré.)<br/>
 <br/>
 <br/>
 <%= report_by("En cadeau, toutes  tes requêtes", @all.select {|r| r.assigned_to == resp.rmt_user}, "ended", true) %>

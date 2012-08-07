@@ -1,0 +1,49 @@
+<%
+background_color_css = ""
+if request_reminder.sanitized_status.eql?("to_be_validated")
+	background_color_css = "background: #AAF;"
+elsif request_reminder.sanitized_status.eql?("new")
+	background_color_css = "background: #FAA;"
+elsif request_reminder.sanitized_status.eql?("assigned")
+	background_color_css = "background: #FF9;"
+elsif request_reminder.sanitized_status.eql?("acknowledged")
+	background_color_css = "background: #FD6;"
+elsif request_reminder.sanitized_status.eql?("feedback")
+	background_color_css = "background: #FAF;"
+elsif request_reminder.sanitized_status.eql?("cancelled")
+	background_color_css = "background: #F00;"
+elsif request_reminder.sanitized_status.eql?("removed")
+	background_color_css = "background: #DDD;"
+elsif request_reminder.sanitized_status.eql?("performed")
+	background_color_css = "background: #AFA;"
+elsif request_reminder.sanitized_status.eql?("validated")
+	background_color_css = "background: #6F6;"
+end
+
+background_color_css_resolution = ""
+if request_reminder.resolution.eql?("not_started")
+	background_color_css_resolution = "background: #FAA;"
+elsif request_reminder.resolution.eql?("ended")
+	background_color_css_resolution = "background: #9F9;"
+end
+%>
+<tr style="<%= background_color_css %>" class='<%= request_reminder.sanitized_status %>'>
+	<td><%= request_reminder.request_id.to_i %></td>
+	<td><%= request_reminder.workstream %></td>
+	<td><%=link_to(request_reminder.summary, "https://sqli.steering-project.com/mantis/view.php?id=#{request_reminder.request_id}")%></td>
+	<td><%= request_reminder.pm %></td><td><%= request_reminder.work_package %></td>
+	<td><%= request_reminder.milestone %></td>
+	<td><b><%= request_reminder.status %></b></td>
+	<td><%= request_reminder.assigned_to %></td>
+	<td><%= request_reminder.workload %></td>
+	<td><%= request_reminder.start_date %></td>
+	<td><%= request_reminder.foreseen_end_date_str %></td>
+	<td style="<%= background_color_css_resolution %>" class='status_<%= request_reminder.sanitized_resolution %>'><%= request_reminder.resolution %></td>
+	<td>
+	<% if request_reminder.sdp and request_reminder.sdp == "No" %>
+		<b>SDP: <%= request_reminder.sdp %></b>
+	<% elsif  request_reminder.sdp %>
+		SDP: <%= request_reminder.sdp %>
+	<% end %>
+	</td>
+</tr>

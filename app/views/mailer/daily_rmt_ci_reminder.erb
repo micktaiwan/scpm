@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
+</head>
+<body>
+
+
+Dear <%= @person.name %>,<br/>
+
+<!-- REQUEST -->
+<% if @request_reminder_hash.count > 0 %>
+    <br /><br /><h2 style="font-weight:bold;">Requests</h2><br />
+
+    <!-- NOT STARTED -->
+    <% if @request_reminder_hash["not_started"] %>
+		<p>Vous avez <%= @request_reminder_hash["not_started"].count %> requêtes devraient avoir démarrées (soit la start date est à décaler, soit le progress doit être changé à in progress).</p>
+		<table>  
+		  <%= render(:partial=>'request_reminder_header') %>
+		  <%= render(:partial=>'request_reminder', :collection=>@request_reminder_hash["not_started"]) %>
+		</table><br />
+	<% end %>
+	
+    <!-- NULL START DATE -->
+    <% if @request_reminder_hash["null_start_date"] %>
+		<p>Vous avez <%= @request_reminder_hash["null_start_date"].count %> requêtes sans start date (devrait jamais arriver).</p>
+		<table>
+		  <%= render(:partial=>'request_reminder_header') %>
+		  <%= render(:partial=>'request_reminder', :collection=>@request_reminder_hash["null_start_date"]) %>
+		</table><br />
+	<% end %>
+	
+    <!-- NULL MILESTONES -->
+    <% if @request_reminder_hash["null_milestones"] %>
+		<p>Vous avez <%= @request_reminder_hash["null_milestones"].count %> requêtes sans milestone date (ça peut être vide mais c'est rare)</p>
+		<table>
+		  <%= render(:partial=>'request_reminder_header') %>
+		  <%= render(:partial=>'request_reminder', :collection=>@request_reminder_hash["null_milestones"]) %>
+		</table><br />
+	<% end %>
+	
+    <!-- PAST MILESTONES -->
+    <% if @request_reminder_hash["past_milestones"] %>
+		<p>Vous avez <%= @request_reminder_hash["past_milestones"].count %> requêtes avec les jalons passés (le status devrait être ended si c'est vraiment fini ou bien la date de actual milestone doit être redéfinie).</p>
+		<table>
+		  <%= render(:partial=>'request_reminder_header') %>
+		  <%= render(:partial=>'request_reminder', :collection=>@request_reminder_hash["past_milestones"]) %>
+		</table><br />
+	<% end %>
+	
+    <!-- ENDED WITHOUT AMDATE -->
+    <% if @request_reminder_hash["ended_without_amdate"] %>
+		<p>Vous avez <%= @request_reminder_hash["ended_without_amdate"].count %> requêtes ended, mais il manque la actual milestone date</p>
+		<table>
+		  <%= render(:partial=>'request_reminder_header') %>
+		  <%= render(:partial=>'request_reminder', :collection=>@request_reminder_hash["ended_without_amdate"]) %>
+		</table><br />
+	<% end %>
+<% end %>
+
+<!-- CI PROJECT -->
+<br/>
+<% if @ciproject_reminder_hash.count > 0 %>
+	<br /><br /><h2 style="font-weight:bold;">CI-Projects</h2><br />
+	<% if @ciproject_reminder_hash["late"] %>
+		<p>Vous avez <%= @ciproject_reminder_hash["late"].count %> CI-Projects en retard.</p>
+	    <table>
+		    <tr style="font-weight:bold;">
+				<td>ID</td>
+				<td></td>
+				<td>Status</td>
+				<td>Visibility</td>
+				<td>Assigned to</td>
+				<td>Summary</td>
+				<td>Stage</td>
+				<td>SQLI</td>
+				<td>Airbus</td>
+				<td>Deployment</td>
+				<td>Kick-Off Date</td>
+				<td>Dates which are late</td>
+		    </tr>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["late"], :as=>:p, :locals => { :check_date => true }) %>
+		</table><br />
+	<% end %>
+	
+	<% if @ciproject_reminder_hash["notKickoff"] %>
+		<p>Vous avez <%= @ciproject_reminder_hash["notKickoff"].count %> CI-Projects assignés mais sans kickoff date.</p>
+		<table>
+		    <tr style="font-weight:bold;">
+				<td>ID</td>
+				<td></td>
+				<td>Status</td>
+				<td>Visibility</td>
+				<td>Assigned to</td>
+				<td>Summary</td>
+				<td>Stage</td>
+				<td>SQLI</td>
+				<td>Airbus</td>
+				<td>Deployment</td>
+				<td>Kick-Off Date</td>
+		    </tr>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["notKickoff"], :as=>:p, :locals => { :check_date => false }) %>
+		</table><br />
+	<% end %>
+	
+	<% if @ciproject_reminder_hash["all"] %>
+		<p>Vous avez un total de <%= @ciproject_reminder_hash["all"].count %> CI-Projects.</p>
+		<table>
+		    <tr style="font-weight:bold;">
+				<td>ID</td>
+				<td></td>
+				<td>Status</td>
+				<td>Visibility</td>
+				<td>Assigned to</td>
+				<td>Summary</td>
+				<td>Stage</td>
+				<td>SQLI</td>
+				<td>Airbus</td>
+				<td>Deployment</td>
+				<td>Kick-Off Date</td>
+		    </tr>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["all"], :as=>:p, :locals => { :check_date => false }) %>
+		</table><br />
+	<% end %>
+<% end %>
+
+<br/>
+<br/>
+Your very kind secretary,<br/>
+The <a href="http://tls-srv-eisq.sqli.com/">BAM</a>.<br/>
+</body>
+</html>

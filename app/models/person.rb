@@ -241,16 +241,46 @@ class Person < ActiveRecord::Base
     #returnHash = {"all" => allTickets, "late" => late, "notKickoff" => assignedNotKickoff}
     returnHash = {}
     if allTickets.size > 0
-      returnHash["all"] = allTickets;
+      returnHash["all"] = allTickets
     end
     if late.size > 0
-      returnHash["late"] = late;
+      returnHash["late"] = late
     end
     if assignedNotKickoff.size > 0
-      returnHash["notKickoff"] = assignedNotKickoff;
+      returnHash["notKickoff"] = assignedNotKickoff
     end
     return returnHash
   end
+  
+  def get_request_reminder
+    #all = Request.all
+    not_started          = Request.find(:all, :conditions=>["start_date != '' and start_date <= ? and resolution!='in progress' and resolution!='ended' and resolution!='aborted' and status!='cancelled'  and status!='removed' and status!='to be validated' and assigned_to = ?", Date.today(), self.rmt_user], :order=>"start_date")
+    null_start_date      = Request.find(:all, :conditions=>["start_date = '' and status='assigned' and assigned_to = ?", self.rmt_user], :order=>"start_date")
+    null_milestones      = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress' and assigned_to = ?", self.rmt_user], :order=>"start_date")
+    past_milestones      = Request.find(:all, :conditions=>["((actual_m_date != '' and actual_m_date < ?) or (actual_m_date = '' and milestone_date != '' and milestone_date < ?)) and resolution!='ended' and resolution!='aborted' and status != 'cancelled' and status != 'removed' and assigned_to = ?", Date.today(), Date.today(), self.rmt_user], :order=>"milestone_date")
+    ended_without_amdate = Request.find(:all, :conditions=>["status !='cancelled' and resolution='ended' and actual_m_date='' and assigned_to = ?", self.rmt_user], :order=>"start_date")
+    returnHash = {}
+    if not_started.size > 0
+      returnHash["not_started"] = not_started;
+    end
+    if null_start_date.size > 0
+      returnHash["null_start_date"] = null_start_date;
+    end
+    if null_milestones.size > 0
+      returnHash["null_milestones"] = null_milestones;
+    end
+    if past_milestones.size > 0
+      returnHash["past_milestones"] = past_milestones;
+    end
+    if ended_without_amdate.size > 0
+      returnHash["ended_without_amdate"] = ended_without_amdate;
+    end
+    #if all.size > 0
+      #returnHash["all"] = all;
+    #end
+    return returnHash;
+  end
+  
 protected
 
   # before filter

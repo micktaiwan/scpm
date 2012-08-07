@@ -83,6 +83,10 @@ private
     @null_milestones      = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress'"], :order=>"start_date")
     @past_milestones      = Request.find(:all, :conditions=>["((actual_m_date != '' and actual_m_date < ?) or (actual_m_date = '' and milestone_date != '' and milestone_date < ?)) and resolution!='ended' and resolution!='aborted' and status != 'cancelled' and status != 'removed'", Date.today(), Date.today()], :order=>"milestone_date")
     @ended_without_amdate = Request.find(:all, :conditions=>["status !='cancelled' and resolution='ended' and actual_m_date=''"], :order=>"start_date")
+    @ci_projects_all = CiProject.find(:all)
+    @ci_projects_late = CiProject.find(:all, :conditions=>["(status='Accepted' or status='Assigned')"], :order=>"sqli_validation_date_review desc")
+    @ci_projects_assigned_without_kickoff = CiProject.find(:all, :conditions=>["kick_off_date IS NULL and assigned_to IS NOT NULL"], :order=>"sqli_validation_date_review desc")
+    
   end
 
 =begin
