@@ -47,7 +47,7 @@ class SDP
       insert
       break if @state == :end
     end
-    SDPTask.formatStatsByType()
+    SDPTask.format_stats_by_type()
   end
 
 private

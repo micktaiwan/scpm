@@ -1,5 +1,10 @@
 <li>
-<b><%= a.project.full_name %></b>
+<b><% if(a.project != nil) %>
+     <%= a.project.full_name %>
+   <% else %>
+     No Project Name
+   <% end %>
+</b>
 <%= a.action %>
 <% if a.due_date %>
 <%= a.due_date %>
