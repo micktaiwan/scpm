@@ -107,4 +107,10 @@ en:
       over_x_years:
         one: "over 1 year"
         other: "over {{count}} years"
-
+# EISQ
+  scpm:
+    sdp:
+      type_Suite: "Physical Suite"
+      type_Yes: "Physical Business projects"
+      type_No: "Functional projects"
+      type_no_type: "No type"

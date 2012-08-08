@@ -237,10 +237,13 @@ class ToolsController < ApplicationController
   
   def sdp_index_by_type_prepare
     return if SDPTask.count.zero?
-    begin
+    begin      
+      typesSorted = APP_CONFIG['sdp_by_type_order'].split(',') # Get sorted list of type to show from conf file
+      remainTypes = SDPPhaseByType.all(:select => "DISTINCT(request_type)", :conditions => ['request_type not in (?)',typesSorted]) # Get all types availables in SDPPhaseByType table which are not in conf file
+      @allPhaseRequestTypes = typesSorted + remainTypes.map { |t| t.request_type } # Types sorted + Types not specified in conf file
+      
       @phases = SDPPhaseByType.find(:all)
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
-      @allPhaseRequestTypes = SDPPhaseByType.all(:select => "DISTINCT(request_type)") # Get all types availables in SDPPhaseByType table
       
       tasks2010                          = SDPTask.find(:all, :conditions=>"iteration='2010'")
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")

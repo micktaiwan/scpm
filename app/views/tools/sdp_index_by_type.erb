@@ -6,9 +6,9 @@
 
 <% @allPhaseRequestTypes.each{|phase_request_type| 
 	# Filter phases for current type
-	phasesForCurrentType = @phases.find_all{|phase| (phase.request_type == phase_request_type.request_type) and (phase.request_type != nil)}
+	phasesForCurrentType = @phases.find_all{|phase| (phase.request_type == phase_request_type) and (phase.request_type != nil)}
 %>
-	<h2>Type : <%= phase_request_type.request_type %></h2>
+	<h2><%= t('scpm.sdp.type_'+phase_request_type) %></h2>
 	<table>
 	  <tr>
 	  <td>Title</td>

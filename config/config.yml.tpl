@@ -11,3 +11,6 @@ daily_reminder_email_object: "[BAM] Reminders for "
 request_ci_reminder_email_source: "addressMail@sqli.com"
 request_ci_reminder_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com,addressMail3@sqli.com"
 request_ci_reminder_email_object: "[BAM] Requests/CI reminders for "
+
+# SDP by type
+sdp_by_type_order: "Yes,Suite,No,no_type"

@@ -30,28 +30,16 @@ class SDPTask < ActiveRecord::Base
             self.manage_phase(sdpTask,requestSdp)
             self.manage_activity(sdpTask,requestSdp)
           else
-            requestSdp.request_type = "Unclassed"
+            requestSdp.request_type = "no_type"
             self.manage_phase(sdpTask,requestSdp)
             self.manage_activity(sdpTask,requestSdp)
           end
-        else
-          requestSdp = Request.new()
-          requestSdp.request_type = "Global"
-          self.manage_phase(sdpTask,requestSdp)
-          self.manage_activity(sdpTask,requestSdp)
+        # else
+          # requestSdp = Request.new()
+          # requestSdp.request_type = "Unclassed"
+          # self.manage_phase(sdpTask,requestSdp)
+          # self.manage_activity(sdpTask,requestSdp)
         end
-        # if ((requestSdp != nil) and (requestSdp.request_type != nil)) # With Specific type
-        #           self.managePhase(sdpTask,requestSdp)
-        #           self.manageActivity(sdpTask,requestSdp)
-        #         elsif(requestSdp != nil) # With request but without specific type
-        #           requestSdp.request_type = "Unclassed"
-        #           self.managePhase(sdpTask,requestSdp)
-        #           self.manageActivity(sdpTask,requestSdp)
-        #         else  # Without request
-        #           requestSdp.request_type = "Global"
-        #           self.managePhase(sdpTask,requestSdp)
-        #           self.manageActivity(sdpTask,requestSdp)
-        #         end
       end
     }
   end
