@@ -24,7 +24,7 @@ class SDPTask < ActiveRecord::Base
        
       # If we have a request id for this sdpTask
       if(sdpTask.request_id != nil)
-        requestSdp = Request.find(:first, :conditions => { :id => sdpTask.request_id })
+        requestSdp = Request.find(:first, :conditions => { :request_id => sdpTask.request_id })
         if (requestSdp != nil)
           if (requestSdp.request_type != nil)
             self.manage_phase(sdpTask,requestSdp)
