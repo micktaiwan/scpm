@@ -54,9 +54,7 @@ class Mailer < ActionMailer::Base
   def rmt_ci_reminder(person, request_reminder_hash, ciproject_reminder_hash)
     render(:nothing=>true) and return if !person or person.email.empty?
     @from        = APP_CONFIG['request_ci_reminder_email_source']
-    #@recipients  = person.email+","+APP_CONFIG['request_ci_reminder_email_destination']
-    @recipients  = APP_CONFIG['request_ci_reminder_email_destination']
-    
+    @recipients  = person.email+","+APP_CONFIG['request_ci_reminder_email_destination']
     @subject     = APP_CONFIG['request_ci_reminder_email_object']+person.name
     @person, @request_reminder_hash, @ciproject_reminder_hash = person, request_reminder_hash, ciproject_reminder_hash
     content_type "text/html; charset=utf-8"
