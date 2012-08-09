@@ -1,4 +1,29 @@
-<tr>
+<%
+background_color_css = ""
+if p.sanitized_status.eql?("to_be_validated")
+	background_color_css = "background: #AAF;"
+elsif p.sanitized_status.eql?("new")
+	background_color_css = "background: #FAA;"
+elsif p.sanitized_status.eql?("assigned")
+	background_color_css = "background: #FF9;"
+elsif p.sanitized_status.eql?("acknowledged")
+	background_color_css = "background: #FD6;"
+elsif p.sanitized_status.eql?("feedback")
+	background_color_css = "background: #FAF;"
+elsif p.sanitized_status.eql?("cancelled")
+	background_color_css = "background: #F00;"
+elsif p.sanitized_status.eql?("removed")
+	background_color_css = "background: #DDD;"
+elsif p.sanitized_status.eql?("performed")
+	background_color_css = "background: #AFA;"
+elsif p.sanitized_status.eql?("validated")
+	background_color_css = "background: #6F6;"
+end
+
+%>
+
+
+<tr style="<%= background_color_css %>" >
 	<td align="right"><b><%=link_to(p.external_id, "https://sqli.steering-project.com/mantis/view.php?id=#{p.internal_id}")%></b></td>
 	<td><%= p.order %></td>
 	<td><%= p.status %></td>

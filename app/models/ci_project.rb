@@ -95,5 +95,21 @@ class CiProject < ActiveRecord::Base
 			0
 		end
 	end
+	
+	def sanitized_status
+    sanitize(self.css_class)
+  end
+  
+private
+
+  def sanitize(name)
+    name = name.downcase
+    name.gsub!("ci_project ","")
+    name.gsub!("/","")
+    name.gsub!("  ","_")
+    name.gsub!(" ","_")
+    name.gsub!("-","_")
+    name
+  end
 
 end

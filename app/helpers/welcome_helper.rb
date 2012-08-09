@@ -57,7 +57,7 @@ module WelcomeHelper
     
     rv += "<table><tr class='theader'><td>#</td><td></td><td>Status</td><td>Visibility</td><td>Assigned to</td><td></td><td>Summary</td><td>Stage</td><td>SQLI</td><td>Airbus</td><td>Deployment</td><td>Kick-Off Date</td><td></td></tr>"
     cis.each { |p|
-      rv += "<tr class=\"closed\">"
+      rv += "<tr class='#{p.sanitized_status}'>"
       rv += "<td><b>"+ link_to(p.external_id, "https://sqli.steering-project.com/mantis/view.php?id=#{p.internal_id}") + "</b></td>"
     	rv += "<td>#{p.order}</td>"
     	rv += "<td>#{p.status}</td>"
