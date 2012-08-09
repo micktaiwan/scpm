@@ -1,5 +1,6 @@
 <tr class="<%= req.css_class %>">
-<td width="30"><%= req.id %>-<%= req.version %></td>
+<td width="30"><%= req.id %></td>
+<td><%= req.version %></td>
 <td width="80"><%= req.source_identifier %></td>
 <td><b><%= req.short_name %></b></td>
 <td>
@@ -17,6 +18,9 @@
 <td><%= req.req_wave.name %></td>
 <td><i><%= req.source_name %></i></td>
 <td width="80"><%= req.person.short_name %></td>
+<td><%= req.is_covered %></td>
+<td><%= req.cover_detail %></td>
+<td><%= req.last_review %></td>
 <td><%= link_to(image_tag('edit.gif'), {:controller=>'requirements', :action=>'edit', :id=>req.id}) %></td>
 <td><%= link_to(image_tag('add.png', :title=>"Add an impact"), {:controller=>'req_impacts', :action=>'new', :id=>req.id}) %></td>
 </tr>
