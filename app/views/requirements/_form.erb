@@ -33,3 +33,13 @@
 
 <p><%= label_tag 'impact' %>
 <%= select(:req, :impact, Requirement::Req_Impact) %></p>
+
+<p><%= label_tag 'is_covered' %>
+<% is_covered_list = APP_CONFIG['requirement_is_covered_list'].split(',') %>
+<%= select(:req, :is_covered, is_covered_list) %></p>
+
+<p><%= label_tag 'How the requirement is covered' %>
+<%= text_area :req, :cover_detail, :rows=>3 %>
+
+<p><%= label_tag 'Last review date' %>
+<%= date_select :req, :last_review %></p>

@@ -85,6 +85,7 @@ class ToolsController < ApplicationController
     sdp = SDP.new(path)
     sdp.import
     sdp_index_prepare
+    sdp_index_by_type_prepare
     SdpImportLog.create(
         :sdp_initial_balance             => @sdp_initial_balance,
         :sdp_real_balance                => @real_balance,
@@ -96,8 +97,8 @@ class ToolsController < ApplicationController
         :remaining_time                  => @remaining_time
         )
     sdp_graph # aleady in sdp_index_prepare, but repeated here so grap in email is updated
-    history_comparison        
-    body = render_to_string(:action=>'sdp_index', :layout=>false)
+    history_comparison 
+    body = render_to_string(:action=>'sdp_index', :layout=>false) + render_to_string(:action=>'sdp_index_by_type', :layout=>false)
     Mailer::deliver_mail(APP_CONFIG['sdp_import_email_destination'],APP_CONFIG['sdp_import_email_object'],"<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
     redirect_to '/tools/sdp_index'
   end
@@ -242,8 +243,8 @@ class ToolsController < ApplicationController
       remainTypes = SDPPhaseByType.all(:select => "DISTINCT(request_type)", :conditions => ['request_type not in (?)',typesSorted]) # Get all types availables in SDPPhaseByType table which are not in conf file
       @allPhaseRequestTypes = typesSorted + remainTypes.map { |t| t.request_type } # Types sorted + Types not specified in conf file
       
-      @phases = SDPPhaseByType.find(:all)
-      @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
+      @phasesByType = SDPPhaseByType.find(:all)
+      @phasesByType.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
       
       tasks2010                          = SDPTask.find(:all, :conditions=>"iteration='2010'")
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")

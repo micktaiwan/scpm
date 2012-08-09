@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120802123646) do
+ActiveRecord::Schema.define(:version => 20120809114310) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -379,6 +379,9 @@ ActiveRecord::Schema.define(:version => 20120802123646) do
     t.integer  "priority"
     t.text     "long_description"
     t.text     "compliance_means"
+    t.string   "is_covered"
+    t.text     "cover_detail"
+    t.date     "last_review"
   end
 
   add_index "requirement_versions", ["requirement_id"], :name => "index_requirement_versions_on_requirement_id"
@@ -402,6 +405,9 @@ ActiveRecord::Schema.define(:version => 20120802123646) do
     t.integer  "impact"
     t.text     "long_description"
     t.text     "compliance_means"
+    t.string   "is_covered"
+    t.text     "cover_detail"
+    t.date     "last_review"
   end
 
   create_table "risks", :force => true do |t|

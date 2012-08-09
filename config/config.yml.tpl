@@ -14,3 +14,6 @@ request_ci_reminder_email_object: "[BAM] Requests/CI reminders for "
 
 # SDP by type
 sdp_by_type_order: "Yes,Suite,No,no_type"
+
+# Requirements is_covered list
+requirement_is_covered_list: "Yes,No,Partially"
