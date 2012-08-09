@@ -79,9 +79,8 @@ Dear <%= @person.name %>,<br/>
 				<td>Airbus</td>
 				<td>Deployment</td>
 				<td>Kick-Off Date</td>
-				<td>Dates which are late</td>
 		    </tr>
-			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["late"], :as=>:p, :locals => { :check_date => true }) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["late"], :as=>:p) %>
 		</table><br />
 	<% end %>
 	
@@ -101,7 +100,7 @@ Dear <%= @person.name %>,<br/>
 				<td>Deployment</td>
 				<td>Kick-Off Date</td>
 		    </tr>
-			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["notKickoff"], :as=>:p, :locals => { :check_date => false }) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["notKickoff"], :as=>:p) %>
 		</table><br />
 	<% end %>
 	
@@ -121,7 +120,7 @@ Dear <%= @person.name %>,<br/>
 				<td>Deployment</td>
 				<td>Kick-Off Date</td>
 		    </tr>
-			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["all"], :as=>:p, :locals => { :check_date => false }) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["all"], :as=>:p) %>
 		</table><br />
 	<% end %>
 <% end %>

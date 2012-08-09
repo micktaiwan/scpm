@@ -31,29 +31,29 @@ end
 	<td><%= p.assigned_to %></td>
 	<td><%= p.summary %></td>
 	<td><b><%= p.short_stage %></b></td>
-	<td><b><%= p.sqli_validation_date_review %></b> 	<%= p.sqli_delay %></td>
-	<td><b><%= p.airbus_validation_date_review %></b> 	<%= p.airbus_delay %></td>
-	<td><b><%= p.deployment_date_review %></b> 			<%= p.deployment_delay %></td>
-	<td> <%= p.kick_off_date %> </td>
+	<!-- SQLI DATE -->
 	<% 
-		if (check_date)
-			late_dates = ""
-			if CiProject.is_late(p.sqli_validation_date_review)
-				late_dates += "SQLI"
-			end
-			if CiProject.is_late(p.airbus_validation_date_review)
-				if late_dates.size > 0
-					late_dates += ", "
-				end
-				late_dates += "Airbus"
-			end
-			if CiProject.is_late(p.deployment_date_review)
-				if late_dates.size > 0
-					late_dates += ", "
-				end
-				late_dates += "Deployment"
-			end
+	   sqliStyle = ""
+	   if CiProject.late_css(p.sqli_validation_date_review).eql?("ci_late") 
+	     sqliStyle = "color:red;"
+       end
 	%>
-			<td><%= late_dates %></td>
-		<% end %>
+	<td style="<%= sqliStyle %>"><b><%= p.sqli_validation_date_review %></b> 	<%= p.sqli_delay %></td>
+	<!-- AIRBUS DATE -->
+	<% 
+	   airbusStyle = ""
+	   if CiProject.late_css(p.airbus_validation_date_review).eql?("ci_late") 
+	     airbusStyle = "color:red;"
+       end
+	%>
+	<td style="<%= airbusStyle %>"><b><%= p.airbus_validation_date_review %></b> 	<%= p.airbus_delay %></td>
+	<!-- DEPLOYMENT DATE -->
+	<% 
+	   deploymentStyle = ""
+	   if CiProject.late_css(p.deployment_date_review).eql?("ci_late") 
+	     deploymentStyle = "color:red;"
+       end
+	%>
+	<td style="<%= deploymentStyle %>"><b><%= p.deployment_date_review %></b> 	<%= p.deployment_delay %></td>
+	<td> <%= p.kick_off_date %> </td>
 </tr>
