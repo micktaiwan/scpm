@@ -43,7 +43,8 @@ module WelcomeHelper
     rv += "</ul>"
   end     
    
-  def ci_project_report_by(title, cis, id, expanded = false)    
+  def ci_project_report_by(title, cis, id, expanded = false, dateType = "none")    
+    # Title
     title = "nil" if not title
     rv = ""
     if not expanded
@@ -55,8 +56,41 @@ module WelcomeHelper
       rv += "<ul id='"+id+"_"+title+"'>"
     end
     
-    rv += "<table><tr class='theader'><td>#</td><td></td><td>Status</td><td>Visibility</td><td>Assigned to</td><td></td><td>Summary</td><td>Stage</td><td>SQLI</td><td>Airbus</td><td>Deployment</td><td>Kick-Off Date</td><td></td></tr>"
+    # Content
+    # Table header
+    date_header_title = "Date review"
+    if dateType.eql?("objective")
+      date_header_title = "Date objective"
+    end
+    rv += "<table><tr class='theader'><td>#</td><td></td><td>Status</td><td>Visibility</td><td>Assigned to</td><td></td><td>Summary</td><td>Stage</td><td>SQLI #{date_header_title}</td><td>Airbus #{date_header_title}</td><td>Deployment #{date_header_title}</td><td>Kick-Off Date</td><td></td></tr>"
+    # Table row
     cis.each { |p|
+    	# Date
+    	sqli_date = ""
+    	airbus_date = ""
+    	deployment_date = ""
+    	late_css_sqli = ""
+    	late_css_airbus = ""
+    	late_css_deployment = ""
+    	if(dateType.eql?("review"))
+    	  sqli_date = p.sqli_validation_date_review
+    	  airbus_date = p.airbus_validation_date_review
+    	  deployment_date = p.deployment_date_review
+      	late_css_sqli = CiProject.late_css(p.sqli_validation_date_review)
+      	late_css_airbus = CiProject.late_css(p.airbus_validation_date_review)
+      	late_css_deployment = CiProject.late_css(p.deployment_date_review)
+  	  elsif(dateType.eql?("objective"))
+        sqli_date = p.sqli_validation_date_objective
+    	  airbus_date = p.airbus_validation_date_objective
+    	  deployment_date = p.deployment_date_objective
+        late_css_sqli = CiProject.late_css(p.sqli_validation_date_objective)
+        late_css_airbus = CiProject.late_css(p.airbus_validation_date_objective)
+        late_css_deployment = CiProject.late_css(p.deployment_date_objective)
+      else
+      	sqli_date = p.sqli_validation_date_review
+      	airbus_date = p.airbus_validation_date_review
+      	deployment_date = p.deployment_date_review
+  	  end
       rv += "<tr class='#{p.sanitized_status}'>"
       rv += "<td><b>"+ link_to(p.external_id, "https://sqli.steering-project.com/mantis/view.php?id=#{p.internal_id}") + "</b></td>"
     	rv += "<td>#{p.order}</td>"
@@ -70,9 +104,9 @@ module WelcomeHelper
     	rv += "</td>"
     	rv += "<td>#{p.summary}</td>"
     	rv += "<td><b>#{p.short_stage}</b></td>"
-      rv += "<td class=\"" + CiProject.late_css(p.sqli_validation_date_review) + "\"><b>#{p.sqli_validation_date_review}</b> 	#{p.sqli_delay}</td>"
-    	rv += "<td class=\"" + CiProject.late_css(p.airbus_validation_date_review) + "\"><b>#{p.airbus_validation_date_review}</b> 	#{p.airbus_delay}</td>"
-    	rv += "<td class=\"" + CiProject.late_css(p.deployment_date_review) + "\"><b>#{p.deployment_date_review}</b> 			#{p.deployment_delay}</td>"
+      rv += "<td class=\"" + late_css_sqli + "\"><b>#{sqli_date}</b> #{p.sqli_delay}</td>"
+    	rv += "<td class=\"" + late_css_airbus + "\"><b>#{airbus_date}</b> #{p.airbus_delay}</td>"
+    	rv += "<td class=\"" + late_css_deployment + "\"><b>#{deployment_date}</b> #{p.deployment_delay}</td>"
     	rv += "<td> #{p.kick_off_date} </td>"
       rv += "</tr>"
       }

@@ -64,65 +64,39 @@ Dear <%= @person.name %>,<br/>
 <br/>
 <% if @ciproject_reminder_hash.count > 0 %>
 	<br /><br /><h2 style="font-weight:bold;">CI-Projects</h2><br />
+	
+	<% if @ciproject_reminder_hash["all"] %>
+		<p>Vous avez un total de <%= @ciproject_reminder_hash["all"].count %> CI-Projects.</p>
+		<table>
+			<%= render(:partial=>'ci_projects/daily_ci_project_header', :locals => {:date_type => "review" }) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["all"], :as=>:p, :locals => {:date_type => "none" }) %>
+		</table><br />
+	<% end %>
+	
 	<% if @ciproject_reminder_hash["late"] %>
-		<p>Vous avez <%= @ciproject_reminder_hash["late"].count %> CI-Projects en retard.</p>
+		<p>Vous avez <%= @ciproject_reminder_hash["late"].count %> CI-Projects en retard (par rapport à la date review).</p>
 	    <table>
-		    <tr style="font-weight:bold;">
-				<td>ID</td>
-				<td></td>
-				<td>Status</td>
-				<td>Visibility</td>
-				<td>Assigned to</td>
-				<td>Summary</td>
-				<td>Stage</td>
-				<td>SQLI</td>
-				<td>Airbus</td>
-				<td>Deployment</td>
-				<td>Kick-Off Date</td>
-		    </tr>
-			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["late"], :as=>:p) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project_header', :locals => {:date_type => "review" }) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["late"], :as=>:p, :locals => {:date_type => "review" }) %>
+		</table><br />
+	<% end %>
+	
+	<% if @ciproject_reminder_hash["lateObjective"] %>
+		<p>Vous avez <%= @ciproject_reminder_hash["lateObjective"].count %> CI-Projects en retard (par rapport à la date Objective).</p>
+	    <table>
+			<%= render(:partial=>'ci_projects/daily_ci_project_header', :locals => {:date_type => "objective" }) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["lateObjective"], :as=>:p, :locals => {:date_type => "objective" }) %>
 		</table><br />
 	<% end %>
 	
 	<% if @ciproject_reminder_hash["notKickoff"] %>
 		<p>Vous avez <%= @ciproject_reminder_hash["notKickoff"].count %> CI-Projects assignés mais sans kickoff date.</p>
 		<table>
-		    <tr style="font-weight:bold;">
-				<td>ID</td>
-				<td></td>
-				<td>Status</td>
-				<td>Visibility</td>
-				<td>Assigned to</td>
-				<td>Summary</td>
-				<td>Stage</td>
-				<td>SQLI</td>
-				<td>Airbus</td>
-				<td>Deployment</td>
-				<td>Kick-Off Date</td>
-		    </tr>
-			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["notKickoff"], :as=>:p) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project_header', :locals => {:date_type => "review" }) %>
+			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["notKickoff"], :as=>:p, :locals => {:date_type => "none" }) %>
 		</table><br />
 	<% end %>
-	
-	<% if @ciproject_reminder_hash["all"] %>
-		<p>Vous avez un total de <%= @ciproject_reminder_hash["all"].count %> CI-Projects.</p>
-		<table>
-		    <tr style="font-weight:bold;">
-				<td>ID</td>
-				<td></td>
-				<td>Status</td>
-				<td>Visibility</td>
-				<td>Assigned to</td>
-				<td>Summary</td>
-				<td>Stage</td>
-				<td>SQLI</td>
-				<td>Airbus</td>
-				<td>Deployment</td>
-				<td>Kick-Off Date</td>
-		    </tr>
-			<%= render(:partial=>'ci_projects/daily_ci_project', :collection=>@ciproject_reminder_hash["all"], :as=>:p) %>
-		</table><br />
-	<% end %>
+
 <% end %>
 
 <br/>
