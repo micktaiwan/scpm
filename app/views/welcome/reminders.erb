@@ -16,7 +16,8 @@ voici les anomalies (informations contradictoires) renseignées dans RMT qu'il f
 <%= report_by("Jalons passés (le status devrait être ended si c'est vraiment fini ou bien la date de actual milestone doit être redéfinie)", @past_milestones.select {|r| r.assigned_to == resp.rmt_user}, "pastm", true) %>
 <%= report_by("Ended, mais il manque la actual milestone date", @ended_without_amdate.select {|r| r.assigned_to == resp.rmt_user}, "ended", true) %>
 <%= ci_project_report_by("Tes Ci-projects", @ci_projects_all.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true) %>
-<%= ci_project_report_by("Tes Ci-projects en retard", @ci_projects_late.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true) %>
+<%= ci_project_report_by("Tes Ci-projects en retard par rapport à la date review", @ci_projects_late.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true, "review") %>
+<%= ci_project_report_by("Tes Ci-projects en retard par rapport à la date objective", @ci_projects_late_objective.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true, "objective") %>
 <%= ci_project_report_by("Tes Ci-projects sans Kick-off date", @ci_projects_assigned_without_kickoff.select {|ci| ci.assigned_to == resp.rmt_user}, "ciprojectall", true) %>
 
 <br/>
