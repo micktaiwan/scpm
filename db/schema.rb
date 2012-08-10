@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120809114310) do
+ActiveRecord::Schema.define(:version => 20120810150042) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -32,9 +32,11 @@ ActiveRecord::Schema.define(:version => 20120809114310) do
     t.text     "amendment"
     t.text     "action"
     t.date     "duedate"
-    t.integer  "done",        :default => 0
+    t.integer  "done",         :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "closing_date"
+    t.date     "done_date"
   end
 
   create_table "bandeaus", :force => true do |t|
