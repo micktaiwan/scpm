@@ -19,7 +19,7 @@ class Action < ActiveRecord::Base
 private
 
   def track_changes
-    return if self.id == nil
+    return if self.id == nil or self.project_id_was == nil
     was_p = Project.find(self.project_id_was)
     if was_p
       self.result = (self.result ? self.result : "") + " changed from project #{self.project_id_was}, #{was_p.name}" if self.project_id_changed? and self.project_id_was

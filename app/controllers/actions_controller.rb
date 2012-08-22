@@ -32,9 +32,14 @@ class ActionsController < ApplicationController
   def update
     a = Action.find(params[:id])
     a.update_attributes(params[:myaction])
-    redirect_to "/projects/show/#{a.project_id}"
+    
+    if a.project_id != nil
+      redirect_to "/projects/show/#{a.project_id}"
+    else
+      redirect_to "/projects/index"
+    end
   end
-
+  
   def destroy
     Action.find(params[:id].to_i).destroy
     render(:nothing=>true)
