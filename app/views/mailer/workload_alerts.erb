@@ -10,6 +10,10 @@
     <br/>
     <%= render(:partial=>"workload", :collection=>@workloads) %><br/>
     <br/>
-    <a href="http://tls-srv-eisq.sqli.com/workloads">EISQ Report</a><br/>    
+    <% 
+    link_report_string = APP_CONFIG['scpm_title'] + " Report"
+    link_report_url = APP_CONFIG['scpm_address'] + "workloads" 
+    %>
+    <%= link_to link_report_string, link_report_url %><br/>    
   </body>
 </html>
