@@ -69,7 +69,7 @@ class ToolsController < ApplicationController
   end
 
   def test_email
-    Mailer::deliver_mail("mfaivremacon@sqli.com")
+    Mailer::deliver_mail(APP_CONFIG['test_email_address'])
   end
 
   def sdp_import
@@ -97,7 +97,8 @@ class ToolsController < ApplicationController
         :remaining_time                  => @remaining_time
         )
     sdp_graph # aleady in sdp_index_prepare, but repeated here so grap in email is updated
-    history_comparison 
+    history_comparison
+    @sdp_index_by_mail = true    
     body = render_to_string(:action=>'sdp_index', :layout=>false) + render_to_string(:action=>'sdp_index_by_type', :layout=>false)
     Mailer::deliver_mail(APP_CONFIG['sdp_import_email_destination'],APP_CONFIG['sdp_import_email_object'],"<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
     redirect_to '/tools/sdp_index'
@@ -207,7 +208,50 @@ class ToolsController < ApplicationController
     #chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>7
     @sdp_graph = chart.to_url#({:chd=>"t:#{serie.join(',')}", :chds=>"#{min},#{max}"})    
   end
+  
+  def get_sdp_graph_series_history(method,date)
+    serie   = []
+    labels  = []
+    logs = SdpImportLog.find(:all,:conditions => ['created_at <= ?',date+" 23:59:59"], :order=>"id")
+    if logs!=nil and logs.first != nil
+      first = logs.first.created_at
+      for l in logs
+        serie << [l.created_at-first, l.send(method)]
+        labels << l.created_at.to_date
+      end
+      min = serie.map{|p| p[1]}.min
+      max = serie.map{|p| p[1]}.max
+      serie = serie.map{ |l| [l[0], l[1]]}
+      [serie, min, max, labels, true]
+    else
+      [ 0.to_s, 0.to_s, 0.to_s, 0.to_s, false]
+    end
+  end  
 
+  def sdp_graph_history
+    render nil if params[:date]==nil
+    chart = GoogleChart::LineChart.new('600x200', "Gain", true)
+    serie1, min1, max1, labels1, result1 = get_sdp_graph_series_history(:sdp_real_balance_and_provisions,params[:date])
+    serie2, min2, max2, labels2, result2 = get_sdp_graph_series_history(:sdp_initial_balance,params[:date])
+    serie4, min4, max4, labels4, result3 = get_sdp_graph_series_history(:provisions,params[:date])
+    if result1 and result2 and result3
+      min = [min1,min2,min4].min
+      max = [max1,max2,min4].max
+      serie1 = serie1.map{ |l| [l[0], l[1]-min]}
+      serie2 = serie2.map{ |l| [l[0], l[1]-min]}
+      serie4 = serie4.map{ |l| [l[0], l[1]-min]}
+      chart.data "Total gain",        serie1, '0000ff'
+      chart.data "SDP balance",       serie2, 'AA0000'
+      chart.data "Provisions",        serie4, '00ff00'
+      chart.axis :y, :range => [min,max], :font_size => 10, :alignment => :center
+      @sdp_graph_history = chart.to_url#({:chd=>"t:#{serie.join(',')}", :chds=>"#{min},#{max}"})
+      @sdp_graph_history_error = false
+    else
+      @sdp_graph_history_error = true
+    end
+  end
+  
+  
   def default_to_zero(&block)
     begin
       yield block
@@ -232,6 +276,7 @@ class ToolsController < ApplicationController
   end
 
   def sdp_index
+    @sdp_index_by_mail = false
     sdp_index_prepare
     history_comparison
   end

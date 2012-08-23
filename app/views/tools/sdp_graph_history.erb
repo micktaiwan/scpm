@@ -1,0 +1,5 @@
+<% if !@sdp_graph_history_error %>
+  <%= image_tag(@sdp_graph_history) if @sdp_graph_history%>
+<% else %>
+  Une erreur empêche de récupérer les données. Verifiez la date.
+<% end %>

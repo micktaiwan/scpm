@@ -70,3 +70,7 @@
   <tr><td>Other provisions:</td><td> <%= @other_provisions %></td><td colspan="2">(CI+QA+Risks)</td></tr>
   <tr><td>Total provisions:</td><td> <%= @total_provisions %></td><td colspan="2">(PM+OM+CI+QA+Risks)</td></tr>
 </table>
+<% if @sdp_index_by_mail != nil and @sdp_index_by_mail == true %>
+<br /> 
+Si le graphique ne s'affiche pas correctement, vous pouvez y accéder à l'adresse suivante : <%= url_for :controller => "tools", :action => "sdp_graph_history", :only_path => false, :date =>Date.today.to_s("%Y-%m-%d %H:%M:%S") %>
+<% end %>
