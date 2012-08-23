@@ -3,7 +3,7 @@ class Mailer < ActionMailer::Base
   include ApplicationHelper
 
   def mail(recipient, subject = "Hi", body = "Test de mail")
-    @from        = "mfaivremacon@sqli.com"
+    @from        = APP_CONFIG['generic_email_address']
     @recipients  = recipient
     @subject     = subject
     @body        = body
@@ -11,15 +11,15 @@ class Mailer < ActionMailer::Base
   end
 
   def status_change(project)
-    @from       = "mfaivremacon@sqli.com"
-    @recipients = "mfaivremacon@sqli.com"
+    @from       = APP_CONFIG['status_change_email_source']
+    @recipients = APP_CONFIG['status_change_email_destination']
     @subject    = "[EISQ] Status change - #{project.full_name}"
     @project    = project
   end
 
   def risk_change(risk)
-    @from       = "mfaivremacon@sqli.com"
-    @recipients = "mfaivremacon@sqli.com"
+    @from       = APP_CONFIG['risk_change_email_source']
+    @recipients = APP_CONFIG['risk_change_email_destination']
     @subject    = "[EISQ] Risk change - #{risk.project.full_name}"
     @risk       = risk
   end
@@ -33,8 +33,8 @@ class Mailer < ActionMailer::Base
     end
     @workloads = @workloads.select{|w| w.next_month_percents < 95 or w.next_month_percents > 115}.sort_by {|w| [w.next_month_percents]}
 
-    @from       = "mfaivremacon@sqli.com"
-    @recipients = "mfaivremacon@sqli.com,bmonteils@sqli.com,stessier@sqli.com,jmondy@sqli.com"
+    @from       = APP_CONFIG['workload_alerts_email_source']
+    @recipients = APP_CONFIG['workload_alerts_email_destination']
     @subject    = "[EISQ] Workload alerts"
     @headers    = {}
     content_type "text/html; charset=utf-8"
