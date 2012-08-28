@@ -4,11 +4,11 @@
 <% form_tag(:action=>'do_duplication') do %>
 <h3>Select lines to duplicate</h3>
 <table>
-  <tr>
+  <tr class="duplicate_tr_header">
     <th></th>
     <%= render(:partial=>"wl_head", :collection=>@months) %>
   </tr>
-  <tr>
+  <tr class="duplicate_tr_header">
     <th></th>
     <%= render(:partial=>"wl_head", :collection=>@weeks) %>
   </tr>
@@ -22,3 +22,24 @@
   <%= submit_tag('Backup') %>
 <% end %>
 
+
+<SCRIPT language="Javascript">
+check_duplicate_workload_interactions();
+// $$(".duplicate_load_td").invoke('observe', 'click', function(){
+//   if (this.select("input")[0].checked == true)
+//   {
+//     this.select("input")[0].checked=false;
+//     this.setStyle({
+//         backgroundColor: "white"
+//     });
+//   }
+//   else
+//   {
+//     this.select("input")[0].checked=true;
+//     this.setStyle({
+//         backgroundColor: "#FF9BAB"
+//     });
+//   }
+// });
+
+</SCRIPT>
