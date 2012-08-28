@@ -1,0 +1,5 @@
+<tr style="border:1px solid black;">
+  <td style="border:1px solid black;"><%= l.name %></td>
+  <%= render(:partial=>"duplicate_load", :collection=>wl_weeks, :as=>:week, :locals => { :l => l } ) %>
+<tr>
+

@@ -1,0 +1,11 @@
+<%
+wlload = l.get_load_object_by_week(week)
+#wlload = wlload == 0 ? '' : wlload
+#wlload = 0
+%>
+<% if wlload != 0 %>
+  <td style="border:1px solid black;"><%= check_box_tag('lines_loads[]',l.id.to_s+"_"+wlload.id.to_s, false) %><br /><%= 
+wlload.wlload %></td>
+<% else %>
+  <td style="border:1px solid black;"></td>
+<% end %>

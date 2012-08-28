@@ -399,6 +399,56 @@ class WorkloadsController < ApplicationController
       }
     redirect_to(:action=>"transfert")
   end
+  
+  def duplicate
+    @months = []
+    @weeks = []
+    @wl_weeks = []
+    @months = params[:months]
+    @weeks = params[:weeks]
+    @wl_weeks = params[:wl_weeks]
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    @lines = WlLine.find(:all, :conditions=>["person_id=? and parent_line IS NULL",  session['workload_person_id']],
+      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+  end
+  
+  def do_duplication
+    lines_loads = params['lines_loads'] # array of lineId_loadId
+    p_id  = params['person_id']
+    
+    lines_loads.each { |l_l|
+      # Wl_line and Wl_load selected
+      l_l_splited = l_l.split("_")
+      line_id = l_l_splited[0] 
+      load_id = l_l_splited[1]
+      line = WlLine.find(line_id.to_i)
+      load = WlLoad.find(load_id.to_i)
+
+      # Check if the person selected has not already a duplicate
+      duplicate = 0 # Id of the Wl_line duplicated and managed by the person selected (0 if null)
+      if line.duplicates != nil
+        line.duplicates.each { |l|
+          if l.person_id.to_s == p_id
+            duplicate = l.id
+          end
+        }
+      end
+      
+      # If the person selected has not already a duplicate, we create it
+      if duplicate == 0
+        new_line = line.clone
+        new_line.parent_line = line.id
+        new_line.person_id = p_id
+        new_line.save
+        duplicate = new_line.id
+      end
+      
+      # Change wl_line of load selected
+      load.wl_line_id = duplicate
+      load.save
+    }
+    redirect_to(:action=>"index")
+  end
 
   def hide_lines_with_no_workload
     on = params[:on].to_s == 'true'

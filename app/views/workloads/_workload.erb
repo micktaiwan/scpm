@@ -5,6 +5,7 @@
     <tr><td valign="top">
       <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
       <%= link_to('Transfert', {:action=>'transfert'}, {:class=>"btnlnk"}) %>
+      <%= link_to('Backup', {:action=>'duplicate',:weeks=>@workload.weeks,:wl_weeks=>@workload.wl_weeks,:months=>@workload.months}, {:class=>"btnlnk"}) %>
       <% if @suggested_requests.size > 0 %>
       You have <b><%=@suggested_requests.size%></b> suggested requests
       <% end %>

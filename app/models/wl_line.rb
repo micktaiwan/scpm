@@ -4,6 +4,8 @@ class WlLine < ActiveRecord::Base
   belongs_to :person
   belongs_to :request
   belongs_to :sdp_task, :class_name=>"SDPTask"
+  belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
+  has_many :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
 
   include ApplicationHelper
 
@@ -18,6 +20,11 @@ class WlLine < ActiveRecord::Base
   def get_load_by_week(week)
     l = load_by_week(week)
     l ? l.wlload : 0.0
+  end
+  
+  def get_load_object_by_week(week)
+    l = load_by_week(week)
+    l ? l : 0
   end
 
   def planned_sum
