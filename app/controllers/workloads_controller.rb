@@ -446,6 +446,19 @@ class WorkloadsController < ApplicationController
       # Change wl_line of load selected
       load.wl_line_id = duplicate
       load.save
+      
+      # Project
+      request = Request.find(line.request_id) if line.request_id
+      if request != nil
+        project_id = request.project_id
+        project_person = ProjectPerson.first(:conditions => ["project_id = ? and person_id = ?", project_id, p_id]) if project_id
+        if project_person == nil
+          project_person = ProjectPerson.new
+          project_person.project_id = project_id
+          project_person.person_id = p_id
+          project_person.save
+        end
+      end
     }
     redirect_to(:action=>"index")
   end
