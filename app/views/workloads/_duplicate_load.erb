@@ -1,0 +1,11 @@
+<%
+wlload = l.get_load_object_by_week(week)
+%>
+<% if wlload != 0 %>
+  <td class="duplicate_load_td" id="td_<%= l.id.to_s %>_<%= wlload.id.to_s %>" >
+    <%= check_box_tag('lines_loads[]',l.id.to_s+"_"+wlload.id.to_s, false,:class => 'wl_load_checkbox') %>
+    <div style="display:inline;"><%= wlload.wlload %></div>
+  </td>
+<% else %>
+  <td class="duplicate_load_empty"></td>
+<% end %>

@@ -172,3 +172,37 @@ td.availability_5 {
   right:5px;
   position:fixed;
 }
+
+/* DUPLICATE */
+.duplicate_tr_header
+{
+	background-color:#E5F5CA;
+}
+.duplicate_line_tr
+{
+	border:1px solid black;
+	height:40px;
+	opacity:1.0;
+}
+.duplicate_line_tr:hover
+{
+	opacity:0.6;
+}
+.duplicate_line_title
+{
+	border:1px solid black;
+	background-color: #CFDEF5;
+}
+.duplicate_load_td
+{
+	border:1px solid black;
+	text-align:center;
+}
+.duplicate_load_empty
+{
+	background-color: grey;
+}
+.wl_load_checkbox
+{
+	display:none;
+}
