@@ -443,7 +443,7 @@ class ProjectsController < ApplicationController
         }
       @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
       if @wps.size > 0
-        @amendments   = Amendment.find(:all, :conditions=>"project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"done, duedate")
+        @amendments   = Amendment.find(:all, :conditions=>"project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"done_date DESC, done ASC, duedate ASC")
       else
         @amendments   = []
       end
