@@ -169,7 +169,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'Workstream', 'Project', 'Milestone', 'Date', 'Amendment', 'Actions', 'Resp', 'Duedate', 'Closing date', 'Done'] do
+        for column in ['id', 'Supervisor', 'Workstream', 'Project', 'Milestone', 'Creation Date', 'Amendment', 'Actions', 'Resp', 'Duedate', 'Closing date', 'Done'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -183,7 +183,7 @@ end
         style = {'ss:StyleID' => 's75'} if p.done==1
         style = {'ss:StyleID' => 's90'} if p.done_date != nil and p.done==1 and  p.done_date > (Date.today - 7) and p.done_date <= Date.today
         @xml.Row(style) do
-          for column in ['project.supervisor.name', 'project.workstream', 'project.full_name', 'milestone.upcase', 'created_at', 'amendment', 'action', 'responsible', 'duedate', 'closing_date', 'done'] do
+          for column in ['id', 'project.supervisor.name', 'project.workstream', 'project.full_name', 'milestone.upcase', 'created_at', 'amendment', 'action', 'responsible', 'duedate', 'closing_date', 'done'] do
             @xml.Cell do
               @xml.Data cascade_send(p, column), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
