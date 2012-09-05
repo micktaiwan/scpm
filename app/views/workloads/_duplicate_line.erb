@@ -1,5 +1,11 @@
+<%
+isBackup = ""
+if l.parent_line
+  isBackup = "[BACKUP]"
+end
+%>
 <tr class="duplicate_line_tr">
-  <td class="duplicate_line_title"><%= l.name %></td>
+  <td class="duplicate_line_title"><%= isBackup %><%= l.name %></td>
   <%= render(:partial=>"duplicate_load", :collection=>wl_weeks, :as=>:week, :locals => { :l => l } ) %>
 <tr>
 

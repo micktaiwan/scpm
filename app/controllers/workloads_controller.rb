@@ -408,7 +408,7 @@ class WorkloadsController < ApplicationController
     @weeks = params[:weeks]
     @wl_weeks = params[:wl_weeks]
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    @lines = WlLine.find(:all, :conditions=>["person_id=? and parent_line IS NULL",  session['workload_person_id']],
+    @lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
   end
   
@@ -423,6 +423,14 @@ class WorkloadsController < ApplicationController
       load_id = l_l_splited[1]
       line = WlLine.find(line_id.to_i)
       load = WlLoad.find(load_id.to_i)
+      
+      # Check if the line to duplicate isn't already duplicated from another line
+      # If Line to duplicate is already duplicate, so we take the first line as parent_id
+      parent_id = line.id
+      if line.parent_line
+        parent = WlLine.find(line.parent_line)
+        parent_id = parent.id
+      end
 
       # Check if the person selected has not already a duplicate
       duplicate = 0 # Id of the Wl_line duplicated and managed by the person selected (0 if null)
@@ -437,7 +445,7 @@ class WorkloadsController < ApplicationController
       # If the person selected has not already a duplicate, we create it
       if duplicate == 0
         new_line = line.clone
-        new_line.parent_line = line.id
+        new_line.parent_line = parent_id
         new_line.person_id = p_id
         new_line.save
         duplicate = new_line.id
