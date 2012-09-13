@@ -293,10 +293,16 @@ class ToolsController < ApplicationController
       
       tasks2010                          = SDPTask.find(:all, :conditions=>"iteration='2010'")
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")
+      tasks2012                          = SDPTask.find(:all, :conditions=>"iteration='2012'")
       op2010                             = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011                             = tasks2011.inject(0) { |sum, t| t.initial+sum}
-      @operational2011_10percent         = round_to_hour(op2011*0.11111111111)
-      @operational_total                 = op2010 + op2011 + @operational2011_10percent
+      op2012                             = tasks2012.inject(0) { |sum, t| t.initial+sum}
+      @operational2011_10percent_by_type         = round_to_hour(op2011*0.11111111111)
+      @operational2012_10percent_by_type         = round_to_hour(op2012*0.11111111111)
+      @operational_percent_total_by_type         = @operational2011_10percent_by_type + @operational2012_10percent_by_type
+      @operational_total_2011_by_type            = op2010 + op2011 + @operational2011_10percent_by_type
+      @operational_total_2012_by_type            = op2012 + @operational2012_10percent_by_type
+      @operational_total_by_type                 = @operational_total_2011_by_type + @operational_total_2012_by_type
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
     end

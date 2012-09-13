@@ -1,7 +1,7 @@
 <%= render(:file=>"tools/sdp_menu.erb") %>
 <%= @error %>
 <%
-  return "No data. Please do an import." if not @operational_total
+  return "No data. Please do an import." if not @operational_total_by_type
 %>
 
 <% @allPhaseRequestTypes.each{|phase_request_type| 
