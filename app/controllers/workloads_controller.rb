@@ -42,14 +42,11 @@ class WorkloadsController < ApplicationController
     chart = GoogleChart::LineChart.new('1000x300', "#{@workload.person.name} workload", false)
     serie = @workload.percents.map{ |p| p[:precise] }
     return if serie.size == 0
-    realmax = serie.max
-    high_limit = 150.0
-    max = realmax > high_limit ? high_limit : realmax
-    high_limit = high_limit > max ? max : high_limit
-    #serie = serie.map{ |p| rand(300)}
-    #chart.max_value 200
+    realmax     = serie.max
+    high_limit  = 150.0
+    max         = realmax > high_limit ? high_limit : realmax
+    high_limit  = high_limit > max ? max : high_limit
     chart.data "non capped", serie, '0000ff'
-    #chart.add_labels @cap_totals[2..-1]
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workload.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>7
@@ -147,14 +144,29 @@ class WorkloadsController < ApplicationController
     end
 
     chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
-    chart.data "capped", @cap_totals[4..-1], 'ff0000'
-    chart.data "non capped", @totals[4..-1], '0000ff'
+    realmax     = [@totals[4..-1].max, @cap_totals[4..-1].max].max
+    high_limit  = 150.0
+    max         = realmax > high_limit ? high_limit : realmax
+    high_limit  = high_limit > max ? max : high_limit
+    cap_serie   = @cap_totals[4..-1].map { |p| p <= max ? p : max}
+    noncap_serie = @totals[4..-1].map { |p| p <= max ? p : max}
+    chart.data "capped", cap_serie, 'ff0000'
+    chart.data "non capped", noncap_serie, '0000ff'
     #chart.add_labels @cap_totals[3..-1]
-    max = [@totals[4..-1].max,@cap_totals[4..-1].max].max
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>1, :data_point_index=>-1, :pixel_size=>8
+    @cap_totals[4..-1].each_with_index do |p,index|
+      if p > high_limit
+        chart.shape_marker :circle, :color=>'333333', :data_set_index=>0, :data_point_index=>index, :pixel_size=>8
+      end
+    end
+    @totals[4..-1].each_with_index do |p,index|
+      if p > high_limit
+        chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>1, :data_point_index=>index, :pixel_size=>8
+      end
+    end
     chart.range_marker :horizontal, :color=>'EEEEEE', :start_point=>95.0/max, :end_point=>105.0/max
     chart.show_legend = true
     #chart.enable_interactivity = true
@@ -399,7 +411,7 @@ class WorkloadsController < ApplicationController
       }
     redirect_to(:action=>"transfert")
   end
-  
+
   def duplicate
     @months = []
     @weeks = []
@@ -411,19 +423,19 @@ class WorkloadsController < ApplicationController
     @lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
   end
-  
+
   def do_duplication
     lines_loads = params['lines_loads'] # array of lineId_loadId
     p_id  = params['person_id']
-    
+
     lines_loads.each { |l_l|
       # Wl_line and Wl_load selected
       l_l_splited = l_l.split("_")
-      line_id = l_l_splited[0] 
+      line_id = l_l_splited[0]
       load_id = l_l_splited[1]
       line = WlLine.find(line_id.to_i)
       load = WlLoad.find(load_id.to_i)
-      
+
       # Check if the line to duplicate isn't already duplicated from another line
       # If Line to duplicate is already duplicate, so we take the first line as parent_id
       parent_id = line.id
@@ -441,7 +453,7 @@ class WorkloadsController < ApplicationController
           end
         }
       end
-      
+
       # If the person selected has not already a duplicate, we create it
       if duplicate == 0
         new_line = line.clone
@@ -450,11 +462,11 @@ class WorkloadsController < ApplicationController
         new_line.save
         duplicate = new_line.id
       end
-      
+
       # Change wl_line of load selected
       load.wl_line_id = duplicate
       load.save
-      
+
       # Project
       request = Request.find(line.request_id) if line.request_id
       if request != nil
