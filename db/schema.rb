@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120827182342) do
+ActiveRecord::Schema.define(:version => 20121017145100) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -194,6 +194,21 @@ ActiveRecord::Schema.define(:version => 20120827182342) do
     t.text     "actions"
   end
 
+  create_table "lifecycle_questions", :force => true do |t|
+    t.integer  "lifecycle_id"
+    t.integer  "pm_type_axes_id"
+    t.string   "text"
+    t.boolean  "validity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lifecycles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "logs", :force => true do |t|
     t.string   "controller"
     t.string   "action"
@@ -260,6 +275,19 @@ ActiveRecord::Schema.define(:version => 20120827182342) do
     t.datetime "created_at"
   end
 
+  create_table "pm_type_axes", :force => true do |t|
+    t.integer  "pm_type_id"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pm_types", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "project_people", :id => false, :force => true do |t|
     t.integer  "project_id"
     t.integer  "person_id"
@@ -285,6 +313,15 @@ ActiveRecord::Schema.define(:version => 20120827182342) do
     t.integer  "lifecycle",     :default => 0
     t.string   "pm_deputy"
     t.string   "ispm"
+    t.integer  "lifecycle_id"
+  end
+
+  create_table "question_references", :force => true do |t|
+    t.integer  "question_id"
+    t.integer  "milestone_id"
+    t.string   "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "req_categories", :force => true do |t|
@@ -559,6 +596,31 @@ ActiveRecord::Schema.define(:version => 20120827182342) do
     t.datetime "updated_at"
     t.integer  "activity_by_type_id"
     t.integer  "phase_by_type_id"
+  end
+
+  create_table "spider_consolidations", :force => true do |t|
+    t.integer  "spider_id"
+    t.integer  "average"
+    t.integer  "average_ref"
+    t.integer  "ni_number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "spider_values", :force => true do |t|
+    t.integer  "lifecycle_question_id"
+    t.integer  "spider_id"
+    t.string   "note"
+    t.string   "reference"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "spiders", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "milestone_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "statuses", :force => true do |t|

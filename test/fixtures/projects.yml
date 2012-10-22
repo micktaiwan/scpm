@@ -13,5 +13,6 @@ project:
   ispl:
   read_date:
   lifecycle:
+  lifecycle_id:
   pm_deputy:
   ispm:

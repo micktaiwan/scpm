@@ -1,0 +1,12 @@
+<%  
+lifecycleArray = ['Full GPP','Light GPP','Maintenance','LBIP Gx', 'LBIP gx','LBIP pgx','Suite']
+
+Project.find(:all).each{|p|
+  projectLifecycleName = lifecycleArray[p.lifecycle]
+  %>
+	<%= p.id %>-<%= projectLifecycleName %><br />
+  <%
+	p.lifecycle_id = p.lifecycle + 1
+	p.save
+}
+%>

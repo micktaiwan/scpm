@@ -609,5 +609,8 @@ private
     p.initial_should_be     = p.initial     + p.difference
     p.reevaluated_should_be = p.reevaluated + p.difference
   end
-
+  
+  # Used to manage old data for the management of lifecycle of projects as object in model
+  def convert_project_lifecycle_text_to_id
+  end
 end
