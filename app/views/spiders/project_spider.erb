@@ -1,0 +1,54 @@
+
+<!-- CURRENT SPIDER QUESTIONS-->
+
+<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_update_spider') do -%>
+
+<!-- PARAMS -->
+<input type="hidden" name="project_id" id="project_id" value="<%= @currentProjectId %>" />
+<input type="hidden" name="milestone_name_id" id="milestone_name_id" value="<%= @currentMilestoneNameId %>" />
+<input type="hidden" name="spider_id" id="spider_id" value="<%= @spider.id %>" />
+<input type="hidden" name="consolidate_spider" id="consolidate_spider" value="0"  />
+
+<%
+i = 0
+# each PM type
+@questions.each {|p| 
+	currentAxes = ""
+	# PM type
+	if(i!=0)
+		concat '</table><br />'
+	end
+	concat p[0].to_s + '<br /><table style="border: 1px solid black;width: 400px;">'	
+%>
+<%	
+	# each questions
+	p[1].each { |q| 
+		# Axes
+		if(currentAxes != q.pm_type_axe.title)
+			concat "<tr><td colspan='3' style='border: 1px solid black;'>"+q.pm_type_axe.title+"</td></tr>"
+			currentAxes = q.pm_type_axe.title
+		end
+
+		concat '<tr><td style="border: 1px solid blue;">' + q.text  + '</td>'
+		concat '<td style="border: 1px solid black;"><input type="text" name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '" /></td>'
+		concat '<td style="border: 1px solid red;">' + @questions_values[q.id].reference  + '</td></tr>'	
+	}
+	concat '</table>'
+	i = i + 1
+}
+%>
+
+<input type="submit" value="Save" />
+<input type="button" value="Consolidate" onClick="consolidate();" />
+<% end -%>
+
+<!-- HISTORY -->
+
+<script type="text/javascript"> 
+function consolidate()
+{
+	document.getElementById("consolidate_spider").value=1;
+	alert(document.getElementById("consolidate_spider").value);
+	document.forms["form_update_spider"].submit();
+}
+</script>
