@@ -3,6 +3,8 @@
     <%= milestone.name %>
     <%= link_to(image_tag('edit.gif'), {:controller=>'milestones', :action=>'edit', :id=>milestone.id}) %>
     <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'milestones', :action=>'destroy', :id=>milestone.id}, :confirm=>"Sure ?", :success=>"$('m_#{milestone.id}').hide();") %>
+	<% milestone_name_id = MilestoneName.first(:conditions => ["title= ?", milestone.name]) %>
+	<%= link_to "Spider", :controller=>'spiders', :action=>'project_spider', :project_id=>milestone.project_id, :milestone_name_id=>milestone_name_id, :create_spider=>0 %>
   </div>
   <div class="milestone_comments status<%=milestone.status%>">
     <%= my_simple_format(milestone.comments) %>

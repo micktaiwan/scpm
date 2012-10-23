@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="all">
+  <title>Spider - BAM</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/general.css" />
+
+  <link href='http://fonts.googleapis.com/css?family=Stardos+Stencil&v1' rel='stylesheet' type='text/css'>
+  <link	<link href='http://fonts.googleapis.com/css?family=Zeyada&v1' rel='stylesheet' type='text/css'>
+  <link	<link href='http://fonts.googleapis.com/css?family=Kameron&v1' rel='stylesheet' type='text/css'>
+  <!-- <%= javascript_include_tag :defaults %> -->
+  <link rel="Shortcut Icon" type="image/x-icon" href="/images/favicon.ico" />
+</head>
+
+<body>
+<%
+  cu = current_user
+  cu.last_view = Time.now
+  cu.save
+  s = cu.open_actions.size
+  if s > 0
+   nb_actions = ' <strong>' +s.to_s+'</strong>'
+  else
+    nb_actions = ''
+  end
+%>
+
+<%#= render :file => 'chat/main' %>
+
+<div id="banner">
+  <%= render :file => 'layouts/context_select' %>
+  <div id="title">Reporting</div>
+  <div id="bandeau">
+    <% b = get_bandeau; if b %>
+      <div class="text"><%= b.text %></div>
+      <div class="person"><%= b.person.name %></div>
+    <% end %>
+    <div class="link">
+      <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+      <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
+    </div>
+  </div>
+  <div id="menu_bar">
+  <%= link_to('Projects', {:controller=>'projects', :action=>'index'}, {:class=>menu_style('projects','*')}) %>
+<% if current_user.is_transverse == 1 %>
+  <%= link_to('Actions'+nb_actions, {:controller=>'actions', :action=>'index'}, {:class=>menu_style('actions','*')}) %>
+<% end %>
+  <%= link_to('Topics', {:controller=>'topics', :action=>'index'}, {:class=>menu_style('topics','*')}) %>
+  <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
+  <% form_tag({:controller=>'projects', :action=>'filter'}, {:style=>"display:inline;"}) do %>
+  <%= text_field_tag('text', '', {:size=>5}) %>
+  <% end %>
+  </div>
+</div>
+
+<div id='checklist_popup' class='popup' style='display:none;min-width:200px;'>
+  <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('checklist_popup').fade({duration:0.2});") %>
+  <div id='checklist_popup_content'></div>
+</div>
+<script>
+  new Draggable($('checklist_popup'));
+</script>
+
+<div id="content">
+<%= yield %>
+</div>
+
+<%= render :file => 'layouts/footer.erb' %>
+</body>
+</html>
+

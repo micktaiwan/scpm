@@ -1,14 +1,12 @@
 class SpidersController < ApplicationController
-  def index
-    #project_spider_save("ff","rr")
-  end
-
+  layout 'spider'
+  
   # -------------
   # GENERAL /READ
   # -------------
   
   # Spider page for a project
-  # Exemple of address : http://0.0.0.0:3000/spiders/project_spider?project_id=806&milestone_name_id=1
+  # Exemple of address : http://0.0.0.0:3000/spiders/project_spider?project_id=806&milestone_name_id=1&create_spider=0
   def project_spider
     # Search project from parameter
     id = params[:project_id]
@@ -19,10 +17,10 @@ class SpidersController < ApplicationController
     @milestone = MilestoneName.find(milestoneNameId)
     
     # create new spider parameter
-    #create_spider_param = params[:create_spider]    
+    create_spider_param = params[:create_spider]    
     
     # call generate_current_table
-    generate_current_table(@project,@milestone)
+    generate_current_table(@project,@milestone,create_spider_param)
     # Search all spider from history (link)
     create_spider_history(@project,@milestone)
   end
@@ -41,10 +39,13 @@ class SpidersController < ApplicationController
   # -------------
   
   # Generate data for the current spider
-  def generate_current_table(currentProject,currentMilestoneName)
+  def generate_current_table(currentProject,currentMilestoneName,newSpiderParam)
     @currentProjectId = currentProject.id
     @currentMilestoneNameId = currentMilestoneName.id
     @pmType = Hash.new
+    @questions = Hash.new
+    @questions_values = Hash.new
+    @spider = nil
     
     #
     # SPIDER
@@ -53,35 +54,38 @@ class SpidersController < ApplicationController
     # Search the last spider with are not consolidated
     last_spider = Spider.last(:conditions => ["project_id = ? and milestone_id= ?", currentProject.id, currentMilestoneName.id])
     
-    # If not, create new
+    # If not spider currently edited
     if ((!last_spider) || (last_spider.spider_consolidations.count != 0))
-      last_spider = create_spider_object(currentProject,currentMilestoneName)
+      # If create mode
+      if (newSpiderParam == "1")
+        last_spider = create_spider_object(currentProject,currentMilestoneName)
+      end
     end
-    @spider = last_spider
     
-    #
-    # QUESTIONS
-    #
+    if ((last_spider) && (last_spider.spider_consolidations.count == 0))
+      @spider = last_spider
     
-    # Search questions for this project
-    @questions = Hash.new
-    # For Each PM Type
-    PmType.find(:all).each{ |p|
-      @pmType[p.id] = p.title
-      # All Axes
-      pmTypeAxe_ids = PmTypeAxe.all(:conditions => ["pm_type_id = ?", p.id]).map{ |pa| pa.id }
-      # All questions
-      @questions[p.id] = LifecycleQuestion.all(:conditions => ["lifecycle_id = ? and pm_type_axe_id IN (?)", currentProject.lifecycle_id, pmTypeAxe_ids],:order => "pm_type_axe_id ASC")
-    }
+      #
+      # QUESTIONS
+      #
     
-    #
-    # Values
-    #
-    @questions_values = Hash.new
-    last_spider.spider_values.each { |v|
-      @questions_values[v.lifecycle_question_id] = v
-    }
-
+      # Search questions for this project
+      # For Each PM Type
+      PmType.find(:all).each{ |p|
+        @pmType[p.id] = p.title
+        # All Axes
+        pmTypeAxe_ids = PmTypeAxe.all(:conditions => ["pm_type_id = ?", p.id]).map{ |pa| pa.id }
+        # All questions
+        @questions[p.id] = LifecycleQuestion.all(:conditions => ["lifecycle_id = ? and pm_type_axe_id IN (?)", currentProject.lifecycle_id, pmTypeAxe_ids],:order => "pm_type_axe_id ASC")
+      }
+    
+      #
+      # Values
+      #
+      last_spider.spider_values.each { |v|
+        @questions_values[v.lifecycle_question_id] = v
+      }
+    end
   end
 
   # Generate data for the history spider selected

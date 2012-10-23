@@ -1,75 +1,95 @@
+<script src="/javascripts/highcharts/highcharts.js" type="text/javascript"></script>  
+<script src="/javascripts/highcharts/highcharts-more.js" type="text/javascript"></script>  
+<script src="/javascripts/highcharts/exporting.js" type="text/javascript"></script>  
 
+<%= link_to "Back to project", :controller=>'projects', :action=>'show', :id=>@currentProjectId %>
+<!-- *** -->
 <!-- CURRENT SPIDER QUESTIONS-->
-<h2>Current Spider</h2>
-<p>Creation Date : <%= @spider.created_at %></p>
-<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_update_spider') do -%>
+<!-- *** -->
 
-<!-- PARAMS -->
-<input type="hidden" name="project_id" id="project_id" value="<%= @currentProjectId %>" />
-<input type="hidden" name="milestone_name_id" id="milestone_name_id" value="<%= @currentMilestoneNameId %>" />
-<input type="hidden" name="spider_id" id="spider_id" value="<%= @spider.id %>" />
-<input type="hidden" name="consolidate_spider" id="consolidate_spider" value="0"  />
+<h2>Current Spider</h2>
+
+<% if (@spider)%>
+	<p>Creation Date : <%= @spider.created_at %></p>
+	<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_update_spider') do -%>
+	<input type="hidden" name="project_id" id="project_id" value="<%= @currentProjectId %>" />
+	<input type="hidden" name="milestone_name_id" id="milestone_name_id" value="<%= @currentMilestoneNameId %>" />
+	<input type="hidden" name="spider_id" id="spider_id" value="<%= @spider.id %>" />
+	<input type="hidden" name="consolidate_spider" id="consolidate_spider" value="0"  />
 
 <%
-i = 0
-# each PM type
-@questions.each {|p| 
-	currentAxes = ""
-	# PM type
-	if(i!=0)
-		concat '</table><br />'
-	end
-	concat @pmType[p[0]].to_s + '<br /><table style="border: 1px solid black;width: 400px;">'	
-%>
-<%	
-	# each questions
-	p[1].each { |q| 
-		# Axes
-		if(currentAxes != q.pm_type_axe.title)
-			concat "<tr><td colspan='3' style='border: 1px solid black;'>"+q.pm_type_axe.title+"</td></tr>"
-			currentAxes = q.pm_type_axe.title
+	i = 0
+	# each PM type
+	@questions.each {|p| 
+		currentAxes = ""
+		# PM type
+		if(i!=0)
+			concat '</table><br />'
 		end
+		concat @pmType[p[0]].to_s + '<br /><table style="border: 1px solid black;width: 400px;">'	
 
-		concat '<tr><td style="border: 1px solid blue;">' + q.text  + '</td>'
-		concat '<td><select name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '">'
-		# NI
-		concat '<option '
-		if (@questions_values[q.id].note.to_s == "NI") 
-			concat 'selected ' 
-		end
-		concat 'value="NI">NI</option>'
-		# 1
-		concat '<option '
-		if (@questions_values[q.id].note.to_s == "1") 
-			concat 'selected ' 
-		end
-		concat 'value="1">1</option>'
-		# 2
-		concat '<option '
-		if (@questions_values[q.id].note.to_s == "2") 
-			concat 'selected ' 
-		end
-		concat 'value="2">2</option>'
-		# 3
-		concat '<option '
-		if (@questions_values[q.id].note.to_s == "3") 
-			concat 'selected ' 
-		end
-		concat 'value="3">3</option>'
-		concat '</select></td>'
-		# concat '<td style="border: 1px solid black;"><input type="text" name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '" /></td>'
-		concat '<td style="border: 1px solid red;">' + @questions_values[q.id].reference  + '</td></tr>'	
+		# each questions
+		p[1].each { |q| 
+			# Axes
+			if(currentAxes != q.pm_type_axe.title)
+				concat "<tr><td colspan='3' style='border: 1px solid black;'>"+q.pm_type_axe.title+"</td></tr>"
+				currentAxes = q.pm_type_axe.title
+			end
+
+			concat '<tr><td style="border: 1px solid blue;">' + q.text  + '</td>'
+			concat '<td><select name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '">'
+			# NI
+			concat '<option '
+			if (@questions_values[q.id].note.to_s == "NI") 
+				concat 'selected ' 
+			end
+			concat 'value="NI">NI</option>'
+			# 1
+			concat '<option '
+			if (@questions_values[q.id].note.to_s == "1") 
+				concat 'selected ' 
+			end
+			concat 'value="1">1</option>'
+			# 2
+			concat '<option '
+			if (@questions_values[q.id].note.to_s == "2") 
+				concat 'selected ' 
+			end
+			concat 'value="2">2</option>'
+			# 3
+			concat '<option '
+			if (@questions_values[q.id].note.to_s == "3") 
+				concat 'selected ' 
+			end
+			concat 'value="3">3</option>'
+			concat '</select></td>'
+			concat '<td style="border: 1px solid red;">'
+			if(@questions_values[q.id].reference)
+			 concat @questions_values[q.id].reference 
+		 	end
+			concat '</td></tr>'	
+		}
+		concat '</table>'
+		i = i + 1
 	}
-	concat '</table>'
-	i = i + 1
-}
 %>
+	<input type="submit" value="Save" />
+	<input type="button" value="Consolidate" onClick="consolidate();" />
+	<% end -%>	
+<% else %>
+	<p>No data.</p>
+	<% form_tag({:action => "project_spider"}, :method => "get", :id => "form_create_spider") do -%>
+		<input type="hidden" value="<%= @currentProjectId %>" name="project_id" />
+		<input type="hidden" value="<%= @currentMilestoneNameId %>" name="milestone_name_id" />
+		<input type="hidden" value="1" name="create_spider" />
+		<input type="submit" value="Create new spider" />
+	<% end -%>
+<% end %>
 
-<input type="submit" value="Save" />
-<input type="button" value="Consolidate" onClick="consolidate();" />
-<% end -%>
-
+<!-- *** -->
 <!-- HISTORY -->
+<!-- *** -->
+
 <h2>History</h2>
 <% @history.each { |s|
 	spider_name = "Spider [created the "

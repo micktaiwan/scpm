@@ -1,5 +1,10 @@
-<%
+<script src="/javascripts/highcharts/highcharts.js" type="text/javascript"></script>  
+<script src="/javascripts/highcharts/highcharts-more.js" type="text/javascript"></script>  
+<script src="/javascripts/highcharts/exporting.js" type="text/javascript"></script>  
 
+<%= link_to "Back to project spider view", :controller=>'spiders', :action=>'project_spider', :project_id=>@spider.project_id, :milestone_name_id=>@spider.milestone_id, :create_spider=>0 %>
+
+<%
 concat "<h2>Spider [created the "
 concat @spider.created_at.to_s
 concat "] [Consolidated the "
@@ -27,7 +32,11 @@ i = 0
 
 		concat '<tr><td style="border: 1px solid blue;">' + q.lifecycle_question.text  + '</td>'
 		concat '<td style="border: 1px solid black;">' + q.note + '</td>'
-		concat '<td style="border: 1px solid red;">' + q.reference  + '</td></tr>'	
+		concat '<td style="border: 1px solid red;">'
+		if (q.reference)
+			concat q.reference
+		end
+		concat '</td></tr>'	
 	}
 	concat '</table>'
 	i = i + 1
