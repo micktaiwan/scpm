@@ -1,0 +1,35 @@
+<%
+
+concat "<h2>Spider [created the "
+concat @spider.created_at.to_s
+concat "] [Consolidated the "
+concat @spider.spider_consolidations.first().created_at.to_s
+concat "]</h2>"
+
+
+# Each type
+i = 0
+@history.each { |p|
+	currentAxes = ""
+	# PM type
+	if(i!=0)
+		concat '</table><br />'
+	end
+	concat @pmType[p[0]].to_s + '<br /><table style="border: 1px solid black;width: 400px;">'	
+
+	# Each values
+	p[1].each { |q|
+		# Axes
+		if(currentAxes != q.lifecycle_question.pm_type_axe.title)
+			concat "<tr><td colspan='3' style='border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td></tr>"
+			currentAxes = q.lifecycle_question.pm_type_axe.title
+		end
+
+		concat '<tr><td style="border: 1px solid blue;">' + q.lifecycle_question.text  + '</td>'
+		concat '<td style="border: 1px solid black;">' + q.note + '</td>'
+		concat '<td style="border: 1px solid red;">' + q.reference  + '</td></tr>'	
+	}
+	concat '</table>'
+	i = i + 1
+}
+%>

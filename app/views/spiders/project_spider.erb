@@ -1,6 +1,7 @@
 
 <!-- CURRENT SPIDER QUESTIONS-->
-
+<h2>Current Spider</h2>
+<p>Creation Date : <%= @spider.created_at %></p>
 <% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_update_spider') do -%>
 
 <!-- PARAMS -->
@@ -18,7 +19,7 @@ i = 0
 	if(i!=0)
 		concat '</table><br />'
 	end
-	concat p[0].to_s + '<br /><table style="border: 1px solid black;width: 400px;">'	
+	concat @pmType[p[0]].to_s + '<br /><table style="border: 1px solid black;width: 400px;">'	
 %>
 <%	
 	# each questions
@@ -30,7 +31,33 @@ i = 0
 		end
 
 		concat '<tr><td style="border: 1px solid blue;">' + q.text  + '</td>'
-		concat '<td style="border: 1px solid black;"><input type="text" name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '" /></td>'
+		concat '<td><select name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '">'
+		# NI
+		concat '<option '
+		if (@questions_values[q.id].note.to_s == "NI") 
+			concat 'selected ' 
+		end
+		concat 'value="NI">NI</option>'
+		# 1
+		concat '<option '
+		if (@questions_values[q.id].note.to_s == "1") 
+			concat 'selected ' 
+		end
+		concat 'value="1">1</option>'
+		# 2
+		concat '<option '
+		if (@questions_values[q.id].note.to_s == "2") 
+			concat 'selected ' 
+		end
+		concat 'value="2">2</option>'
+		# 3
+		concat '<option '
+		if (@questions_values[q.id].note.to_s == "3") 
+			concat 'selected ' 
+		end
+		concat 'value="3">3</option>'
+		concat '</select></td>'
+		# concat '<td style="border: 1px solid black;"><input type="text" name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '" /></td>'
 		concat '<td style="border: 1px solid red;">' + @questions_values[q.id].reference  + '</td></tr>'	
 	}
 	concat '</table>'
@@ -43,12 +70,23 @@ i = 0
 <% end -%>
 
 <!-- HISTORY -->
+<h2>History</h2>
+<% @history.each { |s|
+	spider_name = "Spider [created the "
+	spider_name << s.created_at.to_s
+	spider_name << "] [Consolidated the "
+	spider_name << s.spider_consolidations.first().created_at.to_s
+	spider_name << "]"
+%>
+	<%= link_to spider_name, :action => "project_spider_history", :spider_id => s.id %><br />
+
+<% } %>
+
 
 <script type="text/javascript"> 
 function consolidate()
 {
 	document.getElementById("consolidate_spider").value=1;
-	alert(document.getElementById("consolidate_spider").value);
 	document.forms["form_update_spider"].submit();
 }
 </script>

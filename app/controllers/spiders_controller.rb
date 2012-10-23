@@ -3,14 +3,13 @@ class SpidersController < ApplicationController
     #project_spider_save("ff","rr")
   end
 
-  #
+  # -------------
   # GENERAL /READ
-  #
+  # -------------
   
   # Spider page for a project
   # Exemple of address : http://0.0.0.0:3000/spiders/project_spider?project_id=806&milestone_name_id=1
   def project_spider
-    
     # Search project from parameter
     id = params[:project_id]
     @project = Project.find(id)
@@ -19,23 +18,33 @@ class SpidersController < ApplicationController
     milestoneNameId = params[:milestone_name_id]
     @milestone = MilestoneName.find(milestoneNameId)
     
+    # create new spider parameter
+    #create_spider_param = params[:create_spider]    
+    
     # call generate_current_table
     generate_current_table(@project,@milestone)
     # Search all spider from history (link)
+    create_spider_history(@project,@milestone)
   end
   
   # History of one spider
   def project_spider_history
     # Search project for paramater
-    # Search milestonename from paramater
+    id = params[:spider_id]
+    @spider = Spider.find(id)
     # generate_table_history
+    generate_table_history(@spider)
   end
   
+  # -------------
+  # CREATE HTML TABLE
+  # -------------
   
   # Generate data for the current spider
   def generate_current_table(currentProject,currentMilestoneName)
     @currentProjectId = currentProject.id
     @currentMilestoneNameId = currentMilestoneName.id
+    @pmType = Hash.new
     
     #
     # SPIDER
@@ -45,7 +54,7 @@ class SpidersController < ApplicationController
     last_spider = Spider.last(:conditions => ["project_id = ? and milestone_id= ?", currentProject.id, currentMilestoneName.id])
     
     # If not, create new
-    if (!last_spider)
+    if ((!last_spider) || (last_spider.spider_consolidations.count != 0))
       last_spider = create_spider_object(currentProject,currentMilestoneName)
     end
     @spider = last_spider
@@ -58,6 +67,7 @@ class SpidersController < ApplicationController
     @questions = Hash.new
     # For Each PM Type
     PmType.find(:all).each{ |p|
+      @pmType[p.id] = p.title
       # All Axes
       pmTypeAxe_ids = PmTypeAxe.all(:conditions => ["pm_type_id = ?", p.id]).map{ |pa| pa.id }
       # All questions
@@ -73,6 +83,41 @@ class SpidersController < ApplicationController
     }
 
   end
+
+  # Generate data for the history spider selected
+  def generate_table_history(spiderParam)
+    @pmType = Hash.new
+    @history = Hash.new
+    # For Each PM Type
+    PmType.find(:all).each{ |p|
+      @pmType[p.id] = p.title
+      # All Axes
+      pmTypeAxe_ids = PmTypeAxe.all(:conditions => ["pm_type_id = ?", p.id]).map{ |pa| pa.id }
+      # All values/questions
+      @history[p.id] = SpiderValue.find(:all,
+      :include => :lifecycle_question,
+      :conditions => ['spider_id = ? and lifecycle_questions.pm_type_axe_id IN (?)', spiderParam.id,pmTypeAxe_ids],
+      :order => "lifecycle_questions.pm_type_axe_id ASC")
+    }  
+  end
+  
+  # -------------
+  # CREATE HISTORY LINKS
+  # -------------
+  def create_spider_history(projectSpider,milestoneNameSpider)
+    @history = Array.new
+    Spider.find(:all,
+    :select => "DISTINCT(spiders.id),spiders.created_at",
+    :joins => 'JOIN spider_consolidations ON spiders.id = spider_consolidations.spider_id',
+    :conditions => ["project_id = ? and milestone_id= ?", projectSpider.id, milestoneNameSpider.id]).each { |s|
+      @history.push(s)
+    }
+  end
+  
+  
+  # -------------
+  # CREATE MODEL SPIDER OBJECT
+  # -------------
   
   # Create spider object with questions
   def create_spider_object(projectSpider,milestoneNameSpider)
@@ -97,19 +142,11 @@ class SpidersController < ApplicationController
     }
     return new_spider
   end
-  
-  # Generate data for the history spider selected
-  def generate_table_history(project,milestoneName,creationDate)
-    # Search project and its lifecycle
-    # Search questions for this project
-    # Search responses (and references) for each Question
-    # make array of data
-  end
 
 
-  #
+  # ---------------
   # FORMS MANAGEMENT
-  #
+  # ---------------
   
   # Save spider
   def update_spider
@@ -121,58 +158,72 @@ class SpidersController < ApplicationController
         currentQuestion.save
       }
       if(params[:consolidate_spider] == "1")
-        #valuesByAxeHash = Hash.new
-        #referencesByAxeHash = Hash.new
-        #NiByAxeHash = Hash.new
-        
-        currentAxes = ""
-        valuesTotal = 0
-        valuesCount = 0
-        referencesTotal = 0
-        referencesCount = 0
-        niTotal = 0
-        i = 0;
-        SpiderValue.find(:all, :joins => 'LEFT OUTER JOIN lifecycle_questions ON spider_values.lifecycle_question_id = lifecycle_questions.id', :conditions => ['spider_id = ?', spider.id],:order => "lifecycle_questions.pm_type_axe_id ASC").each { |v|
-          Rails.logger.info("---------------------------------------->"+v.id.to_s)
-          
-          if(currentAxes != v.lifecycle_question.pm_type_axe.title)
-              if(i!=0)
-                # Save data in consolidate table
-                Rails.logger.info("--------------------------------> SAVE "+ currentAxes + "valuestotal = "+ valuesTotal.to_s + "values Count = "+ valuesCount.to_s)
-              end
-              
-              currentAxes = v.lifecycle_question.pm_type_axe.title
-              valuesTotal = 0
-              valuesCount = 0
-              referencesTotal = 0
-              referencesCount = 0
-              niCount = 0
-          end
-          
-          if(v.note == "NI")
-            niCount.to_i = niCount.to_i + 1
-          else
-            valuesTotal = valuesTotal.to_i + v.note.to_i
-            valuesCount = valuesCount.to_i + 1
-          end
-          referencesTotal = referencesTotal.to_i + v.reference.to_i
-          referencesCount = referencesCount.to_i + 1
-          i = i + 1
-        }
-      end
-      
-      
-      redirect_to :action=>:project_spider, :project_id=>params[:project_id], :milestone_name_id=>params[:milestone_name_id]
+        project_spider_consolidate(spider)
+     end
+     redirect_to :action=>:project_spider, :project_id=>params[:project_id], :milestone_name_id=>params[:milestone_name_id]
   end
   
   # Consolidate the spider
-  def project_spider_consolidate
+  def project_spider_consolidate(spiderParam)
+    currentAxes = ""
+    currentAxesId = 0;
+    valuesTotal = 0
+    valuesCount = 0
+    referencesTotal = 0
+    referencesCount = 0
+    niCount = 0
+    i = 0;
     
+    SpiderValue.find(:all, 
+    :joins => 'LEFT OUTER JOIN lifecycle_questions ON spider_values.lifecycle_question_id = lifecycle_questions.id',
+    :conditions => ['spider_id = ?', spiderParam.id],
+    :order => "lifecycle_questions.pm_type_axe_id ASC").each { |v|          
+      # If new axes
+      if(currentAxes != v.lifecycle_question.pm_type_axe.title)  
+          if(i!=0)
+            # Save data in consolidate table
+            create_spider_conso(spiderParam,currentAxesId,valuesTotal,valuesCount,referencesTotal,referencesCount,niCount)             
+          end
+          currentAxes = v.lifecycle_question.pm_type_axe.title
+          currentAxesId = v.lifecycle_question.pm_type_axe.id
+          valuesTotal = 0
+          valuesCount = 0
+          referencesTotal = 0
+          referencesCount = 0
+          niCount = 0
+      end
+      
+      if(v.note == "NI")
+        niCount = niCount.to_i + 1
+      else
+        valuesTotal = valuesTotal.to_i + v.note.to_i
+        valuesCount = valuesCount.to_i + 1
+      end
+      referencesTotal = referencesTotal.to_i + v.reference.to_i
+      referencesCount = referencesCount.to_i + 1
+      i = i + 1
+    }
+    # Save data of last element
+    create_spider_conso(spiderParam,currentAxesId,valuesTotal,valuesCount,referencesTotal,referencesCount,niCount)
   end
   
-  # Save the spider
-  def project_spider_save
+  # Create spider consolidation
+  def create_spider_conso(spiderParam, axesIdParam, valuesTotalParam,valuesCountParam,referencesTotalParam,referencesCountParam,niCountParam)
+    new_spider_conso = SpiderConsolidation.new
+    if(valuesCountParam != 0)
+      new_spider_conso.average = valuesTotalParam / valuesCountParam
+    else
+      new_spider_conso.average = 0
+    end
+    if(referencesCountParam != 0)
+      new_spider_conso.average_ref = referencesTotalParam / referencesCountParam
+    else
+      new_spider_conso.average_ref = 0
+    end
+    new_spider_conso.ni_number = niCountParam
+    new_spider_conso.spider_id = spiderParam.id
+    new_spider_conso.pm_type_axe_id = axesIdParam
+    new_spider_conso.save
   end
-  
   
 end
