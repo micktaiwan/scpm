@@ -1,3 +1,8 @@
+<script type="text/javascript"> 
+$(function () {
+	calculHistoryAverage();
+});
+</script>
 
 <%= link_to "Back to project spider view", :controller=>'spiders', :action=>'project_spider', :project_id=>@spider.project_id, :milestone_name_id=>@spider.milestone_id, :create_spider=>0 %>
 
@@ -13,23 +18,26 @@ concat "]</h2>"
 i = 0
 @history.each { |p|
 	currentAxes = ""
+	chartName = "chartContainer_"+i.to_s
+	pmTabId = i.to_s
+	
 	# PM type
 	if(i!=0)
-		concat '</table><br />'
+		concat '</table>'
 	end
-	concat @pmType[p[0]].to_s + '<br /><table style="border: 1px solid black;width: 400px;">'	
+	concat "<p id='table_title_" + pmTabId + "'>"+@pmType[p[0]].to_s + '</p><table class="pm_type_tab" id="pm_' + pmTabId + '" style="border: 1px solid black;width: 400px;">'	
 
 	# Each values
 	p[1].each { |q|
 		# Axes
 		if(currentAxes != q.lifecycle_question.pm_type_axe.title)
-			concat "<tr><td colspan='3' style='border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td></tr>"
+			concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' colspan='3' style='border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td></tr>"
 			currentAxes = q.lifecycle_question.pm_type_axe.title
 		end
 
 		concat '<tr><td style="border: 1px solid blue;">' + q.lifecycle_question.text  + '</td>'
-		concat '<td style="border: 1px solid black;">' + q.note + '</td>'
-		concat '<td style="border: 1px solid red;">'
+		concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="border: 1px solid black;">' + q.note + '</td>'
+		concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '"  style="border: 1px solid red;">'
 		if (q.reference)
 			concat q.reference
 		end
@@ -37,5 +45,8 @@ i = 0
 	}
 	concat '</table>'
 	i = i + 1
+%>
+	<div id="<%= chartName %>" style="width: 700px; height: 400px; margin: 0 auto"></div>
+<%	
 }
 %>
