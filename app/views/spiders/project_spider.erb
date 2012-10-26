@@ -23,7 +23,7 @@ $(function () {
 
 <%= link_to "Back to project", :controller=>'projects', :action=>'show', :id=>@currentProjectId %>
 <!-- *** -->
-<!-- CURRENT SPIDER QUESTIONS-->
+<!-- CURRENT SPIDER QUESTIONS -->
 <!-- *** -->
 
 <h2>Current Spider</h2>
@@ -38,62 +38,82 @@ $(function () {
 
 <%
 	i = 0
-	# each PM type
+	# each PM type loop
 	@questions.each {|p| 
+		# PARAMS
 		currentAxes = ""
+		currentAxeId = ""
 		chartName = "chartContainer_"+i.to_s
 		pmTabId = i.to_s
 		
-		# PM type
-		if(i!=0)
-			#concat '</table>'
-		end
+		# Header and table creation
 		concat "<p id='table_title_" + pmTabId + "'>"+ @pmType[p[0]].to_s + '</p><table class="pm_type_tab" id="pm_' + pmTabId + '" style="border: 1px solid black;width: 400px;">'	
 
-		# each questions
+		# each lines - questions
+		j = 0
 		p[1].each { |q| 
-			# Axes
+			
+			# New Axes
 			if(currentAxes != q.pm_type_axe.title)
+				if(j!=0)
+					concat "<tr><td>Average</td>"
+					concat "<td id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"
+					concat "<td id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td><tr>"
+					currentAxeId = q.pm_type_axe.id.to_s
+				else
+					currentAxeId = q.pm_type_axe.id.to_s
+				end
 				concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.pm_type_axe.id.to_s + "' colspan='3' style='border: 1px solid black;'>"+q.pm_type_axe.title+"</td></tr>"
 				currentAxes = q.pm_type_axe.title
 			end
-
+			
+			# Question line
 			concat '<tr><td style="border: 1px solid blue;">' + q.text  + '</td>'
-			# SELECT LIST
+			# SELECT LIST - Question note
 			concat '<td><select class="question_note_' + q.pm_type_axe.id.to_s + '" name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '">'
-			# NI
-			concat '<option '
-			if (@questions_values[q.id].note.to_s == "NI") 
-				concat 'selected ' 
-			end
-			concat 'value="NI">NI</option>'
-			# 1
-			concat '<option '
-			if (@questions_values[q.id].note.to_s == "1") 
-				concat 'selected ' 
-			end
-			concat 'value="1">1</option>'
-			# 2
-			concat '<option '
-			if (@questions_values[q.id].note.to_s == "2") 
-				concat 'selected ' 
-			end
-			concat 'value="2">2</option>'
-			# 3
-			concat '<option '
-			if (@questions_values[q.id].note.to_s == "3") 
-				concat 'selected ' 
-			end
-			concat 'value="3">3</option>'
+				# NI
+				concat '<option '
+				if (@questions_values[q.id].note.to_s == "NI") 
+					concat 'selected ' 
+				end
+				concat 'value="NI">NI</option>'
+				# 1
+				concat '<option '
+				if (@questions_values[q.id].note.to_s == "1") 
+					concat 'selected ' 
+				end
+				concat 'value="1">1</option>'
+				# 2
+				concat '<option '
+				if (@questions_values[q.id].note.to_s == "2") 
+					concat 'selected ' 
+				end
+				concat 'value="2">2</option>'
+				# 3
+				concat '<option '
+				if (@questions_values[q.id].note.to_s == "3") 
+					concat 'selected ' 
+				end
+				concat 'value="3">3</option>'
 			concat '</select></td>'
+			
+			# Question Reference
 			concat '<td class="question_reference_' + q.pm_type_axe.id.to_s + '" style="border: 1px solid red;">'
 			if(@questions_values[q.id].reference)
 			 concat @questions_values[q.id].reference 
 		 	end
+			
+			# End question line
 			concat '</td></tr>'	
+			j = j + 1
 		}
+		concat "<tr><td>Average</td>"
+		concat "<td id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"			
+		concat "<td id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td><tr>"	
 		concat '</table>'
-		i = i + 1		
+		i = i + 1
+		
+		# Chart		
 %>
 		<div class="spider_chart" id="<%= chartName %>" style="width: 700px; height: 400px; margin: 0 auto"></div>
 <%	

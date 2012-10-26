@@ -12,19 +12,30 @@ concat "]</h2>"
 i = 0
 @history.each { |p|
 	currentAxes = ""
+	currentAxeId = 0
 	chartName = "chartContainer_"+i.to_s
 	pmTabId = i.to_s
 	
 	# PM type
-	if(i!=0)
-		#concat '</table>'
-	end
 	concat "<p id='table_title_" + pmTabId + "'>"+@pmType[p[0]].to_s + '</p><table class="pm_type_tab" id="pm_' + pmTabId + '" style="border: 1px solid black;width: 400px;">'	
 
 	# Each values
+	j = 0
+	
 	p[1].each { |q|
 		# Axes
 		if(currentAxes != q.lifecycle_question.pm_type_axe.title)
+			# Average
+			if(j!=0)
+				concat "<tr><td>Average</td>"
+				concat "<td>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
+				concat "<td>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
+				currentAxeId = q.lifecycle_question.pm_type_axe.id
+			else
+				currentAxeId = q.lifecycle_question.pm_type_axe.id
+			end
+			
+			# New Axes
 			concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' colspan='3' style='border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td></tr>"
 			currentAxes = q.lifecycle_question.pm_type_axe.title
 		end
@@ -36,7 +47,13 @@ i = 0
 			concat q.reference
 		end
 		concat '</td></tr>'	
+		j = j + 1
 	}
+	
+	 concat "<tr><td>Average</td>"
+	 concat "<td>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
+	 concat "<td>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
+	
 	concat '</table>'
 	i = i + 1
 %>

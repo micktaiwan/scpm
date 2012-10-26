@@ -27,6 +27,10 @@ function calculAverage()
 			// Get axe id
 			var axe_id = axeList[j].id.split('_')[2];
 			
+			// Average cells name
+			var averageNoteCellId = pm_type_tab_id + "_axe_average_note_"+axe_id;
+			var averageRefCellId = pm_type_tab_id + "_axe_average_ref_"+axe_id;
+			
 			// Get all notes and references of questions of the current axe_tab
 			var questions = $('.question_note_'+axe_id);
 			var references = $('.question_reference_'+axe_id);
@@ -59,6 +63,7 @@ function calculAverage()
 			{
 				averageNotesList.push(0);
 			}
+			$("#"+averageNoteCellId).text(averageNotesList[averageNotesList.length-1]);
 			if(questionRefsCount != 0)
 			{
 				averageReferencesList.push(questionRefsList/questionRefsCount);
@@ -67,6 +72,7 @@ function calculAverage()
 			{
 				averageReferencesList.push(0);
 			}
+			$("#"+averageRefCellId).text(averageReferencesList[averageReferencesList.length-1]);
 		}
 		
 		// Draw chart for pm_type_tab
@@ -146,7 +152,6 @@ function calculHistoryAverage(axeAvgByPmType)
 	{
 		var chartId = "chartContainer_"+i;
 		var chartName = axeAvgByPmType[i]["title"];
-		
 		generate_spider_chart(chartId,chartName,axeAvgByPmType[i]["axes"],axeAvgByPmType[i]["notes"],axeAvgByPmType[i]["refs"]);
 	}
 }

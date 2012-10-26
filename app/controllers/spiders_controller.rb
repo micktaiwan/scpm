@@ -34,6 +34,11 @@ class SpidersController < ApplicationController
     generate_table_history(@spider)
   end
   
+  # Export excel from spider
+  def project_spider_export
+  
+  end
+  
   # -------------
   # CREATE HTML TABLE
   # -------------
@@ -93,6 +98,8 @@ class SpidersController < ApplicationController
     @pmType = Hash.new
     @history = Hash.new
     @consolidationData = Hash.new
+    @axesConsolidations = Hash.new
+    
     # For Each PM Type
     PmType.find(:all).each{ |p|
       @pmType[p.id] = p.title
@@ -108,7 +115,13 @@ class SpidersController < ApplicationController
       :include => :pm_type_axe,
       :conditions => ['spider_id = ? and pm_type_axes.pm_type_id = ?', spiderParam.id,p.id],
       :order => "pm_type_axes.id ASC")
-
+      
+      @consolidationData[p.id].each { |c|
+        @axesConsolidations[c.pm_type_axe_id] = Hash.new
+        @axesConsolidations[c.pm_type_axe_id]["avg_note"] = c.average.to_s
+        @axesConsolidations[c.pm_type_axe_id]["avg_ref"] = c.average_ref.to_s
+        @axesConsolidations[c.pm_type_axe_id]["ni_nb"] =  c.ni_number.to_s
+      }      
     }  
   end
   
