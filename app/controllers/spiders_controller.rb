@@ -92,6 +92,7 @@ class SpidersController < ApplicationController
   def generate_table_history(spiderParam)
     @pmType = Hash.new
     @history = Hash.new
+    @consolidationData = Hash.new
     # For Each PM Type
     PmType.find(:all).each{ |p|
       @pmType[p.id] = p.title
@@ -102,6 +103,12 @@ class SpidersController < ApplicationController
       :include => :lifecycle_question,
       :conditions => ['spider_id = ? and lifecycle_questions.pm_type_axe_id IN (?)', spiderParam.id,pmTypeAxe_ids],
       :order => "lifecycle_questions.pm_type_axe_id ASC")
+      
+      @consolidationData[p.id] = SpiderConsolidation.find(:all,
+      :include => :pm_type_axe,
+      :conditions => ['spider_id = ? and pm_type_axes.pm_type_id = ?', spiderParam.id,p.id],
+      :order => "pm_type_axes.id ASC")
+
     }  
   end
   
@@ -199,11 +206,13 @@ class SpidersController < ApplicationController
       
       if(v.note == "NI")
         niCount = niCount.to_i + 1
+        valuesTotal = valuesTotal.to_f + 0
+        valuesCount = valuesCount.to_i + 1
       else
-        valuesTotal = valuesTotal.to_i + v.note.to_i
+        valuesTotal = valuesTotal.to_f + v.note.to_f
         valuesCount = valuesCount.to_i + 1
       end
-      referencesTotal = referencesTotal.to_i + v.reference.to_i
+      referencesTotal = referencesTotal.to_f + v.reference.to_f
       referencesCount = referencesCount.to_i + 1
       i = i + 1
     }
@@ -215,12 +224,12 @@ class SpidersController < ApplicationController
   def create_spider_conso(spiderParam, axesIdParam, valuesTotalParam,valuesCountParam,referencesTotalParam,referencesCountParam,niCountParam)
     new_spider_conso = SpiderConsolidation.new
     if(valuesCountParam != 0)
-      new_spider_conso.average = valuesTotalParam / valuesCountParam
+      new_spider_conso.average = valuesTotalParam.to_f / valuesCountParam.to_f
     else
       new_spider_conso.average = 0
     end
     if(referencesCountParam != 0)
-      new_spider_conso.average_ref = referencesTotalParam / referencesCountParam
+      new_spider_conso.average_ref = referencesTotalParam.to_f / referencesCountParam.to_f
     else
       new_spider_conso.average_ref = 0
     end

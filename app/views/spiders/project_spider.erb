@@ -46,7 +46,7 @@ $(function () {
 		
 		# PM type
 		if(i!=0)
-			concat '</table>'
+			#concat '</table>'
 		end
 		concat "<p id='table_title_" + pmTabId + "'>"+ @pmType[p[0]].to_s + '</p><table class="pm_type_tab" id="pm_' + pmTabId + '" style="border: 1px solid black;width: 400px;">'	
 
@@ -59,6 +59,7 @@ $(function () {
 			end
 
 			concat '<tr><td style="border: 1px solid blue;">' + q.text  + '</td>'
+			# SELECT LIST
 			concat '<td><select class="question_note_' + q.pm_type_axe.id.to_s + '" name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '">'
 			# NI
 			concat '<option '
@@ -94,7 +95,7 @@ $(function () {
 		concat '</table>'
 		i = i + 1		
 %>
-		<div id="<%= chartName %>" style="width: 700px; height: 400px; margin: 0 auto"></div>
+		<div class="spider_chart" id="<%= chartName %>" style="width: 700px; height: 400px; margin: 0 auto"></div>
 <%	
 	}
 %>

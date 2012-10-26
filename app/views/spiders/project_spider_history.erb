@@ -1,9 +1,3 @@
-<script type="text/javascript"> 
-$(function () {
-	calculHistoryAverage();
-});
-</script>
-
 <%= link_to "Back to project spider view", :controller=>'spiders', :action=>'project_spider', :project_id=>@spider.project_id, :milestone_name_id=>@spider.milestone_id, :create_spider=>0 %>
 
 <%
@@ -23,7 +17,7 @@ i = 0
 	
 	# PM type
 	if(i!=0)
-		concat '</table>'
+		#concat '</table>'
 	end
 	concat "<p id='table_title_" + pmTabId + "'>"+@pmType[p[0]].to_s + '</p><table class="pm_type_tab" id="pm_' + pmTabId + '" style="border: 1px solid black;width: 400px;">'	
 
@@ -49,4 +43,35 @@ i = 0
 	<div id="<%= chartName %>" style="width: 700px; height: 400px; margin: 0 auto"></div>
 <%	
 }
+
+concat '<script type="text/javascript">$(function () {'
+concat 'var consoDataArray = new Array();'
+pmTypeIndex = 0
+@consolidationData.each { |consoByPmType|
+	pmTypeId = consoByPmType[0].to_s
+	pmTypeName = @pmType[consoByPmType[0]].to_s
+	
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"] = new Array();'
+
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["title"]="'+pmTypeName+'";'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["id"]="'+pmTypeId+'";'
+	
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["axes"]= new Array();'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["notes"]= new Array();'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["refs"]= new Array();'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["ni_nb"]= new Array();'
+	
+	# For each pmType, get conso (conso for one spider and one axe)
+	consoByPmType[1].each { |c| 
+		# AXE
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["axes"].push("'+c.pm_type_axe.title+'");'
+		
+		# AVERAGE DATA
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["notes"].push('+c.average.to_s+');'
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["refs"].push('+c.average_ref.to_s+');'
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["ni_nb"].push('+c.ni_number.to_s+');'
+	}
+	pmTypeIndex += 1
+}
+concat 'calculHistoryAverage(consoDataArray);});</script>'
 %>

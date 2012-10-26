@@ -42,6 +42,7 @@ function calculAverage()
 				else
 				{
 					questionNotesList += 0;
+					questionNotesCount++;
 				}
 				
 				questionRefsList += parseInt(references[y].firstChild.nodeValue);
@@ -139,78 +140,13 @@ function generate_spider_chart(chartId,chartName,xAxisArray,serie1,serie2)
 	});
 }
 
-
-function calculHistoryAverage()
+function calculHistoryAverage(axeAvgByPmType)
 {
-	// Get all table of class pm_type_tab (PM TYPE)
-	var pmTypeList = $(".pm_type_tab");
-	for (var i=0; i < pmTypeList.length; i++)
+	for(var i=0; i < axeAvgByPmType.length; i++)
 	{
-		// Get id of PM type tab
-		var pm_type_tab_id = pmTypeList[i].id.split('_')[1];
-	
-		// Params for average calculation
-		var axesList = new Array();
-		var averageNotesList = new Array();
-		var averageReferencesList = new Array();
+		var chartId = "chartContainer_"+i;
+		var chartName = axeAvgByPmType[i]["title"];
 		
-		// Get all elements of class axe_tab in pm_type_tab (AXES)
-		var axeList = $("#"+pmTypeList[i].id+" .axe_tab");
-		for (var j=0; j<axeList.length; j++)
-		{
-			// Params for axe's average calculation
-			var questionNotesList = 0;
-			var questionNotesCount = 0;
-			var questionRefsList = 0;
-			var questionRefsCount = 0;
-			
-			// Get axe id
-			var axe_id = axeList[j].id.split('_')[2];
-			
-			// Get all notes and references of questions of the current axe_tab
-			var questions = $('.question_note_'+axe_id);
-			var references = $('.question_reference_'+axe_id);
-			
-			// For each questions, add values to params
-			for (var y=0; y<questions.length; y++)
-			{
-				if(questions[y].value != "NI")
-				{
-					questionNotesList += parseInt(questions[y].firstChild.nodeValue);
-					questionNotesCount++;
-				}
-				else
-				{
-					questionNotesList += 0;
-				}
-				
-				questionRefsList += parseInt(references[y].firstChild.nodeValue);
-				questionRefsCount++;
-			}	
-			
-			// Calcul notes/references average of the current axes
-			axesList.push(axeList[j].firstChild.nodeValue);
-			if(questionNotesCount != 0)
-			{
-				averageNotesList.push(questionNotesList/questionNotesCount);
-			}
-			else
-			{
-				averageNotesList.push(0);
-			}
-			if(questionRefsCount != 0)
-			{
-				averageReferencesList.push(questionRefsList/questionRefsCount);
-			}
-			else
-			{
-				averageReferencesList.push(0);
-			}
-		}
-		
-		// Draw chart for pm_type_tab
-		var chartId = "chartContainer_"+pm_type_tab_id;
-		var chartName = $("#table_title_"+pm_type_tab_id).text();
-		generate_spider_chart(chartId,chartName,axesList,averageNotesList,averageReferencesList)
+		generate_spider_chart(chartId,chartName,axeAvgByPmType[i]["axes"],axeAvgByPmType[i]["notes"],axeAvgByPmType[i]["refs"]);
 	}
 }
