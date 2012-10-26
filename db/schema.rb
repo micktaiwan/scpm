@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(:version => 20121017145100) do
 
   create_table "lifecycle_questions", :force => true do |t|
     t.integer  "lifecycle_id"
-    t.integer  "pm_type_axes_id"
+    t.integer  "pm_type_axe_id"
     t.string   "text"
     t.boolean  "validity"
     t.datetime "created_at"
@@ -600,8 +600,9 @@ ActiveRecord::Schema.define(:version => 20121017145100) do
 
   create_table "spider_consolidations", :force => true do |t|
     t.integer  "spider_id"
-    t.integer  "average"
-    t.integer  "average_ref"
+    t.integer  "pm_type_axe_id"
+    t.float    "average"
+    t.float    "average_ref"
     t.integer  "ni_number"
     t.datetime "created_at"
     t.datetime "updated_at"

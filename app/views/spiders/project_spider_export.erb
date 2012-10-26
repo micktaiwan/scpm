@@ -1,0 +1,28 @@
+<%
+@pm_type_hash.each { |pm_type|
+	concat "PM Type id ="+pm_type[0].to_s+"<br />"
+	concat "PM Type name = "+ pm_type[1]["title"]+"<br />"
+	
+	pm_type[1]["axe_hash"].each { |axe|
+		concat "----AXE id ="+axe[0].to_s+"<br />"
+		concat "----AXE  name = "+ axe[1]["title"]+"<br />"
+		
+		axe[1]["milestone_hash"].each { |mi|
+			concat "--------Milestone id ="+mi[0].to_s+"<br />"
+			concat "--------Milestone  name = "+ mi[1]["title"]+"<br />"
+			concat "--------Conso = " + mi[1]["spider_conso_array"].to_s+"<br />"
+			
+			mi[1]["question_hash"].each { |quest|
+				concat "----------------Question id ="+quest[0].to_s+"<br />"
+				concat "----------------Question  Text = "+ quest[1]["text"]+"<br />"
+				if (quest[1]["spider_value_array"] != 0)
+					concat "----------------Spider Values = "+quest[1]["spider_value_array"].note.to_s+"<br />"
+				else
+					concat "----------------Spider Values = NO SPIDER VALUES<br />"
+				end
+				
+			}
+		}
+	}	
+}
+%>
