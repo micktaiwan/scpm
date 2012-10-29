@@ -100,7 +100,9 @@ $(function () {
 			# Question Reference
 			concat '<td class="question_reference_' + q.pm_type_axe.id.to_s + '" style="border: 1px solid red;">'
 			if(@questions_values[q.id].reference)
-			 concat @questions_values[q.id].reference 
+			  concat @questions_values[q.id].reference 
+			else
+			  concat "NI"
 		 	end
 			
 			# End question line

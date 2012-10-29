@@ -1,28 +1,211 @@
 <%
-@pm_type_hash.each { |pm_type|
-	concat "PM Type id ="+pm_type[0].to_s+"<br />"
-	concat "PM Type name = "+ pm_type[1]["title"]+"<br />"
+# @pm_type_hash.each { |pm_type|
+# 	concat "PM Type id ="+pm_type[0].to_s+"<br />"
+# 	concat "PM Type name = "+ pm_type[1]["title"]+"<br />"
+# 	
+# 	pm_type[1]["axe_hash"].each { |axe|
+# 		concat "----AXE id ="+axe[0].to_s+"<br />"
+# 		concat "----AXE  name = "+ axe[1]["title"]+"<br />"
+# 		
+# 		axe[1]["milestone_hash"].each { |mi|
+# 			concat "--------Milestone id ="+mi[0].to_s+"<br />"
+# 			concat "--------Milestone  name = "+ mi[1]["title"]+"<br />"
+# 			concat "--------Conso = " + mi[1]["spider_conso"].to_s+"<br />"
+# 			
+# 			mi[1]["question_hash"].each { |quest|
+# 				concat "----------------Question id ="+quest[0].to_s+"<br />"
+# 				concat "----------------Question  Text = "+ quest[1]["text"]+"<br />"
+# 				if (quest[1]["spider_value"] != 0)
+# 					concat "----------------Spider Values = "+quest[1]["spider_value"].note.to_s+"<br />"
+# 				else
+# 					concat "----------------Spider Values = NO SPIDER VALUES<br />"
+# 				end
+# 				
+# 			}
+# 		}
+# 	}	
+# }
+%>
+<%=
+@xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
+@xml.Workbook({
+  'xmlns'      => "urn:schemas-microsoft-com:office:spreadsheet",
+  'xmlns:o'    => "urn:schemas-microsoft-com:office:office",
+  'xmlns:x'    => "urn:schemas-microsoft-com:office:excel",
+  'xmlns:html' => "http://www.w3.org/TR/REC-html40",
+  'xmlns:ss'   => "urn:schemas-microsoft-com:office:spreadsheet"
+  }) do
+
+	  @xml.Styles do
+	   @xml.Style 'ss:ID' => 'Default', 'ss:Name' => 'Normal' do
+	     @xml.Alignment 'ss:Vertical' => 'Top', 'ss:WrapText' => '1'
+	     @xml.Borders
+	     @xml.Font 'ss:FontName' => 'Verdana'
+	     @xml.Interior
+	     @xml.NumberFormat
+	     @xml.Protection
+	   end
+	   @xml.Style 'ss:ID' => 's1024', 'ss:Name' => 'Header' do
+	     @xml.Font  'ss:Color'=>'#FFFFFF', 'ss:Bold'=>"1"
+	     @xml.Interior 'ss:Color'=>"#6C6C6C", 'ss:Pattern'=>'Solid'
+	   end
+		 @xml.Style 'ss:ID' => 's1025', 'ss:Name' => 'Ref' do
+	     @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
+	     @xml.Interior 'ss:Color'=>"#8DC600", 'ss:Pattern'=>'Solid'
+	   end
+		 @xml.Style 'ss:ID' => 's1026', 'ss:Name' => 'Question' do
+	     @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
+	     @xml.Interior 'ss:Color'=>"#89BEFF", 'ss:Pattern'=>'Solid'
+	   end
+		 @xml.Style 'ss:ID' => 's1027', 'ss:Name' => 'Classic' do
+		   @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
+		   @xml.Interior 'ss:Color'=>"#FFFFFF", 'ss:Pattern'=>'Solid'
+		 end
+	  end
 	
-	pm_type[1]["axe_hash"].each { |axe|
-		concat "----AXE id ="+axe[0].to_s+"<br />"
-		concat "----AXE  name = "+ axe[1]["title"]+"<br />"
-		
-		axe[1]["milestone_hash"].each { |mi|
-			concat "--------Milestone id ="+mi[0].to_s+"<br />"
-			concat "--------Milestone  name = "+ mi[1]["title"]+"<br />"
-			concat "--------Conso = " + mi[1]["spider_conso_array"].to_s+"<br />"
-			
-			mi[1]["question_hash"].each { |quest|
-				concat "----------------Question id ="+quest[0].to_s+"<br />"
-				concat "----------------Question  Text = "+ quest[1]["text"]+"<br />"
-				if (quest[1]["spider_value_array"] != 0)
-					concat "----------------Spider Values = "+quest[1]["spider_value_array"].note.to_s+"<br />"
-				else
-					concat "----------------Spider Values = NO SPIDER VALUES<br />"
-				end
+		# PM Type / Worksheet
+	  @pm_type_hash.each { |pm_type|
+	    @xml.Worksheet 'ss:Name' => pm_type[1]["title"].to_s do
+		  @xml.Table do
+   		
+				# Axe
+			  pm_type[1]["axe_hash"].each { |axe|
+					
+					# Params by Axe
+					tableHeader = Array.new
+					tableHeader << axe[1]["title"]
+					avgRow = Array.new
+					avgRow << "Average"
+					niRow = Array.new
+					niRow << "NB NI"
+					rowsList = Hash.new
 				
-			}
-		}
-	}	
-}
+					#
+					# READ AND SAVE COLUMNS/ROWS/CELLS
+					#
+					
+					# Milestones / Columns
+					col = 0
+					axe[1]["milestone_hash"].each { |mi|
+						
+						# Column header
+						tableHeader << mi[1]["title"]
+						tableHeader << mi[1]["title"]+"_ref"
+						
+						# Average (footer)
+						if (mi[1]["spider_conso"] != 0)
+							avgRow << mi[1]["spider_conso"].average.to_s
+						  avgRow << mi[1]["spider_conso"].average_ref.to_s
+							niRow << mi[1]["spider_conso"].ni_number.to_s
+							niRow << ""
+						else
+							avgRow << ""
+						  avgRow << ""
+							niRow << ""
+							niRow << ""
+						end
+						
+						# Column's cells per row
+						row = 0
+						mi[1]["question_hash"].each { |quest|
+							
+							# Init array for each row
+							if (col == 0)
+								rowsList[row] = Array.new
+								rowsList[row] << quest[1]["text"]
+							end
+							# Value and ref
+							if ((quest[1]["spider_value"] ) && (quest[1]["spider_value"] != 0))
+								rowsList[row] << quest[1]["spider_value"].note.to_s
+								rowsList[row] << quest[1]["spider_value"].reference.to_s
+							else
+								rowsList[row] << "No data"
+								rowsList[row] << "No data"
+							end
+							
+							row = row + 1
+						}
+						col = col + 1
+					}
+				
+					#
+					# WRITE COLUMNS/ROWS/CELLS
+					#
+					
+					# Header
+					@xml.Row do
+						i = 0
+						for columnTitle in tableHeader
+							styleId = 's1024'
+							if ((i != 0) and (i % 2 == 0))
+								styleId = 's1025'
+							end
+							
+			        @xml.Cell 'ss:StyleID' => styleId do 
+								@xml.Data  columnTitle, 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' 
+							end
+							i = i + 1
+			      end
+					end
+				
+					# Lines
+					rowsList.each { |questRow|
+						@xml.Row do
+							i = 0
+							questRow[1].each { |questCell|
+								styleId = 's1027'
+								if (i == 0)
+									styleId = 's1024'
+								elsif (i % 2 == 0)
+									styleId = 's1025'
+								end
+								
+								@xml.Cell 'ss:StyleID' => styleId do 
+									@xml.Data  questCell, 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+								end
+								i = i + 1
+							}
+						end
+					}
+					
+					# Average row
+					@xml.Row do
+						i = 0
+						for avg in avgRow
+							styleId = 's1024'
+							if ((i != 0) and (i % 2 == 0))
+								styleId = 's1025'
+							end
+		          @xml.Cell 'ss:StyleID' => styleId do 
+							  @xml.Data  avg, 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+						  end
+					   	i = i + 1
+						end
+					end
+					
+					# NI Row
+					@xml.Row do
+						i = 0
+						for ni in niRow
+							styleId = 's1024'
+							if ((i != 0) and (i % 2 == 0))
+								styleId = 's1025'
+							end
+		          @xml.Cell  'ss:StyleID' => styleId do 
+			 					@xml.Data  ni, 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+			        end
+				   		i = i + 1
+						end
+					end
+					
+					# Separation row (footer)
+					@xml.Row do
+						@xml.Cell { @xml.Data  "", 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+					end
+			  }
+	    end
+		  #@xml.AutoFilter 'x:Range' => 'R1C1:R2000C7', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
+	    end
+	  }
+end
 %>

@@ -45,6 +45,8 @@ i = 0
 		concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '"  style="border: 1px solid red;">'
 		if (q.reference)
 			concat q.reference
+		else
+			concat "NI"
 		end
 		concat '</td></tr>'	
 		j = j + 1

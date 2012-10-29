@@ -1,5 +1,3 @@
-
-
 function calculAverage()
 {
 	// Get all table of class pm_type_tab (PM TYPE)
@@ -38,6 +36,7 @@ function calculAverage()
 			// For each questions, add values to params
 			for (var y=0; y<questions.length; y++)
 			{
+				// Note
 				if(questions[y].value != "NI")
 				{
 					questionNotesList += parseInt(questions[y].value);
@@ -49,8 +48,17 @@ function calculAverage()
 					questionNotesCount++;
 				}
 				
-				questionRefsList += parseInt(references[y].firstChild.nodeValue);
-				questionRefsCount++;
+				// Reference
+				if(references[y].firstChild.nodeValue != "NI")
+				{
+					questionRefsList += parseInt(references[y].firstChild.nodeValue);
+					questionRefsCount++;
+				}
+				else
+				{
+					questionRefsList += 0;
+					questionRefsCount++;
+				}
 			}	
 			
 			// Calcul notes/references average of the current axes

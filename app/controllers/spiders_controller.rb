@@ -38,6 +38,8 @@ class SpidersController < ApplicationController
   def project_spider_export
     @project = Project.find(params[:project_id])
     @pm_type_hash = Hash.new
+    @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
+    
     
     # Cache for milestones and spider
     cache_milestone = Array.new
@@ -47,7 +49,9 @@ class SpidersController < ApplicationController
       # Search milestonename obj
       milestone_name_obj = MilestoneName.first(:conditions => ["title = ?", mi.name])
       cache_milestone<<milestone_name_obj
-      cache_spider[milestone_name_obj.id] = Spider.last(:conditions => ['project_id = ? and milestone_id = ? ',@project.id,milestone_name_obj.id])
+      cache_spider[milestone_name_obj.id] = Spider.last(
+      :joins => 'JOIN spider_consolidations ON spiders.id = spider_consolidations.spider_id',
+      :conditions => ['project_id = ? and milestone_id = ? ',@project.id,milestone_name_obj.id])
       # TODO : GET LAST SPIDER WITH CONSOLIDATE DATA , SO JOIN WITH SPIDER_CONSOLIDATE
     }
     
@@ -57,7 +61,8 @@ class SpidersController < ApplicationController
       @pm_type_hash[pm.id]["title"] = pm.title
       @pm_type_hash[pm.id]["axe_hash"] = Hash.new
       
-      pm.pm_type_axes.each { |axe|
+      #pm.pm_type_axes.each { |axe|
+      PmTypeAxe.find(:all,:include => :lifecycle_questions , :conditions => ["pm_type_id = ? and lifecycle_questions.lifecycle_id = ?", pm.id, @project.lifecycle_id]).each{ |axe|
         # Params
         @pm_type_hash[pm.id]["axe_hash"][axe.id] = Hash.new
         @pm_type_hash[pm.id]["axe_hash"][axe.id]["title"] = axe.title
@@ -73,76 +78,40 @@ class SpidersController < ApplicationController
           #last_spider = Spider.last(:conditions => ['project_id = ? and milestone_id = ? ',@project.id,mi.id])
           last_spider = cache_spider[mi.id]
           # Get spiders conso for this project, this milestone, this axe, and last spider
-          @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso_array"] = Array.new
-          if(last_spider)
-            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso_array"] = last_spider.spider_consolidations
+          if((last_spider) and (last_spider.spider_consolidations.count > 0))
+            last_spider.spider_consolidations.each { |conso|
+              if (conso.pm_type_axe_id == axe.id)
+                @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = conso
+              end
+            }
           else
-            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso_array"] = 0
+            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = 0
           end
           
-          #axe.lifecycle_questions.each { |quest| 
           LifecycleQuestion.all(:conditions => ["lifecycle_id = ? and pm_type_axe_id = ?",@project.lifecycle_id,axe.id] ).each{ |quest|
             # Params
             @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id] = Hash.new
             @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["text"] = quest.text
-          
-            # @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value_array"] = Array.new
-        
-        
+                  
             # Get spiders values for this project, this milestone, this axe, and last spider
             if(last_spider)
               last_spider.spider_values.each { |sv| 
-                                      if (sv.lifecycle_question_id = quest.id)
-                                        @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value_array"] = sv
-                                      end
-                                    }
-              
-               # @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value_array"] = SpiderValue.first( 
-               #                                      :include => :lifecycle_question,
-               #                                      :conditions => ['lifecycle_question_id = ? and spider_id = ?',quest.id,last_spider.id])
+                if (sv.lifecycle_question_id == quest.id)
+                  @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = sv
+                end
+              }
             else
-              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value_array"] = 0
+              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = 0
             end
          }
         }
       }
     }
    
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-    # @spidersByType = Hash.new
-    # @spidersByMilestones = Hash.new
-    # 
-    # 
-    # 
-    # 
-    # 
-    # 
-    # @project.milestones.each { |m|
-    #   # Search milestonename obj
-    #   milestoneNameObj = MilestoneName.first(:conditions => ["title = ?", m.name])
-    #   
-    #   
-    #   @spidersByMilestones[milestoneNameObj.title] = Spider.last(
-    #   :include => :
-    #   :conditions => ["project_id = ? and milestone_id= ?", @project.id, milestoneNameObj.id])
-    # }
-
-    # :include => :lifecycle_question,
-    # :conditions => ['spider_id = ? and lifecycle_questions.pm_type_axe_id IN (?)', spiderParam.id,pmTypeAxe_ids],
-    # :order => "lifecycle_questions.pm_type_axe_id ASC")
-
+    headers['Content-Type']         = "application/vnd.ms-excel"
+    headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
+    headers['Cache-Control']        = ''
+    render(:layout=>false)
   end
   
   # -------------
@@ -267,7 +236,10 @@ class SpidersController < ApplicationController
       new_spider_value.spider_id = new_spider.id
       if(new_question_reference)
         new_spider_value.reference = new_question_reference.note
+      else
+        new_spider_value.reference = "NI"
       end
+      
       new_spider_value.save
     }
     return new_spider
