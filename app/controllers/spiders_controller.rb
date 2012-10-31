@@ -1,9 +1,10 @@
+require 'spreadsheet'
 class SpidersController < ApplicationController
   layout 'spider'
   
-  # -------------
+  # ------------------------------------------------------------------------------------
   # GENERAL /READ
-  # -------------
+  # ------------------------------------------------------------------------------------
   
   # Spider page for a project
   # Exemple of address : http://0.0.0.0:3000/spiders/project_spider?project_id=806&milestone_name_id=1&create_spider=0
@@ -52,7 +53,6 @@ class SpidersController < ApplicationController
       cache_spider[milestone_name_obj.id] = Spider.last(
       :joins => 'JOIN spider_consolidations ON spiders.id = spider_consolidations.spider_id',
       :conditions => ['project_id = ? and milestone_id = ? ',@project.id,milestone_name_obj.id])
-      # TODO : GET LAST SPIDER WITH CONSOLIDATE DATA , SO JOIN WITH SPIDER_CONSOLIDATE
     }
     
     PmType.find(:all).each { |pm|  
@@ -114,9 +114,218 @@ class SpidersController < ApplicationController
     render(:layout=>false)
   end
   
-  # -------------
+  def project_spider_import
+  end
+  
+  def do_spider_upload
+    
+    # INDEX OF COLUMNS IN EXCEL ------------------------
+    @practiceStartColumn = 9
+    @practiceEndColumn = 35
+    @deliverableStartColumn = 36
+    @deliverableEndColumn = 62
+    
+    # LOAD FILE --------------------------------- 
+    consoSheet = load_spider_excel_file(params[:upload])
+    
+    # ANALYSE HEADER OF FILE ---------------------------------
+    axesHash = analyze_spider_excel_file_header(consoSheet)
+    
+    # ANALYSE CONSOS OF FILE ---------------------------------
+    projectsArray = analyze_spider_excel_file_conso(consoSheet, axesHash)
+    
+    # IMPORT DATA IN BDD ---------------------------------
+    @projectsNotFound = Array.new
+    @milestonesNotFound = Array.new
+    @axesNotFound = Array.new
+    @projectsAlreadyImported = Array.new
+    
+    # For each projects
+    projectsArray.each { |project| 
+         	
+    	# Search project in BAM
+    	bam_project = Project.last(:conditions=>["name = ?", project["title"]])
+    	if(bam_project != nil)
+    	  
+    	  # Search milestone
+    	  milestoneList = Array.new
+    	  if (project["milestone"].count('-') > 0)
+    	    milestoneList = project["milestone"].split('-')
+    	  else
+    	    milestoneList << project["milestone"]
+    	  end 
+    	  
+    	  # For each milestones of project in BAM
+    	  milestoneList.each { |project_milestone|
+    	    
+    	    bam_milestone = Milestone.last(:conditions =>["name = ? and project_id = ?", project_milestone, bam_project.id])
+    	    
+    	    if(bam_milestone != nil)
+    	      # Search milestone Name
+    	      bam_milestone_name = MilestoneName.first(:conditions => ["title = ?",bam_milestone.name])
+    	      # Check if spider not already exist
+    	      utc_date = Time.zone.parse(project["date"]).utc
+    	      spider_exist = Spider.first(:conditions => ["project_id = ? and milestone_id = ? and created_at = ?",bam_project.id,bam_milestone_name.id,utc_date])
+    	      if(spider_exist == nil)
+    	      
+      	      # Create Spider for this project
+      	      new_spider = create_spider_object(bam_project,bam_milestone_name)
+      	      new_spider.created_at = project["date"]
+      	      new_spider.save
+    	      
+      	      # For each conso
+      	      project["conso"].each do |conso|
+    	        
+      	        axe_title = conso[0]
+      	        if (axe_title[-1,1] == " ")
+      	          axe_title = axe_title[0..-2]
+      	        end
+      	        if(axe_title[0,1] == " ")
+      	          axe_title = axe_title[1..-1]
+      	        end
+    	          pm_type = axesHash[conso[1]["column_ids"].last.to_i]["type"]
+    	        
+      	        if(conso[1]["column_ids"][2].to_i <= @deliverableEndColumn)
+          	      # Search type
+          	      bam_pm_type = PmType.first(:conditions => ["title LIKE ?", "%"+pm_type+"%"])
+        	        # Search Axes
+        	        bam_axe = PmTypeAxe.first(:conditions => ["pm_type_id = ? and title LIKE ?", bam_pm_type.id, "%"+axe_title+"%"])
+        	        # Axes if not found
+        	        if (bam_axe != nil)
+        	          # Add spider conso
+        	          create_spider_conso(new_spider,bam_axe.id,conso[1]["values"][0],1,conso[1]["values"][1],1,conso[1]["values"][2])
+        	        else
+        	          @axesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " - Axe : " + axe_title + " not found."
+        	        end
+        	      end
+      	      end
+        	  else
+        	    @projectsAlreadyImported << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " : Already imported."
+        	  end
+    	    else
+    	      @milestonesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " not found."
+    	    end 
+    	  }
+    	else
+    	  @projectsNotFound << "Project " + project["title"] + " not found"
+    	end
+    }
+  end
+  
+  # ------------------------------------------------------------------------------------
+  # IMPORT FUNCTIONS
+  # ------------------------------------------------------------------------------------
+
+  # Load excel file and return the worksheet named "Conso"
+  def load_spider_excel_file(post)
+    redirect_to '/spiders/project_spider_import' and return if post.nil? or post['datafile'].nil?
+    Spreadsheet.client_encoding = 'UTF-8'
+    doc = Spreadsheet.open post['datafile']
+    consoSheet = doc.worksheet 'Conso'
+    return consoSheet
+  end
+  
+  # Read the second line of the excels and return an identification of Pm type and axe for each columns
+  # Return value : axesHash
+  # Format : axesHash[column_index] = hash
+  # axesHash[column_index]["title"] = Title of axes
+  # axesHash[column_index]["type"] = Title of PM Type
+  def analyze_spider_excel_file_header(consoSheet)
+    # Second line of excel / Axes headers
+    # Params
+    subHeaderIndex = 0
+    lastAxeName = ""
+    axesHash = Hash.new
+    
+    # Each Cells
+    consoSheet.row(1).each do |sub_header_cell|
+
+    	type = ""
+    	if ((subHeaderIndex >= @practiceStartColumn) and (subHeaderIndex <= @practiceEndColumn))
+    		type = "Practice"
+    	elsif ((subHeaderIndex >= @deliverableStartColumn) and (subHeaderIndex <= @deliverableEndColumn))
+    		type = "Deliverable"
+    	end
+
+      # If new axe
+    	if ((type != "") and (sub_header_cell.to_s != "") and (lastAxeName != sub_header_cell.to_s))
+    		axesHash[subHeaderIndex] = Hash.new
+    		axesHash[subHeaderIndex]["type"] = type
+    		axesHash[subHeaderIndex]["title"] = sub_header_cell.to_s
+    		lastAxeName = sub_header_cell.to_s
+    	elsif((type != "") and (sub_header_cell.to_s == ""))
+    		axesHash[subHeaderIndex] = Hash.new
+    		axesHash[subHeaderIndex]["type"] = type
+    		axesHash[subHeaderIndex]["title"] = lastAxeName
+    	end
+    	subHeaderIndex += 1
+    end
+    return axesHash
+  end
+  
+  # Read the content of excel file and return an array of hash
+  # Return value : projectsArray
+  # Format : projectsArray[index_array] = hash
+  # projectsArray[index_array]["title"] = Name of project
+  # projectsArray[index_array]["version"] = Version of project
+  # projectsArray[index_array]["milestone"] = Milestone of project (can contain a string of multiple milestones. Ex : M1-M3)
+  # projectsArray[index_array]["date"] = Date of project
+  # projectsArray[index_array]["conso"] = Hash
+  # projectsArray[index_array]["conso"][axe_name] = Hash
+  # projectsArray[index_array]["conso"]["values"] = Array of values (Note + Ref + nb ni)
+  # projectsArray[index_array]["conso"]["column_ids"] = Array of column id (Note column id + Ref column id + nb ni column id)
+  def analyze_spider_excel_file_conso(consoSheet,axesHash)
+    # Conso lines
+   projectsArray = Array.new
+   indexRow = 0
+   # For each row
+   consoSheet.each do |conso_row|
+   	# If project name
+   	if ((indexRow > 2) and (conso_row[3].to_s != ""))
+   		projectHash = Hash.new
+   		projectHash["title"] = conso_row[3].to_s
+   		projectHash["version"] = conso_row[4].to_s
+   		projectHash["milestone"] = conso_row[5].to_s
+   		year = conso_row[8].to_i
+   		year_str = year.to_s
+   		month = conso_row[7].to_i
+   		month_str = month.to_s
+   		if (month < 10)
+   		  month_str = "0"+month.to_s
+   		end
+   		day = conso_row[6].to_i
+   		day_str = day.to_s
+   		if (day < 10)
+   		  day_str = "0"+day.to_s
+   		end
+   		projectHash["date"] = year_str+ "-" + month_str + "-" + day_str + " 00:00:00"
+      projectHash["conso"] = Hash.new
+
+   		columnIndex = 9
+   		column_last_axe_name = ""
+   		# For each question values/ref/ni
+   		while columnIndex <= conso_row.count and columnIndex <= @deliverableEndColumn
+         if(column_last_axe_name != axesHash[columnIndex]["title"])
+           projectHash["conso"][axesHash[columnIndex]["title"]] = Hash.new
+           projectHash["conso"][axesHash[columnIndex]["title"]]["values"] = Array.new
+           projectHash["conso"][axesHash[columnIndex]["title"]]["column_ids"] = Array.new
+           column_last_axe_name = axesHash[columnIndex]["title"]
+         end
+
+         projectHash["conso"][axesHash[columnIndex]["title"]]["values"] << conso_row[columnIndex].to_s
+         projectHash["conso"][axesHash[columnIndex]["title"]]["column_ids"] << columnIndex.to_s
+   			columnIndex += 1
+   		end
+   		projectsArray << projectHash
+   	end
+   	indexRow += 1
+   end
+   return projectsArray
+  end
+  
+  # ------------------------------------------------------------------------------------
   # CREATE HTML TABLE
-  # -------------
+  # ------------------------------------------------------------------------------------
   
   # Generate data for the current spider
   def generate_current_table(currentProject,currentMilestoneName,newSpiderParam)
@@ -200,9 +409,9 @@ class SpidersController < ApplicationController
     }  
   end
   
-  # -------------
+  # ------------------------------------------------------------------------------------
   # CREATE HISTORY LINKS
-  # -------------
+  # ------------------------------------------------------------------------------------
   def create_spider_history(projectSpider,milestoneNameSpider)
     @history = Array.new
     Spider.find(:all,
@@ -214,9 +423,9 @@ class SpidersController < ApplicationController
   end
   
   
-  # -------------
+  # ------------------------------------------------------------------------------------
   # CREATE MODEL SPIDER OBJECT
-  # -------------
+  # ------------------------------------------------------------------------------------
   
   # Create spider object with questions
   def create_spider_object(projectSpider,milestoneNameSpider)
@@ -246,9 +455,9 @@ class SpidersController < ApplicationController
   end
 
 
-  # ---------------
+  # ------------------------------------------------------------------------------------
   # FORMS MANAGEMENT
-  # ---------------
+  # ------------------------------------------------------------------------------------
   
   # Save spider
   def update_spider
@@ -329,5 +538,5 @@ class SpidersController < ApplicationController
     new_spider_conso.pm_type_axe_id = axesIdParam
     new_spider_conso.save
   end
-  
+    
 end

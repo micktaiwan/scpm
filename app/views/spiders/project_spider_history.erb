@@ -41,12 +41,18 @@ i = 0
 		end
 
 		concat '<tr><td style="border: 1px solid blue;">' + q.lifecycle_question.text  + '</td>'
-		concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="border: 1px solid black;">' + q.note + '</td>'
+		concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="border: 1px solid black;">'
+		if(q.note != nil)
+			concat q.note
+		else
+			concat "NA"
+		end
+		concat '</td>'
 		concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '"  style="border: 1px solid red;">'
 		if (q.reference)
 			concat q.reference
 		else
-			concat "NI"
+			concat "NA"
 		end
 		concat '</td></tr>'	
 		j = j + 1
