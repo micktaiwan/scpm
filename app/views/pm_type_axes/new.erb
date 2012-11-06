@@ -1,0 +1,8 @@
+<h2>New Axe</h2>
+
+<%= error_messages_for :pm_type_axe %>
+<% form_for @pm_type_axe, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'New' %></p>
+<% end -%>

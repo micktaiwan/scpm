@@ -1,0 +1,8 @@
+<h2>Axe Edit</h2>
+
+<%= error_messages_for :pm_type_axe %>
+<% form_for @pm_type_axe, :url=>{:action=>'update', :id=>@pm_type_axe.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Edit' %></p>
+<% end -%>

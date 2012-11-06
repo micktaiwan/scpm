@@ -1,0 +1,17 @@
+<h2>Axes Actions</h2>
+<span style="width:auto;float:left;">General actions : </span><%= button_to "New", :action => "new", :method => :post %><br />
+
+<h2>Axes</h2>
+<%
+for pm_type_axe in @pm_type_axes
+%>
+	<span style="width:auto;float:left;"><%= pm_type_axe.title.to_s %> - Actions :</span>
+	<span style="width:auto;float:left;">
+	<%= button_to "Edit", {:action => "edit", :id => pm_type_axe.id }, :method => :post %>
+	</span>
+	<%= button_to "Delete", {:action => "destroy", :id => pm_type_axe.id }, :method => :post %></span>
+	<br />
+
+<%
+end
+%>
