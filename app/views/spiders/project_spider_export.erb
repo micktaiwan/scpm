@@ -65,7 +65,13 @@
 	
 		# PM Type / Worksheet
 	  @pm_type_hash.each { |pm_type|
-	    @xml.Worksheet 'ss:Name' => pm_type[1]["title"].to_s do
+			worksheet_title = pm_type[1]["title"].to_s
+			if(worksheet_title.length >= 30)
+				nb_char_to_remove = worksheet_title.length - 30
+				worksheet_title = worksheet_title[0..-nb_char_to_remove]
+			end
+			
+	    @xml.Worksheet 'ss:Name' => worksheet_title do
 		  @xml.Table do
    		
 				# Axe

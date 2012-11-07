@@ -1,6 +1,6 @@
 require 'spreadsheet'
 class SpidersController < ApplicationController
-  layout 'spider'
+  layout 'spider', :except => :generate_kpi_charts_data
   
   # ------------------------------------------------------------------------------------
   # GENERAL /READ
@@ -37,80 +37,84 @@ class SpidersController < ApplicationController
   
   # Export excel from project
   def project_spider_export
-    @project = Project.find(params[:project_id])
-    @pm_type_hash = Hash.new
-    @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
+    begin
+      @project = Project.find(params[:project_id])
+      @pm_type_hash = Hash.new
+      @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
     
     
-    # Cache for milestones and spider
-    cache_milestone = Array.new
-    cache_spider = Hash.new
+      # Cache for milestones and spider
+      cache_milestone = Array.new
+      cache_spider = Hash.new
     
-    @project.milestones.each { |mi|
-      # Search milestonename obj
-      milestone_name_obj = MilestoneName.first(:conditions => ["title = ?", mi.name])
-      cache_milestone<<milestone_name_obj
-      cache_spider[milestone_name_obj.id] = Spider.last(
-      :joins => 'JOIN spider_consolidations ON spiders.id = spider_consolidations.spider_id',
-      :conditions => ['project_id = ? and milestone_id = ? ',@project.id,milestone_name_obj.id])
-    }
+      @project.milestones.each { |mi|
+        # Search milestonename obj
+        milestone_name_obj = MilestoneName.first(:conditions => ["title = ?", mi.name])
+        cache_milestone<<milestone_name_obj
+        cache_spider[milestone_name_obj.id] = Spider.last(
+        :joins => 'JOIN spider_consolidations ON spiders.id = spider_consolidations.spider_id',
+        :conditions => ['project_id = ? and milestone_id = ? ',@project.id,milestone_name_obj.id])
+      }
     
-    PmType.find(:all).each { |pm|  
-      # Params
-      @pm_type_hash[pm.id] = Hash.new
-      @pm_type_hash[pm.id]["title"] = pm.title
-      @pm_type_hash[pm.id]["axe_hash"] = Hash.new
-      
-      #pm.pm_type_axes.each { |axe|
-      PmTypeAxe.find(:all,:include => :lifecycle_questions , :conditions => ["pm_type_id = ? and lifecycle_questions.lifecycle_id = ?", pm.id, @project.lifecycle_id]).each{ |axe|
+      PmType.find(:all).each { |pm|  
         # Params
-        @pm_type_hash[pm.id]["axe_hash"][axe.id] = Hash.new
-        @pm_type_hash[pm.id]["axe_hash"][axe.id]["title"] = axe.title
-        @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"] = Hash.new
-
-        # Get milestones
-        cache_milestone.each { |mi|
+        @pm_type_hash[pm.id] = Hash.new
+        @pm_type_hash[pm.id]["title"] = pm.title
+        @pm_type_hash[pm.id]["axe_hash"] = Hash.new
+      
+        #pm.pm_type_axes.each { |axe|
+        PmTypeAxe.find(:all,:include => :lifecycle_questions , :conditions => ["pm_type_id = ? and lifecycle_questions.lifecycle_id = ?", pm.id, @project.lifecycle_id]).each{ |axe|
           # Params
-          @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id] = Hash.new
-          @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["title"] = mi.title
-          @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"] = Hash.new
-          
-          #last_spider = Spider.last(:conditions => ['project_id = ? and milestone_id = ? ',@project.id,mi.id])
-          last_spider = cache_spider[mi.id]
-          # Get spiders conso for this project, this milestone, this axe, and last spider
-          if((last_spider) and (last_spider.spider_consolidations.count > 0))
-            last_spider.spider_consolidations.each { |conso|
-              if (conso.pm_type_axe_id == axe.id)
-                @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = conso
-              end
-            }
-          else
-            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = 0
-          end
-          
-          LifecycleQuestion.all(:conditions => ["lifecycle_id = ? and pm_type_axe_id = ?",@project.lifecycle_id,axe.id] ).each{ |quest|
+          @pm_type_hash[pm.id]["axe_hash"][axe.id] = Hash.new
+          @pm_type_hash[pm.id]["axe_hash"][axe.id]["title"] = axe.title
+          @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"] = Hash.new
+
+          # Get milestones
+          cache_milestone.each { |mi|
             # Params
-            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id] = Hash.new
-            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["text"] = quest.text
-                  
-            # Get spiders values for this project, this milestone, this axe, and last spider
-            if(last_spider)
-              last_spider.spider_values.each { |sv| 
-                if (sv.lifecycle_question_id == quest.id)
-                  @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = sv
+            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id] = Hash.new
+            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["title"] = mi.title
+            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"] = Hash.new
+          
+            #last_spider = Spider.last(:conditions => ['project_id = ? and milestone_id = ? ',@project.id,mi.id])
+            last_spider = cache_spider[mi.id]
+            # Get spiders conso for this project, this milestone, this axe, and last spider
+            if((last_spider) and (last_spider.spider_consolidations.count > 0))
+              last_spider.spider_consolidations.each { |conso|
+                if (conso.pm_type_axe_id == axe.id)
+                  @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = conso
                 end
               }
             else
-              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = 0
+              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = 0
             end
-         }
+          
+            LifecycleQuestion.all(:conditions => ["lifecycle_id = ? and pm_type_axe_id = ?",@project.lifecycle_id,axe.id] ).each{ |quest|
+              # Params
+              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id] = Hash.new
+              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["text"] = quest.text
+                  
+              # Get spiders values for this project, this milestone, this axe, and last spider
+              if(last_spider)
+                last_spider.spider_values.each { |sv| 
+                  if (sv.lifecycle_question_id == quest.id)
+                    @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = sv
+                  end
+                }
+              else
+                @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = 0
+              end
+           }
+          }
         }
       }
-    }
    
-    headers['Content-Type']         = "application/vnd.ms-excel"
-    headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
-    headers['Cache-Control']        = ''
+      headers['Content-Type']         = "application/vnd.ms-excel"
+      headers['Content-Disposition']  = 'attachment; filename="spiders_export_'+@project.workstream+'_'+@project.id.to_s+'.xls"'
+      headers['Cache-Control']        = ''
+    rescue Exception => e
+      render(:text=>"<b>#{e}</b><br/>#{e.backtrace.join("<br/>")}")
+    end
     render(:layout=>false)
   end
   
@@ -121,9 +125,12 @@ class SpidersController < ApplicationController
     
     # INDEX OF COLUMNS IN EXCEL ------------------------
     @practiceStartColumn = 9
-    @practiceEndColumn = 35
-    @deliverableStartColumn = 36
-    @deliverableEndColumn = 62
+    @practiceEndColumn = 0
+    @deliverableStartColumn = 0
+    @deliverableEndColumn = 0
+    #@practiceEndColumn = 35
+    #@deliverableStartColumn = 36
+    #@deliverableEndColumn = 62
     
     # LOAD FILE --------------------------------- 
     consoSheet = load_spider_excel_file(params[:upload])
@@ -193,7 +200,7 @@ class SpidersController < ApplicationController
         	        # Axes if not found
         	        if (bam_axe != nil)
         	          # Add spider conso
-        	          create_spider_conso(new_spider,bam_axe.id,conso[1]["values"][0],1,conso[1]["values"][1],1,conso[1]["values"][2])
+        	          create_spider_history_conso(new_spider,bam_axe.id, project["date"], conso[1]["values"][0],conso[1]["values"][1],conso[1]["values"][2])
         	        else
         	          @axesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " - Axe : " + axe_title + " not found."
         	        end
@@ -211,6 +218,110 @@ class SpidersController < ApplicationController
     	end
     }
   end
+  
+  #http://0.0.0.0:3000/spiders/kpi_charts_by_pm_type?lifecycle_id=1&workstream=0&milestone_name_id=0
+  def kpi_charts_by_pm_types 
+    @kpi_type_param = "pm_type" 
+    kpi_prepare_parameters
+    generate_kpi_charts_data  
+    render :kpi_charts
+    
+  end
+  
+  def kpi_charts_by_axes 
+    @kpi_type_param = "pm_type_axe"
+    kpi_prepare_parameters
+    generate_kpi_charts_data
+    render :kpi_charts
+  end
+  
+  # ------------------------------------------------------------------------------------
+  # KPI FUNCTIONS
+  # ------------------------------------------------------------------------------------
+  def kpi_prepare_parameters
+    @lifecycles = Lifecycle.all.map {|u| [u.name,u.id]}    
+    @milestones = MilestoneName.all.map {|u| [u.title,u.id]} 
+    @milestones.insert(0,["None",0])
+    @workstreams = Workstream.all.map {|u| [u.name,u.name]}
+    @workstreams.insert(0,["None",0])
+  end
+  
+  def generate_kpi_charts_data
+    @lifecycle_id = params[:lifecycle_id]
+    @workstream = params[:workstream]
+    @milestone_name_id = params[:milestone_name_id]
+    
+    # CHART TYPE --------------------------------- 
+    @kpi_type = ""
+    if (@kpi_type_param != nil)
+      @kpi_type = @kpi_type_param
+    else
+      @kpi_type = params[:kpi_type]
+    end
+    charts_element = Array.new
+    if (@kpi_type == "pm_type")
+      charts_element = PmType.all
+    else
+      charts_element = PmTypeAxe.all
+    end
+
+    # MONTHS CALCUL --------------------------------- 
+    timeline_size = 12 # in months
+    
+    @months_array = Array.new
+    now_dateTime = DateTime.now.to_time
+    last_month = now_dateTime - 1.month
+    
+    month_index = 0
+    while(month_index < 12)
+      temp_date = last_month - month_index.month
+      @months_array << temp_date.strftime("%b %y")
+      month_index += 1
+    end
+
+    # REQUEST --------------------------------- 
+    # @data = SpiderConsolidation.average("average",
+    #             :joins => ["JOIN spiders ON spiders.id = spider_consolidations.spider_id",
+    #               "JOIN projects ON projects.id = spiders.project_id",
+    #               "JOIN pm_type_axes ON spider_consolidations.pm_type_axe_id = pm_type_axes.id"],
+    #             :group => "MONTH(spider_consolidations.created_at),YEAR(spider_consolidations.created_at)")
+    # 
+    
+    # MULTIPLE GROUP BY : Seem broken (https://rails.lighthouseapp.com/projects/8994/tickets/497-activerecord-calculate-broken-for-multiple-fields-in-group-option)
+    # So I use a SQL Query (yes, it's ugly in a RoR project)
+    
+    @charts_data = Hash.new
+    charts_element.each do |chart_element|
+      query = "SELECT avg(sc.average),MONTH(sc.created_at),YEAR(sc.created_at) 
+      FROM spider_consolidations sc, spiders s, projects p,  pm_type_axes pta
+      WHERE sc.spider_id = s.id
+      AND s.project_id = p.id
+      AND sc.pm_type_axe_id = pta.id
+      AND p.lifecycle_id = " + @lifecycle_id.to_s
+    
+      if ((@workstream != nil) && (@workstream != "0"))
+        query += ' AND p.workstream = "' + @workstream + '"'
+      end
+      
+      if ((@milestone_name_id != nil) && (@milestone_name_id != "0"))
+        query += " AND s.milestone_id = " + @milestone_name_id
+      end
+      
+      if (@kpi_type == "pm_type")
+        query += " AND pta.pm_type_id = " + chart_element.id.to_s
+      else
+        query += " AND pta.id = " + chart_element.id.to_s
+      end
+      
+      query += " GROUP BY MONTH(created_at),YEAR(created_at)";
+      @charts_data[chart_element.id.to_s] = ActiveRecord::Base.connection.execute(query)
+    end
+    
+    if(@kpi_type_param == nil)
+      render :layout => false     
+    end
+  end
+  
   
   # ------------------------------------------------------------------------------------
   # IMPORT FUNCTIONS
@@ -237,9 +348,25 @@ class SpidersController < ApplicationController
     lastAxeName = ""
     axesHash = Hash.new
     
-    # Each Cells
-    consoSheet.row(1).each do |sub_header_cell|
-
+    # First line - Each Cells
+    firstLineCellIndex = 0
+    consoSheet.row(0).each do |sub_header_cell|
+      Rails.logger.info("- - - - <>"+ sub_header_cell.to_s + "_"+ firstLineCellIndex.to_s)
+      if((firstLineCellIndex > @practiceStartColumn + 1) && (sub_header_cell.to_s != ""))
+        @practiceEndColumn = firstLineCellIndex - 1
+        Rails.logger.info("- - - - <Pratice End>"+ @practiceEndColumn.to_s)
+        @deliverableStartColumn = firstLineCellIndex
+        Rails.logger.info("- - - - <Deli Start>"+ @deliverableStartColumn.to_s)
+        
+      end
+      firstLineCellIndex += 1
+    end
+    @deliverableEndColumn = firstLineCellIndex - 1
+    Rails.logger.info("- - - - <Deli end>"+ @deliverableEndColumn.to_s)
+    
+    
+    # Second line - Each Cells
+    consoSheet.row(1).each do |sub_header_cell|      
     	type = ""
     	if ((subHeaderIndex >= @practiceStartColumn) and (subHeaderIndex <= @practiceEndColumn))
     		type = "Practice"
@@ -538,5 +665,31 @@ class SpidersController < ApplicationController
     new_spider_conso.pm_type_axe_id = axesIdParam
     new_spider_conso.save
   end
+  
+  def create_spider_history_conso(spiderParam, axesIdParam, date, valuesTotalParam,referencesTotalParam,niCountParam)
+    new_spider_conso = SpiderConsolidation.new
     
+    if(valuesTotalParam)
+      new_spider_conso.average = valuesTotalParam.to_f
+    else
+      new_spider_conso.average = 0
+    end
+    
+    if(referencesTotalParam)
+      new_spider_conso.average_ref = referencesTotalParam.to_f
+    else
+      new_spider_conso.average_ref = 0
+    end
+    
+    if(niCountParam)
+      new_spider_conso.ni_number = niCountParam
+    else
+      new_spider_conso.ni_number = 0
+    end
+    
+    new_spider_conso.spider_id = spiderParam.id
+    new_spider_conso.pm_type_axe_id = axesIdParam
+    new_spider_conso.created_at = date
+    new_spider_conso.save
+  end
 end

@@ -1,0 +1,45 @@
+<SCRIPT language="Javascript">
+l_id_save = '<%= @lifecycle_id %>'
+ws_save = '<%= @workstream %>'
+mn_id_save = '<%= @milestone_name_id %>'
+kpi_type = '<%= @kpi_type %>'
+
+function change_lifecycle(lifecycle_id)
+{
+	l_id_save = lifecycle_id
+	$.ajax({
+	url: "/spiders/generate_kpi_charts_data",
+	type: "POST",
+	data: "lifecycle_id="+lifecycle_id+"&workstream="+ws_save+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type}).done(function(result) { 
+	  $("#charts_list").html(result);
+	});
+}
+function change_workstream(workstream_id)
+{
+	ws_save = workstream_id
+	$.ajax({
+	url: "/spiders/generate_kpi_charts_data",
+	type: "POST",
+	data: "lifecycle_id="+l_id_save+"&workstream="+workstream_id+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type}).done(function(result) { 
+	  $("#charts_list").html(result);
+	});
+}
+function change_milestone(milestone_id)
+{
+	mn_id_save = milestone_id
+	$.ajax({
+	url: "/spiders/generate_kpi_charts_data",
+	type: "POST",
+	data: "lifecycle_id="+l_id_save+"&workstream="+ws_save+"&milestone_name_id="+milestone_id+"&kpi_type="+kpi_type}).done(function(result) { 
+	  $("#charts_list").html(result);
+	});
+}
+</SCRIPT>
+
+Lifecycle : <%= select_tag('choose_lifecycle', options_for_select(@lifecycles), {:onchange=>"change_lifecycle(this.value)"}) %>
+Workstream : <%= select_tag('choose_workstream', options_for_select(@workstreams), {:onchange=>"change_workstream(this.value)"}) %>
+Milestones : <%= select_tag('choose_milestone', options_for_select(@milestones), {:onchange=>"change_milestone(this.value)"}) %>
+
+
+<div id="charts_list">
+</div>
