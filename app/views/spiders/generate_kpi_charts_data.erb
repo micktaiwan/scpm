@@ -1,16 +1,86 @@
-<% @charts_data.each do |chart_data| %>
-<!-- CREATE CHART DIV -->
-<!-- FORMAT SERIES OF DATA IN JS -->
-<!-- CREATE CHART -->
-	<%= chart_data[0].to_s%><br />
-
-	<% chart_data[1].each do |da| %>
-	
-		<% da.each do |d| %>
-			<%= d.to_s %>-
-		<% end %>
-		<br />
-		
+<SCRIPT language="Javascript">
+<% indexCat = 0 %>
+categories = new Array(
+<% @months_array.each do |month| %>
+	<% if(indexCat != 0) %>
+		,
 	<% end %>
-	<br />
+	'<%= month.to_s %>'
+	<% indexCat += 1 %>
 <% end %>
+);
+</SCRIPT>
+
+<% @charts_data.each do |chart_data| %>
+	<h2><%= @titles_data[chart_data[0]].to_s %></h2>
+
+	<!-- CREATE CHART DIV -->
+	<div id="container_<%= chart_data[0].to_s %>" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+	<!-- FORMAT SERIES OF DATA IN JS -->
+	<SCRIPT language="Javascript">
+		// Series array for highchart (axe title and data)
+		var series = new Array();
+		// Array of data
+		var serieData = new Array(
+		<% indexValue = 0 %>
+		<% chart_data[1].each do |row| %>
+			<% if indexValue > 0 %>,<% end %>
+			<%= row[0].to_f.round(2).to_s %>
+			<% indexValue += 1 %>
+		<% end %>
+		);	
+		
+		//series push
+		var seriesObject = new Array();
+		seriesObject["name"] = "<%= @titles_data[chart_data[0]].to_s %>";
+		seriesObject["data"] = serieData;
+		series.push(seriesObject);
+		
+		// CREATE CHART
+		$(document).ready(function() {
+			chart = new Highcharts.Chart({
+	            chart: {
+	                renderTo: "container_<%= chart_data[0].to_s %>",
+	                type: 'line',
+	                marginRight: 130,
+	                marginBottom: 25
+	            },
+	            title: {
+	                text: '<%= @titles_data[chart_data[0]].to_s %>',
+	                x: -20 //center
+	            },
+	            xAxis: {
+	                categories: categories
+	            },
+	            yAxis: {
+	                title: {
+	                    text: 'Average'
+	                },
+	                plotLines: [{
+	                    value: 0,
+	                    width: 1,
+	                    color: '#808080'
+	                }]
+	            },
+	            tooltip: {
+	                formatter: function() {
+	                        return '<b>'+ this.series.name +'</b><br/>'+
+	                        this.x +': '+ this.y;
+	                }
+	            },
+	            legend: {
+	                layout: 'vertical',
+	                align: 'right',
+	                verticalAlign: 'top',
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            series: series
+	      });
+	  });
+	</SCRIPT>	
+
+<% end %>
+

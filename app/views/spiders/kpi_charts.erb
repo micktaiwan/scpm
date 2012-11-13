@@ -4,6 +4,15 @@ ws_save = '<%= @workstream %>'
 mn_id_save = '<%= @milestone_name_id %>'
 kpi_type = '<%= @kpi_type %>'
 
+$(document).ready(function(){
+	$.ajax({
+	url: "/spiders/generate_kpi_charts_data",
+	type: "POST",
+	data: "lifecycle_id="+l_id_save+"&workstream="+ws_save+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type}).done(function(result) { 
+	  $("#charts_list").html(result);
+	});
+});
+
 function change_lifecycle(lifecycle_id)
 {
 	l_id_save = lifecycle_id

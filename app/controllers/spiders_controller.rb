@@ -219,11 +219,11 @@ class SpidersController < ApplicationController
     }
   end
   
-  #http://0.0.0.0:3000/spiders/kpi_charts_by_pm_type?lifecycle_id=1&workstream=0&milestone_name_id=0
+  #http://0.0.0.0:3000/spiders/kpi_charts_by_pm_types?lifecycle_id=1&workstream=0&milestone_name_id=0
   def kpi_charts_by_pm_types 
     @kpi_type_param = "pm_type" 
     kpi_prepare_parameters
-    generate_kpi_charts_data  
+    #generate_kpi_charts_data  
     render :kpi_charts
     
   end
@@ -231,7 +231,7 @@ class SpidersController < ApplicationController
   def kpi_charts_by_axes 
     @kpi_type_param = "pm_type_axe"
     kpi_prepare_parameters
-    generate_kpi_charts_data
+    #generate_kpi_charts_data
     render :kpi_charts
   end
   
@@ -244,6 +244,25 @@ class SpidersController < ApplicationController
     @milestones.insert(0,["None",0])
     @workstreams = Workstream.all.map {|u| [u.name,u.name]}
     @workstreams.insert(0,["None",0])
+    
+    @lifecycle_id = params[:lifecycle_id]
+    @workstream = params[:workstream]
+    @milestone_name_id = params[:milestone_name_id]
+    
+    # CHART TYPE --------------------------------- 
+    @kpi_type = ""
+    if (@kpi_type_param != nil)
+      @kpi_type = @kpi_type_param
+    else
+      @kpi_type = params[:kpi_type]
+    end
+    charts_element = Array.new
+    if (@kpi_type == "pm_type")
+      charts_element = PmType.all
+    else
+      charts_element = PmTypeAxe.all
+    end
+    
   end
   
   def generate_kpi_charts_data
@@ -272,13 +291,22 @@ class SpidersController < ApplicationController
     now_dateTime = DateTime.now.to_time
     last_month = now_dateTime - 1.month
     
+    
+    temp_date_end = now_dateTime
+    sql_query_end = temp_date_end.strftime("%Y-%m-01 00:00")    
+    # Rails.logger.info("+++++ "+sql_query_end.to_s)
+    temp_date_begin = last_month - timeline_size.month
+    sql_query_begin = temp_date_begin.strftime("%Y-%m-01 00:00:00")
+    # Rails.logger.info("+++++ "+sql_query_begin.to_s)
+    
     month_index = 0
-    while(month_index < 12)
+    while(month_index < timeline_size)
       temp_date = last_month - month_index.month
       @months_array << temp_date.strftime("%b %y")
       month_index += 1
     end
-
+    @months_array.reverse!
+    
     # REQUEST --------------------------------- 
     # @data = SpiderConsolidation.average("average",
     #             :joins => ["JOIN spiders ON spiders.id = spider_consolidations.spider_id",
@@ -291,6 +319,7 @@ class SpidersController < ApplicationController
     # So I use a SQL Query (yes, it's ugly in a RoR project)
     
     @charts_data = Hash.new
+    @titles_data = Hash.new
     charts_element.each do |chart_element|
       query = "SELECT avg(sc.average),MONTH(sc.created_at),YEAR(sc.created_at) 
       FROM spider_consolidations sc, spiders s, projects p,  pm_type_axes pta
@@ -298,6 +327,8 @@ class SpidersController < ApplicationController
       AND s.project_id = p.id
       AND sc.pm_type_axe_id = pta.id
       AND p.lifecycle_id = " + @lifecycle_id.to_s
+      query += " AND sc.created_at >= '" + sql_query_begin.to_s + "'"
+      query += " AND sc.created_at <= '" + sql_query_end.to_s + "'"
     
       if ((@workstream != nil) && (@workstream != "0"))
         query += ' AND p.workstream = "' + @workstream + '"'
@@ -313,8 +344,10 @@ class SpidersController < ApplicationController
         query += " AND pta.id = " + chart_element.id.to_s
       end
       
-      query += " GROUP BY MONTH(created_at),YEAR(created_at)";
+      query += " GROUP BY MONTH(created_at),YEAR(created_at) 
+      ORDER BY YEAR(created_at),MONTH(created_at)";
       @charts_data[chart_element.id.to_s] = ActiveRecord::Base.connection.execute(query)
+      @titles_data[chart_element.id.to_s] = chart_element.title
     end
     
     if(@kpi_type_param == nil)
