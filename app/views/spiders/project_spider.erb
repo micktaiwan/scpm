@@ -47,60 +47,61 @@ $(function () {
 		pmTabId = i.to_s
 		
 		# Header and table creation
-		concat "<p id='table_title_" + pmTabId + "'>"+ @pmType[p[0]].to_s + '</p><table class="pm_type_tab" id="pm_' + pmTabId + '" style="border: 1px solid black;width: 400px;">'	
+		concat "<div class='spider_container'><h3 id='table_title_" + pmTabId + "'>"+ @pmType[p[0]].to_s + '</h3><table class="pm_type_tab" id="pm_' + pmTabId + '">'	
 
 		# each lines - questions
 		j = 0
 		p[1].each { |q| 
 			
 			# New Axes
-			if(currentAxes != q.pm_type_axe.title)
+			if(currentAxes != q.lifecycle_question.pm_type_axe.title)
 				if(j!=0)
-					concat "<tr><td>Average</td>"
-					concat "<td id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"
-					concat "<td id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td><tr>"
-					currentAxeId = q.pm_type_axe.id.to_s
+					concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+					concat "<td style='border: 1px solid black;' class='grey_cell' id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"
+					concat "<td style='border: 1px solid black;' class='green_cell' id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td><tr>"
+					concat "<tr><td collspan='3' style='height:5px;background-color:white;'></td></tr>"
+					currentAxeId = q.lifecycle_question.pm_type_axe.id.to_s
 				else
-					currentAxeId = q.pm_type_axe.id.to_s
+					currentAxeId = q.lifecycle_question.pm_type_axe.id.to_s
 				end
-				concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.pm_type_axe.id.to_s + "' colspan='3' style='border: 1px solid black;'>"+q.pm_type_axe.title+"</td></tr>"
-				currentAxes = q.pm_type_axe.title
+				concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' style='background-color: #6D6D6D;color:white;border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td><td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td></tr>"
+				currentAxes = q.lifecycle_question.pm_type_axe.title
 			end
 			
 			# Question line
-			concat '<tr><td style="border: 1px solid blue;">' + q.text  + '</td>'
+			concat '<tr><td class="spider_question_text">' + q.lifecycle_question.text  + '</td>'
 			# SELECT LIST - Question note
-			concat '<td><select class="question_note_' + q.pm_type_axe.id.to_s + '" name="spiderquest[' + @questions_values[q.id].id.to_s + '][]" value="' + @questions_values[q.id].note.to_s + '">'
+			concat '<td><select class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '" name="spiderquest[' + q.id.to_s + '][]" value="' + q.note.to_s + '">'
 				# NI
 				concat '<option '
-				if (@questions_values[q.id].note.to_s == "NI") 
+				if (q.note.to_s == "NI") 
 					concat 'selected ' 
 				end
 				concat 'value="NI">NI</option>'
 				# 1
 				concat '<option '
-				if (@questions_values[q.id].note.to_s == "1") 
+				if (q.note.to_s == "1") 
 					concat 'selected ' 
 				end
 				concat 'value="1">1</option>'
 				# 2
 				concat '<option '
-				if (@questions_values[q.id].note.to_s == "2") 
+				if (q.note.to_s == "2") 
 					concat 'selected ' 
 				end
 				concat 'value="2">2</option>'
 				# 3
 				concat '<option '
-				if (@questions_values[q.id].note.to_s == "3") 
+				if (q.note.to_s == "3") 
 					concat 'selected ' 
 				end
 				concat 'value="3">3</option>'
 			concat '</select></td>'
 			
 			# Question Reference
-			concat '<td class="question_reference_' + q.pm_type_axe.id.to_s + '" style="border: 1px solid red;">'
-			if(@questions_values[q.id].reference)
-			  concat @questions_values[q.id].reference 
+			concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="background-color: #8DC600;">'
+			if(q.reference)
+			  concat q.reference 
 			else
 			  concat "NI"
 		 	end
@@ -109,20 +110,24 @@ $(function () {
 			concat '</td></tr>'	
 			j = j + 1
 		}
-		concat "<tr><td>Average</td>"
-		concat "<td id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"			
-		concat "<td id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td><tr>"	
+		concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+		concat "<td style='border: 1px solid black;' class='grey_cell' id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"			
+		concat "<td style='border: 1px solid black;' class='green_cell' id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td><tr>"	
 		concat '</table>'
 		i = i + 1
 		
 		# Chart		
 %>
-		<div class="spider_chart" id="<%= chartName %>" style="width: 700px; height: 400px; margin: 0 auto"></div>
+		<div class="spider_chart" id="<%= chartName %>"></div>
+	</div>
 <%	
 	}
 %>
-	<input type="submit" value="Save" />
-	<input type="button" value="Consolidate" id="consolidate_btn" />
+	<div id="spider_form_buttons">
+		<h3>Actions</h3>
+		<input type="submit" value="Save" />
+		<input type="button" value="Consolidate" id="consolidate_btn" />
+	</div>
 	<% end -%>	
 <% else %>
 	<p>No data.</p>

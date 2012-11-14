@@ -52,7 +52,7 @@ class LifecycleQuestionsController < ApplicationController
      end
      
      format_questions()
-     render :action => 'index'
+     redirect_to :action => 'index'
   end
 
   def update

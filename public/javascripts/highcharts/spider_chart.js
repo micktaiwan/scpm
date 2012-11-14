@@ -1,3 +1,4 @@
+// Spider charts
 function calculAverage()
 {
 	// Get all table of class pm_type_tab (PM TYPE)
@@ -106,7 +107,7 @@ function generate_spider_chart(chartId,chartName,xAxisArray,serie1,serie2)
 	    chart: {
 	        renderTo: chartId,
 	        polar: true,
-	        type: 'line'
+	        type: 'area'
 	    },
 	    
 	    title: {
@@ -141,13 +142,17 @@ function generate_spider_chart(chartId,chartName,xAxisArray,serie1,serie2)
 	        y: 100,
 	        layout: 'vertical'
 	    },
-	    
+	    credits : {
+		  enabled : false
+		},
 	    series: [{
 	        name: 'Note',
+	        color: '#0E13FF',
 	        data: serie1,
 	        pointPlacement: 'on'
 	    }, {
 	        name: 'Reference',
+	        color: '#99B3FF',
 	        data: serie2,
 	        pointPlacement: 'on'
 	    }]
@@ -162,4 +167,52 @@ function calculHistoryAverage(axeAvgByPmType)
 		var chartName = axeAvgByPmType[i]["title"];
 		generate_spider_chart(chartId,chartName,axeAvgByPmType[i]["axes"],axeAvgByPmType[i]["notes"],axeAvgByPmType[i]["refs"]);
 	}
+}
+
+// KPI
+function generate_kpi_chart(containerId, chartName, categories, series)
+{
+	chart = new Highcharts.Chart({
+        chart: {
+            renderTo: containerId,
+            type: 'line',
+            marginRight: 130,
+            marginBottom: 25
+        },
+        title: {
+            text: chartName,
+            x: -20 //center
+        },
+        xAxis: {
+            categories: categories
+        },
+        yAxis: {
+            title: {
+                text: 'Average'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ this.y;
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -10,
+            y: 20,
+            borderWidth: 0
+        },
+		credits : {
+		  enabled : false
+		},
+        series: series
+  });
 }

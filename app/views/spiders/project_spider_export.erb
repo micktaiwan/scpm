@@ -39,25 +39,55 @@
 	  @xml.Styles do
 	   @xml.Style 'ss:ID' => 'Default', 'ss:Name' => 'Normal' do
 	     @xml.Alignment 'ss:Vertical' => 'Top', 'ss:WrapText' => '1'
-	     @xml.Borders
+	     	@xml.Borders do
+					@xml.Border 'ss:Position'=>'Top', 'ss:Color'=>'#FFFFFF', 'ss:Weight'=>"1"
+					@xml.Border 'ss:Position'=>'Bottom', 'ss:Color'=>'#FFFFFF', 'ss:Weight'=>"1"
+					@xml.Border 'ss:Position'=>'Left', 'ss:Color'=>'#FFFFFF', 'ss:Weight'=>"1"
+					@xml.Border 'ss:Position'=>'Right', 'ss:Color'=>'#FFFFFF', 'ss:Weight'=>"1"
+			 end
 	     @xml.Font 'ss:FontName' => 'Verdana'
 	     @xml.Interior
 	     @xml.NumberFormat
 	     @xml.Protection
 	   end
 	   @xml.Style 'ss:ID' => 's1024', 'ss:Name' => 'Header' do
+
+	     	@xml.Borders do
+					@xml.Border 'ss:Position'=>'Top', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Bottom', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Left', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Right', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+			 end
 	     @xml.Font  'ss:Color'=>'#FFFFFF', 'ss:Bold'=>"1"
 	     @xml.Interior 'ss:Color'=>"#6C6C6C", 'ss:Pattern'=>'Solid'
 	   end
 		 @xml.Style 'ss:ID' => 's1025', 'ss:Name' => 'Ref' do
+	     @xml.Borders do
+					@xml.Border 'ss:Position'=>'Top', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Bottom', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Left', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Right', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+			 end
 	     @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
 	     @xml.Interior 'ss:Color'=>"#8DC600", 'ss:Pattern'=>'Solid'
 	   end
 		 @xml.Style 'ss:ID' => 's1026', 'ss:Name' => 'Question' do
+	     @xml.Borders do
+					@xml.Border 'ss:Position'=>'Top', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Bottom', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Left', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Right', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+			 end
 	     @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
 	     @xml.Interior 'ss:Color'=>"#89BEFF", 'ss:Pattern'=>'Solid'
 	   end
 		 @xml.Style 'ss:ID' => 's1027', 'ss:Name' => 'Classic' do
+	     @xml.Borders do
+					@xml.Border 'ss:Position'=>'Top', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Bottom', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Left', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+					@xml.Border 'ss:Position'=>'Right', 'ss:Color'=>'#000000', 'ss:Weight'=>'1','ss:LineStyle'=>'Continuous'
+			 end		
 		   @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
 		   @xml.Interior 'ss:Color'=>"#FFFFFF", 'ss:Pattern'=>'Solid'
 		 end

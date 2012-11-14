@@ -17,7 +17,7 @@ i = 0
 	pmTabId = i.to_s
 	
 	# PM type
-	concat "<p id='table_title_" + pmTabId + "'>"+@pmType[p[0]].to_s + '</p><table class="pm_type_tab" id="pm_' + pmTabId + '" style="border: 1px solid black;width: 400px;">'	
+	concat "<div class='spider_container'><h3 id='table_title_" + pmTabId + "'>"+@pmType[p[0]].to_s + '</h3><table class="pm_type_tab" id="pm_' + pmTabId + '">'	
 
 	# Each values
 	j = 0
@@ -27,28 +27,29 @@ i = 0
 		if(currentAxes != q.lifecycle_question.pm_type_axe.title)
 			# Average
 			if(j!=0)
-				concat "<tr><td>Average</td>"
-				concat "<td>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
-				concat "<td>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
+				concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+				concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
+				concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
+				concat "<tr><td collspan='3' style='height:5px;background-color:white;'></td></tr>"
 				currentAxeId = q.lifecycle_question.pm_type_axe.id
 			else
 				currentAxeId = q.lifecycle_question.pm_type_axe.id
 			end
 			
 			# New Axes
-			concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' colspan='3' style='border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td></tr>"
+			concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' style='background-color: #6D6D6D;color:white;border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td><td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td></tr>"
 			currentAxes = q.lifecycle_question.pm_type_axe.title
 		end
 
-		concat '<tr><td style="border: 1px solid blue;">' + q.lifecycle_question.text  + '</td>'
-		concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="border: 1px solid black;">'
+		concat '<tr><td class="spider_question_text">' + q.lifecycle_question.text  + '</td>'
+		concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '">'
 		if(q.note != nil)
 			concat q.note
 		else
 			concat "NA"
 		end
 		concat '</td>'
-		concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '"  style="border: 1px solid red;">'
+		concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="background-color: #8DC600;">'
 		if (q.reference)
 			concat q.reference
 		else
@@ -58,14 +59,15 @@ i = 0
 		j = j + 1
 	}
 	
-	 concat "<tr><td>Average</td>"
-	 concat "<td>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
-	 concat "<td>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
+	 concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+	 concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
+	 concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
 	
 	concat '</table>'
 	i = i + 1
 %>
-	<div id="<%= chartName %>" style="width: 700px; height: 400px; margin: 0 auto"></div>
+	<div class="spider_chart" id="<%= chartName %>"></div>
+	</div>
 <%	
 }
 

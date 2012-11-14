@@ -18,7 +18,7 @@ class PmTypeAxesController < ApplicationController
      end
      
      @pm_type_axes = PmTypeAxe.all()
-     render :action => 'index'
+     redirect_to :action => 'index'
   end
 
   def edit

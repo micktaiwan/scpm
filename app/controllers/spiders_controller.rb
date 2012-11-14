@@ -79,15 +79,17 @@ class SpidersController < ApplicationController
             #last_spider = Spider.last(:conditions => ['project_id = ? and milestone_id = ? ',@project.id,mi.id])
             last_spider = cache_spider[mi.id]
             # Get spiders conso for this project, this milestone, this axe, and last spider
+            @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = 0
             if((last_spider) and (last_spider.spider_consolidations.count > 0))
               last_spider.spider_consolidations.each { |conso|
                 if (conso.pm_type_axe_id == axe.id)
                   @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = conso
                 end
               }
-            else
-              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = 0
             end
+            # if (@pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] == nil)
+            #              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["spider_conso"] = 0
+            #            end
           
             LifecycleQuestion.all(:conditions => ["lifecycle_id = ? and pm_type_axe_id = ?",@project.lifecycle_id,axe.id] ).each{ |quest|
               # Params
@@ -95,15 +97,18 @@ class SpidersController < ApplicationController
               @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["text"] = quest.text
                   
               # Get spiders values for this project, this milestone, this axe, and last spider
+              @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = 0
+              
               if(last_spider)
                 last_spider.spider_values.each { |sv| 
                   if (sv.lifecycle_question_id == quest.id)
                     @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = sv
                   end
                 }
-              else
-                @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = 0
               end
+              # if (@pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] == nil)
+              #                 @pm_type_hash[pm.id]["axe_hash"][axe.id]["milestone_hash"][mi.id]["question_hash"][quest.id]["spider_value"] = 0
+              #               end
            }
           }
         }
@@ -262,7 +267,6 @@ class SpidersController < ApplicationController
     else
       charts_element = PmTypeAxe.all
     end
-    
   end
   
   def generate_kpi_charts_data
@@ -287,25 +291,27 @@ class SpidersController < ApplicationController
     # MONTHS CALCUL --------------------------------- 
     timeline_size = 12 # in months
     
-    @months_array = Array.new
+    # @months_array = Array.new
     now_dateTime = DateTime.now.to_time
     last_month = now_dateTime - 1.month
     
-    
     temp_date_end = now_dateTime
-    sql_query_end = temp_date_end.strftime("%Y-%m-01 00:00")    
-    # Rails.logger.info("+++++ "+sql_query_end.to_s)
+    sql_query_end = temp_date_end.strftime("%Y-%m-01 00:00")   
+    last_month_ref =  last_month.month   
+    last_year_ref = last_month.year 
+    
     temp_date_begin = last_month - timeline_size.month
     sql_query_begin = temp_date_begin.strftime("%Y-%m-01 00:00:00")
-    # Rails.logger.info("+++++ "+sql_query_begin.to_s)
+    first_month_ref =  temp_date_begin.strftime("%m")   
+    first_year_ref = temp_date_begin.strftime("%Y")
     
-    month_index = 0
-    while(month_index < timeline_size)
-      temp_date = last_month - month_index.month
-      @months_array << temp_date.strftime("%b %y")
-      month_index += 1
-    end
-    @months_array.reverse!
+    # month_index = 0
+    # while(month_index < timeline_size)
+      # temp_date = last_month - month_index.month
+      # @months_array << temp_date.strftime("%b %y")
+      # month_index += 1
+    # end
+    # @months_array.reverse!
     
     # REQUEST --------------------------------- 
     # @data = SpiderConsolidation.average("average",
@@ -321,7 +327,7 @@ class SpidersController < ApplicationController
     @charts_data = Hash.new
     @titles_data = Hash.new
     charts_element.each do |chart_element|
-      query = "SELECT avg(sc.average),MONTH(sc.created_at),YEAR(sc.created_at) 
+      query = "SELECT sum(sc.average),MONTH(sc.created_at),YEAR(sc.created_at) 
       FROM spider_consolidations sc, spiders s, projects p,  pm_type_axes pta
       WHERE sc.spider_id = s.id
       AND s.project_id = p.id
@@ -346,8 +352,32 @@ class SpidersController < ApplicationController
       
       query += " GROUP BY MONTH(created_at),YEAR(created_at) 
       ORDER BY YEAR(created_at),MONTH(created_at)";
-      @charts_data[chart_element.id.to_s] = ActiveRecord::Base.connection.execute(query)
-      @titles_data[chart_element.id.to_s] = chart_element.title
+      
+      # Analyse return data
+      @charts_data[chart_element.id.to_s] = Array.new
+      charts_data_by_date = Hash.new
+      
+      # Save query data in hash[month-year]
+      ActiveRecord::Base.connection.execute(query).each do |query_data|
+        charts_data_by_date[query_data[1]+"-"+query_data[2]] = query_data
+      end
+      
+      # Check if we have all months/years
+      month_index = 0
+      (Date.new(first_year_ref.to_i, first_month_ref.to_i)..Date.new(last_year_ref.to_i, last_month_ref.to_i)).select {|d| 
+        if (month_index.to_i != d.month.to_i)
+          if(charts_data_by_date[d.month.to_s+"-"+d.year.to_s] != nil)
+            @charts_data[chart_element.id.to_s] << charts_data_by_date[d.month.to_s+"-"+d.year.to_s]
+          else
+            unassigned_month = Array.new<<0<<d.month.to_i<<d.year.to_i
+            @charts_data[chart_element.id.to_s] << unassigned_month
+          end
+          month_index = d.month
+        end
+      }
+      
+      # Set title
+      @titles_data[chart_element.id.to_s] = chart_element.title  
     end
     
     if(@kpi_type_param == nil)
@@ -525,15 +555,12 @@ class SpidersController < ApplicationController
         # All Axes
         pmTypeAxe_ids = PmTypeAxe.all(:conditions => ["pm_type_id = ?", p.id]).map{ |pa| pa.id }
         # All questions
-        @questions[p.id] = LifecycleQuestion.all(:conditions => ["lifecycle_id = ? and pm_type_axe_id IN (?)", currentProject.lifecycle_id, pmTypeAxe_ids],:order => "pm_type_axe_id ASC")
+        @questions[p.id] = SpiderValue.find(:all,
+        :include => :lifecycle_question,
+        :conditions => ['spider_id = ? and lifecycle_questions.pm_type_axe_id IN (?)', @spider.id,pmTypeAxe_ids],
+        :order => "lifecycle_questions.pm_type_axe_id ASC")
       }
-    
-      #
-      # Values
-      #
-      last_spider.spider_values.each { |v|
-        @questions_values[v.lifecycle_question_id] = v
-      }
+
     end
   end
 
