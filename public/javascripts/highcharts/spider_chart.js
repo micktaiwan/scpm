@@ -66,7 +66,8 @@ function calculAverage()
 			axesList.push(axeList[j].firstChild.nodeValue);
 			if(questionNotesCount != 0)
 			{
-				averageNotesList.push(questionNotesList/questionNotesCount);
+				var resultAvg = questionNotesList/questionNotesCount
+				averageNotesList.push(Math.round(resultAvg*100)/100);
 			}
 			else
 			{
@@ -75,7 +76,8 @@ function calculAverage()
 			$("#"+averageNoteCellId).text(averageNotesList[averageNotesList.length-1]);
 			if(questionRefsCount != 0)
 			{
-				averageReferencesList.push(questionRefsList/questionRefsCount);
+				var resultAvgRef = questionRefsList/questionRefsCount
+				averageReferencesList.push(Math.round(resultAvgRef*100)/100);
 			}
 			else
 			{
