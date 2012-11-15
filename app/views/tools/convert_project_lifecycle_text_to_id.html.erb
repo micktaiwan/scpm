@@ -1,6 +1,15 @@
 <%  
 lifecycleArray = ['Full GPP','Light GPP','Maintenance','LBIP Gx', 'LBIP gx','LBIP pgx','Suite']
 
+indexLifecycle = 1
+lifecycleArray.each do |lifecycle|
+	new_lf = Lifecycle.new
+	new_lf.id = indexLifecycle
+	new_lf.name = lifecycle.to_s
+	new_lf.save
+	indexLifecycle += 1
+end
+
 Project.find(:all).each{|p|
   projectLifecycleName = lifecycleArray[p.lifecycle]
   %>
