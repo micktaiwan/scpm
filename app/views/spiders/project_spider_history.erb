@@ -28,8 +28,8 @@ i = 0
 			# Average
 			if(j!=0)
 				concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
-				concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
-				concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
+				concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"].to_f.round(2).to_s+"</td>"
+				concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"].to_f.round(2).to_s+"</td><tr>"
 				concat "<tr><td collspan='3' style='height:5px;background-color:white;'></td></tr>"
 				currentAxeId = q.lifecycle_question.pm_type_axe.id
 			else
@@ -60,8 +60,8 @@ i = 0
 	}
 	
 	 concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
-	 concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"]+"</td>"
-	 concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"]+"</td><tr>"
+	 concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"].to_f.round(2).to_s+"</td>"
+	 concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"].to_f.round(2).to_s+"</td><tr>"
 	
 	concat '</table>'
 	i = i + 1
