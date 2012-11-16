@@ -39,7 +39,7 @@
 
 <div id="banner">
   <%= render :file => 'layouts/context_select' %>
-  <div id="title">Reporting</div>
+  <div id="title">SPIDERS</div>
   <div id="bandeau">
     <% b = get_bandeau; if b %>
       <div class="text"><%= b.text %></div>
@@ -51,15 +51,7 @@
     </div>
   </div>
   <div id="menu_bar">
-  <%= link_to('Projects', {:controller=>'projects', :action=>'index'}, {:class=>menu_style('projects','*')}) %>
-<% if current_user.is_transverse == 1 %>
-  <%= link_to('Actions'+nb_actions, {:controller=>'actions', :action=>'index'}, {:class=>menu_style('actions','*')}) %>
-<% end %>
-  <%= link_to('Topics', {:controller=>'topics', :action=>'index'}, {:class=>menu_style('topics','*')}) %>
-  <b><%= Date.today.strftime('%d-%b-%Y') %> - week <%= Date.today.cweek %></b>
-  <% form_tag({:controller=>'projects', :action=>'filter'}, {:style=>"display:inline;"}) do %>
-  <%= text_field_tag('text', '', {:size=>5}) %>
-  <% end %>
+ 		
   </div>
 </div>
 
