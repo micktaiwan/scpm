@@ -63,13 +63,13 @@ function unlock_inputs()
 }
 </SCRIPT>
 
-<% axe = "" %>
+<% question_str = "" %>
 <table>
 <tr><th>Lifecycle</th><!-- <th>PM Type</th> --><th>Axe</th><th>Milestone</th><th>Question text</th><th>Reference Note</th></tr>
 <% @questionReferencesList.each{|m| %>
-	<% if(axe != m.lifecycle_question.pm_type_axe.title.to_s) %>
+	<% if(question_str != m.lifecycle_question.text.to_s) %>
 		<tr><td collspan="6"></td></tr>
-		<% axe = m.lifecycle_question.pm_type_axe.title.to_s %>
+		<% question_str = m.lifecycle_question.text.to_s %>
 	<% end %>
 	<tr>
 	<td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.lifecycle_question.lifecycle.name.to_s %></td>
