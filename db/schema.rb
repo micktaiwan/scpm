@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121017145100) do
+ActiveRecord::Schema.define(:version => 20121116145000) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -192,6 +192,13 @@ ActiveRecord::Schema.define(:version => 20121017145100) do
     t.text     "risk"
     t.text     "consequence"
     t.text     "actions"
+  end
+
+  create_table "lifecycle_milestones", :force => true do |t|
+    t.integer  "lifecycle_id"
+    t.integer  "milestone_name_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "lifecycle_questions", :force => true do |t|
