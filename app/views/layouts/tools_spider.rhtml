@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="all">
+  <title>Tools - BAM</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/tools.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/chat.css" />
+	<link href='http://fonts.googleapis.com/css?family=Stardos+Stencil&v1' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Zeyada&v1' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Kameron&v1' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="/javascripts/highcharts/highcharts.js" type="text/javascript"></script>  
+  <script src="/javascripts/highcharts/highcharts-more.js" type="text/javascript"></script>  
+  <script src="/javascripts/highcharts/exporting.js" type="text/javascript"></script>  
+  <script src="/javascripts/highcharts/spider_chart.js" type="text/javascript"></script>
+  <link rel="Shortcut Icon" type="image/x-icon" href="/images/favicon.ico" />
+</head>
+
+<body>
+<%
+  cu = current_user
+  cu.last_view = Time.now
+  cu.save
+%>
+
+<%#= render :file => 'chat/main' %>
+
+<div id="banner">
+  <%= render :file => 'layouts/context_select' %>
+  <div id="title">Tools</div>
+  <div id="bandeau">
+    <% b = get_bandeau; if b %>
+    <div class="text"><%= b.text %></div>
+    <div class="person"><%= b.person.name %></div>
+    <% end %>
+    <div class="link">
+      <%= link_to('Add something', {:controller=>'bandeaus', :action=>'new'}) %> |
+      <%= link_to('See all', {:controller=>'bandeaus', :action=>'index'}) %>
+    </div>
+  </div>
+
+  <div id="menu_bar">
+    <ul>
+    <li><%= link_to('SDP', {:controller=>'tools', :action=>'sdp_index'}, {:class=>menu_style('tools','sdp_index')}) %>
+    <ul>
+      <li class="hsep">Index</li>
+      <li><%= link_to('SDP index',        {:controller=>'tools', :action=>'sdp_index'}) %></li>
+      <li><%= link_to('SDP index by specific type',        {:controller=>'tools', :action=>'sdp_index_by_type'}) %></li>
+      <% if current_user.has_role?('Admin') %>
+        <li><%= link_to('Gains conso',     {:controller=>'tools', :action=>'sdp_conso'}) %></li>
+      <% end %>
+      <li class="hsep">Imports</li>
+      <li><%= link_to('SDP import',       {:controller=>'tools', :action=>'sdp_import'}) %></li>
+      <li><%= link_to('RMT to SDP task import',          {:controller=>'tools', :action=>'sdp_add'}) %></li>
+      <li><%= link_to('Monthly tasks SDP import', {:controller=>'tools', :action=>'import_monthly_tasks_form'}) %></li>
+      <li class="hsep">Checks</li>
+      <li><%= link_to('CHECK Loads',{:controller=>'tools', :action=>'load_errors'}) %></li>
+      <li><%= link_to('CHECK RMT <=> SDP',{:controller=>'tools', :action=>'sdp_yes_check'}) %></li>
+      <li><%= link_to('CHECK RMT ended',  {:controller=>'tools', :action=>'requests_ended_check'}) %></li>
+      <li><%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}) %></li>
+      <li><%= link_to('CHECK wrong Remaining Workload', {:controller=>'tools', :action=>'check_sdp_remaining_workload'}) %></li>
+    </ul>
+    </li>
+    <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
+      <ul>
+        <li class="hsep">WS Reporting</li>
+        <li><%= link_to('Reporting',        {:controller=>'workstreams', :action=>'index'}) %></li>
+        <li><%= link_to('Manage',        {:controller=>'workstreams', :action=>'manage'}) %></li>
+      </ul>
+    </li>
+    <li><%= link_to('Requests', {:controller=>'welcome', :action=>'index'}, {:class=>menu_style('welcome','index')}) %></li>
+    <li><%= link_to('People', {:controller=>'people', :action=>'index'}, {:class=>menu_style('people','*')}) %></li>
+    <li><%= link_to('Reminders', {:controller=>'welcome', :action=>'reminders'}, {:class=>menu_style('welcome','reminders')}) %></li>
+    <li><%= link_to('Bandeaux', {:controller=>'bandeaus', :action=>'index'}, {:class=>menu_style('bandeaus','*')}) %></li>
+
+    <% if cu.has_role?('Admin') %>
+      <li><%= link_to('Import', {:controller=>'welcome', :action=>'update'}, {:class=>menu_style('welcome','update')}) %></li>
+    <% end %>
+    <li>
+      <%= link_to('Tools', "", {:class=>menu_style('tools','*'), :onclick=>"return false;"}) %>
+      <ul>
+        <li class="hsep">Management</li>
+        <li><%= link_to('Requirements',   {:controller=>'requirements', :action=>'index'}) %></li>
+        <li><%= link_to('Checklists',     {:controller=>'checklist_templates', :action=>'index'}) %></li>
+        <li><%= link_to('Risks',          {:controller=>'risks', :action=>'list'}) %></li>
+        <li><%= link_to('Generic Risks',  {:controller=>'generic_risk_questions', :action=>'index'}) %></li>
+        <li><%= link_to('Capi',           {:controller=>'notes', :action=>'list'}) %></li>
+        <li><%= link_to('Capi Axes',      {:controller=>'capi_axes', :action=>'index'}) %></li>
+        <li class="hsep">Stats</li>
+        <li><%= link_to('Requests by year', {:controller=>'tools', :action=>'requests_by_year'}) %></li>
+        <li><%= link_to('Projects length',  {:controller=>'tools', :action=>'projects_length'}) %></li>
+        <li><%= link_to('Check dates RMT <=> BAM', {:controller=>'tools', :action=>'rmt_date_check'}) %></li>
+        <li><%= link_to('QR per DWS',     {:controller=>'tools', :action=>'qr_per_ws'}) %></li>
+        <li><%= link_to('Last projects',  {:controller=>'tools', :action=>'last_projects'}) %></li>
+        <li><%= link_to('Projects status',{:controller=>'tools', :action=>'project_list'}) %></li>
+        <li><%= link_to('Next milestones',{:controller=>'tools', :action=>'next_milestones'}) %></li>
+        <li><%= link_to('Check RMT Milestone Dates <=> po',{:controller=>'tools', :action=>'check_difference_po_milestone_date'}) %></li>
+        <li class="hsep">Old stuff</li>
+        <li><%= link_to('Workload Gantt', {:controller=>'welcome', :action=>'workload_schedule'}) %></li>
+        <li><%= link_to('Stats open projects', {:controller=>'tools', :action=>'stats_open_projects'}) %></li>
+        <li><%= link_to('Test email',     {:controller=>'tools', :action=>'test_email'}) %></li>
+      </ul> 
+    </li>
+
+		<% if (cu.has_role?('Admin') or (cu.is_cpdp==1) or cu.has_role?('ServiceLineResp'))  %>
+		<li><%= link_to('Spider', "", {:class=>menu_style('workstreams','*')}) %>
+      <ul>
+        <li class="hsep">KPI</li>
+        <li><%= link_to('KPI by PM Types',        {:controller=>'spiders', :action=>'kpi_charts_by_pm_types', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
+        <li><%= link_to('KPI by axes',        {:controller=>'spiders', :action=>'kpi_charts_by_axes', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
+	      <li class="hsep">Spider administration</li>
+        <li><%= link_to('Import',       						  {:controller=>'spiders', :action=>'project_spider_import'}) %></li>
+        <li><%= link_to('Manage Axes',        				{:controller=>'pm_type_axes', :action=>'index'}) %></li>
+        <li><%= link_to('Manage Questions',        		{:controller=>'lifecycle_questions', :action=>'index'}) %></li>
+        <li><%= link_to('Manage Questions References',{:controller=>'question_references', :action=>'index'}) %></li>
+      </ul>
+    </li>
+		<% end %>
+		
+    <% if cu.has_role?('Super') %>
+      <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
+    <% end %>
+    <% new_requests = Request.count(:conditions=>"status='new' or status='acknowledged'"); if new_requests > 0 %>
+      <li><div class="notif"><strong><%=new_requests%></strong> new or ackn requests</div></li>
+    <% end %>
+    </ul>
+  </div>
+
+</div>
+
+<div id="content">
+  <%= yield %>
+</div>
+
+<%= render :file => 'layouts/footer.erb' %>
+</body>
+</html>

@@ -25,7 +25,14 @@ $(function () {
 <!-- *** -->
 <!-- CURRENT SPIDER QUESTIONS -->
 <!-- *** -->
-
+<%
+	projectName = ""
+	if( @project.project_id != nil)
+		projectName += @project.project.name
+	end
+	projectName += " > "+@project.name
+%>
+<h3>Project : <%= projectName %> - Milestone : <%= @milestone.title %></h3>
 <h2>Current Spider</h2>
 
 <% if (@spider)%>

@@ -1,7 +1,16 @@
 require 'spreadsheet'
 class SpidersController < ApplicationController
-  layout 'spider', :except => :generate_kpi_charts_data
+  layout :resolve_layout, :except => :generate_kpi_charts_data
   
+  def resolve_layout
+     case action_name
+     when "kpi_charts_by_pm_types","kpi_charts_by_axes", "project_spider_import", "do_spider_upload"
+       "tools_spider"
+     else
+       "spider"
+     end
+   end
+   
   # ------------------------------------------------------------------------------------
   # GENERAL /READ
   # ------------------------------------------------------------------------------------
@@ -150,7 +159,7 @@ class SpidersController < ApplicationController
     @projectsNotFound = Array.new
     @milestonesNotFound = Array.new
     @axesNotFound = Array.new
-    @projectsAlreadyImported = Array.new
+    @projectsAdded = Array.new
     
     # For each projects
     projectsArray.each { |project| 
@@ -175,45 +184,39 @@ class SpidersController < ApplicationController
     	    if(bam_milestone != nil)
     	      # Search milestone Name
     	      bam_milestone_name = MilestoneName.first(:conditions => ["title = ?",bam_milestone.name])
-    	      # Check if spider not already exist
-    	      utc_date = Time.zone.parse(project["date"]).utc
-    	      spider_exist = Spider.first(:conditions => ["project_id = ? and milestone_id = ? and created_at = ?",bam_project.id,bam_milestone_name.id,utc_date])
-    	      if(spider_exist == nil)
-    	      
-      	      # Create Spider for this project
-      	      new_spider = create_spider_object(bam_project,bam_milestone_name)
-      	      new_spider.created_at = project["date"]
-      	      new_spider.save
-    	      
-      	      # For each conso
-      	      project["conso"].each do |conso|
-    	        
-      	        axe_title = conso[0]
-      	        if (axe_title[-1,1] == " ")
-      	          axe_title = axe_title[0..-2]
+    	          	      
+      	    # Create Spider for this project
+    	      new_spider = create_spider_object(bam_project,bam_milestone_name)
+    	      new_spider.created_at = project["date"]
+    	      new_spider.save
+  	        @projectsAdded << "Project : "+ bam_project.name + " - Milestone : " + project_milestone
+    	      # For each conso
+    	      project["conso"].each do |conso|
+  	        
+    	        axe_title = conso[0]
+    	        if (axe_title[-1,1] == " ")
+    	          axe_title = axe_title[0..-2]
+    	        end
+    	        if(axe_title[0,1] == " ")
+    	          axe_title = axe_title[1..-1]
+    	        end
+  	          pm_type = axesHash[conso[1]["column_ids"].last.to_i]["type"]
+  	        
+    	        if(conso[1]["column_ids"][2].to_i <= @deliverableEndColumn)
+        	      # Search type
+        	      bam_pm_type = PmType.first(:conditions => ["title LIKE ?", "%"+pm_type+"%"])
+      	        # Search Axes
+      	        bam_axe = PmTypeAxe.first(:conditions => ["pm_type_id = ? and title LIKE ?", bam_pm_type.id, "%"+axe_title+"%"])
+      	        # Axes if not found
+      	        if (bam_axe != nil)
+      	          # Add spider conso
+      	          create_spider_history_conso(new_spider,bam_axe.id, project["date"], conso[1]["values"][0],conso[1]["values"][1],conso[1]["values"][2])
+      	        else
+      	          @axesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " - Axe : " + axe_title + " not found."
       	        end
-      	        if(axe_title[0,1] == " ")
-      	          axe_title = axe_title[1..-1]
-      	        end
-    	          pm_type = axesHash[conso[1]["column_ids"].last.to_i]["type"]
-    	        
-      	        if(conso[1]["column_ids"][2].to_i <= @deliverableEndColumn)
-          	      # Search type
-          	      bam_pm_type = PmType.first(:conditions => ["title LIKE ?", "%"+pm_type+"%"])
-        	        # Search Axes
-        	        bam_axe = PmTypeAxe.first(:conditions => ["pm_type_id = ? and title LIKE ?", bam_pm_type.id, "%"+axe_title+"%"])
-        	        # Axes if not found
-        	        if (bam_axe != nil)
-        	          # Add spider conso
-        	          create_spider_history_conso(new_spider,bam_axe.id, project["date"], conso[1]["values"][0],conso[1]["values"][1],conso[1]["values"][2])
-        	        else
-        	          @axesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " - Axe : " + axe_title + " not found."
-        	        end
-        	      end
       	      end
-        	  else
-        	    @projectsAlreadyImported << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " : Already imported."
-        	  end
+    	      end
+      	  
     	    else
     	      @milestonesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " not found."
     	    end 

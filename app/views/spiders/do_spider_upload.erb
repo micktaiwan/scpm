@@ -15,9 +15,11 @@ concat "<h2>-------------------- Axes not found --------------------</h2>"
 	concat a.to_s + "<br />"
 end
 
-concat "<h2>-------------------- Projects already imported --------------------</h2>"
-@projectsAlreadyImported.each do |p|
+concat "<h2>-------------------- Projects added --------------------</h2>"
+@projectsAdded.each do |p|
 	concat p.to_s + "<br />"
 end
+
+
 
 %>
