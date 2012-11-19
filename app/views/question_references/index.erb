@@ -1,27 +1,4 @@
 <SCRIPT language="Javascript">
-// $(document).ready(function(){
-// 	$(".question_reference_note").change(function() {
-// 			var question_reference_id = this.id
-// 			var question_reference_note = $(this).val()
-// 		
-// 			$(".question_reference_note").attr('disabled', 'disabled');
-// 			$("#loading_" + question_reference_id).show();
-// 			
-// 			$.ajax({
-// 			url: "/question_references/save_question_reference",
-// 			type: "POST",
-// 			data: "question_reference_id=" + question_reference_id + "&question_reference_note=" + question_reference_note})
-// 			.done(function(result) { 
-// 				$(".question_reference_note").removeAttr('disabled');
-// 				$("#loading_" + question_reference_id).hide();
-// 			})
-// 			.fail(function() { 
-// 				$(".question_reference_note").removeAttr('disabled');
-// 				$("#loading_" + question_reference_id).hide();
-// 				alert("Error, modification not saved.");
-// 			});
-// 	});
-// });
 function question_reference_change(id,value)
 {
 	var question_reference_id = id;
@@ -61,31 +38,22 @@ function unlock_inputs()
 	     e.enable();
   });	
 }
-</SCRIPT>
+function change_axe(value)
+{
+	new Ajax.Request('/question_references/generate_question_references_table', {
+    parameters: { axe_id: value },
+	  onSuccess: function(response) {
+			$("quest_ref_content").innerHTML = response.responseText;
+	  },
+		onFailure:function(response) {
+		}
+	});
+}
 
-<% question_str = "" %>
-<table>
-<tr><th>Lifecycle</th><!-- <th>PM Type</th> --><th>Axe</th><th>Milestone</th><th>Question text</th><th>Reference Note</th></tr>
-<% @questionReferencesList.each{|m| %>
-	<% if(question_str != m.lifecycle_question.text.to_s) %>
-		<tr><td collspan="6"></td></tr>
-		<% question_str = m.lifecycle_question.text.to_s %>
-	<% end %>
-	<tr>
-	<td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.lifecycle_question.lifecycle.name.to_s %></td>
-	<!-- <td class="grey_cell" style="border: 1px solid black;"><%= m.lifecycle_question.pm_type_axe.pm_type.title.to_s %></td> -->
-	<td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.lifecycle_question.pm_type_axe.title.to_s %></td>
-	<td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.milestone_name.title.to_s %></td>
-	<td style="background-color: #8DC600;border: 1px solid black;"><%= m.lifecycle_question.text.to_s %></td>
-	
-	<td><select class="question_reference_note" id="<%= m.id %>" onchange="question_reference_change(this.id,this.value);">
-		<option <% if (m.note.to_s == "NI") %>selected<% end %> value="NI">NI</option>
-		<option <% if (m.note.to_s == "1") %>selected<% end %> value="1">1</option>
-		<option <% if (m.note.to_s == "2") %>selected<% end %> value="2">2</option>
-		<option <% if (m.note.to_s == "3") %>selected<% end %> value="3">3</option>
-	</select></td>
-	
-	<td id="loading_<%= m.id %>" style="display:none;"><%= image_tag "ajax-loader.gif", :alt => "Loading", :id => "image_loading" %></td>
-	
-<% } %>
-</table>
+change_axe("<%= @firstAxeId %>");
+
+</SCRIPT>
+<%= select_tag('choose_axe', options_for_select(@axesList), {:onchange=>"change_axe(this.value)"}) %>
+
+<div id="quest_ref_content">
+</div>
