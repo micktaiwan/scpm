@@ -19,58 +19,46 @@ concat "]</h2>"
 
 # Each type
 i = 0
-@history.each { |p|
+@consoByPmType.each { |p|
 	currentAxes = ""
 	currentAxeId = 0
 	chartName = "chartContainer_"+i.to_s
 	pmTabId = i.to_s
 	
-	# PM type
+	# PM TYPE
 	concat "<div class='spider_container'><h3 id='table_title_" + pmTabId + "'>"+@pmType[p[0]].to_s + '</h3><table class="pm_type_tab" id="pm_' + pmTabId + '">'	
 
-	# Each values
-	j = 0
-	
-	p[1].each { |q|
-		# Axes
-		if(currentAxes != q.lifecycle_question.pm_type_axe.title)
-			# Average
-			if(j!=0)
-				concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
-				concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"].to_f.round(2).to_s+"</td>"
-				concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"].to_f.round(2).to_s+"</td><tr>"
-				concat "<tr><td collspan='3' style='height:5px;background-color:white;'></td></tr>"
-				currentAxeId = q.lifecycle_question.pm_type_axe.id
-			else
-				currentAxeId = q.lifecycle_question.pm_type_axe.id
-			end
-			
-			# New Axes
-			concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' style='background-color: #6D6D6D;color:white;border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td><td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td></tr>"
-			currentAxes = q.lifecycle_question.pm_type_axe.title
+	# EACH CONSO FOR CURRENT TYPE
+	p[1].each { |c|
+		# AXES
+		concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + c.pm_type_axe.id.to_s + "' style='background-color: #6D6D6D;color:white;border: 1px solid black;'>"+c.pm_type_axe.title+"</td><td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td></tr>"
+		
+		# VALUES
+		if (@axesValues[c.pm_type_axe.id] != nil)
+			@axesValues[c.pm_type_axe.id].each { |q|
+				concat '<tr><td class="spider_question_text">' + q.lifecycle_question.text  + '</td>'
+				concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '">'
+				if(q.note != nil)
+					concat q.note
+				else
+					concat "NA"
+				end
+				concat '</td>'
+				concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="background-color: #8DC600;">'
+				if (q.reference)
+					concat q.reference
+				else
+					concat "NA"
+				end
+				concat '</td></tr>'	
+			}
 		end
-
-		concat '<tr><td class="spider_question_text">' + q.lifecycle_question.text  + '</td>'
-		concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '">'
-		if(q.note != nil)
-			concat q.note
-		else
-			concat "NA"
-		end
-		concat '</td>'
-		concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="background-color: #8DC600;">'
-		if (q.reference)
-			concat q.reference
-		else
-			concat "NA"
-		end
-		concat '</td></tr>'	
-		j = j + 1
+		
+		# CONSO RESULTS
+		concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+		concat "<td style='border: 1px solid black;' class='grey_cell'>"+c["average"].to_f.round(2).to_s+"</td>"
+		concat "<td style='border: 1px solid black;' class='green_cell'>"+c["average_ref"].to_f.round(2).to_s+"</td><tr>"	
 	}
-	
-	 concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
-	 concat "<td style='border: 1px solid black;' class='grey_cell'>"+@axesConsolidations[currentAxeId]["avg_note"].to_f.round(2).to_s+"</td>"
-	 concat "<td style='border: 1px solid black;' class='green_cell'>" +@axesConsolidations[currentAxeId]["avg_ref"].to_f.round(2).to_s+"</td><tr>"
 	
 	concat '</table>'
 	i = i + 1
@@ -83,7 +71,7 @@ i = 0
 concat '<script type="text/javascript">$(function () {'
 concat 'var consoDataArray = new Array();'
 pmTypeIndex = 0
-@consolidationData.each { |consoByPmType|
+@consoByPmType.each { |consoByPmType|
 	pmTypeId = consoByPmType[0].to_s
 	pmTypeName = @pmType[consoByPmType[0]].to_s
 	

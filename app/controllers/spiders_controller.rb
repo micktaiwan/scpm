@@ -570,31 +570,23 @@ class SpidersController < ApplicationController
   # Generate data for the history spider selected
   def generate_table_history(spiderParam)
     @pmType = Hash.new
-    @history = Hash.new
-    @consolidationData = Hash.new
-    @axesConsolidations = Hash.new
+    @consoByPmType = Hash.new
+    @axesValues = Hash.new
     
     # For Each PM Type
     PmType.find(:all).each{ |p|
       @pmType[p.id] = p.title
-      # All Axes
-      pmTypeAxe_ids = PmTypeAxe.all(:conditions => ["pm_type_id = ?", p.id]).map{ |pa| pa.id }
-      # All values/questions
-      @history[p.id] = SpiderValue.find(:all,
-      :include => :lifecycle_question,
-      :conditions => ['spider_id = ? and lifecycle_questions.pm_type_axe_id IN (?)', spiderParam.id,pmTypeAxe_ids],
-      :order => "lifecycle_questions.pm_type_axe_id ASC")
       
-      @consolidationData[p.id] = SpiderConsolidation.find(:all,
+      @consoByPmType[p.id] = SpiderConsolidation.find(:all,
       :include => :pm_type_axe,
       :conditions => ['spider_id = ? and pm_type_axes.pm_type_id = ?', spiderParam.id,p.id],
       :order => "pm_type_axes.id ASC")
       
-      @consolidationData[p.id].each { |c|
-        @axesConsolidations[c.pm_type_axe_id] = Hash.new
-        @axesConsolidations[c.pm_type_axe_id]["avg_note"] = c.average.to_s
-        @axesConsolidations[c.pm_type_axe_id]["avg_ref"] = c.average_ref.to_s
-        @axesConsolidations[c.pm_type_axe_id]["ni_nb"] =  c.ni_number.to_s
+      @consoByPmType[p.id].each { |c|        
+          @axesValues[c.pm_type_axe_id] = SpiderValue.find(:all,
+              :include => :lifecycle_question,
+              :conditions => ['spider_id = ? and lifecycle_questions.pm_type_axe_id = ?', spiderParam.id,c.pm_type_axe_id],
+              :order => "lifecycle_questions.pm_type_axe_id ASC")
       }      
     }  
   end
