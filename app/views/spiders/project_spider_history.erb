@@ -1,4 +1,4 @@
-<%= link_to "Back to project spider view", :controller=>'spiders', :action=>'project_spider', :project_id=>@spider.project_id, :milestone_name_id=>@spider.milestone_id, :create_spider=>0 %>
+<%= link_to "Back to project spider view", :controller=>'spiders', :action=>'project_spider', :project_id=>@spider.project_id, :milestone_id=>@spider.milestone_id, :create_spider=>0 %>
 
 <%
 	projectName = ""
@@ -7,7 +7,7 @@
 	end
 	projectName += " > " + @spider.project.name
 %>
-<h3>Project : <%= projectName %> - Milestone : <%= @spider.milestone_name.title %></h3>
+<h3>Project : <%= projectName %> - Milestone : <%= @spider.milestone.name %></h3>
 
 <%
 concat "<h2>Spider [created the "

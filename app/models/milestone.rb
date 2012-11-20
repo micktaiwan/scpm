@@ -3,6 +3,8 @@ class Milestone < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
   belongs_to  :project
   has_many    :checklist_items, :dependent=>:destroy
+  has_many    :spiders
+  
   MILESTONE_ELIGIBLE_FOR_NOTE = ['M3', 'G2', 'M5', 'G5', 'QG TD', 'M13', 'CCB']
 
   def date

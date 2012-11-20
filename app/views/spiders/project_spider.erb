@@ -32,14 +32,14 @@ $(function () {
 	end
 	projectName += " > "+@project.name
 %>
-<h3>Project : <%= projectName %> - Milestone : <%= @milestone.title %></h3>
+<h3>Project : <%= projectName %> - Milestone : <%= @milestone.name %></h3>
 <h2>Current Spider</h2>
 
 <% if (@spider)%>
 	<p>Creation Date : <%= @spider.created_at %></p>
 	<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_update_spider') do -%>
 	<input type="hidden" name="project_id" id="project_id" value="<%= @currentProjectId %>" />
-	<input type="hidden" name="milestone_name_id" id="milestone_name_id" value="<%= @currentMilestoneNameId %>" />
+	<input type="hidden" name="milestone_id" id="milestone_id" value="<%= @currentMilestoneId %>" />
 	<input type="hidden" name="spider_id" id="spider_id" value="<%= @spider.id %>" />
 	<input type="hidden" name="consolidate_spider" id="consolidate_spider" value="0"  />
 
@@ -140,7 +140,7 @@ $(function () {
 	<p>No data.</p>
 	<% form_tag({:action => "project_spider"}, :method => "get", :id => "form_create_spider") do -%>
 		<input type="hidden" value="<%= @currentProjectId %>" name="project_id" />
-		<input type="hidden" value="<%= @currentMilestoneNameId %>" name="milestone_name_id" />
+		<input type="hidden" value="<%= @currentMilestoneId %>" name="milestone_id" />
 		<input type="hidden" value="1" name="create_spider" />
 		<input type="submit" value="Create new spider" />
 	<% end -%>

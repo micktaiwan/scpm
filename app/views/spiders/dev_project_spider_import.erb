@@ -1,0 +1,9 @@
+<h2>Spider excel import</h2>
+<%= form_tag({:action => 'dev_do_spider_upload'}, :multipart => true) %>
+  <p>
+    <label for="upload_file">Spider excel</label>
+    <%= file_field 'upload', 'datafile' %>
+    <%= submit_tag "Upload" %>
+  </p>
+</form>
+
