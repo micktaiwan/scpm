@@ -16,11 +16,11 @@ class SDP
   REMAINING   = 7
   REVISED     = 8
   GAINED      = 9
-  ITERATION   = 10
-  COLLAB      = 11
-  BALANCEI    = 12
-  BALANCER    = 13
-  BALANCEA    = 14
+  ITERATION   = 11
+  COLLAB      = 12
+  BALANCEI    = 13
+  BALANCER    = 14
+  BALANCEA    = 15
 
 	def initialize(path)
     @path = path
