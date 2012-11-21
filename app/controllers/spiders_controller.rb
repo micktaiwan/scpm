@@ -4,7 +4,7 @@ class SpidersController < ApplicationController
   
   def resolve_layout
      case action_name
-     when "kpi_charts_by_pm_types","kpi_charts_by_axes", "project_spider_import", "do_spider_upload"
+     when "kpi_charts_by_pm_types","kpi_charts_by_axes", "kpi_cumul_charts_by_axes", "kpi_cumul_charts_by_pm_types", "project_spider_import", "do_spider_upload"
        "tools_spider"
      else
        "spider"

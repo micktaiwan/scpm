@@ -217,4 +217,5 @@ function generate_kpi_chart(containerId, chartName, categories, series)
 		},
         series: series
   });
+  return chart;
 }

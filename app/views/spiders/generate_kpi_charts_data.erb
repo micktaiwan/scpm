@@ -1,3 +1,7 @@
+<input type="button" id="export" value="Export all" />
+<SCRIPT language="Javascript">
+	var chartsList = new Array();
+</SCRIPT>
 <% @charts_data.each do |chart_data| %>
 	<h2><%= @titles_data[chart_data[0]].to_s %></h2>
 
@@ -25,9 +29,18 @@
 		
 		// CREATE CHART
 		$(document).ready(function() {
-			generate_kpi_chart("container_<%= chart_data[0].to_s %>", "<%= @titles_data[chart_data[0]].to_s %>", categories, series);
+			chartsList.push(generate_kpi_chart("container_<%= chart_data[0].to_s %>", "<%= @titles_data[chart_data[0]].to_s %>", categories, series));
 	  });
 	</SCRIPT>	
 
 <% end %>
-
+<SCRIPT language="Javascript">
+	$(document).ready(function() {
+		$("#export").click(function() {
+			Highcharts.exportCharts(chartsList,{
+				            type: 'image/png',
+				            filename: 'kpi_export'
+	  	});
+		});
+  });
+</SCRIPT>

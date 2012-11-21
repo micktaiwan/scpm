@@ -1,18 +1,16 @@
 <SCRIPT language="Javascript">
-l_id_save = '<%= @lifecycle_id %>'
-ws_save = '<%= @workstream %>'
-mn_id_save = '<%= @milestone_name_id %>'
-kpi_type = '<%= @kpi_type %>'
-chart_type = '<%= @chart_type %>'
-
-
-url = "/spiders/generate_kpi_charts_data"
-<% if (@chart_type == "cumul") %>
-	url = "/spiders/generate_kpi_cumul_charts_data"
-<% end %>
-
-
 $(document).ready(function(){
+	l_id_save = '<%= @lifecycle_id %>'
+	ws_save = '<%= @workstream %>'
+	mn_id_save = '<%= @milestone_name_id %>'
+	kpi_type = '<%= @kpi_type %>'
+	chart_type = '<%= @chart_type %>'
+
+	url = "/spiders/generate_kpi_charts_data"
+	<% if (@chart_type == "cumul") %>
+		url = "/spiders/generate_kpi_cumul_charts_data"
+	<% end %>
+
 	$("#loading_container").show();
 	$.ajax({
 		url: url,
@@ -26,56 +24,56 @@ $(document).ready(function(){
 	.fail(function() { 
 		$("#loading_container").hide(); 
 	});
-});
 
-function change_lifecycle(lifecycle_id)
-{
-	$("#loading_container").show();
-	l_id_save = lifecycle_id
-	$.ajax({
-	url: url,
-	type: "POST",
-	data: "lifecycle_id="+lifecycle_id+"&workstream="+ws_save+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type+"&chart_type="+chart_type})
-	.done(function(result) { 
-	  $("#charts_list").html(result);
-		$("#loading_container").hide();
-	})
-	.fail(function() { 
-		$("#loading_container").hide(); 
-	});
-}
-function change_workstream(workstream_id)
-{
-	$("#loading_container").show();
-	ws_save = workstream_id
-	$.ajax({
-	url: url,
-	type: "POST",
-	data: "lifecycle_id="+l_id_save+"&workstream="+workstream_id+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type+"&chart_type="+chart_type})
-	.done(function(result) { 
-	  $("#charts_list").html(result);
-		$("#loading_container").hide();
-	})
-	.fail(function() { 
-		$("#loading_container").hide(); 
-	});
-}
-function change_milestone(milestone_id)
-{
-	$("#loading_container").show();
-	mn_id_save = milestone_id
-	$.ajax({
-	url: url,
-	type: "POST",
-	data: "lifecycle_id="+l_id_save+"&workstream="+ws_save+"&milestone_name_id="+milestone_id+"&kpi_type="+kpi_type+"&chart_type="+chart_type})
-	.done(function(result) { 
-	  $("#charts_list").html(result);
-		$("#loading_container").hide();
-	})
-	.fail(function() { 
-		$("#loading_container").hide(); 
-	});
-}
+	change_lifecycle = function(lifecycle_id)
+	{
+		$("#loading_container").show();
+		l_id_save = lifecycle_id
+		$.ajax({
+		url: url,
+		type: "POST",
+		data: "lifecycle_id="+lifecycle_id+"&workstream="+ws_save+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type+"&chart_type="+chart_type})
+		.done(function(result) { 
+		  $("#charts_list").html(result);
+			$("#loading_container").hide();
+		})
+		.fail(function() { 
+			$("#loading_container").hide(); 
+		});
+	}
+	change_workstream = function(workstream_id)
+	{
+		$("#loading_container").show();
+		ws_save = workstream_id
+		$.ajax({
+		url: url,
+		type: "POST",
+		data: "lifecycle_id="+l_id_save+"&workstream="+workstream_id+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type+"&chart_type="+chart_type})
+		.done(function(result) { 
+		  $("#charts_list").html(result);
+			$("#loading_container").hide();
+		})
+		.fail(function() { 
+			$("#loading_container").hide(); 
+		});
+	}
+	change_milestone = function(milestone_id)
+	{
+		$("#loading_container").show();
+		mn_id_save = milestone_id
+		$.ajax({
+		url: url,
+		type: "POST",
+		data: "lifecycle_id="+l_id_save+"&workstream="+ws_save+"&milestone_name_id="+milestone_id+"&kpi_type="+kpi_type+"&chart_type="+chart_type})
+		.done(function(result) { 
+		  $("#charts_list").html(result);
+			$("#loading_container").hide();
+		})
+		.fail(function() { 
+			$("#loading_container").hide(); 
+		});
+	}
+});
 </SCRIPT>
 
 <div id="chart_selectors">
