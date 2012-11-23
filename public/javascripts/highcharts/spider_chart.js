@@ -189,6 +189,8 @@ function generate_kpi_chart(containerId, chartName, categories, series)
             categories: categories
         },
         yAxis: {
+			max: 3,
+			min: 0,
             title: {
                 text: 'Average'
             },
