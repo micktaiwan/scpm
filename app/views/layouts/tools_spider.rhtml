@@ -109,10 +109,10 @@
 		<li><%= link_to('Spider', "", {:class=>menu_style('workstreams','*')}) %>
       <ul>
         <li class="hsep">KPI</li>
-				<li><%= link_to('KPI by PM Types',        {:controller=>'spiders', :action=>'kpi_charts_by_pm_types', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
-        <li><%= link_to('KPI by axes',        {:controller=>'spiders', :action=>'kpi_charts_by_axes', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
-        <li><%= link_to('Cumul KPI by PM Types',        {:controller=>'spiders', :action=>'kpi_cumul_charts_by_pm_types', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
-        <li><%= link_to('Cumul KPI by axes',        {:controller=>'spiders', :action=>'kpi_cumul_charts_by_axes', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
+				<li><%= link_to('KPI by PM Types',        {:controller=>'spider_kpis', :action=>'kpi_charts_by_pm_types', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
+        <li><%= link_to('KPI by axes',        {:controller=>'spider_kpis', :action=>'kpi_charts_by_axes', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
+        <li><%= link_to('Cumul KPI by PM Types',        {:controller=>'spider_kpis', :action=>'kpi_cumul_charts_by_pm_types', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
+        <li><%= link_to('Cumul KPI by axes',        {:controller=>'spider_kpis', :action=>'kpi_cumul_charts_by_axes', :lifecycle_id=>1, :workstream=>0, :milestone_name_id=>0}) %></li>
 	      <li class="hsep">Spider administration</li>
         <li><%= link_to('Import',       						  {:controller=>'spiders', :action=>'project_spider_import'}) %></li>
         <li><%= link_to('Manage Axes',        				{:controller=>'pm_type_axes', :action=>'index'}) %></li>

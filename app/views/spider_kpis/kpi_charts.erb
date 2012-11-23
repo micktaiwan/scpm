@@ -6,9 +6,9 @@ $(document).ready(function(){
 	kpi_type = '<%= @kpi_type %>'
 	chart_type = '<%= @chart_type %>'
 
-	url = "/spiders/generate_kpi_charts_data"
+	url = "/spider_kpis/generate_kpi_charts_data"
 	<% if (@chart_type == "cumul") %>
-		url = "/spiders/generate_kpi_cumul_charts_data"
+		url = "/spider_kpis/generate_kpi_cumul_charts_data"
 	<% end %>
 
 	$("#loading_container").show();
