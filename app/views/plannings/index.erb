@@ -17,7 +17,7 @@ en construction :)<br/>
 <div id='planning'style="width:700px;height:300px;border: 1px solid #AAA;">Loading planning...</div>
 
 <script>
-  planning = new Planning();
+  planning = new Planning('planning', <%= @planning.tasks.to_json %> );
 </script>
 
 <% end %>

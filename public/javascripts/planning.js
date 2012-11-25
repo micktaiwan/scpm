@@ -1,21 +1,26 @@
 var Task = Class.create ({
-  initialize: function(planning, name) {
+  initialize: function(planning, task) {
     this.planning   = planning;
-    this.name       = name
-    this.start_date = Math.random()*200;
-    this.duration   = Math.random()*300;
+    this.name       = task.name
+    this.start_date = new Date(task.start_date);
+    this.duration   = task.duration_in_day;
     },
+
   draw: function (y) {
     this.planning.ctx.fillText(this.name, 2, y+12);
-    this.planning.ctx.fillRect(this.planning.taskTitleSize + this.start_date, y, this.duration, 18);
+    this.planning.ctx.fillRect(this.planning.taskTitleSize, y, this.duration, 18);
     }
 });
 
 var Planning = Class.create({
-  initialize: function(div_id) {
+  initialize: function(div_id,tasks) {
     // Actually start initializing defaults etc.
-    this.div_id         = div_id || "planning";
-    this.taskTitleSize  = 50;
+    this.div_id           = div_id || "planning";
+    this.taskTitleSize    = 150;
+    this.vertLinesSpacing = 50;
+    this.start_date       = new Date();
+    this.end_date         = new Date().getDate()+10;
+    //alert(this.end_date);
 
     // Build up our canvas
     this.canvas        = document.createElement("canvas");
@@ -34,8 +39,9 @@ var Planning = Class.create({
 
     // tasks
     this.tasks = new Array();
-    this.tasks.push(new Task(this, "Task 1"));
-    this.tasks.push(new Task(this, "Task 2"));
+    for(var i=0; i < tasks.length; i++) {
+      this.tasks.push(new Task(this, tasks[i].task));
+      }
 
     // Draw the grid
     this.draw();
@@ -44,13 +50,19 @@ var Planning = Class.create({
   draw: function() {
     this.ctx.fillStyle = "rgba(100, 100, 255, 1)";
     this.ctx.font = "12px Helvetica";
-    this.drawGrid
+    this.drawGrid();
     for(var i=0; i < this.tasks.length; i++) {
       this.tasks[i].draw(1+i*20);
       }
     },
 
   drawGrid: function() {
-
+    this.ctx.lineWidth = 1;
+    for(var i=0; i < this.canvas.width; i+=this.vertLinesSpacing) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.taskTitleSize+i,0);
+      this.ctx.lineTo(this.taskTitleSize+i,this.canvas.height);
+      this.ctx.stroke();
+      }
     }
 });
