@@ -13,4 +13,11 @@ en construction :)<br/>
 <ul>
 <%= render(:partial=>'task', :collection=>@planning.tasks, :as=>:t) %>
 </ul>
+
+<div id='planning'style="width:700px;height:300px;border: 1px solid #AAA;">Loading planning...</div>
+
+<script>
+  planning = new Planning();
+</script>
+
 <% end %>

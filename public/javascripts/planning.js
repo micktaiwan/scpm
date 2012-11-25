@@ -1,19 +1,21 @@
 var Task = Class.create ({
-  initialize: function(planning) {
-    this.planning = planning;
+  initialize: function(planning, name) {
+    this.planning   = planning;
+    this.name       = name
     this.start_date = Math.random()*200;
     this.duration   = Math.random()*300;
     },
   draw: function (y) {
-    this.planning.ctx.fillRect(this.start_date, y, this.duration, 18);
+    this.planning.ctx.fillText(this.name, 2, y+12);
+    this.planning.ctx.fillRect(this.planning.taskTitleSize + this.start_date, y, this.duration, 18);
     }
 });
 
 var Planning = Class.create({
   initialize: function(div_id) {
     // Actually start initializing defaults etc.
-    this.div_id      = div_id || "planning";
-    //this.canvaswidth = 300;
+    this.div_id         = div_id || "planning";
+    this.taskTitleSize  = 50;
 
     // Build up our canvas
     this.canvas        = document.createElement("canvas");
@@ -32,16 +34,23 @@ var Planning = Class.create({
 
     // tasks
     this.tasks = new Array();
-    this.tasks.push(new Task(this));
-    this.tasks.push(new Task(this));
+    this.tasks.push(new Task(this, "Task 1"));
+    this.tasks.push(new Task(this, "Task 2"));
 
     // Draw the grid
     this.draw();
     },
+
   draw: function() {
-    this.ctx.fillStyle = "rgba(100, 100, 255, 0.9)";
+    this.ctx.fillStyle = "rgba(100, 100, 255, 1)";
+    this.ctx.font = "12px Helvetica";
+    this.drawGrid
     for(var i=0; i < this.tasks.length; i++) {
       this.tasks[i].draw(1+i*20);
       }
+    },
+
+  drawGrid: function() {
+
     }
 });

@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   def log_action
     return if controller_name == "chat" and (action_name == "refresh_sessions" or action_name == "refresh")
-    
+
     @action_log                   = Log.new
     # who is doing the activity?
     @action_log.person_id         = session[:user_id]

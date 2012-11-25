@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120827182342) do
+ActiveRecord::Schema.define(:version => 20121124182145) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -258,6 +258,13 @@ ActiveRecord::Schema.define(:version => 20120827182342) do
     t.integer  "person_id"
     t.integer  "role_id"
     t.datetime "created_at"
+  end
+
+  create_table "plannings", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "project_people", :id => false, :force => true do |t|
@@ -582,6 +589,17 @@ ActiveRecord::Schema.define(:version => 20120827182342) do
     t.text     "ws_report"
     t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
     t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.integer  "planning_id"
+    t.string   "name"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.float    "duration_in_day"
+    t.float    "person_nb"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "topics", :force => true do |t|
