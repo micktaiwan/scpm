@@ -14,7 +14,7 @@ en construction :)<br/>
 <%= render(:partial=>'task', :collection=>@planning.tasks, :as=>:t) %>
 </ul>
 
-<div id='planning'style="width:700px;height:300px;border: 1px solid #AAA;">Loading planning...</div>
+<canvas id='planning' width="700px" height="300px">no canvas</canvas>
 
 <script>
   planning = new Planning('planning', <%= @planning.tasks.to_json %> );
