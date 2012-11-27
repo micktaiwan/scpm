@@ -50,106 +50,108 @@ init_charts = function()
 // Called when change in list
 generate_kpi = function()
 {
-	reset_charts();
+	$("#kpi_loading").show("fast",function() {
+		reset_charts();
 	
-	type_id = $("#choose_type").val();
-	lifecycle_id = $("#choose_lifecycle").val();
-	workstream = ""+$("#choose_workstream").val();
-	milestone = $("#choose_milestone").val();
+		type_id = $("#choose_type").val();
+		lifecycle_id = $("#choose_lifecycle").val();
+		workstream = ""+$("#choose_workstream").val();
+		milestone = $("#choose_milestone").val();
 	
-	// Data filter : For each month, filter data with lifecycle/workstream/milestone
-	var value_results = new Array();
+		// Data filter : For each month, filter data with lifecycle/workstream/milestone
+		var value_results = new Array();
 	
-	$.each(kpi_dates, function(key, value) {
-		current_date = value["month"]+"_"+value["year"];
-		current_chart_data = kpi_data[current_date];
-		value_results[current_date] = new Array();
-		if(current_chart_data != null)
+		$.each(kpi_dates, function(key, value) {
+			current_date = value["month"]+"_"+value["year"];
+			current_chart_data = kpi_data[current_date];
+			value_results[current_date] = new Array();
+			if(current_chart_data != null)
+			{
+				$.each(current_chart_data, function(chart_data_key, chart_data_value) {
+					lifecycle_ok = false;
+					if( ((lifecycle_id == 0) || (parseInt(lifecycle_id) == parseInt(chart_data_value["lifecycle"]))) && (chart_data_value["lifecycle"] != "") )
+					{
+						lifecycle_ok = true;
+					}
+			
+					workstream_ok = false;
+					if( ((workstream == 0) || (workstream.toLowerCase() == chart_data_value["workstream"].toLowerCase())) && (chart_data_value["workstream"] != null) )
+					{
+						workstream_ok = true;
+					}
+			
+					milestone_ok = false;			
+					if( ((milestone == 0) || (parseInt(milestone) == parseInt(chart_data_value["milestone"]))) && (chart_data_value["milestone"] != "") )
+					{
+						milestone_ok = true;
+					}			
+		
+					if((lifecycle_ok) && (workstream_ok) && (milestone_ok))
+					{
+						value_results[current_date].push(chart_data_value);
+					}
+				});
+			}	
+		});	
+	
+		// init chart arrays
+		var charts_values_not_cal = new Array();
+		$.each(types, function(key,value) {
+			charts_values_not_cal["type_"+value["id"]] = new Array();
+		});	
+		$.each(axes, function(key,value) {
+			charts_values_not_cal["axe_"+value["id"]] = new Array();
+		});
+	
+		// For each month, add sum and count of different types and axes
+		var last_month = 0;
+		$.each(kpi_dates, function(key, value) 
 		{
-			$.each(current_chart_data, function(chart_data_key, chart_data_value) {
-				lifecycle_ok = false;
-				if( ((lifecycle_id == 0) || (parseInt(lifecycle_id) == parseInt(chart_data_value["lifecycle"]))) && (chart_data_value["lifecycle"] != "") )
-				{
-					lifecycle_ok = true;
-				}
-			
-				workstream_ok = false;
-				if( ((workstream == 0) || (workstream.toLowerCase() == chart_data_value["workstream"].toLowerCase())) && (chart_data_value["workstream"] != null) )
-				{
-					workstream_ok = true;
-				}
-			
-				milestone_ok = false;			
-				if( ((milestone == 0) || (parseInt(milestone) == parseInt(chart_data_value["milestone"]))) && (chart_data_value["milestone"] != "") )
-				{
-					milestone_ok = true;
-				}			
+			current_date = value["month"]+"_"+value["year"];
+			current_chart_data = value_results[current_date];
 		
-				if((lifecycle_ok) && (workstream_ok) && (milestone_ok))
-				{
-					value_results[current_date].push(chart_data_value);
-				}
-			});
-		}	
-	});	
-	
-	// init chart arrays
-	var charts_values_not_cal = new Array();
-	$.each(types, function(key,value) {
-		charts_values_not_cal["type_"+value["id"]] = new Array();
-	});	
-	$.each(axes, function(key,value) {
-		charts_values_not_cal["axe_"+value["id"]] = new Array();
-	});
-	
-	// For each month, add sum and count of different types and axes
-	var last_month = 0;
-	$.each(kpi_dates, function(key, value) 
-	{
-		current_date = value["month"]+"_"+value["year"];
-		current_chart_data = value_results[current_date];
-		
-		$.each(types, function(type_key,type_value) {
-			charts_values_not_cal["type_"+type_value["id"]][current_date] = new Array();
-			charts_values_not_cal["type_"+type_value["id"]][current_date]["sum"] = 0;
-			charts_values_not_cal["type_"+type_value["id"]][current_date]["count"] = 0;
-		});
-		$.each(axes, function(axe_key,axe_value) {
-			charts_values_not_cal["axe_"+axe_value["id"]][current_date] = new Array();
-			charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] = 0;
-			charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] = 0;
-		});
-				
-		// Format data in sum and count
-		$.each(current_chart_data, function(chart_data_key, chart_data_value) {
-			// By type
 			$.each(types, function(type_key,type_value) {
-				if(chart_data_value["type"] == type_value["id"])
-				{
-					charts_values_not_cal["type_"+type_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
-					charts_values_not_cal["type_"+type_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
-				}
+				charts_values_not_cal["type_"+type_value["id"]][current_date] = new Array();
+				charts_values_not_cal["type_"+type_value["id"]][current_date]["sum"] = 0;
+				charts_values_not_cal["type_"+type_value["id"]][current_date]["count"] = 0;
 			});
-			// By Axes
 			$.each(axes, function(axe_key,axe_value) {
-				if(chart_data_value["axe"] == axe_value["id"])
-				{
-					charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
-					charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
-				}
-			});		
+				charts_values_not_cal["axe_"+axe_value["id"]][current_date] = new Array();
+				charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] = 0;
+				charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] = 0;
+			});
+				
+			// Format data in sum and count
+			$.each(current_chart_data, function(chart_data_key, chart_data_value) {
+				// By type
+				$.each(types, function(type_key,type_value) {
+					if(chart_data_value["type"] == type_value["id"])
+					{
+						charts_values_not_cal["type_"+type_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
+						charts_values_not_cal["type_"+type_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
+					}
+				});
+				// By Axes
+				$.each(axes, function(axe_key,axe_value) {
+					if(chart_data_value["axe"] == axe_value["id"])
+					{
+						charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
+						charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
+					}
+				});		
+			});
 		});
-	});
 	
 
-	if(type_id == 1)
-	{
-		kpi_calcul_classic(charts_values_not_cal);
-	}
-	else
-	{
-		kpi_calcul_cumul(charts_values_not_cal);
-	}
+		if(type_id == 1)
+		{
+			kpi_calcul_classic(charts_values_not_cal);
+		}
+		else
+		{
+			kpi_calcul_cumul(charts_values_not_cal);
+		}
+	});
 } 
 
 kpi_calcul_classic = function(charts_data)
@@ -175,6 +177,8 @@ kpi_calcul_classic = function(charts_data)
 			kpi_chart_add_serie(chart_objects[chart_key],serie);
 		}
 	}
+	
+	$("#kpi_loading").hide();
 }
 
 kpi_calcul_cumul = function(charts_data)
@@ -188,13 +192,6 @@ kpi_calcul_cumul = function(charts_data)
 	
 		for(var date_key in charts_data[chart_key])
 		{
-			
-				if(chart_key == "axe_15")
-				{
-					console.log(date_key);
-					console.log(charts_data[chart_key][date_key]["sum"]);
-					console.log(charts_data[chart_key][date_key]["count"]);
-				}
 			if(last_avg == -1)
 			{
 				var temp_avg = 0;
@@ -254,6 +251,8 @@ kpi_calcul_cumul = function(charts_data)
 			kpi_chart_add_serie(chart_objects[chart_key],serie);
 		}
 	}	
+	
+	$("#kpi_loading").hide();
 }
 
 reset_charts = function()
@@ -277,5 +276,22 @@ helper_format_float = function(floatValue)
 
 // Exec
 download_json();
+
+$("#export").click(function() {
+	
+	var chartExportArray = new Array();
+	for(var chartObj in chart_objects)
+	{
+		chartExportArray.push(chart_objects[chartObj]);
+	}
+	/*Highcharts.exportCharts(chartExportArray,{
+		            type: 'image/jpeg',
+		            filename: 'kpi_export'
+	});*/
+	Highcharts.exportCharts(chartExportArray,{
+		            type: 'application/pdf',
+		            filename: 'kpi_export'
+	});
+});
 
 });

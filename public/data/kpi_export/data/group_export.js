@@ -16,7 +16,7 @@ Highcharts.getSVG = function(charts) {
 
         svgArr.push(svg);
     });
-
+	
     return '<svg height="'+ top +'" width="' + width + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' + svgArr.join('') + '</svg>';
 };
 
