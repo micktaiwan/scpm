@@ -31,11 +31,11 @@ class SpiderKpisController < ApplicationController
   end
   
   def kpi_total_export
-    #dataPath = Rails.public_path + "/data"
-    #system("cd #{dataPath} && tar -cvzf #{dataPath}/kpi_export_archive.tar.gz kpi_export/")
-    #system("cd #{dataPath} && zip -9 -r #{dataPath}/kpi_export_archive.zip kpi_export/")
-    
     kpi_total_export_generate()
+    dataPath = Rails.public_path + "/data"
+    # system("cd #{dataPath} && tar -cvzf #{dataPath}/kpi_export.tar.gz kpi_export/")
+    system("cd #{dataPath} && zip -9 -r #{dataPath}/kpi_export_package.zip kpi_export/")
+    @link = "kpi_export_package.zip"
   end
   
   # ------------------------------------------------------------------------------------
@@ -185,6 +185,8 @@ class SpiderKpisController < ApplicationController
       
       query += " GROUP BY MONTH(created_at),YEAR(created_at) 
       ORDER BY YEAR(created_at),MONTH(created_at)";
+      
+      Rails.logger.info(query);
       
       # Analyse return data
       @charts_data[chart_element.id.to_s] = Array.new
@@ -345,14 +347,15 @@ class SpiderKpisController < ApplicationController
             new_c = Array.new
             count_to_divise = cc[1].to_f
             if(count_to_divise == 0)
-              count_to_divise = 1
+              new_c[0] = 0
+            else
+              new_c[0] = cc[0].to_f / count_to_divise
             end
-            new_c[0] = cc[0].to_f / count_to_divise
             last_avg = new_c[0]
             new_c[1] = cc[2]
             new_c[2] = cc[3]
             @charts_data[c[0]] << new_c
-        elsif (cc[0] == 0)
+        elsif (cc[0].to_f == 0)
             new_c = Array.new
             new_c[0] = last_avg
             last_avg = last_avg
@@ -363,9 +366,10 @@ class SpiderKpisController < ApplicationController
             new_c = Array.new
             count_to_divise = cc[1].to_f
             if(count_to_divise == 0)
-              count_to_divise = 1
+              new_c[0] = 0
+            else
+              new_c[0] = cc[0].to_f / count_to_divise
             end
-            new_c[0] = cc[0].to_f / count_to_divise
             last_avg = new_c[0]
             new_c[1] = cc[2]
             new_c[2] = cc[3]
@@ -392,7 +396,7 @@ class SpiderKpisController < ApplicationController
   end
  
  def kpi_total_export_generate
-   dataPath = Rails.public_path + "/data"
+   dataPath = Rails.public_path + "/data/kpi_export/data"
    
    # Get consolidated spiders
    spiders_consolidated = get_spiders_consolidated(nil,nil,nil)

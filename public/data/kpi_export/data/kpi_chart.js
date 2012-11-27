@@ -45,7 +45,15 @@ function generate_kpi_chart(containerId, chartName, categories, series)
 		credits : {
 		  enabled : false
 		},
-        series: series
+        series: [{ name: "Value", data:series}]
   });
   return chart;
+}
+
+function kpi_chart_add_serie(chart,serie)
+{
+	chart.addSeries({
+         name: name,
+         data: serie
+      });
 }

@@ -3,7 +3,10 @@ var kpi_data = new Array();
 var kpi_dates = new Array();
 var axes = new Array();
 var types = new Array();
+var categories = new Array();
+var chart_objects = new Array();
 
+// INIT
 download_json = function()
 {
 	var jqxhr = $.getJSON('http://0.0.0.0:3000/data/kpi_export/data/data.json', function(data) {});
@@ -23,19 +26,38 @@ download_json = function()
 				kpi_data[key] = value;
 			});
 		}
-		
+		init_charts();
 	});
 }
 
+init_charts = function()
+{
+	$.each(kpi_dates, function(key, value) {
+		current_date = value["month"]+"_"+value["year"];
+		categories.push(current_date);
+	});
+	$.each(types, function(key,value) {
+		$("#charts").append('<div id="type_' + value["id"] + '" style="min-width: 400px; height: 400px; margin: 0 auto"></div>');
+		chart_objects["type_" + value["id"]] = generate_kpi_chart("type_" + value["id"], value["title"], categories, [0]);
+	});	
+	$.each(axes, function(key,value) {
+		$("#charts").append('<div id="axe_' + value["id"] + '" style="min-width: 400px; height: 400px; margin: 0 auto"></div>');		
+		chart_objects["axe_" + value["id"]] = generate_kpi_chart("axe_" + value["id"], value["title"], categories, [0]);	
+	});	
+}
+
+
+// Called when change in list
 generate_kpi = function()
 {
+	reset_charts();
+	
 	type_id = $("#choose_type").val();
 	lifecycle_id = $("#choose_lifecycle").val();
 	workstream = ""+$("#choose_workstream").val();
 	milestone = $("#choose_milestone").val();
 	
-	// Data filter
-	var charts_values = new Array();
+	// Data filter : For each month, filter data with lifecycle/workstream/milestone
 	var value_results = new Array();
 	
 	$.each(kpi_dates, function(key, value) {
@@ -68,74 +90,191 @@ generate_kpi = function()
 					value_results[current_date].push(chart_data_value);
 				}
 			});
-		}
-		
+		}	
 	});	
 	
-	// init
-	
+	// init chart arrays
+	var charts_values_not_cal = new Array();
 	$.each(types, function(key,value) {
-		charts_values["type_"+key] = new Array();
+		charts_values_not_cal["type_"+value["id"]] = new Array();
 	});	
 	$.each(axes, function(key,value) {
-		charts_values["axe"+key] = new Array();
+		charts_values_not_cal["axe_"+value["id"]] = new Array();
 	});
 	
+	// For each month, add sum and count of different types and axes
 	var last_month = 0;
-	$.each(kpi_dates, function(key, value) {
+	$.each(kpi_dates, function(key, value) 
+	{
 		current_date = value["month"]+"_"+value["year"];
 		current_chart_data = value_results[current_date];
 		
-		var sum = new Array();
 		$.each(types, function(type_key,type_value) {
-			sum["types_"+type_value["id"]] = 0;
+			charts_values_not_cal["type_"+type_value["id"]][current_date] = new Array();
+			charts_values_not_cal["type_"+type_value["id"]][current_date]["sum"] = 0;
+			charts_values_not_cal["type_"+type_value["id"]][current_date]["count"] = 0;
 		});
-		var count = new Array();
 		$.each(axes, function(axe_key,axe_value) {
-			sum["axe_"+axe_value["id"]] = 0;
+			charts_values_not_cal["axe_"+axe_value["id"]][current_date] = new Array();
+			charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] = 0;
+			charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] = 0;
 		});
-		
+				
+		// Format data in sum and count
 		$.each(current_chart_data, function(chart_data_key, chart_data_value) {
-	
 			// By type
 			$.each(types, function(type_key,type_value) {
 				if(chart_data_value["type"] == type_value["id"])
 				{
-					sum["types_"+type_value["id"]] += helper_format_float(chart_data_value["sum"]);
-					count["types_"+type_value["id"]] += helper_format_float(chart_data_value["count"]);
+					charts_values_not_cal["type_"+type_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
+					charts_values_not_cal["type_"+type_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
 				}
 			});
-	
 			// By Axes
 			$.each(axes, function(axe_key,axe_value) {
 				if(chart_data_value["axe"] == axe_value["id"])
 				{
-					sum["axes_"+axe_value["id"]] += helper_format_float(chart_data_value["sum"]);
-					count["axes_"+axe_value["id"]] += helper_format_float(chart_data_value["count"]);
+					charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
+					charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
 				}
 			});		
 		});
-		//cacul_data(sum,count);
-		console.log(sum);
 	});
 	
-//	console.log(value_results);
+
+	if(type_id == 1)
+	{
+		kpi_calcul_classic(charts_values_not_cal);
+	}
+	else
+	{
+		kpi_calcul_cumul(charts_values_not_cal);
+	}
 } 
 
-cacul_data = function(calculType,value,count,lastValue)
+kpi_calcul_classic = function(charts_data)
 {
+	for(var chart_key in charts_data)
+	{
+		serie = new Array();
+		for(var date_key in charts_data[chart_key])
+		{
+			if(charts_data[chart_key][date_key]["count"] > 0)
+			{
+				serie.push(charts_data[chart_key][date_key]["sum"]/charts_data[chart_key][date_key]["count"]);
+			}
+			else
+			{
+				serie.push(0);
+			}
+		}
+		// Set chart
+		if(serie.length == categories.length)	
+		{
+			// Add series
+			kpi_chart_add_serie(chart_objects[chart_key],serie);
+		}
+	}
+}
+
+kpi_calcul_cumul = function(charts_data)
+{
+	for(var chart_key in charts_data)
+	{
+		serie = new Array();
+		var sum_save = 0;
+	    var count_save = 0;
+	    var last_avg = -1;
+	
+		for(var date_key in charts_data[chart_key])
+		{
+			
+				if(chart_key == "axe_15")
+				{
+					console.log(date_key);
+					console.log(charts_data[chart_key][date_key]["sum"]);
+					console.log(charts_data[chart_key][date_key]["count"]);
+				}
+			if(last_avg == -1)
+			{
+				var temp_avg = 0;
+				if(charts_data[chart_key][date_key]["count"] > 0)
+				{
+					temp_avg = charts_data[chart_key][date_key]["sum"] / charts_data[chart_key][date_key]["count"];
+					last_avg = temp_avg;
+					serie.push(temp_avg);
+				}
+				else
+				{
+					last_avg = 0;
+					serie.push(0);
+				}
+			}
+			else if(charts_data[chart_key][date_key]["sum"] == 0)
+			{
+				serie.push(last_avg);
+			}
+			else if(last_avg == 0)
+			{
+				var temp_avg = 0;
+				if(charts_data[chart_key][date_key]["count"] > 0)
+				{
+					temp_avg = charts_data[chart_key][date_key]["sum"] / charts_data[chart_key][date_key]["count"];
+					last_avg = temp_avg;
+					serie.push(temp_avg);
+				}
+				else
+				{
+					last_avg = 0;
+					serie.push(0);
+				}
+			}
+			else
+			{
+				var temp_avg = sum_save + charts_data[chart_key][date_key]["sum"];
+				var temp_count = count_save + charts_data[chart_key][date_key]["count"];
+				if(temp_count > 0)
+				{
+					serie.push(temp_avg/temp_count);
+					last_avg = temp_avg/temp_count;
+				}
+				else
+				{
+					serie.push(0);
+					last_avg = 0;
+				}
+			}
+			sum_save += charts_data[chart_key][date_key]["sum"];
+			count_save += charts_data[chart_key][date_key]["count"];
+		}
+		// Set chart
+		if(serie.length == categories.length)	
+		{
+			// Add series
+			kpi_chart_add_serie(chart_objects[chart_key],serie);
+		}
+	}	
+}
+
+reset_charts = function()
+{
+	for(var chart_key in chart_objects)
+	{
+		while(chart_objects[chart_key].series.length > 0)
+		    chart_objects[chart_key].series[0].remove(true);		
+	}
 	
 }
 
 helper_format_float = function(floatValue)
 {
-	console.log(floatValue);
 	if((floatValue == null) || (floatValue == "0"))
 	{
 		return 0;
 	}
 	return parseFloat(floatValue);
 }
+
 // Exec
 download_json();
 
