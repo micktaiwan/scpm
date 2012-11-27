@@ -15,24 +15,25 @@ var Task = Class.create ({
     this.start_date       = new Date(task.start_date);
     this.duration         = task.duration_in_day;
     this.vertTitleSpacing = 12;
+    this.taskHeight       = this.planning.taskHeight-2;
     },
 
   draw: function (y) {
     this.planning.ctx.fillText(this.name, 2, y + this.planning.dateHeaderHeight + this.vertTitleSpacing);
     x = this.planning.getTaskX(this);
     limRight =  this.planning.canvas.width -this.planning.canvasEndBorder;
-    if(x > limRight)
+    if(x > limRight) // out of the canvas
       return;
     lim    = this.planning.taskTitleWidth
     length = this.duration*this.planning.pixelsForOneDay;
-    if(x+length < lim) return;
+    if(x+length < lim) return; // out of the canvas
     if(x < lim) {
-      length -= lim-x;
-      x = lim;
+      length -= lim-x; // reduce length
+      x = lim; // do not draw the start of the task that is out of the left limit
       }
-    if(x+length > limRight)
+    if(x+length > limRight) // do not draw the rest of the task that is out the canvas (on the right)
       length -= (x+length - limRight)
-    this.planning.ctx.fillRect(x, y + this.planning.dateHeaderHeight, length, 18);
+    this.planning.ctx.fillRect(x, y + this.planning.dateHeaderHeight, length, this.taskHeight);
     }
 });
 
@@ -48,14 +49,12 @@ var Planning = Class.create({
     this.taskBarMaxWidth    = this.canvas.width - this.taskTitleWidth - this.canvasEndBorder
     this.dateHeaderHeight   = 30;
     this.start_date         = new Date();
-    this.end_date           = new Date(this.start_date.valueOf());
-    this.planningWidthInDay = 60;
-    this.end_date.addDays(this.planningWidthInDay);
-    this.pixelsForOneDay    = this.taskBarMaxWidth / this.planningWidthInDay;
+    this.setPlanningWidthInDay(60);
     this.months             = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     this.mouseCoords        = null; // current mouse coords
     this.fromCoords         = null; // down event ouse coords
     this.mouseState         = null;
+    this.taskHeight         = 20;
     HTMLCanvasElement.prototype.relMouseCoords = this.relMouseCoords;
 
     // tasks
@@ -71,6 +70,15 @@ var Planning = Class.create({
     this.canvas.addEventListener("mousedown", this.onMouseDown, false);
     this.canvas.addEventListener("mouseup",   this.onMouseUp, false);
     this.canvas.addEventListener("mousemove", this.onMouseMove, false);
+    this.canvas.addEventListener("mouseout",  this.onMouseOut, false);
+    },
+
+  setPlanningWidthInDay: function(days) {
+    if(days < 10 || days > 90) return;
+    this.planningWidthInDay = days;
+    this.end_date           = new Date(this.start_date.valueOf());
+    this.end_date.addDays(this.planningWidthInDay);
+    this.pixelsForOneDay    = this.taskBarMaxWidth / this.planningWidthInDay;
     },
 
   draw: function() {
@@ -81,7 +89,7 @@ var Planning = Class.create({
     this.ctx.strokeStyle = "black";
     this.drawGrid();
     for(var i=0; i < this.tasks.length; i++) {
-      this.tasks[i].draw(1+i*20);
+      this.tasks[i].draw(1+i*this.taskHeight);
       }
     },
 
@@ -120,15 +128,35 @@ var Planning = Class.create({
     window.Planning.mouseCoords = this.relMouseCoords(event);
     window.Planning.mouseState = 'up';
     },
+  onMouseOut: function(event) {
+    window.Planning.mouseState = 'up';
+    },
   onMouseMove: function(event) {
     if(window.Planning.mouseState!='down') return;
     window.Planning.mouseCoords = this.relMouseCoords(event);
-    delta = -(window.Planning.mouseCoords.x - window.Planning.fromCoords.x) / window.Planning.pixelsForOneDay;
-    if(Math.abs(delta) < 1) return;
-    window.Planning.start_date.addDays(delta);
-    window.Planning.end_date.addDays(delta);
-    window.Planning.fromCoords = this.relMouseCoords(event);
-    window.Planning.draw();
+    moved = false;
+
+    // tasks translation (horizontal move)
+    delta = (window.Planning.fromCoords.x - window.Planning.mouseCoords.x)*3 / window.Planning.pixelsForOneDay;
+    if(Math.abs(delta) >= 1) {
+      if(delta < 0) delta = Math.ceil(delta);
+      else          delta = Math.floor(delta);
+      window.Planning.start_date.addDays(delta);
+      window.Planning.end_date.addDays(delta);
+      moved = true;
+      }
+    else {
+      // zoom
+      delta = (window.Planning.fromCoords.y - window.Planning.mouseCoords.y)/3;
+      if(Math.abs(delta) >= 1) {
+        window.Planning.setPlanningWidthInDay(window.Planning.planningWidthInDay+delta);
+        moved = true;
+        }
+      }
+    if(moved) {
+      window.Planning.fromCoords = this.relMouseCoords(event);
+      window.Planning.draw();
+      }
     },
 
   relMouseCoords: function (e){
