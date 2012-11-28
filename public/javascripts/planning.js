@@ -16,6 +16,8 @@ var Task = Class.create ({
     this.duration         = task.duration_in_day;
     this.vertTitleSpacing = 12;
     this.taskHeight       = this.planning.taskHeight-2;
+    this.leftCoords       = {x: null, y: null}
+    this.rightCoords      = {x: null, y: null}
     },
 
   draw: function (y) {
@@ -33,6 +35,11 @@ var Task = Class.create ({
       }
     if(x+length > limRight) // do not draw the rest of the task that is out the canvas (on the right)
       length -= (x+length - limRight)
+    // save the coordinates (to be able to get the tasks under the click, for example)
+    this.leftCoords.x  = x;
+    this.leftCoords.y  = y + this.planning.dateHeaderHeight;
+    this.rightCoords.x = x + length;
+    this.rightCoords.y = y + this.planning.dateHeaderHeight + this.taskHeight;
     this.planning.ctx.fillRect(x, y + this.planning.dateHeaderHeight, length, this.taskHeight);
     }
 });
@@ -95,14 +102,17 @@ var Planning = Class.create({
 
   drawGrid: function() {
     this.drawDateHeader();
+    // top horizontal line
     this.ctx.beginPath();
     this.ctx.moveTo(0,this.dateHeaderHeight-0.5);
     this.ctx.lineTo(this.canvas.width-this.canvasEndBorder, this.dateHeaderHeight-0.5);
     this.ctx.stroke();
+    // bottom horizontal line
     this.ctx.beginPath();
     this.ctx.moveTo(0,this.canvas.height-0.5);
     this.ctx.lineTo(this.canvas.width-this.canvasEndBorder, this.canvas.height-0.5);
     this.ctx.stroke();
+    // vertical lines for days
     for(var i=0; i <= this.planningWidthInDay; i++) {
       this.ctx.beginPath();
       this.ctx.moveTo(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.dateHeaderHeight);
