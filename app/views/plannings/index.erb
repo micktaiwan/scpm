@@ -1,23 +1,20 @@
-en construction :)<br/>
-<br/>
 <%= link_to('New planning', {:action=>'new'}, {:class=>'btnlnk'}) %>
 
 <ul>
-<%= render(:partial=>'planning', :collection=>@plannings, :as=>:p) %>
+  <%= render(:partial=>'planning', :collection=>@plannings, :as=>:p) %>
 </ul>
 
 <% if @planning %>
-<h2><%= @planning.name %></h2>
-<%= link_to('New task', {:controller=>:tasks, :action=>'new', :id=>@planning.id}, {:class=>'btnlnk'}) %>
+  <h2><%= @planning.name %></h2>
+  <%= link_to('New task', {:controller=>:tasks, :action=>'new', :id=>@planning.id}, {:class=>'btnlnk'}) %>
 
-<ul>
-<%= render(:partial=>'task', :collection=>@planning.tasks, :as=>:t) %>
-</ul>
+  <ul>
+    <%= render(:partial=>'task', :collection=>@planning.tasks, :as=>:t) %>
+  </ul>
 
-<canvas id='planning' width="800px" height="300px">no canvas</canvas>
+  <canvas id='planning' width="800px" height="300px">no canvas</canvas>
 
-<script>
-  planning = new Planning('planning', <%= @planning.tasks.to_json %> );
-</script>
-
+  <script>
+    planning = new Planning('planning', <%= @planning.tasks.to_json %> );
+  </script>
 <% end %>

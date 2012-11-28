@@ -4,15 +4,14 @@ class PlanningsController < ApplicationController
 
   def index
     @plannings = Planning.all
-    id = params[:id]
-    if id
-      @planning = Planning.find(id)
-    end
+    id         = params[:id]
+    @planning  = Planning.find(id) if id
   end
 
   def new
-    Planning.create(:name=>'test')
-    render(:text=>'ok')
+    # TODO
+    Planning.create(:name=>'eLogbook')
+    redirect_to :action=>'index'
   end
 
 end

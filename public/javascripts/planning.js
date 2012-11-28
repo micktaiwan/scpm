@@ -16,12 +16,16 @@ var Task = Class.create ({
     this.duration         = task.duration_in_day;
     this.vertTitleSpacing = 12;
     this.taskHeight       = this.planning.taskHeight-2;
-    this.leftCoords       = {x: null, y: null}
-    this.rightCoords      = {x: null, y: null}
+    this.leftCoords       = {x: null, y: null} // top left
+    this.rightCoords      = {x: null, y: null} // bottom right
+    this.titleColor       = 'blue';
+    this.setMouseOutShape();
     },
 
   draw: function (y) {
+    this.planning.ctx.fillStyle   = this.titleColor;
     this.planning.ctx.fillText(this.name, 2, y + this.planning.dateHeaderHeight + this.vertTitleSpacing);
+    //this.drawTitle(y);
     x = this.planning.getTaskX(this);
     limRight =  this.planning.canvas.width -this.planning.canvasEndBorder;
     if(x > limRight) // out of the canvas
@@ -40,7 +44,30 @@ var Task = Class.create ({
     this.leftCoords.y  = y + this.planning.dateHeaderHeight;
     this.rightCoords.x = x + length;
     this.rightCoords.y = y + this.planning.dateHeaderHeight + this.taskHeight;
+
+    this.planning.ctx.fillStyle   = this.color;
     this.planning.ctx.fillRect(x, y + this.planning.dateHeaderHeight, length, this.taskHeight);
+    },
+  drawTitle: function(y) {
+    // var input   = document.createElement("input");
+    // input.top   = y;
+    // input.value = this.name;
+    },
+  reactToMouseOver: function(coords) {
+    if(coords.x < this.leftCoords.x || coords.x > this.rightCoords.x || coords.y < this.leftCoords.y || coords.y > this.rightCoords.y) {
+      this.setMouseOutShape();
+      return false;
+      }
+    else {
+      this.setMouseInShape();
+      return true;
+      }
+    },
+  setMouseInShape: function() {
+    this.color = "rgba(100, 100, 255, 1.0)";
+    },
+  setMouseOutShape: function() {
+    this.color = "rgba(100, 100, 255, 0.9)";
     }
 });
 
@@ -131,23 +158,39 @@ var Planning = Class.create({
     },
 
   onMouseDown: function(event) {
-    window.Planning.fromCoords = this.relMouseCoords(event);
-    window.Planning.mouseState = 'down';
+    window.Planning.fromCoords  = this.relMouseCoords(event);
+    window.Planning.mouseState  = 'down';
     },
+
   onMouseUp: function(event) {
     window.Planning.mouseCoords = this.relMouseCoords(event);
-    window.Planning.mouseState = 'up';
+    window.Planning.mouseState  = 'up';
     },
+
   onMouseOut: function(event) {
-    window.Planning.mouseState = 'up';
+    window.Planning.mouseState  = 'up';
     },
+
+  mouseOver: function(coords) {
+    // rv = false;
+    for(var i=0; i < this.tasks.length; i++) {
+      // rv = rv || this.tasks[i].reactToMouseOver(coords);
+      this.tasks[i].reactToMouseOver(coords);
+      }
+    //if(rv)
+    this.draw();
+    },
+
   onMouseMove: function(event) {
-    if(window.Planning.mouseState!='down') return;
+    if(window.Planning.mouseState!='down') {
+      window.Planning.mouseOver(this.relMouseCoords(event));
+      return;
+      }
     window.Planning.mouseCoords = this.relMouseCoords(event);
     moved = false;
 
     // tasks translation (horizontal move)
-    delta = (window.Planning.fromCoords.x - window.Planning.mouseCoords.x)*3 / window.Planning.pixelsForOneDay;
+    delta = (window.Planning.fromCoords.x - window.Planning.mouseCoords.x)*1.1 / window.Planning.pixelsForOneDay;
     if(Math.abs(delta) >= 1) {
       if(delta < 0) delta = Math.ceil(delta);
       else          delta = Math.floor(delta);
@@ -157,7 +200,7 @@ var Planning = Class.create({
       }
     else {
       // zoom
-      delta = (window.Planning.fromCoords.y - window.Planning.mouseCoords.y)/3;
+      delta = (window.Planning.mouseCoords.y - window.Planning.fromCoords.y) / 3;
       if(Math.abs(delta) >= 1) {
         window.Planning.setPlanningWidthInDay(window.Planning.planningWidthInDay+delta);
         moved = true;

@@ -1,1 +1,5 @@
-<li><%= link_to(t.name) %>: <%= t.start_date %><li>
+<li>
+  <%= link_to(t.name) %>
+  <%= t.start_date %> => <%= t.end_date %>
+  (<%= t.duration_in_day %> days)
+<li>
