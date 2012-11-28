@@ -33,6 +33,11 @@ class SpiderKpisController < ApplicationController
   def kpi_total_export
     kpi_total_export_generate()
     dataPath = Rails.public_path + "/data"
+    
+    if(FileTest.exists?("#{@dataPath}/kpi_export_package.zip"))
+      File.delete("#{dataPath}/kpi_export_package.zip") 
+    end
+    
     # system("cd #{dataPath} && tar -cvzf #{dataPath}/kpi_export.tar.gz kpi_export/")
     system("cd #{dataPath} && zip -9 -r #{dataPath}/kpi_export_package.zip kpi_export/")
     @link = "kpi_export_package.zip"

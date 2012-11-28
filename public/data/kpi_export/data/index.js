@@ -9,7 +9,7 @@ var chart_objects = new Array();
 // INIT
 download_json = function()
 {
-	var jqxhr = $.getJSON('http://0.0.0.0:3000/data/kpi_export/data/data.json', function(data) {});
+	var jqxhr = $.getJSON('data/data.json?callback=?', function(data) {});
 	jqxhr.complete(function(data){ 
 		var obj = $.parseJSON(data.responseText);
 		// Dates

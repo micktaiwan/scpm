@@ -45,6 +45,9 @@ function generate_kpi_chart(containerId, chartName, categories, series)
 		credits : {
 		  enabled : false
 		},
+		exporting : {
+			url : "http://toulouse.sqli.com/eisq-portal/export_image/index.php"
+		},
         series: [{ name: "Value", data:series}]
   });
   return chart;

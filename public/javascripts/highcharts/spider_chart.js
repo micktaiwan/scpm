@@ -147,6 +147,9 @@ function generate_spider_chart(chartId,chartName,xAxisArray,serie1,serie2)
 	    credits : {
 		  enabled : false
 		},
+		exporting : {
+			url : "http://toulouse.sqli.com/eisq-portal/export_image/index.php"
+		},
 	    series: [{
 	        name: 'Note',
 	        color: '#0E13FF',
@@ -216,6 +219,9 @@ function generate_kpi_chart(containerId, chartName, categories, series)
         },
 		credits : {
 		  enabled : false
+		},
+		exporting : {
+			url : "http://toulouse.sqli.com/eisq-portal/export_image/index.php"
 		},
         series: series
   });
