@@ -30,7 +30,7 @@ end
 <tr style="<%= background_color_css %>" class='<%= request_reminder.sanitized_status %>'>
 	<td><%= request_reminder.request_id.to_i %></td>
 	<td><%= request_reminder.workstream %></td>
-	<td><%=link_to(request_reminder.summary, "https://sqli.steering-project.com/mantis/view.php?id=#{request_reminder.request_id}")%></td>
+	<td><%=link_to(request_reminder.summary, "http://toulouse.sqli.com/EMN/view.php?id=#{request_reminder.request_id}")%></td>
 	<td><%= request_reminder.pm %></td><td><%= request_reminder.work_package %></td>
 	<td><%= request_reminder.milestone %></td>
 	<td><b><%= request_reminder.status %></b></td>
