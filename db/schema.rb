@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120827182342) do
+ActiveRecord::Schema.define(:version => 20121129140025) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(:version => 20120827182342) do
     t.text     "deliverable_list"
     t.string   "accountable"
     t.string   "deployment"
-    t.date     "launching_date"
+    t.date     "launching_date_ddmmyyyy"
     t.date     "sqli_validation_date_objective"
     t.date     "airbus_validation_date_objective"
     t.date     "deployment_date_objective"
