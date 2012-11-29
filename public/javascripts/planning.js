@@ -1,11 +1,14 @@
+// TODO: rallonger les durées d'autant que contient de jours fériés (d'abord week-ends, puis gérer les jours chômés)
+// TODO: colorer les week-ends
+// TODO: rendre plus visuel les dates de début et fin de tâches
 Date.prototype.addDays = function(days) {
   this.setDate(this.getDate()+days);
   };
 
 Date.prototype.diffInDays = function(d2) {
-  var t2 = d2.getTime();
   var t1 = this.getTime();
-  return parseInt((t2-t1)/(24*3600*1000));
+  var t2 = d2.getTime();
+  return Math.ceil((t2-t1)/(24*3600*1000));
   };
 
 var Task = Class.create ({
@@ -83,6 +86,7 @@ var Planning = Class.create({
     this.taskBarMaxWidth    = this.canvas.width - this.taskTitleWidth - this.canvasEndBorder
     this.dateHeaderHeight   = 30;
     this.start_date         = new Date();
+    this.start_date.addDays(-10);
     this.setPlanningWidthInDay(60);
     this.months             = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     this.mouseCoords        = null; // current mouse coords
@@ -230,8 +234,8 @@ var Planning = Class.create({
 
   // given a task, return the absolute task abscissa (in pixels)
   getTaskX: function(task) {
-    days = this.start_date.diffInDays(task.start_date) * this.pixelsForOneDay;
-    return this.taskTitleWidth + days;
+    days_in_pixels = (this.start_date.diffInDays(task.start_date)) * this.pixelsForOneDay;
+    return this.taskTitleWidth + days_in_pixels;
     }
 
 });

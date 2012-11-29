@@ -10,4 +10,16 @@ class TasksController < ApplicationController
     redirect_to :controller=>'plannings', :action=>'index', :id=>id
   end
 
+  def edit
+  	id = params[:id]
+  	@task = Task.find(id)
+  end
+
+  def update
+    t = Task.find(params[:id])
+    t.update_attributes(params[:task])
+    redirect_to "/plannings/index/#{t.planning_id}"
+  end
+
+
 end
