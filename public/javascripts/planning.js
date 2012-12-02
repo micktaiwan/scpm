@@ -94,6 +94,7 @@ var Planning = Class.create({
     this.mouseState         = null;
     this.taskHeight         = 20;
     this.weekendColor       = 'gray';
+    this.todayColor         = 'yellow';
     HTMLCanvasElement.prototype.relMouseCoords = this.relMouseCoords;
 
     // tasks
@@ -134,6 +135,9 @@ var Planning = Class.create({
 
   drawGrid: function() {
     var current_date = new Date(this.start_date);
+    var today        = new Date();
+    current_date.setHours(0,0,0,0);
+    today.setHours(0,0,0,0);
     this.drawDateHeader();
     // top horizontal line
     this.ctx.beginPath();
@@ -152,8 +156,14 @@ var Planning = Class.create({
       this.ctx.lineTo(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.canvas.height);
       this.ctx.stroke();
       var current_day = current_date.getDay();
+      // drawing week-ends
       if(current_day==6 || current_day==0) {
         this.ctx.fillStyle   = this.weekendColor;
+        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height);
+        }
+      // drawing today
+      if(current_date.getTime()==today.getTime()) {
+        this.ctx.fillStyle   = this.todayColor;
         this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height);
         }
       current_date.addDays(1);
