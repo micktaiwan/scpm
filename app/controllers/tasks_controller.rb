@@ -21,5 +21,11 @@ class TasksController < ApplicationController
     redirect_to "/plannings/index/#{t.planning_id}"
   end
 
+  def destroy
+    @task = Task.find(params[:id])
+    planning_id = @task.planning_id
+    @task.destroy
+    redirect_to "/plannings/index/#{planning_id}"
+  end
 
 end
