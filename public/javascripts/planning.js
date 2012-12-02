@@ -88,32 +88,40 @@ var Task = Class.create ({
     }
 });
 
+
+
+//=============================================================================
+//=============================================================================
+//=============================================================================
+
 var Planning = Class.create({
   initialize: function(canvas_id, tasks, teamSize) {
     // initialize defaults, etc.
-    window.Planning         = this; // define this class global, so it is accessible from event handlers
-    // TODO teamSize
-    this.teamSize           = teamSize || new Array(10);
-    this.canvas_id          = canvas_id || "planning";
-    this.canvas             = $(this.canvas_id);
-    this.ctx                = this.canvas.getContext("2d");
-    this.taskTitleWidth     = 150;
-    this.tasksHeight        = 200;
-    this.dateHeaderHeight   = 30;
+    window.Planning          = this; // define this class global, so it is accessible from event handlers
+    this.canvas_id           = canvas_id || "planning";
+    this.canvas              = $(this.canvas_id);
+    this.canvas.width        = window.screen.width - this.canvas.offsetLeft - 20;
+    this.canvas.height       = 400;
+    this.ctx                 = this.canvas.getContext("2d");
+    this.teamSize            = teamSize || new Array(10);
+    this.taskTitleWidth      = 150;
+    this.tasksHeight         = 250;
+    this.dateHeaderHeight    = 30;
     this.tasksHeightAbsolute = this.dateHeaderHeight + this.tasksHeight - 0.5;
-    this.canvasEndBorder    = 25;
-    this.taskBarMaxWidth    = this.canvas.width - this.taskTitleWidth - this.canvasEndBorder
-    this.start_date         = new Date();
+    this.canvasEndBorder     = 25;
+    this.taskBarMaxWidth     = this.canvas.width - this.taskTitleWidth - this.canvasEndBorder
+    this.start_date          = new Date();
     this.start_date.addDays(-10);
     this.setPlanningWidthInDay(60);
-    this.months             = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    this.mouseCoords        = null; // current mouse coords
-    this.fromCoords         = null; // down event ouse coords
-    this.mouseState         = null;
-    this.taskHeight         = 20;
-    this.weekendColor       = 'gray';
-    this.todayColor         = 'yellow';
-    this.teamSizeColor      = 'blue';
+    this.months              = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    this.mouseCoords         = null; // current mouse coords
+    this.fromCoords          = null; // down event ouse coords
+    this.mouseOverCoords     = null; // every time the mouse moves
+    this.mouseState          = null;
+    this.taskHeight          = 20;
+    this.weekendColor        = 'gray';
+    this.todayColor          = 'yellow';
+    this.teamSizeColor       = 'blue';
     HTMLCanvasElement.prototype.relMouseCoords = this.relMouseCoords;
 
     // tasks
@@ -133,7 +141,7 @@ var Planning = Class.create({
     },
 
   setPlanningWidthInDay: function(days) {
-    if(days < 10 || days > 90) return;
+    if(days < 15 || days > 120) return;
     this.planningWidthInDay = days;
     this.end_date           = new Date(this.start_date.valueOf());
     this.end_date.addDays(this.planningWidthInDay);
@@ -145,7 +153,6 @@ var Planning = Class.create({
     this.ctx.fillStyle   = "rgba(100, 100, 255, 1.0)";
     this.ctx.font        = "12px Helvetica";
     this.ctx.lineWidth   = 1;
-    this.ctx.strokeStyle = "black";
     this.drawGrid();
     for(var i=0; i < this.tasks.length; i++) {
       this.tasks[i].draw(1+i*this.taskHeight);
@@ -166,6 +173,7 @@ var Planning = Class.create({
     // bottom horizontal line
     this.drawLine(0,this.canvas.height-0.5, this.canvas.width-this.canvasEndBorder, this.canvas.height-0.5)
     // vertical lines for days
+    this.ctx.strokeStyle = "black";
     for(var i=0; i <= this.planningWidthInDay; i++) {
       this.drawLine(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.dateHeaderHeight, this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.tasksHeightAbsolute)
       var current_day = current_date.getDay();
@@ -180,6 +188,17 @@ var Planning = Class.create({
         this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.tasksHeight-1);
         }
       current_date.addDays(1);
+      }
+    // mouse position
+    if(this.mouseOverCoords) {
+      x = this.mouseOverCoords.x-0.5
+      if(x > this.taskTitleWidth && x < (this.canvas.width - this.canvasEndBorder)) {
+        this.ctx.strokeStyle = "black";
+        this.drawLine(x,this.dateHeaderHeight-10, x, this.canvas.height-0.5)
+        date = this.getDateForX(x);
+        if(date)
+          this.ctx.fillText(this.myDateFormat(date), x-15, 20);
+        }
       }
     },
 
@@ -254,16 +273,17 @@ var Planning = Class.create({
     },
 
   onMouseMove: function(event) {
+    window.Planning.mouseOverCoords  = this.relMouseCoords(event);
     if(window.Planning.mouseState!='down') {
       window.Planning.mouseOver(this.relMouseCoords(event));
       return;
       }
-    window.Planning.mouseCoords = this.relMouseCoords(event);
     moved = false;
 
-    // tasks translation (horizontal move)
+    window.Planning.mouseCoords = this.relMouseCoords(event);
     delta = (window.Planning.fromCoords.x - window.Planning.mouseCoords.x)*1.1 / window.Planning.pixelsForOneDay;
     if(Math.abs(delta) >= 1) {
+      // tasks translation (horizontal move)
       if(delta < 0) delta = Math.ceil(delta);
       else          delta = Math.floor(delta);
       window.Planning.start_date.addDays(delta);
@@ -271,7 +291,7 @@ var Planning = Class.create({
       moved = true;
       }
     else {
-      // zoom
+      // zoom (vertical move)
       delta = (window.Planning.mouseCoords.y - window.Planning.fromCoords.y) / 3;
       if(Math.abs(delta) >= 1) {
         window.Planning.setPlanningWidthInDay(window.Planning.planningWidthInDay+delta);
@@ -304,6 +324,15 @@ var Planning = Class.create({
   getTaskX: function(task) {
     days_in_pixels = (this.start_date.diffInDays(task.start_date)) * this.pixelsForOneDay;
     return this.taskTitleWidth + days_in_pixels;
+    },
+
+  // given a abcissa, return the day
+  getDateForX: function(x) {
+    if(x < this.taskTitleWidth)
+      return null;
+    date = new Date(this.start_date)
+    date.addDays(Math.floor(((x-this.taskTitleWidth) / this.pixelsForOneDay)));
+    return date;
     },
 
   drawLine: function(x,y,a,b) {

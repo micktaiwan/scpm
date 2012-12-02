@@ -12,7 +12,7 @@
     <%= render(:partial=>'task', :collection=>@planning.tasks, :as=>:t) %>
   </ul>
 
-  <canvas id='planning' width="800px" height="300px">no canvas</canvas>
+  <canvas id='planning'>no canvas</canvas>
 
   <script>
     planning = new Planning('planning', <%= @planning.tasks.to_json %>, <%= @planning.team_size_array.to_json %>);

@@ -1,6 +1,6 @@
 class Planning < ActiveRecord::Base
 
-  has_many :tasks
+  has_many :tasks, :order=>"start_date, end_date"
 
   # construct an array of nb of person needed (CMMI PP12)
   def team_size_array
@@ -19,7 +19,7 @@ class Planning < ActiveRecord::Base
   def get_team_size_for_day(date)
     rv = 0
     self.tasks.each { |t|
-      rv += 1 if date >= t.start_date and date < t.end_date
+      rv += ((t.team_size / 0.1).round)*0.1 if date >= t.start_date and date < t.end_date
       }
     rv
   end
