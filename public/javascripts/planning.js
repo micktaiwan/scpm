@@ -1,4 +1,4 @@
-// TODO: colorer les week-ends
+// TODO: begin real work : calculate and graph needed team size
 // TODO: rendre plus visuel les dates de début et fin de tâches
 Date.prototype.addDays = function(days) {
   this.setDate(this.getDate()+days);
@@ -67,7 +67,7 @@ var Task = Class.create ({
       }
     },
   setMouseInShape: function() {
-    this.color = "rgba(100, 100, 255, 1.0)";
+    this.color = "rgba(50, 50, 200, 1.0)";
     },
   setMouseOutShape: function() {
     this.color = "rgba(100, 100, 255, 0.9)";
@@ -76,15 +76,17 @@ var Task = Class.create ({
 
 var Planning = Class.create({
   initialize: function(canvas_id,tasks) {
-    // Actually start initializing defaults etc.
+    // initialize defaults, etc.
     window.Planning         = this; // define this class global, so it is accessible from event handlers
     this.canvas_id          = canvas_id || "planning";
     this.canvas             = $(this.canvas_id);
     this.ctx                = this.canvas.getContext("2d");
     this.taskTitleWidth     = 150;
+    this.tasksHeight        = 200;
+    this.dateHeaderHeight   = 30;
+    this.tasksHeightAbsolute = this.dateHeaderHeight + this.tasksHeight - 0.5;
     this.canvasEndBorder    = 25;
     this.taskBarMaxWidth    = this.canvas.width - this.taskTitleWidth - this.canvasEndBorder
-    this.dateHeaderHeight   = 30;
     this.start_date         = new Date();
     this.start_date.addDays(-10);
     this.setPlanningWidthInDay(60);
@@ -106,7 +108,7 @@ var Planning = Class.create({
     // Draw the grid
     this.draw();
 
-    // listen to the mouse clicks
+    // listen to mouse
     this.canvas.addEventListener("mousedown", this.onMouseDown, false);
     this.canvas.addEventListener("mouseup",   this.onMouseUp, false);
     this.canvas.addEventListener("mousemove", this.onMouseMove, false);
@@ -131,6 +133,7 @@ var Planning = Class.create({
     for(var i=0; i < this.tasks.length; i++) {
       this.tasks[i].draw(1+i*this.taskHeight);
       }
+    this.drawTeamSize();
     },
 
   drawGrid: function() {
@@ -141,21 +144,23 @@ var Planning = Class.create({
     this.drawDateHeader();
     // top horizontal line
     this.drawLine(0,this.dateHeaderHeight-0.5, this.canvas.width-this.canvasEndBorder, this.dateHeaderHeight-0.5)
+    // tasks bottom horizontal line
+    this.drawLine(0,this.tasksHeightAbsolute, this.canvas.width-this.canvasEndBorder, this.tasksHeightAbsolute)
     // bottom horizontal line
     this.drawLine(0,this.canvas.height-0.5, this.canvas.width-this.canvasEndBorder, this.canvas.height-0.5)
     // vertical lines for days
     for(var i=0; i <= this.planningWidthInDay; i++) {
-      this.drawLine(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.dateHeaderHeight, this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.canvas.height)
+      this.drawLine(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.dateHeaderHeight, this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.tasksHeightAbsolute)
       var current_day = current_date.getDay();
       // drawing week-ends
       if(current_day==6 || current_day==0) {
         this.ctx.fillStyle   = this.weekendColor;
-        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height-this.dateHeaderHeight-1);
+        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.tasksHeight-1);
         }
       // drawing today
       if(current_date.getTime()==today.getTime()) {
         this.ctx.fillStyle   = this.todayColor;
-        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height-this.dateHeaderHeight-1);
+        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.tasksHeight-1);
         }
       current_date.addDays(1);
       }
@@ -165,6 +170,17 @@ var Planning = Class.create({
     this.ctx.fillText(this.myDateFormat(this.start_date), this.taskTitleWidth-15, 20);
     this.ctx.fillText(this.myDateFormat(this.end_date), this.canvas.width-this.canvasEndBorder - 15, 20);
     },
+
+  drawTeamSize: function() {
+    // horizontal lines for each day
+    // TODO: get data for day from server and stop this random stuff :)
+    r = Math.floor(this.tasksHeightAbsolute + Math.random(1)*50)-0.5;
+    for(var i=0; i <= this.planningWidthInDay; i++) {
+      r += Math.floor(Math.random(1)*10-5);
+      this.drawLine(this.taskTitleWidth+i*this.pixelsForOneDay, r, this.taskTitleWidth+(i+1)*this.pixelsForOneDay, r);
+      }
+    },
+
 
   myDateFormat: function(date) {
     return date.getDate() + '-' + this.months[date.getMonth()];
