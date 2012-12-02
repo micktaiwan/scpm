@@ -1,4 +1,3 @@
-// TODO: rallonger les durées d'autant que contient de jours fériés (d'abord week-ends, puis gérer les jours chômés)
 // TODO: colorer les week-ends
 // TODO: rendre plus visuel les dates de début et fin de tâches
 Date.prototype.addDays = function(days) {
@@ -16,7 +15,8 @@ var Task = Class.create ({
     this.planning         = planning;
     this.name             = task.name
     this.start_date       = new Date(task.start_date);
-    this.duration         = task.duration_in_day;
+    this.end_date         = new Date(task.end_date)
+    this.work_in_day      = task.work_in_day;
     this.vertTitleSpacing = 12;
     this.taskHeight       = this.planning.taskHeight-2;
     this.leftCoords       = {x: null, y: null} // top left
@@ -34,7 +34,7 @@ var Task = Class.create ({
     if(x > limRight) // out of the canvas
       return;
     lim    = this.planning.taskTitleWidth
-    length = this.duration*this.planning.pixelsForOneDay;
+    length = (this.start_date.diffInDays(this.end_date)) * this.planning.pixelsForOneDay;
     if(x+length < lim) return; // out of the canvas
     if(x < lim) {
       length -= lim-x; // reduce length
@@ -93,6 +93,7 @@ var Planning = Class.create({
     this.fromCoords         = null; // down event ouse coords
     this.mouseState         = null;
     this.taskHeight         = 20;
+    this.weekendColor       = 'gray';
     HTMLCanvasElement.prototype.relMouseCoords = this.relMouseCoords;
 
     // tasks
@@ -132,6 +133,7 @@ var Planning = Class.create({
     },
 
   drawGrid: function() {
+    var current_date = new Date(this.start_date);
     this.drawDateHeader();
     // top horizontal line
     this.ctx.beginPath();
@@ -149,6 +151,12 @@ var Planning = Class.create({
       this.ctx.moveTo(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.dateHeaderHeight);
       this.ctx.lineTo(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.canvas.height);
       this.ctx.stroke();
+      var current_day = current_date.getDay();
+      if(current_day==6 || current_day==0) {
+        this.ctx.fillStyle   = this.weekendColor;
+        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height);
+        }
+      current_date.addDays(1);
       }
     },
 
