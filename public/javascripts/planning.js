@@ -140,21 +140,12 @@ var Planning = Class.create({
     today.setHours(0,0,0,0);
     this.drawDateHeader();
     // top horizontal line
-    this.ctx.beginPath();
-    this.ctx.moveTo(0,this.dateHeaderHeight-0.5);
-    this.ctx.lineTo(this.canvas.width-this.canvasEndBorder, this.dateHeaderHeight-0.5);
-    this.ctx.stroke();
+    this.drawLine(0,this.dateHeaderHeight-0.5, this.canvas.width-this.canvasEndBorder, this.dateHeaderHeight-0.5)
     // bottom horizontal line
-    this.ctx.beginPath();
-    this.ctx.moveTo(0,this.canvas.height-0.5);
-    this.ctx.lineTo(this.canvas.width-this.canvasEndBorder, this.canvas.height-0.5);
-    this.ctx.stroke();
+    this.drawLine(0,this.canvas.height-0.5, this.canvas.width-this.canvasEndBorder, this.canvas.height-0.5)
     // vertical lines for days
     for(var i=0; i <= this.planningWidthInDay; i++) {
-      this.ctx.beginPath();
-      this.ctx.moveTo(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.dateHeaderHeight);
-      this.ctx.lineTo(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.canvas.height);
-      this.ctx.stroke();
+      this.drawLine(this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.dateHeaderHeight, this.taskTitleWidth+i*this.pixelsForOneDay-0.5,this.canvas.height)
       var current_day = current_date.getDay();
       // drawing week-ends
       if(current_day==6 || current_day==0) {
@@ -254,6 +245,13 @@ var Planning = Class.create({
   getTaskX: function(task) {
     days_in_pixels = (this.start_date.diffInDays(task.start_date)) * this.pixelsForOneDay;
     return this.taskTitleWidth + days_in_pixels;
+    },
+
+  drawLine: function(x,y,a,b) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x,y);
+    this.ctx.lineTo(a,b);
+    this.ctx.stroke();
     }
 
 });
