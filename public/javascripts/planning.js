@@ -51,26 +51,40 @@ var Task = Class.create ({
     this.planning.ctx.fillStyle   = this.color;
     this.planning.ctx.fillRect(x, y + this.planning.dateHeaderHeight, length, this.taskHeight);
     },
+
   drawTitle: function(y) {
     // var input   = document.createElement("input");
     // input.top   = y;
     // input.value = this.name;
     },
-  reactToMouseOver: function(coords) {
+
+  reactToMouseOver: function(coords, alreadyIn) {
     if(coords.x < this.leftCoords.x || coords.x > this.rightCoords.x || coords.y < this.leftCoords.y || coords.y > this.rightCoords.y) {
-      this.setMouseOutShape();
+      this.setMouseOutShape(alreadyIn);
       return false;
       }
     else {
-      this.setMouseInShape();
+      if(coords.x > this.rightCoords.x - 10)
+        this.setMouseEndTaskShape();
+      else
+        this.setMouseInShape();
       return true;
       }
     },
+
   setMouseInShape: function() {
     this.color = "rgba(50, 50, 200, 1.0)";
+    document.body.style.cursor = 'default';
     },
-  setMouseOutShape: function() {
+
+  setMouseEndTaskShape: function() {
+    this.color = "rgba(200, 0, 200, 1.0)";
+    document.body.style.cursor = 'e-resize';
+    },
+
+  setMouseOutShape: function(alreadyIn) {
     this.color = "rgba(100, 100, 255, 0.9)";
+    if(!alreadyIn) document.body.style.cursor = 'default';
     }
 });
 
@@ -179,12 +193,18 @@ var Planning = Class.create({
     this.ctx.fillStyle   = this.teamSizeColor;
     date = new Date(this.start_date);
     date.setHours(0,0,0,0);
+    current_nb = 0;
     for(var i=0; i <= this.planningWidthInDay; i++) {
       date_str = date.getFullYear() + "-" + this.padStr(date.getMonth()+1) + "-" + this.padStr(date.getDate());
-      nb = this.getTeamSize(date_str);
-      height   = this.canvas.height - nb*10;
+      nb       = this.getTeamSize(date_str);
+      x = this.taskTitleWidth+i*this.pixelsForOneDay;
+      if(current_nb!=nb) {
+          current_nb = nb;
+          this.ctx.fillText(current_nb, x+this.pixelsForOneDay/2, this.canvas.height-5);
+          }
+      height   = this.canvas.height - 20 - nb*10;
       if(nb > 0) {
-        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay, height, this.pixelsForOneDay-1, this.canvas.height-height-2);
+        this.ctx.fillRect(x, height, this.pixelsForOneDay+0.5, this.canvas.height-height-20);
         }
       date.addDays(1);
       }
@@ -224,8 +244,9 @@ var Planning = Class.create({
 
   mouseOver: function(coords) {
     // tasks mouseover
+    alreadyIn = false;
     for(var i=0; i < this.tasks.length; i++) {
-      this.tasks[i].reactToMouseOver(coords);
+      alreadyIn = this.tasks[i].reactToMouseOver(coords, alreadyIn) || alreadyIn;
       }
     // overall planning mouseover
     // TODO: this.mouseoverDate =
