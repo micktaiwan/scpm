@@ -150,12 +150,12 @@ var Planning = Class.create({
       // drawing week-ends
       if(current_day==6 || current_day==0) {
         this.ctx.fillStyle   = this.weekendColor;
-        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height);
+        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height-this.dateHeaderHeight-1);
         }
       // drawing today
       if(current_date.getTime()==today.getTime()) {
         this.ctx.fillStyle   = this.todayColor;
-        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height);
+        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay-0.5, this.dateHeaderHeight, this.pixelsForOneDay, this.canvas.height-this.dateHeaderHeight-1);
         }
       current_date.addDays(1);
       }
@@ -185,12 +185,12 @@ var Planning = Class.create({
     },
 
   mouseOver: function(coords) {
-    // rv = false;
+    // tasks mouseover
     for(var i=0; i < this.tasks.length; i++) {
-      // rv = rv || this.tasks[i].reactToMouseOver(coords);
       this.tasks[i].reactToMouseOver(coords);
       }
-    //if(rv)
+    // overall planning mouseover
+    // TODO: this.mouseoverDate =
     this.draw();
     },
 

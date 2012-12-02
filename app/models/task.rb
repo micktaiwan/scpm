@@ -8,7 +8,9 @@ class Task < ActiveRecord::Base
 
   # verify if start date is not a holiday
   def adjust_start_date
-    # TODO
+    wday = self.start_date.wday
+    self.start_date += 1.day if wday == 0
+    self.start_date += 2.day if wday == 6
   end
 
   def calculate_end_date_or_work
