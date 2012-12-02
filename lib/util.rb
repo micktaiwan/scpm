@@ -1,3 +1,13 @@
+class Object
+  ##
+  #   @person ? @person.name : nil
+  # vs
+  #   @person.try(:name)
+  def try(method)
+    send method if respond_to? method
+  end
+end
+
 module Util
 
   # wdays is an array with the days of the week
@@ -22,13 +32,11 @@ module Util
   # start_date must be a working day !
   def self.real_end_date(start_date,initial_duration)
     diff, holidays = calculate_diff_and_holidays(start_date, start_date+initial_duration.days)
-    puts "diff: #{diff}, holidays: #{holidays}"
     # end_date is start_date + duration + nb of holiday
     # but if holiday is odd, it means it lacks sunday as we assume start day is not a holiday already,
     # thus the modulo 2
     end_date = start_date + diff.days + (holidays+holidays % 2).days
     end_date = end_date - 2.days if end_date.wday == 1 # monday
-    #puts "end_date wday: #{end_date.wday}"
     end_date
   end
 

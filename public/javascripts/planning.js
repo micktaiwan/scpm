@@ -75,9 +75,11 @@ var Task = Class.create ({
 });
 
 var Planning = Class.create({
-  initialize: function(canvas_id,tasks) {
+  initialize: function(canvas_id, tasks, teamSize) {
     // initialize defaults, etc.
     window.Planning         = this; // define this class global, so it is accessible from event handlers
+    // TODO teamSize
+    this.teamSize           = teamSize || new Array(10);
     this.canvas_id          = canvas_id || "planning";
     this.canvas             = $(this.canvas_id);
     this.ctx                = this.canvas.getContext("2d");
@@ -97,6 +99,7 @@ var Planning = Class.create({
     this.taskHeight         = 20;
     this.weekendColor       = 'gray';
     this.todayColor         = 'yellow';
+    this.teamSizeColor      = 'blue';
     HTMLCanvasElement.prototype.relMouseCoords = this.relMouseCoords;
 
     // tasks
@@ -173,14 +176,33 @@ var Planning = Class.create({
 
   drawTeamSize: function() {
     // horizontal lines for each day
-    // TODO: get data for day from server and stop this random stuff :)
-    r = Math.floor(this.tasksHeightAbsolute + Math.random(1)*50)-0.5;
+    this.ctx.fillStyle   = this.teamSizeColor;
+    date = new Date(this.start_date);
+    date.setHours(0,0,0,0);
     for(var i=0; i <= this.planningWidthInDay; i++) {
-      r += Math.floor(Math.random(1)*10-5);
-      this.drawLine(this.taskTitleWidth+i*this.pixelsForOneDay, r, this.taskTitleWidth+(i+1)*this.pixelsForOneDay, r);
+      date_str = date.getFullYear() + "-" + this.padStr(date.getMonth()+1) + "-" + this.padStr(date.getDate());
+      nb = this.getTeamSize(date_str);
+      height   = this.canvas.height - nb*10;
+      if(nb > 0) {
+        this.ctx.fillRect(this.taskTitleWidth+i*this.pixelsForOneDay, height, this.pixelsForOneDay-1, this.canvas.height-height-2);
+        }
+      date.addDays(1);
       }
     },
 
+  padStr: function(i) {
+    return (i < 10) ? "0" + i : "" + i;
+    },
+
+  getTeamSize: function(date) {
+    //window.console.log(date);
+    for(i=0; i < this.teamSize.length; i++) {
+      //window.console.log(this.teamSize[i])
+      if(this.teamSize[i][0] == date)
+        return this.teamSize[i][1];
+      }
+    return 0;
+    },
 
   myDateFormat: function(date) {
     return date.getDate() + '-' + this.months[date.getMonth()];
