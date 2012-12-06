@@ -124,7 +124,7 @@ class ToolsController < ApplicationController
       @operational_total_2011            = op2010 + op2011 + @operational2011_10percent
       @operational_total_2012            = op2012 + @operational2012_10percent
       @operational_total                 = @operational_total_2011 + @operational_total_2012
-      @remaining                         = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum})
+      @remaining                         = (tasks2010.inject(0) { |sum, t| t.remaining+sum} + tasks2011.inject(0) { |sum, t| t.remaining+sum} + tasks2012.inject(0) { |sum, t| t.remaining+sum})
       @remaining_time                    = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.001).round * 0.001
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
       @theorical_management              = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH)*@remaining_time)

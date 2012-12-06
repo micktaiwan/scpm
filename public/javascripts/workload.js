@@ -64,8 +64,10 @@ function set_fixed_header() {
 function display_milestones(evt,text) {
   var popup = $('milestones')
   var e = evt;
-  popup.style.top = parseInt(Event.pointerY(e))+"px"
-  popup.style.left = parseInt(Event.pointerX(e))+"px"
+  popup.style.top  = e.clientY + "px";
+  popup.style.left = e.clientX + "px";
+  // popup.style.top = parseInt(Event.pointerY(e))+"px"
+  // popup.style.left = parseInt(Event.pointerX(e))+"px"
   popup.innerHTML = text;
   popup.show();
 }
