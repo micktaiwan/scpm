@@ -601,8 +601,20 @@ private
   def get_risk_status_string
     raise "@project must be defined" if not @project
     @risks = "Risks:<br/>"
-    for r in @project.open_quality_risks
-      @risks += "- #{r.context} => #{r.risk} (#{r.consequence})<br/>"
+    #r.severity
+    for r in @project.open_quality_risks.find(:all,:order=>"probability*impact desc")
+      bgcolor = "#AFA"
+      if r.probability>=4
+       	bgcolor = "#A00"
+      elsif r.severity>=8
+       	bgcolor = "#F00"
+      elsif r.severity>=6 
+      	bgcolor = "#FA0"
+      elsif 
+      r.severity>=3 
+      	bgcolor = "#FF9"
+      end
+      @risks += "<span style='background-color:#{bgcolor};'>#{r.context} => #{r.risk} (#{r.consequence}) [Severity => #{r.severity}]</span><br/>"
     end
     @risks
   end
