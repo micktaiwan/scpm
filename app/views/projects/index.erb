@@ -62,14 +62,59 @@
 
 <div id="tabs">
   <ol>
+	  <%
+	  	wps_size_str = ""
+		ci_size_str = ""
+		actions_size_str = ""
+		amendments_size_str = ""
+		risks_size_str = ""
+		inconsistencies_size_str = ""
+		checklists_size_str = ""
+		if(@wps.size > 0)
+			wps_size_str = "[<strong>#{@wps.size}</strong>]"
+		else
+			wps_size_str = "[#{@wps.size}]"
+		end
+		if(@ci.size > 0)
+			ci_size_str = "[<strong>#{@ci.size}</strong>]"
+		else
+			ci_size_str = "[#{@ci.size}]"
+		end
+		if(@actions.size > 0)
+			actions_size_str = "[<strong>#{@actions.size}</strong>]"
+		else
+			actions_size_str = "[#{@actions.size}]"
+		end
+		if(@amendments.size > 0)
+			amendments_size_str = "[<strong>#{@amendments.size}</strong>]"
+		else
+			amendments_size_str = "[#{@amendments.size}]"
+		end
+		if(@risks.size > 0)
+			risks_size_str = "[<strong>#{@risks.size}</strong>]"
+		else
+			risks_size_str = "[#{@risks.size}]"
+		end
+		if(@inconsistencies.size > 0)
+			inconsistencies_size_str = "[<strong>#{@inconsistencies.size}</strong>]"
+		else
+			inconsistencies_size_str = "[#{@inconsistencies.size}]"
+		end
+		if(@checklist_milestones.size > 0)
+			checklists_size_str = "[<strong>#{@checklist_milestones.size}</strong>]"
+		else
+			checklists_size_str = "[#{@checklist_milestones.size}]"
+		end
+	
+	  %>
       <%= tab_menu("project_index", [
-        "Projects <strong>#{@wps.size}</strong>",
-        "CI <strong>#{@ci.size}</strong>",
-        "Actions <strong>#{@actions.size}</strong>",
-        "Amendments <strong>#{@amendments.size}</strong>",
-        "Risks <strong>#{@risks.size}</strong>",
-        "Inconsistencies <strong>#{@inconsistencies.size}</strong>",
-        "Checklists <strong>#{@checklist_milestones.size}</strong>"
+        "Projects #{wps_size_str}",
+        "CI #{ci_size_str}",
+        "Actions #{amendments_size_str}",
+        "Amendments #{actions_size_str}",
+        "Risks #{risks_size_str}",
+        "Inconsistencies #{inconsistencies_size_str}",
+        "Checklists #{checklists_size_str}"
         ]) %>  
   </ol>
 
