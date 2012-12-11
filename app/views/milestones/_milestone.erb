@@ -4,8 +4,8 @@
     <%= link_to(image_tag('edit.gif'), {:controller=>'milestones', :action=>'edit', :id=>milestone.id}) %>
     <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'milestones', :action=>'destroy', :id=>milestone.id}, :confirm=>"Sure ?", :success=>"$('m_#{milestone.id}').hide();") %>
 	<% milestone_name_id = MilestoneName.first(:conditions => ["title= ?", milestone.name]) %>
-	<% milestones_blacklist = ["QG BRD"] %>
-	<% if ((milestone_name_id!= nil) and (!milestones_blacklist.include?(milestone_name_id.title))) %>
+	<% milestones_blacklist = [] %>
+	<% if ((milestone_name_id!= nil) and (!milestones_blacklist.include?(milestone_name_id.title)) and (milestone.name[0..1]!='QG')) %>
 		<%= link_to image_tag('spider_icon.png'), :controller=>'spiders', :action=>'project_spider', :project_id=>milestone.project_id, :milestone_id=>milestone, :create_spider=>0 %>
 	<% end %>
   </div>
