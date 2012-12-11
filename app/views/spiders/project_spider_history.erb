@@ -1,3 +1,50 @@
+
+<script type="text/javascript"> 
+$(function () {
+	
+	var docHeight = getDocHeight();
+	if (docHeight < 1000)
+	{
+		$("#spider_separator_offset").height("300px");
+		docHeight = getDocHeight();
+	}
+
+	// Manage the two charts
+	$("#chartContainer_0").show();
+	$(window).scroll(function(){
+		var spider_sepator = $("#spider_separator");
+		var docViewTop = $(window).scrollTop();
+	    var docViewBottom = docViewTop + $(window).height();
+		var docSurface = docViewBottom - docViewTop;
+		var docMiddle = docViewTop + (docSurface/2);
+
+	    var elemTop = $(spider_sepator).offset().top;
+		
+		if((elemTop - docMiddle >= 0) && (docViewBottom < (docHeight-10)))
+		{
+			$("#chartContainer_0").show();
+			$("#chartContainer_1").hide();
+		}
+		else
+		{
+			$("#chartContainer_1").show();
+			$("#chartContainer_0").hide();
+		}
+	});
+});
+
+// Helper
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        Math.max(D.body.scrollHeight, D.documentElement.scrollHeight),
+        Math.max(D.body.offsetHeight, D.documentElement.offsetHeight),
+        Math.max(D.body.clientHeight, D.documentElement.clientHeight)
+    );
+}
+</script>
+
+
 <%= link_to "Back to project spider view", :controller=>'spiders', :action=>'project_spider', :project_id=>@spider.project_id, :milestone_id=>@spider.milestone_id, :create_spider=>0 %>
 
 <%
@@ -66,6 +113,10 @@ i = 0
 	<div class="spider_chart" id="<%= chartName %>"></div>
 	</div>
 <%	
+	if(i==1)
+		concat '<div id="spider_separator"></div>'
+		concat '<div id="spider_separator_offset"></div>'
+	end
 }
 
 concat '<script type="text/javascript">$(function () {'
