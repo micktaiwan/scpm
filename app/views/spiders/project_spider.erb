@@ -159,13 +159,11 @@ function getDocHeight() {
 			
 			# End question line
 			concat '</td>'
-			# if @first_spider
-				concat '<td><input type="checkbox" name="spiderquestresursive[' + q.id.to_s + '][]"'
-				if (q.recursive)
-					concat ' checked'
-				end
-				concat ' /></td>'
-			# end
+			concat '<td><input type="checkbox" name="spiderquestresursive[' + q.id.to_s + '][]"'
+			if (q.recursive)
+				concat ' checked'
+			end
+			concat ' /></td>'
 			concat '</tr>'	
 			j = j + 1
 		}

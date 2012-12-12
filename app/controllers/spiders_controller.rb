@@ -25,27 +25,6 @@ class SpidersController < ApplicationController
     milestoneId = params[:milestone_id]
     @milestone = Milestone.find(milestoneId)
     
-    # Check if first milestone with spider for this project
-    @first_spider = true
-    spider_found = false
-    all_spiders_milestone = Array.new # Get all milestone of spiders of this project
-    Spider.find(:all, :conditions => ["project_id = ?",id]).each{ |current_spider|
-      all_spiders_milestone << current_spider.milestone
-    }
-    @project.sorted_milestones.each do |sm|
-      if sm.id.to_i == milestoneId.to_i
-        if spider_found
-          @first_spider = false
-        end
-        break;
-      else
-        # check if spider for this milestone
-        if all_spiders_milestone.include?(sm)
-          spider_found = true
-        end
-      end
-    end
-    
     # create new spider parameter
     create_spider_param = params[:create_spider]    
     
@@ -232,7 +211,6 @@ class SpidersController < ApplicationController
       spiderValues = params[:spiderquest]
       spiderValuesRecursives = params[:spiderquestresursive]
       
-      spiderFormIndex = 0;
       spiderValues.each { |h|
         currentQuestion = SpiderValue.find(h[0])
         currentQuestion.note = h[1].to_s
@@ -242,7 +220,6 @@ class SpidersController < ApplicationController
           currentQuestion.recursive = false
         end
         currentQuestion.save
-        spiderFormIndex += 1
       }
       if(params[:consolidate_spider] == "1")
         project_spider_consolidate(spider)
