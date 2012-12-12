@@ -406,6 +406,7 @@ class SpidersController < ApplicationController
       # Previous value
       if(previous_questions[q.id] != nil)
         new_spider_value.note = previous_questions[q.id].note
+        new_spider_value.recursive = true
       end
       # Save
       new_spider_value.save
