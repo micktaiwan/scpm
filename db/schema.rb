@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121202210905) do
+ActiveRecord::Schema.define(:version => 20121212210905) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -629,6 +629,7 @@ ActiveRecord::Schema.define(:version => 20121202210905) do
     t.string   "reference"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "recursive",             :default => false
   end
 
   create_table "spiders", :force => true do |t|

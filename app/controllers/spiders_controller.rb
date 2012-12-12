@@ -25,6 +25,27 @@ class SpidersController < ApplicationController
     milestoneId = params[:milestone_id]
     @milestone = Milestone.find(milestoneId)
     
+    # Check if first milestone with spider for this project
+    @first_spider = true
+    spider_found = false
+    all_spiders_milestone = Array.new # Get all milestone of spiders of this project
+    Spider.find(:all, :conditions => ["project_id = ?",id]).each{ |current_spider|
+      all_spiders_milestone << current_spider.milestone
+    }
+    @project.sorted_milestones.each do |sm|
+      if sm.id.to_i == milestoneId.to_i
+        if spider_found
+          @first_spider = false
+        end
+        break;
+      else
+        # check if spider for this milestone
+        if all_spiders_milestone.include?(sm)
+          spider_found = true
+        end
+      end
+    end
+    
     # create new spider parameter
     create_spider_param = params[:create_spider]    
     
@@ -209,10 +230,19 @@ class SpidersController < ApplicationController
   def update_spider
       spider = Spider.find(params[:spider_id])
       spiderValues = params[:spiderquest]
+      spiderValuesRecursives = params[:spiderquestresursive]
+      
+      spiderFormIndex = 0;
       spiderValues.each { |h|
         currentQuestion = SpiderValue.find(h[0])
         currentQuestion.note = h[1].to_s
+        if (spiderValuesRecursives[h[0]].to_s == "on")
+          currentQuestion.recursive = true
+        else
+          currentQuestion.recursive = false
+        end
         currentQuestion.save
+        spiderFormIndex += 1
       }
       if(params[:consolidate_spider] == "1")
         project_spider_consolidate(spider)
@@ -365,12 +395,28 @@ class SpidersController < ApplicationController
     new_spider.milestone_id = milestoneSpider.id
     new_spider.save
     
+    # Check spider consolidated before previous milestone
+    previous_questions = Array.new
+    new_spider.project.sorted_milestones.each{ |sm|
+      if sm.id.to_i == milestoneSpider.id.to_i
+        break;
+      else
+        previous_spider = Spider.last(:include => :spider_consolidations ,:conditions => ["project_id = ? and milestone_id = ?",projectSpider.id.to_s,sm.id.to_s])
+        if previous_spider != nil
+          previous_spider.spider_values.each { |previous_spider_values|
+            if previous_spider_values.recursive
+              previous_questions[previous_spider_values.lifecycle_question.id] = previous_spider_values
+            end
+          }
+        end
+      end
+    }
+    
     # Generate Spider_responses
     LifecycleQuestion.all(:conditions => ["lifecycle_id = ?", projectSpider.lifecycle_id]).each { |q|
       # Get reference for this question and milestone
       m = MilestoneName.find_by_title(milestoneSpider.name)
       new_question_reference = QuestionReference.first(:conditions => ["question_id = ? and milestone_id = ?", q.id, m.id])
-      
       # Creation question value
       new_spider_value = SpiderValue.new
       new_spider_value.lifecycle_question_id = q.id
@@ -380,7 +426,11 @@ class SpidersController < ApplicationController
       else
         new_spider_value.reference = "NI"
       end
-      
+      # Previous value
+      if(previous_questions[q.id] != nil)
+        new_spider_value.note = previous_questions[q.id].note
+      end
+      # Save
       new_spider_value.save
     }
     return new_spider
