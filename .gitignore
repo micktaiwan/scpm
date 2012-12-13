@@ -4,3 +4,9 @@
 /Capfile
 /config/deploy.rb
 config/config.yml
+
+app/.DS_Store
+
+db/.DS_Store
+
+db/.DS_Store
