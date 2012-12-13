@@ -1,0 +1,12 @@
+<ul>
+	<% Stream.find(:all).each do |stream| %>
+		<% 
+			link_title = "[" + stream.id.to_s + "]"
+			link_title += stream.name 
+			link_title += "[QS count : x/" + stream.total_qs_count.to_s 
+			link_title += "] [Spider count : y/" + stream.total_spider_count.to_s + "]" 
+		%>
+	
+		<li><%= link_to link_title, :controller => "streams", :action => "show", :id => stream.id %></li>
+	<% end %>
+</ul>

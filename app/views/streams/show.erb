@@ -1,0 +1,10 @@
+Counts :
+QS count : <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.total_qs_count.to_s %>
+Spider Count : <%= @stream.get_consumed_spider_count.to_s %>  / <%= @stream.total_spider_count.to_s %>
+
+
+<br />
+Reviews :
+<% @stream.get_stream_review.each do |review| %>
+	<%= review.to_s %>
+<% end %>

@@ -689,6 +689,7 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
   end
 
   create_table "streams", :force => true do |t|
+    t.string   "name"
     t.integer  "total_qs_count"
     t.integer  "total_spider_count"
     t.integer  "workstream_id"
