@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121212210905) do
+ActiveRecord::Schema.define(:version => 20121213210911) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -174,6 +174,15 @@ ActiveRecord::Schema.define(:version => 20121212210905) do
     t.datetime "updated_at"
   end
 
+  create_table "counter_logs", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "stream_id"
+    t.integer  "credit"
+    t.integer  "debit"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "generic_risk_questions", :force => true do |t|
     t.text     "question"
     t.datetime "created_at"
@@ -328,6 +337,8 @@ ActiveRecord::Schema.define(:version => 20121212210905) do
     t.string   "pm_deputy"
     t.string   "ispm"
     t.integer  "lifecycle_id"
+    t.integer  "qs_count",      :default => 0
+    t.integer  "spider_count",  :default => 0
   end
 
   create_table "question_references", :force => true do |t|
@@ -408,6 +419,7 @@ ActiveRecord::Schema.define(:version => 20121212210905) do
     t.string   "sdpiteration"
     t.string   "contre_visite_milestone"
     t.string   "request_type"
+    t.integer  "stream_id"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
@@ -461,6 +473,12 @@ ActiveRecord::Schema.define(:version => 20121212210905) do
     t.string   "is_covered"
     t.text     "cover_detail"
     t.date     "last_review"
+  end
+
+  create_table "review_types", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "risks", :force => true do |t|
@@ -660,6 +678,22 @@ ActiveRecord::Schema.define(:version => 20121212210905) do
     t.text     "ws_report"
     t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
     t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
+  end
+
+  create_table "stream_reviews", :force => true do |t|
+    t.integer  "stream_id"
+    t.integer  "review_type_id"
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "streams", :force => true do |t|
+    t.integer  "total_qs_count"
+    t.integer  "total_spider_count"
+    t.integer  "workstream_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tasks", :force => true do |t|
