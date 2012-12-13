@@ -130,6 +130,7 @@ function generate_spider_chart(chartId,chartName,xAxisArray,serie1,serie2)
 	    yAxis: {
 	        gridLineInterpolation: 'polygon',
 	        lineWidth: 0,
+			max: 3,
 	        min: 0
 	    },
 	    
