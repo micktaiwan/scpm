@@ -1,3 +1,5 @@
+<p><%= link_to "Projects", :controller => "streams", :action => "show_stream_projects", :id => @stream.id %></p>
+
 Counts :
 QS count : <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.total_qs_count.to_s %>
 Spider Count : <%= @stream.get_consumed_spider_count.to_s %>  / <%= @stream.total_spider_count.to_s %>
