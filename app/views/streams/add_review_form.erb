@@ -1,0 +1,11 @@
+<h2><%= @review.review_type.title %> Review</h2>
+
+<%= error_messages_for :review %>
+<% form_for @review, :url=>{:action=>'create_review' } do |f| -%>
+  <%= hidden_field(:review, :stream_id) %>
+  <%= hidden_field(:review, :review_type_id) %>
+
+  <%= text_area(:review, :text, {:cols=>100, :rows=>7 }) %>
+  <%= submit_tag 'add Review' %></p>
+<% end -%>
+

@@ -7,7 +7,7 @@ class Stream < ActiveRecord::Base
 
   def get_consumed_qs_count
     # Get projects by workstream
-    projects = Project.find(:all,:conditions => ["workstream = ?", Workstream.first(self.workstream).name])
+    projects = Project.find(:all,:conditions => ["workstream = ?", Workstream.find(self.workstream).name])
     # analyse all projects
     qs_count = 0
     projects.each do |project|
@@ -18,7 +18,7 @@ class Stream < ActiveRecord::Base
   end
   def get_consumed_spider_count
     # Get projects by workstream
-    projects = Project.find(:all,:conditions => ["workstream = ?", Workstream.first(self.workstream).name])
+    projects = Project.find(:all,:conditions => ["workstream = ?", Workstream.find(self.workstream).name])
     # analyse all projects
     spider_count = 0
     projects.each do |project|
@@ -33,7 +33,7 @@ class Stream < ActiveRecord::Base
     last_reviews_str = ""
     last_update = DateTime.strptime('1970-01-01 00:00:00','%Y-%m-%d %H:%M:%S')
     ReviewType.find(:all).each do |review_type|
-      last_review = StreamReview.last(:conditions => ["review_type_id = ?",review_type.id])
+      last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",self.id ,review_type.id], :order => "created_at DESC")
       if last_review != nil
         last_reviews_str += "<p>" + review_type.title + "</p>" + last_review.text
         if last_review.updated_at > last_update
@@ -46,5 +46,15 @@ class Stream < ActiveRecord::Base
     return array_return
   end
 
+  def get_stream_review_types
+    reviewsType = Array.new
+    ReviewType.find(:all).each do |review_type|
+      reviews = StreamReview.find(:all,:conditions => ["stream_id = ? and review_type_id = ?",self.id ,review_type.id])
+      if reviews.count > 0
+        reviewsType << review_type
+      end
+    end
+    return reviewsType
+  end
 
 end

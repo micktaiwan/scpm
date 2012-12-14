@@ -1,0 +1,8 @@
+<h2><%= @review.review_type.title %> Review</h2>
+
+<%= error_messages_for :review %>
+<% form_for @review, :url=>{:action=>'update_review', :id=>@review.id} do |f| -%>
+  <%= text_area(:review, :text, {:cols=>100, :rows=>7 }) %>
+  <%= submit_tag 'Update' %></p>
+<% end -%>
+
