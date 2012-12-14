@@ -1,5 +1,5 @@
 <div id='review_<%=review.id%>'>
-  <div class='review_detail'>
+  <div class='status_explanation'>
       <div class='review_date'><%=review.updated_at%>
         <% # status.modifier.name if status.last_modifier %>
         <%=link_to_function('Edit', "edit(#{review.id});")%>

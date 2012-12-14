@@ -1,5 +1,6 @@
 class StreamsController < ApplicationController
-
+  layout "general"
+  
   # GENERAL ACTIONS
   def index
   end
