@@ -41,7 +41,7 @@ class Request < ActiveRecord::Base
   "WP4.1 - Surveillance Audit" 		                      => "Audit",
   "WP4.2 - Surveillance Root cause"                     => "RCA",
   "WP4.3 - Actions Implementation & Control"            => "", #NEW
-  "WP5.0 - Change Accompaniment" 		                    => "Change",
+  "WP5 - Change Accompaniment" 		                    => "Change",
   "WP5.1 - Change: Diagnosis & Action Plan"             => "", #NEW
   "WP5.2 – Change : Implementation Support & Follow-up" => "", #NEW
   "WP6.1 - Coaching PP" 			                          => "PP",
@@ -55,7 +55,7 @@ class Request < ActiveRecord::Base
   "WP6.9 – Coaching Data Model"                         => "", #NEW
   "WP6.10.1 – Diagnosis & project launch"               => "", #NEW
   "WP6.10.2 – Sprint 0 support"                         => "", #NEW
-  "WP6.10.3 – Sprint coaching"                          => "",
+  "WP6.10.3 – Sprint coaching"                          => "", #NEW
   "WP7.1.1 – Requirements Management"                   => "", #NEW
   "WP7.1.2 – Risks Management"                          => "", #NEW
   "WP7.1.3 – Test Management"                           => "", #NEW
@@ -146,7 +146,7 @@ class Request < ActiveRecord::Base
     "WP4.1 - Surveillance Audit" 		                      => 44,
     "WP4.2 - Surveillance Root cause"                     => 45,
     "WP4.3 - Actions Implementation & Control"            => 46,
-    "WP5.0 - Change Accompaniment" 		                    => 47,
+    "WP5 - Change Accompaniment" 		                      => 47,
     "WP5.1 - Change: Diagnosis & Action Plan"             => 48,
     "WP5.2 – Change : Implementation Support & Follow-up" => 49,
     "WP6.1 - Coaching PP" 			                          => 50,
