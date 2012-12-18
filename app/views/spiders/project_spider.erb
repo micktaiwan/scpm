@@ -129,6 +129,12 @@ function getDocHeight() {
 					concat 'selected ' 
 				end
 				concat 'value="NI">NI</option>'
+				# 0
+				concat '<option '
+				if (q.note.to_s == "0") 
+					concat 'selected ' 
+				end
+				concat 'value="0">0</option>'
 				# 1
 				concat '<option '
 				if (q.note.to_s == "1") 
