@@ -56,5 +56,11 @@ class Stream < ActiveRecord::Base
     end
     return reviewsType
   end
-
+  
+  def self.find_with_workstream(workstreamParam)
+    ws = Workstream.first(:conditions => ["name = ?",workstreamParam])
+    stream = Stream.first(:conditions => ["workstream_id = ?",ws.id.to_s])
+    return stream
+  end
+  
 end

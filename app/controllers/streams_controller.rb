@@ -39,6 +39,24 @@ class StreamsController < ApplicationController
     end
   end
   
+  # link a request to a Stream, based on request workstream
+  def link
+    request_id        = params[:id]
+    request           = Request.find(request_id)
+    project_name      = request.project_name
+    workpackage_name  = request.workpackage_name
+    brn               = request.brn
+    workstream        = request.workstream
+    
+    stream = Stream.find_with_workstream(workstream)
+    if not stream
+      # CREATE IT ?
+    end
+
+    request.stream_id = stream.id
+    request.save
+    render(:text=>"saved")
+  end
   
   # FORM REVIEW - EDIT/UPDATE
   def edit_review
