@@ -277,7 +277,7 @@ class SpidersController < ApplicationController
   def do_spider_upload
     
     # INDEX OF COLUMNS IN EXCEL ------------------------
-    @practiceStartColumn = 9
+    @practiceStartColumn = 10
     @practiceEndColumn = 0
     @deliverableStartColumn = 0
     @deliverableEndColumn = 0
@@ -300,8 +300,9 @@ class SpidersController < ApplicationController
     # For each projects
     projectsArray.each { |project| 
          	
-    	# Search project in BAM
-    	bam_project = Project.last(:conditions=>["name = ?", project["title"]])
+    	# Search project in BAM with Request
+    	bam_request = Request.first(:conditions=>["id = ?",id])
+    	bam_project = Project.last(:conditions=>["id = ?", bam_request.project_id])
     	if(bam_project != nil)
     	  
     	  # Search milestone
@@ -534,6 +535,7 @@ class SpidersController < ApplicationController
   # projectsArray[index_array]["title"] = Name of project
   # projectsArray[index_array]["version"] = Version of project
   # projectsArray[index_array]["milestone"] = Milestone of project (can contain a string of multiple milestones. Ex : M1-M3)
+  # projectsArray[index_array]["request_id"] = Id de la requête.
   # projectsArray[index_array]["date"] = Date of project
   # projectsArray[index_array]["conso"] = Hash
   # projectsArray[index_array]["conso"][axe_name] = Hash
@@ -551,6 +553,7 @@ class SpidersController < ApplicationController
    		projectHash["title"] = conso_row[3].to_s
    		projectHash["version"] = conso_row[4].to_s
    		projectHash["milestone"] = conso_row[5].to_s
+   		projectHash["request_id"] = conso_row[9].to_s
    		year = conso_row[8].to_i
    		year_str = year.to_s
    		month = conso_row[7].to_i
@@ -566,7 +569,7 @@ class SpidersController < ApplicationController
    		projectHash["date"] = year_str+ "-" + month_str + "-" + day_str + " 00:00:00"
       projectHash["conso"] = Hash.new
 
-   		columnIndex = 9
+   		columnIndex = @practiceStartColumn
    		column_last_axe_name = ""
    		# For each question values/ref/ni
    		while columnIndex <= conso_row.count and columnIndex <= @deliverableEndColumn
@@ -600,7 +603,7 @@ class SpidersController < ApplicationController
   def dev_do_spider_upload
     
     # INDEX OF COLUMNS IN EXCEL ------------------------
-    @practiceStartColumn = 9
+    @practiceStartColumn = 10
     @practiceEndColumn = 0
     @deliverableStartColumn = 0
     @deliverableEndColumn = 0
