@@ -65,17 +65,17 @@ module SdpDB
   # SDP Doamin
   DomainDB = {
     #'EA'  =>2865,
-    'EV'  =>3702,
-    'EE' =>3703,
-    'EY' =>3704,
-    'EG' =>3705,
-    'ES' =>3706,
-    'EZ'  =>3707,
-    'EI'  =>3709,
-    'EZC' =>3708,
-    'EZMC'=>3712,
-    'EZMB'=>3711,
-    'TBCE' => 3710
+    'EV'  =>3734,
+    'EE'  =>3733,
+    'EY'  =>3736,
+    'EG'  =>3743,
+    'ES'  =>3735,
+    'EZ'  =>3737,
+    'EI'  =>3739,
+    'EZC' =>3738,
+    'EZMC'=>3740,
+    'EZMB'=>3741,
+    'TBCE'=>3742
     }
 
   def self.sdp_phase_id(name)
