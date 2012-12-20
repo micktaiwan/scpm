@@ -69,12 +69,12 @@ class SpiderKpisController < ApplicationController
     else
       @kpi_type = params[:kpi_type]
     end
-    charts_element = Array.new
-    if (@kpi_type == "pm_type")
-      charts_element = PmType.all
-    else
-      charts_element = PmTypeAxe.all
-    end
+    # charts_element = Array.new
+    #     if (@kpi_type == "pm_type")
+    #       charts_element = PmType.all
+    #     else
+    #       charts_element = PmTypeAxe.all
+    #     end
     
     @chart_type = ""
     if(@chart_type_param != nil)
@@ -119,7 +119,8 @@ class SpiderKpisController < ApplicationController
   
   def generate_kpi_charts_data
     @lifecycle_id = params[:lifecycle_id]
-    lifecycle_title = Lifecycle.find(@lifecycle_id).name
+    lifecycle_object = Lifecycle.find(@lifecycle_id)
+    lifecycle_title = lifecycle_object.name
     @workstream = params[:workstream]
     @milestone_name_id = params[:milestone_name_id]
     milestone_title = ""
@@ -138,7 +139,15 @@ class SpiderKpisController < ApplicationController
     if (@kpi_type == "pm_type")
       charts_element = PmType.all
     else
-      charts_element = PmTypeAxe.all
+        query = 'SELECT DISTINCT(p.id) FROM pm_type_axes as p, lifecycle_questions as lc   
+        WHERE p.id = lc.pm_type_axe_id 
+        AND lc.lifecycle_id = ' +lifecycle_object.id.to_s
+        pm_type_axes_id = Array.new
+        ActiveRecord::Base.connection.execute(query).each do |query_data|
+          pm_type_axes_id << query_data[0].to_i
+        end
+        pm_type_axes_id_join = pm_type_axes_id.join(",")
+        charts_element = PmTypeAxe.find(:all,:conditions => ["id in (?)",pm_type_axes_id_join.split(',')])
     end
 
     @chart_type = ""
@@ -235,7 +244,8 @@ class SpiderKpisController < ApplicationController
   
   def generate_kpi_cumul_charts_data
     @lifecycle_id = params[:lifecycle_id]
-    lifecycle_title = Lifecycle.find(@lifecycle_id).name
+    lifecycle_object = Lifecycle.find(@lifecycle_id)
+    lifecycle_title = lifecycle_object.name
     @workstream = params[:workstream]
     @milestone_name_id = params[:milestone_name_id]
     milestone_title = ""
@@ -254,7 +264,15 @@ class SpiderKpisController < ApplicationController
     if (@kpi_type == "pm_type")
       charts_element = PmType.all
     else
-      charts_element = PmTypeAxe.all
+      query = 'SELECT DISTINCT(p.id) FROM pm_type_axes as p, lifecycle_questions as lc   
+      WHERE p.id = lc.pm_type_axe_id 
+      AND lc.lifecycle_id = ' +lifecycle_object.id.to_s
+      pm_type_axes_id = Array.new
+      ActiveRecord::Base.connection.execute(query).each do |query_data|
+        pm_type_axes_id << query_data[0].to_i
+      end
+      pm_type_axes_id_join = pm_type_axes_id.join(",")
+      charts_element = PmTypeAxe.find(:all,:conditions => ["id in (?)",pm_type_axes_id_join.split(',')])
     end
 
     @chart_type = ""
