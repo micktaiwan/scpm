@@ -64,6 +64,7 @@
   <ol>
       <%= tab_menu("project_index", [
         "Projects <strong>#{@wps.size}</strong>",
+		"Streams",
         "CI <strong>#{@ci.size}</strong>",
         "Actions <strong>#{@actions.size}</strong>",
         "Amendments <strong>#{@amendments.size}</strong>",
@@ -84,13 +85,20 @@
     <div id="tabContent2" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="2"? "block" : "none"%>;">
         <br />
         <div>
+	        <%= render(:file=>'streams/index') %>
+        </div>
+    </div>
+
+    <div id="tabContent3" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="3"? "block" : "none"%>;">
+        <br />
+        <div>
           <%= render(:file=>'ci_projects/ci_header') %>
           <%= render(:partial=>'ci_projects/ci_project', :collection=>@ci, :as=>:p) %>
           </table>
         </div>
     </div>
 
-    <div id="tabContent3" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="3"? "block" : "none"%>;">
+    <div id="tabContent4" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="4"? "block" : "none"%>;">
         <br />
         <div>
           <%= render(:file=>'actions/actions_header') %>
@@ -99,7 +107,7 @@
         </div>
     </div>
 
-    <div id="tabContent4" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="4"? "block" : "none"%>;">
+    <div id="tabContent5" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="5"? "block" : "none"%>;">
         <br />
         <div>
           <%= render(:file=>'amendments/amendments_header') %>
@@ -108,7 +116,7 @@
         </div>
     </div>
 
-    <div id="tabContent5" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="5"? "block" : "none"%>;">
+    <div id="tabContent6" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="6"? "block" : "none"%>;">
         <br />
         <div>
           <%= render(:file=>'risks/risks_header') %>
@@ -117,7 +125,7 @@
         </div>
     </div>
 
-    <div id="tabContent6" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="6"? "block" : "none"%>;">
+    <div id="tabContent7" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="7"? "block" : "none"%>;">
         <br />
         <div>
           <table>
@@ -128,7 +136,7 @@
         </div>
     </div>
 
-    <div id="tabContent7" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="7"? "block" : "none"%>;">
+    <div id="tabContent8" class="tabContent" style="display:<%= cookies["tab_menu_project_index"]=="8"? "block" : "none"%>;">
         <br />
         <div>
           <% if @checklist_milestones.size == 0 %>

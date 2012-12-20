@@ -32,6 +32,7 @@ class Project < ActiveRecord::Base
   has_many    :project_check_items, :class_name=>"ChecklistItem"
   has_many    :project_check_root_items, :conditions=>"parent_id=0", :class_name=>"ChecklistItem"
   has_many    :spiders,      :dependent => :destroy
+  has_many    :counter_logs,      :dependent=>:nullify
 
   def project_check_items_numbers
     cs = self.project_check_items.select{|c| c.ctemplate.ctype!="folder"}

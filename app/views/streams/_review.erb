@@ -1,0 +1,16 @@
+<div id='review_<%=review.id%>'>
+  <div class='status_explanation'>
+      <div class='review_date'><%=review.updated_at%>
+        <% # status.modifier.name if status.last_modifier %>
+        <%=link_to_function('Edit', "edit(#{review.id});")%>
+        <% if current_user.has_role?('Admin')%>
+          <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'streams',
+           :action=>'destroy_review', :id=>review.id}, :confirm=>"Sure?",
+           :success=>"new Effect.SwitchOff('review_#{review.id}');")%>
+        <%end%>
+      </div>
+    <b>Review detail</b><br />
+	<%= review.text %>
+</div>
+<br />
+
