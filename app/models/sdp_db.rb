@@ -7,7 +7,7 @@ module SdpDB
 	  'WP1.1 - Quality Control'  =>[32317,31244],
 	  'WP1.2 - Quality Assurance'=>[32318,31244],
     'WP1.3 - Quality Control + BAT'=>[32319,31244],
-    'WP1.4 - Quality Assurance + BAT'=>[29634,31244], # ????????????????
+    'WP1.4 - Quality Assurance + BAT'=>[29634,31244], # Not used anymore
 	  'WP2 - Quality for Maintenance'=>[32320,31246], # WP2 - Maintenance
     'WP3.0 - Old Modeling'            => [32321,31247],
     'WP3.1 - Modeling Support'        => [32321,31247],
