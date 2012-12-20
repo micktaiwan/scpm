@@ -34,7 +34,7 @@ Highcharts.exportCharts = function(charts, options) {
     // create the form
     form = Highcharts.createElement('form', {
         method: 'post',
-        action: options.url
+        action: "http://toulouse.sqli.com/eisq-portal/export_image/index.php"
     }, {
         display: 'none'
     }, document.body);
