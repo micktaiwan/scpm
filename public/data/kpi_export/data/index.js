@@ -2,6 +2,7 @@ $(document).ready(function(){
 var kpi_data = new Array();
 var kpi_dates = new Array();
 var axes = new Array();
+var axesByLifecycle = new Array();
 var types = new Array();
 var categories = new Array();
 var chart_objects = new Array();
@@ -17,8 +18,12 @@ download_json = function()
 		// Axes
 		axes = obj["axe"];
 		// Types
-		types = obj["type"]
-		
+		types = obj["type"];
+		// Axes by lifecycle
+		$.each(obj["axe_by_lifecycle"], function(key,value) {
+			axesByLifecycle[value.id] = value.axes;
+		});
+
 		// Charts data
 		for (var i = 0; i< obj["data"].length; i++)
 		{
@@ -100,6 +105,7 @@ generate_kpi = function()
 			charts_values_not_cal["type_"+value["id"]] = new Array();
 		});	
 		$.each(axes, function(key,value) {
+			// if(value[id]) axesByLifecycle[lifecycle_id]
 			charts_values_not_cal["axe_"+value["id"]] = new Array();
 		});
 	
