@@ -105,8 +105,10 @@ generate_kpi = function()
 			charts_values_not_cal["type_"+value["id"]] = new Array();
 		});	
 		$.each(axes, function(key,value) {
-			// if(value[id]) axesByLifecycle[lifecycle_id]
-			charts_values_not_cal["axe_"+value["id"]] = new Array();
+			$.inArray(value["id"], axesByLifecycle[lifecycle_id])
+			{
+				charts_values_not_cal["axe_"+value["id"]] = new Array();
+			}
 		});
 	
 		// For each month, add sum and count of different types and axes
@@ -139,16 +141,21 @@ generate_kpi = function()
 				});
 				// By Axes
 				$.each(axes, function(axe_key,axe_value) {
-					if(chart_data_value["axe"] == axe_value["id"])
+					$.inArray(axe_value["id"], axesByLifecycle[lifecycle_id])
 					{
-						charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
-						charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
+						if(chart_data_value["axe"] == axe_value["id"])
+						{
+							charts_values_not_cal["axe_"+axe_value["id"]][current_date]["sum"] += helper_format_float(chart_data_value["sum"]);
+							charts_values_not_cal["axe_"+axe_value["id"]][current_date]["count"] += helper_format_float(chart_data_value["count"]);
+						}
 					}
 				});		
 			});
 		});
 	
-
+		// Hide axe in function of lifecycle
+		show_lifecycle_axes(lifecycle_id);
+		
 		if(type_id == 1)
 		{
 			kpi_calcul_classic(charts_values_not_cal);
@@ -261,6 +268,21 @@ kpi_calcul_cumul = function(charts_data)
 	$("#kpi_loading").hide();
 }
 
+show_lifecycle_axes = function(lifecycle_id)
+{
+	$.each(axes, function(axe_key,axe_value) 
+	{
+		if ($.inArray(parseInt(axe_value["id"]), axesByLifecycle[lifecycle_id]) > 0)
+		{
+			$("#axe_"+axe_value["id"]).show();			
+		}
+		else
+		{
+			$("#axe_"+axe_value["id"]).hide();
+		}
+	});
+}
+
 reset_charts = function()
 {
 	for(var chart_key in chart_objects)
@@ -288,7 +310,10 @@ $("#export").click(function() {
 	var chartExportArray = new Array();
 	for(var chartObj in chart_objects)
 	{
-		chartExportArray.push(chart_objects[chartObj]);
+		if($(chart_objects[chartObj].renderTo).is(":visible"))
+	 	{
+			chartExportArray.push(chart_objects[chartObj]);
+		}
 	}
 	/*Highcharts.exportCharts(chartExportArray,{
 		            type: 'image/jpeg',
