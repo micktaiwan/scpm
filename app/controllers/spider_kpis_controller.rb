@@ -468,6 +468,27 @@ class SpiderKpisController < ApplicationController
    end
    axe_json += "]"
    
+   # axes id by lifecycle
+   iLifecycle = 0
+   axe_by_lifecycle_json = '"axe_by_lifecycle" : ['
+   Lifecycle.find(:all).each do |lifecycle_element|
+     if(iLifecycle != 0)
+       axe_by_lifecycle_json += ','
+     end
+     axe_by_lifecycle_json += '{"id" : "' + lifecycle_element.id.to_s + '", "axes" : ['
+     iAxeByLifecycleElement = 0
+     lifecycle_element.pm_type_axe.uniq.each do |axe_element|
+       if(iAxeByLifecycleElement != 0)
+         axe_by_lifecycle_json += ','
+       end
+       axe_by_lifecycle_json += axe_element.id.to_s 
+       iAxeByLifecycleElement += 1
+     end
+     iLifecycle += 1
+     axe_by_lifecycle_json += "]}"
+   end
+   axe_by_lifecycle_json += "]"
+   
    # types
    iTypeElement = 0
    type_json = '"type" : ['
@@ -529,7 +550,7 @@ class SpiderKpisController < ApplicationController
        iQuery += 1
        iData += 1
      end
-    f.write("]}]," + date_json + "," + axe_json + "," + type_json + "}")
+    f.write("]}]," + date_json + "," + axe_json + "," + type_json + "," + axe_by_lifecycle_json + "}")
      
      }
  end
