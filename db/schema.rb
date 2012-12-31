@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(:version => 20121202210905) do
     t.text     "deliverable_list"
     t.string   "accountable"
     t.string   "deployment"
-    t.date     "launching_date"
+    t.date     "launching_date_ddmmyyyy"
     t.date     "sqli_validation_date_objective"
     t.date     "airbus_validation_date_objective"
     t.date     "deployment_date_objective"

@@ -29,7 +29,7 @@ class CsvCi
     :deliverable_list,
     :accountable,
     :deployment,
-    :launching_date,
+    :launching_date_ddmmyyyy,
     :sqli_validation_date_objective,
     :airbus_validation_date_objective,
     :sqli_validation_date_review,
@@ -113,6 +113,8 @@ private
     name.gsub!(" #","")
     name.gsub!("/","")
     name.gsub!("  ","_")
+    name.gsub!("(","")
+    name.gsub!(")","")
     name.gsub!(" ","_")
     name.gsub!("-","_")
     name.gsub!(".","")

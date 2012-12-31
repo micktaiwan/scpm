@@ -13,11 +13,11 @@ class ToolsController < ApplicationController
   PM_LOAD_PER_MONTH 		      = 48 #was: NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
   WP_LEADERS_DAYS_PER_MONTH   = 12 #was: 18 # 10 + 4*2
 
-  PM_PROVISION_ADJUSTMENT     = 0
-  QA_PROVISION_ADJUSTMENT     = 22.5
-  RK_PROVISION_ADJUSTMENT     = 21
-  CI_PROVISION_ADJUSTMENT     = 53.5
-  OP_PROVISION_ADJUSTMENT     = 0.5
+  PM_PROVISION_ADJUSTMENT     = -36.875
+  QA_PROVISION_ADJUSTMENT     = 11.625
+  RK_PROVISION_ADJUSTMENT     = -16
+  CI_PROVISION_ADJUSTMENT     = 23.5
+  OP_PROVISION_ADJUSTMENT     = -43.5
 
   def index
   end
@@ -175,7 +175,7 @@ class ToolsController < ApplicationController
   def get_sdp_graph_series(method)
     serie   = []
     labels  = []
-    logs = SdpImportLog.find(:all, :order=>"id")
+    logs = SdpImportLog.find(:all, :conditions => ['created_at >= "2012-12-20 00:00:00"'], :order=>"id")
     first = logs.first.created_at
     for l in logs
       serie << [l.created_at-first, l.send(method)]
