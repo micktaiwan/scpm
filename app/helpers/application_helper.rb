@@ -56,7 +56,7 @@ module ApplicationHelper
     year = date.year.to_s
     dateMonday = date - (date.cwday-1).days
     if dateMonday.month == 12 and dateMonday.day >= 29
-      year = (date.year + 1).to_s
+      year = (dateMonday.year + 1).to_s
     end
     (year + filled_number(date.cweek,2)).to_i
   end
