@@ -214,7 +214,7 @@ class SpidersController < ApplicationController
       spiderValues.each { |h|
         currentQuestion = SpiderValue.find(h[0])
         currentQuestion.note = h[1].to_s
-        if (spiderValuesRecursives[h[0]].to_s == "on")
+        if ((spiderValuesRecursives != nil) && (spiderValuesRecursives[h[0]].to_s == "on"))
           currentQuestion.recursive = true
         else
           currentQuestion.recursive = false
