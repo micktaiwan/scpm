@@ -1,7 +1,8 @@
 <li id="req_<%= import[:id] %>">
 <!-- Project -->
-<% #if import[:workpackage][0..4] != "WP7.1" %>
-<% if import[:workpackage][0..4] != "WP6.4" %>
+<% if import[:workpackage][0..4] != "WP7.1" %>
+<%  #TEST
+	#if import[:workpackage][0..4] != "WP6.4" %>
 	<% if not Project.find_by_name(import[:project_name]) %>
 	<strong>new project</strong>
 	<% end %>
