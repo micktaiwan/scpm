@@ -16,7 +16,7 @@
 	<% if not Stream.find_with_workstream(import[:workstream]) %>
 		<strong>Stream not found</strong>
 	<% end %>
-	<%= link_to_remote('link to stream', :url=>{:controller=>'streams', :action=>'link', :id=>import[:id]}, :update=>"req_#{import[:id]}") %>
+	<%#= link_to_remote('link to stream', :url=>{:controller=>'streams', :action=>'link', :id=>import[:id]}, :update=>"req_#{import[:id]}") %>
 <% end %>
 
 
