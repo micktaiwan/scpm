@@ -1,0 +1,2 @@
+module PmTypeAxesHelper
+end

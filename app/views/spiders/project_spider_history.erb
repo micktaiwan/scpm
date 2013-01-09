@@ -1,0 +1,152 @@
+
+<script type="text/javascript"> 
+$(function () {
+	
+	var docHeight = getDocHeight();
+	if (docHeight < 1000)
+	{
+		$("#spider_separator_offset").height("300px");
+		docHeight = getDocHeight();
+	}
+
+	// Manage the two charts
+	$("#chartContainer_0").show();
+	$(window).scroll(function(){
+		var spider_sepator = $("#spider_separator");
+		var docViewTop = $(window).scrollTop();
+	    var docViewBottom = docViewTop + $(window).height();
+		var docSurface = docViewBottom - docViewTop;
+		var docMiddle = docViewTop + (docSurface/2);
+
+	    var elemTop = $(spider_sepator).offset().top;
+		
+		if((elemTop - docMiddle >= 0) && (docViewBottom < (docHeight-10)))
+		{
+			$("#chartContainer_0").show();
+			$("#chartContainer_1").hide();
+		}
+		else
+		{
+			$("#chartContainer_1").show();
+			$("#chartContainer_0").hide();
+		}
+	});
+});
+
+// Helper
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        Math.max(D.body.scrollHeight, D.documentElement.scrollHeight),
+        Math.max(D.body.offsetHeight, D.documentElement.offsetHeight),
+        Math.max(D.body.clientHeight, D.documentElement.clientHeight)
+    );
+}
+</script>
+
+
+<%= link_to "Back to project spider view", :controller=>'spiders', :action=>'project_spider', :project_id=>@spider.project_id, :milestone_id=>@spider.milestone_id, :create_spider=>0 %>
+
+<%
+	projectName = ""
+	if( @spider.project.project_id != nil)
+		projectName += @spider.project.project.name
+	end
+	projectName += " > " + @spider.project.name
+%>
+<h3>Project : <%= projectName %> - Milestone : <%= @spider.milestone.name %></h3>
+
+<%
+concat "<h2>Spider [created the "
+concat @spider.created_at.to_s
+concat "] [Consolidated the "
+concat @spider.spider_consolidations.first().created_at.to_s
+concat "]</h2>"
+
+
+# Each type
+i = 0
+@consoByPmType.each { |p|
+	currentAxes = ""
+	currentAxeId = 0
+	chartName = "chartContainer_"+i.to_s
+	pmTabId = i.to_s
+	
+	# PM TYPE
+	concat "<div class='spider_container'><h3 id='table_title_" + pmTabId + "'>"+@pmType[p[0]].to_s + '</h3><table class="pm_type_tab" id="pm_' + pmTabId + '">'	
+
+	# EACH CONSO FOR CURRENT TYPE
+	p[1].each { |c|
+		# AXES
+		concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + c.pm_type_axe.id.to_s + "' style='background-color: #6D6D6D;color:white;border: 1px solid black;'>"+c.pm_type_axe.title+"</td><td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td></tr>"
+		
+		# VALUES
+		if (@axesValues[c.pm_type_axe.id] != nil)
+			@axesValues[c.pm_type_axe.id].each { |q|
+				concat '<tr><td class="spider_question_text">' + q.lifecycle_question.text  + '</td>'
+				concat '<td class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '">'
+				if(q.note != nil)
+					concat q.note
+				else
+					concat "NA"
+				end
+				concat '</td>'
+				concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="background-color: #8DC600;">'
+				if (q.reference)
+					concat q.reference
+				else
+					concat "NA"
+				end
+				concat '</td></tr>'	
+			}
+		end
+		
+		# CONSO RESULTS
+		concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+		concat "<td style='border: 1px solid black;' class='grey_cell'>"+c["average"].to_f.round(2).to_s+"</td>"
+		concat "<td style='border: 1px solid black;' class='green_cell'>"+c["average_ref"].to_f.round(2).to_s+"</td><tr>"	
+	}
+	
+	concat '</table>'
+	i = i + 1
+%>
+	<div class="spider_chart" id="<%= chartName %>"></div>
+	</div>
+<%	
+	if(i==1)
+		concat '<div id="spider_separator"></div>'
+		concat '<div id="spider_separator_offset"></div>'
+	end
+}
+
+concat '<script type="text/javascript">$(function () {'
+concat 'var consoDataArray = new Array();'
+pmTypeIndex = 0
+@consoByPmType.each { |consoByPmType|
+	pmTypeId = consoByPmType[0].to_s
+	pmTypeName = @pmType[consoByPmType[0]].to_s
+	
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"] = new Array();'
+
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["title"]="'+pmTypeName+'";'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["id"]="'+pmTypeId+'";'
+	
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["axes"]= new Array();'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["notes"]= new Array();'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["refs"]= new Array();'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["ni_nb"]= new Array();'
+	
+	# For each pmType, get conso (conso for one spider and one axe)
+	consoByPmType[1].each { |c| 
+		# AXE
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["axes"].push("'+c.pm_type_axe.title+'");'
+		
+		# AVERAGE DATA
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["notes"].push('+c.average.to_s+');'
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["refs"].push('+c.average_ref.to_s+');'
+		concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["ni_nb"].push('+c.ni_number.to_s+');'
+	}
+	pmTypeIndex += 1
+}
+concat 'calculHistoryAverage(consoDataArray);});</script>'
+%>

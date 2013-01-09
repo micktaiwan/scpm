@@ -1,0 +1,26 @@
+<!-- PM TITLE -->
+<% @resultsAxes.each do |pm_type| %>
+<h2><%= pm_type[1]["title"]%></h2>
+
+	<!-- AXE -->
+	<% pm_type[1]["axes"].each do |axe| %>
+	<div style= "border:1px solid black;">
+	<h4>
+	<span style="float: left; width: auto;"><%= axe[1]["title"]%> - Actions : </span>
+	<%= button_to "New", {:action => "new", :lifecycle_id => pm_type[1]["lifecycle_id"], :pm_type_axe_id => axe[0].to_s }, :method => :post %>
+	</h4>
+
+		<!-- QUESTION -->
+		<div style="background-color:#E0FFDB;">
+		<% axe[1]["questions"].each do |quest| %>
+		
+		<span style="float: left; width: auto;">Text : [<%= quest.text %>] - Validity : [<%= quest.validity %>] - Actions : </span>
+		<%= button_to "Edit", {:action => "edit", :id => quest.id, :lifecycle_id => pm_type[1]["lifecycle_id"], :pm_type_axe_id => axe[0].to_s }, :method => :post %>
+		<br />
+		<% end %>
+		</div>
+	</div>
+	<br />
+	<% end %>
+	
+<% end %>

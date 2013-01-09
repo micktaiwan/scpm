@@ -1,0 +1,10 @@
+<%= hidden_field(:question, :lifecycle_id, :value=>@lifecycle_id) %>
+<%= hidden_field(:question, :pm_type_axe_id, :value=>@pm_type_axe_id) %>
+
+<p><%= label_tag 'Text' %>
+<%= text_field :question, :text %></p>
+
+<p><%= label_tag 'Validity' %>
+<%= radio_button(:question, :validity, 1, {:checked=>@question.validity} ) %> Valid
+<%= radio_button(:question, :validity, 0, {:checked=>!@question.validity} ) %> Invalid
+</p>

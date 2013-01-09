@@ -1,0 +1,2 @@
+module LifecycleQuestionsHelper
+end

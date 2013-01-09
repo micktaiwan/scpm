@@ -1,0 +1,59 @@
+<SCRIPT language="Javascript">
+function question_reference_change(id,value)
+{
+	var question_reference_id = id;
+ 	var question_reference_note = value;
+	
+	// Lock screen
+	lock_inputs();
+	// Show loading indicator
+	$("loading_" + question_reference_id).show();
+
+	// Request
+	new Ajax.Request('/question_references/save_question_reference', {
+    parameters: { question_reference_id: question_reference_id, question_reference_note : question_reference_note  },
+	  onSuccess: function(response) {
+			unlock_inputs();
+			$("loading_" + question_reference_id).hide();
+	  },
+		onFailure:function(response) {
+			unlock_inputs(); 
+			$("loading_" + question_reference_id).hide();
+			alert("Error, modification not saved.");
+		}
+	});
+}
+
+function lock_inputs()
+{
+	$$('.question_reference_note').each(
+	   function (e) {
+	      e.disable();
+	});
+}
+function unlock_inputs()
+{
+	$$('.question_reference_note').each(
+	  function (e) {
+	     e.enable();
+  });	
+}
+function change_axe(value)
+{
+	new Ajax.Request('/question_references/generate_question_references_table', {
+    parameters: { axe_id: value },
+	  onSuccess: function(response) {
+			$("quest_ref_content").innerHTML = response.responseText;
+	  },
+		onFailure:function(response) {
+		}
+	});
+}
+
+change_axe("<%= @firstAxeId %>");
+
+</SCRIPT>
+<%= select_tag('choose_axe', options_for_select(@axesList), {:onchange=>"change_axe(this.value)"}) %>
+
+<div id="quest_ref_content">
+</div>

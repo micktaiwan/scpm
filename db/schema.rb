@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121129140025) do
+ActiveRecord::Schema.define(:version => 20121213210911) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -174,6 +174,15 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.datetime "updated_at"
   end
 
+  create_table "counter_logs", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "stream_id"
+    t.integer  "credit"
+    t.integer  "debit"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "generic_risk_questions", :force => true do |t|
     t.text     "question"
     t.datetime "created_at"
@@ -192,6 +201,28 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.text     "risk"
     t.text     "consequence"
     t.text     "actions"
+  end
+
+  create_table "lifecycle_milestones", :force => true do |t|
+    t.integer  "lifecycle_id"
+    t.integer  "milestone_name_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lifecycle_questions", :force => true do |t|
+    t.integer  "lifecycle_id"
+    t.integer  "pm_type_axe_id"
+    t.string   "text"
+    t.boolean  "validity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lifecycles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "logs", :force => true do |t|
@@ -260,6 +291,26 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.datetime "created_at"
   end
 
+  create_table "plannings", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pm_type_axes", :force => true do |t|
+    t.integer  "pm_type_id"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pm_types", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "project_people", :id => false, :force => true do |t|
     t.integer  "project_id"
     t.integer  "person_id"
@@ -285,6 +336,17 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.integer  "lifecycle",     :default => 0
     t.string   "pm_deputy"
     t.string   "ispm"
+    t.integer  "lifecycle_id"
+    t.integer  "qs_count",      :default => 0
+    t.integer  "spider_count",  :default => 0
+  end
+
+  create_table "question_references", :force => true do |t|
+    t.integer  "question_id"
+    t.integer  "milestone_id"
+    t.string   "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "req_categories", :force => true do |t|
@@ -357,6 +419,7 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.string   "sdpiteration"
     t.string   "contre_visite_milestone"
     t.string   "request_type"
+    t.integer  "stream_id"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
@@ -410,6 +473,12 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.string   "is_covered"
     t.text     "cover_detail"
     t.date     "last_review"
+  end
+
+  create_table "review_types", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "risks", :force => true do |t|
@@ -561,6 +630,33 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.integer  "phase_by_type_id"
   end
 
+  create_table "spider_consolidations", :force => true do |t|
+    t.integer  "spider_id"
+    t.integer  "pm_type_axe_id"
+    t.float    "average"
+    t.float    "average_ref"
+    t.integer  "ni_number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "spider_values", :force => true do |t|
+    t.integer  "lifecycle_question_id"
+    t.integer  "spider_id"
+    t.string   "note"
+    t.string   "reference"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "recursive",             :default => false
+  end
+
+  create_table "spiders", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "milestone_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "statuses", :force => true do |t|
     t.integer  "project_id",                                           :null => false
     t.integer  "status",            :default => 0
@@ -582,6 +678,35 @@ ActiveRecord::Schema.define(:version => 20121129140025) do
     t.text     "ws_report"
     t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
     t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
+  end
+
+  create_table "stream_reviews", :force => true do |t|
+    t.integer  "stream_id"
+    t.integer  "review_type_id"
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "streams", :force => true do |t|
+    t.string   "name"
+    t.integer  "total_qs_count"
+    t.integer  "total_spider_count"
+    t.integer  "workstream_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.integer  "planning_id"
+    t.string   "name"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.float    "work_in_day"
+    t.float    "person_nb"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "team_size",   :default => 0.0
   end
 
   create_table "topics", :force => true do |t|

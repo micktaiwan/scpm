@@ -1,0 +1,224 @@
+<script type="text/javascript"> 
+$(function () {
+	
+	// Consolidate fct
+	function consolidate()
+	{
+		document.getElementById("consolidate_spider").value=1;
+		document.forms["form_update_spider"].submit();
+	}
+	$("#consolidate_btn").click(function () {
+		consolidate();
+	});
+
+	$("select").change(function () {
+		calculAverage();
+	});
+	calculAverage();
+	
+	// Manage the two charts
+	var docHeight = getDocHeight();
+	if (docHeight < 1000)
+	{
+		$("#spider_separator_offset").height("300px");
+		docHeight = getDocHeight();
+	}
+	
+	
+	$("#chartContainer_0").show();
+	$(window).scroll(function(){
+		var spider_sepator = $("#spider_separator");
+		var docViewTop = $(window).scrollTop();
+	    var docViewBottom = docViewTop + $(window).height();
+		//console.log(docViewBottom);
+		//console.log(getDocHeight());
+		var docSurface = docViewBottom - docViewTop;
+		var docMiddle = docViewTop + (docSurface/2);
+
+	    var elemTop = $(spider_sepator).offset().top;
+
+		
+		if((elemTop - docMiddle >= 0) && (docViewBottom < (getDocHeight()-10)))
+		{
+			$("#chartContainer_0").show();
+			$("#chartContainer_1").hide();
+		}
+		else
+		{
+			$("#chartContainer_1").show();
+			$("#chartContainer_0").hide();
+		}
+	});
+});
+
+// Helper
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        Math.max(D.body.scrollHeight, D.documentElement.scrollHeight),
+        Math.max(D.body.offsetHeight, D.documentElement.offsetHeight),
+        Math.max(D.body.clientHeight, D.documentElement.clientHeight)
+    );
+}
+</script>
+
+
+<%= link_to "Back to project", :controller=>'projects', :action=>'show', :id=>@currentProjectId %>
+<!-- *** -->
+<!-- CURRENT SPIDER QUESTIONS -->
+<!-- *** -->
+<%
+	projectName = ""
+	if( @project.project_id != nil)
+		projectName += @project.project.name
+	end
+	projectName += " > "+@project.name
+%>
+<h3>Project : <%= projectName %> - Milestone : <%= @milestone.name %></h3>
+<h2>Current Spider</h2>
+
+<% if (@spider)%>
+	<p>Creation Date : <%= @spider.created_at %></p>
+	<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_update_spider') do -%>
+	<input type="hidden" name="project_id" id="project_id" value="<%= @currentProjectId %>" />
+	<input type="hidden" name="milestone_id" id="milestone_id" value="<%= @currentMilestoneId %>" />
+	<input type="hidden" name="spider_id" id="spider_id" value="<%= @spider.id %>" />
+	<input type="hidden" name="consolidate_spider" id="consolidate_spider" value="0"  />
+
+<%
+	i = 0
+	# each PM type loop
+	@questions.each {|p| 
+		# PARAMS
+		currentAxes = ""
+		currentAxeId = ""
+		chartName = "chartContainer_"+i.to_s
+		pmTabId = i.to_s
+		
+		# Header and table creation
+		concat "<div class='spider_container'><h3 id='table_title_" + pmTabId + "'>"+ @pmType[p[0]].to_s + '</h3><table class="pm_type_tab" id="pm_' + pmTabId + '">'	
+
+		# each lines - questions
+		j = 0
+		p[1].each { |q| 
+			
+			# New Axes
+			if(currentAxes != q.lifecycle_question.pm_type_axe.title)
+				if(j!=0)
+					concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+					concat "<td style='border: 1px solid black;' class='grey_cell' id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"
+					concat "<td style='border: 1px solid black;' class='green_cell' id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td>"
+					concat "<td></td><tr>"
+					concat "<tr><td collspan='4' style='height:5px;background-color:white;'></td></tr>"
+					currentAxeId = q.lifecycle_question.pm_type_axe.id.to_s
+				else
+					currentAxeId = q.lifecycle_question.pm_type_axe.id.to_s
+				end
+				concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' style='background-color: #6D6D6D;color:white;border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td>"
+				concat "<td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td><td style='background-color: #6D6D6D;color:white;border: 1px solid black;width:80px;'>Recursive ?</td></tr>"
+				currentAxes = q.lifecycle_question.pm_type_axe.title
+			end
+			
+			# Question line
+			concat '<tr><td class="spider_question_text">' + q.lifecycle_question.text  + '</td>'
+			# SELECT LIST - Question note
+			concat '<td><select class="question_note_' + q.lifecycle_question.pm_type_axe.id.to_s + '" name="spiderquest[' + q.id.to_s + '][]" value="' + q.note.to_s + '">'
+				# NI
+				concat '<option '
+				if (q.note.to_s == "NI") 
+					concat 'selected ' 
+				end
+				concat 'value="NI">NI</option>'
+				# 0
+				concat '<option '
+				if (q.note.to_s == "0") 
+					concat 'selected ' 
+				end
+				concat 'value="0">0</option>'
+				# 1
+				concat '<option '
+				if (q.note.to_s == "1") 
+					concat 'selected ' 
+				end
+				concat 'value="1">1</option>'
+				# 2
+				concat '<option '
+				if (q.note.to_s == "2") 
+					concat 'selected ' 
+				end
+				concat 'value="2">2</option>'
+				# 3
+				concat '<option '
+				if (q.note.to_s == "3") 
+					concat 'selected ' 
+				end
+				concat 'value="3">3</option>'
+			concat '</select></td>'
+			
+			# Question Reference
+			concat '<td class="question_reference_' + q.lifecycle_question.pm_type_axe.id.to_s + '" style="background-color: #8DC600;">'
+			if(q.reference)
+			  concat q.reference 
+			else
+			  concat "NI"
+		 	end
+			
+			# End question line
+			concat '</td>'
+			concat '<td><input type="checkbox" name="spiderquestresursive[' + q.id.to_s + '][]"'
+			if (q.recursive)
+				concat ' checked'
+			end
+			concat ' /></td>'
+			concat '</tr>'	
+			j = j + 1
+		}
+		concat "<tr><td style='border: 1px solid black;' class='grey_cell'>Average</td>"
+		concat "<td style='border: 1px solid black;' class='grey_cell' id='" + pmTabId + "_axe_average_note_" + currentAxeId + "'></td>"			
+		concat "<td style='border: 1px solid black;' class='green_cell' id='" + pmTabId + "_axe_average_ref_" + currentAxeId + "'></td>"
+		concat "<td></td><tr>"	
+		concat '</table>'
+		i = i + 1
+		
+		# Chart		
+%>
+		<div class="spider_chart" id="<%= chartName %>"></div>
+	</div>
+<%	
+		if(i==1)
+			concat '<div id="spider_separator"></div>'
+			concat '<div id="spider_separator_offset"></div>'
+		end
+	}
+%>
+	<div id="spider_form_buttons">
+		<h3>Actions</h3>
+		<input type="submit" value="Save" />
+		<input type="button" value="Consolidate" id="consolidate_btn" />
+	</div>
+	<% end -%>	
+<% else %>
+	<p>No data.</p>
+	<% form_tag({:action => "project_spider"}, :method => "get", :id => "form_create_spider") do -%>
+		<input type="hidden" value="<%= @currentProjectId %>" name="project_id" />
+		<input type="hidden" value="<%= @currentMilestoneId %>" name="milestone_id" />
+		<input type="hidden" value="1" name="create_spider" />
+		<input type="submit" value="Create new spider" />
+	<% end -%>
+<% end %>
+
+<!-- *** -->
+<!-- HISTORY -->
+<!-- *** -->
+
+<h2>History</h2>
+<% @history.each { |s|
+	spider_name = "Spider [created the "
+	spider_name << s.created_at.to_s
+	spider_name << "] [Consolidated the "
+	spider_name << s.spider_consolidations.first().created_at.to_s
+	spider_name << "]"
+%>
+	<%= link_to spider_name, :action => "project_spider_history", :spider_id => s.id %><br />
+
+<% } %>

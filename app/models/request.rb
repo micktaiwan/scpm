@@ -1,6 +1,7 @@
 class Request < ActiveRecord::Base
 
   belongs_to :project
+  belongs_to :stream
   has_one    :wl_line, :primary_key=>"request_id"
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
 

@@ -1,0 +1,25 @@
+<%
+
+concat "<h2>-------------------- Projects not found --------------------</h2>"
+@projectsNotFound.each do |t|
+	concat t.to_s + "<br />"
+end
+
+concat "<h2>-------------------- Milestones in projects not found --------------------</h2>"
+@milestonesNotFound.each do |t|
+	concat t.to_s + "<br />"
+end
+
+concat "<h2>-------------------- Axes not found --------------------</h2>"
+@axesNotFound.each do |a|
+	concat a.to_s + "<br />"
+end
+
+concat "<h2>-------------------- Projects added --------------------</h2>"
+@projectsAdded.each do |p|
+	concat p.to_s + "<br />"
+end
+
+
+
+%>

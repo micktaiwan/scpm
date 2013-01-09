@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
   end
 
   def do_login
+    raise "no parameter :person" if !params[:person]
     authenticate(params[:person][:login], params[:person][:pwd])
     if logged_in?
       session[:project_filter_qr] = [current_user.id]

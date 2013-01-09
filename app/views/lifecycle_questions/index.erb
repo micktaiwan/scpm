@@ -1,0 +1,14 @@
+<SCRIPT language="Javascript">
+function change_lifecycle(lifecycle_id)
+{
+  new Ajax.Request('/lifecycle_questions/format_questions', {
+    parameters: { lifecycle_id: lifecycle_id }
+    });
+}
+</SCRIPT>
+
+Lifecycle : <%= select_tag('choose_lifecycle', options_for_select(@lifecycles), {:onchange=>"change_lifecycle(this.value)"}) %>
+
+<div id="questions_list">
+  <%= render(:partial=>"questions", :locals=>{:resultsAxes => @resultsAxes}) %>
+</div>

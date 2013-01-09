@@ -1,0 +1,134 @@
+<html>
+<head>
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<title>EISQ Spider</title>
+	<script src="data/jquery_kpi.js"></script>
+	<script src="data/highcharts.js"></script>
+	<script src="data/exporting.js"></script>
+	<script src="data/group_export.js"></script>
+	<script src="data/kpi_chart.js"></script>
+	<script src="data/index.js"></script>
+	<style type="text/css">
+	  #kpi_loading  {
+	    position:absolute;  
+	    width: 100%;
+	    height: 100%;  
+		background-color:black;
+		z-index: 9;
+		display:none;
+		opacity:0.7;
+	  }
+	  #kpi_loading_content {
+		background-color:white;
+		width: 70px;
+		height: 80px;
+	    margin-left: auto;
+	    margin-right: auto;
+		opacity:1.0;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+		margin-top:15px;
+		text-align:center;
+	  }
+	</style>
+</head>
+<body>
+<p>Notice : This module don't work on chrome.</p>
+<div id="chart_selectors">
+	Type : <select id="choose_type" name="choose_type" onchange="generate_kpi()">
+			<option value="1">Classic</option>
+			<option value="2">Cumul</option>
+	</select>
+	Lifecycle : <select id="choose_lifecycle" name="choose_lifecycle" onchange="generate_kpi()">
+		<option value="1">FullGPP</option>
+		<option value="2">LightGPP</option>
+		<option value="3">Maintenance</option>
+		<option value="4">LBIPGx</option>
+		<option value="5">LBIPgx</option>
+		<option value="6">LBIPpgx</option>
+		<option value="7">Suite</option>
+	</select>
+	Workstream : <select id="choose_workstream" name="choose_workstream" onchange="generate_kpi()">
+		<option value="0">None</option>
+		<option value="EI">EI</option>
+		<option value="EV">EV</option>
+		<option value="EE">EE</option>
+		<option value="EG">EG</option>
+		<option value="ES">ES</option>
+		<option value="EY">EY</option>
+		<option value="EZC">EZC</option>
+		<option value="EZ">EZ</option>
+		<option value="EZMB">EZMB</option>
+		<option value="EZMC">EZMC</option>
+		<option value="TBCE">TBCE</option>
+	</select>
+	Milestones : <select id="choose_milestone" name="choose_milestone" onchange="generate_kpi()">
+		<option value="0">None</option>
+		<option value="1">M1</option>
+		<option value="2">M3</option>
+		<option value="3">QG BRD</option>
+		<option value="4">QG ARD</option>
+		<option value="5">M5</option>
+		<option value="6">M5/M7</option>
+		<option value="7">M7</option>
+		<option value="8">M9</option>
+		<option value="9">M9/M10</option>
+		<option value="10">M10</option>
+		<option value="11">QG TD</option>
+		<option value="12">M10a</option>
+		<option value="13">QG MIP</option>
+		<option value="14">M11</option>
+		<option value="15">M12</option>
+		<option value="16">M12/M13</option>
+		<option value="17">M13</option>
+		<option value="18">M14</option>
+		<option value="19">CCB</option>
+		<option value="20">QG TD M</option>
+		<option value="21">MIPM</option>
+		<option value="22">G0</option>
+		<option value="23">G2</option>
+		<option value="24">G3</option>
+		<option value="25">G4</option>
+		<option value="26">G5</option>
+		<option value="27">G6</option>
+		<option value="28">G7</option>
+		<option value="29">G8</option>
+		<option value="30">G9</option>
+		<option value="31">g0</option>
+		<option value="32">g2</option>
+		<option value="33">g3</option>
+		<option value="34">g4</option>
+		<option value="35">g5</option>
+		<option value="36">g6</option>
+		<option value="37">g7</option>
+		<option value="38">g8</option>
+		<option value="39">g9</option>
+		<option value="40">pg0</option>
+		<option value="41">pg2</option>
+		<option value="42">pg3</option>
+		<option value="43">pg4</option>
+		<option value="44">pg5</option>
+		<option value="45">pg6</option>
+		<option value="46">pg7</option>
+		<option value="47">pg8</option>
+		<option value="48">pg9</option>
+		<option value="49">sM1</option>
+		<option value="50">sM3</option>
+		<option value="51">sM5</option>
+		<option value="52">sM13</option>
+		<option value="53">sM14</option>
+	</select>
+</div>
+
+<input type="button" id="export" value="Export all" />
+
+<div id="kpi_loading">
+	<div id="kpi_loading_content"><img src="data/kpi_loading.gif" /><br />Loading...</div>
+</div>
+
+<div id="charts">
+</div>	
+
+	
+</body>
+</html>

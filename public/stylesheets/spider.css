@@ -1,0 +1,45 @@
+/* GENERAL */
+.pm_type_tab{
+	width : 50%;
+	float: left;
+	margin-right : 20px;
+	border : 1px solid black;
+}
+.spider_chart{
+	float: right;
+	right: 0px;
+	top: 180px;
+	position: fixed;
+	width: 600px; 
+	height: 400px; 
+	margin: 0 auto;
+	display: none;
+}
+.spider_container
+{
+	width : 100%;
+	background-color:#F7F7F7;
+	margin-top: 30px;
+	overflow:hidden; 
+}
+#spider_form_buttons
+{
+	margin-top:10px;
+	background-color:#F7F7F7;
+}
+
+
+/* SPIDER TABLE CELLS */
+.spider_question_text
+{
+	background-color:#89BEFF;
+}
+.grey_cell
+{
+	background-color: #6D6D6D;
+	color:white;
+}
+.green_cell
+{
+	background-color: #8DC600;
+}
