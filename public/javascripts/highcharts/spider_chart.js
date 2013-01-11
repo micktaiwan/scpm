@@ -152,14 +152,15 @@ function generate_spider_chart(chartId,chartName,xAxisArray,serie1,serie2)
 			url : "http://toulouse.sqli.com/eisq-portal/export_image/index.php"
 		},
 	    series: [{
-	        name: 'Note',
-	        color: '#0E13FF',
-	        data: serie1,
-	        pointPlacement: 'on'
-	    }, {
 	        name: 'Reference',
 	        color: '#99B3FF',
 	        data: serie2,
+	        pointPlacement: 'on'
+	    },
+		{
+	        name: 'Note',
+	        color: '#0E13FF',
+	        data: serie1,
 	        pointPlacement: 'on'
 	    }]
 	});
