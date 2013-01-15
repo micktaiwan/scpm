@@ -15,6 +15,7 @@
 	
 	<td><select class="question_reference_note" id="<%= m.id %>" onchange="question_reference_change(this.id,this.value);">
 		<option <% if (m.note.to_s == "NI") %>selected<% end %> value="NI">NI</option>
+		<option <% if (m.note.to_s == "0") %>selected<% end %> value="0">0</option>
 		<option <% if (m.note.to_s == "1") %>selected<% end %> value="1">1</option>
 		<option <% if (m.note.to_s == "2") %>selected<% end %> value="2">2</option>
 		<option <% if (m.note.to_s == "3") %>selected<% end %> value="3">3</option>
