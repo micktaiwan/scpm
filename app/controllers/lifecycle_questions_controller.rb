@@ -3,6 +3,11 @@ class LifecycleQuestionsController < ApplicationController
   
   def index
     format_questions()
+    if params[:lifecycle_id] != nil
+      @lifecycle_index_select = params[:lifecycle_id]
+    else
+      @lifecycle_index_select = 0
+    end
   end
   
   def format_questions
@@ -62,13 +67,13 @@ class LifecycleQuestionsController < ApplicationController
      end
      
      format_questions()
-     redirect_to :action => 'index'
+     redirect_to :action => 'index', :lifecycle_id => @question.lifecycle_id
   end
 
   def update
     @question = LifecycleQuestion.find(params[:id])
     if @question.update_attributes(params[:question])
-      redirect_to :action => "index"
+      redirect_to :action => "index", :lifecycle_id => @question.lifecycle_id
     else
       render :action => "edit"
     end
@@ -76,7 +81,7 @@ class LifecycleQuestionsController < ApplicationController
 
   def destroy
      LifecycleQuestion.find(params[:id]).destroy
-     redirect_to :action => "index"
+     redirect_to :action => "index", :lifecycle_id => @question.lifecycle_id
   end
 
 
