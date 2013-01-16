@@ -1,19 +1,32 @@
-<br />
-<% question_str = "" %>
+<% question_id = "" %>
+
 <table>
-<tr><th>Lifecycle</th><th>Axe</th><th>Milestone</th><th>Question text</th><th>Reference Note</th></tr>
+<% indexArray = 0 %>
 <% @questionReferencesList.each{|m| %>
-	<% if(question_str != m.lifecycle_question.text.to_s) %>
-		<tr><td colspan="3"></td><td><%= m.lifecycle_question.text.to_s %></td></tr>
-		<% question_str = m.lifecycle_question.text.to_s %>
+	<!--  Index / Header -->
+	<% if(question_id != m.lifecycle_question.id.to_s) %>
+		<tr><td colspan="4"></td></tr>
+		<tr><td style="background-color: #8DC600;border: 1px solid black;font-weight:bold;" colspan="3"><%= m.lifecycle_question.lifecycle.name.to_s %> | <%= m.lifecycle_question.text.to_s %></td></tr>
+		<tr><!-- <th>Lifecycle</th> --><!-- <th>Axe</th> --><th>Milestone</th><!-- <th>Question text</th> --><th>Reference Note</th></tr>
+		<% question_id = m.lifecycle_question.id.to_s %>
 	<% end %>
-	<tr>
-	<td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.lifecycle_question.lifecycle.name.to_s %></td>
-	<td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.lifecycle_question.pm_type_axe.title.to_s %></td>
-	<td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.milestone_name.title.to_s %></td>
-	<td style="background-color: #8DC600;border: 1px solid black;"><%= m.lifecycle_question.text.to_s %></td>
 	
-	<td><select class="question_reference_note" id="<%= m.id %>" onchange="question_reference_change(this.id,this.value);">
+	<!-- COLOR -->
+	<%
+		bgColor = "#C7C7C7";
+		if(indexArray % 2 == 0)
+			bgColor = "#B1E0FF";
+		end
+	%>
+	
+	<!-- CONTENT - LINE -->
+	<tr>
+	<!-- <td style="background-color: <%= bgColor %>;"><%= m.lifecycle_question.lifecycle.name.to_s %></td> -->
+	<!-- <td style="background-color: #6D6D6D;color:white;border: 1px solid black;"><%= m.lifecycle_question.pm_type_axe.title.to_s %></td> -->
+	<td style="background-color: <%= bgColor %>;"><%= m.milestone_name.title.to_s %></td>
+	<!-- <td style="background-color: #8DC600;border: 1px solid black;"><%= m.lifecycle_question.text.to_s %></td> -->
+	
+	<td style="text-align:right;background-color: <%= bgColor %>;" ><select class="question_reference_note" id="<%= m.id %>" onchange="question_reference_change(this.id,this.value);">
 		<option <% if (m.note.to_s == "NI") %>selected<% end %> value="NI">NI</option>
 		<option <% if (m.note.to_s == "0") %>selected<% end %> value="0">0</option>
 		<option <% if (m.note.to_s == "1") %>selected<% end %> value="1">1</option>
@@ -22,6 +35,6 @@
 	</select></td>
 	
 	<td id="loading_<%= m.id %>" style="display:none;"><%= image_tag "ajax-loader.gif", :alt => "Loading", :id => "image_loading" %></td>
-	
+	<% indexArray += 1 %>
 <% } %>
 </table>
