@@ -6,8 +6,7 @@
 	<!--  Index / Header -->
 	<% if(question_id != m.lifecycle_question.id.to_s) %>
 		<tr><td colspan="4"></td></tr>
-		<tr><td style="background-color: #8DC600;border: 1px solid black;font-weight:bold;" colspan="3"><%= m.lifecycle_question.lifecycle.name.to_s %> | <%= m.lifecycle_question.text.to_s %></td></tr>
-		<tr><!-- <th>Lifecycle</th> --><!-- <th>Axe</th> --><th>Milestone</th><!-- <th>Question text</th> --><th>Reference Note</th></tr>
+		<tr><td style="background-color: #8DC600;border: 1px solid black;font-weight:bold;" colspan="3"><%= m.lifecycle_question.text.to_s %></td></tr>
 		<% question_id = m.lifecycle_question.id.to_s %>
 	<% end %>
 	

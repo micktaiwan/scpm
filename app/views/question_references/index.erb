@@ -1,4 +1,7 @@
 <SCRIPT language="Javascript">
+var lifecycle_selected;
+var axe_selected;
+
 function question_reference_change(id,value)
 {
 	var question_reference_id = id;
@@ -16,11 +19,11 @@ function question_reference_change(id,value)
 			unlock_inputs();
 			$("loading_" + question_reference_id).hide();
 	  },
-		onFailure:function(response) {
+	  onFailure:function(response) {
 			unlock_inputs(); 
 			$("loading_" + question_reference_id).hide();
 			alert("Error, modification not saved.");
-		}
+	  }
 	});
 }
 
@@ -38,11 +41,13 @@ function unlock_inputs()
 	     e.enable();
   });	
 }
+
 function change_axe(value)
 {
 	new Ajax.Request('/question_references/generate_question_references_table', {
-    parameters: { axe_id: value },
+    parameters: { axe_id: value , lifecycle_id : lifecycle_selected},
 	  onSuccess: function(response) {
+			axe_selected = value;
 			$("quest_ref_content").innerHTML = response.responseText;
 	  },
 		onFailure:function(response) {
@@ -50,9 +55,37 @@ function change_axe(value)
 	});
 }
 
-change_axe("<%= @firstAxeId %>");
+function change_lifecycle(value)
+{
+	new Ajax.Request('/question_references/generate_question_references_table', {
+    parameters: { axe_id: axe_selected , lifecycle_id : value },
+	  onSuccess: function(response) {
+			lifecycle_selected = value;
+			$("quest_ref_content").innerHTML = response.responseText;
+	  },
+		onFailure:function(response) {
+		}
+	});
+}
+
+function first_init(axeId, lifecycleId)
+{
+	new Ajax.Request('/question_references/generate_question_references_table', {
+    parameters: { axe_id : axeId , lifecycle_id : lifecycleId },
+	  onSuccess: function(response) {
+			lifecycle_selected = lifecycleId;
+			axe_selected = axeId;
+			$("quest_ref_content").innerHTML = response.responseText;
+	  },
+		onFailure:function(response) {
+		}
+	});	
+}
+
+first_init("<%= @firstAxeId %>","<%= @firstLifecycleId %>");
 
 </SCRIPT>
+<%= select_tag('choose_lifecycle', options_for_select(@lifecycleList), {:onchange=>"change_lifecycle(this.value)"}) %>
 <%= select_tag('choose_axe', options_for_select(@axesList), {:onchange=>"change_axe(this.value)"}) %>
 
 <div id="quest_ref_content">
