@@ -1,11 +1,21 @@
 <SCRIPT language="Javascript">
+
 function change_lifecycle(lifecycle_id)
 {
-  new Ajax.Request('/lifecycle_questions/format_questions', {
-    parameters: { lifecycle_id: lifecycle_id }
-    });
+  if(location.toString().indexOf("index") !== -1)
+  {
+	location.replace("index?lifecycle_id="+lifecycle_id);
+  }
+  else
+  {
+	location.replace("lifecycle_questions/index?lifecycle_id="+lifecycle_id);
+  }
+  // new Ajax.Request('/lifecycle_questions/format_questions?lifecycle_id='+lifecycle_id, 
+  //   {
+  //   });
 }
 </SCRIPT>
+
 Lifecycle : <%= select_tag('choose_lifecycle', options_for_select(@lifecycles, @lifecycle_index_select.to_i), {:onchange=>"change_lifecycle(this.value)"}) %>
 
 <div id="questions_list">
