@@ -105,10 +105,10 @@ module SdpDB
       ['All','WP2 - Quality for Maintenance']=>142225,
       
       # WP 3
-      ['All','WP3.0 - Old Modeling']=>142226,                         #????? = WP3
+      ['All','WP3.0 - Old Modeling']=>142226,                         
       ['All','WP3 - Modeling']=>142226, 
       ['All','WP3.1 - Modeling Support']=>143054,
-      ['All','WP3.2 - Modeling Conception and Production']=>142226,   #????? = WP3
+      ['All','WP3.2 - Modeling Conception and Production']=>142226,   
       ['All','WP3.2.1 - Business Process Layout']=>143055,
       ['All','WP3.2.2 - Functional Layout (Use Cases)']=>143056,
       ['All','WP3.2.3 - Information Layout (Data Model)']=>143057,
@@ -116,9 +116,9 @@ module SdpDB
       ['All','WP3.4 - Modeling BAT specific Production']=>143059,
       
       # WP 4
-      ['All','WP4.1 - Surveillance Audit']=>142227, # NOK
-      ['All','WP4.2 - Surveillance Root cause']=>142228, # NOK
-      ['All','WP4.3 - Actions Implementation & Control']=>142229, # OK
+      ['All','WP4.1 - Surveillance Audit']=>142227,
+      ['All','WP4.2 - Surveillance Root cause']=>142228,
+      ['All','WP4.3 - Actions Implementation & Control']=>142229,
       
       # WP 5
       ['All','WP5 - Change Accompaniment']=>142230,
@@ -153,21 +153,17 @@ module SdpDB
       ['All','WP7.2.5 - Expertise Activities for Project: Lessons Learnt']=>143078,		 
       ['All','WP7.2.6 - Expertise Activities for Project: Configuration Management']=>143079,
       
-      # !!!!!
-      # TODO
-      # !!!!!
-      
-      #['Audit',nil]=>127637,
+      # BUNDLE MANAGEMENT
       ['Bundle Management','']=>142237,
       ['Bundle Quality Assurance','']=>142236,
-      ['Continuous Improvement','']=>142238,
-      #['Hand-Over','']=>102845,
-      #['Initialization','']=>102844,
-      ['Montée en compétences',nil]=>142240,
       ['Operational Management',nil]=>142239,
-      ['Processes Evaluation',nil]=>142229,
-      ['Root Causes Analysis',nil]=>142228,
-      ['Sous charges',nil]=>142241
+      ['Montée en compétences',nil]=>142240,
+      ['Continuous Improvement','']=>142238,
+      ['Sous charges',nil]=>142241,
+      
+      # WP4
+      ['Processes Evaluation',nil]=>143222,
+      ['Root Causes Analysis',nil]=>142228
       }
 
   # SDP Doamin
