@@ -21,7 +21,7 @@ module SdpDB
     'WP1.6.8 – Lessons Learnt'          =>[32498,31244], #NEW
     'WP2 - Quality for Maintenance'=>[32320,31246], # WP2 - Maintenance
     'WP3.0 - Old Modeling'            => [32321,31247],
-    'WP3 - Modeling'=>[32321,31247],
+    'WP3 - Modeling'                  =>[32321,31247],
     'WP3.1 - Modeling Support'        => [32321,31247],
     'WP3.2 - Modeling Conception and Production' => [32321,31247],
     'WP3.2.1 - Business Process Layout'          => [32321,31247], #NEW

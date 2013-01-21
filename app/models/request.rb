@@ -531,7 +531,29 @@ class Request < ActiveRecord::Base
     'WP3.2 - Modeling Conception and Production' => ['M5', 'M5/M7', 'G5'],
     'WP3.3 - Modeling BAT specific Control' =>      ['M5', 'M5/M7', 'G5'],
     'WP3.4 - Modeling BAT specific Production' =>   ['M5', 'M5/M7', 'G5'],
-    'WP5 - Change Accompaniment' 		  => ['M11']
+    'WP5 - Change Accompaniment' 		  => ['M11'],
+    'WP1.6.2 - Project Setting-up' 		  => ['M3','G2','pg2','g2'],
+    'WP1.6.6 - QG BRD' 		  => ['QG BRD'],
+    'WP1.6.7 - QG TD' 		  => ['QG TD'],
+    'WP1.6.8 - Lessons Learnt' 		  => ['M5','M5/M7','G5','pg5','g5','M10','M14','G9','pg9','g9'],
+    'WP3.2.1 - Modeling Business Process Layout' => ['M5', 'M5/M7', 'G5'],
+    'WP3.2.2 - Modeling Use Cases' => ['M5', 'M5/M7', 'G5'],
+    'WP3.2.3 - Modeling Data Model' => ['M5', 'M5/M7', 'G5'],
+    'WP5.1 - Change: Diagnosis & Action Plan' 		  => ['M11'],
+    'WP5.2 - Change : Implementation Support & Follow-up' 		  => ['M11'],
+    'WP6.6 - Coaching HLR' =>     ['M3', 'G2', 'pg2', 'g2', 'sM3'],
+    'WP6.7 - Coaching Business Process' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
+    'WP6.8 - Coaching Use Case' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
+    'WP6.9 - Coaching Data Model' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
+    'WP6.10.1 - Coaching Agility - Diagnosis & Project Launch' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
+    'WP6.10.2 - Coaching Agility - Sprint 0' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
+    'WP6.10.3 - Coaching Agility - Sprint n' =>     ['M7', 'M9', 'M9/M10', 'M10','G6','pg6','g6'],
+    'WP7.1.1 - Expert - Req Mgt' =>     ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.1.2 - Expert - Risks Mgt' =>     ['M13', 'G8', 'pg8', 'g8'],
+    'WP7.1.3 - Expert - Test Mgt' =>     ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.1.4 - Expert - Change Mgt' =>     ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.1.5 - Expert - Lessons Learnt' =>     ['M14', 'G9', 'pg7', 'g7'],
+    'WP7.1.6 - Expert - Conf Mgt' =>     ['M3', 'G2', 'pg2', 'g2']
     }
 
   def wp_index(wp, cv)
