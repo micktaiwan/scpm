@@ -4,7 +4,7 @@ module SdpDB
 	  'Bundle Management'        =>[32329,31245],
     'Continuous Improvement'   =>[32331,31375],
     'Quality Assurance'        =>[32330,31376],
-    'Provisions'			   =>[32332,]
+    'Provisions'			   =>[32332,31377],
     'WP1.1 - Quality Control'  =>[32317,31244],
     'WP1.2 - Quality Assurance'=>[32318,31244],
     'WP1.3 - Quality Control + BAT'=>[32319,31244],
@@ -39,7 +39,7 @@ module SdpDB
     'WP6.2 - Coaching BRD'=>[32325,31250],    #WP6.2 - Coaching for Business Requirements
     'WP6.3 - Coaching V&V'=>[32326,31250],    #WP6.3 - Coaching for Verification and Validation
     'WP6.4 - Coaching ConfMgt'=>[32327,31250],  #WP6.4 - Coaching for Configuration Management
-    'WP6.5 - Coaching Maintenance'=>[32328,31250]   #WP6.5 - Coaching for Maintenance
+    'WP6.5 - Coaching Maintenance'=>[32328,31250],   #WP6.5 - Coaching for Maintenance
     "WP6.6 – Change : Implementation Support & Follow-up" => [32499,31250], #NEW
     "WP6.7 – Coaching Business Process"                   => [32500,31250], #NEW
     "WP6.8 – Coaching Use Case"                           => [32501,31250], #NEW
