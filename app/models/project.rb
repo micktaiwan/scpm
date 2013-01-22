@@ -410,140 +410,137 @@ class Project < ActiveRecord::Base
     self.requests.select { |r|
       next if (r.milestone!='N/A' and r.milestone != m) or r.status=='cancelled' or r.status=='to be validated'
       case r.work_package
+        # SAME
         when 'WP1.1 - Quality Control'
-          nb += 1 and rv += "Control\n"           if m != 'Maintenance'
+          nb += 1 and rv += "Control\n"   if m != 'Maintenance'
+        # SAME
         when 'WP1.2 - Quality Assurance'
-          nb += 1 and rv += "Assurance\n"         if m != 'Maintenance'
+          nb += 1 and rv += "Assurance\n"   if m != 'Maintenance'
+        # NEW
+        when 'WP1.3 - BAT'
+          nb += 1 and rv += "Control BAT\n"   if m != 'Maintenance'
+        # OLD
         when 'WP1.3 - Quality Control + BAT'
-          nb += 1 and rv += "Control BAT\n"         if m != 'Maintenance'
-        when 'WP1.4 - Quality Assurance + BAT'
-          nb += 1 and rv += "Assurance BAT\n"         if m != 'Maintenance'
+          nb += 1 and rv += "Control BAT\n"   if m != 'Maintenance'
         # NEW
         when 'WP1.4 - Agility'
-          nb += 1 and rv += "Agility\n"         if m != 'Maintenance'   
+          nb += 1 and rv += "Agility\n"   if m != 'Maintenance'
+        # OLD
+        when 'WP1.4 - Quality Assurance + BAT'
+          nb += 1 and rv += "Assurance BAT\n"   if m != 'Maintenance'
         # NEW
         when 'WP1.5 - SQR'
-          nb += 1 and rv += "SQT\n"         if m != 'Maintenance'   
+          nb += 1 and rv += "SQR\n"   if m != 'Maintenance' 
+            
         # NEW
-        when 'WP1.6.1 - DWQAP'
-          nb += 1 and rv += "DWQAP\n"         if m != 'Maintenance'   
+        when 'WP1.6.2 - QWR Project Setting-up'
+          nb += 1 and rv += "Project Setting-up\n"  if m != 'Maintenance'
         # NEW
-        when 'WP1.6.2 - Project Setting-up'
-          nb += 1 and rv += "Project Setting-up\n"         if m != 'Maintenance'
+        when 'WP1.6.6 – QWR QG BRD'
+          nb += 1 and rv += "QG BRD\n"    if m != 'Maintenance'
         # NEW
-        when 'WP1.6.3 - Support, Reporting & KP'
-          nb += 1 and rv += "Support, Reporting & KP\n"         if m != 'Maintenance'
+        when 'WP1.6.7 – QWR QG TD'
+          nb += 1 and rv += "QG TD\n"   if m != 'Maintenance'
         # NEW
-        when 'WP1.6.4 – Quality Status'
-          nb += 1 and rv += "Quality Status\n"         if m != 'Maintenance'
-        # NEW
-        when 'WP1.6.5 – Spiders'
-          nb += 1 and rv += "Spiders\n"         if m != 'Maintenance'
-        # NEW
-        when 'WP1.6.6 – QG BRD'
-          nb += 1 and rv += "Spiders\n"         if m != 'Maintenance'
-        # NEW
-        when 'WP1.6.7 – QG TD'
-          nb += 1 and rv += "Spiders\n"         if m != 'Maintenance'
-        # NEW
-        when 'WP1.6.8 – Lessons Learnt'
-          nb += 1 and rv += "Lessons Learnt\n"         if m != 'Maintenance'
+        when 'WP1.6.8 – QWR Lessons Learnt'
+          nb += 1 and rv += "Project Lessons Learnt\n"    if m != 'Maintenance'
+        
+        # SAME  
         when 'WP2 - Quality for Maintenance'
           nb += 1 and rv += "Maintenance\n"       if m == 'Maintenance'
+        
+        # SAME
         when 'WP3.0 - Old Modeling'
           nb += 1 and rv += "Old Modeling\n"        if m == 'M5'
+        # SAME
         when 'WP3.1 - Modeling Support'
           nb += 1 and rv += "Modeling 1\n"          if m == 'M5'
-        # OLD
+        # SAME
         when 'WP3.2 - Modeling Conception and Production'
           nb += 1 and rv += "Modeling 2\n"          if m == 'M5'
         # NEW
         when 'WP3.2.1 - Business Process Layout'
-          nb += 1 and rv += "Business Process Layout\n"          if m == 'M5'
+          nb += 1 and rv += "Modeling Business Process Layout\n"    if m == 'M5'
         # NEW
         when 'WP3.2.2 - Functional Layout (Use Cases)'
-          nb += 1 and rv += "Functional Layout (Use Cases)\n"          if m == 'M5'
+          nb += 1 and rv += "Modeling Use Cases\n"   if m == 'M5'
         # NEW
         when 'WP3.2.3 - Information Layout (Data Model)'
-          nb += 1 and rv += "Information Layout (Data Model)\n"          if m == 'M5'  
+          nb += 1 and rv += "Modeling Data Model\n"   if m == 'M5'  
+        # SAME  
         when 'WP3.3 - Modeling BAT specific Control'
-          nb += 1 and rv += "Modeling 3\n"          if m == 'M5'
+          nb += 1 and rv += "Modeling 3\n"    if m == 'M5'
+        # NEW
         when 'WP3.4 - Modeling BAT specific Production'
-          nb += 1 and rv += "Modeling 4\n"          if m == 'M5'
+          nb += 1 and rv += "Modeling 4\n"    if m == 'M5'
+          
+        # SAME
         when 'WP4.1 - Surveillance Audit'
           nb += 1 and rv += "Audit\n"       if m == 'M3'
+        # SAME
         when 'WP4.2 - Surveillance Root cause'
           nb += 1 and rv += "Root Cause\n"  if m == 'M3'
         # NEW
         when 'WP4.3 - Actions Implementation & Control'
-          nb += 1 and rv += "Actions Implementation & Control\n"          if m == 'M5'
-        # OLD
+          nb += 1 and rv += "Surveillance - Actions Implementation & Control\n"          if m == 'M5'
+        
+        # SAME
         when 'WP5 - Change Accompaniment'
-          nb += 1 and rv += "Change\n"      if m == 'M3'
+          nb += 1 and rv += "Change\n"    if m == 'M3'
         # NEW
         when 'WP5.1 - Change: Diagnosis & Action Plan'
-          nb += 1 and rv += "Change\n"      if m == 'M3'
+          nb += 1 and rv += "Change - Diagnosis\\n"   if m == 'M3'
         # NEW
         when 'WP5.2 – Change : Implementation Support & Follow-up'  
-          nb += 1 and rv += "Actions Implementation & Control\n"          if m == 'M5'
+          nb += 1 and rv += "Change - Actions Implementation & Control\n"   if m == 'M5'
+          
+        # SAME
         when 'WP6.1 - Coaching PP'
           nb += 1 and rv += "Coaching PP\n"       if m == 'M3'
+        # SAME
         when 'WP6.2 - Coaching BRD'
           nb += 1 and rv += "Coaching BRD\n"      if m == 'M5'
+        # SAME
         when 'WP6.3 - Coaching V&V'
           nb += 1 and rv += "Coaching V&V\n"      if m == 'M11'
+        # SAME
         when 'WP6.4 - Coaching ConfMgt'
-          nb += 1 and rv += "Coaching ConfMgt\n"  if m == 'M14'
+          nb += 1 and rv += "Coaching ConfMgt\n"  if m == 'M3'
+        # SAME
         when 'WP6.5 - Coaching Maintenance'
           nb += 1 and rv += "Coaching Maint.\n"   if m == 'Maintenance'
         # NEW
-        when 'WP6.6 – Change : Implementation Support & Follow-up'  
-          nb += 1 and rv += "Change : Implementation Support & Follow-up\n"          if m == 'M5'
+        when 'WP6.6 – Coaching HLR'  
+          nb += 1 and rv += "Coaching HLR\n"          if m == 'M5'
         # NEW
         when 'WP6.7 – Coaching Business Process'  
           nb += 1 and rv += "Coaching Business Process\n"          if m == 'M5'
         # NEW
         when 'WP6.8 – Coaching Use Case'  
-          nb += 1 and rv += "Use Case\n"          if m == 'M5'
+          nb += 1 and rv += "Coaching Use Case\n"          if m == 'M5'
         # NEW
         when 'WP6.9 – Coaching Data Model'  
-          nb += 1 and rv += "Data Model\n"          if m == 'M5'
+          nb += 1 and rv += "Coaching Data Model\n"          if m == 'M5'
+       
         # NEW
-        when 'WP7.1.1 – Requirements Management'  
-          nb += 1 and rv += "Requirements Management\n"          if m == 'M5'  
+        when 'WP7.2.1 - Expertise Activities for Project: Requirements Management'  
+          nb += 1 and rv += "Expert Req Management\n"          if m == 'M3'
         # NEW
-        when 'WP7.1.2 – Risks Management'  
-          nb += 1 and rv += "Risks Management\n"          if m == 'M5'
+        when 'WP7.2.2 - Expertise Activities for Project: Risks Management'  
+          nb += 1 and rv += "Expert Risks Management\n"          if m == 'M3'
         # NEW
-        when 'WP7.1.3 – Test Management'  
-          nb += 1 and rv += "Test Management\n"          if m == 'M5'
+        when 'WP7.2.3 - Expertise Activities for Project: Test Management'  
+          nb += 1 and rv += "Expert Test Management\n"          if m == 'M5'
         # NEW
-        when 'WP7.1.4 – Change Management'  
-          nb += 1 and rv += "Change Management\n"          if m == 'M5'
+        when 'WP7.2.4 - Expertise Activities for Project: Change Management'  
+          nb += 1 and rv += "Expert Change Management\n"          if m == 'M5'
         # NEW
-        when 'WP7.1.5 – Lessons Learnt'  
-          nb += 1 and rv += "Lessons Learnt\n"          if m == 'M5'
+        when 'WP7.2.5 - Expertise Activities for Project: Lessons Learnt'  
+          nb += 1 and rv += "Expert Lessons Learnt\n"          if m == 'M5'
         # NEW
-        when 'WP7.1.6 – Configuration Management'  
-          nb += 1 and rv += "Configuration Management\n"          if m == 'M5'
-        # NEW
-        when 'WP7.2.1 – Requirements Management'  
-          nb += 1 and rv += "Requirements Management\n"          if m == 'M5'
-        # NEW
-        when 'WP7.2.2 – Risks Management'  
-          nb += 1 and rv += "Risks Management\n"          if m == 'M5'
-        # NEW
-        when 'WP7.2.3 – Test Management'  
-          nb += 1 and rv += "Test Management\n"          if m == 'M5'
-        # NEW
-        when 'WP7.2.4 – Change Management'  
-          nb += 1 and rv += "Change Management\n"          if m == 'M5'
-        # NEW
-        when 'WP7.2.5 – Lessons Learnt'  
-          nb += 1 and rv += "Lessons Learnt\n"          if m == 'M5'
-        # NEW
-        when 'WP7.2.6 – Configuration Management'  
-          nb += 1 and rv += "Configuration Management\n"          if m == 'M5'
+        when 'WP7.2.6 - Expertise Activities for Project: Configuration Management'  
+          nb += 1 and rv += "Expert Conf Management\n"          if m == 'M3'
+          
         else
           rv += "unknown workpackage: #{r.work_package}"
       end

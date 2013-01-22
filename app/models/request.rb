@@ -20,14 +20,15 @@ class Request < ActiveRecord::Base
   "WP1.3 - BAT"                                         => "BAT",
   "WP1.4 - Agility"                                     => "Agility", #NEW
   "WP1.5 - SQR"                                         => "SQR", #NEW
-  "WP1.6.1 - DWQAP"                                     => "DWQAP", #NEW
-  "WP1.6.2 - Project Setting-up"                        => "Project Setting-up",
-  "WP1.6.3 - Support, Reporting & KP"                   => "", #NEW
-  "WP1.6.4 – Quality Status"                            => "", #NEW
-  "WP1.6.5 – Spiders"                                   => "", #NEW
-  "WP1.6.6 – QG BRD"                                    => "", #NEW
-  "WP1.6.7 – QG TD"                                     => "", #NEW
-  "WP1.6.8 – Lessons Learnt"                            => "", #NEW
+  "WP1.6.1 - QWR DWQAP"                                 => "DWQAP", #NEW
+  "WP1.6.2 - Project Setting-up"                        => "Project Setting-up", # OLD
+  "WP1.6.2 - QWR Project Setting-up"                    => "Project Setting-up", # NEW
+  "WP1.6.3 - QWR Support, Reporting & KP"               => "", #NEW
+  "WP1.6.4 – QWR Quality Status"                        => "", #NEW
+  "WP1.6.5 – QWR Spiders"                               => "", #NEW
+  "WP1.6.6 – QWR QG BRD"                                => "", #NEW
+  "WP1.6.7 – QWR QG TD"                                 => "", #NEW
+  "WP1.6.8 – QWR Lessons Learnt"                        => "", #NEW
   "WP2 - Quality for Maintenance" 	                    => "Maint.",
   "WP3.0 - Old Modeling"                                => "Modeling 0",
   "WP3.1 - Modeling Support"                            => "Modeling 1",
@@ -41,7 +42,7 @@ class Request < ActiveRecord::Base
   "WP4.1 - Surveillance Audit" 		                      => "Audit",
   "WP4.2 - Surveillance Root cause"                     => "RCA",
   "WP4.3 - Actions Implementation & Control"            => "", #NEW
-  "WP5 - Change Accompaniment" 		                    => "Change",
+  "WP5 - Change Accompaniment" 		                      => "Change",
   "WP5.1 - Change: Diagnosis & Action Plan"             => "", #NEW
   "WP5.2 – Change : Implementation Support & Follow-up" => "", #NEW
   "WP6.1 - Coaching PP" 			                          => "PP",
@@ -49,25 +50,25 @@ class Request < ActiveRecord::Base
   "WP6.3 - Coaching V&V"                                => "V&V",
   "WP6.4 - Coaching ConfMgt"                            => "ConfMgt",
   "WP6.5 - Coaching Maintenance"                        => "C. Maint.",
-  "WP6.6 – Change : Implementation Support & Follow-up" => "", #NEW
+  "WP6.6 – Coaching HLR"                                => "", #NEW
   "WP6.7 – Coaching Business Process"                   => "", #NEW
   "WP6.8 – Coaching Use Case"                           => "", #NEW
   "WP6.9 – Coaching Data Model"                         => "", #NEW
-  "WP6.10.1 – Diagnosis & project launch"               => "", #NEW
-  "WP6.10.2 – Sprint 0 support"                         => "", #NEW
-  "WP6.10.3 – Sprint coaching"                          => "", #NEW
-  "WP7.1.1 – Requirements Management"                   => "", #NEW
-  "WP7.1.2 – Risks Management"                          => "", #NEW
-  "WP7.1.3 – Test Management"                           => "", #NEW
-  "WP7.1.4 – Change Management"                         => "", #NEW
-  "WP7.1.5 – Lessons Learnt"                            => "", #NEW
-  "WP7.1.6 – Configuration Management"                  => "", #NEW
-  "WP7.2.1 – Requirements Management"                   => "", #NEW
-  "WP7.2.2 – Risks Management"                          => "", #NEW
-  "WP7.2.3 – Test Management"                           => "", #NEW
-  "WP7.2.4 – Change Management"                         => "", #NEW
-  "WP7.2.5 – Lessons Learnt"                            => "", #NEW
-  "WP7.2.6 – Configuration Management"                  => "", #NEW
+  "WP6.10.1 – Coaching Agility: Diagnosis & project launch" => "", #NEW
+  "WP6.10.2 – Coaching Agility: Sprint 0 support"           => "", #NEW
+  "WP6.10.3 – Coaching Agility: Sprint coaching"            => "", #NEW
+  "WP7.1.1 – Expertise Activities for Multi Projects: Requirements Management"            => "", #NEW
+  "WP7.1.2 – Expertise Activities for Multi Projects: Risks Management"                   => "", #NEW
+  "WP7.1.3 – Expertise Activities for Multi Projects: Test Management"                    => "", #NEW
+  "WP7.1.4 – Expertise Activities for Multi Projects: Change Management"                  => "", #NEW
+  "WP7.1.5 – Expertise Activities for Multi Projects: Lessons Learnt"                     => "", #NEW
+  "WP7.1.6 – Expertise Activities for Multi Projects: Configuration Management"           => "", #NEW
+  "WP7.2.1 – Expertise Activities for Project: Requirements Management"                   => "", #NEW
+  "WP7.2.2 – Expertise Activities for Project: Risks Management"                          => "", #NEW
+  "WP7.2.3 – Expertise Activities for Project: Test Management"                           => "", #NEW
+  "WP7.2.4 – Expertise Activities for Project: Change Management"                         => "", #NEW
+  "WP7.2.5 – Expertise Activities for Project: Lessons Learnt"                            => "", #NEW
+  "WP7.2.6 – Expertise Activities for Project: Configuration Management"                  => "", #NEW
   }
 
 
@@ -125,14 +126,14 @@ class Request < ActiveRecord::Base
     "WP1.3 - BAT"                                         => 16,
     "WP1.4 - Agility"                                     => 19,
     "WP1.5 - SQR"                                         => 22,
-    "WP1.6.1 - DWQAP"                                     => 26,
-    "WP1.6.2 - Project Setting-up"                        => 27,
-    "WP1.6.3 - Support, Reporting & KP"                   => 28,
-    "WP1.6.4 – Quality Status"                            => 29,
-    "WP1.6.5 – Spiders"                                   => 30,
-    "WP1.6.6 – QG BRD"                                    => 31,
-    "WP1.6.7 – QG TD"                                     => 32,
-    "WP1.6.8 – Lessons Learnt"                            => 33,
+    "WP1.6.1 - QWR DWQAP"                                 => 26,
+    "WP1.6.2 - QWR Project Setting-up"                    => 27,
+    "WP1.6.3 - QWR Support, Reporting & KP"               => 28,
+    "WP1.6.4 – QWR Quality Status"                        => 29,
+    "WP1.6.5 – QWR Spiders"                               => 30,
+    "WP1.6.6 – QWR QG BRD"                                => 31,
+    "WP1.6.7 – QWR QG TD"                                 => 32,
+    "WP1.6.8 – QWR Lessons Learnt"                        => 33,
     "WP2 - Quality for Maintenance" 	                    => 34,
     "WP3.0 - Old Modeling"                                => 35,
     "WP3.1 - Modeling Support"                            => 36,
@@ -154,25 +155,25 @@ class Request < ActiveRecord::Base
     "WP6.3 - Coaching V&V"                                => 52,
     "WP6.4 - Coaching ConfMgt"                            => 53,
     "WP6.5 - Coaching Maintenance"                        => 54,
-    "WP6.6 – Change : Implementation Support & Follow-up" => 55,
+    "WP6.6 – Coaching HLR"                                => 55,
     "WP6.7 – Coaching Business Process"                   => 56,
     "WP6.8 – Coaching Use Case"                           => 57,
     "WP6.9 – Coaching Data Model"                         => 58,
-    "WP6.10.1 – Diagnosis & project launch"               => 59,
-    "WP6.10.2 – Sprint 0 support"                         => 60,
-    "WP6.10.3 – Sprint coaching"                          => 61,
-    "WP7.1.1 – Requirements Management"                   => 62,
-    "WP7.1.2 – Risks Management"                          => 63,
-    "WP7.1.3 – Test Management"                           => 64,
-    "WP7.1.4 – Change Management"                         => 65,
-    "WP7.1.5 – Lessons Learnt"                            => 66,
-    "WP7.1.6 – Configuration Management"                  => 67,
-    "WP7.2.1 – Requirements Management"                   => 68,
-    "WP7.2.2 – Risks Management"                          => 69,
-    "WP7.2.3 – Test Management"                           => 70,
-    "WP7.2.4 – Change Management"                         => 71,
-    "WP7.2.5 – Lessons Learnt"                            => 72,
-    "WP7.2.6 – Configuration Management"                  => 73,
+    "WP6.10.1 – Coaching Agility: Diagnosis & project launch"=> 59,
+    "WP6.10.2 – Coaching Agility: Sprint 0 support"       => 60,
+    "WP6.10.3 – Coaching Agility: Sprint coaching"        => 61,
+    "WP7.1.1 – Expertise Activities for Multi Projects: Requirements Management"            => 62,
+    "WP7.1.2 – Expertise Activities for Multi Projects: Risks Management"                   => 63,
+    "WP7.1.3 – Expertise Activities for Multi Projects: Test Management"                    => 64,
+    "WP7.1.4 – Expertise Activities for Multi Projects: Change Management"                  => 65,
+    "WP7.1.5 – Expertise Activities for Multi Projects: Lessons Learnt"                     => 66,
+    "WP7.1.6 – Expertise Activities for Multi Projects: Configuration Management"           => 67,
+    "WP7.2.1 – Expertise Activities for Project: Requirements Management"                   => 68,
+    "WP7.2.2 – Expertise Activities for Project: Risks Management"                          => 69,
+    "WP7.2.3 – Expertise Activities for Project: Test Management"                           => 70,
+    "WP7.2.4 – Expertise Activities for Project: Change Management"                         => 71,
+    "WP7.2.5 – Expertise Activities for Project: Lessons Learnt"                            => 72,
+    "WP7.2.6 – Expertise Activities for Project: Configuration Management"                  => 73,
     "WP1.1 - Quality ControlCV"                           => 4,
     "WP1.2 - Quality AssuranceCV"                         => 12
   }
@@ -195,134 +196,134 @@ class Request < ActiveRecord::Base
   # reminder: minus 10% for operational meetings
   LoadsRFP2013 = [
     # WP 1.1
-    [2.646,	2.793,	3.381], #0
-    [4.413,	5.148,	7.206],
-    [3.381,	4.557,	7.644],
-    [5.292,	6.174,	9.114],
+    [2.205,	2.328,	2.818], #0
+    [3.678,	4.290,	6.005],
+    [2.818,	3.798,	6.370],
+    [4.410,	5.145,	7.595],
     # WP 1.1 contre visite
-    [0.588,	0.588,	0.882], #4
-    [1.176,	1.176,	1.764],
-    [0.441,	0.441,	0.588],
-    [2.352,	2.94,	3.528],
+    [0.490,	0.490,	0.735], #4
+    [0.980,	0.980,	1.470],
+    [0.368,	0.368,	0.490],
+    [1.960,	2.450,	2.940],
     # WP 1.2 Quality assurance
-    [3.969,	4.557,	5.292], #8
-    [7.503,	9.564,	12.801],
-    [7.206,	7.941,	9.264],
-    [7.056,	9.114,	12.054],
+    [3.308,	3.798,	4.410], #8
+    [6.253,	7.970,	10.668],
+    [6.005,	6.618,	7.720],
+    [5.880,	7.595,	10.045],
     # WP 1.2 Contre visite
-    [0.588,	0.588,	0.588], #12
-    [2.352,	2.94,	3.528],
-    [2.352,	3.528,	4.704],
-    [3.528,	4.704,	5.88],
+    [0.490,	0.490,	0.490], #12
+    [1.960,	2.450,	2.940],
+    [1.960,	2.940,	3.920],
+    [2.940,	3.920,	4.900],
     # WP 1.3
-    [3,	4.2,	5.4], #16
-    [0.9,	1.2,	1.8],
-    [2.4,	3.3,	5.1],
+    [2.500,	3.500,	4.500], #16
+    [0.750,	1.000,	1.500],
+    [2.000,	2.750,	4.250],
     # WP 1.4
-    [7.503,	9.564,	12.801], #19
-    [1.65,	2.7,	3.75],
-    [2.4,	3.6,	4.8],
+    [6.253,	7.970,	10.668], #19
+    [1.375,	2.250,	3.125],
+    [2.000,	3.000,	4.000],
     # WP 1.5
-    [	0, 0,	6], #22
-    [	0, 3.6,	7.2],
-    [	0, 3.6,	9.6],
-    [	0, 0,	10.8],
+    [	0, 0,	5.000], #22  # WARNING N/A
+    [	0, 3.000,	6.000],
+    [	0, 3.000,	8.000],
+    [	0, 0,	9.000],
     # WP 1.6.1
-    [1.8,	3.6,	6], #26
+    [1.500,	3.000,	5.000], #26
     # WP 1.6.2
-    [2.1,	3,	4.2], #27
+    [1.750,	2.500,	3.500], #27
     # WP 1.6.3
-    [8.1,	10.8,	14.4], #28
+    [6.750,	9.000,	12.000], #28
     # WP 1.6.4
-    [4.5,	22.5,	45], #29
+    [3.750,	18.750,	37.500], #29
     # WP 1.6.5
-    [4.5,	18,	36], #30
+    [3.750,	15.000,	30.000], #30
     # WP 1.6.6
-    [1.2,	1.8,	2.4], #31
+    [1.000,	1.500,	2.00], #31
     # WP 1.6.7
-    [1.2,	1.8,	2.4], #32
+    [1.000,	1.500,	2.00], #32
     # WP 1.6.8
-    [1.35,	1.65,	1.95], #33
+    [1.125,	1.375,	1.625], #33
     # WP 2
-    [6.762,	10.143,	15.582], #34
-    # WP 3.0 Old
-    [8.5, 16.25, 22.5], #35
+    [5.635,	8.453,	12.985], #34
+    # WP 3.0 Old (NOTE : Should not be used  WP3.0 OLD = WP3.1)
+    [9.310,	17.640,	24.990], #35
     # WP 3.1
-    [11.172,	21.168,	29.988], #36
+    [9.310,	17.640,	24.990], #36
     # WP 3.2 (Values from previous RFP)
     [18.5, 42.75, 58.75], #37
     # WP 3.2.1
-    [9.45,	28.65,	37.05], #38
+    [7.875,	23.875,	30.875], #38
     # WP 3.2.2
-    [10.35,	19.05,	25.95], #39
+    [8.625,	15.875,	21.625], #39
     # WP 3.2.3
-    [9.3,	17.4,	25.2], #40
+    [7.750,	14.500,	21.000], #40
     # WP 3.3
-    [4.8,	8.4,	13.2], #41
+    [4.000,	7.000,	11.000], #41
     # WP 3.4
-    [10.2,	18.6,	25.8], #42
+    [8.500,	15.500,	21.500], #42
     # WP 4 (Values from previous RFP)
     [5.125, 7.25, 11.375], #43
     # WP 4.1
-    [18,	24,	36], #44
+    [15.000,	20.000,	30.000], #44
     # WP 4.2
-    [12,	18,	30], #45
+    [10.000,	15.000,	25.000], #45
     # WP 4.3
-    [6,	12,	24], #46
-    # WP 5 OLD
+    [5.000,	10.000,	20.000], #46
+    # WP 5  (Values from previous RFP)
     [10, 21.75, 40], #47
     # WP 5.1
-    [6.9825,	15.141,	27.783], #48
+    [5.819,	12.618,	23.153], #48
     # WP 5.2
-    [6.9825,	15.141,	27.783], #49
+    [5.819,	12.618,	23.153], #49
     # WP 6.1
-    [6.174,	14.7,	27.048], #50
+    [5.145,	12.250,	22.540], #50
     # WP 6.2
-    [4.41,	13.524,	28.224], #51
+    [3.675,	11.270,	23.520], #51
     # WP 6.3
-    [2.646,	7.644,	18.816], #52
+    [2.205,	6.370,	15.680], #52
     # WP 6.4
-    [3.528,	17.64,	41.16], #53
+    [2.940,	14.700,	34.300], #53
     # WP 6.5
-    [10.29,	15.582,	21.462], #54
+    [8.575,	12.985,	17.885], #54
     # WP 6.6
-    [2.4,	6.9, 0], #55
+    [2.000,	5.750, 0], #55 # WARNING
     # WP 6.7
-    [2.1,	8.7,	0], #56
+    [1.750,	7.250,	0], #56 # WARNING
     # WP 6.8
-    [2.1,	8.7, 0], #57
+    [1.750,	7.250,	0], #57 # WARNING
     # WP 6.9
-    [2.4,	9.6, 0], #58
+    [2.000,	8.000, 0], #58 #WARNING
     # WP 6.10.1
-    [4.72411186696901,	7.08616780045352,	7.08616780045352], #59
+    [3.937,	5.905,	5.905], #59
     # WP 6.10.2
-    [9.44822373393802,	14.172335600907,	23.620559334845], #60
+    [7.874,	11.810,	19.684], #60
     # WP 6.10.3
-    [4.72411186696901,	9.44822373393802,	18.896447467876], #61
+    [3.937,	7.874,	15.747], #61
     # WP 7.1.1
-    [6.6,	12,	18], #62
+    [5.500,	10.000,	15.000], #62
     # WP 7.1.2
-    [4.2,	9.6, 15.6], #63
+    [3.500,	8.000, 13.000], #63
     # WP 7.1.3
-    [5.4,	9.6,	15.6], #64
+    [4.500,	8.000, 13.000], #64
     # WP 7.1.4
-    [4.2, 0, 0], #65
+    [3.500, 0, 0], #65 # WARNING
     # WP 7.1.5
-    [4.2,	9.6,	15.6], #66
+    [3.500,	8.000, 13.000], #66
     # WP 7.1.6
-    [4.2,	9.6,	15.6], #67
+    [3.500,	8.000, 13.000], #67
     # WP 7.2.1
-    [5.4,	7.2,	10.8], #68
+    [4.500,	6.000,	9.000], #68
     # WP 7.2.2
-    [2.1, 0, 0], #69
+    [1.750, 0, 0], #69 # WARNING
     # WP 7.2.3
-    [3.9,	4.8,	8.4], #70
+    [3.250,	4.000,	7.000], #70
     # WP 7.2.4
-    [2.1,	7.2,	10.8], #71
+    [1.750,	6.000,	9.000], #71
     # WP 7.2.5
-    [2.1,	0, 0], #72
+    [1.750,	0, 0], #72 # WARNING
     # WP 7.2.6
-    [2.1,	4.8,	8.4] #73
+    [1.750,	4.000,	7.000] #73
   ]
     
   LoadsRFP2012 = [
@@ -548,12 +549,12 @@ class Request < ActiveRecord::Base
     'WP6.10.1 - Coaching Agility - Diagnosis & Project Launch' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
     'WP6.10.2 - Coaching Agility - Sprint 0' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
     'WP6.10.3 - Coaching Agility - Sprint n' =>     ['M7', 'M9', 'M9/M10', 'M10','G6','pg6','g6'],
-    'WP7.1.1 - Expert - Req Mgt' =>     ['M11', 'G7', 'pg7', 'g7'],
-    'WP7.1.2 - Expert - Risks Mgt' =>     ['M13', 'G8', 'pg8', 'g8'],
-    'WP7.1.3 - Expert - Test Mgt' =>     ['M11', 'G7', 'pg7', 'g7'],
-    'WP7.1.4 - Expert - Change Mgt' =>     ['M11', 'G7', 'pg7', 'g7'],
-    'WP7.1.5 - Expert - Lessons Learnt' =>     ['M14', 'G9', 'pg7', 'g7'],
-    'WP7.1.6 - Expert - Conf Mgt' =>     ['M3', 'G2', 'pg2', 'g2']
+    'WP7.2.1 - Expert - Req Mgt' => ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.2.2 - Expert - Risks Mgt' => ['M13', 'G8', 'pg8', 'g8'],
+    'WP7.2.3 - Expert - Test Mgt' => ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.2.4 - Expert - Change Mgt' => ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.2.5 - Expert - Lessons Learnt' => ['M14', 'G9', 'pg7', 'g7'],
+    'WP7.2.6 - Expert - Conf Mgt' => ['M3', 'G2', 'pg2', 'g2']
     }
 
   def wp_index(wp, cv)
