@@ -17,7 +17,7 @@ module Util
   # - right: every holidays add more days to the right limit when counting holidays
   # - left: holiday is just the nb of holidays inside the date interval
   def self.calculate_diff_and_holidays(d1,d2, direction=:right, wdays=[0,6])
-    diff     = d2 - d1
+    diff     = (d2 - d1)
     holidays = 0
     ret      = (d2-d1).divmod(7)
     holidays = ret[0].truncate * wdays.length

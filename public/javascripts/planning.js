@@ -1,5 +1,5 @@
-// TODO: begin real work : calculate and graph needed team size
 // TODO: rendre plus visuel les dates de début et fin de tâches
+// TODO: the last day of tasks shall be working days 
 Date.prototype.addDays = function(days) {
   this.setDate(this.getDate()+days);
   };
@@ -29,12 +29,12 @@ var Task = Class.create ({
     this.planning.ctx.fillStyle   = this.titleColor;
     this.planning.ctx.fillText(this.name, 2, y + this.planning.dateHeaderHeight + this.vertTitleSpacing);
     //this.drawTitle(y);
-    x = this.planning.getTaskX(this);
-    limRight =  this.planning.canvas.width -this.planning.canvasEndBorder;
+    x         = this.planning.getTaskX(this);
+    limRight  = this.planning.canvas.width -this.planning.canvasEndBorder;
     if(x > limRight) // out of the canvas
       return;
-    lim    = this.planning.taskTitleWidth
-    length = (this.start_date.diffInDays(this.end_date)) * this.planning.pixelsForOneDay;
+    lim       = this.planning.taskTitleWidth
+    length    = (this.start_date.diffInDays(this.end_date)) * this.planning.pixelsForOneDay;
     if(x+length < lim) return; // out of the canvas
     if(x < lim) {
       length -= lim-x; // reduce length
@@ -106,6 +106,7 @@ var Planning = Class.create({
     this.teamSize            = teamSize || new Array(10);
     this.taskTitleWidth      = 150;
     this.tasksHeight         = 250;
+    this.teamHeight          = this.canvas.height - this.tasksHeight;
     this.dateHeaderHeight    = 30;
     this.tasksHeightAbsolute = this.dateHeaderHeight + this.tasksHeight - 0.5;
     this.canvasEndBorder     = 25;
@@ -145,19 +146,34 @@ var Planning = Class.create({
     this.planningWidthInDay = days;
     this.end_date           = new Date(this.start_date.valueOf());
     this.end_date.addDays(this.planningWidthInDay);
-    this.pixelsForOneDay    = this.taskBarMaxWidth / this.planningWidthInDay;
+    },
+
+  setDrawingVariables: function() {
+    this.taskTitleWidth   = this.getMaxTitleLength() + 5; // recalculate task titles width function of the max title length
+    this.taskBarMaxWidth  = this.canvas.width - this.taskTitleWidth - this.canvasEndBorder
+    this.pixelsForOneDay  = this.taskBarMaxWidth / this.planningWidthInDay;
     },
 
   draw: function() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillStyle   = "rgba(100, 100, 255, 1.0)";
-    this.ctx.font        = "12px Helvetica";
-    this.ctx.lineWidth   = 1;
+    this.ctx.fillStyle    = "rgba(100, 100, 255, 1.0)";
+    this.ctx.font         = "12px Helvetica";
+    this.ctx.lineWidth    = 1;
+    this.setDrawingVariables();
     this.drawGrid();
     for(var i=0; i < this.tasks.length; i++) {
       this.tasks[i].draw(1+i*this.taskHeight);
       }
     this.drawTeamSize();
+    },
+  
+  getMaxTitleLength: function() {
+    var len, max = 0;
+    for(var i=0; i < this.tasks.length; i++) {
+      len = this.ctx.measureText(this.tasks[i].name).width;
+      if(max < len) max = len;
+      }
+    return max;
     },
 
   drawGrid: function() {
@@ -208,26 +224,43 @@ var Planning = Class.create({
     },
 
   drawTeamSize: function() {
-    // horizontal lines for each day
-    this.ctx.fillStyle   = this.teamSizeColor;
-    date = new Date(this.start_date);
+    // vertical lines for each day
+    this.ctx.fillStyle = this.teamSizeColor;
+    var date = new Date(this.start_date);
     date.setHours(0,0,0,0);
     current_nb = 0;
+    max_nb = this.getMaxTeamHeight();
+    var pixelsForOnePerson = (this.teamHeight - 35) / max_nb;
+    var nb;
     for(var i=0; i <= this.planningWidthInDay; i++) {
       date_str = date.getFullYear() + "-" + this.padStr(date.getMonth()+1) + "-" + this.padStr(date.getDate());
-      nb       = this.getTeamSize(date_str);
-      x = this.taskTitleWidth+i*this.pixelsForOneDay;
+      nb = this.getTeamSize(date_str);
+      x  = this.taskTitleWidth + i*this.pixelsForOneDay;
       if(current_nb!=nb) {
           current_nb = nb;
-          this.ctx.fillText(current_nb, x+this.pixelsForOneDay/2, this.canvas.height-5);
+          this.ctx.fillText(current_nb, x, this.canvas.height-5);
           }
-      height   = this.canvas.height - 20 - nb*10;
+      height   = this.canvas.height - nb * pixelsForOnePerson;
       if(nb > 0) {
         this.ctx.fillRect(x, height, this.pixelsForOneDay+0.5, this.canvas.height-height-20);
         }
       date.addDays(1);
       }
     },
+    
+    // get the maximum  heigth for a day
+    getMaxTeamHeight: function() {
+      var date, nb, nb, max=0;
+      date = new Date(this.start_date);
+      date.setHours(0,0,0,0);
+      for(var i=0; i <= this.planningWidthInDay; i++) {
+        date_str = date.getFullYear() + "-" + this.padStr(date.getMonth()+1) + "-" + this.padStr(date.getDate());
+        nb   = this.getTeamSize(date_str);
+        if(max < nb) max = nb;
+        date.addDays(1);
+        }
+      return max;
+      },
 
   padStr: function(i) {
     return (i < 10) ? "0" + i : "" + i;
