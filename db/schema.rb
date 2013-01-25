@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121213210911) do
+ActiveRecord::Schema.define(:version => 20130124181211) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -175,12 +175,12 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
   end
 
   create_table "counter_logs", :force => true do |t|
-    t.integer  "project_id"
-    t.integer  "stream_id"
-    t.integer  "credit"
-    t.integer  "debit"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "request_id"
+    t.integer  "counter_value"
+    t.datetime "import_date"
+    t.boolean  "validity",      :default => false
   end
 
   create_table "generic_risk_questions", :force => true do |t|
@@ -201,6 +201,17 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.text     "risk"
     t.text     "consequence"
     t.text     "actions"
+  end
+
+  create_table "history_counters", :force => true do |t|
+    t.integer  "request_id"
+    t.integer  "concerned_project_id"
+    t.datetime "action_date"
+    t.string   "author"
+    t.integer  "concerned_status_id"
+    t.integer  "concerned_spider"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "lifecycle_milestones", :force => true do |t|
@@ -339,6 +350,7 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.integer  "lifecycle_id"
     t.integer  "qs_count",      :default => 0
     t.integer  "spider_count",  :default => 0
+    t.boolean  "is_running",    :default => true
   end
 
   create_table "question_references", :force => true do |t|
@@ -420,6 +432,7 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.string   "contre_visite_milestone"
     t.string   "request_type"
     t.integer  "stream_id"
+    t.boolean  "is_stream",               :default => false
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
