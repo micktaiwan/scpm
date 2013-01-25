@@ -532,13 +532,13 @@ class Request < ActiveRecord::Base
     'WP3.3 - Modeling BAT specific Control' =>      ['M5', 'M5/M7', 'G5'],
     'WP3.4 - Modeling BAT specific Production' =>   ['M5', 'M5/M7', 'G5'],
     'WP5 - Change Accompaniment' 		  => ['M11'],
-    'WP1.6.2 - Project Setting-up' 		  => ['M3','G2','pg2','g2'],
-    'WP1.6.6 - QG BRD' 		  => ['QG BRD'],
-    'WP1.6.7 - QG TD' 		  => ['QG TD'],
-    'WP1.6.8 - Lessons Learnt' 		  => ['M5','M5/M7','G5','pg5','g5','M10','M14','G9','pg9','g9'],
+    'WP1.6.2 - QWR Project Setting-up' 		  => ['M3','G2','pg2','g2'],
+    'WP1.6.6 - QWR QG BRD' 		  => ['QG BRD'],
+    'WP1.6.7 - QWR QG TD' 		  => ['QG TD'],
+    'WP1.6.8 - QWR Lessons Learnt' 		  => ['M5','M5/M7','G5','pg5','g5','M10','M14','G9','pg9','g9'],
     'WP3.2.1 - Modeling Business Process Layout' => ['M5', 'M5/M7', 'G5'],
-    'WP3.2.2 - Modeling Use Cases' => ['M5', 'M5/M7', 'G5'],
-    'WP3.2.3 - Modeling Data Model' => ['M5', 'M5/M7', 'G5'],
+    'WP3.2.2 - Functional Layout (Use Cases)' => ['M5', 'M5/M7', 'G5'],
+    'WP3.2.3 - Information Layout (Data Model)' => ['M5', 'M5/M7', 'G5'],
     'WP5.1 - Change: Diagnosis & Action Plan' 		  => ['M11'],
     'WP5.2 - Change : Implementation Support & Follow-up' 		  => ['M11'],
     'WP6.6 - Coaching HLR' =>     ['M3', 'G2', 'pg2', 'g2', 'sM3'],
@@ -548,12 +548,12 @@ class Request < ActiveRecord::Base
     'WP6.10.1 - Coaching Agility - Diagnosis & Project Launch' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
     'WP6.10.2 - Coaching Agility - Sprint 0' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
     'WP6.10.3 - Coaching Agility - Sprint n' =>     ['M7', 'M9', 'M9/M10', 'M10','G6','pg6','g6'],
-    'WP7.2.1 - Expert - Req Mgt' => ['M11', 'G7', 'pg7', 'g7'],
-    'WP7.2.2 - Expert - Risks Mgt' => ['M13', 'G8', 'pg8', 'g8'],
-    'WP7.2.3 - Expert - Test Mgt' => ['M11', 'G7', 'pg7', 'g7'],
-    'WP7.2.4 - Expert - Change Mgt' => ['M11', 'G7', 'pg7', 'g7'],
-    'WP7.2.5 - Expert - Lessons Learnt' => ['M14', 'G9', 'pg7', 'g7'],
-    'WP7.2.6 - Expert - Conf Mgt' => ['M3', 'G2', 'pg2', 'g2']
+    'WP7.2.1 – Expertise Activities for Project: Requirements Management' => ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.2.2 – Expertise Activities for Project: Risks Management' => ['M13', 'G8', 'pg8', 'g8'],
+    'WP7.2.3 – Expertise Activities for Project: Test Management' => ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.2.4 – Expertise Activities for Project: Change Management' => ['M11', 'G7', 'pg7', 'g7'],
+    'WP7.2.5 – Expertise Activities for Project: Lessons Learnt' => ['M14', 'G9', 'pg7', 'g7'],
+    'WP7.2.6 – Expertise Activities for Project: Configuration Management' => ['M3', 'G2', 'pg2', 'g2']
     }
 
   def wp_index(wp, cv)
@@ -602,9 +602,9 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    if self.sdpiteration == "2013" or Date.parse(self.date_submitted) >= Date.parse('2013-01-10') or (self.status_new and self.status_new >= Date.parse('2013-01-10'))
+    if self.sdpiteration == "2013-Y3"
       return LoadsRFP2013[wp_index_RFP2013(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
-    elsif self.sdpiteration == "2012" or Date.parse(self.date_submitted) >= Date.parse('2012-01-10') or (self.status_new and self.status_new >= Date.parse('2012-01-10'))
+    elsif self.sdpiteration == "2013" or  self.sdpiteration == "2012" or Date.parse(self.date_submitted) >= Date.parse('2012-01-10') or (self.status_new and self.status_new >= Date.parse('2012-01-10'))
       return LoadsRFP2012[wp_index_RFP2012(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2011" or self.sdpiteration == "2011-Y2"
       return Loads2011[wp_index(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
