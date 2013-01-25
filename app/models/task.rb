@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
   end
 
   def adjust_end_date
-    wday = (self.end_date-1.day).wday
+    wday = (self.end_date - 1.day).wday
     self.end_date -= 2.day if wday == 0
     self.end_date -= 1.day if wday == 6
   end
