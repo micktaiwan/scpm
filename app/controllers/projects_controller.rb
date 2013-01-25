@@ -137,6 +137,7 @@ class ProjectsController < ApplicationController
     project = Project.find(params[:id])
     project.update_attributes(params[:project])
     project.propagate_attributes
+    project.set_lifecycle_old_param()
     redirect_to :action=>:show, :id=>project.id
   end
 
