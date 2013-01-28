@@ -10,7 +10,7 @@ class CvsRequest
     :start_date, :sdp, :pm, :milestone_date, :project_name, :sdpiteration,
     :end_date, :milestone_date, :actual_m_date, :po,
     :status_to_be_validated, :status_new, :status_feedback, :status_acknowledged, :status_assigned, :status_contre_visite, :status_performed, :status_cancelled, :status_closed,
-    :total_csv_severity, :total_csv_category, :contre_visite_milestone, :request_type
+    :total_csv_severity, :total_csv_category, :contre_visite_milestone, :request_type, :is_stream
 
   def initialize
   end

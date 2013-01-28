@@ -1,6 +1,15 @@
 <li id="req_<%= import[:id] %>">
+<!-- Counters -->
+<% if import[:workpackage][0..6] == "WP1.6.4" %>
+	<%
+		# Add new value in counter logs
+	%>
+<% elsif import[:workpackage][0..6] == "WP1.6.5" %>
+	<%
+		# Add new value in counter logs
+	%>
 <!-- Project -->
-<% if import[:workpackage][0..4] != "WP7.1" %>
+<% elsif import[:is_stream] == "No" %>
 	<% if not Project.find_by_name(import[:project_name]) %>
 	<strong>new project</strong>
 	<% end %>
@@ -9,14 +18,12 @@
 	<% end %>
 
 	<%= link_to_remote('link to project', :url=>{:action=>'link', :id=>import[:id], :project_name=>import[:project_name]}, :update=>"req_#{import[:id]}") %>
-
-	
 <% else %>
 <!-- Stream -->
 	<% if not Stream.find_with_workstream(import[:workstream]) %>
 		<strong>Stream not found</strong>
 	<% end %>
-	<%#= link_to_remote('link to stream', :url=>{:controller=>'streams', :action=>'link', :id=>import[:id]}, :update=>"req_#{import[:id]}") %>
+	<%= link_to_remote('link to stream', :url=>{:controller=>'streams', :action=>'link', :id=>import[:id]}, :update=>"req_#{import[:id]}") %>
 <% end %>
 
 

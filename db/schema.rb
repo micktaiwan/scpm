@@ -432,7 +432,7 @@ ActiveRecord::Schema.define(:version => 20130124181211) do
     t.string   "contre_visite_milestone"
     t.string   "request_type"
     t.integer  "stream_id"
-    t.boolean  "is_stream",               :default => false
+    t.string   "is_stream",               :default => "No"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"

@@ -1,6 +1,6 @@
 class AddIsStreamToRequests < ActiveRecord::Migration
   def self.up
-  	add_column :requests, :is_stream, :boolean, :default=>0
+  	add_column :requests, :is_stream, :string, :default=>"No"
   end
 
   def self.down
