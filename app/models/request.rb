@@ -3,7 +3,7 @@ class Request < ActiveRecord::Base
   belongs_to :project
   belongs_to :stream
   has_one    :wl_line, :primary_key=>"request_id"
-  has_one    :counter_logs, :dependent=>:nullify
+  has_one    :counter_log, :dependent=>:nullify
   has_many   :history_counters, :dependent=>:nullify
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
 
@@ -822,6 +822,37 @@ class Request < ActiveRecord::Base
     else
       return ""
     end    
+  end
+  
+  # Manage count value for Counters tickets
+  def update_ticket_counters
+    # Get the counter_log of this request
+    counterLogObj = self.counter_log
+		
+    # Get the new value for this request
+		newCounterValue = CounterBaseValue.first(
+		:conditions => ["complexity = ? and operational_year = ?",self.complexity,self.sdpiteration]).value
+			
+		# Create new counter_log 
+		if (!counterLogObj) 
+	    counterLogObj = CounterLog.new
+	    counterLogObj.request_id     = self.id
+	    counterLogObj.import_date    = DateTime.current
+	    counterLogObj.counter_value  = newCounterValue
+	    counterLogObj.validity       = 1
+	    counterLogObj.save
+	  # Update counter_log
+		elsif(counterLogObj.counter_value != newCounterValue)
+			  counterLogObj.counter_value = newCounterValue
+			  counterLogObj.save
+		end
+		
+		if self.status == "To be validated"
+		  counterLogObj.validity = false
+		else
+		  counterLogObj.validity = true
+		end
+		# TODO : Manage the validity !!!!!
   end
 
 private

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130124181211) do
+ActiveRecord::Schema.define(:version => 20130128110905) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -170,6 +170,14 @@ ActiveRecord::Schema.define(:version => 20130124181211) do
 
   create_table "companies", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "counter_base_values", :force => true do |t|
+    t.string   "complexity"
+    t.string   "operational_year"
+    t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

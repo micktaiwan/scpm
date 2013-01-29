@@ -205,8 +205,8 @@ class ProjectsController < ApplicationController
   # check request and suggest projects
   def import
     @import = []
-    Request.find(:all, :conditions=>"project_id is null", :order=>"workstream").each { |r|
-      @import << {:id=>r.id, :project_name=>r.project_name, :summary=>r.summary, :workstream=>r.workstream, :workpackage=>r.work_package, :is_stream=>r.is_stream}
+    Request.find(:all, :conditions=>"project_id is null and stream_id is null", :order=>"workstream").each { |r|
+      @import << r
       }
     render(:layout=>'tools')  
   end
