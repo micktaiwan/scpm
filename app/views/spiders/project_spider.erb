@@ -8,7 +8,11 @@ $(function () {
 		document.forms["form_update_spider"].submit();
 	}
 	$("#consolidate_btn").click(function () {
-		consolidate();
+		var alertConfirmation = confirm('This consolidation will increment the spider counter of this projet.');
+		if (alertConfirmation == true)
+		{
+			consolidate();
+		}
 	});
 
 	$("select").change(function () {

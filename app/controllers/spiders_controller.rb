@@ -271,6 +271,13 @@ class SpidersController < ApplicationController
     }
     # Save data of last element
     create_spider_conso(spiderParam,currentAxesId,valuesTotal,valuesCount,referencesTotal,referencesCount,niCount)
+    
+    # Increment the spider counter of the project
+    spiderProject = Project.find(spiderParam.project_id)
+    if(spiderProject)
+      spiderProject.spider_count = spiderProject.spider_count + 1
+      spiderProject.save
+    end
   end
   
   # Import file

@@ -840,11 +840,9 @@ class Request < ActiveRecord::Base
 	    counterLogObj.import_date    = DateTime.current
 	    counterLogObj.counter_value  = newCounterValue
 	    counterLogObj.validity       = 1
-	    counterLogObj.save
 	  # Update counter_log
 		elsif(counterLogObj.counter_value != newCounterValue)
 			  counterLogObj.counter_value = newCounterValue
-			  counterLogObj.save
 		end
 		
 		if self.status == "To be validated"
@@ -852,6 +850,7 @@ class Request < ActiveRecord::Base
 		else
 		  counterLogObj.validity = true
 		end
+		counterLogObj.save
 		# TODO : Manage the validity !!!!!
   end
 

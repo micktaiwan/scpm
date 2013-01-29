@@ -181,6 +181,11 @@ class ProjectsController < ApplicationController
     p.update_status(params[:status][:status])
     #p.save
     p.calculate_diffs
+    
+    # Increment QS counter
+    p.qs_count = p.qs_count + 1
+    p.save
+    
     Mailer::deliver_status_change(p)
     redirect_to :action=>:show, :id=>project_id
   end

@@ -9,6 +9,6 @@
 <% form_for @status, :url=>{:action=>'add_status', :project_id=>@project.id} do |f| -%>
   <%= render(:partial => 'status_form') %>
   <p><label>&nbsp;</label>
-  <%= submit_tag 'add status', :onclick=>"formSave();" %></p>
+  <%= submit_tag 'add status', :onclick=>"formSave();", :confirm => "If you send this new status, the QS counter of this project will be incremented." %></p>
 <% end -%>
 </div>
