@@ -205,9 +205,8 @@ ActiveRecord::Schema.define(:version => 20130124181211) do
 
   create_table "history_counters", :force => true do |t|
     t.integer  "request_id"
-    t.integer  "concerned_project_id"
     t.datetime "action_date"
-    t.string   "author"
+    t.integer  "author"
     t.integer  "concerned_status_id"
     t.integer  "concerned_spider"
     t.datetime "created_at"

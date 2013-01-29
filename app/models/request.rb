@@ -3,6 +3,8 @@ class Request < ActiveRecord::Base
   belongs_to :project
   belongs_to :stream
   has_one    :wl_line, :primary_key=>"request_id"
+  has_one    :counter_logs, :dependent=>:nullify
+  has_many   :history_counters, :dependent=>:nullify
   # belongs_to :resp, :class_name=>'Person', :conditions=>"assigned_to='people.rmt_user'"
 
   include WelcomeHelper

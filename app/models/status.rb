@@ -2,6 +2,7 @@ class Status < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :modifier, :class_name=>'Person', :foreign_key=>'last_modifier'
+  has_many   :history_counters
 
   before_save :escape
 

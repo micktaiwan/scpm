@@ -1,4 +1,3 @@
 class CounterLog < ActiveRecord::Base
-  belongs_to  :stream
-  belongs_to  :project
+  belongs_to  :request, :dependent=>:nullify
 end

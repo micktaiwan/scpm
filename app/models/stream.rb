@@ -1,7 +1,6 @@
 class Stream < ActiveRecord::Base
   has_many    :requests,          :dependent=>:nullify
   has_many    :stream_reviews,    :dependent => :destroy, :order=>"created_at desc"
-  has_many    :counter_logs,      :dependent=>:nullify
   
   belongs_to  :workstream
 
