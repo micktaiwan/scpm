@@ -62,4 +62,70 @@ class Stream < ActiveRecord::Base
     return stream
   end
   
+  # Create a new line in history_counter for spider
+  def set_spider_history_counter(author,spider)
+    request_id = self.get_current_spider_counter_request.id 
+    newHistoryCounter = HistoryCounter.new
+    newHistoryCounter.stream_id = self.id
+    newHistoryCounter.author = author.id
+    newHistoryCounter.concerned_spider = spider.id
+    newHistoryCounter.action_date = DateTime.current
+    if (request_id)
+      newHistoryCounter.request_id = request_id
+    end
+    newHistoryCounter.save
+  end
+  
+  def set_qs_history_counter(author,status)
+    request_id = self.get_current_qs_counter_request.id 
+    newHistoryCounter = HistoryCounter.new
+    newHistoryCounter.stream_id = self.id
+    newHistoryCounter.author = author.id
+    newHistoryCounter.status_id = status.id
+    newHistoryCounter.action_date = DateTime.current
+    if (request_id)
+      newHistoryCounter.request_id = request_id
+    end
+    newHistoryCounter.save
+  end
+
+  # Find the "Counter Request" for the next incrementation of spider counter 
+  # For a stream, we can have multiple "Counter request" with multiple counter values.
+  # This "counter request" will be order by date
+  def get_current_spider_counter_request
+    sum_spider_count_for_request = 0
+    last_request = 0
+    next_spider_counter_incrementation = self.get_consumed_spider_count + 1 # Get the next counter incrementation
+    
+    # loop on requests of this stream by date (!!!!!!!!!!)     
+    self.requests.each { |r|
+       if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6]) # NOT ALL WORKPACKAGES !!!!!!!!!!!!!!
+          sum_spider_count_for_request = sum_spider_count_for_request + r.counter_log.counter_value
+          last_request = r
+          if (next_spider_counter_incrementation <= sum_spider_count_for_request)
+            break
+          end
+       end
+    }
+    return last_request
+  end
+  
+  def get_current_qs_counter_request
+    sum_qs_count_for_request = 0
+    last_request = 0
+    next_qs_counter_incrementation = self.get_consumed_qs_count + 1 # Get the next counter incrementation
+    
+    # loop on requests of this stream by date (!!!!!!!!!!)     
+    self.requests.each { |r|
+       if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6]) # NOT ALL WORKPACKAGES !!!!!!!!!!!!!!
+          sum_qs_count_for_request = sum_qs_count_for_request + r.counter_log.counter_value
+          last_request = r
+          if (next_qs_counter_incrementation <= sum_qs_count_for_request)
+            break
+          end
+       end
+    }
+    return last_request
+  end
+
 end
