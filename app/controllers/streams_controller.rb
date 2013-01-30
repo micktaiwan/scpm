@@ -50,7 +50,7 @@ class StreamsController < ApplicationController
     
     stream = Stream.find_with_workstream(workstream)
     if not stream
-      # CREATE IT ?
+    render(:text=>"Stream not found")
     end
 
     request.stream_id = stream.id
@@ -77,17 +77,18 @@ class StreamsController < ApplicationController
     type = params['type']
     last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",id ,type], :order => "created_at DESC")
     @review = StreamReview.new
-    @review.stream_id = id    
-    @review.text = last_review.text
+    @review.stream_id = id 
+    if(last_review)   
+      @review.text = last_review.text
+    end
     @review.review_type_id = type
   end
   
   def create_review
-    review      = StreamReview.create(params[:review])
-    review.stream_id = params[:review][:stream_id]
+    review                = StreamReview.create(params[:review])
+    review.stream_id      = params[:review][:stream_id]
     review.review_type_id = params[:review][:review_type_id]
-    Rails.logger.info("+>"+review.to_s)
-    Rails.logger.info("++>"+review.stream_id.to_s)
+    review.author_id      = current_user.id
     review.save
     redirect_to :action=>:show, :id=>review.stream_id
   end
@@ -99,4 +100,15 @@ class StreamsController < ApplicationController
     StreamReview.find(params[:id].to_i).destroy
     render(:nothing=>true)
   end
+  
+  
+  # List streams
+  
+  def mark_as_read
+    s           = Stream.find(params[:id])
+    s.read_date = Time.now
+    s.save
+    render(:nothing=>true)
+  end
+
 end

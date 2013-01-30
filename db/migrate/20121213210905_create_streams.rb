@@ -5,6 +5,7 @@ class CreateStreams < ActiveRecord::Migration
       #t.integer :total_qs_count
       #t.integer :total_spider_count
       t.integer  :workstream_id
+      t.datetime :read_date
       t.timestamps
     end
   end

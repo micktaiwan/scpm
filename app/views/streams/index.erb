@@ -3,10 +3,32 @@
 		<% 
 			link_title = "[" + stream.id.to_s + "] "
 			link_title += stream.name 
-			link_title += " [QS count :" + stream.get_consumed_qs_count.to_s + "/" + stream.total_qs_count.to_s 
-			link_title += "] [Spider count : " + stream.get_consumed_spider_count.to_s + "/" + stream.total_spider_count.to_s + "]" 
+			#link_title += " [QS count :" + stream.get_consumed_qs_count.to_s + "/" + stream.get_qs_counter.to_s 
+			#link_title += "] [Spider count : " + stream.get_consumed_spider_count.to_s + "/" + stream.get_spider_counter.to_s + "]" 
+			
+			last_update_str = "No last update"
+			last_update = stream.get_last_update_review
+			if last_update
+				last_update_str = last_update.updated_at.to_s
+			end
 		%>
 	
-		<li><%= link_to link_title, :controller => "streams", :action => "show", :id => stream.id %></li>
+		<li>
+			<%= link_to link_title, :controller => "streams", :action => "show", :id => stream.id %>
+		
+			<% if stream.read_date and current_user.has_role?('Admin')%>
+			  <font color="#777777">Last read: <%= time_ago_in_words(stream.read_date) %></font>
+			<% end %>
+			<% if current_user.has_role?('Admin')%>
+			  <%= link_to_remote('Mark as read', {:url=>{:controller=>'streams',
+			     :action=>'mark_as_read', :id=>stream.id},
+			     :success=>"$('markasread_#{stream.id}').fade();"},
+			     {:class=>'btnlnk special', :id=>"markasread_#{stream.id}"}) %>
+			<% end %>
+			
+			<p>Last review update : <%= last_update_str %></p>
+			<p>QS count : <%=  stream.get_consumed_qs_count.to_s %> / <%= stream.get_qs_counter.to_s %> </p>
+			<p>Spider count : <%=  stream.get_consumed_spider_count.to_s %> / <%= stream.get_spider_counter.to_s %> </p>
+		</li>
 	<% end %>
 </ul>

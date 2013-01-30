@@ -1,9 +1,15 @@
 class Stream < ActiveRecord::Base
   has_many    :requests,          :dependent=>:nullify
   has_many    :stream_reviews,    :dependent => :destroy, :order=>"created_at desc"
-  
   belongs_to  :workstream
+  has_many    :stream_review_types
+  has_many    :review_types, :through=>:stream_review_types
 
+
+  #                   # 
+  # Consumed tickets  #
+  #                   #
+  
   def get_consumed_qs_count
     # Get projects by workstream
     projects = Project.find(:all,:conditions => ["workstream = ?", Workstream.find(self.workstream).name])
@@ -15,6 +21,7 @@ class Stream < ActiveRecord::Base
     # return
     return qs_count
   end
+  
   def get_consumed_spider_count
     # Get projects by workstream
     projects = Project.find(:all,:conditions => ["workstream = ?", Workstream.find(self.workstream).name])
@@ -27,40 +34,35 @@ class Stream < ActiveRecord::Base
     return spider_count
   end
   
-  def get_stream_review
-    # Get all last review for each type
-    last_reviews_str = ""
-    last_update = DateTime.strptime('1970-01-01 00:00:00','%Y-%m-%d %H:%M:%S')
-    ReviewType.find(:all).each do |review_type|
-      last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",self.id ,review_type.id], :order => "created_at DESC")
-      if last_review != nil
-        last_reviews_str += "<p>" + review_type.title + "</p>" + last_review.text
-        if last_review.updated_at > last_update
-          last_update = last_review.updated_at
-        end
-      end
-    end
-    #return last_reviews_str
-    array_return = [last_update.to_s, last_reviews_str]
-    return array_return
-  end
 
-  def get_stream_review_types
-    reviewsType = Array.new
-    ReviewType.find(:all).each do |review_type|
-      reviews = StreamReview.find(:all,:conditions => ["stream_id = ? and review_type_id = ?",self.id ,review_type.id])
-      if reviews.count > 0
-        reviewsType << review_type
+  #               # 
+  # Total tickets #
+  #               #  
+  
+  def get_qs_counter
+    total = 0
+    self.requests.sort_by{|r| r.start_date }.each { |r|
+      if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log))
+         total = total + r.counter_log.counter_value
       end
-    end
-    return reviewsType
+    }
+    return total
   end
   
-  def self.find_with_workstream(workstreamParam)
-    ws = Workstream.first(:conditions => ["name = ?",workstreamParam])
-    stream = Stream.first(:conditions => ["workstream_id = ?",ws.id.to_s])
-    return stream
+  def get_spider_counter
+    total = 0
+    self.requests.sort_by{|r| r.start_date }.each { |r|
+      if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log))
+         total = total + r.counter_log.counter_value
+      end
+    }
+    return total
   end
+  
+  
+  #                                   # 
+  # History of tickets incrementation #
+  #                                   #
   
   # Create a new line in history_counter for spider
   def set_spider_history_counter(author,spider)
@@ -89,6 +91,11 @@ class Stream < ActiveRecord::Base
     newHistoryCounter.save
   end
 
+
+  #                                                   # 
+  # Retrieve the current Request (1.6.4 / 1.6.5) used #
+  #                                                   #
+  
   # Find the "Counter Request" for the next incrementation of spider counter 
   # For a stream, we can have multiple "Counter request" with multiple counter values.
   # This "counter request" will be order by date
@@ -128,4 +135,36 @@ class Stream < ActiveRecord::Base
     return last_request
   end
 
+
+  #                # 
+  # Stream reviews #
+  #                #  
+  
+  def get_stream_review
+    last_reviews = Array.new
+    self.review_types.each {|rt|
+      last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",self.id ,rt.id], :order => "created_at DESC")
+      if last_review != nil
+        last_reviews.push(last_review)
+      end
+    }
+    return last_reviews
+  end
+
+  def get_last_update_review
+    last_review = StreamReview.first(:conditions => ["stream_id = ?",self.id], :order => "created_at DESC")
+    return last_review
+  end
+  
+  
+  #                # 
+  # Static methods #
+  #                #  
+
+  def self.find_with_workstream(workstreamParam)
+    ws = Workstream.first(:conditions => ["name = ?",workstreamParam])
+    stream = Stream.first(:conditions => ["workstream_id = ?",ws.id.to_s])
+    return stream
+  end
+  
 end

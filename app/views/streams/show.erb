@@ -2,20 +2,24 @@
 	<%= link_to "Stream", {:controller => "streams", :action => "show", :id => @stream.id},{:class=>"btnlnk"} %>
 	<%= link_to "Projects",{:controller => "streams", :action => "show_stream_projects", :id => @stream.id},{:class=>"btnlnk"}%>
 	<%= link_to "Informations", {:controller => "streams", :action => "show_stream_informations", :id => @stream.id},{:class=>"btnlnk"}%>
-	<% @stream.get_stream_review_types.each do |review_type| %>
+	<% @stream.review_types.each do |review_type| %>
 		<%= link_to  review_type.title , {:controller => "streams", :action => "show_stream_review", :id => @stream.id, :type => review_type.id },{:class=>"btnlnk"}%>
 	<% end %>
 </p>
+
 <div class='status_explanation'>
-Counts :
-<p>QS count : <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.total_qs_count.to_s %></p>
-<p>Spider Count : <%= @stream.get_consumed_spider_count.to_s %>  / <%= @stream.total_spider_count.to_s %></p>
+Counters :
+<p>QS count : <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.get_qs_counter.to_s %></p>
+<p>Spider Count : <%= @stream.get_consumed_spider_count.to_s %>  / <%= @stream.get_spider_counter.to_s %></p>
 </div>
 
 <div class='status_explanation'>
 Reviews :
-<p>Last edit : <%= @stream.get_stream_review[0].to_s %></p>
+<% @stream.get_stream_review.each { |r| %>
+<p>Last edit : <%= r.updated_at.to_s %></p>
+<p>Author : <%= r.person.name.to_s %></p>
 <p>
-	<%= @stream.get_stream_review[1].to_s %>
+	<%= r.text.to_s %>
 </p>
+<% } %>
 </div>

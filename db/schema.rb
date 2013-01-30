@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130128110905) do
+ActiveRecord::Schema.define(:version => 20130129120905) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -214,11 +214,12 @@ ActiveRecord::Schema.define(:version => 20130128110905) do
   create_table "history_counters", :force => true do |t|
     t.integer  "request_id"
     t.datetime "action_date"
-    t.integer  "author"
+    t.integer  "author_id"
     t.integer  "concerned_status_id"
-    t.integer  "concerned_spider"
+    t.integer  "concerned_spider_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "stream_id",           :null => false
   end
 
   create_table "lifecycle_milestones", :force => true do |t|
@@ -700,6 +701,13 @@ ActiveRecord::Schema.define(:version => 20130128110905) do
     t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
   end
 
+  create_table "stream_review_types", :force => true do |t|
+    t.integer  "stream_id"
+    t.integer  "review_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "stream_reviews", :force => true do |t|
     t.integer  "stream_id"
     t.integer  "review_type_id"
@@ -710,8 +718,6 @@ ActiveRecord::Schema.define(:version => 20130128110905) do
 
   create_table "streams", :force => true do |t|
     t.string   "name"
-    t.integer  "total_qs_count"
-    t.integer  "total_spider_count"
     t.integer  "workstream_id"
     t.datetime "created_at"
     t.datetime "updated_at"
