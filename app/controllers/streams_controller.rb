@@ -125,16 +125,18 @@ class StreamsController < ApplicationController
     project = Project.find_by_name(project_name)
     if not project
       project = Project.create(:name=>project_name)
-      project.workstream = workstream.name
+      project.workstream        = workstream.name
+      project.lifecycle_object  = Lifecycle.first
       project.save
     end
 
     wp = Project.find_by_name(workpackage_name, :conditions=>["project_id=?",project.id])
     if not wp
       wp = Project.create(:name=>workpackage_name)
-      wp.workstream = workstream.name
-      wp.brn        = brn
-      wp.project_id = project.id
+      wp.workstream       = workstream.name
+      wp.brn              = brn
+      wp.lifecycle_object = Lifecycle.first
+      wp.project_id       = project.id
       wp.save
     end
 
