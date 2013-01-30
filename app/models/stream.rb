@@ -67,8 +67,8 @@ class Stream < ActiveRecord::Base
     request_id = self.get_current_spider_counter_request.id 
     newHistoryCounter = HistoryCounter.new
     newHistoryCounter.stream_id = self.id
-    newHistoryCounter.author = author.id
-    newHistoryCounter.concerned_spider = spider.id
+    newHistoryCounter.author_id = author.id
+    newHistoryCounter.concerned_spider_id = spider.id
     newHistoryCounter.action_date = DateTime.current
     if (request_id)
       newHistoryCounter.request_id = request_id
@@ -80,8 +80,8 @@ class Stream < ActiveRecord::Base
     request_id = self.get_current_qs_counter_request.id 
     newHistoryCounter = HistoryCounter.new
     newHistoryCounter.stream_id = self.id
-    newHistoryCounter.author = author.id
-    newHistoryCounter.status_id = status.id
+    newHistoryCounter.author_id = author.id
+    newHistoryCounter.concerned_status_id = status.id
     newHistoryCounter.action_date = DateTime.current
     if (request_id)
       newHistoryCounter.request_id = request_id
@@ -98,8 +98,8 @@ class Stream < ActiveRecord::Base
     next_spider_counter_incrementation = self.get_consumed_spider_count + 1 # Get the next counter incrementation
     
     # loop on requests of this stream by date (!!!!!!!!!!)     
-    self.requests.each { |r|
-       if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6]) # NOT ALL WORKPACKAGES !!!!!!!!!!!!!!
+    self.requests.sort_by{|r| r.start_date }.each { |r|
+       if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log))
           sum_spider_count_for_request = sum_spider_count_for_request + r.counter_log.counter_value
           last_request = r
           if (next_spider_counter_incrementation <= sum_spider_count_for_request)
@@ -116,8 +116,8 @@ class Stream < ActiveRecord::Base
     next_qs_counter_incrementation = self.get_consumed_qs_count + 1 # Get the next counter incrementation
     
     # loop on requests of this stream by date (!!!!!!!!!!)     
-    self.requests.each { |r|
-       if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6]) # NOT ALL WORKPACKAGES !!!!!!!!!!!!!!
+    self.requests.sort_by{|r| r.start_date }.each { |r|
+       if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log))
           sum_qs_count_for_request = sum_qs_count_for_request + r.counter_log.counter_value
           last_request = r
           if (next_qs_counter_incrementation <= sum_qs_count_for_request)

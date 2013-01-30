@@ -186,6 +186,10 @@ class ProjectsController < ApplicationController
     p.qs_count = p.qs_count + 1
     p.save
     
+    # Insert in history_counter
+    streamRef     = Stream.find_with_workstream(p.workstream)
+    streamRef.set_qs_history_counter(current_user,status)
+    
     Mailer::deliver_status_change(p)
     redirect_to :action=>:show, :id=>project_id
   end
