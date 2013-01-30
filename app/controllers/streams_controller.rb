@@ -1,5 +1,6 @@
 class StreamsController < ApplicationController
   layout "general"
+  include WelcomeHelper
   
   # GENERAL ACTIONS
   def index
@@ -110,5 +111,38 @@ class StreamsController < ApplicationController
     s.save
     render(:nothing=>true)
   end
+
+  # List projects
+  
+  def create_project
+    id                = params[:id]
+    workstream        = Stream.find(id).workstream
+    summary           = params[:summary]
+    project_name      = params[:project_name]
+    workpackage_name  = get_workpackage_name_from_summary(summary, project_name)
+    brn               = summary.split(/\[([^\]]*)\]/)[5]
+    
+    project = Project.find_by_name(project_name)
+    if not project
+      project = Project.create(:name=>project_name)
+      project.workstream = workstream.name
+      project.save
+    end
+
+    wp = Project.find_by_name(workpackage_name, :conditions=>["project_id=?",project.id])
+    if not wp
+      wp = Project.create(:name=>workpackage_name)
+      wp.workstream = workstream.name
+      wp.brn        = brn
+      wp.project_id = project.id
+      wp.save
+    end
+
+    project.add_responsible_from_rmt_user(current_user.rmt_user) if current_user != nil
+    
+    redirect_to :action=>:show, :id=>id
+    
+  end
+
 
 end

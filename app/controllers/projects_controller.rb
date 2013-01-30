@@ -540,7 +540,30 @@ class ProjectsController < ApplicationController
     @performed    = Request.find(:all, :conditions=>["status_performed >= ?", date], :order=>"workstream, project_id, status_performed")
     @closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
   end
-
+  
+  
+  # Change is_running status
+  
+  def stop
+    id = params[:id]
+    project = Project.find(id)
+    if(project)
+      project.is_running = 0      
+      project.save
+    end
+    render(:nothing => true)
+  end
+  
+  def start
+    id = params[:id]
+    project = Project.find(id)
+    if(project)
+      project.is_running = 1
+      project.save
+    end
+    redirect_to :action=>:show, :id=>project.id
+  end
+  
 private
 
   def get_status_progress

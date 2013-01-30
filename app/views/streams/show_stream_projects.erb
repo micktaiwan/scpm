@@ -7,8 +7,20 @@
 	<% end %>
 </p>
 
+<h3>Create new project</h3>
+<% form_tag(:action=>'create_project') do %>
+  <%= hidden_field_tag('id', @stream.id) %>
+  Summary ([X][X][X]) : <%= text_field_tag 'summary' %>
+  Project Name : 		<%= text_field_tag 'project_name' %>
+
+  <%= submit_tag('Create this project for the current stream') %>
+<% end %>
+
+<h3>Projects</h3>
 <ul>
 <% @projects.each do |project| %>
-  <%= render(:partial=>'projects/project', :object=>project) %>
+  <% if project.is_running %>
+  	<%= render(:partial=>'stream_project', :object=>project) %>
+  <% end %>
 <% end %>
 </ul>
