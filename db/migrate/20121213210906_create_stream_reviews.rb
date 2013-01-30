@@ -5,6 +5,7 @@ class CreateStreamReviews < ActiveRecord::Migration
       t.integer   :review_type_id
       t.integer   :author_id
       t.text      :text
+      t.text      :text_diff
       t.timestamps
     end
   end

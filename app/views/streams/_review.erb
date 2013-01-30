@@ -10,7 +10,8 @@
         <%end%>
       </div>
     <b>Review detail</b><br />
-	<%= review.text %>
+	<%= review.text %> | <span class='diff'><br/><br/><br/><%= review.text_diff.to_s %></span>
+    
 </div>
 <br />
 

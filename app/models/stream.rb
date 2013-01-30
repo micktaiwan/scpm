@@ -157,6 +157,17 @@ class Stream < ActiveRecord::Base
   end
   
   
+  # set last test dif
+  def calculate_diffs(review_type)
+    reviews = StreamReview.find(:all,:conditions => ["stream_id = ? and review_type_id = ?",self.id ,review_type], :order => "created_at DESC")
+    if reviews.size > 2
+      Rails.logger.info("------AXIZ>OK")
+      
+      reviews[0].text_diff = Differ.diff(reviews[0].text,reviews[1].text).to_s.split("\n").join("<br/>") if reviews[0].text and reviews[1].text
+      reviews[0].save
+    end
+  end
+  
   #                # 
   # Static methods #
   #                #  

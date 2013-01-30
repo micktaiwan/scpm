@@ -69,6 +69,7 @@ class StreamsController < ApplicationController
     review = StreamReview.find(params[:id])
     review.text = params[:review][:text]
     review.save
+    review.stream.calculate_diffs(review.review_type_id)
     redirect_to :action=>:show, :id=>review.stream_id
   end
   
@@ -91,6 +92,7 @@ class StreamsController < ApplicationController
     review.review_type_id = params[:review][:review_type_id]
     review.author_id      = current_user.id
     review.save
+    review.stream.calculate_diffs(review.review_type_id)
     redirect_to :action=>:show, :id=>review.stream_id
   end
   
