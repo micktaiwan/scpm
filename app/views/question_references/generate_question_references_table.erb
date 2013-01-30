@@ -7,7 +7,7 @@
 	<% if(question_id != m.lifecycle_question.id.to_s) %>
 		<%
 			isInactive = ""
-			if m.lifecycle_question.validity
+			if !m.lifecycle_question.validity
 				isInactive = "<span style='background-color:red;'>(QUESTION INACTIVE)</span>"
 			end
 		%>

@@ -137,6 +137,7 @@ class ProjectsController < ApplicationController
     project = Project.find(params[:id])
     project.update_attributes(params[:project])
     project.propagate_attributes
+    project.set_lifecycle_old_param()
     redirect_to :action=>:show, :id=>project.id
   end
 
@@ -239,12 +240,12 @@ class ProjectsController < ApplicationController
           parent = Project.find(:first, :conditions=>"name='#{r.project_name}'")
           if not parent
             # create parent
-            parent_id = Project.create(:project_id=>nil, :name=>r.project_name, :workstream=>r.workstream).id
+            parent_id = Project.create(:project_id=>nil, :name=>r.project_name, :workstream=>r.workstream, :lifecycle_object=>Lifecycle.first).id
           else
             parent_id = parent.id
           end
           #create wp
-          p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream)
+          p = Project.create(:project_id=>parent_id, :name=>r.workpackage_name, :workstream=>r.workstream, :lifecycle_object=>Lifecycle.first)
           if r.project.requests.size == 1 # if that was the only request move all statuts and actions, etc.. to new project
             @text << "<u>#{r.project.full_name}</u>: #{r.workpackage_name} (new) != #{r.project.name} (old) => creating and moving ALL<br/>"
             r.project.move_all(p)
@@ -294,6 +295,7 @@ class ProjectsController < ApplicationController
     if not project
       project = Project.create(:name=>project_name)
       project.workstream = request.workstream
+      project.lifecycle_object = Lifecycle.first
       project.save
     end
 
@@ -303,6 +305,7 @@ class ProjectsController < ApplicationController
       wp.workstream = request.workstream
       wp.brn        = brn
       wp.project_id = project.id
+      wp.lifecycle_object = Lifecycle.first
       wp.save
     end
 
