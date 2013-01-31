@@ -20,6 +20,10 @@ class StreamsController < ApplicationController
   def show_stream_informations
     id = params['id']
     @stream = Stream.find(id)
+    
+    # Get all review types
+    @reviewTypes = ReviewType.find(:all)
+    
     # Get all Requests
     # @requests = Request.find(:all,:conditions => ["stream_id = ?", id])
   end
@@ -58,6 +62,33 @@ class StreamsController < ApplicationController
     request.save
     render(:text=>"saved")
   end
+  
+  # FORM INFORMATIONS - UPDATE
+  def update_stream_review_types
+    
+    rtSelected = params[:reviewTypeForm] #ReviewTypes selected in the form
+    stream = Stream.find(params[:id])
+    streamRt = stream.review_types #ReviewTypes already added to stream
+    
+    # For each reviewType
+    ReviewType.find(:all).each do |rt|   
+      # If current rt is selected in the form and not already added to stream
+      if rtSelected.include?(rt.id.to_s) and !streamRt.include?(rt)
+        # ADD / CREATE
+        srt = StreamReviewType.create
+        srt.stream_id = stream.id
+        srt.review_type_id = rt.id
+        srt.save
+      # If current RT is not selected in form and previously added to stream
+      elsif !rtSelected.include?(rt.id.to_s) and streamRt.include?(rt)
+        # DELETE
+        srt = StreamReviewType.first(:conditions=>["stream_id = ? and review_type_id = ?",stream.id.to_s,rt.id.to_s])
+        srt.destroy
+      end
+    end
+    redirect_to :action=>:show_stream_informations, :id=>stream.id
+  end
+  
   
   # FORM REVIEW - EDIT/UPDATE
   def edit_review

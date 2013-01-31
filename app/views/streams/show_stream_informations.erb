@@ -7,6 +7,24 @@
 	<% end %>
 </p>
 
+
+<h3>Review type</h3>
+<% form_tag ({:controller => "streams", :action => "update_stream_review_types"}, :method => "post") do %>
+	<%= hidden_field_tag('id', @stream.id) %>
+	<% @reviewTypes.each do |rt| %>
+		<p><%= rt.title %>
+		<% checkboxName = rt.id.to_s %>
+		<% if(@stream.review_types.include?(rt))%>
+			<%= check_box_tag("reviewTypeForm[]",checkboxName,true) %>
+		<% else %>
+			<%= check_box_tag("reviewTypeForm[]",checkboxName,false) %>
+		<% end %>
+		</p>
+	<% end %>
+	<%= submit_tag "Update" %>
+<% end %>
+
+
 <h3>Requests</h3>
 <ul>
 <%= render(:partial=>'projects/request', :collection=>@stream.requests) %>
