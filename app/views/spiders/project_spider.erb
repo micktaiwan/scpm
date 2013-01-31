@@ -96,7 +96,7 @@ function getDocHeight() {
 		pmTabId = i.to_s
 		
 		# Header and table creation
-		concat "<div class='spider_container'><h3 id='table_title_" + pmTabId + "'>"+ @pmType[p[0]].to_s + '</h3><table class="pm_type_tab" id="pm_' + pmTabId + '">'	
+		concat "<div class='spider_container'><h3 id='table_title_" + pmTabId + "'>"+ @pmType[p[0]].to_s + "-" + @milestone.name.to_s + '</h3><table class="pm_type_tab" id="pm_' + pmTabId + '">'	
 
 		# each lines - questions
 		j = 0

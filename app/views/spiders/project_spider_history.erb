@@ -128,7 +128,7 @@ pmTypeIndex = 0
 	
 	concat 'consoDataArray["'+pmTypeIndex.to_s+'"] = new Array();'
 
-	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["title"]="'+pmTypeName+'";'
+	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["title"]="' + pmTypeName + '-' + @spider.milestone.name + '";'
 	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["id"]="'+pmTypeId+'";'
 	
 	concat 'consoDataArray["'+pmTypeIndex.to_s+'"]["axes"]= new Array();'
