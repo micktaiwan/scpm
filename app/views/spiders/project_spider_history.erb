@@ -11,7 +11,22 @@ $(function () {
 
 	// Manage the two charts
 	$("#chartContainer_0").show();
-	$(window).scroll(function(){
+	$(window).scroll(manageChartVisibility);
+	
+	// Show/hide charts
+	$("#chart_visibility_btn").click(function(){
+
+		if($(".spider_chart").width() == 1)
+		{
+			$(".spider_chart").width("40%");
+		}
+		else
+		{
+			$(".spider_chart").width(1);	
+		}
+	});
+	
+	function manageChartVisibility(){
 		var spider_sepator = $("#spider_separator");
 		var docViewTop = $(window).scrollTop();
 	    var docViewBottom = docViewTop + $(window).height();
@@ -30,7 +45,8 @@ $(function () {
 			$("#chartContainer_1").show();
 			$("#chartContainer_0").hide();
 		}
-	});
+	}
+	
 });
 
 // Helper
@@ -54,7 +70,7 @@ function getDocHeight() {
 	end
 	projectName += " > " + @spider.project.name
 %>
-<h3>Project : <%= projectName %> - Milestone : <%= @spider.milestone.name %></h3>
+<h3>Project : <%= projectName %> - Milestone : <%= @spider.milestone.name %> - <a href='#' id="chart_visibility_btn">Toggle Hide/show charts</a></h3>
 
 <%
 concat "<h2>Spider [created the "

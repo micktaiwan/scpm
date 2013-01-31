@@ -10,8 +10,12 @@
 	right: 0px;
 	top: 180px;
 	position: fixed;
-	width: 600px; 
-	height: 400px; 
+/*	min-width: 300px;*/
+	max-width: 600px; 
+	width : 40%;
+	min-height: 200px;
+	max-height: 400px; 
+	height : 45%;
 	margin: 0 auto;
 	display: none;
 }
