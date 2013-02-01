@@ -12,14 +12,16 @@ class StreamsController < ApplicationController
   end
   
   def show_stream_projects
-    id = params['id']
-    @stream = Stream.find(id)
-    @projects = Project.find(:all,:conditions => ["workstream = ?", Workstream.find(@stream.workstream).name])
+    id            = params['id']
+    @stream       = Stream.find(id)
+    @creationError = params['creationError']    
+    
+    @projects = Project.find(:all,:conditions => ["workstream = ? and is_running = 1", Workstream.find(@stream.workstream).name])
   end
   
   def show_stream_informations
-    id = params['id']
-    @stream = Stream.find(id)
+    id            = params['id']
+    @stream       = Stream.find(id)
     
     # Get all review types
     @reviewTypes = ReviewType.find(:all)
@@ -155,28 +157,31 @@ class StreamsController < ApplicationController
     workpackage_name  = get_workpackage_name_from_summary(summary, project_name)
     brn               = summary.split(/\[([^\]]*)\]/)[5]
     
-    project = Project.find_by_name(project_name)
-    if not project
-      project = Project.create(:name=>project_name)
-      project.workstream        = workstream.name
-      project.lifecycle_object  = Lifecycle.first
-      project.save
-    end
+    resultRegex = summary.scan(/\[(.*?)\]/)
+    if (resultRegex.count == 3)
+      project = Project.find_by_name(project_name)
+      if not project
+        project = Project.create(:name=>project_name)
+        project.workstream        = workstream.name
+        project.lifecycle_object  = Lifecycle.first
+        project.save
+      end
 
-    wp = Project.find_by_name(workpackage_name, :conditions=>["project_id=?",project.id])
-    if not wp
-      wp = Project.create(:name=>workpackage_name)
-      wp.workstream       = workstream.name
-      wp.brn              = brn
-      wp.lifecycle_object = Lifecycle.first
-      wp.project_id       = project.id
-      wp.save
-    end
+      wp = Project.find_by_name(workpackage_name, :conditions=>["project_id=?",project.id])
+      if not wp
+        wp = Project.create(:name=>workpackage_name)
+        wp.workstream       = workstream.name
+        wp.brn              = brn
+        wp.lifecycle_object = Lifecycle.first
+        wp.project_id       = project.id
+        wp.save
+      end
 
-    project.add_responsible_from_rmt_user(current_user.rmt_user) if current_user != nil
-    
-    redirect_to :action=>:show, :id=>id
-    
+      project.add_responsible_from_rmt_user(current_user.rmt_user) if current_user != nil
+      redirect_to :action=>:show_stream_projects, :id=>id, :creationError=>false
+    else
+      redirect_to :action=>:show_stream_projects, :id=>id, :creationError=>true
+    end
   end
 
 

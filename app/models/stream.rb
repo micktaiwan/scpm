@@ -2,10 +2,26 @@ class Stream < ActiveRecord::Base
   has_many    :requests,          :dependent=>:nullify
   has_many    :stream_reviews,    :dependent => :destroy, :order=>"created_at desc"
   belongs_to  :workstream
+  belongs_to  :supervisor, :class_name=>"Person", :foreign_key=>"supervisor_id"
   has_many    :stream_review_types
   has_many    :review_types, :through=>:stream_review_types
 
-
+  # give a list of corresponding requests QR
+  def assignees
+    rv = []
+    requests.each { |r|
+      if r.assigned_to != ''
+        person = Person.find_by_rmt_user(r.assigned_to)
+      else
+        person = nil
+      end
+      name = person ? person.name : r.assigned_to
+      name += " (#{r.work_package})"
+      rv << name if not rv.include?(name)
+      }
+    rv
+  end
+  
   #                   # 
   # Consumed tickets  #
   #                   #

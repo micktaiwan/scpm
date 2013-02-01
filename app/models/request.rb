@@ -831,7 +831,7 @@ class Request < ActiveRecord::Base
 		
     # Get the new value for this request
 		newCounterValue = CounterBaseValue.first(
-		:conditions => ["complexity = ? and operational_year = ?",self.complexity,self.sdpiteration]).value
+		:conditions => ["complexity = ? and sdp_iteration = ?",self.complexity,self.sdpiteration]).value
 			
 		# Create new counter_log 
 		if (!counterLogObj) 

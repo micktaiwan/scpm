@@ -7,6 +7,14 @@
 	<% end %>
 </p>
 
+<h3>Informations</h3>
+<p><b>Supervisor : </b> <%= @stream.supervisor.name %></p>
+<p><b>Quality Manager : </b> <%= @stream.quality_manager %></p>
+<p><b>DWL : </b> <%= @stream.dwl %></p>
+<p><b>Process Owner : </b> <%= @stream.process_owner %></p>
+<p><b>Request resp:</b> <%=@stream.assignees.join(', ')%></p>
+
+
 
 <h3>Review type</h3>
 <% form_tag ({:controller => "streams", :action => "update_stream_review_types"}, :method => "post") do %>

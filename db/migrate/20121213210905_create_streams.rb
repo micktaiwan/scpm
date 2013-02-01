@@ -6,6 +6,10 @@ class CreateStreams < ActiveRecord::Migration
       #t.integer :total_spider_count
       t.integer  :workstream_id
       t.datetime :read_date
+      t.integer  :supervisor_id
+      t.string   :quality_manager
+      t.string   :dwl
+      t.string   :process_owner
       t.timestamps
     end
   end
