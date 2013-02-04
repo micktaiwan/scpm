@@ -9,13 +9,26 @@
 
 <div class='status_explanation'>
 Counters :
-<p>QS count : <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.get_qs_counter.to_s %></p>
-<p>Spider Count : <%= @stream.get_consumed_spider_count.to_s %>  / <%= @stream.get_spider_counter.to_s %></p>
+<p>QS count : <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.get_qs_counter.to_s %>
+<% if (@stream.get_consumed_qs_count.to_i == @stream.get_qs_counter.to_i) %>
+	<span class="warning"> Not enough QS tickets </span>
+<% elsif (@stream.get_consumed_qs_count.to_i > @stream.get_qs_counter.to_i) %>
+	<span class="alert"> Not enough QS tickets </span>
+<% end %>
+</p>
+<p>Spider Count : <%= @stream.get_consumed_spider_count.to_s %>  / <%= @stream.get_spider_counter.to_s %>
+<% if (@stream.get_consumed_spider_count.to_i == @stream.get_spider_counter.to_i) %>
+	<span class="warning"> Not enough Spider tickets </span>
+<% elsif (@stream.get_consumed_spider_count.to_i > @stream.get_spider_counter.to_i) %>
+	<span class="alert"> Not enough Spider tickets </span>
+<% end %>
+</p>
 </div>
 
 <div class='status_explanation'>
 Reviews :
 <% @stream.get_stream_review.each { |r| %>
+<p><%= r.review_type.title %></p>
 <p>Last edit : <%= r.updated_at.to_s %></p>
 <p>Author : <%= r.person.name.to_s %></p>
 <p>

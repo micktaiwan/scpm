@@ -582,6 +582,19 @@ class ToolsController < ApplicationController
     render :nothing => true
   end
   
+  def show_counter_history
+    @spider_counter            = HistoryCounter.find(:all,:conditions=>["concerned_spider_id IS NOT NULL"],
+                                          :joins => 'JOIN requests ON requests.id = history_counters.request_id',
+                                          :order=>"requests.id ASC")
+    @spider_counter_no_request = HistoryCounter.find(:all,:conditions=>["concerned_spider_id IS NOT NULL and request_id IS NULL"])
+    
+    @qs_counter                = HistoryCounter.find(:all,:conditions=>["concerned_status_id IS NOT NULL"],
+                                          :joins => 'JOIN requests ON requests.id = history_counters.request_id',
+                                          :order=>"requests.id ASC")
+    @qs_counter_no_request     = HistoryCounter.find(:all,:conditions=>["concerned_status_id IS NOT NULL and request_id IS NULL"])
+    
+  end
+  
 private
 
   def round_to_hour(f)

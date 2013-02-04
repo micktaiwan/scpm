@@ -1,0 +1,6 @@
+<table class="edit">
+<td>Process Owner</td><td><%= text_field :stream, :process_owner %></td></tr>
+<td>Quality Manager</td><td><%= text_field :stream, :quality_manager %></td></tr>
+<td>DWL</td><td><%= text_field :stream, :dwl %></td></tr>
+<td>Supervisor</td><td><%= select(:stream, :supervisor_id, @supervisors.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
+</table>

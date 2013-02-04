@@ -1,0 +1,95 @@
+<h2>Spider Counters</h2>
+<% last_request_spider = 0 %>
+<!-- For each spider counter -->
+<% @spider_counter.each do |sc| %>
+
+	<!-- IF NEW REQUEST -->
+	<% if last_request_spider != sc.request_id %>
+		<!-- TABLE -->
+		<% if last_request_spider != 0 %>
+			</table><br />
+		<% end %>
+		<table class="history_counts_table" >
+		<!-- REQUEST TR -->
+		<tr class="bg_blue">
+			<td>
+				<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= sc.request.request_id %>">#<%= sc.request.request_id %></a>
+			</td>
+			<td COLSPAN="2"><%= sc.request.summary %></td>
+		</tr>
+		<!-- HEADER TR -->
+		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td></tr>
+		<% last_request_spider = sc.request_id %>
+	<% end %>
+	
+	<!-- DETAIL ACTION TR-->
+	<tr>
+		<td><%= sc.author.name %></td>
+		<td><%= sc.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<td><%= link_to(sc.spider.project.name, {:controller=>'projects', :action=>'show', :id=>sc.spider.project.id}) %></td>
+	</tr>
+<% end %>
+</table>
+
+<h2>QS Counters</h2>
+<% last_request_qs = 0 %>
+<!-- For each QS counter -->
+<% @qs_counter.each do |qsc| %>
+
+	<!-- IF NEW REQUEST -->
+	<% if last_request_qs != qsc.request_id %>
+		<!-- TABLE -->
+		<% if last_request_qs != 0 %>
+			</table><br />
+			<% end %>		
+		<table class="history_counts_table" >
+		<!-- REQUEST TR -->
+		<tr class="bg_blue">
+			<td>
+				<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= qsc.request.request_id %>">#<%= qsc.request.request_id %></a>
+			</td>
+			<td COLSPAN="3"><%= qsc.request.summary %></td>
+		</tr>
+		<!-- HEADER TR -->
+		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td></tr>
+		<% last_request_qs = qsc.request_id %>
+	<% end %>
+	
+	<!-- DETAIL ACTION TR -->	
+	<tr>
+		<td><%= qsc.author.name %></td>
+		<td><%= qsc.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<td><%= link_to(qsc.status.project.name, {:controller=>'projects', :action=>'show', :id=>qsc.status.project.id}) %></td>
+		<td><%=html_status(qsc.status.status)%></td>
+	</tr>
+<% end %>
+</table>
+
+
+
+<!-- WITHOUT REQUESTS -->
+<h2>Spider Counters not linked with request</h2>
+<table class="history_counts_table" >
+<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td></tr>
+<% @spider_counter_no_request.each do |sc_no_req| %>
+	<tr>
+		<td><%= sc_no_req.author.name %></td>
+		<td><%= sc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<td><%= link_to(sc_no_req.spider.project.name, {:controller=>'projects', :action=>'show', :id=>sc_no_req.spider.project.id}) %></td>
+	</tr>
+<% end %>
+</table>
+
+<h2>SQ Counters not linked with request</h2>
+<table class="history_counts_table" >
+<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td></tr>
+<% @qs_counter_no_request.each do |qsc_no_req| %>
+	<tr>
+		<td><%= qsc_no_req.author.name %></td>
+		<td><%= qsc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<td>
+			<%= link_to(qsc_no_req.status.project.name, {:controller=>'projects', :action=>'show', :id=>qsc_no_req.status.project.id}) %>
+		</td>
+		<td><%=html_status(qsc_no_req.status.status)%></td>	</tr>
+<% end %>
+</table>

@@ -432,5 +432,41 @@ end
   end
 =end
 
+# STREAMS
+	@xml.Worksheet 'ss:Name' => 'Streams' do
+	  @xml.Table do
+
+	    # Columns width
+	    for width in @stream_width_array do
+	      @xml.Column nil, {'ss:Width' => width}
+	    end
+
+	    # Header
+	    @xml.Row 'ss:StyleID' => 's62' do
+	      for column in @stream_column_array do
+	        @xml.Cell do
+	          @xml.Data column, 'ss:Type' => 'String'
+	          @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+	        end
+	      end
+	    end
+
+	    # Rows
+			for p in @stream_columns_content
+        style = {}
+        @xml.Row(style) do
+          for column in @stream_column_array do
+            @xml.Cell do
+              @xml.Data p[column], 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
+        end
+      end
+
+	  end
+	@xml.AutoFilter 'x:Range' => 'R1C1:R2000C9', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
+	end
+
+
 end
 %>

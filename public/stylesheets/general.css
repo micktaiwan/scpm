@@ -18,3 +18,10 @@ div#banner {
   background: #99F;
   }
 
+.warning {
+  color: red;
+}
+
+.alert {
+  color: orange;
+}

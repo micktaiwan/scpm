@@ -830,9 +830,13 @@ class Request < ActiveRecord::Base
     counterLogObj = self.counter_log
 		
     # Get the new value for this request
-		newCounterValue = CounterBaseValue.first(
-		:conditions => ["complexity = ? and sdp_iteration = ?",self.complexity,self.sdpiteration]).value
-			
+    newCounterValue = 0
+    counterBase = CounterBaseValue.first(
+		:conditions => ["complexity = ? and sdp_iteration = ? and workpackage = ?",self.complexity,self.sdpiteration,self.work_package])
+		if counterBase
+		  newCounterValue = counterBase.value
+    end
+    
 		# Create new counter_log 
 		if (!counterLogObj) 
 	    counterLogObj = CounterLog.new

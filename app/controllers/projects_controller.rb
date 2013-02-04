@@ -483,7 +483,34 @@ class ProjectsController < ApplicationController
       closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
       closed.each { |r| r.reporter = "Closed" }
       @week_changes = wps + complexities + news + performed + closed
-
+      
+      # STREAMS REVIEW
+      @stream               = Stream.find(:all)
+      @review_types         = ReviewType.find(:all)
+      @stream_width_array   = ["100","60"]
+      @stream_column_array  = ["Workstream","stream"]
+      
+      @review_types.each { |rt| 
+        @stream_width_array.push('200') 
+        @stream_column_array.push(rt.title)
+      }
+      @stream_columns_content = Array.new
+      @stream.each do |s|
+        stream_params_array = Hash.new
+        stream_params_array["workstream"] = s.workstream.name
+        stream_params_array["stream"] = s.name
+        @review_types.each do |rt|
+          last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",s.id ,rt.id], :order => "created_at DESC")
+          if last_review
+            stream_params_array[rt.title] = last_review.text
+          else
+            stream_params_array[rt.title] = 0
+          end
+        end
+        @stream_columns_content.push(stream_params_array)
+      end
+      
+      
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
       headers['Cache-Control']        = ''

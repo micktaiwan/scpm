@@ -179,6 +179,8 @@ function add(id, same_week, has_requests) {
             <b>ISPL</b>: <%= @project.ispl %><br/>
             <b>Request resp:</b> <%=@project.assignees.join(', ')%><br/>
             <b>Associations:</b> <%=@project.responsibles.map{|r| r.name}.join(', ')%><br/>
+            <b>QR</b>: <%= @project.qr %><br/>
+            <b>DWR</b>: <%= @project.dwr %><br/>
 			<b>Is Running:</b> <%= @project.is_running.to_s %>
 			<% if !@project.is_running %>
 				<%= link_to ('Start project', { :action => "start", :id => @project.id }) %>

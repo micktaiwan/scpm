@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130129120905) do
+ActiveRecord::Schema.define(:version => 20130203180905) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -176,7 +176,8 @@ ActiveRecord::Schema.define(:version => 20130129120905) do
 
   create_table "counter_base_values", :force => true do |t|
     t.string   "complexity"
-    t.string   "operational_year"
+    t.string   "sdp_iteration"
+    t.string   "workpackage"
     t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -359,6 +360,8 @@ ActiveRecord::Schema.define(:version => 20130129120905) do
     t.integer  "qs_count",      :default => 0
     t.integer  "spider_count",  :default => 0
     t.boolean  "is_running",    :default => true
+    t.string   "qr"
+    t.string   "dwr"
   end
 
   create_table "question_references", :force => true do |t|
@@ -711,7 +714,9 @@ ActiveRecord::Schema.define(:version => 20130129120905) do
   create_table "stream_reviews", :force => true do |t|
     t.integer  "stream_id"
     t.integer  "review_type_id"
+    t.integer  "author_id"
     t.text     "text"
+    t.text     "text_diff"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -719,8 +724,13 @@ ActiveRecord::Schema.define(:version => 20130129120905) do
   create_table "streams", :force => true do |t|
     t.string   "name"
     t.integer  "workstream_id"
+    t.datetime "read_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "supervisor_id"
+    t.string   "quality_manager"
+    t.string   "dwl"
+    t.string   "process_owner"
   end
 
   create_table "tasks", :force => true do |t|

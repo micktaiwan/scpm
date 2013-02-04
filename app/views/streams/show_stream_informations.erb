@@ -7,7 +7,8 @@
 	<% end %>
 </p>
 
-<h3>Informations</h3>
+<h2>Informations</h2>
+<%= link_to('Edit stream informations', {:action=>'edit', :id=>@stream.id}, {:class=>'btnlnk'}) %>
 <p><b>Supervisor : </b> <%= @stream.supervisor.name %></p>
 <p><b>Quality Manager : </b> <%= @stream.quality_manager %></p>
 <p><b>DWL : </b> <%= @stream.dwl %></p>
@@ -16,7 +17,7 @@
 
 
 
-<h3>Review type</h3>
+<h2>Review type</h2>
 <% form_tag ({:controller => "streams", :action => "update_stream_review_types"}, :method => "post") do %>
 	<%= hidden_field_tag('id', @stream.id) %>
 	<% @reviewTypes.each do |rt| %>
@@ -33,7 +34,7 @@
 <% end %>
 
 
-<h3>Requests</h3>
+<h2>Requests</h2>
 <ul>
 <%= render(:partial=>'projects/request', :collection=>@stream.requests) %>
 </ul>

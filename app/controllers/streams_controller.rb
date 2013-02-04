@@ -11,6 +11,18 @@ class StreamsController < ApplicationController
     @stream = Stream.find(id)
   end
   
+  def edit
+    id = params['id']
+    @stream = Stream.find(id)
+    @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+  end
+  
+  def update
+    stream = Stream.find(params[:id])
+    stream.update_attributes(params[:stream])
+    redirect_to :action=>:show_stream_informations, :id=>stream.id
+  end
+  
   def show_stream_projects
     id            = params['id']
     @stream       = Stream.find(id)
@@ -48,6 +60,7 @@ class StreamsController < ApplicationController
   
   # link a request to a Stream, based on request workstream
   def link
+    # PARAMS
     request_id        = params[:id]
     request           = Request.find(request_id)
     project_name      = request.project_name
@@ -55,14 +68,43 @@ class StreamsController < ApplicationController
     brn               = request.brn
     workstream        = request.workstream
     
+    # STREAM
     stream = Stream.find_with_workstream(workstream)
     if not stream
-    render(:text=>"Stream not found")
+      render(:text=>"Stream not found")
     end
-
+    # UPDATE REQUEST
     request.stream_id = stream.id
     request.save
-    render(:text=>"saved")
+    
+    # CHECK HISTORY_COUNT WITHOUT REQUEST
+    history_count_no_request = nil
+    if (WORKPACKAGE_QS == request.work_package[0..6])
+      history_count_no_request = HistoryCounter.find(:all,
+            :conditions=>["stream_id = ? and request_id IS NULL and concerned_status_id IS NOT NULL",stream.id])
+    elsif (WORKPACKAGE_SPIDERS == request.work_package[0..6])
+      history_count_no_request = HistoryCounter.find(:all,
+            :conditions=>["stream_id = ? and request_id IS NULL and concerned_spider_id IS NOT NULL",stream.id])
+    end
+    count = 0
+    total_count = CounterBaseValue.first(
+    :conditions => ["complexity = ? and sdp_iteration = ? and workpackage = ?",request.complexity,request.sdpiteration,request.work_package]).value
+		
+    history_count_no_request.each do |hc_no_req|
+      if count < total_count
+        hc_no_req.request_id = request.id
+        hc_no_req.save
+        count = count + 1
+      end
+    end
+    
+    # TEXT RESULT
+    str = "saved"
+    if count > 0
+      str = str+" and "+count.to_s+" ticket already used."
+    end
+    
+    render(:text=>str)
   end
   
   # FORM INFORMATIONS - UPDATE
