@@ -488,7 +488,7 @@ class ProjectsController < ApplicationController
       @stream               = Stream.find(:all)
       @review_types         = ReviewType.find(:all)
       @stream_width_array   = ["100","60"]
-      @stream_column_array  = ["Workstream","stream"]
+      @stream_column_array  = ["workstream","stream"]
       
       @review_types.each { |rt| 
         @stream_width_array.push('200') 
