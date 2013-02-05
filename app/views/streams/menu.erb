@@ -1,0 +1,9 @@
+<p>
+	<%= link_to "Stream", {:controller => "streams", :action => "show", :id => @stream.id},{:class=>"btnlnk"} %>
+	<%= link_to "Projects",{:controller => "streams", :action => "show_stream_projects", :id => @stream.id},{:class=>"btnlnk"}%>
+	<%= link_to "Informations", {:controller => "streams", :action => "show_stream_informations", :id => @stream.id},{:class=>"btnlnk"}%>
+	<% @stream.review_types.each do |review_type| %>
+		<%= link_to  review_type.title , {:controller => "streams", :action => "show_stream_review", :id => @stream.id, :type => review_type.id },{:class=>"btnlnk"}%>
+	<% end %>
+</p>
+<br />

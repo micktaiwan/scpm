@@ -484,21 +484,23 @@ class ProjectsController < ApplicationController
       closed.each { |r| r.reporter = "Closed" }
       @week_changes = wps + complexities + news + performed + closed
       
-      # STREAMS REVIEW
-      @stream               = Stream.find(:all)
+      # STREAMS REVIEW BEGIN
+      stream                = Stream.find(:all)
       @review_types         = ReviewType.find(:all)
       @stream_width_array   = ["100","60"]
       @stream_column_array  = ["workstream","stream"]
+      @stream_columns_content = Array.new
       
       @review_types.each { |rt| 
         @stream_width_array.push('200') 
         @stream_column_array.push(rt.title)
       }
-      @stream_columns_content = Array.new
-      @stream.each do |s|
+      
+      stream.each do |s|
         stream_params_array = Hash.new
         stream_params_array["workstream"] = s.workstream.name
         stream_params_array["stream"] = s.name
+        
         @review_types.each do |rt|
           last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",s.id ,rt.id], :order => "created_at DESC")
           if last_review
@@ -509,7 +511,7 @@ class ProjectsController < ApplicationController
         end
         @stream_columns_content.push(stream_params_array)
       end
-      
+      # STREAMS REVIEW END
       
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'

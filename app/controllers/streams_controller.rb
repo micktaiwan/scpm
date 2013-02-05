@@ -43,11 +43,12 @@ class StreamsController < ApplicationController
   end
   
   def show_stream_review
-    id = params['id']
-    @review_type = params['type']
-    @stream = Stream.find(id) 
+    id              = params['id']
+    review_type_id  = params['type']
+    @stream         = Stream.find(id) 
+    @review_type    = ReviewType.find(review_type_id)
     
-    reviews = StreamReview.find(:all,:conditions => ["stream_id = ? and review_type_id = ?",@stream.id, @review_type],:order => "created_at DESC")
+    reviews = StreamReview.find(:all,:conditions => ["stream_id = ? and review_type_id = ?",@stream.id, review_type_id],:order => "created_at DESC")
     @last_review = reviews[0]
     
     @old_reviews = Array.new
@@ -145,7 +146,7 @@ class StreamsController < ApplicationController
     review.text = params[:review][:text]
     review.save
     review.stream.calculate_diffs(review.review_type_id)
-    redirect_to :action=>:show, :id=>review.stream_id
+    redirect_to :action=>:show_stream_review, :id=>review.stream_id, :type=>review.review_type_id
   end
   
   # FORM REVIEW - CREATE/REVIEW
@@ -168,7 +169,7 @@ class StreamsController < ApplicationController
     review.author_id      = current_user.id
     review.save
     review.stream.calculate_diffs(review.review_type_id)
-    redirect_to :action=>:show, :id=>review.stream_id
+    redirect_to :action=>:show_stream_review, :id=>review.stream_id, :type=>review.review_type_id
   end
   
   def cut_review
