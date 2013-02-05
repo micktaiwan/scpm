@@ -90,10 +90,10 @@
 			else
 				amendments_size_str = "[#{@amendments.size}]"
 			end
-			if(@risks.size > 0)
-				risks_size_str = "[<strong>#{@risks.size}</strong>]"
+			if(@risks_with_severity.size > 0)
+				risks_size_str = "[<strong>#{@risks_with_severity.size}</strong>]"
 			else
-				risks_size_str = "[#{@risks.size}]"
+				risks_size_str = "[#{@risks_with_severity.size}]"
 			end
 			if(@inconsistencies.size > 0)
 				inconsistencies_size_str = "[<strong>#{@inconsistencies.size}</strong>]"
@@ -105,17 +105,18 @@
 			else
 				checklists_size_str = "[#{@checklist_milestones.size}]"
 			end
-		%>
-    <%= tab_menu("project_index", [
-      "Projects #{wps_size_str}",
-			"Streams",
-      "CI #{ci_size_str}",
-      "Actions #{actions_size_str}",
-      "Amendments #{amendments_size_str}",
-      "Risks #{risks_size_str}",
-      "Inconsistencies #{inconsistencies_size_str}",
-      "Checklists #{checklists_size_str}"
-      ]) %>  
+	
+		  %>
+	      <%= tab_menu("project_index", [
+	        "Projects #{wps_size_str}",
+					"Streams",
+	        "CI #{ci_size_str}",
+	        "Actions #{actions_size_str}",
+	        "Amendments #{amendments_size_str}",
+	        "Risks #{risks_size_str}",
+	        "Inconsistencies #{inconsistencies_size_str}",
+	        "Checklists #{checklists_size_str}"
+	        ]) %>  
   </ol>
 
   <div id="tabscontent">

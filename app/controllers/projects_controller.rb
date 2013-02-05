@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
     if @wps.size > 0
       @amendments           = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
       @risks                = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
+      @risks_with_severity  = @risks.select { |risk| risk.severity > 0}
       @inconsistencies      = @wps.select{|wp| !wp.is_consistent_with_risks}
       @checklist_milestones = @wps.map{|p| p.milestones}.flatten.select{ |m|
         m.done == 1 and
@@ -31,6 +32,7 @@ class ProjectsController < ApplicationController
     else
       @amendments           = []
       @risks                = []
+      @risks_with_severity  = []
       @inconsistencies      = []
       @checklist_milestones = []
     end
