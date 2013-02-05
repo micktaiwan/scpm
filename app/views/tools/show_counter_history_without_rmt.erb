@@ -1,3 +1,8 @@
+<% form_tag(:action=>'show_counter_history_without_rmt') do %>
+	<%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
+  <%= submit_tag('Filter') %>
+<% end %>
+
 <!-- WITHOUT REQUESTS -->
 <h2>Spider Counters not linked with request</h2>
 <table class="history_counts_table" >

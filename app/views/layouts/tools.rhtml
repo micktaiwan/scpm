@@ -62,6 +62,7 @@
       <li><%= link_to('CHECK RMT should be ended',  {:controller=>'tools', :action=>'requests_should_be_ended_check'}) %></li>
       <li><%= link_to('CHECK wrong Remaining Workload', {:controller=>'tools', :action=>'check_sdp_remaining_workload'}) %></li>
     	<li><%= link_to('CHECK QS/Spiders Counters', {:controller=>'tools', :action=>'show_counter_history'}) %></li>
+    	<li><%= link_to('CHECK QS/Spiders Counters without RMT', {:controller=>'tools', :action=>'show_counter_history_without_rmt'}) %></li>
 		</ul>
     </li>
     <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
