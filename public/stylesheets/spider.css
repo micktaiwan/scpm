@@ -11,11 +11,11 @@
 	top: 180px;
 	position: fixed;
 /*	min-width: 300px;*/
-	max-width: 600px; 
-	width : 40%;
-	min-height: 200px;
-	max-height: 400px; 
-	height : 45%;
+/*	max-width: 600px;*/ 
+	width : 600px;
+/*	min-height: 200px;*/
+	/*max-height: 400px;*/ 
+	height : 400px;
 	margin: 0 auto;
 	display: none;
 }
@@ -31,7 +31,6 @@
 	margin-top:10px;
 	background-color:#F7F7F7;
 }
-
 
 /* SPIDER TABLE CELLS */
 .spider_question_text

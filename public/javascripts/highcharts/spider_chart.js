@@ -114,7 +114,7 @@ function generate_spider_chart(chartId,chartName,xAxisArray,serie1,serie2)
 	    
 	    title: {
 	        text: chartName,
-	        x: -80
+	        x: 0,
 	    },
 	    
 	    pane: {
@@ -188,7 +188,7 @@ function generate_kpi_chart(containerId, chartName, categories, series)
         },
         title: {
             text: chartName,
-            x: -20 //center
+            x: 0, //center
         },
         xAxis: {
             categories: categories
