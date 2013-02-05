@@ -186,6 +186,7 @@ kpi_calcul_classic = function(charts_data)
 		// Set chart
 		if(serie.length == categories.length)	
 		{
+			//chart_objects[chart_key].setTitle({text: chart_objects[chart_key].title.text + " - " +  $("#choose_milestone :selected").text() });
 			// Add series
 			kpi_chart_add_serie(chart_objects[chart_key],serie);
 		}
