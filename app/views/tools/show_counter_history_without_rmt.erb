@@ -11,7 +11,13 @@
 	<tr>
 		<td><%= sc_no_req.author.name %></td>
 		<td><%= sc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
-		<td><%= link_to(sc_no_req.spider.project.name, {:controller=>'projects', :action=>'show', :id=>sc_no_req.spider.project.id}) %></td>
+		
+		<% project_name = sc_no_req.spider.project.name %>
+		<% if sc_no_req.spider.project.project %>
+			<% project_name = sc_no_req.spider.project.project.name + " > " + sc_no_req.spider.project.name %>
+		<% end %>
+		
+		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc_no_req.spider.project.id}) %></td>
 	</tr>
 <% end %>
 </table>
@@ -23,8 +29,13 @@
 	<tr>
 		<td><%= qsc_no_req.author.name %></td>
 		<td><%= qsc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<% project_name = qsc_no_req.status.project.name %>
+		<% if qsc_no_req.status.project.project %>
+			<% project_name = qsc_no_req.status.project.project.name + " > " + qsc_no_req.status.project.name %>
+		<% end %>
+		
 		<td>
-			<%= link_to(qsc_no_req.status.project.name, {:controller=>'projects', :action=>'show', :id=>qsc_no_req.status.project.id}) %>
+			<%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc_no_req.status.project.id}) %>
 		</td>
 		<td><%=html_status(qsc_no_req.status.status)%></td>	</tr>
 <% end %>
