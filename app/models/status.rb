@@ -9,7 +9,11 @@ class Status < ActiveRecord::Base
   def is_current?
     self.updated_at.to_date.cweek == Date.today.cweek
   end
-
+  
+  def months_from_creation
+    return  (Date.today.year * 12 + Date.today.month) - (self.updated_at.to_date.year * 12 + self.updated_at.to_date.month)
+  end
+  
   def get_last_change_excel
     return self.last_change_excel if self.last_change_excel
     self.last_change

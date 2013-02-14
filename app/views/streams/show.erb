@@ -1,6 +1,6 @@
 <%= render(:file=>"streams/menu") %>
 
-<h2>Counters</h2>
+<h2>Dashboard</h2>
 <p><span class="bold">QS count :</span> <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.get_qs_counter.to_s %>
 <% if ((@stream.get_consumed_qs_count.to_i + 5 >= @stream.get_qs_counter.to_i) && (@stream.get_consumed_qs_count.to_i > 0)) %>
 	<span class="warning"> Not enough QS tickets </span>
@@ -14,6 +14,12 @@
 <% elsif ((@stream.get_consumed_spider_count.to_i >= @stream.get_spider_counter.to_i) && (@stream.get_consumed_spider_count.to_i > 0 )) %>
 	<span class="alert"> Not enough Spider tickets </span>
 <% end %>
+</p>
+
+<p>
+	<span class="bold">Status :</span>
+	<% suggested_status = @stream.suggested_status %>
+	<%= html_status(suggested_status) %>
 </p>
 
 <h2>Last reviews</h2>
