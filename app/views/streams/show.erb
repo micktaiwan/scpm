@@ -2,16 +2,16 @@
 
 <h2>Counters</h2>
 <p><span class="bold">QS count :</span> <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.get_qs_counter.to_s %>
-<% if (@stream.get_consumed_qs_count.to_i == @stream.get_qs_counter.to_i) %>
+<% if ((@stream.get_consumed_qs_count.to_i + 5 >= @stream.get_qs_counter.to_i) && (@stream.get_consumed_qs_count.to_i > 0)) %>
 	<span class="warning"> Not enough QS tickets </span>
-<% elsif (@stream.get_consumed_qs_count.to_i > @stream.get_qs_counter.to_i) %>
+<% elsif ((@stream.get_consumed_qs_count.to_i >= @stream.get_qs_counter.to_i) && (@stream.get_consumed_qs_count.to_i > 0)) %>
 	<span class="alert"> Not enough QS tickets </span>
 <% end %>
 </p>
 <p><span class="bold">Spider Count :</span> <%= @stream.get_consumed_spider_count.to_s %>  / <%= @stream.get_spider_counter.to_s %>
-<% if (@stream.get_consumed_spider_count.to_i == @stream.get_spider_counter.to_i) %>
+<% if ((@stream.get_consumed_spider_count.to_i + 5 >= @stream.get_spider_counter.to_i) && (@stream.get_consumed_spider_count.to_i > 0)) %>
 	<span class="warning"> Not enough Spider tickets </span>
-<% elsif (@stream.get_consumed_spider_count.to_i > @stream.get_spider_counter.to_i) %>
+<% elsif ((@stream.get_consumed_spider_count.to_i >= @stream.get_spider_counter.to_i) && (@stream.get_consumed_spider_count.to_i > 0 )) %>
 	<span class="alert"> Not enough Spider tickets </span>
 <% end %>
 </p>
@@ -19,10 +19,13 @@
 <h2>Last reviews</h2>
 <% @stream.get_stream_review.each { |r| %>
 <div class='status_explanation'>
-	<h3><%= r.review_type.title %></h3>
-	<p><span class="bold">Last edit :</span> <%= r.updated_at.to_s %></p>
-	<p><span class="bold">Author:</span>		 <%= r.author.name.to_s %></p>
-	<p><span class="bold">Content</span>
+	<div class='status_date'>
+		<span class="bold_colored"><%= r.review_type.title %></span> -  
+		<span class="bold">Last edit :</span> <%= r.updated_at.strftime("%m/%d/%Y %H:%M") %>
+		<span class="bold"> by </span> <%= r.author.name.to_s %>
+  </div>
+	<br />
+	<span class="bold">Content </span>
 	<p>
 		<%= r.text.to_s %>
 	</p>

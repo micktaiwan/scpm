@@ -1,0 +1,9 @@
+<h2>Risk Edit</h2>
+
+Do not delete a risk, set its probability to 0
+<%= error_messages_for :risk %>
+<% form_for @risk, :url=>{:action=>'update_with_stream', :id=>@risk.id} do |f| -%>
+	<%= render :partial => 'form_with_stream', :locals => {:f => f} %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'OK' %></p>
+<% end -%>

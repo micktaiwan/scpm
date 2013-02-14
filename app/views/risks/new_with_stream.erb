@@ -1,0 +1,8 @@
+<h2>Add a risk</h2>
+<%= error_messages_for :risk %>
+<% form_for :@risk, :url=>{:action=>'create_with_stream'} do |f| -%>
+  <%= render :partial => 'form_with_stream', :locals => {:f => f} %>
+
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>

@@ -37,9 +37,6 @@ class StreamsController < ApplicationController
     
     # Get all review types
     @reviewTypes = ReviewType.find(:all)
-    
-    # Get all Requests
-    # @requests = Request.find(:all,:conditions => ["stream_id = ?", id])
   end
   
   def show_stream_review
@@ -57,6 +54,12 @@ class StreamsController < ApplicationController
       @old_reviews << review if review_index != 0
       review_index += 1
     end
+  end
+  
+  def show_stream_risks
+    id = params['id']
+    @stream         = Stream.find(id) 
+    
   end
   
   # link a request to a Stream, based on request workstream
@@ -195,13 +198,16 @@ class StreamsController < ApplicationController
   def create_project
     id                = params[:id]
     workstream        = Stream.find(id).workstream
-    summary           = params[:summary]
+    summaryParam      = params[:summary]
     project_name      = params[:project_name]
-    workpackage_name  = get_workpackage_name_from_summary(summary, project_name)
-    brn               = summary.split(/\[([^\]]*)\]/)[5]
     
-    resultRegex = summary.scan(/\[(.*?)\]/)
-    if (resultRegex.count == 3)
+    resultRegex = summaryParam.scan(/\[(.*?)\]/)
+    if ((resultRegex.count == 3) && (resultRegex[0].to_s.length > 0) && (resultRegex[1].to_s.length > 0) && (resultRegex[1].to_s == project_name.to_s))
+      
+      summary           = "[" + resultRegex[0].to_s + "][" + resultRegex[1].to_s + "]["+resultRegex[2].to_s+"]"
+      workpackage_name  = get_workpackage_name_from_summary(summary, project_name)
+      brn               = summary.split(/\[([^\]]*)\]/)[5]
+      
       project = Project.find_by_name(project_name)
       if not project
         project = Project.create(:name=>project_name)

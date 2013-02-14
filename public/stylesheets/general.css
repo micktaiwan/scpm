@@ -27,5 +27,10 @@ div#banner {
 }
 
 .bold {
-  font-weight:bold
+  font-weight: bold;
+}
+
+.bold_colored {
+  font-weight: bold;
+  color: green;
 }

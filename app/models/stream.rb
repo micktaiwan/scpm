@@ -5,7 +5,8 @@ class Stream < ActiveRecord::Base
   belongs_to  :supervisor, :class_name=>"Person", :foreign_key=>"supervisor_id"
   has_many    :stream_review_types
   has_many    :review_types, :through=>:stream_review_types
-
+  has_many    :risks
+  
   # give a list of corresponding requests QR
   def assignees
     rv = []
@@ -18,6 +19,16 @@ class Stream < ActiveRecord::Base
       name = person ? person.name : r.assigned_to
       name += " (#{r.work_package})"
       rv << name if not rv.include?(name)
+      }
+    rv
+  end
+  
+  # Risks
+  def suggested_status
+    rv = 1
+    self.risks.each { |r|
+      rv = 2 if rv < 2 and r.severity >=6
+      rv = 3 if rv < 3 and r.severity >=8
       }
     rv
   end

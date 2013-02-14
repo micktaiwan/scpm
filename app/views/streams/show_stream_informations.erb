@@ -6,7 +6,7 @@
 <p><span class="bold">DWL: </span> 							<%= @stream.dwl %></p>
 <p><span class="bold">Process Owner: </span> 		<%= @stream.process_owner %></p>
 <p><span class="bold">Request resp:</span> 			<%= @stream.assignees.join(', ')%></p>
-
+<p><span class="bold">Description:</span>				<%= simple_format(@stream.description) %></p>
 
 
 <h2>Review type</h2>
@@ -14,7 +14,7 @@
 	<%= hidden_field_tag('id', @stream.id) %>
 	<% @reviewTypes.each do |rt| %>
 		<p><%= rt.title %>
-		<% checkboxName = rt.id.to_s %>
+		<% checkboxName = rt.id.to_s %> <%= rt.description %>
 		<% if(@stream.review_types.include?(rt))%>
 			<%= check_box_tag("reviewTypeForm[]",checkboxName,true) %>
 		<% else %>
