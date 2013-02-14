@@ -275,93 +275,97 @@ class SpidersController < ApplicationController
   
   # Import file
   def do_spider_upload
-    
-    # INDEX OF COLUMNS IN EXCEL ------------------------
-    @practiceStartColumn = 10
-    @practiceEndColumn = 0
-    @deliverableStartColumn = 0
-    @deliverableEndColumn = 0
-    
-    # LOAD FILE --------------------------------- 
-    consoSheet = load_spider_excel_file(params[:upload])
-    
-    # ANALYSE HEADER OF FILE ---------------------------------
-    axesHash = analyze_spider_excel_file_header(consoSheet)
-    
-    # ANALYSE CONSOS OF FILE ---------------------------------
-    projectsArray = analyze_spider_excel_file_conso(consoSheet, axesHash)
-    
-    # IMPORT DATA IN BDD ---------------------------------
-    @projectsNotFound = Array.new
-    @milestonesNotFound = Array.new
-    @axesNotFound = Array.new
-    @projectsAdded = Array.new
-    
-    # For each projects
-    projectsArray.each { |project| 
-         	
-    	# Search project in BAM with Request
-    	bam_request = Request.first(:conditions=>["id = ?", project["request_id"].to_s])
-    	bam_project = Project.last(:conditions=>["id = ?", bam_request.project_id])
-    	if(bam_project != nil)
-    	  
-    	  # Search milestone
-    	  milestoneList = Array.new
-    	  if (project["milestone"].count('-') > 0)
-    	    milestoneList = project["milestone"].split('-')
-    	  else
-    	    milestoneList << project["milestone"]
-    	  end 
-    	  
-    	  # For each milestones of project in BAM
-    	  milestoneList.each { |project_milestone|
-    	    
-    	    bam_milestone = Milestone.last(:conditions =>["name = ? and project_id = ?", project_milestone, bam_project.id])
-    	    
-    	    if(bam_milestone != nil)
-    	          	          	      
-      	    # Create Spider for this project
-    	      new_spider = create_spider_object(bam_project,bam_milestone)
-    	      new_spider.created_at = project["date"]
-    	      new_spider.save
-  	        @projectsAdded << "Project : "+ bam_project.name + " - Milestone : " + project_milestone
-    	      # For each conso
-    	      project["conso"].each do |conso|
-  	        
-    	        axe_title = conso[0]
-    	        if (axe_title[-1,1] == " ")
-    	          axe_title = axe_title[0..-2]
-    	        end
-    	        if(axe_title[0,1] == " ")
-    	          axe_title = axe_title[1..-1]
-    	        end
-  	          pm_type = axesHash[conso[1]["column_ids"].last.to_i]["type"]
-  	        
-    	        if(conso[1]["column_ids"][2].to_i <= @deliverableEndColumn)
-        	      # Search type
-        	      bam_pm_type = PmType.first(:conditions => ["title LIKE ?", "%"+pm_type+"%"])
-      	        # Search Axes
-      	        bam_axe = PmTypeAxe.first(:conditions => ["pm_type_id = ? and title LIKE ?", bam_pm_type.id, "%"+axe_title+"%"])
-      	        # Axes if not found
-      	        if (bam_axe != nil)
-      	          # Add spider conso
-      	          create_spider_history_conso(new_spider,bam_axe.id, project["date"], conso[1]["values"][0],conso[1]["values"][1],conso[1]["values"][2])
-      	        else
-      	          @axesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " - Axe : " + axe_title + " not found."
-      	        end
-      	      end
-    	      end
-      	  
-    	    else
-    	      @milestonesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " not found."
-    	    end 
-    	  }
-    	else
-    	  @projectsNotFound << "Project " + project["title"] + " not found"
-    	end
-    }
+   # INDEX OF COLUMNS IN EXCEL ------------------------
+   @practiceStartColumn = 10
+   @practiceEndColumn = 0
+   @deliverableStartColumn = 0
+   @deliverableEndColumn = 0
+
+   # LOAD FILE --------------------------------- 
+   consoSheet = load_spider_excel_file(params[:upload])
+
+   # ANALYSE HEADER OF FILE ---------------------------------
+   axesHash = analyze_spider_excel_file_header(consoSheet)
+
+   # ANALYSE CONSOS OF FILE ---------------------------------
+   projectsArray = analyze_spider_excel_file_conso(consoSheet, axesHash)
+
+   # IMPORT DATA IN BDD ---------------------------------
+   @projectsNotFound = Array.new
+   @milestonesNotFound = Array.new
+   @axesNotFound = Array.new
+   @projectsAdded = Array.new
+   @requestNotFound = Array.new
+
+   # For each projects
+   projectsArray.each { |project| 
+
+   	# Search project in BAM with Request
+   	bam_request = Request.first(:conditions=>["id = ?", project["request_id"].to_s])
+   	if(bam_request != nil)
+     	bam_project = Project.last(:conditions=>["id = ?", bam_request.project_id])
+     	  Rails.logger.info("---- --- xxxx"+project.to_s)
+     	if(bam_project != nil)
+     	  # Search milestone
+     	  milestoneList = Array.new
+     	  if (project["milestone"].count('-') > 0)
+     	    milestoneList = project["milestone"].split('-')
+     	  else
+     	    milestoneList << project["milestone"]
+     	  end 
+
+     	  # For each milestones of project in BAM
+     	  milestoneList.each { |project_milestone|
+
+     	    bam_milestone = Milestone.last(:conditions =>["name = ? and project_id = ?", project_milestone, bam_project.id])
+
+     	    if(bam_milestone != nil)
+
+       	    # Create Spider for this project
+     	      new_spider = create_spider_object(bam_project,bam_milestone)
+     	      new_spider.created_at = project["date"]
+     	      new_spider.save
+   	        @projectsAdded << "Project : "+ bam_project.name + " - Milestone : " + project_milestone
+     	      # For each conso
+     	      project["conso"].each do |conso|
+
+     	        axe_title = conso[0]
+     	        if (axe_title[-1,1] == " ")
+     	          axe_title = axe_title[0..-2]
+     	        end
+     	        if(axe_title[0,1] == " ")
+     	          axe_title = axe_title[1..-1]
+     	        end
+   	          pm_type = axesHash[conso[1]["column_ids"].last.to_i]["type"]
+
+     	        if(conso[1]["column_ids"][2].to_i <= @deliverableEndColumn)
+         	      # Search type
+         	      bam_pm_type = PmType.first(:conditions => ["title LIKE ?", "%"+pm_type+"%"])
+       	        # Search Axes
+       	        bam_axe = PmTypeAxe.first(:conditions => ["pm_type_id = ? and title LIKE ?", bam_pm_type.id, "%"+axe_title+"%"])
+       	        # Axes if not found
+       	        if (bam_axe != nil)
+       	          # Add spider conso
+       	          create_spider_history_conso(new_spider,bam_axe.id, project["date"], conso[1]["values"][0],conso[1]["values"][1],conso[1]["values"][2])
+       	        else
+       	          @axesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " - Axe : " + axe_title + " not found."
+       	        end
+       	      end
+     	      end
+
+     	    else
+     	      @milestonesNotFound << "Project : "+ bam_project.name + " - Milestone : " + project_milestone + " not found."
+     	    end 
+     	  }
+     	else
+     	  @projectsNotFound << "Project " + project["title"] + " not found"
+     	end
+     else
+       @requestNotFound << "Request " + project["request_id"].to_s + " not found"
+     end
+   }
   end
-  
+
   # ------------------------------------------------------------------------------------
   # OBJECTS MANAGEMENT
   # ------------------------------------------------------------------------------------

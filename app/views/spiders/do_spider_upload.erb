@@ -1,5 +1,10 @@
 <%
 
+concat "<h2>-------------------- Requests not found --------------------</h2>"
+@requestNotFound.each do |t|
+	concat t.to_s + "<br />"
+end
+
 concat "<h2>-------------------- Projects not found --------------------</h2>"
 @projectsNotFound.each do |t|
 	concat t.to_s + "<br />"
