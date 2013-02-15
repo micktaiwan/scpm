@@ -8,10 +8,21 @@ $(function () {
 		document.forms["form_update_spider"].submit();
 	}
 	$("#consolidate_btn").click(function () {
-		var alertConfirmation = confirm('This consolidation will increment the spider counter of this projet. Are you sure to continue ?');
-		if (alertConfirmation == true)
+		var aqValidation = confirm("This is an AQ project ?");
+		if(!aqValidation)
 		{
-			consolidate();
+			$("#AQ_spider").val("NO");
+			var counterValidation = confirm("If you send this new status, the QS counter of this project will be incremented. Are you sure to continue ?");
+			
+			if(counterValidation)
+			{
+				consolidate();
+			}
+		}
+		else
+		{
+				$("#AQ_spider").val("YES");
+				consolidate();
 		}
 	});
 
@@ -99,6 +110,7 @@ function getDocHeight() {
 <% if (@spider)%>
 	<p>Creation Date : <%= @spider.created_at %></p>
 	<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_update_spider') do -%>
+	<%= hidden_field_tag 'AQ_spider', 'YES' %>
 	<input type="hidden" name="project_id" id="project_id" value="<%= @currentProjectId %>" />
 	<input type="hidden" name="milestone_id" id="milestone_id" value="<%= @currentMilestoneId %>" />
 	<input type="hidden" name="spider_id" id="spider_id" value="<%= @spider.id %>" />

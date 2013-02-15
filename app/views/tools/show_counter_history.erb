@@ -59,10 +59,10 @@
 			<td>
 				<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= qsc.request.request_id %>">#<%= qsc.request.request_id %></a>
 			</td>
-			<td COLSPAN="3"><%= qsc.request.summary %></td>
+			<td COLSPAN="4"><%= qsc.request.summary %></td>
 		</tr>
 		<!-- HEADER TR -->
-		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td></tr>
+		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td><td>Delivery link</td></tr>
 		<% last_request_qs = qsc.request_id %>
 	<% end %>
 	
@@ -78,6 +78,11 @@
 		
 		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc.status.project.id}) %></td>
 		<td><%=html_status(qsc.status.status)%></td>
+		<% if qsc.status.file_link %>
+			<td><%= link_to(qsc.status.file_link, {:controller=>'projects', :action=>'update_status_file_name_form', :id=>qsc.status.id}) %></td>
+		<% else %>
+			<td>None</td>
+		<% end %>
 	</tr>
 <% end %>
 </table>

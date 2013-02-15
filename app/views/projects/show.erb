@@ -12,7 +12,7 @@ function add(id, nb_months, has_requests) {
     alert("This project has no request, you should edit the workpackage")
     return;
     }
-  if(nb_months >= 1 || confirm('There is a status for this week already.\nAre you sure you want to add a new status?')) {
+  if(nb_months >= 1 || confirm('There is a status for this month already.\nAre you sure you want to add a new status?')) {
     location = '/projects/add_status_form/'+id;
     }
   }

@@ -185,15 +185,17 @@ class ProjectsController < ApplicationController
     #p.save
     p.calculate_diffs
     
-    # Increment QS counter
-    p.qs_count = p.qs_count + 1
-    p.save
+    if (params[:AQ_status] == "NO")
+      # Increment QS counter
+      p.qs_count = p.qs_count + 1
+      p.save
     
-    # Insert in history_counter
-    streamRef     = Stream.find_with_workstream(p.workstream)
-    streamRef.set_qs_history_counter(current_user,status)
+      # Insert in history_counter
+      streamRef     = Stream.find_with_workstream(p.workstream)
+      streamRef.set_qs_history_counter(current_user,status)
+    end
     
-    Mailer::deliver_status_change(p)
+    #Mailer::deliver_status_change(p)
     redirect_to :action=>:show, :id=>project_id
   end
 
@@ -213,6 +215,22 @@ class ProjectsController < ApplicationController
     timestamps_on if params[:update] != '1'
     redirect_to :action=>:show, :id=>status.project_id
   end
+  
+  def update_status_file_name_form
+    status_id = params[:id]
+    @status    = Status.find(status_id)
+  end
+  
+  def update_status_file_name
+    status_id        = params[:id]
+    if params[:status][:file_link]
+      status           = Status.find(status_id)
+      status.file_link = params[:status][:file_link]
+      status.save
+    end
+    redirect_to :controller=>:tools ,:action=>:show_counter_history
+  end
+  
 
   # check request and suggest projects
   def import

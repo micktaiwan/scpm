@@ -274,7 +274,8 @@ class SpidersController < ApplicationController
     
     # Increment the spider counter of the project
     spiderProject = Project.find(spiderParam.project_id)
-    if(spiderProject)
+    
+    if((spiderProject) && (params[:AQ_spider] == "NO"))
       spiderProject.spider_count = spiderProject.spider_count + 1
       spiderProject.save
       

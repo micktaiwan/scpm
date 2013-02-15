@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130212130905) do
+ActiveRecord::Schema.define(:version => 20130215130905) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -704,6 +704,7 @@ ActiveRecord::Schema.define(:version => 20130212130905) do
     t.text     "ws_report"
     t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
     t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
+    t.string   "file_link"
   end
 
   create_table "stream_review_types", :force => true do |t|

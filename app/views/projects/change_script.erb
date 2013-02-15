@@ -11,4 +11,26 @@
     _checkIsDirty = 0;
     document.forms[0].submit();
     }
+
+	function qsValidation()
+	{
+		var aqValidation = confirm("This is an AQ project ?");
+		if(!aqValidation)
+		{
+			$("AQ_status").setValue("NO");
+			var counterValidation = confirm("If you send this new status, the QS counter of this project will be incremented. Are you sure to continue ?");
+			
+			if(counterValidation)
+			{
+				_checkIsDirty = 0;
+				$("new_status").submit();
+			}
+		}
+		else
+		{
+				$("AQ_status").setValue("YES");
+				_checkIsDirty = 0;
+				$("new_status").submit();		
+		}
+	}
 </script>
