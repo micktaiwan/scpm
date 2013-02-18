@@ -301,7 +301,7 @@ class SpidersController < ApplicationController
    projectsArray.each { |project| 
 
    	# Search project in BAM with Request
-   	bam_request = Request.first(:conditions=>["id = ?", project["request_id"].to_s])
+   	bam_request = Request.first(:conditions=>["request_id = ?", (project["request_id"].to_i.round.to_s)])
    	if(bam_request != nil)
      	bam_project = Project.last(:conditions=>["id = ?", bam_request.project_id])
      	  Rails.logger.info("---- --- xxxx"+project.to_s)
