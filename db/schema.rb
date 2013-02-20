@@ -123,6 +123,8 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.integer  "project_id"
   end
 
+  add_index "checklist_items", ["id", "milestone_id", "request_id", "parent_id", "template_id", "project_id"], :name => "test", :unique => true
+
   create_table "ci_projects", :force => true do |t|
     t.integer  "internal_id"
     t.integer  "external_id"

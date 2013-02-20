@@ -71,6 +71,7 @@ class StreamsController < ApplicationController
     workpackage_name  = request.workpackage_name
     brn               = request.brn
     workstream        = request.workstream
+    str               = "saved"
     
     # STREAM
     stream = Stream.find_with_workstream(workstream)
@@ -90,22 +91,24 @@ class StreamsController < ApplicationController
       history_count_no_request = HistoryCounter.find(:all,
             :conditions=>["stream_id = ? and request_id IS NULL and concerned_spider_id IS NOT NULL",stream.id])
     end
-    count = 0
-    total_count = CounterBaseValue.first(
-    :conditions => ["complexity = ? and sdp_iteration = ? and workpackage = ?",request.complexity,request.sdpiteration,request.work_package]).value
-		
-    history_count_no_request.each do |hc_no_req|
-      if count < total_count
-        hc_no_req.request_id = request.id
-        hc_no_req.save
-        count = count + 1
-      end
-    end
     
-    # TEXT RESULT
-    str = "saved"
-    if count > 0
-      str = str+" and "+count.to_s+" ticket already used."
+    if (WORKPACKAGE_COUNTERS.include?(request.work_package[0..6]))
+      count = 0
+      total_count = CounterBaseValue.first(
+      :conditions => ["complexity = ? and sdp_iteration = ? and workpackage = ?",request.complexity,request.sdpiteration,request.work_package]).value
+		
+      history_count_no_request.each do |hc_no_req|
+        if count < total_count
+          hc_no_req.request_id = request.id
+          hc_no_req.save
+          count = count + 1
+        end
+      end
+    
+      # TEXT RESULT
+      if count > 0
+        str = str+" and "+count.to_s+" ticket already used."
+      end
     end
     
     render(:text=>str)
