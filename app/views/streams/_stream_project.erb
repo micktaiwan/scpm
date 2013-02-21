@@ -35,6 +35,8 @@
   <% end %>
   <ul id="sub_<%=stream_project.id%>" style="display:none;">
     <%= render(:partial=>'projects/request', :collection=>stream_project.requests) %>
-    <%= render(:partial=>'streams/stream_project', :collection=>stream_project.projects) %>
+		<% subProjects = Project.find(:all, :conditions => ["project_id = ? and is_running = 1",stream_project.id.to_s],:order=>'name')%>
+
+    <%= render(:partial=>'streams/stream_project', :collection=>subProjects) %>
   </ul>
 </li>
