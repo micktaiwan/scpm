@@ -205,7 +205,7 @@ class StreamsController < ApplicationController
     project_name      = params[:project_name]
     
     resultRegex = summaryParam.scan(/\[(.*?)\]/)
-    if ((resultRegex.count == 3) && (resultRegex[0].to_s.length > 0) && (resultRegex[1].to_s.length > 0) && (resultRegex[1].to_s == project_name.to_s))
+    if ((resultRegex.count == 3) && (resultRegex[0].to_s.length > 0) && (resultRegex[1].to_s.length > 0) && (resultRegex[0].to_s == project_name.to_s))
       
       summary           = "[" + resultRegex[0].to_s + "][" + resultRegex[1].to_s + "]["+resultRegex[2].to_s+"]"
       workpackage_name  = get_workpackage_name_from_summary(summary, project_name)
