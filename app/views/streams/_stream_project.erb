@@ -1,0 +1,42 @@
+<% status_html = stream_project.project_requests_progress_status_html %>
+
+<li id="p_<%=stream_project.id%>">
+  <% if stream_project.projects.size + stream_project.requests.size > 0 %>
+    <%= link_to_function(image_tag('expand.gif'), "$('sub_#{stream_project.id}').toggle();") %>
+  <% else %>
+    <%= image_tag('dot.gif', :width=>12) %>
+  <% end %>
+
+  <%= stream_project.workstream %>
+  <%=link_to(stream_project.name, {:controller=>'projects', :action=>'show', :id=>stream_project.id}) %>
+  <%= html_status(stream_project.last_status) %>
+  <% date = stream_project.last_status_date
+  if date
+    days = time_ago_in_words(date) %>
+    (<%= days %> - w<%= date.to_date.cweek %>)
+  <% end %>
+  <% if current_user.has_role?('Admin') %>
+    <%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'projects', :action=>'cut', :id=>stream_project.id}) %>
+    <%= link_to_remote(image_tag('paste.png'), :url=>{:controller=>'projects',:action=>'paste', :id=>stream_project.id}) %>
+    <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'projects',:action=>'destroy', :id=>stream_project.id}, :confirm=>"Sure?", :success=>"$('p_#{stream_project.id}').hide();", :failure=>"alert(request.responseText)") %>
+    <%= link_to_remote(image_tag('project_pause.png'), :url=>{:controller=>'projects',:action=>'stop', :id=>stream_project.id}, :confirm=>"Sure?", :success=>"$('p_#{stream_project.id}').hide();", :failure=>"alert(request.responseText)") %>
+
+    <span class="project_status_<%=status_html%>">
+    <%= status_html %>
+    </span>
+  <% end %>
+
+  <% if @display_actions %>
+    <%= stream_project.actions.size %> actions
+  <% end %>
+
+  <% if not stream_project.sub_has_supervisor  %>
+    <strong>no supervisor</strong>
+  <% end %>
+  <ul id="sub_<%=stream_project.id%>" style="display:none;">
+    <%= render(:partial=>'projects/request', :collection=>stream_project.requests) %>
+		<% subProjects = Project.find(:all, :conditions => ["project_id = ? and is_running = 1",stream_project.id.to_s],:order=>'name')%>
+
+    <%= render(:partial=>'streams/stream_project', :collection=>subProjects) %>
+  </ul>
+</li>

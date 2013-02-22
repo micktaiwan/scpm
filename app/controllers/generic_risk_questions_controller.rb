@@ -66,7 +66,8 @@ class GenericRiskQuestionsController < ApplicationController
           :probability=>fields[:probability],
           :consequence=>fields[:consequence],
           :impact=>fields[:impact],
-          :actions=>fields[:actions])
+          :actions=>fields[:actions],
+          :stream_id=>nil)
         }
     end
     redirect_to :controller=>'projects', :action=>'show', :id=>project_id

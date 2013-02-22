@@ -4,4 +4,5 @@ class Spider < ActiveRecord::Base
   has_many      :spider_values
   has_many      :spider_consolidations
   has_many      :lifecycle_questions, :through=>:spider_values
+  has_many      :history_counters
 end

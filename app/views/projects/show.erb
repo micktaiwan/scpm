@@ -1,18 +1,18 @@
 <script>
-function edit(id, same_week, has_requests) {
+function edit(id, nb_months, has_requests) {
   if (!has_requests) {
     alert("This project has no request, you should edit the workpackage")
     }
-  if(same_week || confirm('This status is old. You should add a new status.\nAre you sure you want to edit it?')) {
+  if(nb_months == 0 || confirm('This status is old. You should add a new status.\nAre you sure you want to edit it?')) {
     location = '/projects/edit_status/'+id;
     }
   }
-function add(id, same_week, has_requests) {
+function add(id, nb_months, has_requests) {
   if (!has_requests) {
     alert("This project has no request, you should edit the workpackage")
     return;
     }
-  if(!same_week || confirm('There is a status for this week already.\nAre you sure you want to add a new status?')) {
+  if(nb_months >= 1 || confirm('There is a status for this month already.\nAre you sure you want to add a new status?')) {
     location = '/projects/add_status_form/'+id;
     }
   }
@@ -52,7 +52,8 @@ function add(id, same_week, has_requests) {
             </div>
             
             <% if @project.requests.size > 0 %>
-              <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ? s.updated_at.to_date.cweek == Date.today.cweek : false}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
+              <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ?
+							(Date.today.year * 12 + Date.today.month) - (s.updated_at.to_date.year * 12 + s.updated_at.to_date.month): 0}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
               <%
                 n,c = @project.project_check_items_numbers
                 check_all_done = (n==c)
@@ -179,6 +180,13 @@ function add(id, same_week, has_requests) {
             <b>ISPL</b>: <%= @project.ispl %><br/>
             <b>Request resp:</b> <%=@project.assignees.join(', ')%><br/>
             <b>Associations:</b> <%=@project.responsibles.map{|r| r.name}.join(', ')%><br/>
+            <b>QR</b>: <%= @project.qr %><br/>
+            <b>DWR</b>: <%= @project.dwr %><br/>
+			<b>Is Running:</b> <%= @project.is_running.to_s %>
+			<% if !@project.is_running %>
+				<%= link_to ('Start project', { :action => "start", :id => @project.id }) %>
+			<% end %>
+			<br />
             <% if @project.description and @project.description!=''%>
               <%= simple_format(@project.description) %>
             <% end %>

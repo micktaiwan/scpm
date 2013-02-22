@@ -582,6 +582,58 @@ class ToolsController < ApplicationController
     render :nothing => true
   end
   
+  def show_counter_history
+    @stream_id        = params[:stream_id]
+    @request_id       = params[:request_id]
+    streams           = Stream.find(:all)
+    @streams_array    = [["All",0]]
+    streams.each{ |s| 
+      @streams_array << [s.name, s.id]
+    }
+    requests          = Request.find(:all,:conditions=>["work_package LIKE ? or work_package LIKE ?", "%"+WORKPACKAGE_QS+"%","%"+WORKPACKAGE_SPIDERS+"%"])
+    @requests_array   = [["All",0]] 
+    requests.each{ |r| 
+      @requests_array << [r.summary, r.id ]
+    }
+    
+    spider_condition  = "concerned_spider_id IS NOT NULL"
+    qs_condition      = "concerned_status_id IS NOT NULL"
+    if @stream_id and @stream_id!= "0"
+      spider_condition = spider_condition+" and history_counters.stream_id="+@stream_id.to_s
+      qs_condition     = qs_condition+" and history_counters.stream_id="+@stream_id.to_s
+    end
+    if @request_id and @request_id!= "0"
+      spider_condition = spider_condition+" and history_counters.request_id="+@request_id.to_s
+      qs_condition     = qs_condition+" and history_counters.request_id="+@request_id.to_s
+    end
+    
+    @spider_counter = HistoryCounter.find(:all,:conditions=>[spider_condition],
+                                          :joins => 'JOIN requests ON requests.id = history_counters.request_id',
+                                          :order=>"requests.id ASC")
+    
+    @qs_counter     = HistoryCounter.find(:all,:conditions=>[qs_condition],
+                                          :joins => 'JOIN requests ON requests.id = history_counters.request_id',
+                                          :order=>"requests.id ASC")
+  end
+  
+  def show_counter_history_without_rmt
+    @stream_id        = params[:stream_id]
+    streams           = Stream.find(:all)
+    @streams_array    = [["All",0]]
+    streams.each{ |s| 
+      @streams_array << [s.name, s.id]
+    }
+
+    spider_condition  = "concerned_spider_id IS NOT NULL and request_id IS NULL"
+    qs_condition      = "concerned_status_id IS NOT NULL and request_id IS NULL"
+    if @stream_id and @stream_id!= "0"
+      spider_condition = spider_condition+" and history_counters.stream_id="+@stream_id.to_s
+      qs_condition     = qs_condition+" and history_counters.stream_id="+@stream_id.to_s
+    end
+      
+    @spider_counter_no_request = HistoryCounter.find(:all,:conditions=>[spider_condition])
+    @qs_counter_no_request     = HistoryCounter.find(:all,:conditions=>[qs_condition])
+  end
 private
 
   def round_to_hour(f)

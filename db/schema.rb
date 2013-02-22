@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121213210911) do
+ActiveRecord::Schema.define(:version => 20130215130905) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -123,6 +123,8 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.integer  "project_id"
   end
 
+  add_index "checklist_items", ["id", "milestone_id", "request_id", "parent_id", "template_id", "project_id"], :name => "test", :unique => true
+
   create_table "ci_projects", :force => true do |t|
     t.integer  "internal_id"
     t.integer  "external_id"
@@ -174,13 +176,22 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.datetime "updated_at"
   end
 
-  create_table "counter_logs", :force => true do |t|
-    t.integer  "project_id"
-    t.integer  "stream_id"
-    t.integer  "credit"
-    t.integer  "debit"
+  create_table "counter_base_values", :force => true do |t|
+    t.string   "complexity"
+    t.string   "sdp_iteration"
+    t.string   "workpackage"
+    t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "counter_logs", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "request_id"
+    t.integer  "counter_value"
+    t.datetime "import_date"
+    t.boolean  "validity",      :default => false
   end
 
   create_table "generic_risk_questions", :force => true do |t|
@@ -201,6 +212,17 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.text     "risk"
     t.text     "consequence"
     t.text     "actions"
+  end
+
+  create_table "history_counters", :force => true do |t|
+    t.integer  "request_id"
+    t.datetime "action_date"
+    t.integer  "author_id"
+    t.integer  "concerned_status_id"
+    t.integer  "concerned_spider_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "stream_id",           :null => false
   end
 
   create_table "lifecycle_milestones", :force => true do |t|
@@ -339,6 +361,9 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.integer  "lifecycle_id"
     t.integer  "qs_count",      :default => 0
     t.integer  "spider_count",  :default => 0
+    t.boolean  "is_running",    :default => true
+    t.string   "qr"
+    t.string   "dwr"
   end
 
   create_table "question_references", :force => true do |t|
@@ -420,6 +445,7 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.string   "contre_visite_milestone"
     t.string   "request_type"
     t.integer  "stream_id"
+    t.string   "is_stream",               :default => "No"
   end
 
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
@@ -479,6 +505,7 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "description"
   end
 
   create_table "risks", :force => true do |t|
@@ -493,6 +520,7 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.datetime "updated_at"
     t.integer  "is_quality",      :default => 1
     t.integer  "generic_risk_id"
+    t.integer  "stream_id"
   end
 
   create_table "roles", :force => true do |t|
@@ -678,23 +706,37 @@ ActiveRecord::Schema.define(:version => 20121213210911) do
     t.text     "ws_report"
     t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
     t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
+    t.string   "file_link"
+  end
+
+  create_table "stream_review_types", :force => true do |t|
+    t.integer  "stream_id"
+    t.integer  "review_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "stream_reviews", :force => true do |t|
     t.integer  "stream_id"
     t.integer  "review_type_id"
+    t.integer  "author_id"
     t.text     "text"
+    t.text     "text_diff"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "streams", :force => true do |t|
     t.string   "name"
-    t.integer  "total_qs_count"
-    t.integer  "total_spider_count"
     t.integer  "workstream_id"
+    t.datetime "read_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "supervisor_id"
+    t.string   "quality_manager"
+    t.string   "dwl"
+    t.string   "process_owner"
+    t.text     "description"
   end
 
   create_table "tasks", :force => true do |t|

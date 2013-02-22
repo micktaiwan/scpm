@@ -1,0 +1,8 @@
+<div id="subcontent">
+<%= error_messages_for :stream %>
+<% form_for @stream, :url=>{:action=>'update', :id=>@stream.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Update' %></p>
+<% end -%>
+</div>

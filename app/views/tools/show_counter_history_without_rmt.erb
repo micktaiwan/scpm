@@ -1,0 +1,42 @@
+<% form_tag(:action=>'show_counter_history_without_rmt') do %>
+	<%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
+  <%= submit_tag('Filter') %>
+<% end %>
+
+<!-- WITHOUT REQUESTS -->
+<h2>Spider Counters not linked with request</h2>
+<table class="history_counts_table" >
+<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td></tr>
+<% @spider_counter_no_request.each do |sc_no_req| %>
+	<tr>
+		<td><%= sc_no_req.author.name %></td>
+		<td><%= sc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		
+		<% project_name = sc_no_req.spider.project.name %>
+		<% if sc_no_req.spider.project.project %>
+			<% project_name = sc_no_req.spider.project.project.name + " > " + sc_no_req.spider.project.name %>
+		<% end %>
+		
+		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc_no_req.spider.project.id}) %></td>
+	</tr>
+<% end %>
+</table>
+
+<h2>SQ Counters not linked with request</h2>
+<table class="history_counts_table" >
+<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td></tr>
+<% @qs_counter_no_request.each do |qsc_no_req| %>
+	<tr>
+		<td><%= qsc_no_req.author.name %></td>
+		<td><%= qsc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<% project_name = qsc_no_req.status.project.name %>
+		<% if qsc_no_req.status.project.project %>
+			<% project_name = qsc_no_req.status.project.project.name + " > " + qsc_no_req.status.project.name %>
+		<% end %>
+		
+		<td>
+			<%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc_no_req.status.project.id}) %>
+		</td>
+		<td><%=html_status(qsc_no_req.status.status)%></td>	</tr>
+<% end %>
+</table>

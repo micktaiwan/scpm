@@ -6,14 +6,15 @@ class Person < ActiveRecord::Base
   include ApplicationHelper # for wlweek
 
   belongs_to :company
-  has_many :person_roles
-  has_many :roles, :through => :person_roles
-  has_many :open_actions, :class_name=>"Action", :conditions=>"progress='open' or progress='in_progress'"
-  has_many :project_people
-  has_many :projects, :foreign_key=>"supervisor_id"
-  has_many :projects, :through=>:project_people
-  has_many :wl_lines
-  has_many :sdp_logs, :order=>"id"
+  has_many   :person_roles
+  has_many   :roles, :through => :person_roles
+  has_many   :open_actions, :class_name=>"Action", :conditions=>"progress='open' or progress='in_progress'"
+  has_many   :project_people
+  has_many   :projects, :foreign_key=>"supervisor_id"
+  has_many   :projects, :through=>:project_people
+  has_many   :wl_lines
+  has_many   :sdp_logs, :order=>"id"
+  has_many   :history_counters
 
   before_save :encrypt_password
 

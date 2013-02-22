@@ -18,3 +18,19 @@ div#banner {
   background: #99F;
   }
 
+.warning {
+  color: red;
+}
+
+.alert {
+  color: orange;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.bold_colored {
+  font-weight: bold;
+  color: green;
+}

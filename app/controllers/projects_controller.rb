@@ -184,7 +184,18 @@ class ProjectsController < ApplicationController
     p.update_status(params[:status][:status])
     #p.save
     p.calculate_diffs
-    Mailer::deliver_status_change(p)
+    
+    if (params[:AQ_status] == "NO")
+      # Increment QS counter
+      p.qs_count = p.qs_count + 1
+      p.save
+    
+      # Insert in history_counter
+      streamRef     = Stream.find_with_workstream(p.workstream)
+      streamRef.set_qs_history_counter(current_user,status)
+    end
+    
+    #Mailer::deliver_status_change(p)
     redirect_to :action=>:show, :id=>project_id
   end
 
@@ -204,12 +215,28 @@ class ProjectsController < ApplicationController
     timestamps_on if params[:update] != '1'
     redirect_to :action=>:show, :id=>status.project_id
   end
+  
+  def update_status_file_name_form
+    status_id = params[:id]
+    @status    = Status.find(status_id)
+  end
+  
+  def update_status_file_name
+    status_id        = params[:id]
+    if params[:status][:file_link]
+      status           = Status.find(status_id)
+      status.file_link = params[:status][:file_link]
+      status.save
+    end
+    redirect_to :controller=>:tools ,:action=>:show_counter_history
+  end
+  
 
   # check request and suggest projects
   def import
     @import = []
-    Request.find(:all, :conditions=>"project_id is null", :order=>"workstream").each { |r|
-      @import << {:id=>r.id, :project_name=>r.project_name, :summary=>r.summary, :workstream=>r.workstream, :workpackage=>r.work_package}
+    Request.find(:all, :conditions=>"project_id is null and stream_id is null", :order=>"workstream").each { |r|
+      @import << r
       }
     render(:layout=>'tools')  
   end
@@ -441,7 +468,7 @@ class ProjectsController < ApplicationController
         }
       #@actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
       @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed' and status!='removed'", :order=>"status, workstream")
-      @risks      = Risk.find(:all) #, :conditions=>"", :order=>"status, workstream")
+      @risks      = Risk.find(:all, :conditions => "stream_id IS NULL") #, :conditions=>"", :order=>"status, workstream")
       @risks      = @risks.select { |r| r.project and r.severity > 0}.sort_by {|r|
         raise "no supervisor for #{r.project.full_name}" if !r.project.supervisor
         [r.project.supervisor.name, r.project.full_name, r.severity]
@@ -476,7 +503,36 @@ class ProjectsController < ApplicationController
       closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
       closed.each { |r| r.reporter = "Closed" }
       @week_changes = wps + complexities + news + performed + closed
-
+      
+      # STREAMS REVIEW BEGIN
+      stream                = Stream.find(:all)
+      @review_types         = ReviewType.find(:all)
+      @stream_width_array   = ["100","60"]
+      @stream_column_array  = ["workstream","stream"]
+      @stream_columns_content = Array.new
+      
+      @review_types.each { |rt| 
+        @stream_width_array.push('200') 
+        @stream_column_array.push(rt.title)
+      }
+      
+      stream.each do |s|
+        stream_params_array = Hash.new
+        stream_params_array["workstream"] = s.workstream.name
+        stream_params_array["stream"] = s.name
+        
+        @review_types.each do |rt|
+          last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",s.id ,rt.id], :order => "created_at DESC")
+          if last_review
+            stream_params_array[rt.title] = last_review.text
+          else
+            stream_params_array[rt.title] = 0
+          end
+        end
+        @stream_columns_content.push(stream_params_array)
+      end
+      # STREAMS REVIEW END
+      
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
       headers['Cache-Control']        = ''
@@ -536,7 +592,30 @@ class ProjectsController < ApplicationController
     @performed    = Request.find(:all, :conditions=>["status_performed >= ?", date], :order=>"workstream, project_id, status_performed")
     @closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
   end
-
+  
+  
+  # Change is_running status
+  
+  def stop
+    id = params[:id]
+    project = Project.find(id)
+    if(project)
+      project.is_running = 0      
+      project.save
+    end
+    render(:nothing => true)
+  end
+  
+  def start
+    id = params[:id]
+    project = Project.find(id)
+    if(project)
+      project.is_running = 1
+      project.save
+    end
+    redirect_to :action=>:show, :id=>project.id
+  end
+  
 private
 
   def get_status_progress

@@ -1,25 +1,39 @@
-<li id="req_<%= import[:id] %>">
+<li id="req_<%= import.id %>">
+<!-- Counters -->
+
 <!-- Project -->
-<% if import[:workpackage][0..4] != "WP7.1" %>
-	<% if not Project.find_by_name(import[:project_name]) %>
+<% if import.is_stream == "No" %>
+	<% if not Project.find_by_name(import.project_name) %>
 	<strong>new project</strong>
 	<% end %>
-	<% if not Project.find_by_name(get_workpackage_name_from_summary(import[:summary], import[:project_name])) %>
+	<% if not Project.find_by_name(get_workpackage_name_from_summary(import.summary, import.project_name)) %>
 	<strong>new WP</strong>
 	<% end %>
 
-	<%= link_to_remote('link to project', :url=>{:action=>'link', :id=>import[:id], :project_name=>import[:project_name]}, :update=>"req_#{import[:id]}") %>
-
-	
+	<%= link_to_remote('link to project', :url=>{:action=>'link', :id=>import.id, :project_name=>import.project_name}, :update=>"req_#{import.id}") %>
 <% else %>
 <!-- Stream -->
-	<% if not Stream.find_with_workstream(import[:workstream]) %>
+	<% if not Stream.find_with_workstream(import.workstream) %>
 		<strong>Stream not found</strong>
 	<% end %>
-	<%#= link_to_remote('link to stream', :url=>{:controller=>'streams', :action=>'link', :id=>import[:id]}, :update=>"req_#{import[:id]}") %>
+	<%= link_to_remote('link to stream', :url=>{:controller=>'streams', :action=>'link', :id=>import.id}, :update=>"req_#{import.id}") %>
 <% end %>
 
 
-<%= import[:workstream] %>
-<%= import[:summary] %>
+<%= import.workstream %>
+<%= import.summary %>
+
+<%  if WORKPACKAGE_COUNTERS.include?(import.work_package[0..6])
+		# Check if an objet is already 
+		counterLogObj = import.counter_log #counterLogObj = CounterLog.find_by_request_id(import.id)
+		if (counterLogObj) 
+			concat "Counter value of this ticket is saved for a value of " + counterLogObj.counter_value.to_s
+		else
+			concat "Counter value of this ticket isn't saved."
+		end
+	end
+%>
+		
+
+
 </li>

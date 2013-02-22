@@ -2,13 +2,18 @@ class Status < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :modifier, :class_name=>'Person', :foreign_key=>'last_modifier'
+  has_many   :history_counters
 
   before_save :escape
 
   def is_current?
     self.updated_at.to_date.cweek == Date.today.cweek
   end
-
+  
+  def months_from_creation
+    return  (Date.today.year * 12 + Date.today.month) - (self.updated_at.to_date.year * 12 + self.updated_at.to_date.month)
+  end
+  
   def get_last_change_excel
     return self.last_change_excel if self.last_change_excel
     self.last_change

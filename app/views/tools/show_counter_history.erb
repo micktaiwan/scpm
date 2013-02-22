@@ -1,0 +1,88 @@
+<% form_tag(:action=>'show_counter_history') do %>
+	<%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
+	<%= select_tag ("request_id",options_for_select(@requests_array,@request_id.to_i))  %>
+  <%= submit_tag('Filter') %>
+<% end %>
+
+
+<h2>Spider Counters</h2>
+<% last_request_spider = 0 %>
+<!-- For each spider counter -->
+<% @spider_counter.each do |sc| %>
+
+	<!-- IF NEW REQUEST -->
+	<% if last_request_spider != sc.request_id %>
+		<!-- TABLE -->
+		<% if last_request_spider != 0 %>
+			</table><br />
+		<% end %>
+		<table class="history_counts_table" >
+		<!-- REQUEST TR -->
+		<tr class="bg_blue">
+			<td>
+				<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= sc.request.request_id %>">#<%= sc.request.request_id %></a>
+			</td>
+			<td COLSPAN="2"><%= sc.request.summary %></td>
+		</tr>
+		<!-- HEADER TR -->
+		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td></tr>
+		<% last_request_spider = sc.request_id %>
+	<% end %>
+	
+	<!-- DETAIL ACTION TR-->
+	<tr>
+		<td><%= sc.author.name %></td>
+		<td><%= sc.action_date.strftime("%m/%d/%Y %H:%M") %></td>		
+		<% project_name = sc.spider.project.name %>
+		<% if sc.spider.project.project %>
+			<% project_name = sc.spider.project.project.name + " > " + sc.spider.project.name %>
+		<% end %>
+		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc.spider.project.id}) %></td>
+	</tr>
+<% end %>
+</table>
+
+<h2>QS Counters</h2>
+<% last_request_qs = 0 %>
+<!-- For each QS counter -->
+<% @qs_counter.each do |qsc| %>
+
+	<!-- IF NEW REQUEST -->
+	<% if last_request_qs != qsc.request_id %>
+		<!-- TABLE -->
+		<% if last_request_qs != 0 %>
+			</table><br />
+			<% end %>		
+		<table class="history_counts_table" >
+		<!-- REQUEST TR -->
+		<tr class="bg_blue">
+			<td>
+				<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= qsc.request.request_id %>">#<%= qsc.request.request_id %></a>
+			</td>
+			<td COLSPAN="4"><%= qsc.request.summary %></td>
+		</tr>
+		<!-- HEADER TR -->
+		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td><td>Delivery link</td></tr>
+		<% last_request_qs = qsc.request_id %>
+	<% end %>
+	
+	<!-- DETAIL ACTION TR -->	
+	<tr>
+		<td><%= qsc.author.name %></td>
+		<td><%= qsc.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		
+		<% project_name = qsc.status.project.name %>
+		<% if qsc.status.project.project %>
+			<% project_name = qsc.status.project.project.name + " > " + qsc.status.project.name %>
+		<% end %>
+		
+		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc.status.project.id}) %></td>
+		<td><%=html_status(qsc.status.status)%></td>
+		<% if qsc.status.file_link %>
+			<td><%= link_to(qsc.status.file_link, {:controller=>'projects', :action=>'update_status_file_name_form', :id=>qsc.status.id}) %></td>
+		<% else %>
+			<td>None</td>
+		<% end %>
+	</tr>
+<% end %>
+</table>

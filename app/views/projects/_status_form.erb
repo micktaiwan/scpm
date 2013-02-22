@@ -9,5 +9,6 @@
 <tr><td class="descr">Last UP3P verification:</td><td><%= text_field(:status, :ereporting_date, :onchange=>"formChanged();") %>yyyy-mm-dd</td></tr>
 <tr><td class="descr">Details</td><td><%= text_area(:status, :explanation, {:cols=>100, :rows=>7, :onchange=>"formChanged();"}) %></td></tr>
 <tr><td class="descr">Supervisor Feedback</td><td><%= text_area(:status, :feedback, {:cols=>100, :rows=>7, :onchange=>"formChanged();"}) %></td></tr>
+<tr><td class="descr">Delivery File link</td><td><%= text_area(:status, :file_link, {:cols=>100, :rows=>2,:onchange=>"formChanged();"}) %></td></tr>
 </table>
 <%= hidden_field :status, :project_id, :value=>@project.id %>

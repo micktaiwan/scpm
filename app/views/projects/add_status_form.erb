@@ -9,6 +9,7 @@
 <% form_for @status, :url=>{:action=>'add_status', :project_id=>@project.id} do |f| -%>
   <%= render(:partial => 'status_form') %>
   <p><label>&nbsp;</label>
-  <%= submit_tag 'add status', :onclick=>"formSave();" %></p>
+		<%= hidden_field_tag 'AQ_status', 'YES' %>
+		<%= tag "input", { "type" => "button", "value" => "add status", "onclick" => "qsValidation();" } %></p>
 <% end -%>
 </div>

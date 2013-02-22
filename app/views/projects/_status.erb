@@ -7,7 +7,7 @@
 
         <%=html_status(status.status)%>
 
-        <%=link_to_function('Edit', "edit(#{status.id}, #{status.is_current?}, #{status.project.has_requests});")%>
+        <%=link_to_function('Edit', "edit(#{status.id}, #{status.months_from_creation}, #{status.project.has_requests});")%>
         <% if current_user.has_role?('Admin')%>
           <%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'projects', :action=>'cut_status', :id=>status.id})%>
           <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'projects',
@@ -76,6 +76,9 @@
 
     <h3>Supervisor Feedback (internal to SQLI)</h3>
     <%=my_simple_format(status.feedback)%>
+
+		<h3>Delivery File link</h3>
+		<%= status.file_link %>
   </div>
 </div>
 

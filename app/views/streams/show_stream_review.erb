@@ -7,28 +7,23 @@ function add(id,type_id) {
 }
 </script>
 
-<p>
-	<%= link_to "Stream", {:controller => "streams", :action => "show", :id => @stream.id},{:class=>"btnlnk"} %>
-	<%= link_to "Projects",{:controller => "streams", :action => "show_stream_projects", :id => @stream.id},{:class=>"btnlnk"}%>
-	<%= link_to "Informations", {:controller => "streams", :action => "show_stream_informations", :id => @stream.id},{:class=>"btnlnk"}%>
-	<% @stream.get_stream_review_types.each do |review_type| %>
-		<%= link_to  review_type.title , {:controller => "streams", :action => "show_stream_review", :id => @stream.id, :type => review_type.id },{:class=>"btnlnk"}%>
-	<% end %>
-</p>
+<%= render(:file=>"streams/menu") %>
 
-<div class='status_explanation'>
-	<%= link_to_function('Add review', "add(#{@stream.id},#{@review_type})", {:class=>'btnlnk'}) %>
-	
-	<% if @last_review %>
-      <font color="#777777">Last read: <%= time_ago_in_words(@last_review.updated_at) %></font>
-	  <%= render(:partial=>'review', :object=>@last_review) %>
-    <% end %>
-    <br/>
+<h2>
+	<%= link_to_function('Add', "add(#{@stream.id},#{@review_type.id})", {:class=>'btnlnk'}) %> 
+	<%= @review_type.title %> review
+</h2>
+
+<% if @last_review %>
+	<p><span class="bold">Last update time:</span> <%= time_ago_in_words(@last_review.updated_at.strftime("%m/%d/%Y %H:%M")) %></p>
+	<%= render(:partial=>'review', :object=>@last_review) %>
+<% end %>
+
     
-    <%= link_to_function("Old (#{@old_reviews.size})", "$('old_statuses').toggle();", :class=>"menu") %>
-    <div id='old_statuses' style="display:none;">
-      <% for s in @old_reviews %>
-        <%= render(:partial=>'review', :object=>s) %>
-      <% end %>
-    </div>
+<%= link_to_function("Old (#{@old_reviews.size})", "$('old_statuses').toggle();", :class=>"menu") %>
+<div id='old_statuses' style="display:none;">
+	<% for s in @old_reviews %><br />
+		<%= render(:partial=>'review', :object=>s) %>
+  <% end %>
 </div>
+

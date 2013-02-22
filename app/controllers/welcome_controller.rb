@@ -48,7 +48,11 @@ class WelcomeController < ApplicationController
       r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
       #r.deploy_checklists if r.status == 'assigned' and r.status_changed?
       r.save
-      }
+      # Create or update the counter log of this request
+      if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6])
+        r.update_ticket_counters
+      end
+    }
     SDPTask.format_stats_by_type()
     redirect_to '/projects/import'
   end

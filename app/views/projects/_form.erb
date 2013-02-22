@@ -8,6 +8,8 @@
 <td>BPL</td><td><%= text_field :project, :bpl %></td></tr>
 <td>ISPL</td><td><%= text_field :project, :ispl %></td></tr>
 <td>ISPM</td><td><%= text_field :project, :ispm %></td></tr>
+<td>QR</td><td><%= text_field :project, :qr %></td></tr>
+<td>DWR</td><td><%= text_field :project, :dwr %></td></tr>
 <td>Supervisor</td><td><%= select(:project, :supervisor_id, @supervisors.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
 <% lifecycle_list = Lifecycle.find(:all) %>
 <td>Lifecycle</td><td><%= select(:project, :lifecycle_id, lifecycle_list.map {|l| [l.name, l.id]}) %></td></tr>

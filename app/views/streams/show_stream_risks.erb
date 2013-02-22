@@ -1,0 +1,40 @@
+<%= render(:file=>"streams/menu") %>
+
+<!-- Risk menu -->
+<%= link_to('Add risk', {:controller=>'risks', :action=>'new_with_stream', :stream_id=>@stream.id}, {:class=>'btnlnk'}) %>
+<br />
+
+<!-- Color status -->
+Suggested status:
+  <% suggested_status = @stream.suggested_status %>
+  <%= html_status(suggested_status) %>
+  <br/>
+
+  <a href="#" onclick="return false;" title="Probability:
+    0:can not occur
+    1:low. 1% < x < 35%
+    2:normal. 36% < x < 70%
+    3:high. > 70%
+    4:occured
+
+    Impact:
+    1:low. cost, delay or quality impact < 10%
+    2:medium. cost, delay or quality impact > 10%
+    3:high. cost, demlay or quality impact > 20%">Help</a>
+  <table class="grid">
+  <tr class="header">
+  <td>Severity</td>
+  <td>ID</td>
+  <td>Context</td>
+  <td>Q</td>
+  <td>Risk</td>
+  <td>Probability</td>
+  <td>Consequence/Impact</td>
+  <td>Impact</td>
+  <td>Actions taken</td>
+  <td>Created at</td>
+  <td>Modif.</td>
+  <td></td>
+  </tr>
+    <%= render(:partial=>'streams/risk', :collection=>@stream.risks.sort_by {|r| [-r.severity, r.id]}) %>
+  </table>

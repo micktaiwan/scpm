@@ -48,3 +48,16 @@ h2 {
 	font-size : 10px;
 	font-style:italic;
 }
+.bg_blue
+{
+	background: #9EB5D9;
+}
+.bg_grey
+{
+	background: #CDDAD0;
+}
+.history_counts_table
+{
+	border: 1px solid grey;
+	width:500px;
+}
