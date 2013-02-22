@@ -123,8 +123,6 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.integer  "project_id"
   end
 
-  add_index "checklist_items", ["id", "milestone_id", "request_id", "parent_id", "template_id", "project_id"], :name => "test", :unique => true
-
   create_table "ci_projects", :force => true do |t|
     t.integer  "internal_id"
     t.integer  "external_id"
@@ -220,9 +218,9 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.integer  "author_id"
     t.integer  "concerned_status_id"
     t.integer  "concerned_spider_id"
+    t.integer  "stream_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "stream_id",           :null => false
   end
 
   create_table "lifecycle_milestones", :force => true do |t|
@@ -719,19 +717,19 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
   create_table "stream_reviews", :force => true do |t|
     t.integer  "stream_id"
     t.integer  "review_type_id"
-    t.integer  "author_id"
     t.text     "text"
-    t.text     "text_diff"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "author_id"
+    t.text     "text_diff"
   end
 
   create_table "streams", :force => true do |t|
     t.string   "name"
     t.integer  "workstream_id"
-    t.datetime "read_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "read_date"
     t.integer  "supervisor_id"
     t.string   "quality_manager"
     t.string   "dwl"
