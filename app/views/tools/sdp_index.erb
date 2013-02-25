@@ -43,7 +43,7 @@
 
 <table>
   <tr><td>SDP Initial Balance:</td><td><%= @sdp_initial_balance %>, real balance: <%=@real_balance%> (balance minus lacking  management), plus provisions: <b><%=@real_balance_and_provisions%></b> (total provisions to release: <%= @provisions_remaining_should_be %>)</td></tr>
-  <tr><td>Operational:</td><td> <%= @remaining %> / <%= @operational_total-(@operational2011_10percent+@operational2012_10percent) %> /  <%= @operational_total %> (Remaining  / Total minus OM / including OM)</td></tr>
+	<tr><td>Operational:</td><td> <%= @remaining %> / <%= @operational_total-(@operational2011_10percent+@operational2012_10percent+@operational2013_10percent) %> /  <%= @operational_total %> (Remaining  / Total minus OM / including OM)</td></tr>
   <tr><td>Remaining time:</td><td> <%= @remaining_time %> months</td></tr>
   <tr><td>Constants:</td><td> <%= @nb_qr %> op persons, <%= @fte %> op FTE</td></tr>
   <tr><td>Theorical management remaining:</td><td> <%= @theorical_management %> (in SDP: <%= @remaining_management %>, diff: <%= @theorical_management - @remaining_management%>)</td></tr>
