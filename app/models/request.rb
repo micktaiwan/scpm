@@ -24,7 +24,7 @@ class Request < ActiveRecord::Base
   "WP1.5 - SQR"                                         => "SQR", #NEW
   "WP1.6.1 - QWR DWQAP"                                 => "DWQAP", #NEW
   "WP1.6.2 - QWR Project Setting-up"                    => "Proj. Setting-up", # NEW
-  "WP1.6.3 - QWR Support, Reporting & KP"               => "Supp. Setting-up", #NEW
+  "WP1.6.3 - QWR Support, Reporting & KPI"               => "Supp. Setting-up", #NEW
   "WP1.6.4 - QWR Quality Status"                        => "QS", #NEW
   "WP1.6.5 - QWR Spiders"                               => "Spiders", #NEW
   "WP1.6.6 - QWR QG BRD"                                => "QG BRD", #NEW
@@ -129,7 +129,7 @@ class Request < ActiveRecord::Base
     "WP1.5 - SQR"                                         => 22,
     "WP1.6.1 - QWR DWQAP"                                 => 26,
     "WP1.6.2 - QWR Project Setting-up"                    => 27,
-    "WP1.6.3 - QWR Support, Reporting & KP"               => 28,
+    "WP1.6.3 - QWR Support, Reporting & KPI"               => 28,
     "WP1.6.4 - QWR Quality Status"                        => 29,
     "WP1.6.5 - QWR Spiders"                               => 30,
     "WP1.6.6 - QWR QG BRD"                                => 31,
