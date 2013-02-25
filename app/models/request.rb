@@ -24,7 +24,7 @@ class Request < ActiveRecord::Base
   "WP1.5 - SQR"                                         => "SQR", #NEW
   "WP1.6.1 - QWR DWQAP"                                 => "DWQAP", #NEW
   "WP1.6.2 - QWR Project Setting-up"                    => "Proj. Setting-up", # NEW
-  "WP1.6.3 - QWR Support, Reporting & KPI"               => "Supp. Setting-up", #NEW
+  "WP1.6.3 - QWR Support, Reporting & KPI"              => "Supp. Reporting & KPI", #NEW
   "WP1.6.4 - QWR Quality Status"                        => "QS", #NEW
   "WP1.6.5 - QWR Spiders"                               => "Spiders", #NEW
   "WP1.6.6 - QWR QG BRD"                                => "QG BRD", #NEW
@@ -765,7 +765,11 @@ class Request < ActiveRecord::Base
 
   def workload_name
     ##{appended_string(project.workstream, 6, "&nbsp;")}
-   "<b>#{self.project ? self.project.full_name : "no project"}</b> <u>#{self.shortname}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
+    if !self.is_stream
+      "<b>#{self.project ? self.project.full_name : "no project"}</b> <u>#{self.shortname}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
+    else
+      "<b>#{self.project_name}</b> <u>#{self.shortname}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
+    end
   end
 
   # return the corresponding milestone names for this request
