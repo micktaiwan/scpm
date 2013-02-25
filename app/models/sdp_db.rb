@@ -13,7 +13,7 @@ module SdpDB
     'WP1.5 - SQR'              =>[32497,31244], #NEW
     'WP1.6.1 - QWR DWQAP'          =>[32498,31244], #NEW
     'WP1.6.2 - QWR Project Setting-up' =>[32533,31244], #NEW
-    'WP1.6.3 - QWR Support, Reporting & KP' =>[32534,31244], #NEW
+    'WP1.6.3 - QWR Support, Reporting & KPI' =>[32534,31244], #NEW
     'WP1.6.4 - QWR Quality Status'          =>[32535,31244], #NEW
     'WP1.6.5 - QWR Spiders'                 =>[32536,31244], #NEW
     'WP1.6.6 - QWR QG BRD'                  =>[32537,31244], #NEW
