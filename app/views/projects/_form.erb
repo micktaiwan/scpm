@@ -8,10 +8,19 @@
 <td>BPL</td><td><%= text_field :project, :bpl %></td></tr>
 <td>ISPL</td><td><%= text_field :project, :ispl %></td></tr>
 <td>ISPM</td><td><%= text_field :project, :ispm %></td></tr>
-<td>QR</td><td><%= text_field :project, :qr %></td></tr>
+<td>Is active QR/QWR ?</td><td><%= check_box :project, :is_qr_qwr,:onclick=>"check_is_qr_qwr();" %></td></tr>
+<td>QR</td><td><%= select(:project, :qr_qwr_id, @qr.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
 <td>DWR</td><td><%= text_field :project, :dwr %></td></tr>
 <td>Supervisor</td><td><%= select(:project, :supervisor_id, @supervisors.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
 <% lifecycle_list = Lifecycle.find(:all) %>
 <td>Lifecycle</td><td><%= select(:project, :lifecycle_id, lifecycle_list.map {|l| [l.name, l.id]}) %></td></tr>
 <td>Description</td><td><%= text_area :project, :description %></td></tr>
 </table>
+
+<script type="text/javascript"> 
+	function check_is_qr_qwr()
+	{
+		if($('project_is_qr_qwr').getValue()){$('project_qr_qwr_id').enable();}else{$('project_qr_qwr_id').disable();}
+	}
+	check_is_qr_qwr();
+</script>

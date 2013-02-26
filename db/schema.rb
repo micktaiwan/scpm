@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130215130905) do
+ActiveRecord::Schema.define(:version => 20130226104105) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -360,8 +360,9 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.integer  "qs_count",      :default => 0
     t.integer  "spider_count",  :default => 0
     t.boolean  "is_running",    :default => true
-    t.string   "qr"
+    t.integer  "qr_qwr_id"
     t.string   "dwr"
+    t.boolean  "is_qr_qwr",     :default => false
   end
 
   create_table "question_references", :force => true do |t|

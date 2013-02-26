@@ -180,13 +180,14 @@ function add(id, nb_months, has_requests) {
             <b>ISPL</b>: <%= @project.ispl %><br/>
             <b>Request resp:</b> <%=@project.assignees.join(', ')%><br/>
             <b>Associations:</b> <%=@project.responsibles.map{|r| r.name}.join(', ')%><br/>
-            <b>QR</b>: <%= @project.qr %><br/>
+            <b>QR/QWR</b>: <%= @project.qr_qwr.name %><br/>
+						<b>Is QR/QWR active</b>: <%= @project.is_qr_qwr %><br />
             <b>DWR</b>: <%= @project.dwr %><br/>
-			<b>Is Running:</b> <%= @project.is_running.to_s %>
-			<% if !@project.is_running %>
-				<%= link_to ('Start project', { :action => "start", :id => @project.id }) %>
-			<% end %>
-			<br />
+						<b>Is Running:</b> <%= @project.is_running.to_s %>
+						<% if !@project.is_running %>
+							<%= link_to ('Start project', { :action => "start", :id => @project.id }) %>
+						<% end %>
+						<br />
             <% if @project.description and @project.description!=''%>
               <%= simple_format(@project.description) %>
             <% end %>

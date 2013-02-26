@@ -14,6 +14,7 @@ class Project < ActiveRecord::Base
   belongs_to  :project
   belongs_to  :supervisor,  :class_name=>"Person"
   belongs_to  :lifecycle_object, :class_name=>"Lifecycle", :foreign_key=>"lifecycle_id"
+  belongs_to  :qr_qwr, :class_name=>"Person"
   has_many    :projects,    :order=>'name', :dependent=>:destroy
   has_many    :requests,    :dependent=>:nullify
   has_many    :statuses,    :dependent => :destroy, :order=>"created_at desc"
