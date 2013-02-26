@@ -75,11 +75,6 @@ th {
 .wl_case input {
   color: #555;
   }
-.wl_case input.milestone {
-  background: #FAA;
-  border: 0;
-  width: 40px;
-  }
 
 .wl_textfield {
   border: 0;
@@ -110,6 +105,9 @@ tr.wl_opens {
 .wl_line_400 {
   background: #FDD;
   }
+.wl_line_150 {
+  background: #A8FFE1;
+  }
 .wl_line_200 .wl_case input {
   background: #EEF;
   }
@@ -120,6 +118,16 @@ tr.wl_opens {
 .wl_line_400 .wl_case input {
   color: #A55;
   background: #FEE;
+  }
+.wl_line_150 .wl_case input {
+ color: #3600FF;
+ background: #C9FFF9;
+ }
+
+.wl_case input.milestone {
+  background: #FAA;
+  border: 0;
+  width: 40px;
   }
 
 .delete {

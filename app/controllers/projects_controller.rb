@@ -79,6 +79,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(params[:project])
+    check_qr_qwr_pdc(@project)
     if not @project.save
       render :action => 'new'
       return
@@ -143,6 +144,7 @@ class ProjectsController < ApplicationController
     project.update_attributes(params[:project])
     project.propagate_attributes
     project.set_lifecycle_old_param()
+    check_qr_qwr_pdc(project)
     redirect_to :action=>:show, :id=>project.id
   end
 
@@ -617,6 +619,20 @@ class ProjectsController < ApplicationController
       project.save
     end
     redirect_to :action=>:show, :id=>project.id
+  end
+  
+  def check_qr_qwr_pdc(project)
+    # If the project is qr_qwr activated
+    if (project.is_qr_qwr && project.is_running && project.qr_qwr_id != nil && project.qr_qwr_id != 0)
+      # Check if the line is already created for the qr_qwr
+      qr_qwr = Person.find(project.qr_qwr_id)
+      if qr_qwr
+        wl_line = WlLine.first(:conditions=>["person_id = ? and project_id = ?",qr_qwr.id.to_s, project.id.to_s])
+        if !wl_line
+          WlLine.create(:name=>"[QR_QWR]"+project.name, :request_id=>nil, :person_id=>qr_qwr.id, :wl_type=>WL_LINE_QR_QWR, :project_id=>project.id)
+        end
+      end
+    end
   end
   
 private

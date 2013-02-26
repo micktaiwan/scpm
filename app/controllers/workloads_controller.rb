@@ -6,11 +6,6 @@ class WorkloadsController < ApplicationController
 
   layout 'pdc'
 
-  WL_LINE_REQUEST   = 100
-  WL_LINE_OTHER     = 200
-  WL_LINE_HOLIDAYS  = 300 # not summed in the planned total
-  WL_LINE_EXCEPT    = 400 # other tasks, not in the current project, not summed in the planned total
-
   def index
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
