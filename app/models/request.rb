@@ -56,8 +56,8 @@ class Request < ActiveRecord::Base
   "WP6.8 - Coaching Use Case"                           => "C. Use Case", #NEW
   "WP6.9 - Coaching Data Model"                         => "C. Data Model", #NEW
   "WP6.10.1 - Coaching Agility: Diagnosis & project launch" => "CA. Diag.", #NEW
-  "WP6.10.2 - Coaching Agility: Sprint 0 support"           => "CA. Support", #NEW
-  "WP6.10.3 - Coaching Agility: Sprint coaching"            => "CA. Coaching", #NEW
+  "WP6.10.2 - Coaching Agility: Sprint 0 support"           => "CA. Sprint 0", #NEW
+  "WP6.10.3 - Coaching Agility: Sprint coaching"            => "CA. Sprint n", #NEW
   "WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management"            => "Multi Proj. Req.", #NEW
   "WP7.1.2 - Expertise Activities for Multi Projects: Risks Management"                   => "Multi Proj. Risks", #NEW
   "WP7.1.3 - Expertise Activities for Multi Projects: Test Management"                    => "Multi Proj. Test", #NEW
