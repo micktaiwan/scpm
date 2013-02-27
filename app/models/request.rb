@@ -765,7 +765,7 @@ class Request < ActiveRecord::Base
 
   def workload_name
     ##{appended_string(project.workstream, 6, "&nbsp;")}
-    if !self.is_stream
+    if (self.is_stream == "No")
       "<b>#{self.project ? self.project.full_name : "no project"}</b> <u>#{self.shortname}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
     else
       "<b>#{self.project_name}</b> <u>#{self.shortname}</u> #{self.milestone} (<a title='RMT' href='http://toulouse.sqli.com/EMN/view.php?id=#{self.request_id.to_i}'>##{self.request_id.to_i}</a>)"
