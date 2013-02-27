@@ -164,5 +164,41 @@ class Workload
     @sdp_remaining_total - @planned_total
   end
 
+  def get_qr_qwr_wl_lines_by_streams
+    lines_by_streams = Hash.new
+    # Create arrays for each stream
+    Stream.find(:all).each do |s| 
+      # lines_by_streams[s.id]                = Array.new
+      lines_by_streams[s.id]                = Hash.new
+      lines_by_streams[s.id]["prev"]        = 0
+      lines_by_streams[s.id]["sum"]         = 0
+      lines_by_streams[s.id]["qs_prev"]     = 0
+      lines_by_streams[s.id]["spider_prev"] = 0
+      lines_by_streams[s.id]["qs_sum"]      = 0
+      lines_by_streams[s.id]["spider_sum"]  = 0
+    end
+    # Add wl_lines to corresponding stream
+    wl_lines.each { |wl|
+      if wl.project
+        # Stream
+        s = Stream.find_with_workstream(wl.project.workstream)
+        # WL Line
+        # lines_by_streams[s.id] << wl
+        # Previsional
+        if(wl.wl_type == 110)
+          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]    + wl.project.calcul_qs_previsional.to_i
+          lines_by_streams[s.id]["qs_prev"]     = lines_by_streams[s.id]["qs_prev"] + wl.project.calcul_qs_previsional.to_i
+          lines_by_streams[s.id]["qs_sum"]      = lines_by_streams[s.id]["qs_sum"]  + wl.planned_sum.to_i
+        elsif(wl.wl_type == 120)
+          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]        + wl.project.calcul_spider_previsional.to_i
+          lines_by_streams[s.id]["spider_prev"] = lines_by_streams[s.id]["spider_prev"] + wl.project.calcul_spider_previsional.to_i
+          lines_by_streams[s.id]["spider_sum"]  = lines_by_streams[s.id]["spider_sum"]  + wl.planned_sum.to_i
+        end
+        lines_by_streams[s.id]["sum"]           = lines_by_streams[s.id]["sum"] + wl.planned_sum.to_i
+      end  
+    }
+    return lines_by_streams
+  end
+
 end
 
