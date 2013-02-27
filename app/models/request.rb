@@ -29,7 +29,7 @@ class Request < ActiveRecord::Base
   "WP1.6.5 - QWR Spiders"                               => "Spiders", #NEW
   "WP1.6.6 - QWR QG BRD"                                => "QG BRD", #NEW
   "WP1.6.7 - QWR QG TD"                                 => "QG TD", #NEW
-  "WP1.6.8 - QWR Lessons Learnt"                        => "QG Lessons", #NEW
+  "WP1.6.8 - QWR Lessons Learnt"                        => "Proj. LL", #NEW
   "WP2 - Quality for Maintenance" 	                    => "Maint.",
   "WP3.0 - Old Modeling"                                => "Modeling 0",
   "WP3.1 - Modeling Support"                            => "Modeling 1",
