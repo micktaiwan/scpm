@@ -21,7 +21,7 @@
     <% end %>
   </td>
 
-	<!-- Edit btn / Alert / Backup msg -->
+	<!-- Edit btn / Alert / Backup msg / Project name -->
   <td>
 		<% if wl_line.wl_type != 150 %>
     	<%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>
@@ -29,6 +29,11 @@
     <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <%= wl_line.display_name %>  
+
+    <!-- QS and Spider Previsionals -->
+    <% if wl_line.request and wl_line.request.project %>
+      (QS : <%= wl_line.request.project.calcul_qs_previsional.to_s %> - Spiders : <%= wl_line.request.project.calcul_spider_previsional.to_s %>)
+    <% end %>
   </td>
 
 	<!-- Request -->

@@ -43,10 +43,17 @@ function add(id, nb_months, has_requests) {
     <div id="tabscontent">
       <div id="tabContent1" class="tabContent" style="display:<%= cookies["tab_menu_project_show"]=="1"? "block" : "none"%>;">
           <div>
-            <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
-            <%= link_to('Export All Spiders', {:controller=>'spiders', :action=>'project_spider_export', :project_id=>@project.id}, {:class=>'btnlnk'}) %><br/>
-
+            <div style="float:left;">
+              <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+              <%= link_to('Export All Spiders', {:controller=>'spiders', :action=>'project_spider_export', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
+            </div>
+            <div style="float:Right;">
+              Remaining QS :        <%= @project.calcul_qs_previsional.to_s %><br />
+              Remaining Spiders :   <%= @project.calcul_spider_previsional  %>
+            </div>
             <br/>
+            <br/>
+            
             <div class="milestone_bar">
               <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
             </div>

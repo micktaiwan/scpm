@@ -141,10 +141,14 @@ class ProjectsController < ApplicationController
 
   def update
     project = Project.find(params[:id])
+    old_is_qr_qwr_param = project.is_qr_qwr
     project.update_attributes(params[:project])
     project.propagate_attributes
     project.set_lifecycle_old_param()
-    check_qr_qwr_pdc(project)
+    
+    # QR QWR 
+    check_qr_qwr_pdc(project) #
+    check_qr_qwr_activated(project,old_is_qr_qwr_param)
     redirect_to :action=>:show, :id=>project.id
   end
 
@@ -621,6 +625,17 @@ class ProjectsController < ApplicationController
     redirect_to :action=>:show, :id=>project.id
   end
   
+  # Check if the project is just setted to "is_qr_qwr". If yes, change the comments of milestones
+  def check_qr_qwr_activated(project,old_is_qr_qwr)
+    if project.is_qr_qwr and !old_is_qr_qwr and project.is_running
+      project.milestones.each do |m|
+        m.comments = "Support QR-QWR"
+        m.save
+      end
+    end
+  end
+  
+  # Check if the project is just setted to "is_qr_qwr". If Yes, create a WlLine for the person concerned
   def check_qr_qwr_pdc(project)
     # If the project is qr_qwr activated
     if (project.is_qr_qwr && project.is_running && project.qr_qwr_id != nil && project.qr_qwr_id != 0)

@@ -787,12 +787,50 @@ class Project < ActiveRecord::Base
     true
   end
 
-
   def self.active_projects_by_workstream(ws_name)
     projects = Project.find(:all, :conditions=>["workstream=?", ws_name])
     projects.select { |p| p.active_requests.size > 0}
   end
-
+  
+  # Calculate the previsional number of QS of the project
+  def calcul_qs_previsional
+    # Params
+    last_milestone_date = nil
+    milestones_array = sorted_milestones
+    
+    # Get last milestone date
+    sorted_milestones.reverse!.each do |m|
+      if m.actual_milestone_date
+        last_milestone_date = m.actual_milestone_date
+        break
+      elsif m.milestone_date
+        last_milestone_date = m.milestone_date
+        break
+      end
+    end
+    
+    # Compare with current date
+    today = Date.today
+    if ((last_milestone_date) && (last_milestone_date > today))
+      nb_qs = 12 * (last_milestone_date.year - today.year) + last_milestone_date.month - today.month
+      return nb_qs
+    else
+      return 0
+    end
+  end
+  
+  # Calculate the previsional number of spiders of the projet
+  def calcul_spider_previsional
+    spider_counter = 0
+    # Get nb of milestones not passed
+    sorted_milestones.each do |m|
+      if m.done == 0
+        spider_counter = spider_counter + 1
+      end
+    end
+    return spider_counter
+  end
+  
 private
 
   def excel(a,b)
