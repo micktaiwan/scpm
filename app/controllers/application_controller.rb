@@ -16,11 +16,12 @@ class ApplicationController < ActionController::Base
   before_filter :set_timezone
   filter_parameter_logging :pwd # Scrub sensitive parameters from logs
 
-  WL_LINE_REQUEST   = 100
-  WL_LINE_OTHER     = 200
-  WL_LINE_HOLIDAYS  = 300 # not summed in the planned total
-  WL_LINE_EXCEPT    = 400 # other tasks, not in the current project, not summed in the planned total
-  WL_LINE_QR_QWR    = 150 # WL line linked to a project for QR QWR
+  WL_LINE_REQUEST           = 100
+  WL_LINE_OTHER             = 200
+  WL_LINE_HOLIDAYS          = 300 # not summed in the planned total
+  WL_LINE_EXCEPT            = 400 # other tasks, not in the current project, not summed in the planned total
+  WL_LINE_QR_QWR_QS         = 110 # WL line linked to a project for QR QWR
+  WL_LINE_QR_QWR_SPIDER     = 120 # WL line linked to a project for QR QWR
 
   def set_timezone
     Time.zone = 'Paris'

@@ -56,7 +56,7 @@ th {
   border: 1px solid #DDD;
   }
 
-#workload_table tr:hover {
+#workload_table tr:hover #workload_qs_spider_table tr:hover {
   background: #FFA;
   }
 
@@ -105,7 +105,7 @@ tr.wl_opens {
 .wl_line_400 {
   background: #FDD;
   }
-.wl_line_150 {
+.wl_line_110,.wl_line_120 {
   background: #A8FFE1;
   }
 .wl_line_200 .wl_case input {
@@ -119,7 +119,7 @@ tr.wl_opens {
   color: #A55;
   background: #FEE;
   }
-.wl_line_150 .wl_case input {
+.wl_line_110 .wl_case input,.wl_line_120 .wl_case input {
  color: #3600FF;
  background: #C9FFF9;
  }

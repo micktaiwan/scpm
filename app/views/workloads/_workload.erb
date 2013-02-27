@@ -45,6 +45,7 @@
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
 
+  <!-- WORKLOAD GENERAL -->
   <table id="workload_table">
   <thead>
     <tr>
@@ -137,6 +138,63 @@
   </tbody>
 
   </table>
+
+  <!-- Workload for QS/spiders -->
+  <table id="workload_qs_spider_table">
+  <thead>
+      <tr>
+      <th></th>
+      <th></th>
+      <th class="wl_names"></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <%= render(:partial=>"wl_head", :collection=>@workload.months) %>
+      </tr>
+
+      <tr>
+      <th></th>
+      <th></th>
+      <th class="wl_names"></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
+      </tr>
+
+      <tr>
+      <th></th>
+      <th></th>
+      <th class="wl_names"></th>
+      <th style="min-width:100px;">Status</th>
+      <th style="min-width:45px;">Init.</th>
+      <th style="min-width:45px;">Gain</th>
+      <th style="min-width:45px;">Rem.</th>
+      <th class="wl_total" style="min-width:45px;">Sum</th>
+      <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
+      </tr>
+
+      <tr class="wl_opens">
+      <th></th>
+      <th></th>
+      <th class="wl_names">Nb of worked days</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
+      </tr>
+    </thead>
+    <tbody class="scrollContent">
+    </tbody>
+
+  </table>
+  <!-- CHART -->
   <%= image_tag(@chart_url) if @chart_url %>
 </div>
 <br/>

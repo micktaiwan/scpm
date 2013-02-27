@@ -23,16 +23,21 @@
 
 	<!-- Edit btn / Alert / Backup msg / Project name -->
   <td>
-		<% if wl_line.wl_type != 150 %>
+    <!-- Edit btn -->
+		<% if wl_line.wl_type != 110 and wl_line.wl_type != 120  %>
     	<%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>
 		<% end %>
+    <!-- Alert -->
     <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
+    <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
+    <!-- Name -->
     <%= wl_line.display_name %>  
-
     <!-- QS and Spider Previsionals -->
-    <% if wl_line.request and wl_line.request.project %>
-      (QS : <%= wl_line.request.project.calcul_qs_previsional.to_s %> - Spiders : <%= wl_line.request.project.calcul_spider_previsional.to_s %>)
+    <% if (wl_line.wl_type == 110 and wl_line.project) %>
+      (QS : <%= wl_line.project.calcul_qs_previsional.to_s %>)
+    <% elsif wl_line.wl_type == 120 and wl_line.project %>
+      (Spiders : <%= wl_line.project.calcul_spider_previsional.to_s %>)
     <% end %>
   </td>
 
@@ -41,8 +46,8 @@
 		<% if wl_line.request %><%= wl_line.request.status %><% end %>
 	</td>
 	
-	<!-- Sum if wl_type != 150 (not qr_qwr wl line) -->
-	<% if wl_line.wl_type != 150 %>
+	<!-- Sum if wl_type != 110/120 (not qr_qwr wl line) -->
+	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
 		<td><%= @workload.line_sums[wl_line.id][:init] %></td>
   	<td><%= @workload.line_sums[wl_line.id][:balance] %></td>
   	<td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% end %>><%= remaining %></td>

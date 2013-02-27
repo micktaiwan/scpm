@@ -59,6 +59,7 @@ function change_workload(person_id) {
 
 function set_fixed_header() {
   $j('#workload_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
+  $j('#workload_qs_spider_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
   }
 
 function display_milestones(evt,text) {
