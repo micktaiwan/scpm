@@ -144,6 +144,19 @@ tr.wl_opens {
   background: #AAF;
   }
 
+/* TABLE WORKLOAD BY STREAM FOR QS/SPIDER */
+table.workload_qs_spider_table th {
+  background-color:#FF9000;
+  color:white;
+}
+table.workload_qs_spider_table tr.stream_line {
+  background-color:#5100FF;
+  color:white;
+}
+table.workload_qs_spider_table td.load_values {
+  font-size:18px;
+}
+
 /* STATUSES AVAILABILITY */
 #availabilities_legends_table {
 	float:right;
