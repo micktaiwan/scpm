@@ -217,10 +217,12 @@ class Request < ActiveRecord::Base
     [1.75,	2.5,	3.375],
     [2.5,	3.375,	4.25],
     # WP 1.3
+    [0, 0, 0], # no M1-M3
     [2.125,	3,	3.875], #16
     [0.625,	0.875,	1.25],
     [1.75,	2.375,	3.625],
     # WP 1.4
+    [0, 0, 0], # no M1-M3
     [5.375,	6.875,	9.25], #19
     [1.125,	2,	2.75],
     [1.75,	2.5,	3.5],
@@ -852,6 +854,8 @@ class Request < ActiveRecord::Base
 			  counterLogObj.counter_value = newCounterValue
 		end
 		
+    # Rails.logger.info("----->" + self.status.to_s)
+    # Rails.logger.info("----->" + self.resolution)
 		if self.status == "to be validated" or self.status == "removed" or self.status == "cancelled" or self.status == "feedback" or self.status == "acknowledged" or self.status == "contre_visite" or self.resolution == "not started" or self.resolution == "planned"
 		  counterLogObj.validity = false
 		else
