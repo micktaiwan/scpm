@@ -27,7 +27,7 @@
 		# Check if an objet is already 
 		counterLogObj = import.counter_log #counterLogObj = CounterLog.find_by_request_id(import.id)
 		if (counterLogObj) 
-			concat "Counter value of this ticket is saved for a value of " + counterLogObj.counter_value.to_s
+			concat "Counter value of this ticket is saved for a value of " + counterLogObj.counter_value.to_s + ". Validity = " + counterLogObj.validity.to_s
 		else
 			concat "Counter value of this ticket isn't saved."
 		end

@@ -83,31 +83,29 @@ class StreamsController < ApplicationController
     request.save
     
     # CHECK HISTORY_COUNT WITHOUT REQUEST
-    history_count_no_request = nil
-    if (WORKPACKAGE_QS == request.work_package[0..6])
-      history_count_no_request = HistoryCounter.find(:all,
-            :conditions=>["stream_id = ? and request_id IS NULL and concerned_status_id IS NOT NULL",stream.id])
-    elsif (WORKPACKAGE_SPIDERS == request.work_package[0..6])
-      history_count_no_request = HistoryCounter.find(:all,
-            :conditions=>["stream_id = ? and request_id IS NULL and concerned_spider_id IS NOT NULL",stream.id])
-    end
-    
-    if (WORKPACKAGE_COUNTERS.include?(request.work_package[0..6]))
-      count = 0
-      total_count = CounterBaseValue.first(
-      :conditions => ["complexity = ? and sdp_iteration = ? and workpackage = ?",request.complexity,request.sdpiteration,request.work_package]).value
-		
-      history_count_no_request.each do |hc_no_req|
-        if count < total_count
-          hc_no_req.request_id = request.id
-          hc_no_req.save
-          count = count + 1
-        end
+    if request.counter_log.validity == 1
+      history_count_no_request = nil
+      if (WORKPACKAGE_QS == request.work_package[0..6])
+        history_count_no_request = HistoryCounter.find(:all, :conditions=>["stream_id = ? and request_id IS NULL and concerned_status_id IS NOT NULL",stream.id])
+      elsif (WORKPACKAGE_SPIDERS == request.work_package[0..6])
+        history_count_no_request = HistoryCounter.find(:all, :conditions=>["stream_id = ? and request_id IS NULL and concerned_spider_id IS NOT NULL",stream.id])
       end
-    
-      # TEXT RESULT
-      if count > 0
-        str = str+" and "+count.to_s+" ticket already used."
+      
+      if (WORKPACKAGE_COUNTERS.include?(request.work_package[0..6]))
+        count       = 0
+        total_count = CounterBaseValue.first(:conditions => ["complexity = ? and sdp_iteration = ? and workpackage = ?",request.complexity,request.sdpiteration,request.work_package]).value
+        history_count_no_request.each do |hc_no_req|
+          if count < total_count
+            hc_no_req.request_id = request.id
+            hc_no_req.save
+            count = count + 1
+          end
+        end
+        # TEXT RESULT
+        if count > 0
+          str = str+" and "+count.to_s+" ticket already used."
+        end
+        
       end
     end
     

@@ -847,19 +847,17 @@ class Request < ActiveRecord::Base
 	    counterLogObj.request_id     = self.id
 	    counterLogObj.import_date    = DateTime.current
 	    counterLogObj.counter_value  = newCounterValue
-	    counterLogObj.validity       = 1
 	  # Update counter_log
 		elsif(counterLogObj.counter_value != newCounterValue)
 			  counterLogObj.counter_value = newCounterValue
 		end
 		
-		if self.status == "To be validated"
+		if self.status == "to be validated" or self.status == "removed" or self.status == "cancelled" or self.status == "feedback" or self.status == "acknowledged" or self.status == "contre_visite"
 		  counterLogObj.validity = false
 		else
 		  counterLogObj.validity = true
 		end
 		counterLogObj.save
-		# TODO : Manage the validity !!!!!
   end
 
 private

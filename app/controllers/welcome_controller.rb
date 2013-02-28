@@ -33,13 +33,14 @@ class WelcomeController < ApplicationController
   end
 
   def upload
-    post = params[:upload]
-    name =  post['datafile'].original_filename
+    post      = params[:upload]
+    name      =  post['datafile'].original_filename
     directory = "public/data"
-    path = File.join(directory, name)
+    path      = File.join(directory, name)
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
-    report = CvsReport.new(path)
+    report    = CvsReport.new(path)
     report.parse
+
     # transform the Report into a Request
     report.requests.each { |req|
       # get the id if it exist, else create it
@@ -48,8 +49,9 @@ class WelcomeController < ApplicationController
       r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
       #r.deploy_checklists if r.status == 'assigned' and r.status_changed?
       r.save
+      
       # Create or update the counter log of this request
-      if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6])
+      if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6]
         r.update_ticket_counters
       end
     }
