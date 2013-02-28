@@ -854,12 +854,10 @@ class Request < ActiveRecord::Base
 			  counterLogObj.counter_value = newCounterValue
 		end
 		
-    # Rails.logger.info("----->" + self.status.to_s)
-    # Rails.logger.info("----->" + self.resolution)
     blacklist_status = ["to be validated","removed","cancelled","feedback","acknowledged","contre_visite"]
     blacklist_resolution = ["not started", "planned"]
 		# if self.status == "to be validated" or self.status == "removed" or self.status == "cancelled" or self.status == "feedback" or self.status == "acknowledged" or self.status == "contre_visite" or self.resolution.to_s == "not started" or self.resolution.to_s == "planned"
-		if blacklist_status.to_s.include?(self.status) or blacklist_resolution.to_s.include?(self.resolution) 
+		if blacklist_resolution.to_s.include?(self.resolution) or blacklist_status.to_s.include?(self.status)
       counterLogObj.validity = false
 		else
 		  counterLogObj.validity = true
