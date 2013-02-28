@@ -852,7 +852,7 @@ class Request < ActiveRecord::Base
 			  counterLogObj.counter_value = newCounterValue
 		end
 		
-		if self.status == "to be validated" or self.status == "removed" or self.status == "cancelled" or self.status == "feedback" or self.status == "acknowledged" or self.status == "contre_visite"
+		if self.status == "to be validated" or self.status == "removed" or self.status == "cancelled" or self.status == "feedback" or self.status == "acknowledged" or self.status == "contre_visite" or self.resolution == "not started" or self.resolution == "planned"
 		  counterLogObj.validity = false
 		else
 		  counterLogObj.validity = true
