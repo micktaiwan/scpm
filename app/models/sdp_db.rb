@@ -7,7 +7,7 @@ module SdpDB
     'Provisions'			   =>[32332,31377],
     'WP1.1 - Quality Control'  =>[32317,31244],
     'WP1.2 - Quality Assurance'=>[32318,31244],
-    'WP1.3 - Quality Control + BAT'=>[32319,31244],
+    'WP1.3 - BAT'=>[32319,31244],
     'WP1.4 - Quality Assurance + BAT'=>[29634,31244], # Not used anymore # ?
     'WP1.4 - Agility'          =>[32488,31244], #NEW
     'WP1.5 - SQR'              =>[32497,31244], #NEW
@@ -75,6 +75,9 @@ module SdpDB
       ['M5-M10','WP1.2 - Quality Assurance']=>142223,
       ['Post-M10','WP1.2 - Quality Assurance']=>142224,
       # WP 1.3
+      ['M3-M5','WP1.3 - BAT']=>145689,
+      ['M5-M10','WP1.3 - BAT']=>145690,
+      ['Post-M10','WP1.3 - BAT']=>145691,
       # WP 1.4
       ['M3-M5','WP1.4 - Agility']=>143003,
       ['M5-M10','WP1.4 - Agility']=>143004,
