@@ -140,43 +140,48 @@
   </table>
 
   <div>
-  <!-- CHART -->
-  <div style="position:absolute;"><%= image_tag(@chart_url) if @chart_url %></div>
-  <!-- Workload for QS/spiders -->
-  <table style="float:right;" id="workload_qs_spider_table">
-    <thead>
-      <tr>
-      <th style="background-color:#FF9000;color:white;">Name      </th>
-      <th style="background-color:#FF9000;color:white;">Previsonal</th>
-      <th style="background-color:#FF9000;color:white;">Imputed   </th>
-      </tr>
-    </thead>
-    <tbody>
-      <% streams_with_wl = @workload.get_qr_qwr_wl_lines_by_streams %>
+    <!-- CHART -->
+    <div style="position:absolute;"><%= image_tag(@chart_url) if @chart_url %></div>
 
-      <% # Each Streams %>
-      <% streams_with_wl.each do |key_stream, hash_stream| %>
-        <tr style="width:140px;">
-          <td style="background-color:#5100FF;color:white;"><%= Stream.find(key_stream).name %></td>
-          <td style="background-color:#5100FF;color:white;font-size:18px;">
-            <%= hash_stream["prev"].to_s %>    
-          </td>
-          <td style="background-color:#5100FF;color:white;font-size:18px;">
-            <%= hash_stream["sum"].to_s %>     
-          </td>
+    <!-- Workload for QS/spiders -->
+    <table style="float:right;" id="workload_qs_spider_table">
+      <!-- Header -->
+      <thead>
+        <tr>
+        <th style="background-color:#FF9000;color:white;">Name      </th>
+        <th style="background-color:#FF9000;color:white;">Previsonal</th>
+        <th style="background-color:#FF9000;color:white;">Imputed   </th>
         </tr>
-        <tr style="width:40px;">
-          <td>QS                                                        </td>
-          <td style="font-size:18px;"><%= hash_stream["qs_prev"].to_s %></td>
-          <td style="font-size:18px;"><%= hash_stream["qs_sum"].to_s  %></td>
-        </tr>
-        <tr style="width:40px;">
-          <td>Spider                                                        </td>
-          <td style="font-size:18px;"><%= hash_stream["spider_prev"].to_s %></td>
-          <td style="font-size:18px;"><%= hash_stream["spider_sum"].to_s  %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>  </div>
+      </thead>
+      <!-- Body -->
+      <tbody>
+        <% # Get all data (Previsonal and imputation) for all Streams (General + Spider + QS) %>
+        <% streams_with_wl = @workload.get_qr_qwr_wl_lines_by_streams %>
+
+        <% # Each Streams %>
+        <% streams_with_wl.each do |key_stream, hash_stream| %>
+          <!-- Streams values -->
+          <tr style="width:140px;">
+            <td style="background-color:#5100FF;color:white;"><%= Stream.find(key_stream).name %></td>
+            <td style="background-color:#5100FF;color:white;font-size:18px;"><%= hash_stream["prev"].to_s if hash_stream["prev"].to_f > 0 %></td>
+            <td style="background-color:#5100FF;color:white;font-size:18px;"><%= hash_stream["sum"].to_s if hash_stream["sum"].to_f > 0 %>  </td>
+          </tr>
+          <!-- QS Values -->
+          <tr style="width:40px;">
+            <td>QS</td>
+            <td style="font-size:18px;"><%= hash_stream["qs_prev"].to_s if hash_stream["qs_prev"].to_f > 0 %></td>
+            <td style="font-size:18px;"><%= hash_stream["qs_sum"].to_s  if hash_stream["qs_sum"].to_f > 0 %></td>
+          </tr>
+          <!-- Spider Values -->
+          <tr style="width:40px;">
+            <td>Spider</td>
+            <td style="font-size:18px;"><%= hash_stream["spider_prev"].to_s if hash_stream["spider_prev"].to_f > 0 %></td>
+            <td style="font-size:18px;"><%= hash_stream["spider_sum"].to_s  if hash_stream["spider_sum"].to_f > 0 %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>  
+  </div>
+  
 </div>
 <br/>

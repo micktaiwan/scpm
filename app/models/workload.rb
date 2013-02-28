@@ -164,6 +164,13 @@ class Workload
     @sdp_remaining_total - @planned_total
   end
 
+  # Will generate a hash of hash following this format :
+  # lines_by_stream[stream.id]["prev"]        = Previsional total (QS + Spider) for this stream
+  # lines_by_stream[stream.id]["sum"]         = Total of imputation (QS + Spider) for this stream
+  # lines_by_stream[stream.id]["qs_prev"]     = Previsional load for QS of this stream
+  # lines_by_stream[stream.id]["qs_sum"]      = Total of imputation for QS of this stream
+  # lines_by_stream[stream.id]["spider_prev"] = Previsional load for Spider of this stream
+  # lines_by_stream[stream.id]["spider_sum"]  = Total of imputation for Spider of this stream   
   def get_qr_qwr_wl_lines_by_streams
     lines_by_streams = Hash.new
     # Create arrays for each stream
@@ -182,19 +189,17 @@ class Workload
       if wl.project
         # Stream
         s = Stream.find_with_workstream(wl.project.workstream)
-        # WL Line
-        # lines_by_streams[s.id] << wl
         # Previsional
         if(wl.wl_type == 110)
-          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]    + wl.project.calcul_qs_previsional.to_i
-          lines_by_streams[s.id]["qs_prev"]     = lines_by_streams[s.id]["qs_prev"] + wl.project.calcul_qs_previsional.to_i
-          lines_by_streams[s.id]["qs_sum"]      = lines_by_streams[s.id]["qs_sum"]  + wl.planned_sum.to_i
+          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]    + wl.project.calcul_qs_previsional.to_f
+          lines_by_streams[s.id]["qs_prev"]     = lines_by_streams[s.id]["qs_prev"] + wl.project.calcul_qs_previsional.to_f
+          lines_by_streams[s.id]["qs_sum"]      = lines_by_streams[s.id]["qs_sum"]  + wl.planned_sum.to_f
         elsif(wl.wl_type == 120)
-          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]        + wl.project.calcul_spider_previsional.to_i
-          lines_by_streams[s.id]["spider_prev"] = lines_by_streams[s.id]["spider_prev"] + wl.project.calcul_spider_previsional.to_i
-          lines_by_streams[s.id]["spider_sum"]  = lines_by_streams[s.id]["spider_sum"]  + wl.planned_sum.to_i
+          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]        + wl.project.calcul_spider_previsional.to_f
+          lines_by_streams[s.id]["spider_prev"] = lines_by_streams[s.id]["spider_prev"] + wl.project.calcul_spider_previsional.to_f
+          lines_by_streams[s.id]["spider_sum"]  = lines_by_streams[s.id]["spider_sum"]  + wl.planned_sum.to_f
         end
-        lines_by_streams[s.id]["sum"]           = lines_by_streams[s.id]["sum"] + wl.planned_sum.to_i
+        lines_by_streams[s.id]["sum"]           = lines_by_streams[s.id]["sum"] + wl.planned_sum.to_f
       end  
     }
     return lines_by_streams
