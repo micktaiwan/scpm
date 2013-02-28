@@ -392,18 +392,49 @@ class WorkloadsController < ApplicationController
 
   def transfert
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    @lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']],
+    # WL Lines without project
+    @lines = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+    # WL lines by project
+    temp_lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
+      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+    @lines_qr_qwr = Hash.new
+    temp_lines_qr_qwr.each do |wl| 
+        @lines_qr_qwr[wl.project_id] = [wl]
+    end
+    @owner_id = session['workload_person_id']
   end
 
   def do_transfert
-    lines = params['lines'] # array of ids (as strings)
-    p_id  = params['person_id']
-    lines.each { |l_id|
-      l = WlLine.find(l_id.to_i)
-      l.person_id = p_id.to_i
-      l.save
+    # Params
+    lines        = params['lines'] # array of ids (as strings)
+    lines_qr_qwr = params['lines_qr_qwr'] # array of ids of wl lines qr qwr (as strings)
+    p_id         = params['person_id']
+    owner_id     = params['owner_id']
+
+    # Lines to transfert
+    if lines
+      lines.each { |l_id|
+        l = WlLine.find(l_id.to_i)
+        l.person_id = p_id.to_i
+        l.save
       }
+    end
+
+    # Lines of qr_qwr to transfert
+    if lines_qr_qwr
+      lines_qr_qwr.each { |l_id|
+        # Find all lines (two line by project qr_qwr)
+        l = WlLine.find(l_id.to_i)
+        WlLine.find(:all,:conditions=>["person_id = ? and project_id = ?",owner_id.to_s, l.project_id.to_s]).each { |line_by_project|
+          line_by_project.person_id         = p_id.to_i
+          line_by_project.project.qr_qwr_id = p_id.to_i
+          line_by_project.save
+          line_by_project.project.save
+        }
+      }
+    end
+
     redirect_to(:action=>"transfert")
   end
 

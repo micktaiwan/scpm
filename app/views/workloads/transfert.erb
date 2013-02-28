@@ -2,10 +2,20 @@
 <h2>Workload line transfert</h2>
 
 <% form_tag(:action=>'do_transfert') do %>
+<%= hidden_field_tag 'owner_id', @owner_id %>
+
 <h3>Select lines to transfert</h3>
-  <ul>
-    <%= render(:partial=>"transfert_line", :collection=>@lines, :as=>:l) %>
-  </ul>
+<ul>
+  <%= render(:partial=>"transfert_line", :collection=>@lines, :as=>:l, :locals => { :is_qr_qwr => false }) %>
+</ul>
+
+<h3>Select QR/QWR lines to transfert</h3>
+<% @lines_qr_qwr.each do |key_project, hash_project| %>
+	<ul>
+		<%= render(:partial=>"transfert_line", :collection=>hash_project, :as=>:l, :locals => { :is_qr_qwr => true }) %>
+	</ul>
+<% end %>
+
 <h3>Person to transfert lines to</h3>
   <%= select_tag('person_id', options_for_select(@people)) %>
   <%= submit_tag('Transfer') %>
