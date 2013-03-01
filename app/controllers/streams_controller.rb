@@ -83,7 +83,7 @@ class StreamsController < ApplicationController
     request.save
     
     # CHECK HISTORY_COUNT WITHOUT REQUEST
-    if request.counter_log.validity == 1
+    if request.counter_log.validity
       history_count_no_request = nil
       if (WORKPACKAGE_QS == request.work_package[0..6])
         history_count_no_request = HistoryCounter.find(:all, :conditions=>["stream_id = ? and request_id IS NULL and concerned_status_id IS NOT NULL",stream.id])

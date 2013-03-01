@@ -69,7 +69,7 @@ class Stream < ActiveRecord::Base
   def get_qs_counter
     total = 0
     self.requests.sort_by{|r| r.start_date }.each { |r|
-      if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity == 1))
+      if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity))
          total = total + r.counter_log.counter_value
       end
     }
@@ -79,7 +79,7 @@ class Stream < ActiveRecord::Base
   def get_spider_counter
     total = 0
     self.requests.sort_by{|r| r.start_date }.each { |r|
-      if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity == 1))
+      if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity))
          total = total + r.counter_log.counter_value
       end
     }
@@ -146,7 +146,7 @@ class Stream < ActiveRecord::Base
     
     # loop on requests of this stream by date 
     self.requests.sort_by{|r| r.start_date }.each { |r|
-       if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity == 1))
+       if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity))
           sum_spider_count_for_request = sum_spider_count_for_request + r.counter_log.counter_value
           last_request = r
           if (next_spider_counter_incrementation <= sum_spider_count_for_request)
@@ -172,7 +172,7 @@ class Stream < ActiveRecord::Base
     
     # loop on requests of this stream by date  
     self.requests.sort_by{|r| r.start_date }.each { |r|
-       if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity == 1))
+       if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity))
           sum_qs_count_for_request = sum_qs_count_for_request + r.counter_log.counter_value
           last_request = r
           if (next_qs_counter_incrementation <= sum_qs_count_for_request)
