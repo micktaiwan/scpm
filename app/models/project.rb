@@ -10,9 +10,6 @@ class Project < ActiveRecord::Base
   LBIPgx      = 4
   LBIPpgx     = 5
   Suite       = 6
-  
-  SpiderLoad  = 0.375
-  QsLoad      = 0.375
 
   belongs_to  :project
   belongs_to  :supervisor,  :class_name=>"Person"
@@ -816,7 +813,7 @@ class Project < ActiveRecord::Base
     today = Date.today
     if ((last_milestone_date) && (last_milestone_date > today))
       nb_qs = 12 * (last_milestone_date.year - today.year) + last_milestone_date.month - today.month
-      return (nb_qs * QsLoad)
+      return nb_qs
     else
       return 0
     end
@@ -831,9 +828,13 @@ class Project < ActiveRecord::Base
         spider_counter = spider_counter + 1
       end
     end
-    return (spider_counter * SpiderLoad)
+    return spider_counter
   end
   
+  def qs_load
+  end
+  def spider_load
+  end
 private
 
   def excel(a,b)
