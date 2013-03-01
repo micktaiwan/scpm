@@ -6,8 +6,9 @@
 <!-- WITHOUT REQUESTS -->
 <h2>Spider Counters not linked with request</h2>
 <table class="history_counts_table" >
-<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td></tr>
-<% @spider_counter_no_request.each do |sc_no_req| %>
+<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Request found</td></tr>
+<% @spider_counter_no_request.each do |spider_array| %>
+	<% sc_no_req = spider_array["object"] %>
 	<tr>
 		<td><%= sc_no_req.author.name %></td>
 		<td><%= sc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
@@ -18,14 +19,26 @@
 		<% end %>
 		
 		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc_no_req.spider.project.id}) %></td>
+		<td style="width:250px;" id=<%="req_#{sc_no_req.id}" %>>
+			<% if spider_array["request"] %> 
+				<%= link_to('Add this counter to request ' + spider_array["request"].request_id ,
+							{ :controller=>'streams', 
+							:action=>'link_old_counter', 
+							:history_counter_id => sc_no_req.id,
+							:request_id=>spider_array["request"].id}) %>
+			<% else %>
+				No request 
+			<% end %>
+		</td>
 	</tr>
 <% end %>
 </table>
 
 <h2>QS Counters not linked with request</h2>
 <table class="history_counts_table" >
-<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td></tr>
-<% @qs_counter_no_request.each do |qsc_no_req| %>
+<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td><td>Request found</td></tr>
+<% @qs_counter_no_request.each do |qs_array| %>
+	<% qsc_no_req = qs_array["object"] %>
 	<tr>
 		<td><%= qsc_no_req.author.name %></td>
 		<td><%= qsc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
@@ -37,6 +50,18 @@
 		<td>
 			<%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc_no_req.status.project.id}) %>
 		</td>
-		<td><%=html_status(qsc_no_req.status.status)%></td>	</tr>
+		<td><%=html_status(qsc_no_req.status.status)%></td>	
+		<td style="width:250px;"  id=<%= "req_#{qsc_no_req.id}"%>>
+			<% if qs_array["request"] %> 
+				<%= link_to('Add this counter to request ' + qs_array["request"].request_id ,
+									{ :controller=>'streams', 
+									:action=>'link_old_counter', 
+									:history_counter_id => qsc_no_req.id,
+									:request_id=>qs_array["request"].id}) %>
+			<% else %>
+				No request 
+			<% end %>
+
+	</tr>
 <% end %>
 </table>
