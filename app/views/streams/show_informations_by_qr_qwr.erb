@@ -24,6 +24,18 @@
 					<span class="alert"> Not enough QS tickets </span>
 				<% end %>
 			</li>
+			<!-- QS/spiders compare -->
+			<li>
+				<span class="bold">Warnings</span> :
+				<% if hash_by_qr_qwr["qs_comp"].to_i != 0 %>
+					<br />
+					Remaining QS are different to previsionnal QS
+				<% end %>
+				<% if hash_by_qr_qwr["spider_comp"].to_i != 0 %>
+					<br />
+					Remaining Spiders are different to previsionnal Spiders
+				<% end %>
+			<li>
 		</ul>
 	</div>
 <% end %>

@@ -105,6 +105,11 @@ class StreamsController < ApplicationController
         Request.find(:all,:include=>[:counter_log],:conditions => ["work_package = ? and assigned_to = ? and is_stream = 'Yes' and stream_id = ? and counter_logs.validity = 1", WORKPACKAGE_SPIDERS_RMT_NAME, qr.rmt_user, @stream.id]).each do |req|
           qr_qwr_data["spider_y"] = qr_qwr_data["spider_y"].to_i + req.counter_log.counter_value.to_i
         end
+
+        # Compare
+        qr_qwr_data["qs_comp"]     = (qr_qwr_data["qs_y"].to_i     - qr_qwr_data["qs_x"].to_i)      - qr_qwr_data["total_qs_prev"].to_i
+        qr_qwr_data["spider_comp"] = (qr_qwr_data["spider_y"].to_i - qr_qwr_data["spider-_x"].to_i) - qr_qwr_data["total_spider_prev"].to_i
+
         @informations_by_qr_qwr << qr_qwr_data
       end
     end
