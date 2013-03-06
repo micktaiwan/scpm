@@ -439,34 +439,40 @@ class WorkloadsController < ApplicationController
   end
 
   def duplicate
-    @months = []
-    @weeks = []
+    @months   = []
+    @weeks    = []
     @wl_weeks = []
-    @months = params[:months]
-    @weeks = params[:weeks]
+    @months   = params[:months]
+    @weeks    = params[:weeks]
     @wl_weeks = params[:wl_weeks]
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    @lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']],
+    @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    
+    # WL lines without project_id
+    @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+
+    # WL lines by project
+    @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
+      :include=>["request","sdp_task","person"], :order=>"project_id,wl_type,name")
   end
 
   def do_duplication
-    lines_loads = params['lines_loads'] # array of lineId_loadId
+    lines_loads         = params['lines_loads'] # array of lineId_loadId
     p_id  = params['person_id']
 
     lines_loads.each { |l_l|
       # Wl_line and Wl_load selected
       l_l_splited = l_l.split("_")
-      line_id = l_l_splited[0]
-      load_id = l_l_splited[1]
-      line = WlLine.find(line_id.to_i)
-      load = WlLoad.find(load_id.to_i)
+      line_id     = l_l_splited[0]
+      load_id     = l_l_splited[1]
+      line        = WlLine.find(line_id.to_i)
+      load        = WlLoad.find(load_id.to_i)
 
       # Check if the line to duplicate isn't already duplicated from another line
       # If Line to duplicate is already duplicate, so we take the first line as parent_id
       parent_id = line.id
       if line.parent_line
-        parent = WlLine.find(line.parent_line)
+        parent    = WlLine.find(line.parent_line)
         parent_id = parent.id
       end
 
@@ -482,11 +488,11 @@ class WorkloadsController < ApplicationController
 
       # If the person selected has not already a duplicate, we create it
       if duplicate == 0
-        new_line = line.clone
+        new_line             = line.clone
         new_line.parent_line = parent_id
-        new_line.person_id = p_id
+        new_line.person_id   = p_id
         new_line.save
-        duplicate = new_line.id
+        duplicate            = new_line.id
       end
 
       # Change wl_line of load selected
@@ -496,12 +502,12 @@ class WorkloadsController < ApplicationController
       # Project
       request = Request.find(line.request_id) if line.request_id
       if request != nil
-        project_id = request.project_id
-        project_person = ProjectPerson.first(:conditions => ["project_id = ? and person_id = ?", project_id, p_id]) if project_id
+        project_id      = request.project_id
+        project_person  = ProjectPerson.first(:conditions => ["project_id = ? and person_id = ?", project_id, p_id]) if project_id
         if project_person == nil
-          project_person = ProjectPerson.new
+          project_person            = ProjectPerson.new
           project_person.project_id = project_id
-          project_person.person_id = p_id
+          project_person.person_id  = p_id
           project_person.save
         end
       end

@@ -2,22 +2,37 @@
 <h2>Workload line backup(duplicate)</h2>
 
 <% form_tag(:action=>'do_duplication') do %>
-<h3>Select lines to duplicate</h3>
-<table>
-  <tr class="duplicate_tr_header">
-    <th></th>
-    <%= render(:partial=>"wl_head", :collection=>@months) %>
-  </tr>
-  <tr class="duplicate_tr_header">
-    <th></th>
-    <%= render(:partial=>"wl_head", :collection=>@weeks) %>
-  </tr>
-  <tr>
-    <%= render(:partial=>"duplicate_line", :collection=>@lines, :as=>:l, :locals => { :wl_weeks => @wl_weeks }) %>
-  <tr>
-</table>
+  <h3>Select lines to duplicate</h3>
+  <table>
+    <tr class="duplicate_tr_header">
+      <th></th>
+      <%= render(:partial=>"wl_head", :collection=>@months) %>
+    </tr>
+    <tr class="duplicate_tr_header">
+      <th></th>
+      <%= render(:partial=>"wl_head", :collection=>@weeks) %>
+    </tr>
+    <tr>
+      <%= render(:partial=>"duplicate_line", :collection=>@lines, :as=>:l, :locals => { :wl_weeks => @wl_weeks, :is_qr_qwr => false }) %>
+    <tr>
+  </table>
 
-<h3>Person to backup lines to</h3>
+  <h3>Select lines QR/QWR to duplicate</h3>
+  <table>
+    <tr class="duplicate_tr_header">
+      <th></th>
+      <%= render(:partial=>"wl_head", :collection=>@months) %>
+    </tr>
+    <tr class="duplicate_tr_header">
+      <th></th>
+      <%= render(:partial=>"wl_head", :collection=>@weeks) %>
+    </tr>
+    <tr>
+      <%= render(:partial=>"duplicate_line", :collection=>@lines_qr_qwr, :as=>:l, :locals => { :wl_weeks => @wl_weeks, :is_qr_qwr => true }) %>
+    <tr>
+  </table>
+
+  <h3>Person to backup lines to</h3>
   <%= select_tag('person_id', options_for_select(@people)) %>
   <%= submit_tag('Backup') %>
 <% end %>
