@@ -19,6 +19,9 @@
     <%= link_to_remote(image_tag('cut.png'), :url=>{:controller=>'projects', :action=>'cut', :id=>stream_project.id}) %>
     <%= link_to_remote(image_tag('paste.png'), :url=>{:controller=>'projects',:action=>'paste', :id=>stream_project.id}) %>
     <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'projects',:action=>'destroy', :id=>stream_project.id}, :confirm=>"Sure?", :success=>"$('p_#{stream_project.id}').hide();", :failure=>"alert(request.responseText)") %>
+
+  <% end %>
+  <% if current_user.has_role?('QR') %>
     <%= link_to_remote(image_tag('project_pause.png'), :url=>{:controller=>'projects',:action=>'stop', :id=>stream_project.id}, :confirm=>"Sure?", :success=>"$('p_#{stream_project.id}').hide();", :failure=>"alert(request.responseText)") %>
 
     <span class="project_status_<%=status_html%>">
