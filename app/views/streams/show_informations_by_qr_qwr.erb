@@ -1,0 +1,29 @@
+<%= render(:file=>"streams/menu") %>
+<% @informations_by_qr_qwr.each do |hash_by_qr_qwr| %>
+	<div class='status_explanation'>
+		<div class='status_date'><%= hash_by_qr_qwr["name"] %></div>
+		<ul>
+			<li><span class="bold">Project number</span> 					: <%= hash_by_qr_qwr["nbProjects"].to_s %></li>
+			<li><span class="bold">Total QS Prev</span> 					: <%= hash_by_qr_qwr["total_qs_prev"].to_s %></li>
+			<li><span class="bold">Total Spider Prev</span> 				: <%= hash_by_qr_qwr["total_spider_prev"].to_s %></li>
+			<!-- QS Counters -->
+			<li>
+				<span class="bold">QS (realised/available)</span> 			: <%= hash_by_qr_qwr["qs_x"].to_s %> / <%= hash_by_qr_qwr["qs_y"].to_s %>
+				<% if ((hash_by_qr_qwr["qs_x"].to_i + 5 >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
+					<span class="warning"> Not enough QS tickets </span>
+				<% elsif ((hash_by_qr_qwr["qs_x"].to_i  >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
+					<span class="alert"> Not enough QS tickets </span>
+				<% end %>
+			</li>
+			<!-- Spiders Counters -->
+			<li>
+				<span class="bold">Spiders (realised/available)</span>		: <%= hash_by_qr_qwr["spider_x"].to_s %> / <%= hash_by_qr_qwr["spider_y"].to_s %>
+				<% if ((hash_by_qr_qwr["spider_x"].to_i + 5 >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
+					<span class="warning"> Not enough QS tickets </span>
+				<% elsif ((hash_by_qr_qwr["spider_x"].to_i  >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
+					<span class="alert"> Not enough QS tickets </span>
+				<% end %>
+			</li>
+		</ul>
+	</div>
+<% end %>
