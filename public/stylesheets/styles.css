@@ -607,3 +607,13 @@ table.sortable .header  {
 .ci_late {
   color:red;
 }
+
+/* STREAM */
+#stream_project_creation{
+  height: 200px;
+}
+#stream_project_creation div{
+  width: 400px;
+  float: left;
+  clear: none; 
+}

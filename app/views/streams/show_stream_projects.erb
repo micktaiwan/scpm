@@ -7,14 +7,21 @@ end
 %>
 
 <h2>Create new project</h2>
-<% form_tag(:action=>'create_project') do %>
-  <%= hidden_field_tag('id', @stream.id) %>
-  <p><span class="bold">Summary ([X][X][X]):</span></p>
-	<p><%= text_area_tag  'summary' %></p>
-  <p><span class="bold">Project Name :</span></p>
-	<p><%= text_field_tag 'project_name' %></p>
-  <%= submit_tag('Create this project for the current stream') %>
-<% end %>
+<div id="stream_project_creation">
+	<div>
+		<% form_tag(:action=>'create_project') do %>
+		  <%= hidden_field_tag('id', @stream.id) %>
+		  <p><span class="bold">Summary ([X][X][X]):</span></p>
+			<p><%= text_area_tag  'summary' %></p>
+		  <p><span class="bold">Project Name :</span></p>
+			<p><%= text_field_tag 'project_name' %></p>
+		  <%= submit_tag('Create this project for the current stream') %>
+		<% end %>
+	</div>
+	<div>
+		<p> Message ici</p>
+	</div>
+</div>
 
 <h2>Projects</h2>
 <ul>
