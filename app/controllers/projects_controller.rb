@@ -126,10 +126,11 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    id = params[:id]
-    @project = Project.find(id)
+    id           = params[:id]
+    @project     = Project.find(id)
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")    
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+    @suiteTags   = SuiteTag.find(:all)
   end
 
   def edit_status

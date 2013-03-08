@@ -1,0 +1,5 @@
+
+<%= link_to("New Suite Tag", {:controller=>:suite_tags,:action=>:new}, {:class=>'btnlnk'}) %><br /><br />
+<% @suiteTags.each do |st| %>
+	<p><%= st.name %> - <%= link_to("Delete",{:controller=>:suite_tags,:action=>:delete, :id=>st.id}, {:class=>'btnlnk'}) %> - <%= link_to("Edit",{:controller=>:suite_tags,:action=>:edit, :id=>st.id}, {:class=>'btnlnk'}) %></p>
+<% end %>

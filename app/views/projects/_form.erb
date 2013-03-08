@@ -1,20 +1,21 @@
 <table class="edit">
 <tr><td>Project</td><td><%= text_field :project, :name %></td></tr>
 <tr><td>Workstream</td><td><%= text_field :project, :workstream %></td></tr>
-<td>BRN</td><td><%= text_field :project, :brn %></td></tr>
-<td>Coordinator</td><td><%= text_field :project, :coordinator %></td></tr>
-<td>PM</td><td><%= text_field :project, :pm %> from RMT: <%=@project.request_pm.join(', ')%></td></tr>
-<td>PM deputy</td><td><%= text_field :project, :pm_deputy %></td></tr>
-<td>BPL</td><td><%= text_field :project, :bpl %></td></tr>
-<td>ISPL</td><td><%= text_field :project, :ispl %></td></tr>
-<td>ISPM</td><td><%= text_field :project, :ispm %></td></tr>
-<td>Is active QR/QWR ?</td><td><%= check_box :project, :is_qr_qwr,:onclick=>"check_is_qr_qwr();" %></td></tr>
-<td>QR</td><td><%= select(:project, :qr_qwr_id, @qr.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
-<td>DWR</td><td><%= text_field :project, :dwr %></td></tr>
-<td>Supervisor</td><td><%= select(:project, :supervisor_id, @supervisors.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
+<tr><td>BRN</td><td><%= text_field :project, :brn %></td></tr>
+<tr><td>Coordinator</td><td><%= text_field :project, :coordinator %></td></tr>
+<tr><td>PM</td><td><%= text_field :project, :pm %> from RMT: <%=@project.request_pm.join(', ')%></td></tr>
+<tr><td>PM deputy</td><td><%= text_field :project, :pm_deputy %></td></tr>
+<tr><td>BPL</td><td><%= text_field :project, :bpl %></td></tr>
+<tr><td>ISPL</td><td><%= text_field :project, :ispl %></td></tr>
+<tr><td>ISPM</td><td><%= text_field :project, :ispm %></td></tr>
+<tr><td>Is active QR/QWR ?</td><td><%= check_box :project, :is_qr_qwr,:onclick=>"check_is_qr_qwr();" %></td></tr>
+<tr><td>QR</td><td><%= select(:project, :qr_qwr_id, @qr.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
+<tr><td>DWR</td><td><%= text_field :project, :dwr %></td></tr>
+<tr><td>Supervisor</td><td><%= select(:project, :supervisor_id, @supervisors.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
 <% lifecycle_list = Lifecycle.find(:all) %>
-<td>Lifecycle</td><td><%= select(:project, :lifecycle_id, lifecycle_list.map {|l| [l.name, l.id]}) %></td></tr>
-<td>Description</td><td><%= text_area :project, :description %></td></tr>
+<tr><td>Lifecycle</td><td><%= select(:project, :lifecycle_id, lifecycle_list.map {|l| [l.name, l.id]}) %></td></tr>
+<tr><td>Suite</td><td><%= select(:project, :suite_tag_id, @suiteTags.map {|s| [s.name, s.id]}, :include_blank=>true) %></td></tr>
+<tr><td>Description</td><td><%= text_area :project, :description %></td></tr>
 </table>
 
 <script type="text/javascript"> 

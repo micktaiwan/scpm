@@ -1,0 +1,9 @@
+<h2>Edit an Suite Tag</h2>
+<div>
+<%= error_messages_for :suite_tag %>
+<% form_for @suite_tag, :url=>{:action=>'update', :id=>@suite_tag.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Update' %></p>
+<% end -%>
+</div>

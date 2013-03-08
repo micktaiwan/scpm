@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226154105) do
+ActiveRecord::Schema.define(:version => 20130308110000) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -363,6 +363,7 @@ ActiveRecord::Schema.define(:version => 20130226154105) do
     t.integer  "qr_qwr_id"
     t.string   "dwr"
     t.boolean  "is_qr_qwr",     :default => false
+    t.integer  "suite_tag_id"
   end
 
   create_table "question_references", :force => true do |t|
@@ -736,6 +737,12 @@ ActiveRecord::Schema.define(:version => 20130226154105) do
     t.string   "dwl"
     t.string   "process_owner"
     t.text     "description"
+  end
+
+  create_table "suite_tags", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tasks", :force => true do |t|
