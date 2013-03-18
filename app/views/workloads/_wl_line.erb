@@ -37,7 +37,7 @@
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)
     <% elsif wl_line.wl_type == 120 and wl_line.project %>
-      (Spiders WKLD prev : <%= (wl_line.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f).to_s %>)
+      (Spiders wkld prev : <%= (wl_line.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f).to_s %>)
     <% end %>
   </td>
 

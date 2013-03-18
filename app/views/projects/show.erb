@@ -47,10 +47,12 @@ function add(id, nb_months, has_requests) {
               <%= link_to('Add milestone', {:controller=>'milestones', :action=>'new', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
               <%= link_to('Export All Spiders', {:controller=>'spiders', :action=>'project_spider_export', :project_id=>@project.id}, {:class=>'btnlnk'}) %>
             </div>
-            <div style="float:Right;">
-              Remaining QS :        <%= @project.calcul_qs_previsional.to_s %><br />
-              Remaining Spiders :   <%= @project.calcul_spider_previsional  %>
-            </div>
+            <% if @project.is_qr_qwr %>
+              <div style="float:Right;">
+                Remaining QS :        <%= @project.calcul_qs_previsional.to_s %><br />
+                Remaining Spiders :   <%= @project.calcul_spider_previsional  %>
+              </div>
+            <% end %>
             <br/>
             <br/>
             

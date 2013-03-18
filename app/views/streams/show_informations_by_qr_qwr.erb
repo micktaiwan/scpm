@@ -29,11 +29,11 @@
 				<span class="bold">Warnings</span> :
 				<% if hash_by_qr_qwr["qs_comp"].to_i != 0 %>
 					<br />
-					Remaining QS are different to previsionnal QS
+					<span class="alert"> Remaining QS are different to previsionnal QS</span>
 				<% end %>
 				<% if hash_by_qr_qwr["spider_comp"].to_i != 0 %>
 					<br />
-					Remaining Spiders are different to previsionnal Spiders
+					<span class="alert"> Remaining Spiders are different to previsionnal Spiders</span>
 				<% end %>
 			<li>
 		</ul>

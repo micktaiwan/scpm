@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
     sort_projects
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
-    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0"], :order=>"people.name asc")    
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")    
     
     # TODO: use model "workstream"
     @workstreams = ['EE','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC','TBCE']
