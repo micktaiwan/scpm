@@ -659,7 +659,9 @@ private
     cond << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
-    @wps = @wps.select {|wp| wp.open_requests.size > 0 } # wp.has_status
+    #@wps = @wps.select {|wp| wp.open_requests.size > 0 } # wp.has_status
+    @wps = @wps.select {|wp| wp.is_running = 1}
+    @wps = @wps.select { |wp| wp.project_id != nil}
     cond << "project_id is null"
     @projects = Project.find(:all, :conditions=>cond.join(" and "))
     if session[:project_filter_qr] != nil
