@@ -1,20 +1,7 @@
 <div id="center">
-  
-  <div id="welcome_panel">
-    <div id="welcome">Welcome <%= current_user.name %> !</div>
-      <% if (@current_actions_from_user.size > 0) %>
-        <div id="action_from_welcome">
-          <span onclick="location='/actions'"><%= @current_actions_from_user.size %> current actions in progress
-          <% if (@recent_current_actions_from_user.size > 0) %>
-            (<%= @recent_current_actions_from_user.size %> updated since less than 72 hours)
-          <% end %>
-          </span>
-        </div>
-      <% end %>
-  </div>
+  <div id="welcome">Welcome <%= current_user.name %> !</div>
 
   <ul id="last_changes">
-    <li><b>19-Mar-2013</b> Affichage des actions en cours sur la page de login.</li>
 		<li><b>22-Fev-2013</b> Intégration de la gestion des Streams. Workpackages 2013 et SDP Iteration 2013.</li>
     <li><b>09-Jan-2012</b> Ajout de la gestion des Spiders.</li>
   </ul>
@@ -24,7 +11,7 @@
   <% end  %>
 
   <div class="center">
-    <div onclick="location='/projects'" class="big_button reporting"
+    <div onclick="location='/projects'"         class="big_button reporting"
       onmouseover="$('reporting_sub').appear({duration:0.3});">
       <div class="btitle">Report</div>
       <ul class="submenu reporting" style="display:none" id="reporting_sub">
@@ -35,7 +22,8 @@
 
     <div onclick="location='/workloads'"        class="big_button workload">Plan</div>
     <div onclick="location='/ci_projects'"      class="big_button ci">Improve</div>
-    <div onclick="location='/tools/sdp_index'"  class="big_button tools"  onmouseover="$('manage_sub').appear({duration:0.3});">
+    <div onclick="location='/tools/sdp_index'"  class="big_button tools"
+      onmouseover="$('manage_sub').appear({duration:0.3});">
       <div class="btitle">Manage</div>
       <ul class="submenu manage" style="display:none" id="manage_sub">
         <li><a href="/tools/sdp_index">SDP</a></li>
@@ -44,7 +32,8 @@
         <li><a href="/generic_risk_questions">Standard risks</a></li>
         <li><a href="/tools/">Other awesome tools</a></li>
       </ul>
-    </div>
+
+      </div>
   </div>
   <% 15.times do %>
     <br/>
