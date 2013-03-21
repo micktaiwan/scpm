@@ -1,11 +1,12 @@
 class WlLine < ActiveRecord::Base
 
-  has_many :wl_loads, :dependent => :destroy
+  has_many   :wl_loads, :dependent => :destroy
   belongs_to :person
   belongs_to :request
   belongs_to :sdp_task, :class_name=>"SDPTask"
   belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
-  has_many :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
+  belongs_to :project
+  has_many   :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
 
   include ApplicationHelper
 
@@ -52,7 +53,7 @@ class WlLine < ActiveRecord::Base
 
   # get milestones for request by week
   def milestones(w)
-    return [] if !request or !request.project
+    return [] if (!request or !request.project) and (!project)
     str = w.to_s
     year = str[0..3].to_i
     week = str[4..5].to_i
@@ -60,12 +61,20 @@ class WlLine < ActiveRecord::Base
     week_end    = Date.commercial(year, week, 7)
     rv = []
     r = request
-    if r
+    p = self.project
+    
+    if r && !p
       r.project.milestones.each { |m|
         date = m.date
         rv << m if date and date >= week_start and date <= week_end
-        }
+      }
+    elsif p
+      p.milestones.each { |m|
+        date = m.date
+        rv << m if date and date >= week_start and date <= week_end
+      }
     end
+    
     rv
   end
 

@@ -17,7 +17,7 @@ class Milestone < ActiveRecord::Base
   end
 
   def passed_style
-    return " passed" if done > 0 or status == -1
+    return " passed" if (done > 0 or status == -1) && !project.is_qr_qwr
     return ""
   end
 

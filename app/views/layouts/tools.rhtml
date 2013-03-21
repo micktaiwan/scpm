@@ -84,12 +84,13 @@
       <%= link_to('Tools', "", {:class=>menu_style('tools','*'), :onclick=>"return false;"}) %>
       <ul>
         <li class="hsep">Management</li>
-        <li><%= link_to('Requirements',   {:controller=>'requirements', :action=>'index'}) %></li>
-        <li><%= link_to('Checklists',     {:controller=>'checklist_templates', :action=>'index'}) %></li>
-        <li><%= link_to('Risks',          {:controller=>'risks', :action=>'list'}) %></li>
-        <li><%= link_to('Generic Risks',  {:controller=>'generic_risk_questions', :action=>'index'}) %></li>
-        <li><%= link_to('Capi',           {:controller=>'notes', :action=>'list'}) %></li>
-        <li><%= link_to('Capi Axes',      {:controller=>'capi_axes', :action=>'index'}) %></li>
+        <li><%= link_to('Requirements',   {:controller=>'requirements',           :action=>'index'})  %></li>
+        <li><%= link_to('Checklists',     {:controller=>'checklist_templates',    :action=>'index'})  %></li>
+        <li><%= link_to('Risks',          {:controller=>'risks',                  :action=>'list'})   %></li>
+        <li><%= link_to('Generic Risks',  {:controller=>'generic_risk_questions', :action=>'index'})  %></li>
+        <li><%= link_to('Capi',           {:controller=>'notes',                  :action=>'list'})   %></li>
+        <li><%= link_to('Capi Axes',      {:controller=>'capi_axes',              :action=>'index'})  %></li>
+        <li><%= link_to('Suite Tags',     {:controller=>'suite_tags',             :action=>'index'})  %></li>
         <li class="hsep">Stats</li>
         <li><%= link_to('Requests by year', {:controller=>'tools', :action=>'requests_by_year'}) %></li>
         <li><%= link_to('Projects length',  {:controller=>'tools', :action=>'projects_length'}) %></li>
