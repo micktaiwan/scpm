@@ -6,11 +6,6 @@ class WorkloadsController < ApplicationController
 
   layout 'pdc'
 
-  WL_LINE_REQUEST   = 100
-  WL_LINE_OTHER     = 200
-  WL_LINE_HOLIDAYS  = 300 # not summed in the planned total
-  WL_LINE_EXCEPT    = 400 # other tasks, not in the current project, not summed in the planned total
-
   def index
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
@@ -397,50 +392,87 @@ class WorkloadsController < ApplicationController
 
   def transfert
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    @lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']],
+    # WL Lines without project
+    @lines = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+    # WL lines by project
+    temp_lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
+      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+    @lines_qr_qwr = Hash.new
+    temp_lines_qr_qwr.each do |wl| 
+        @lines_qr_qwr[wl.project_id] = [wl]
+    end
+    @owner_id = session['workload_person_id']
   end
 
   def do_transfert
-    lines = params['lines'] # array of ids (as strings)
-    p_id  = params['person_id']
-    lines.each { |l_id|
-      l = WlLine.find(l_id.to_i)
-      l.person_id = p_id.to_i
-      l.save
+    # Params
+    lines        = params['lines'] # array of ids (as strings)
+    lines_qr_qwr = params['lines_qr_qwr'] # array of ids of wl lines qr qwr (as strings)
+    p_id         = params['person_id']
+    owner_id     = params['owner_id']
+
+    # Lines to transfert
+    if lines
+      lines.each { |l_id|
+        l = WlLine.find(l_id.to_i)
+        l.person_id = p_id.to_i
+        l.save
       }
+    end
+
+    # Lines of qr_qwr to transfert
+    if lines_qr_qwr
+      lines_qr_qwr.each { |l_id|
+        # Find all lines (two line by project qr_qwr)
+        l = WlLine.find(l_id.to_i)
+        WlLine.find(:all,:conditions=>["person_id = ? and project_id = ?",owner_id.to_s, l.project_id.to_s]).each { |line_by_project|
+          line_by_project.person_id         = p_id.to_i
+          line_by_project.project.qr_qwr_id = p_id.to_i
+          line_by_project.save
+          line_by_project.project.save
+        }
+      }
+    end
+
     redirect_to(:action=>"transfert")
   end
 
   def duplicate
-    @months = []
-    @weeks = []
+    @months   = []
+    @weeks    = []
     @wl_weeks = []
-    @months = params[:months]
-    @weeks = params[:weeks]
+    @months   = params[:months]
+    @weeks    = params[:weeks]
     @wl_weeks = params[:wl_weeks]
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    @lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']],
+    @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    
+    # WL lines without project_id
+    @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+
+    # WL lines by project
+    @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
+      :include=>["request","sdp_task","person"], :order=>"project_id,wl_type,name")
   end
 
   def do_duplication
-    lines_loads = params['lines_loads'] # array of lineId_loadId
+    lines_loads         = params['lines_loads'] # array of lineId_loadId
     p_id  = params['person_id']
 
     lines_loads.each { |l_l|
       # Wl_line and Wl_load selected
       l_l_splited = l_l.split("_")
-      line_id = l_l_splited[0]
-      load_id = l_l_splited[1]
-      line = WlLine.find(line_id.to_i)
-      load = WlLoad.find(load_id.to_i)
+      line_id     = l_l_splited[0]
+      load_id     = l_l_splited[1]
+      line        = WlLine.find(line_id.to_i)
+      load        = WlLoad.find(load_id.to_i)
 
       # Check if the line to duplicate isn't already duplicated from another line
       # If Line to duplicate is already duplicate, so we take the first line as parent_id
       parent_id = line.id
       if line.parent_line
-        parent = WlLine.find(line.parent_line)
+        parent    = WlLine.find(line.parent_line)
         parent_id = parent.id
       end
 
@@ -456,11 +488,11 @@ class WorkloadsController < ApplicationController
 
       # If the person selected has not already a duplicate, we create it
       if duplicate == 0
-        new_line = line.clone
+        new_line             = line.clone
         new_line.parent_line = parent_id
-        new_line.person_id = p_id
+        new_line.person_id   = p_id
         new_line.save
-        duplicate = new_line.id
+        duplicate            = new_line.id
       end
 
       # Change wl_line of load selected
@@ -470,12 +502,12 @@ class WorkloadsController < ApplicationController
       # Project
       request = Request.find(line.request_id) if line.request_id
       if request != nil
-        project_id = request.project_id
-        project_person = ProjectPerson.first(:conditions => ["project_id = ? and person_id = ?", project_id, p_id]) if project_id
+        project_id      = request.project_id
+        project_person  = ProjectPerson.first(:conditions => ["project_id = ? and person_id = ?", project_id, p_id]) if project_id
         if project_person == nil
-          project_person = ProjectPerson.new
+          project_person            = ProjectPerson.new
           project_person.project_id = project_id
-          project_person.person_id = p_id
+          project_person.person_id  = p_id
           project_person.save
         end
       end

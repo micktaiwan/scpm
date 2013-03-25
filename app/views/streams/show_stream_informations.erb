@@ -4,7 +4,7 @@
 <p><span class="bold">Supervisor: </span> 			<%= @stream.supervisor.name %></p>
 <p><span class="bold">Quality Manager: </span> 	<%= @stream.quality_manager %></p>
 <p><span class="bold">DWL: </span> 							<%= @stream.dwl %></p>
-<p><span class="bold">Process Owner: </span> 		<%= @stream.process_owner %></p>
+<p><span class="bold">Process Manager: </span> 		<%= @stream.process_owner %></p>
 <p><span class="bold">Request resp:</span> 			<%= @stream.assignees.join(', ')%></p>
 <p><span class="bold">Description:</span>				<%= simple_format(@stream.description) %></p>
 
@@ -13,7 +13,7 @@
 <% form_tag ({:controller => "streams", :action => "update_stream_review_types"}, :method => "post") do %>
 	<%= hidden_field_tag('id', @stream.id) %>
 	<% @reviewTypes.each do |rt| %>
-		<p><%= rt.title %>
+		<p><%= rt.title %> - <%= rt.description %>
 		<% checkboxName = rt.id.to_s %> <%= rt.description %>
 		<% if(@stream.review_types.include?(rt))%>
 			<%= check_box_tag("reviewTypeForm[]",checkboxName,true) %>

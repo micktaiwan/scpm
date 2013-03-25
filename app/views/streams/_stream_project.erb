@@ -8,6 +8,9 @@
   <% end %>
 
   <%= stream_project.workstream %>
+  <% if stream_project.is_qr_qwr && stream_project.qr_qwr %>
+	 [QR_QWR : <%= stream_project.qr_qwr.name %>]
+  <% end %>
   <%=link_to(stream_project.name, {:controller=>'projects', :action=>'show', :id=>stream_project.id}) %>
   <%= html_status(stream_project.last_status) %>
   <% date = stream_project.last_status_date

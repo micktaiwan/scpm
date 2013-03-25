@@ -28,7 +28,15 @@ class StreamsController < ApplicationController
     @stream       = Stream.find(id)
     @creationError = params['creationError']    
     
-    @projects = Project.find(:all,:conditions => ["workstream = ? and is_running = 1 and project_id is null", Workstream.find(@stream.workstream).name])
+    # @projects = Project.find(:all,:conditions => ["workstream = ? 
+    #                                               and is_running = 1 
+    #                                               and project_id is null 
+    #                                               and qr_qwr_id IS NOT NULL 
+    #                                               and qr_qwr_id != 0 
+    #                                               and is_qr_qwr = 1", Workstream.find(@stream.workstream).name])
+    @projects = Project.find(:all,:conditions => ["workstream = ? 
+                                                  and is_running = 1 
+                                                  and project_id is null", Workstream.find(@stream.workstream).name])
   end
   
   def show_stream_informations
@@ -62,6 +70,52 @@ class StreamsController < ApplicationController
     
   end
   
+  def show_informations_by_qr_qwr
+    streamId                = params['id']
+    @stream                 = Stream.find(streamId)
+    @informations_by_qr_qwr = Array.new
+    # Get all QR QWR.EACH
+    Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc").each do |qr|    
+      # Params
+      qr_qwr_data         = Hash.new
+      qr_qwr_data["name"] = qr.name
+
+      # Get number of project in this stream
+      project_list              = Project.find(:all,:conditions=>["workstream = ? and is_qr_qwr IS NOT NULL and qr_qwr_id = ?", Workstream.find(@stream.workstream).name, qr.id.to_s])
+      qr_qwr_data["nbProjects"] = project_list.count
+
+      if qr_qwr_data["nbProjects"] > 0
+        project_list.each do |project|
+          # Get nb of QS prev total
+          qr_qwr_data["total_qs_prev"]     = qr_qwr_data["total_qs_prev"].to_i     + project.calcul_qs_previsional
+          # Get nb of Spider Prev total
+          qr_qwr_data["total_spider_prev"] = qr_qwr_data["total_spider_prev"].to_i + project.calcul_spider_previsional
+        end
+
+        # Get x/y for qs (alert managed in view)
+        qr_qwr_data["qs_x"]     = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL",qr.id.to_s, @stream.id.to_s]).count
+        qr_qwr_data["qs_y"]     = 0 
+        Request.find(:all,:include=>[:counter_log],:conditions => ["work_package = ? and assigned_to = ? and is_stream = 'Yes' and stream_id = ? and counter_logs.validity = 1", WORKPACKAGE_QS_RMT_NAME, qr.rmt_user, @stream.id]).each do |req|
+          qr_qwr_data["qs_y"] = qr_qwr_data["qs_y"].to_i + req.counter_log.counter_value.to_i
+        end
+
+        # Get x/y for spider (alert managed in view)
+        qr_qwr_data["spider_x"] = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL",qr.id.to_s, @stream.id.to_s]).count
+        qr_qwr_data["spider_y"] = 0 
+        Request.find(:all,:include=>[:counter_log],:conditions => ["work_package = ? and assigned_to = ? and is_stream = 'Yes' and stream_id = ? and counter_logs.validity = 1", WORKPACKAGE_SPIDERS_RMT_NAME, qr.rmt_user, @stream.id]).each do |req|
+          qr_qwr_data["spider_y"] = qr_qwr_data["spider_y"].to_i + req.counter_log.counter_value.to_i
+        end
+
+        # Compare
+        qr_qwr_data["qs_comp"]     = (qr_qwr_data["qs_y"].to_i     - qr_qwr_data["qs_x"].to_i)      - qr_qwr_data["total_qs_prev"].to_i
+        qr_qwr_data["spider_comp"] = (qr_qwr_data["spider_y"].to_i - qr_qwr_data["spider-_x"].to_i) - qr_qwr_data["total_spider_prev"].to_i
+
+        @informations_by_qr_qwr << qr_qwr_data
+      end
+    end
+
+  end
+
   # link a request to a Stream, based on request workstream
   def link
     # PARAMS
@@ -219,7 +273,7 @@ class StreamsController < ApplicationController
     project_name      = params[:project_name]
     
     resultRegex = summaryParam.scan(/\[(.*?)\]/)
-    if ((resultRegex.count == 3) && (resultRegex[0].to_s.length > 0) && (resultRegex[1].to_s.length > 0) && (resultRegex[0].to_s == project_name.to_s))
+    if ((resultRegex.count == 3) && (resultRegex[0].to_s.length > 0) && (resultRegex[1].to_s.length > 0) && (project_name.length > 0))
       
       summary           = "[" + resultRegex[0].to_s + "][" + resultRegex[1].to_s + "]["+resultRegex[2].to_s+"]"
       workpackage_name  = get_workpackage_name_from_summary(summary, project_name)

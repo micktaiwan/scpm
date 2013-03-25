@@ -7,14 +7,28 @@ end
 %>
 
 <h2>Create new project</h2>
-<% form_tag(:action=>'create_project') do %>
-  <%= hidden_field_tag('id', @stream.id) %>
-  <p><span class="bold">Summary ([X][X][X]):</span></p>
-	<p><%= text_area_tag  'summary' %></p>
-  <p><span class="bold">Project Name :</span></p>
-	<p><%= text_field_tag 'project_name' %></p>
-  <%= submit_tag('Create this project for the current stream') %>
-<% end %>
+<div id="stream_project_creation">
+	<div>
+		<% form_tag(:action=>'create_project') do %>
+		  <%= hidden_field_tag('id', @stream.id) %>
+		  <p><span class="bold">Summary ([X][X][X]):</span></p>
+			<p><%= text_area_tag  'summary' %></p>
+		  <p><span class="bold">Project Name :</span></p>
+			<p><%= text_field_tag 'project_name' %></p>
+		  <%= submit_tag('Create this project for the current stream') %>
+		<% end %>
+	</div>
+	<div>
+		How to create a new project:
+Case 1: FuD project or PhD projet not included in PLM Suite
+Summary: [X][Y][Z] with X = project name, Y = WorkPackage name if it is a WP or projet name (= X) if it is not, Z = empty or BRN code of project
+Project Name: X (same as "X" in Summary)
+
+Case 2: PhD projet included in PLM Suite
+Summary: [X][Y][Z] with X = Suite name, Y = project name, Z = empty or BRN code of project
+Project Name: Y (same as "Y" in Summary)
+	</div>
+</div>
 
 <h2>Projects</h2>
 <ul>
