@@ -826,7 +826,10 @@ class Project < ActiveRecord::Base
     # Get nb of milestones not passed
     sorted_milestones.each do |m|
       if m.done == 0
-        spider_counter = spider_counter + 1
+        m_name = MilestoneName.first(:conditions=>["title = ?",m.name])
+        if ((m_name != nil) and (m_name.count_in_spider_prev))
+          spider_counter = spider_counter + 1
+        end
       end
     end
     return spider_counter
