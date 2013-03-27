@@ -9,11 +9,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20130226154105) do
-=======
+
 ActiveRecord::Schema.define(:version => 20130308110000) do
->>>>>>> d77231ccb3317dcd8703fd695c3faa1d25afa480
+
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -376,10 +374,7 @@ ActiveRecord::Schema.define(:version => 20130308110000) do
     t.integer  "qr_qwr_id"
     t.string   "dwr"
     t.boolean  "is_qr_qwr",     :default => false
-<<<<<<< HEAD
-=======
     t.integer  "suite_tag_id"
->>>>>>> d77231ccb3317dcd8703fd695c3faa1d25afa480
   end
 
   add_index "projects", ["project_id"], :name => "IDX_PROJECTS_ON_PROJECT_ID"

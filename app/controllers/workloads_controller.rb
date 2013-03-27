@@ -500,7 +500,7 @@ class WorkloadsController < ApplicationController
       load.save
 
       # Project
-      request = Request.find(line.request_id) if line.request_id
+      request = Request.first(:conditions=>["request_id = ?",line.request_id]) if line.request_id
       if request != nil
         project_id      = request.project_id
         project_person  = ProjectPerson.first(:conditions => ["project_id = ? and person_id = ?", project_id, p_id]) if project_id
