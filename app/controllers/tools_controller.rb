@@ -186,31 +186,31 @@ class ToolsController < ApplicationController
       labels << l.created_at.to_date
     end
     min = serie.map{|p| p[1]}.min
-    max = serie.map{|p| p[1]}.max
+    max = serie.map{|p| p[1]}.max  
     serie = serie.map{ |l| [l[0], l[1]]}
     [serie, min, max, labels]
   end  
 
   def sdp_graph
-    chart = GoogleChart::LineChart.new('600x200', "Gain", true)
+    chart = GoogleChart::LineChart.new('700x300', "Gain", true)
     serie1, min1, max1, labels1 = get_sdp_graph_series(:sdp_real_balance_and_provisions)
     serie2, min2, max2, labels2 = get_sdp_graph_series(:sdp_initial_balance)
     #serie3, min3, max3, labels3 = get_sdp_graph_series(:sdp_real_balance)
     serie4, min4, max4, labels4 = get_sdp_graph_series(:provisions)
     min = [min1,min2,min4].min
-    max = [max1,max2,min4].max
+    max = [max1,max2,max4].max
     serie1 = serie1.map{ |l| [l[0], l[1]-min]}
     serie2 = serie2.map{ |l| [l[0], l[1]-min]}
     #serie3 = serie3.map{ |l| [l[0], l[1]-min]}
     serie4 = serie4.map{ |l| [l[0], l[1]-min]}
-    chart.data "Total gain",        serie1, '0000ff'
-    chart.data "SDP balance",       serie2, 'AA0000'
+    chart.data serie1[0].to_s + "Total gain",        serie1, '0000ff'
+    chart.data serie2[0].to_s + "SDP balance",       serie2, 'AA0000'
     #chart.data "SDP real balance",  serie3, 'ff0000'
-    chart.data "Provisions",        serie4, '00ff00'
+    chart.data serie4[0].to_s + "Provisions",        serie4, '00ff00'
     chart.axis :y, :range => [min,max], :font_size => 10, :alignment => :center
     #chart.axis :x, :labels => labels1, :font_size => 10, :alignment => :center
     #chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>7
-    @sdp_graph = chart.to_url#({:chd=>"t:#{serie.join(',')}", :chds=>"#{min},#{max}"})    
+    @sdp_graph = chart.to_url + "&amp;s:" + serie1 +","+serie2+","+serie4 #({:chd=>"t:#{serie.join(',')}", :chds=>"#{min},#{max}"})    
   end
   
   def get_sdp_graph_series_history(method,date)
