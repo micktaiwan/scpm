@@ -38,7 +38,7 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>"project_id,wl_type,name")
     Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
       @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
@@ -162,6 +162,48 @@ class Workload
 
   def remain_to_plan_days
     @sdp_remaining_total - @planned_total
+  end
+
+  # Will generate a hash of hash following this format :
+  # lines_by_stream[stream.id]["prev"]        = Previsional total (QS + Spider) for this stream
+  # lines_by_stream[stream.id]["sum"]         = Total of imputation (QS + Spider) for this stream
+  # lines_by_stream[stream.id]["qs_prev"]     = Previsional load for QS of this stream
+  # lines_by_stream[stream.id]["qs_sum"]      = Total of imputation for QS of this stream
+  # lines_by_stream[stream.id]["spider_prev"] = Previsional load for Spider of this stream
+  # lines_by_stream[stream.id]["spider_sum"]  = Total of imputation for Spider of this stream   
+  def get_qr_qwr_wl_lines_by_streams
+    lines_by_streams = Hash.new
+    # Create arrays for each stream
+    Stream.find(:all).each do |s| 
+      # lines_by_streams[s.id]                = Array.new
+      lines_by_streams[s.id]                = Hash.new
+      lines_by_streams[s.id]["prev"]        = 0
+      lines_by_streams[s.id]["sum"]         = 0
+      lines_by_streams[s.id]["qs_prev"]     = 0
+      lines_by_streams[s.id]["spider_prev"] = 0
+      lines_by_streams[s.id]["qs_sum"]      = 0
+      lines_by_streams[s.id]["spider_sum"]  = 0
+    end
+    # Add wl_lines to corresponding stream
+    wl_lines.each { |wl|
+      if wl.project
+        # Stream
+        s = Stream.find_with_workstream(wl.project.workstream)
+        # Previsional
+        if(wl.wl_type == 110)
+          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]    + (wl.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f)
+          lines_by_streams[s.id]["qs_prev"]     = lines_by_streams[s.id]["qs_prev"] + (wl.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f)
+          lines_by_streams[s.id]["qs_sum"]      = lines_by_streams[s.id]["qs_sum"]  + (wl.planned_sum.to_f * APP_CONFIG['qs_load'].to_f)
+          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]     + (wl.planned_sum.to_f * APP_CONFIG['qs_load'].to_f)
+        elsif(wl.wl_type == 120)
+          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]        + (wl.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f)
+          lines_by_streams[s.id]["spider_prev"] = lines_by_streams[s.id]["spider_prev"] + (wl.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f)
+          lines_by_streams[s.id]["spider_sum"]  = lines_by_streams[s.id]["spider_sum"]  + (wl.planned_sum.to_f * APP_CONFIG['spider_load'].to_f)
+          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]         + (wl.planned_sum.to_f * APP_CONFIG['spider_load'].to_f)
+        end
+      end  
+    }
+    return lines_by_streams
   end
 
 end

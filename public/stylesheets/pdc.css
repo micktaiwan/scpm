@@ -56,7 +56,7 @@ th {
   border: 1px solid #DDD;
   }
 
-#workload_table tr:hover {
+#workload_table tr:hover #workload_qs_spider_table tr:hover {
   background: #FFA;
   }
 
@@ -74,11 +74,6 @@ th {
 
 .wl_case input {
   color: #555;
-  }
-.wl_case input.milestone {
-  background: #FAA;
-  border: 0;
-  width: 40px;
   }
 
 .wl_textfield {
@@ -110,6 +105,9 @@ tr.wl_opens {
 .wl_line_400 {
   background: #FDD;
   }
+.wl_line_110,.wl_line_120 {
+  background: #A8FFE1;
+  }
 .wl_line_200 .wl_case input {
   background: #EEF;
   }
@@ -120,6 +118,16 @@ tr.wl_opens {
 .wl_line_400 .wl_case input {
   color: #A55;
   background: #FEE;
+  }
+.wl_line_110 .wl_case input,.wl_line_120 .wl_case input {
+ color: #3600FF;
+ background: #C9FFF9;
+ }
+
+.wl_case input.milestone {
+  background: #FAA;
+  border: 0;
+  width: 40px;
   }
 
 .delete {
@@ -135,6 +143,19 @@ tr.wl_opens {
 .wlerror.no_sdp{
   background: #AAF;
   }
+
+/* TABLE WORKLOAD BY STREAM FOR QS/SPIDER */
+table.workload_qs_spider_table th {
+  background-color:#FF9000;
+  color:white;
+}
+table.workload_qs_spider_table tr.stream_line {
+  background-color:#5100FF;
+  color:white;
+}
+table.workload_qs_spider_table td.load_values {
+  font-size:18px;
+}
 
 /* STATUSES AVAILABILITY */
 #availabilities_legends_table {

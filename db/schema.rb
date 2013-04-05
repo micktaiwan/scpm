@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130215130905) do
+ActiveRecord::Schema.define(:version => 20130326170011) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -166,6 +166,10 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.date     "sqli_validation_date_review"
     t.date     "airbus_validation_date_review"
     t.date     "kick_off_date"
+    t.string   "Deliverable_Folder"
+    t.string   "CI_Objectives_2013"
+    t.string   "SQLI_validation_Responsible"
+    t.text     "Historique_de_la_demande"
   end
 
   create_table "companies", :force => true do |t|
@@ -259,7 +263,8 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
   end
 
   create_table "milestone_names", :force => true do |t|
-    t.string "title"
+    t.string  "title"
+    t.boolean "count_in_spider_prev", :default => true
   end
 
   create_table "milestones", :force => true do |t|
@@ -360,8 +365,10 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.integer  "qs_count",      :default => 0
     t.integer  "spider_count",  :default => 0
     t.boolean  "is_running",    :default => true
-    t.string   "qr"
+    t.integer  "qr_qwr_id"
     t.string   "dwr"
+    t.boolean  "is_qr_qwr",     :default => false
+    t.integer  "suite_tag_id"
   end
 
   create_table "question_references", :force => true do |t|
@@ -737,6 +744,12 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.text     "description"
   end
 
+  create_table "suite_tags", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "tasks", :force => true do |t|
     t.integer  "planning_id"
     t.string   "name"
@@ -778,6 +791,7 @@ ActiveRecord::Schema.define(:version => 20130215130905) do
     t.datetime "updated_at"
     t.integer  "sdp_task_id"
     t.integer  "parent_line"
+    t.integer  "project_id"
   end
 
   create_table "wl_loads", :force => true do |t|

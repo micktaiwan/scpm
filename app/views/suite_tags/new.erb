@@ -1,0 +1,7 @@
+<h2>Create an Suite Tag</h2>
+<%= error_messages_for :suite_tag %>
+<% form_for :@suite_tag, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Create' %></p>
+<% end -%>

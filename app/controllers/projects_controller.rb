@@ -10,7 +10,8 @@ class ProjectsController < ApplicationController
     sort_projects
     @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
-    @qr          = Person.find(:all, :conditions=>"is_transverse=0 and is_supervisor=0 and has_left=0", :order=>"name asc")
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")    
+    
     # TODO: use model "workstream"
     @workstreams = ['EE','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC','TBCE']
     #Project.all.collect{|p| p.workstream}.uniq.sort
@@ -72,11 +73,13 @@ class ProjectsController < ApplicationController
   
   def new
     @project     = Project.new(:project_id=>nil, :name=>'')
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")    
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
   end
 
   def create
     @project = Project.new(params[:project])
+    check_qr_qwr_pdc(@project)
     if not @project.save
       render :action => 'new'
       return
@@ -123,9 +126,11 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    id = params[:id]
-    @project = Project.find(id)
+    id           = params[:id]
+    @project     = Project.find(id)
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")    
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+    @suiteTags   = SuiteTag.find(:all)
   end
 
   def edit_status
@@ -137,9 +142,14 @@ class ProjectsController < ApplicationController
 
   def update
     project = Project.find(params[:id])
+    old_is_qr_qwr_param = project.is_qr_qwr
     project.update_attributes(params[:project])
     project.propagate_attributes
     project.set_lifecycle_old_param()
+    
+    # QR QWR 
+    check_qr_qwr_pdc(project)
+    check_qr_qwr_activated(project,old_is_qr_qwr_param)
     redirect_to :action=>:show, :id=>project.id
   end
 
@@ -614,6 +624,32 @@ class ProjectsController < ApplicationController
       project.save
     end
     redirect_to :action=>:show, :id=>project.id
+  end
+  
+  # Check if the project is just setted to "is_qr_qwr". If yes, change the comments of milestones
+  def check_qr_qwr_activated(project,old_is_qr_qwr)
+    if project.is_qr_qwr and !old_is_qr_qwr and project.is_running
+      project.milestones.each do |m|
+        m.comments = "Support QR-QWR"
+        m.save
+      end
+    end
+  end
+  
+  # Check if the project is just setted to "is_qr_qwr". If Yes, create a WlLine for the person concerned
+  def check_qr_qwr_pdc(project)
+    # If the project is qr_qwr activated
+    if (project.is_qr_qwr && project.is_running && project.qr_qwr_id != nil && project.qr_qwr_id != 0)
+      # Check if the line is already created for the qr_qwr
+      qr_qwr = Person.find(project.qr_qwr_id)
+      if qr_qwr
+        wl_line = WlLine.first(:conditions=>["person_id = ? and project_id = ?",qr_qwr.id.to_s, project.id.to_s])
+        if !wl_line
+          WlLine.create(:name=>"[QR_QWR] "+project.full_name, :request_id=>nil, :person_id=>qr_qwr.id, :wl_type=>WL_LINE_QR_QWR_QS, :project_id=>project.id)
+          WlLine.create(:name=>"[QR_QWR] "+project.full_name, :request_id=>nil, :person_id=>qr_qwr.id, :wl_type=>WL_LINE_QR_QWR_SPIDER, :project_id=>project.id)
+        end
+      end
+    end
   end
   
 private

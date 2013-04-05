@@ -1,6 +1,6 @@
 <%= render(:file=>"streams/menu") %>
 
-<h2>Dashboard</h2>
+<h2><%= @stream.name %> dashboard</h2>
 <p><span class="bold">QS count :</span> <%= @stream.get_consumed_qs_count.to_s %> / <%= @stream.get_qs_counter.to_s %>
 <% if ((@stream.get_consumed_qs_count.to_i + 5 >= @stream.get_qs_counter.to_i) && (@stream.get_consumed_qs_count.to_i > 0)) %>
 	<span class="warning"> Not enough QS tickets </span>
@@ -33,7 +33,7 @@
 	<br />
 	<span class="bold">Content </span>
 	<p>
-		<%= r.text.to_s %>
+		<pre><%= r.text.to_s %></pre>
 	</p>
 </div>
 <% } %>

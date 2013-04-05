@@ -3,17 +3,19 @@ require 'rubygems'
 
 class Project < ActiveRecord::Base
 
-  FullGPP       = 0
-  LightGPP      = 1
-  Maintenance   = 2
-  LBIPGx        = 3
-  LBIPgx        = 4
-  LBIPpgx       = 5
-  Suite         = 6
+  FullGPP     = 0
+  LightGPP    = 1
+  Maintenance = 2
+  LBIPGx      = 3
+  LBIPgx      = 4
+  LBIPpgx     = 5
+  Suite       = 6
 
   belongs_to  :project
   belongs_to  :supervisor,  :class_name=>"Person"
   belongs_to  :lifecycle_object, :class_name=>"Lifecycle", :foreign_key=>"lifecycle_id"
+  belongs_to  :qr_qwr, :class_name=>"Person"
+  belongs_to  :suite_tag
   has_many    :projects,    :order=>'name', :dependent=>:destroy
   has_many    :requests,    :dependent=>:nullify
   has_many    :statuses,    :dependent => :destroy, :order=>"created_at desc"
@@ -786,12 +788,57 @@ class Project < ActiveRecord::Base
     true
   end
 
-
   def self.active_projects_by_workstream(ws_name)
     projects = Project.find(:all, :conditions=>["workstream=?", ws_name])
     projects.select { |p| p.active_requests.size > 0}
   end
-
+  
+  # Calculate the previsional number of QS of the project
+  def calcul_qs_previsional
+    # Params
+    last_milestone_date = nil
+    milestones_array = sorted_milestones
+    
+    # Get last milestone date
+    sorted_milestones.reverse!.each do |m|
+      if m.actual_milestone_date
+        last_milestone_date = m.actual_milestone_date
+        break
+      elsif m.milestone_date
+        last_milestone_date = m.milestone_date
+        break
+      end
+    end
+    
+    # Compare with current date
+    today = Date.today
+    if ((last_milestone_date) && (last_milestone_date > today))
+      nb_qs = 12 * (last_milestone_date.year - today.year) + last_milestone_date.month - today.month
+      return nb_qs
+    else
+      return 0
+    end
+  end
+  
+  # Calculate the previsional number of spiders of the projet
+  def calcul_spider_previsional
+    spider_counter = 0
+    # Get nb of milestones not passed
+    sorted_milestones.each do |m|
+      if m.done == 0
+        m_name = MilestoneName.first(:conditions=>["title = ?",m.name])
+        if ((m_name != nil) and (m_name.count_in_spider_prev))
+          spider_counter = spider_counter + 1
+        end
+      end
+    end
+    return spider_counter
+  end
+  
+  def qs_load
+  end
+  def spider_load
+  end
 private
 
   def excel(a,b)
