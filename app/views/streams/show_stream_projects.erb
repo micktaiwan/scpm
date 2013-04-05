@@ -19,14 +19,16 @@ end
 		<% end %>
 	</div>
 	<div>
-		How to create a new project:
+		<%= my_simple_format(
+'How to create a new project:
 Case 1: FuD project or PhD projet not included in PLM Suite
 Summary: [X][Y][Z] with X = project name, Y = WorkPackage name if it is a WP or projet name (= X) if it is not, Z = empty or BRN code of project
 Project Name: X (same as "X" in Summary)
 
 Case 2: PhD projet included in PLM Suite
 Summary: [X][Y][Z] with X = Suite name, Y = project name, Z = empty or BRN code of project
-Project Name: Y (same as "Y" in Summary)
+Project Name: Y (same as "Y" in Summary)') %>
+		</pre>
 	</div>
 </div>
 
