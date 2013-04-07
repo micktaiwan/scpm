@@ -87,6 +87,7 @@ function add(id, nb_months, has_requests) {
                 <%= render(:partial=>'status', :object=>s) %>
               <% end %>
             </div>
+            
           </div>
       </div>
 
@@ -194,7 +195,7 @@ function add(id, nb_months, has_requests) {
 
 			<b>Is Running:</b> <%= @project.is_running.to_s %>
 			<% if !@project.is_running %>
-				<%= link_to('Start project', { :action => "start", :id => @project.id }) %>
+				<%= link_to ('Start project', { :action => "start", :id => @project.id }) %>
 			<% end %>
 			<br />
 
