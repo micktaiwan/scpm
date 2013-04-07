@@ -40,7 +40,11 @@ class CsvCi
     :deployment_date,
     :deployment_date_review,
     :airbus_responsible,
-    :kick_off_date
+    :kick_off_date,
+    :deliverable_folder,
+    :ci_objectives_2013,
+    :sqli_validation_responsible,
+    :issue_history
 
   def initialize
   end
@@ -102,6 +106,7 @@ private
   def sanitize_value(value)
     return nil if !value
     value.gsub!("\"","'")
+    value.gsub!("\\","\\\\\\\\")
     if value =~ /(\d\d)\/(\d\d)\/(\d\d\d\d)/
       value = "#{$2}/#{$1}/#{$3}"
     end

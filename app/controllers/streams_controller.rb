@@ -136,6 +136,7 @@ class StreamsController < ApplicationController
     request.stream_id = stream.id
     request.save
     
+    # Commented because a new page was created to link previous history to new request, see in tools.
     # CHECK HISTORY_COUNT WITHOUT REQUEST
     # if request.counter_log.validity
     #   history_count_no_request = nil

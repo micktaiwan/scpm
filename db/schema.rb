@@ -10,7 +10,7 @@
 # It's strongly recommended to check this file into your version control system.
 
 
-ActiveRecord::Schema.define(:version => 20130308110000) do
+ActiveRecord::Schema.define(:version => 20130326170011) do
 
 
   create_table "actions", :force => true do |t|
@@ -171,6 +171,10 @@ ActiveRecord::Schema.define(:version => 20130308110000) do
     t.date     "sqli_validation_date_review"
     t.date     "airbus_validation_date_review"
     t.date     "kick_off_date"
+    t.string   "Deliverable_Folder"
+    t.string   "CI_Objectives_2013"
+    t.string   "SQLI_validation_Responsible"
+    t.text     "Historique_de_la_demande"
   end
 
   create_table "companies", :force => true do |t|
@@ -266,7 +270,8 @@ ActiveRecord::Schema.define(:version => 20130308110000) do
   end
 
   create_table "milestone_names", :force => true do |t|
-    t.string "title"
+    t.string  "title"
+    t.boolean "count_in_spider_prev", :default => true
   end
 
   create_table "milestones", :force => true do |t|

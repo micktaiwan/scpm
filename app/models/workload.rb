@@ -193,13 +193,13 @@ class Workload
         if(wl.wl_type == 110)
           lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]    + (wl.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f)
           lines_by_streams[s.id]["qs_prev"]     = lines_by_streams[s.id]["qs_prev"] + (wl.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f)
-          lines_by_streams[s.id]["qs_sum"]      = lines_by_streams[s.id]["qs_sum"]  + (wl.planned_sum.to_f * APP_CONFIG['qs_load'].to_f)
-          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]     + (wl.planned_sum.to_f * APP_CONFIG['qs_load'].to_f)
+          lines_by_streams[s.id]["qs_sum"]      = lines_by_streams[s.id]["qs_sum"]  + wl.planned_sum.to_f 
+          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]     + wl.planned_sum.to_f
         elsif(wl.wl_type == 120)
           lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]        + (wl.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f)
           lines_by_streams[s.id]["spider_prev"] = lines_by_streams[s.id]["spider_prev"] + (wl.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f)
-          lines_by_streams[s.id]["spider_sum"]  = lines_by_streams[s.id]["spider_sum"]  + (wl.planned_sum.to_f * APP_CONFIG['spider_load'].to_f)
-          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]         + (wl.planned_sum.to_f * APP_CONFIG['spider_load'].to_f)
+          lines_by_streams[s.id]["spider_sum"]  = lines_by_streams[s.id]["spider_sum"]  + wl.planned_sum.to_f
+          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]         + wl.planned_sum.to_f
         end
       end  
     }
