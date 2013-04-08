@@ -191,20 +191,14 @@ function add(id, nb_months, has_requests) {
             <b>QR/QWR</b>: <%= @project.qr_qwr.name if @project.qr_qwr %><br/>
 						<b>Is QR/QWR active</b>: <%= @project.is_qr_qwr %><br />
             <b>DWR</b>: <%= @project.dwr %><br/>
-<<<<<<< HEAD
+
             <b>Suite</b>: <%= @project.suite_tag.name if @project.suite_tag %><br/>
 						<b>Is Running:</b> <%= @project.is_running.to_s %>
 						<% if !@project.is_running %>
 							<%= link_to('Start project', { :action => "start", :id => @project.id }) %>
 						<% end %>
 						<br />
-=======
-			<b>Is Running:</b> <%= @project.is_running.to_s %>
-			<% if !@project.is_running %>
-				<%= link_to('Start project', { :action => "start", :id => @project.id }) %>
-			<% end %>
-			<br />
->>>>>>> test
+
             <% if @project.description and @project.description!=''%>
               <%= simple_format(@project.description) %>
             <% end %>
