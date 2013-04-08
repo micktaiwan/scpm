@@ -1,7 +1,19 @@
 <div id="center">
-  <div id="welcome">Welcome <%= current_user.name %> !</div>
+
+  <div id="welcome_panel">
+    <div id="welcome">Welcome <%= current_user.name %> !</div>
+      <% if (@current_actions_from_user.size > 0) %>
+        <div id="action_from_welcome">
+          <span onclick="location='/actions'"><%= @current_actions_from_user.size %> current actions in progress</span>
+          <% if (@recent_current_actions_from_user.size > 0) %>
+            <span onclick="location='/actions'">(<%= @recent_current_actions_from_user.size %> updated since less than 72 hours)</span>
+          <% end %>
+        </div>
+      <% end %>
+  </div>
 
   <ul id="last_changes">
+    <li><b>08-Apr-2013</b> Affichage des actions en cours sur la page de bienvenue / Correction bouton "Add/Refresh" dans la liste des projets.</li>
 		<li><b>22-Fev-2013</b> Intégration de la gestion des Streams. Workpackages 2013 et SDP Iteration 2013.</li>
     <li><b>09-Jan-2012</b> Ajout de la gestion des Spiders.</li>
   </ul>

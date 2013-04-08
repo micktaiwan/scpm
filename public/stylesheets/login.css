@@ -146,6 +146,27 @@ h2 {
   font-family: 'Zeyada', serif;
   font-size: 3em;
   color: #000;
-  padding: 0px;
-  margin: 0px;
+  text-align: center;
+}
+
+#welcome_panel{
+  background: #ABC;
+  color: black;
+  opacity: 0.9;
+  padding:10px;
+  margin: 10px 25%;
+  border: 1px solid #666;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  }
+
+#action_from_welcome {
+  color: black;
+  text-align: center;
+  padding-bottom:10px;
+}
+
+#action_from_welcome :hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
