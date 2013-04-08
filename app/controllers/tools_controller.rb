@@ -203,14 +203,14 @@ class ToolsController < ApplicationController
     serie2 = serie2.map{ |l| [l[0], l[1]-min]}
     #serie3 = serie3.map{ |l| [l[0], l[1]-min]}
     serie4 = serie4.map{ |l| [l[0], l[1]-min]}
-    chart.data serie1[0].to_s + "Total gain",        serie1, '0000ff'
-    chart.data serie2[0].to_s + "SDP balance",       serie2, 'AA0000'
+    chart.data "Total gain",        serie1, '0000ff'
+    chart.data  "SDP balance",       serie2, 'AA0000'
     #chart.data "SDP real balance",  serie3, 'ff0000'
-    chart.data serie4[0].to_s + "Provisions",        serie4, '00ff00'
+    chart.data "Provisions",        serie4, '00ff00'
     chart.axis :y, :range => [min,max], :font_size => 10, :alignment => :center
     #chart.axis :x, :labels => labels1, :font_size => 10, :alignment => :center
     #chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>7
-    @sdp_graph = chart.to_url + "&amp;s:" + serie1 +","+serie2+","+serie4 #({:chd=>"t:#{serie.join(',')}", :chds=>"#{min},#{max}"})    
+    @sdp_graph = chart.to_url #({:chd=>"t:#{serie.join(',')}", :chds=>"#{min},#{max}"})    
   end
   
   def get_sdp_graph_series_history(method,date)
