@@ -149,7 +149,7 @@ class ProjectsController < ApplicationController
     
     # QR QWR 
     check_qr_qwr_pdc(project)
-    check_qr_qwr_activated(project,old_is_qr_qwr_param)
+    #check_qr_qwr_activated(project,old_is_qr_qwr_param)
     redirect_to :action=>:show, :id=>project.id
   end
 
