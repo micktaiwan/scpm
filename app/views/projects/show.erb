@@ -60,7 +60,7 @@ function add(id, nb_months, has_requests) {
               <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
             </div>
             
-            <% if @project.requests.size > 0 %>
+            <% if @project.project_id != nil or @project.is_qr_qwr %>
               <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ?
 							(Date.today.year * 12 + Date.today.month) - (s.updated_at.to_date.year * 12 + s.updated_at.to_date.month): 0}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
               <%
@@ -87,7 +87,6 @@ function add(id, nb_months, has_requests) {
                 <%= render(:partial=>'status', :object=>s) %>
               <% end %>
             </div>
-            
           </div>
       </div>
 
@@ -192,12 +191,14 @@ function add(id, nb_months, has_requests) {
             <b>QR/QWR</b>: <%= @project.qr_qwr.name if @project.qr_qwr %><br/>
 						<b>Is QR/QWR active</b>: <%= @project.is_qr_qwr %><br />
             <b>DWR</b>: <%= @project.dwr %><br/>
+
             <b>Suite</b>: <%= @project.suite_tag.name if @project.suite_tag %><br/>
 						<b>Is Running:</b> <%= @project.is_running.to_s %>
 						<% if !@project.is_running %>
-							<%= link_to ('Start project', { :action => "start", :id => @project.id }) %>
+							<%= link_to('Start project', { :action => "start", :id => @project.id }) %>
 						<% end %>
 						<br />
+
             <% if @project.description and @project.description!=''%>
               <%= simple_format(@project.description) %>
             <% end %>

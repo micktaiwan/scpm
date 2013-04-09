@@ -124,7 +124,7 @@ class Workload
         @line_sums[l.id][:balance]   = l.sdp_task.balancei
         @line_sums[l.id][:remaining] = l.sdp_task.remaining
       elsif l.request
-        s = round_to_hour(l.request.workload2 * 0.8)
+        s = round_to_hour(l.request.workload2)
         if l.request.sdp == "No"
           @line_sums[l.id][:init]      = 'no sdp'
           @line_sums[l.id][:balance]   = 'N/A'
