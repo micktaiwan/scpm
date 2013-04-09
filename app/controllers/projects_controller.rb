@@ -155,6 +155,7 @@ class ProjectsController < ApplicationController
 
   def add_status_form
     @project = Project.find(params[:id])
+    @list_choice = params[:list_choice]
     @status = Status.new
     get_risk_status_string
     last = @project.get_status
@@ -176,6 +177,7 @@ class ProjectsController < ApplicationController
     p           = Project.find(project_id)
     last_status = p.get_status
     status      = Status.create(params[:status])
+    status_type = params[:status_type]
 
     t = Time.now
     if last_status
@@ -195,7 +197,8 @@ class ProjectsController < ApplicationController
     #p.save
     p.calculate_diffs
     
-    if (params[:AQ_status] == "NO")
+    # Counter increment if type = 2 (1 = AQ, 2 = standart, 3 = standart but not QS count increment)
+    if (status_type.to_i == 2)
       # Increment QS counter
       p.qs_count = p.qs_count + 1
       p.save
@@ -652,6 +655,10 @@ class ProjectsController < ApplicationController
     end
   end
   
+  def status_list_form
+        @project = Project.find(params[:id])
+  end
+
 private
 
   def get_status_progress

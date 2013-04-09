@@ -1,0 +1,52 @@
+<%= form_tag({:action => 'add_status_form'}, :multipart => true, :id => 'form_status_list') %>
+	<!-- Param hidden tag -->
+	<%= hidden_field_tag('id', @project.id) %>
+	<%= hidden_field_tag('list_choice',"0") %>
+	<!-- List -->
+	<h3>You are reporting on this project: </h3>
+	<!-- CHOICE 1 -->
+	<div class="status_list_choice" id="choice1" >
+		<div class="status_list_choice_text" >
+			<%= my_simple_format("From a request belonging to one of these WP:
+			WP1.1: Quality Control
+			WP1.2: Quality Assurance
+			WP1.4: Agility Assurance
+			WP1.5: SQR Activities
+			WP1.6.2: Project Setting-up") %>
+		</div>
+		<img class="status_list_choice_img" src='/images/right.png'>      
+	</div>
+	<br />
+	<!-- CHOICE 2 -->
+	<div  class="status_list_choice" id="choice2" >
+		<div class="status_list_choice_text" >
+			<%= my_simple_format('During a "Standard Support" activity and you want to increment the QS counter (last QS counter update for this project: "dd.mm.yy (about xx days/month/year)') %> 
+		</div>
+		<img class="status_list_choice_img" src='/images/right.png'>      
+	</div>
+	<br />
+	<!-- CHOICE 3 -->
+	<div  class="status_list_choice" id="choice3" >
+		<div class="status_list_choice_text" >
+			<%= my_simple_format('During a "Standard Support" activity and you do not want to increment the QS counter (last QS counter update for this project: "dd.mm.yy (about xx days/month/year))"') %> 
+		</div>
+		<img class="status_list_choice_img" src='/images/right.png'>      
+	</div>
+</form>
+
+
+<!-- SCRIPT -->
+<script type="text/javascript">
+ $("choice1").observe('click', function() {				
+ 	$("list_choice").setValue("1");
+ 	$("form_status_list").submit();
+ });
+ $("choice2").observe('click', function() {			
+ 	$("list_choice").setValue("2");
+ 	$("form_status_list").submit();
+ });
+ $("choice3").observe('click', function() {			
+ 	$("list_choice").setValue("3");
+ 	$("form_status_list").submit();
+ });
+</script>

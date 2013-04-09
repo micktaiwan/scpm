@@ -9,28 +9,29 @@
     }
   function formSave() {
     _checkIsDirty = 0;
-    document.forms[0].submit();
+    // document.forms[0].submit();
+    $("new_status").submit();	
     }
 
-	function qsValidation()
-	{
-		var aqValidation = confirm("Are you reporting on this project from a request (assigned to you) belonging to one of these WP?\n WP1.1: Quality Control\n WP1.2: Quality Assurance\n WP1.4: Agility Assurance\n WP1.5: SQR activities\n WP1.6.2: Project Setting-up");
-		if(!aqValidation)
-		{
-			$("AQ_status").setValue("NO");
-			var counterValidation = confirm("If you send this new status, the QS counter of this project will be incremented. Are you sure to continue ?");
+	// function qsValidation()
+	// {
+	// 	var aqValidation = confirm("Are you reporting on this project from a request (assigned to you) belonging to one of these WP?\n WP1.1: Quality Control\n WP1.2: Quality Assurance\n WP1.4: Agility Assurance\n WP1.5: SQR activities\n WP1.6.2: Project Setting-up");
+	// 	if(!aqValidation)
+	// 	{
+	// 		$("AQ_status").setValue("NO");
+	// 		var counterValidation = confirm("If you send this new status, the QS counter of this project will be incremented. Are you sure to continue ?");
 			
-			if(counterValidation)
-			{
-				_checkIsDirty = 0;
-				$("new_status").submit();
-			}
-		}
-		else
-		{
-				$("AQ_status").setValue("YES");
-				_checkIsDirty = 0;
-				$("new_status").submit();		
-		}
-	}
+	// 		if(counterValidation)
+	// 		{
+	// 			_checkIsDirty = 0;
+	// 			$("new_status").submit();
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 			$("AQ_status").setValue("YES");
+	// 			_checkIsDirty = 0;
+	// 			$("new_status").submit();		
+	// 	}
+	// }
 </script>
