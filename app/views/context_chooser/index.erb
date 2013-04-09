@@ -5,9 +5,6 @@
       <% if (@current_actions_from_user.size > 0) %>
         <div id="action_from_welcome">
           <span onclick="location='/actions'"><%= @current_actions_from_user.size %> current actions in progress</span>
-          <% #if (@recent_current_actions_from_user.size > 0) %>
-            <!--<span onclick="location='/actions'">(<%# @recent_current_actions_from_user.size %> updated since less than 72 hours)</span> -->
-          <% #end %>
         </div>
       <% end %>
   </div>
