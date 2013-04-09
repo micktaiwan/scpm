@@ -846,7 +846,7 @@ def get_last_qs_increment
   if last_inc
     return last_inc.created_at
   else
-    return 0
+    return nil
   end
 end
 
