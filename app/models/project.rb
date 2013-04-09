@@ -839,6 +839,17 @@ class Project < ActiveRecord::Base
   end
   def spider_load
   end
+
+# Get the last incrementation date of QS count
+def get_last_qs_increment
+  last_inc =  HistoryCounter.last(:include => :status, :conditions=>["concerned_status_id IS NOT NULL and statuses.project_id = ?" ,self.id])
+  if last_inc
+    return last_inc.created_at
+  else
+    return nil
+  end
+end
+
 private
 
   def excel(a,b)

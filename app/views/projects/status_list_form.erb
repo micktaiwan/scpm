@@ -20,7 +20,8 @@
 	<!-- CHOICE 2 -->
 	<div  class="status_list_choice" id="choice2" >
 		<div class="status_list_choice_text" >
-			<%= my_simple_format('During a "Standard Support" activity and you want to increment the QS counter (last QS counter update for this project: "dd.mm.yy (about xx days/month/year)') %> 
+			<%= my_simple_format('During a "Standard Support" activity and you <strong>want to</strong> increment the QS counter.
+			(last QS counter update for this project: "'+ @project.get_last_qs_increment.to_s + ' (' + time_ago_in_words(@project.get_last_qs_increment) + ')') %> 
 		</div>
 		<img class="status_list_choice_img" src='/images/right.png'>      
 	</div>
@@ -28,7 +29,8 @@
 	<!-- CHOICE 3 -->
 	<div  class="status_list_choice" id="choice3" >
 		<div class="status_list_choice_text" >
-			<%= my_simple_format('During a "Standard Support" activity and you do not want to increment the QS counter (last QS counter update for this project: "dd.mm.yy (about xx days/month/year))"') %> 
+			<%= my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the QS counter.
+			(last QS counter update for this project: "'+ @project.get_last_qs_increment.to_s + ' (' + time_ago_in_words(@project.get_last_qs_increment) + ')') %> 
 		</div>
 		<img class="status_list_choice_img" src='/images/right.png'>      
 	</div>
