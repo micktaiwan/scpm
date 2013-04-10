@@ -60,7 +60,7 @@ function add(id, nb_months, has_requests) {
               <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
             </div>
             
-            <% if @project.project_id != nil or @project.is_qr_qwr %>
+            <% if @project.project_id != nil and ( @project.is_qr_qwr or @project.requests.size > 0 )%>
               <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ?
 							(Date.today.year * 12 + Date.today.month) - (s.updated_at.to_date.year * 12 + s.updated_at.to_date.month): 0}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
               <%
