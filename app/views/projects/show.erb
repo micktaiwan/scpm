@@ -7,13 +7,14 @@ function edit(id, nb_months, has_requests) {
     location = '/projects/edit_status/'+id;
     }
   }
-function add(id, nb_months, has_requests) {
-  if (!has_requests) {
-    alert("This project has no request, you should edit the workpackage")
+function add(id, nb_months, has_requests, has_rights) {
+  if (!has_rights & !has_requests) {
+    alert("You can not edit this project because you have not access rights for editing the workpackage")  
     return;
     }
-  if(nb_months >= 1 || confirm('There is a status for this month already.\nAre you sure you want to add a new status?')) {
-    location = '/projects/add_status_form/'+id;
+    if(nb_months >= 1 || confirm('There is a status for this month already.\nAre you sure you want to add a new status?')) 
+    {
+      location = '/projects/add_status_form/'+id;
     }
   }
 </script>
@@ -62,7 +63,7 @@ function add(id, nb_months, has_requests) {
             
             <% if @project.project_id != nil and ( @project.is_qr_qwr or @project.requests.size > 0 )%>
               <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ?
-							(Date.today.year * 12 + Date.today.month) - (s.updated_at.to_date.year * 12 + s.updated_at.to_date.month): 0}, #{@project.has_requests})", {:class=>'btnlnk'}) %>
+							(Date.today.year * 12 + Date.today.month) - (s.updated_at.to_date.year * 12 + s.updated_at.to_date.month): 0}, #{@project.has_requests}, #{@project.is_qr_qwr})", {:class=>'btnlnk'}) %>
               <%
                 n,c = @project.project_check_items_numbers
                 check_all_done = (n==c)
