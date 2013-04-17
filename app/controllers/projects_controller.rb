@@ -8,7 +8,13 @@ class ProjectsController < ApplicationController
     @time = Time.now
     get_projects
     sort_projects
-    @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
+    @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" )
+    if @last_update
+      @last_update = @last_update.updated_at
+      @last_update = "#{time_ago_in_words(@last_update)} ago (#@last_update)"
+    else
+      @last_update = "Never updated"
+    end
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")    
     
