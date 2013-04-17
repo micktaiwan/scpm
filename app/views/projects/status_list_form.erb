@@ -22,7 +22,7 @@
 		<div class="status_list_choice_text" >
 			<% if @project.get_last_qs_increment %>
 				<%= my_simple_format('During a "Standard Support" activity and you <strong>want to</strong> increment the QS counter.
-				(last QS counter update for this project: "'+ @project.get_last_qs_increment.to_s + ' (' + time_ago_in_words(@project.get_last_qs_increment) + ')') %> 
+				Last QS counter update for this project: "'+ @project.get_last_qs_increment.to_s + ' (<span class="descr">' + time_ago_in_words(@project.get_last_qs_increment) + '</span>)') %> 
 			<% else %>
 				<%= my_simple_format('During a "Standard Support" activity and you <strong>want to</strong> increment the QS counter.') %> 
 			<% end %>
@@ -35,7 +35,7 @@
 		<div class="status_list_choice_text" >
 			<% if @project.get_last_qs_increment %>
 				<%= my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the QS counter.
-			(last QS counter update for this project: "'+ @project.get_last_qs_increment.to_s + ' (' + time_ago_in_words(@project.get_last_qs_increment) + ')') %> 
+			Last QS counter update for this project: "'+ @project.get_last_qs_increment.to_s + ' (<span class="descr">' + time_ago_in_words(@project.get_last_qs_increment) + '</span>)') %> 
 			<% else %>
 				<%= my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the QS counter.') %> 
 			<% end %>
