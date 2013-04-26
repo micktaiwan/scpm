@@ -276,12 +276,13 @@ class SpidersController < ApplicationController
     spiderProject = Project.find(spiderParam.project_id)
     
     if((spiderProject) && (params[:AQ_spider] == "NO"))
-      spiderProject.spider_count = spiderProject.spider_count + 1
-      spiderProject.save
-      
       # Insert in history_counter
       streamRef     = Stream.find_with_workstream(spiderProject.workstream)
       streamRef.set_spider_history_counter(current_user,spiderParam)
+
+      # Increment counter
+      spiderProject.spider_count = spiderProject.spider_count + 1
+      spiderProject.save
     end
     
   end
