@@ -123,6 +123,12 @@ class SpidersController < ApplicationController
   def project_spider_import
   end
 
+  def update_spider_file_name_form
+    spider_id  = params[:id]
+    @spider    = Spider.find(spider_id)
+  end
+
+
   # ------------------------------------------------------------------------------------
   # CREATE HTML ELEMENTS
   # ------------------------------------------------------------------------------------
@@ -242,6 +248,15 @@ class SpidersController < ApplicationController
     redirect_to  :action=>:project_spider_history, :spider_id=>s.id.to_s
   end
 
+  def update_spider_file_name
+    spider_id          = params[:id]
+    if params[:spider][:file_link]
+      spider           = Spider.find(spider_id)
+      spider.file_link = params[:spider][:file_link]
+      spider.save
+    end
+    redirect_to :controller=>:tools ,:action=>:show_counter_history
+  end
 
   # Consolidate the spider
   def project_spider_consolidate(spiderParam)

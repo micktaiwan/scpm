@@ -1,0 +1,5 @@
+<%= error_messages_for :spider %>
+<% form_for @spider, :url=>{:action=>'update_spider_file_name', :id=>@spider.id} do |f| -%>
+	<%= f.text_area :file_link %><br />
+	<%= f.submit %>
+<% end -%>

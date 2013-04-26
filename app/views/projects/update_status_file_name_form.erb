@@ -1,5 +1,0 @@
-<%= error_messages_for :status %>
-<% form_for @status, :url=>{:action=>'update_status_file_name', :id=>@status.id} do |f| -%>
-	<%= f.text_area :file_link %><br />
-	<%= f.submit %>
-<% end -%>

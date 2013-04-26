@@ -237,22 +237,6 @@ class ProjectsController < ApplicationController
     redirect_to :action=>:show, :id=>status.project_id
   end
 
-  def update_status_file_name_form
-    status_id = params[:id]
-    @status    = Status.find(status_id)
-  end
-
-  def update_status_file_name
-    status_id        = params[:id]
-    if params[:status][:file_link]
-      status           = Status.find(status_id)
-      status.file_link = params[:status][:file_link]
-      status.save
-    end
-    redirect_to :controller=>:tools ,:action=>:show_counter_history
-  end
-
-
   # check request and suggest projects
   def import
     @import = []
