@@ -641,8 +641,8 @@ class ToolsController < ApplicationController
       
     tmp_spider_counter_no_request = HistoryCounter.find(:all,:conditions=>[spider_condition])
     tmp_qs_counter_no_request     = HistoryCounter.find(:all,:conditions=>[qs_condition])
-    @spider_counter_no_request = Array.new
-    @qs_counter_no_request = Array.new
+    @spider_counter_no_request    = Array.new
+    @qs_counter_no_request        = Array.new
 
 
     # For each spider counter
@@ -650,11 +650,12 @@ class ToolsController < ApplicationController
       current_spider_history            = Hash.new
       current_spider_history["object"]  = s_req
       current_spider_history["request"] = nil
+      current_spider_user               = Person.find(s_req.author_id)
       
       # Check if we have a available spider request thanks to Workstream 
       stream_found  = Stream.find_with_workstream(s_req.spider.project.workstream)
-      if (stream_found)
-        request_found = stream_found.get_current_spider_counter_request
+      if ((stream_found) and (current_user.id.to_i == current_qs_user.id.to_i))
+        request_found = stream_found.get_current_spider_counter_request(current_spider_user)
         if request_found
           current_spider_history["request"] = request_found
         end
@@ -667,11 +668,12 @@ class ToolsController < ApplicationController
       current_qs_history            = Hash.new
       current_qs_history["object"]  = qs_req
       current_qs_history["request"] = nil
+      current_qs_user               = Person.find(qs_req.author_id)
       
       # Check if we have a available qs request thanks to Workstream 
       stream_found  = Stream.find_with_workstream(qs_req.status.project.workstream)
-      if (stream_found)
-        request_found = stream_found.get_current_qs_counter_request
+      if ((stream_found) and (current_user.id.to_i == current_qs_user.id.to_i))
+        request_found = stream_found.get_current_qs_counter_request(current_qs_user)
         if request_found
           current_qs_history["request"] = request_found
         end

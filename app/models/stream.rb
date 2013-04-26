@@ -61,6 +61,15 @@ class Stream < ActiveRecord::Base
     return spider_count
   end
   
+  def get_consumed_qs_count_for_user(user)
+    historyCounters = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NOT NULL", user.id, self.id]) 
+    return historyCounters.count
+  end
+  
+  def get_consumed_spider_count_for_user(user)
+    historyCounters = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_spider_id IS NOT NULL", user.id, self.id]) 
+    return historyCounters.count
+  end
 
   #               # 
   # Total tickets #
@@ -93,7 +102,7 @@ class Stream < ActiveRecord::Base
   
   # Create a new line in history_counter for spider
   def set_spider_history_counter(author,spider)
-    counter_request = self.get_current_spider_counter_request
+    counter_request = self.get_current_spider_counter_request(author)
     
     newHistoryCounter = HistoryCounter.new
     newHistoryCounter.stream_id = self.id
@@ -112,7 +121,7 @@ class Stream < ActiveRecord::Base
   end
   
   def set_qs_history_counter(author,status)
-    counter_request = self.get_current_qs_counter_request
+    counter_request = self.get_current_qs_counter_request(author)
 
     newHistoryCounter = HistoryCounter.new
     newHistoryCounter.stream_id = self.id
@@ -138,15 +147,15 @@ class Stream < ActiveRecord::Base
   # Find the "Counter Request" (valide) for the next incrementation of spider counter 
   # For a stream, we can have multiple "Counter request" with multiple counter values.
   # This "counter request" will be order by date
-  def get_current_spider_counter_request
+  def get_current_spider_counter_request(author)
     sum_spider_count_for_request = 0
     last_request = 0
     found = false
-    next_spider_counter_incrementation = self.get_consumed_spider_count + 1 # Get the next counter incrementation
+    next_spider_counter_incrementation = self.get_consumed_spider_count_for_user(author) + 1 # Get the next counter incrementation
     
     # loop on requests of this stream by date 
     self.requests.sort_by{|r| r.start_date }.each { |r|
-       if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity))
+       if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity) and (r.assigned_to == author.rmt_user))
           sum_spider_count_for_request = sum_spider_count_for_request + r.counter_log.counter_value
           last_request = r
           if (next_spider_counter_incrementation <= sum_spider_count_for_request)
@@ -164,15 +173,15 @@ class Stream < ActiveRecord::Base
   # Find the "Counter Request" (valide) for the next incrementation of spider counter 
   # For a stream, we can have multiple "Counter request" with multiple counter values.
   # This "counter request" will be order by date
-  def get_current_qs_counter_request
+  def get_current_qs_counter_request(author)
     sum_qs_count_for_request = 0
     last_request = 0
     found = false
-    next_qs_counter_incrementation = self.get_consumed_qs_count + 1 # Get the next counter incrementation
+    next_qs_counter_incrementation = self.get_consumed_qs_count_for_user(author) + 1 # Get the next counter incrementation
     
     # loop on requests of this stream by date  
     self.requests.sort_by{|r| r.start_date }.each { |r|
-       if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity))
+       if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity) and (r.assigned_to == author.rmt_user))
           sum_qs_count_for_request = sum_qs_count_for_request + r.counter_log.counter_value
           last_request = r
           if (next_qs_counter_incrementation <= sum_qs_count_for_request)
