@@ -199,13 +199,13 @@ class ProjectsController < ApplicationController
     
     # Counter increment if type = 2 (1 = AQ, 2 = standart, 3 = standart but not QS count increment)
     if (status_type.to_i == 2)
-      # Increment QS counter
-      p.qs_count = p.qs_count + 1
-      p.save
-    
       # Insert in history_counter
       streamRef     = Stream.find_with_workstream(p.workstream)
       streamRef.set_qs_history_counter(current_user,status)
+
+      # Increment QS counter
+      p.qs_count = p.qs_count + 1
+      p.save
     end
     
     #Mailer::deliver_status_change(p)
