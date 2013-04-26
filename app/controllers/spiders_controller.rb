@@ -207,10 +207,16 @@ class SpidersController < ApplicationController
   
   # Save spider
   def update_spider
-      spider = Spider.find(params[:spider_id])
-      spiderValues = params[:spiderquest]
-      spiderValuesRecursives = params[:spiderquestresursive]
+      spider                  = Spider.find(params[:spider_id])
+      file_link               = params[:file_link]
+      spiderValues            = params[:spiderquest]
+      spiderValuesRecursives  = params[:spiderquestresursive]
       
+      # File link
+      spider.file_link = file_link
+      spider.save
+
+      # Set spider values
       spiderValues.each { |h|
         currentQuestion = SpiderValue.find(h[0])
         currentQuestion.note = h[1].to_s
@@ -221,12 +227,22 @@ class SpidersController < ApplicationController
         end
         currentQuestion.save
       }
+
+      #Consolidate
       if(params[:consolidate_spider] == "1")
         project_spider_consolidate(spider)
      end
      redirect_to :action=>:project_spider, :project_id=>params[:project_id], :milestone_id=>params[:milestone_id]
   end
   
+  # Update spider from consolidation view
+  def update_by_conso
+    s = Spider.find(params[:id])
+    s.update_attributes(params[:spider])
+    redirect_to  :action=>:project_spider_history, :spider_id=>s.id.to_s
+  end
+
+
   # Consolidate the spider
   def project_spider_consolidate(spiderParam)
     currentAxes = ""

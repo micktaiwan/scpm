@@ -1,7 +1,24 @@
 
 <script type="text/javascript"> 
 $(function () {
-	
+	// file link
+	// function checkFilelink()
+	// {
+	// 	if($('#spider_file_link').val().length == 0)
+	// 	{
+	// 		$("#warning_file_link").show();
+	// 	}
+	// 	else
+	// 	{
+	// 		$("#warning_file_link").hide();
+	// 	}
+	// }
+	// $('#spider_file_link').change(function() {
+	//   checkFilelink();
+	// });
+	// checkFilelink();
+
+	// Schema visibility
 	var docHeight = getDocHeight();
 	if (docHeight < 1000)
 	{
@@ -166,3 +183,17 @@ pmTypeIndex = 0
 }
 concat 'calculHistoryAverage(consoDataArray);});</script>'
 %>
+
+
+<br />
+
+<div id="spider_file_link">
+	<h3>Consolidation update</h3>
+	<% form_for :spider, @spider, :url => { :action => "update_by_conso", :id=>@spider.id } do |f| %>
+	  <%= label_tag(:file_link, "Delivery File Link:") %>
+		<%= f.text_field :file_link %>
+		<!-- <span class="warning" id="warning_file_link">No delivery file link.</span> -->
+  <%= submit_tag "Update" %>
+<% end %>
+
+</end>

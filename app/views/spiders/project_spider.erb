@@ -79,6 +79,24 @@ $(function () {
 			$("#chartContainer_0").hide();
 		}
 	}
+
+	function checkFilelink()
+	{
+		if($('#file_link').val().length == 0)
+		{
+			$("#warning_file_link").show();
+		}
+		else
+		{
+			$("#warning_file_link").hide();
+		}
+	}
+
+	// Execution
+	$('#file_link').change(function() {
+	  checkFilelink();
+	});
+	checkFilelink();
 });
 
 // Helper
@@ -222,6 +240,12 @@ function getDocHeight() {
 		end
 	}
 %>
+	<br />
+	<div id="spider_file_link">
+		<h3>Others</h3>
+		Delivery File Link : <input id="file_link" name="file_link" type="text" value="<%= @spider.file_link %>" />
+		<span class="warning" id="warning_file_link">No delivery file link.</span>
+	</end>
 	<div id="spider_form_buttons">
 		<h3>Actions</h3>
 		<input type="submit" value="Save" />
