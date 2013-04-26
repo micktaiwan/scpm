@@ -601,7 +601,7 @@ class ToolsController < ApplicationController
     requests          = Request.find(:all,:conditions=>["work_package LIKE ? or work_package LIKE ?", "%"+WORKPACKAGE_QS+"%","%"+WORKPACKAGE_SPIDERS+"%"])
     @requests_array   = [["All",0]] 
     requests.each{ |r| 
-      @requests_array << [r.summary, r.id ]
+      @requests_array << [r.request_id.to_s+" "+r.summary, r.id ]
     }
     
     spider_condition  = "concerned_spider_id IS NOT NULL"
