@@ -11,7 +11,7 @@
 	<% sc_no_req = spider_array["object"] %>
 	<tr>
 		<td><%= sc_no_req.author.name %></td>
-		<td><%= sc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<td><%= sc_no_req.action_date.strftime("%Y-%m-%d %H:%M") %></td>
 		
 		<% project_name = sc_no_req.spider.project.name %>
 		<% if sc_no_req.spider.project.project %>
@@ -41,7 +41,7 @@
 	<% qsc_no_req = qs_array["object"] %>
 	<tr>
 		<td><%= qsc_no_req.author.name %></td>
-		<td><%= qsc_no_req.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<td><%= qsc_no_req.action_date.strftime("%Y-%m-%d %H:%M") %></td>
 		<% project_name = qsc_no_req.status.project.name %>
 		<% if qsc_no_req.status.project.project %>
 			<% project_name = qsc_no_req.status.project.project.name + " > " + qsc_no_req.status.project.name %>

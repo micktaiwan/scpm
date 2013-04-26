@@ -32,7 +32,7 @@
 	<!-- DETAIL ACTION TR-->
 	<tr>
 		<td><%= sc.author.name %></td>
-		<td><%= sc.action_date.strftime("%m/%d/%Y %H:%M") %></td>		
+		<td><%= sc.action_date.strftime("%Y-%m-%d %H:%M") %></td>		
 		<% project_name = sc.spider.project.name %>
 		<% if sc.spider.project.project %>
 			<% project_name = sc.spider.project.project.name + " > " + sc.spider.project.name %>
@@ -76,7 +76,7 @@
 	<!-- DETAIL ACTION TR -->	
 	<tr>
 		<td><%= qsc.author.name %></td>
-		<td><%= qsc.action_date.strftime("%m/%d/%Y %H:%M") %></td>
+		<td><%= qsc.action_date.strftime("%Y-%m-%d %H:%M") %></td>
 		
 		<% project_name = qsc.status.project.name %>
 		<% if qsc.status.project.project %>

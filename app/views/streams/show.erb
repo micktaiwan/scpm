@@ -27,7 +27,7 @@
 <div class='status_explanation'>
 	<div class='status_date'>
 		<span class="bold_colored"><%= r.review_type.title %></span> -  
-		<span class="bold">Last edit :</span> <%= r.updated_at.strftime("%m/%d/%Y %H:%M") %>
+		<span class="bold">Last edit :</span> <%= r.updated_at.strftime("%Y-%m-%d %H:%M") %>
 		<span class="bold"> by </span> <%= r.author.name.to_s %>
   </div>
 	<br />

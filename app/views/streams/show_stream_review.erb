@@ -15,7 +15,7 @@ function add(id,type_id) {
 </h2>
 
 <% if @last_review %>
-	<p><span class="bold">Last update time:</span> <%= time_ago_in_words(@last_review.updated_at.strftime("%m/%d/%Y %H:%M")) %></p>
+	<p><span class="bold">Last update time:</span> <%= time_ago_in_words(@last_review.updated_at.strftime("%Y-%m-%d %H:%M")) %></p>
 	<%= render(:partial=>'review', :object=>@last_review) %>
 <% end %>
 

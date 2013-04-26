@@ -1,6 +1,6 @@
 <div id='review_<%=review.id%>'>
   <div class='review_date'>
-				<%=review.updated_at.strftime("%m/%d/%Y %H:%M")%> -
+				<%=review.updated_at.strftime("%Y-%m-%d %H:%M")%> -
         <%= review.author.name if review.author %>
 
         <%=link_to_function('Edit', "edit(#{review.id});")%>
