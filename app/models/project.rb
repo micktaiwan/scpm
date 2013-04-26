@@ -40,7 +40,7 @@ class Project < ActiveRecord::Base
     ns = cs.select{|c| c.status > 0}
     [ns.size, cs.size]
   end
-  
+
   def transverse_checklists
     self.project_check_items.select{|c| c.ctemplate.ctype!="folder" and c.ctemplate.is_transverse==1 }
   end
@@ -263,6 +263,11 @@ class Project < ActiveRecord::Base
     s ? s.name : ''
   end
 
+  def suite_tag_name
+    s = self.suite_tag
+    s ? s.name : ''
+  end
+
   def move_statuses_to_project(p)
     self.statuses.each { |s|
       s.project_id = p.id
@@ -367,7 +372,7 @@ class Project < ActiveRecord::Base
           ['sM1', 'sM3', 'sM5', 'sM13', 'sM14'].each {|m| create_milestone(m)}
         end
   end
-  
+
   def set_lifecycle_old_param
     case self.lifecycle_object.name
          when "Full GPP"
@@ -451,8 +456,8 @@ class Project < ActiveRecord::Base
           nb += 1 and rv += "Assurance BAT\n"   if m != 'Maintenance'
         # NEW
         when 'WP1.5 - SQR'
-          nb += 1 and rv += "SQR\n"   if m != 'Maintenance' 
-            
+          nb += 1 and rv += "SQR\n"   if m != 'Maintenance'
+
         # NEW
         when 'WP1.6.2 - QWR Project Setting-up'
           nb += 1 and rv += "Project Setting-up\n"  if m != 'Maintenance'
@@ -465,11 +470,11 @@ class Project < ActiveRecord::Base
         # NEW
         when 'WP1.6.8 – QWR Lessons Learnt'
           nb += 1 and rv += "Project Lessons Learnt\n"    if m != 'Maintenance'
-        
-        # SAME  
+
+        # SAME
         when 'WP2 - Quality for Maintenance'
           nb += 1 and rv += "Maintenance\n"       if m == 'Maintenance'
-        
+
         # SAME
         when 'WP3.0 - Old Modeling'
           nb += 1 and rv += "Old Modeling\n"        if m == 'M5'
@@ -487,14 +492,14 @@ class Project < ActiveRecord::Base
           nb += 1 and rv += "Modeling Use Cases\n"   if m == 'M5'
         # NEW
         when 'WP3.2.3 - Information Layout (Data Model)'
-          nb += 1 and rv += "Modeling Data Model\n"   if m == 'M5'  
-        # SAME  
+          nb += 1 and rv += "Modeling Data Model\n"   if m == 'M5'
+        # SAME
         when 'WP3.3 - Modeling BAT specific Control'
           nb += 1 and rv += "Modeling 3\n"    if m == 'M5'
         # NEW
         when 'WP3.4 - Modeling BAT specific Production'
           nb += 1 and rv += "Modeling 4\n"    if m == 'M5'
-          
+
         # SAME
         when 'WP4.1 - Surveillance Audit'
           nb += 1 and rv += "Audit\n"       if m == 'M3'
@@ -504,7 +509,7 @@ class Project < ActiveRecord::Base
         # NEW
         when 'WP4.3 - Actions Implementation & Control'
           nb += 1 and rv += "Surveillance - Actions Implementation & Control\n"          if m == 'M5'
-        
+
         # SAME
         when 'WP5 - Change Accompaniment'
           nb += 1 and rv += "Change\n"    if m == 'M3'
@@ -512,9 +517,9 @@ class Project < ActiveRecord::Base
         when 'WP5.1 - Change: Diagnosis & Action Plan'
           nb += 1 and rv += "Change - Diagnosis\\n"   if m == 'M3'
         # NEW
-        when 'WP5.2 – Change : Implementation Support & Follow-up'  
+        when 'WP5.2 – Change : Implementation Support & Follow-up'
           nb += 1 and rv += "Change - Actions Implementation & Control\n"   if m == 'M5'
-          
+
         # SAME
         when 'WP6.1 - Coaching PP'
           nb += 1 and rv += "Coaching PP\n"       if m == 'M3'
@@ -531,37 +536,37 @@ class Project < ActiveRecord::Base
         when 'WP6.5 - Coaching Maintenance'
           nb += 1 and rv += "Coaching Maint.\n"   if m == 'Maintenance'
         # NEW
-        when 'WP6.6 – Coaching HLR'  
+        when 'WP6.6 – Coaching HLR'
           nb += 1 and rv += "Coaching HLR\n"          if m == 'M5'
         # NEW
-        when 'WP6.7 – Coaching Business Process'  
+        when 'WP6.7 – Coaching Business Process'
           nb += 1 and rv += "Coaching Business Process\n"          if m == 'M5'
         # NEW
-        when 'WP6.8 – Coaching Use Case'  
+        when 'WP6.8 – Coaching Use Case'
           nb += 1 and rv += "Coaching Use Case\n"          if m == 'M5'
         # NEW
-        when 'WP6.9 – Coaching Data Model'  
+        when 'WP6.9 – Coaching Data Model'
           nb += 1 and rv += "Coaching Data Model\n"          if m == 'M5'
-       
+
         # NEW
-        when 'WP7.2.1 - Expertise Activities for Project: Requirements Management'  
+        when 'WP7.2.1 - Expertise Activities for Project: Requirements Management'
           nb += 1 and rv += "Expert Req Management\n"          if m == 'M3'
         # NEW
-        when 'WP7.2.2 - Expertise Activities for Project: Risks Management'  
+        when 'WP7.2.2 - Expertise Activities for Project: Risks Management'
           nb += 1 and rv += "Expert Risks Management\n"          if m == 'M3'
         # NEW
-        when 'WP7.2.3 - Expertise Activities for Project: Test Management'  
+        when 'WP7.2.3 - Expertise Activities for Project: Test Management'
           nb += 1 and rv += "Expert Test Management\n"          if m == 'M5'
         # NEW
-        when 'WP7.2.4 - Expertise Activities for Project: Change Management'  
+        when 'WP7.2.4 - Expertise Activities for Project: Change Management'
           nb += 1 and rv += "Expert Change Management\n"          if m == 'M5'
         # NEW
-        when 'WP7.2.5 - Expertise Activities for Project: Lessons Learnt'  
+        when 'WP7.2.5 - Expertise Activities for Project: Lessons Learnt'
           nb += 1 and rv += "Expert Lessons Learnt\n"          if m == 'M5'
         # NEW
-        when 'WP7.2.6 - Expertise Activities for Project: Configuration Management'  
+        when 'WP7.2.6 - Expertise Activities for Project: Configuration Management'
           nb += 1 and rv += "Expert Conf Management\n"          if m == 'M3'
-          
+
         else
           rv += "unknown workpackage: #{r.work_package}"
       end
@@ -792,13 +797,13 @@ class Project < ActiveRecord::Base
     projects = Project.find(:all, :conditions=>["workstream=?", ws_name])
     projects.select { |p| p.active_requests.size > 0}
   end
-  
+
   # Calculate the previsional number of QS of the project
   def calcul_qs_previsional
     # Params
     last_milestone_date = nil
     milestones_array = sorted_milestones
-    
+
     # Get last milestone date
     sorted_milestones.reverse!.each do |m|
       if m.actual_milestone_date
@@ -809,7 +814,7 @@ class Project < ActiveRecord::Base
         break
       end
     end
-    
+
     # Compare with current date
     today = Date.today
     if ((last_milestone_date) && (last_milestone_date > today))
@@ -819,7 +824,7 @@ class Project < ActiveRecord::Base
       return 0
     end
   end
-  
+
   # Calculate the previsional number of spiders of the projet
   def calcul_spider_previsional
     spider_counter = 0
@@ -834,7 +839,7 @@ class Project < ActiveRecord::Base
     end
     return spider_counter
   end
-  
+
   def qs_load
   end
   def spider_load

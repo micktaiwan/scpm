@@ -10,7 +10,7 @@
 <%= link_to('Request changes', {:action=>'week_changes'}, {:class=>'btnlnk'}) %>
 
 <div class="stats">
-  Last RMT update: <%= time_ago_in_words(@last_update) %> ago (<%= @last_update %>)<br/>
+  Last RMT update: <%= @last_update %><br/>
   <b>Filter</b>: <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status.<br/>
   <b>Total</b>: <%= @total_wps %> WPs, <%= @total_status %> statuses.
 </div>

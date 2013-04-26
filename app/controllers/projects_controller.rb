@@ -1,5 +1,7 @@
 require 'builder'
 
+include ActionView::Helpers::DateHelper # just for time_ago_in_words...
+
 class ProjectsController < ApplicationController
 
   before_filter :require_login
@@ -8,10 +10,16 @@ class ProjectsController < ApplicationController
     @time = Time.now
     get_projects
     sort_projects
-    @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" ).updated_at
+    @last_update = Request.find(:first, :select=>"updated_at", :order=>"updated_at desc" )
+    if @last_update
+      @last_update = @last_update.updated_at
+      @last_update = "#{time_ago_in_words(@last_update)} ago (#@last_update)"
+    else
+      @last_update = "Never updated"
+    end
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
-    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")    
-    
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")
+
     # TODO: use model "workstream"
     @workstreams = ['EE','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC','TBCE']
     #Project.all.collect{|p| p.workstream}.uniq.sort
@@ -47,7 +55,7 @@ class ProjectsController < ApplicationController
   end
 
   def sort_projects
-    case 
+    case
       when session[:project_sort]=='read'
         @projects = @projects.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year }
         @wps = @wps.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year}
@@ -62,18 +70,18 @@ class ProjectsController < ApplicationController
         @wps = @wps.sort_by { |p| [p.workstream, p.full_name] }
     end
   end
-  
+
   def refresh_projects
     s = params[:sort]
     session[:project_sort] = s
     get_projects
     sort_projects
-    render(:partial=>'home_project', :collection=>@wps, :as=>:project, :layout=>false)    
+    render(:partial=>'home_project', :collection=>@wps, :as=>:project, :layout=>false)
   end
-  
+
   def new
     @project     = Project.new(:project_id=>nil, :name=>'')
-    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")    
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
   end
 
@@ -128,7 +136,7 @@ class ProjectsController < ApplicationController
   def edit
     id           = params[:id]
     @project     = Project.find(id)
-    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")    
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @suiteTags   = SuiteTag.find(:all)
   end
@@ -146,8 +154,8 @@ class ProjectsController < ApplicationController
     project.update_attributes(params[:project])
     project.propagate_attributes
     project.set_lifecycle_old_param()
-    
-    # QR QWR 
+
+    # QR QWR
     check_qr_qwr_pdc(project)
     #check_qr_qwr_activated(project,old_is_qr_qwr_param)
     redirect_to :action=>:show, :id=>project.id
@@ -196,7 +204,7 @@ class ProjectsController < ApplicationController
     p.update_status(params[:status][:status])
     #p.save
     p.calculate_diffs
-    
+
     # Counter increment if type = 2 (1 = AQ, 2 = standart, 3 = standart but not QS count increment)
     if (status_type.to_i == 2)
       # Insert in history_counter
@@ -207,7 +215,7 @@ class ProjectsController < ApplicationController
       p.qs_count = p.qs_count + 1
       p.save
     end
-    
+
     #Mailer::deliver_status_change(p)
     redirect_to :action=>:show, :id=>project_id
   end
@@ -228,12 +236,12 @@ class ProjectsController < ApplicationController
     timestamps_on if params[:update] != '1'
     redirect_to :action=>:show, :id=>status.project_id
   end
-  
+
   def update_status_file_name_form
     status_id = params[:id]
     @status    = Status.find(status_id)
   end
-  
+
   def update_status_file_name
     status_id        = params[:id]
     if params[:status][:file_link]
@@ -243,7 +251,7 @@ class ProjectsController < ApplicationController
     end
     redirect_to :controller=>:tools ,:action=>:show_counter_history
   end
-  
+
 
   # check request and suggest projects
   def import
@@ -251,7 +259,7 @@ class ProjectsController < ApplicationController
     Request.find(:all, :conditions=>"project_id is null and stream_id is null", :order=>"workstream").each { |r|
       @import << r
       }
-    render(:layout=>'tools')  
+    render(:layout=>'tools')
   end
 
   # for each request rename project if necessary
@@ -312,7 +320,7 @@ class ProjectsController < ApplicationController
     @display_actions  = true
     @missing_associations = find_missing_project_person_associations
     timestamps_on
-    render(:layout=>'tools')  
+    render(:layout=>'tools')
   end
 
   # link a request to a project, based on request project_name
@@ -516,24 +524,24 @@ class ProjectsController < ApplicationController
       closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
       closed.each { |r| r.reporter = "Closed" }
       @week_changes = wps + complexities + news + performed + closed
-      
+
       # STREAMS REVIEW BEGIN
       stream                = Stream.find(:all)
       @review_types         = ReviewType.find(:all)
       @stream_width_array   = ["100","60"]
       @stream_column_array  = ["workstream","stream"]
       @stream_columns_content = Array.new
-      
-      @review_types.each { |rt| 
-        @stream_width_array.push('200') 
+
+      @review_types.each { |rt|
+        @stream_width_array.push('200')
         @stream_column_array.push(rt.title)
       }
-      
+
       stream.each do |s|
         stream_params_array = Hash.new
         stream_params_array["workstream"] = s.workstream.name
         stream_params_array["stream"] = s.name
-        
+
         @review_types.each do |rt|
           last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",s.id ,rt.id], :order => "created_at DESC")
           if last_review
@@ -545,7 +553,7 @@ class ProjectsController < ApplicationController
         @stream_columns_content.push(stream_params_array)
       end
       # STREAMS REVIEW END
-      
+
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
       headers['Cache-Control']        = ''
@@ -605,20 +613,20 @@ class ProjectsController < ApplicationController
     @performed    = Request.find(:all, :conditions=>["status_performed >= ?", date], :order=>"workstream, project_id, status_performed")
     @closed       = Request.find(:all, :conditions=>["status_closed >= ?", date], :order=>"workstream, project_id, status_closed")
   end
-  
-  
+
+
   # Change is_running status
-  
+
   def stop
     id = params[:id]
     project = Project.find(id)
     if(project)
-      project.is_running = 0      
+      project.is_running = 0
       project.save
     end
     render(:nothing => true)
   end
-  
+
   def start
     id = params[:id]
     project = Project.find(id)
@@ -628,7 +636,7 @@ class ProjectsController < ApplicationController
     end
     redirect_to :action=>:show, :id=>project.id
   end
-  
+
   # Check if the project is just setted to "is_qr_qwr". If yes, change the comments of milestones
   def check_qr_qwr_activated(project,old_is_qr_qwr)
     if project.is_qr_qwr and !old_is_qr_qwr and project.is_running
@@ -638,7 +646,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  
+
   # Check if the project is just setted to "is_qr_qwr". If Yes, create a WlLine for the person concerned
   def check_qr_qwr_pdc(project)
     # If the project is qr_qwr activated
@@ -654,7 +662,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  
+
   def status_list_form
         @project = Project.find(params[:id])
   end
@@ -736,10 +744,10 @@ private
        	bgcolor = "#A00"
       elsif r.severity>=8
        	bgcolor = "#F00"
-      elsif r.severity>=6 
+      elsif r.severity>=6
       	bgcolor = "#FA0"
-      elsif 
-      r.severity>=3 
+      elsif
+      r.severity>=3
       	bgcolor = "#FF9"
       end
       @risks += "<span style='background-color:#{bgcolor};'>#{r.context} => #{r.risk} (#{r.consequence}) [Severity => #{r.severity}]</span><br/>"
