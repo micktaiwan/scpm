@@ -830,20 +830,25 @@ class Project < ActiveRecord::Base
     spider_counter = 0
     # Get nb of milestones not passed
     sorted_milestones.each do |m|
-      if m.done == 0
-        m_name = MilestoneName.first(:conditions=>["title = ?",m.name])
-        if ((m_name != nil) and (m_name.count_in_spider_prev))
-          spider_counter = spider_counter + 1
-        end
-      end
-    end
+      m_name = MilestoneName.first(:conditions=>["title = ?",m.name])
+      if (m.done == 0) and ((m_name != nil) and (m_name.count_in_spider_prev))
+        if m.actual_milestone_date
+          # Sub-if because we need to check this independently of the presence of actual milestone date
+          if m.actual_milestone_date > DateTime.now.to_date
+            spider_counter = spider_counter + 1
+          end
+        elsif m.milestone_date
+          # Sub-if because we need to check this independently of the presence of milestone_date
+          if m.milestone_date > DateTime.now.to_date
+              spider_counter = spider_counter + 1
+          end # End if m.milestone_date > Date.now
+        end # End if m.milestone_date
+      end # End if (m.done == 0) and ((m_name != nil) and (m_name.count_in_spider_prev))
+    end # End sorted_milestones.each
+
     return spider_counter
   end
 
-  def qs_load
-  end
-  def spider_load
-  end
 
 # Get the last incrementation date of QS count
 def get_last_qs_increment
