@@ -299,7 +299,7 @@ class ProjectsController < ApplicationController
       p.supervisor_id = p.project.supervisor_id
       p.save
       }
-    @projects         = Project.find(:all).select{ |p| p.projects.size == 0 and p.requests.size == 0}
+    @projects         = Project.find(:all, :conditions=>"is_running = 0")
     @root_requests    = Project.find(:all, :conditions=>"project_id is null").select{ |p| p.requests.size > 0}
     @display_actions  = true
     @missing_associations = find_missing_project_person_associations
