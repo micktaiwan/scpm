@@ -136,7 +136,7 @@ class ProjectsController < ApplicationController
   def edit
     id           = params[:id]
     @project     = Project.find(id)
-    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")
+    @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0"], :order=>"people.name asc")    
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @suiteTags   = SuiteTag.find(:all)
   end
