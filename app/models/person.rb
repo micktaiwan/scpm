@@ -261,7 +261,7 @@ class Person < ActiveRecord::Base
     #all = Request.all
     not_started          = Request.find(:all, :conditions=>["start_date != '' and start_date <= ? and resolution!='in progress' and resolution!='ended' and resolution!='aborted' and status!='cancelled'  and status!='removed' and status!='to be validated' and assigned_to = ?", Date.today(), self.rmt_user], :order=>"start_date")
     null_start_date      = Request.find(:all, :conditions=>["start_date = '' and status='assigned' and assigned_to = ?", self.rmt_user], :order=>"start_date")
-    null_milestones      = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress' and assigned_to = ?", self.rmt_user], :order=>"start_date")
+    null_milestones      = Request.find(:all, :conditions=>["milestone_date = '' and status != 'cancelled' and resolution='in progress' and assigned_to = ? and milestone != 'N/A'", self.rmt_user], :order=>"start_date")
     past_milestones      = Request.find(:all, :conditions=>["((actual_m_date != '' and actual_m_date < ?) or (actual_m_date = '' and milestone_date != '' and milestone_date < ?)) and resolution!='ended' and resolution!='aborted' and status != 'cancelled' and status != 'removed' and assigned_to = ?", Date.today(), Date.today(), self.rmt_user], :order=>"milestone_date")
     ended_without_amdate = Request.find(:all, :conditions=>["status !='cancelled' and resolution='ended' and actual_m_date='' and assigned_to = ?", self.rmt_user], :order=>"start_date")
     returnHash = {}
