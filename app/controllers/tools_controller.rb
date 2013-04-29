@@ -654,7 +654,7 @@ class ToolsController < ApplicationController
       
       # Check if we have a available spider request thanks to Workstream 
       stream_found  = Stream.find_with_workstream(s_req.spider.project.workstream)
-      if ((stream_found) and (current_user.id.to_i == current_qs_user.id.to_i))
+      if ((stream_found) and (current_user.id.to_i == current_spider_user.id.to_i))
         request_found = stream_found.get_current_spider_counter_request(current_spider_user)
         if request_found
           current_spider_history["request"] = request_found
