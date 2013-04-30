@@ -13,7 +13,7 @@
 <% form_tag ({:controller => "streams", :action => "update_stream_review_types"}, :method => "post") do %>
 	<%= hidden_field_tag('id', @stream.id) %>
 	<% @reviewTypes.each do |rt| %>
-		<p><%= rt.title %> - <%= rt.description %>
+		<p><%= rt.title %> -
 		<% checkboxName = rt.id.to_s %> <%= rt.description %>
 		<% if(@stream.review_types.include?(rt))%>
 			<%= check_box_tag("reviewTypeForm[]",checkboxName,true) %>
