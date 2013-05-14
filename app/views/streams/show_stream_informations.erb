@@ -27,6 +27,16 @@
 
 
 <h2>Requests</h2>
+
+<div>
+<% form_tag(:action=>'add_request') do %>
+	<b>Add Request :</b> </h3>
+  	<%= hidden_field_tag('id', @stream.id) %>
+  	<%= text_field_tag 'request_id' %>
+  	<%= submit_tag('Add') %>
+<% end %>
+</div>
+
 <ul>
-<%= render(:partial=>'projects/request', :collection=>@stream.requests) %>
+<%= render(:partial=>'streams/request', :collection=>@stream.requests) %>
 </ul>

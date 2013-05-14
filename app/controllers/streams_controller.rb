@@ -46,7 +46,31 @@ class StreamsController < ApplicationController
     # Get all review types
     @reviewTypes = ReviewType.find(:all)
   end
-  
+
+  def add_request
+    stream_id          = params['id']
+    request_id         = params['request_id']
+    if (request_id.length == 7)
+      request            = Request.first(:conditions => ["request_id = ?",request_id])
+      request.stream_id  = stream_id
+      request.project_id = nil
+      request.is_stream  = 1
+      request.save
+    end
+
+    redirect_to :controller=>"streams", :action=>:show_stream_informations, :id=>stream_id
+  end
+
+  def remove_request
+    stream_id          = params['id']
+    request_id         = params['request_id']
+    request            = Request.first(:conditions => ["request_id = ?", request_id])
+    request.stream_id  = nil
+    request.is_stream  = 1
+    request.save 
+    redirect_to :controller=>"streams", :action=>:show_stream_informations, :id=>stream_id
+  end
+
   def show_stream_review
     id              = params['id']
     review_type_id  = params['type']

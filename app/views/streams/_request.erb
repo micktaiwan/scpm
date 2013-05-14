@@ -1,0 +1,34 @@
+<span class="<%= request.sanitized_status %>">
+<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= request.request_id %>"><%= request.request_id %></a>
+<b><%= request.work_package %></b>
+<%= request.milestone %>
+<%= request.complexity %>
+(<%= request.workload2 %>)
+<%= request.assigned_to %>
+<%= request.status %>
+<%= request.resolution %>
+<%= request.foreseen_end_date_str %>
+</span>
+
+<% if request.resolution != 'not started' and request.resolution != 'not planned' %>
+<% tasks = request.sdp_tasks %>
+<span style="background:#AAF">
+<%= tasks.inject(0) { |sum, t| t.remaining+sum } %>
+</span>
+<span style="background:#AFA">
+<%= tasks.inject(0) { |sum, t| t.balancei+sum } %>
+</span>
+<% end %>
+
+<% if (request.resolution=="ended" or request.resolution=="aborted") and (request.end_date=="" or !request.end_date) %>
+  <strong>No end date</strong>
+<% end %>
+<% if (request.resolution=="ended" or request.resolution=="aborted") and request.actual_m_date=="" %>
+  <strong>No actual milestone date</strong>
+<% end %>
+
+<% if current_user.has_role?('Admin') %>
+  <%= link_to_remote(image_tag('cut.png'),  :url=>{:controller=>'welcome', :action=>'cut',			  		:id=>request.id}) %>
+  <%= link_to(image_tag('delete.gif'), 			{:controller=>'streams',			 :action=>'remove_request', :id=>@stream.id , :request_id=>request.request_id}) %>
+<% end %>
+<br/>
