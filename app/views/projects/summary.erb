@@ -472,5 +472,46 @@ end
 	end
 	# STREAMS END
 
+  # SPIDERS BEGIN
+  @xml.Worksheet 'ss:Name' => 'Spiders' do
+    @xml.Table do
+
+      # Columns width
+      for width in @spidersWidth do
+        @xml.Column nil, {'ss:Width' => width}
+      end
+
+      # Header
+      @xml.Row 'ss:StyleID' => 's62' do
+        for axe in @spidersColumns do
+          @xml.Cell do
+            @xml.Data axe, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+        end
+      end
+
+      # Rows
+      for p in @spidersLines
+        style = {}
+        @xml.Row(style) do
+
+          @xml.Cell do
+            @xml.Data p["title"], 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+
+          for column in p["values"] do
+            @xml.Cell do
+              @xml.Data column, 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
+
+        end
+      end
+
+    end
+  end
+  # SPIDERS END
+
 end
 %>

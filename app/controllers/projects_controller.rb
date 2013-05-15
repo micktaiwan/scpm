@@ -468,6 +468,7 @@ class ProjectsController < ApplicationController
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
+      saveWps = @wps
       @wps = @wps.sort_by { |w|
         [w.supervisor_name, w.workstream, w.project_name, w.name]
         }
@@ -537,6 +538,21 @@ class ProjectsController < ApplicationController
         @stream_columns_content.push(stream_params_array)
       end
       # STREAMS REVIEW END
+
+      # SPIDERS EXPORT
+      axes            = PmTypeAxe.get_sorted_axes
+      @spidersWidth   = Array.new << 200
+      for i in 0..axes.count
+        @spidersWidth << 50
+        @spidersWidth << 50
+      end
+      @spidersColumns  = Array.new << "Project-Milestone"
+      axes.each do |a|
+        @spidersColumns << a.title + " Average"
+        @spidersColumns << a.title + " Average Ref"
+      end
+      @spidersLines    = Spider.spider_export_by_projects_and_milestones(saveWps)
+      # SPIDERS EXPORT END
 
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="Summary.xls"'
