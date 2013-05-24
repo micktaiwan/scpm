@@ -616,12 +616,19 @@ class ToolsController < ApplicationController
     end
     
     @spider_counter = HistoryCounter.find(:all,:conditions=>[spider_condition],
-                                          :joins => 'JOIN requests ON requests.id = history_counters.request_id',
-                                          :order=>"requests.id ASC")
+                                          :joins => ["JOIN requests ON requests.id = history_counters.request_id",
+                                          "JOIN spiders ON spiders.id = history_counters.concerned_spider_id",
+                                          "JOIN projects ON projects.id = spiders.project_id",
+                                          "JOIN projects as parent ON parent.id = projects.project_id"
+                                          ],
+                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC")
     
     @qs_counter     = HistoryCounter.find(:all,:conditions=>[qs_condition],
-                                          :joins => 'JOIN requests ON requests.id = history_counters.request_id',
-                                          :order=>"requests.id ASC")
+                                          :joins => ["JOIN requests ON requests.id = history_counters.request_id", 
+                                          "JOIN statuses ON statuses.id = history_counters.concerned_status_id",
+                                          "JOIN projects ON projects.id = statuses.project_id",
+                                          "JOIN projects as parent ON parent.id = projects.project_id"],
+                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC")
   end
   
   def show_counter_history_without_rmt
@@ -639,8 +646,17 @@ class ToolsController < ApplicationController
       qs_condition     = qs_condition+" and history_counters.stream_id="+@stream_id.to_s
     end
       
-    tmp_spider_counter_no_request = HistoryCounter.find(:all,:conditions=>[spider_condition])
-    tmp_qs_counter_no_request     = HistoryCounter.find(:all,:conditions=>[qs_condition])
+    tmp_spider_counter_no_request = HistoryCounter.find(:all,:conditions=>[spider_condition],
+                                          :joins => ["JOIN spiders ON spiders.id = history_counters.concerned_spider_id",
+                                          "JOIN projects ON projects.id = spiders.project_id",
+                                          "JOIN projects as parent ON parent.id = projects.project_id"
+                                          ],
+                                          :order=>"parent.name ASC, projects.name ASC")
+    tmp_qs_counter_no_request     = HistoryCounter.find(:all,:conditions=>[qs_condition],
+                                          :joins => ["JOIN statuses ON statuses.id = history_counters.concerned_status_id",
+                                          "JOIN projects ON projects.id = statuses.project_id",
+                                          "JOIN projects as parent ON parent.id = projects.project_id"],
+                                          :order=>"parent.name ASC, projects.name ASC")
     @spider_counter_no_request    = Array.new
     @qs_counter_no_request        = Array.new
 
