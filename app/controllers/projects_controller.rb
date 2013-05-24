@@ -149,13 +149,18 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    project = Project.find(params[:id])
+    project             = Project.find(params[:id])
     old_is_qr_qwr_param = project.is_qr_qwr
     project.update_attributes(params[:project])
+
     project.propagate_attributes
     project.set_lifecycle_old_param()
 
     # QR QWR
+    if (!project.is_qr_qwr)
+      project.qr_qwr_id = nil
+    end
+    project.save
     check_qr_qwr_pdc(project)
     #check_qr_qwr_activated(project,old_is_qr_qwr_param)
     redirect_to :action=>:show, :id=>project.id

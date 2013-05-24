@@ -21,7 +21,7 @@
 <script type="text/javascript"> 
 	function check_is_qr_qwr()
 	{
-		if($('project_is_qr_qwr').getValue()){$('project_qr_qwr_id').enable();}else{$('project_qr_qwr_id').disable();}
+		if($('project_is_qr_qwr').getValue()){$('project_qr_qwr_id').enable();}else{$('project_qr_qwr_id').disable();$('project_qr_qwr_id').selectedIndex = 0;}
 	}
 	check_is_qr_qwr();
 </script>
