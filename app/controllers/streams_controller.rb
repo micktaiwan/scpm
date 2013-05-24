@@ -105,7 +105,7 @@ class StreamsController < ApplicationController
       qr_qwr_data["name"] = qr.name
 
       # Get number of project in this stream
-      project_list              = Project.find(:all,:conditions=>["workstream = ? and is_qr_qwr IS NOT NULL and qr_qwr_id = ?", Workstream.find(@stream.workstream).name, qr.id.to_s])
+      project_list              = Project.find(:all,:conditions=>["workstream = ? and is_running = 1 and is_qr_qwr IS NOT NULL and qr_qwr_id = ?", Workstream.find(@stream.workstream).name, qr.id.to_s])
       qr_qwr_data["nbProjects"] = project_list.count
 
       if qr_qwr_data["nbProjects"] > 0
