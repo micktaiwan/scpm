@@ -546,12 +546,12 @@ class ProjectsController < ApplicationController
 
       # SPIDERS EXPORT
       axes            = PmTypeAxe.get_sorted_axes
-      @spidersWidth   = Array.new << 200
+      @spidersWidth   = Array.new << 50 << 50 << 50
       for i in 0..axes.count
         @spidersWidth << 50
         @spidersWidth << 50
       end
-      @spidersColumns  = Array.new << "Project-Milestone"
+      @spidersColumns  = Array.new << "Project" << "Workpackage" << "Milestone"
       axes.each do |a|
         @spidersColumns << a.title + " Average"
         @spidersColumns << a.title + " Average Ref"

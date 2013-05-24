@@ -10,7 +10,7 @@ def self.spider_export_by_projects_and_milestones(projects)
 # TODO FILTER PROEJCTS
 
 	resultArray = Array.new
-	axes 				= PmTypeAxe.get_sorted_axes
+	axes 		= PmTypeAxe.get_sorted_axes
 
 	# For Each project
 	projects.each do |p|
@@ -19,18 +19,18 @@ def self.spider_export_by_projects_and_milestones(projects)
 			# Get last spider consolidated
 			lastSpider 	= Spider.last(:conditions => ["milestone_id = ?", m.id], :joins => 'JOIN spider_consolidations ON spiders.id = spider_consolidations.spider_id')
 			# Array note
-			avgArray 		=	Array.new
+			avgArray 			= Array.new
 
 			# For each axe
 			axes.each do |a|
-				avg 				= ""
-				avgRef			=	""
+				avg 			= ""
+				avgRef			= ""
 				# Get conso
 				if lastSpider
 					spiderConso = SpiderConsolidation.find(:first, :conditions => ["spider_id = ? and pm_type_axe_id = ?", lastSpider.id, a.id])
 					if spiderConso
-						avg 				= spiderConso.average
-						avgRef			= spiderConso.average_ref
+						avg 	= spiderConso.average
+						avgRef	= spiderConso.average_ref
 					end
 				end
 				# Add in array
@@ -41,9 +41,11 @@ def self.spider_export_by_projects_and_milestones(projects)
 
 			# Create Hash
 			lineHash = Hash.new
-			lineHash["title"]	 	= p.name + " " + m.name
-			lineHash["values"] 	= avgArray 
-			resultArray 				<< lineHash
+			lineHash["title"]		= p.name
+			lineHash["workpackage"]	= p.project.name
+			lineHash["milestone"]	= m.name
+			lineHash["values"] 		= avgArray 
+			resultArray 			<< lineHash
 		# End milestone
 		end
 	# End project

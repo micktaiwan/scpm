@@ -499,6 +499,12 @@ end
           @xml.Cell do
             @xml.Data p["title"], 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
           end
+          @xml.Cell do
+            @xml.Data p["workpackage"], 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
+          @xml.Cell do
+            @xml.Data p["milestone"], 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
 
           for column in p["values"] do
             @xml.Cell do
