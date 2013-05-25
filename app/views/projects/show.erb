@@ -9,7 +9,7 @@ function edit(id, nb_months, has_requests) {
   }
 function add(id, nb_months, has_requests, has_rights) {
   if (!has_rights & !has_requests) {
-    alert("You can not edit this project because you have not access rights for editing the workpackage")  
+    alert("You can not edit this project because you have not access rights for editing the workpackage")
     return;
     }
   if(nb_months >= 1 || confirm('There is a status for this month already.\nAre you sure you want to add a new status?')) {
@@ -36,7 +36,7 @@ function add(id, nb_months, has_requests, has_rights) {
         "Amendments <strong>#{@project.current_amendments.size}</strong>",
         "Actions <strong>#{@project.current_actions.size}</strong>",
         "Notes/Capi <strong>#{@project.visible_notes(current_user.id).size}</strong>",
-        "Information"        
+        "Information"
         ]) %>
     </ol>
 
@@ -55,11 +55,11 @@ function add(id, nb_months, has_requests, has_rights) {
               </div>
             <% end %>
             <br/>
-            
+
             <div class="milestone_bar">
               <%= render(:partial=>'milestones/milestone', :collection=>@project.sorted_milestones) %>
             </div>
-            
+
             <% if @project.project_id != nil and ( @project.is_qr_qwr or @project.requests.size > 0 )%>
               <%= link_to_function('Add/Refresh status for this week', "add(#{@project.id}, #{s = @project.get_status; s.updated_at ?
 							(Date.today.year * 12 + Date.today.month) - (s.updated_at.to_date.year * 12 + s.updated_at.to_date.month): 0}, #{@project.has_requests}, #{@project.is_qr_qwr})", {:class=>'btnlnk'}) %>
@@ -87,6 +87,7 @@ function add(id, nb_months, has_requests, has_rights) {
                 <%= render(:partial=>'status', :object=>s) %>
               <% end %>
             </div>
+
           </div>
       </div>
 
@@ -191,7 +192,11 @@ function add(id, nb_months, has_requests, has_rights) {
             <b>QR/QWR</b>: <%= @project.qr_qwr.name if @project.qr_qwr %><br/>
 						<b>Is QR/QWR active</b>: <%= @project.is_qr_qwr %><br />
             <b>DWR</b>: <%= @project.dwr %><br/>
-
+      			<b>Is Running:</b> <%= @project.is_running.to_s %>
+      			<% if !@project.is_running %>
+      				<%= link_to ('Start project', { :action => "start", :id => @project.id }) %>
+      			<% end %>
+      			<br />
             <b>Suite</b>: <%= @project.suite_tag.name if @project.suite_tag %><br/>
 						<b>Is Running:</b> <%= @project.is_running.to_s %>
 						<% if !@project.is_running %>
