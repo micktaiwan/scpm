@@ -27,6 +27,7 @@
       <%=my_simple_format(status.actions)%>
       <% if status.status > 1 and status.actions == "" %><%=image_tag("alert.gif")%><br/><% end %>
     <% end %>
+
     <table>
       <tr>
       <td valign='top'><h4>Last 7 days changes</h4><%=my_simple_format(status.last_change)%></td>
@@ -71,10 +72,16 @@
       </tr>
     </table>
 
-    <h3>Operational Alert</h3>
+    <h4>PM Practices - Justification of last Milestone gaps with "ref" in Spider</h4>
+    <%=my_simple_format(status.pratice_spider_gap)%>
+
+    <h4>Deliverables Completion - Justification of last Milestone gaps with "ref" in Spider</h4>
+    <%=my_simple_format(status.deliverable_spider_gap)%>
+
+    <h4>Operational Alert</h4>
     <%=my_simple_format(status.operational_alert)%>
 
-    <h3>Supervisor Feedback (internal to SQLI)</h3>
+    <h4>Supervisor Feedback (internal to SQLI)</h4>
     <%=my_simple_format(status.feedback)%>
 
   </div>

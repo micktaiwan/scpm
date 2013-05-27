@@ -172,15 +172,17 @@ class ProjectsController < ApplicationController
     @status = Status.new
     get_risk_status_string
     last = @project.get_status
-    @status.explanation       = last.explanation
-    @status.feedback          = last.feedback
-    @status.reason            = last.reason
-    @status.status            = last.status
-    @status.last_change       = last.last_change
-    @status.actions           = last.actions
-    @status.ereporting_date   = last.ereporting_date
-    @status.operational_alert = last.operational_alert
-    @status.ws_report         = last.ws_report
+    @status.explanation             = last.explanation
+    @status.feedback                = last.feedback
+    @status.reason                  = last.reason
+    @status.status                  = last.status
+    @status.last_change             = last.last_change
+    @status.actions                 = last.actions
+    @status.ereporting_date         = last.ereporting_date
+    @status.operational_alert       = last.operational_alert
+    @status.ws_report               = last.ws_report
+    @status.pratice_spider_gap      = last.pratice_spider_gap
+    @status.deliverable_spider_gap  = last.deliverable_spider_gap
   end
 
   def add_status

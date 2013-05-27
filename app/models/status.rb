@@ -20,13 +20,18 @@ class Status < ActiveRecord::Base
   end
 
   def escape
-    self.reason       = html_escape(self.reason)
-    self.explanation  = html_escape(self.explanation)
-    self.last_change  = html_escape(self.last_change)
-    self.ws_report    = html_escape(self.ws_report)
-    self.feedback     = html_escape(self.feedback)
-    self.actions      = html_escape(self.actions)
-    self.operational_alert = html_escape(self.operational_alert)
+    self.reason                     = html_escape(self.reason)
+    self.explanation                = html_escape(self.explanation)
+    self.last_change                = html_escape(self.last_change)
+    self.ws_report                  = html_escape(self.ws_report)
+    self.feedback                   = html_escape(self.feedback)
+    self.actions                    = html_escape(self.actions)
+    self.operational_alert          = html_escape(self.operational_alert)
+    self.explanation_diffs          = html_escape(self.explanation_diffs)
+    self.last_change_diffs          = html_escape(self.last_change_diffs)
+    self.ws_report                  = html_escape(self.ws_report)
+    self.pratice_spider_gap         = html_escape(self.pratice_spider_gap)
+    self.deliverable_spider_gap     = html_escape(self.deliverable_spider_gap)
   end
 
   def copy_status_to_ws_reporting
