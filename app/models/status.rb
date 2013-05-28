@@ -27,8 +27,6 @@ class Status < ActiveRecord::Base
     self.feedback                   = html_escape(self.feedback)
     self.actions                    = html_escape(self.actions)
     self.operational_alert          = html_escape(self.operational_alert)
-    self.explanation_diffs          = html_escape(self.explanation_diffs)
-    self.last_change_diffs          = html_escape(self.last_change_diffs)
     self.ws_report                  = html_escape(self.ws_report)
     self.pratice_spider_gap         = html_escape(self.pratice_spider_gap)
     self.deliverable_spider_gap     = html_escape(self.deliverable_spider_gap)
