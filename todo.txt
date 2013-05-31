@@ -1,3 +1,9 @@
+Seeds
+=====
+
+31-Mai-2013: Faire un script de création de premier user admin pour l'appli
+
+
 Checklists
 ==========
 Vérifier toutes les "@last_update = query.updated_at"
