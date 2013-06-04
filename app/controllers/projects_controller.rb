@@ -21,7 +21,9 @@ class ProjectsController < ApplicationController
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")
 
     # TODO: use model "workstream"
-    @workstreams = ['EE','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC','TBCE']
+    # @workstreams = ['EP','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC','EC']
+    @workstreams = Workstream.all()
+    @workstreams = @workstreams.map { |ws| ws.name }
     #Project.all.collect{|p| p.workstream}.uniq.sort
 
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
@@ -585,8 +587,6 @@ class ProjectsController < ApplicationController
       @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
       get_projects
 
-      # TODO: use model "workstream"
-      # @centers = ['EI', 'EV', 'EE', 'EG', 'ES', 'EY', 'EZC', 'EZ', 'EZMB', 'EZMC', 'TBCE']
       @centers = Workstream.all()
       @centers = @centers.map { |c| stats_for_center(c) }
 
