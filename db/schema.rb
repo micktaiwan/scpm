@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130426153211) do
+ActiveRecord::Schema.define(:version => 20130527163000) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -708,8 +708,8 @@ ActiveRecord::Schema.define(:version => 20130426153211) do
   add_index "spiders", ["milestone_id"], :name => "IDX_SPIDERS"
 
   create_table "statuses", :force => true do |t|
-    t.integer  "project_id",                                           :null => false
-    t.integer  "status",            :default => 0
+    t.integer  "project_id",                                                :null => false
+    t.integer  "status",                 :default => 0
     t.text     "explanation"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -723,11 +723,13 @@ ActiveRecord::Schema.define(:version => 20130426153211) do
     t.text     "last_change_diffs"
     t.text     "last_change_excel"
     t.integer  "last_modifier"
-    t.integer  "locked",            :default => 0
+    t.integer  "locked",                 :default => 0
     t.datetime "locked_time"
     t.text     "ws_report"
-    t.datetime "reason_updated_at", :default => '2011-07-19 09:15:21'
-    t.datetime "ws_updated_at",     :default => '2011-07-19 09:15:21'
+    t.datetime "reason_updated_at",      :default => '2011-07-19 09:15:21'
+    t.datetime "ws_updated_at",          :default => '2011-07-19 09:15:21'
+    t.text     "pratice_spider_gap"
+    t.text     "deliverable_spider_gap"
   end
 
   add_index "statuses", ["project_id"], :name => "IDX_STATUSES"

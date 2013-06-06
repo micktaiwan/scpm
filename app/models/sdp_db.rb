@@ -173,7 +173,7 @@ module SdpDB
   DomainDB = {
       #'EA'  =>2865,
       'EV'  =>3734,
-      'EE'  =>3733,
+      'EP'  =>3733,
       'EY'  =>3736,
       'EG'  =>3743,
       'ES'  =>3735,
@@ -182,7 +182,7 @@ module SdpDB
       'EZC' =>3738,
       'EZMC'=>3740,
       'EZMB'=>3741,
-      'TBCE'=>3742
+      'EC'=>3742
       }
 
   def self.sdp_phase_id(name)

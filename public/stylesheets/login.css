@@ -1,5 +1,5 @@
 body {
-  background: url(/images/bg/route-enneigee.jpg) no-repeat center center fixed;
+  background: url(/images/bg/background_03062013.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -169,4 +169,14 @@ h2 {
 #action_from_welcome :hover {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.background_css
+{
+  margin-top : 4px;
+  padding-top: 2px;
+  background-color: rgba(255,255,255,0.7);
+  color: black;
+  font-size: : bold;
+  height: 15px;
 }

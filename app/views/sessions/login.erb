@@ -1,11 +1,10 @@
-<p>To have a better font experience, please <a href="http://download.microsoft.com/download/b/7/0/b7019730-0fa3-47a9-a159-98b80c185aad/setup.exe">install Windows XP antialiasing</a></p>
+<p class="background_css">To have a better font experience, please <a href="http://download.microsoft.com/download/b/7/0/b7019730-0fa3-47a9-a159-98b80c185aad/setup.exe">install Windows XP antialiasing</a></p>
 
-<h3>Login</h3>
+<!-- <h3 class="background_css">Login</h3> -->
 <%= @error %>
 <%= error_messages_for :person %>
 <%= form_tag :action=>'do_login'  -%>
-  <p><label>Login</label><%= text_field(:person, :login) %></p>
-  <p><label>Pwd</label><%= password_field(:person, :pwd) %></p>
+  <p><label class="background_css">Login</label><%= text_field(:person, :login) %></p>
+  <p><label class="background_css">Pwd</label><%= password_field(:person, :pwd) %></p>
   <p><label>&nbsp;</label><%= submit_tag 'login >>' %></p>
 </form>
-

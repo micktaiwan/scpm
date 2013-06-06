@@ -43,8 +43,10 @@ class ToolsController < ApplicationController
     end
 
     # by centres
+    @workstreams = Workstream.all()
+    @workstreams = @workstreams.map { |ws| ws.name }
     @centres = []
-    for centre in ["EA", "EDE", "EV", "EDC", "EDG", "EDS", "EI", "EDY", "EM", "EMNB", "EMNC", "TBCE"] do
+    for centre in @workstreams do
       stats = Array.new
       @centres << {:name=>centre, :stats=>stats}
       begin

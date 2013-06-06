@@ -110,10 +110,12 @@ class StreamsController < ApplicationController
 
       if qr_qwr_data["nbProjects"] > 0
         project_list.each do |project|
-          # Get nb of QS prev total
-          qr_qwr_data["total_qs_prev"]     = qr_qwr_data["total_qs_prev"].to_i     + project.calcul_qs_previsional
-          # Get nb of Spider Prev total
-          qr_qwr_data["total_spider_prev"] = qr_qwr_data["total_spider_prev"].to_i + project.calcul_spider_previsional
+          if project.is_running
+            # Get nb of QS prev total
+            qr_qwr_data["total_qs_prev"]     = qr_qwr_data["total_qs_prev"].to_i     + project.calcul_qs_previsional
+            # Get nb of Spider Prev total
+            qr_qwr_data["total_spider_prev"] = qr_qwr_data["total_spider_prev"].to_i + project.calcul_spider_previsional
+          end
         end
 
         # Get x/y for qs (alert managed in view)
