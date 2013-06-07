@@ -4,8 +4,8 @@ class WlLine < ActiveRecord::Base
   belongs_to :person
   belongs_to :request
   belongs_to :sdp_task, :class_name=>"SDPTask"
-  belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
   belongs_to :project
+  belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
   has_many   :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
 
   include ApplicationHelper

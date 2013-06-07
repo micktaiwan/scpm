@@ -14,7 +14,13 @@
 <tr><td>Supervisor</td><td><%= select(:project, :supervisor_id, @supervisors.map {|p| [p.name, p.id]}, :include_blank=>true) %></td></tr>
 <% lifecycle_list = Lifecycle.find(:all) %>
 <tr><td>Lifecycle</td><td><%= select(:project, :lifecycle_id, lifecycle_list.map {|l| [l.name, l.id]}) %></td></tr>
-<tr><td>Suite</td><td><%= select(:project, :suite_tag_id, @suiteTags.map {|s| [s.name, s.id]}, :include_blank=>true) %></td></tr>
+<tr><td>Suite</td><td>
+	<% if @suiteTags %>
+		<%= select(:project, :suite_tag_id, @suiteTags.map {|s| [s.name, s.id]}, :include_blank=>true) %>
+	<% else %>
+		No suite tags
+	<% end %>
+</td></tr>
 <tr><td>Description</td><td><%= text_area :project, :description %></td></tr>
 </table>
 
