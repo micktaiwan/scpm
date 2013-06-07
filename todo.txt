@@ -1,3 +1,6 @@
+Les miletones sont en dur dans le formulaire de création de miletones pour un projet et c'est du GPP, pas du EC
+
+
 Seeds
 =====
 
