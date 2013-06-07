@@ -89,6 +89,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(params[:project])
+    @project.project_id = 0 if !@project.project_id
     check_qr_qwr_pdc(@project)
     if not @project.save
       render :action => 'new'
