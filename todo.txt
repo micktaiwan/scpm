@@ -4,10 +4,13 @@ Seeds
 31-Mai-2013: Faire un script de création de premier user admin pour l'appli
 
 INSERT INTO `scpm_development`.`people` (`name`, `email`, `phone`, `company_id`, `created_at`, `updated_at`, `rmt_user`, `is_supervisor`, `login`, `pwd`, `last_view`, `has_left`, `sdp_id`, `trigram`, `is_transverse`, `is_cpdp`) VALUES ('Mickael', 'mfaivremacon@sqli.com', '', 1, '', '', '', 0, 'mfaivremacon', '', '', 0, 0, 'MFM', 1, 1);
-
 INSERT INTO `scpm_development`.`person_roles` (`person_id`, `role_id`) VALUES (1,1);
 INSERT INTO `scpm_development`.`roles` (`name`, `display`, `description`) VALUES ('Admin', 'Administrator', 'Can do whatever the system permits');
-
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('QG2');
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('QG3');
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('QG4');
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('GL');
+INSERT INTO `scpm_development`.`lifecycles` (`name`) VALUES ('eFactory');
 
 
 Checklists
