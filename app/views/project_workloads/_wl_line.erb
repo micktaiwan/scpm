@@ -3,11 +3,11 @@
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
   error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.8) or (planned_total > remaining)))
 %>
-<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
+<tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
 	<td align='center'>
     <%= link_to_remote(image_tag("delete.gif"),
-     {:url=>{:action=>'destroy_line', :id=>wl_line.id},
+     {:url=>{:controller=>'workloads', :action=>'destroy_line', :id=>wl_line.id},
      :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
      :success=>"$('edit_line').fade(); $('wl_line_#{wl_line.id}').fade();",
      :failure=>"alert('Error:' + request.responseText);"},
@@ -21,18 +21,18 @@
     <% end %>
   </td>
 
-	<!-- Edit btn / Alert / Backup msg / Project name -->
+	<!-- Edit btn / Alert / Backup msg / Person name -->
   <td>
     <!-- Edit btn -->
 		<% if wl_line.wl_type != 110 and wl_line.wl_type != 120  %>
     	<%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>
 		<% end %>
     <!-- Alert -->
-    <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
+    <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= wl_line.display_name %>
+    <%= wl_line.person_name %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)
@@ -63,7 +63,7 @@
     milestones = wl_line.milestones(week)
     m_names    = milestones.map { |m| "<b>#{m.name}</b>: #{m.date}"}.join("<br/>")
 	%>
-    <td class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones(event,'<%=m_names%>');" onmouseout="hide_milestones();"<% end %>>
+    <td title="<%= wl_line.name %>" class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones(event,'<%=m_names%>');" onmouseout="hide_milestones();"<% end %>>
     <%
       wlload = wl_line.get_load_by_week(week)
       wlload = wlload == 0.0 ? '' : wlload

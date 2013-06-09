@@ -1,14 +1,14 @@
 function hide_lines_with_no_workload() {
   document.body.style.cursor = 'wait';
   $('loading').show();
-  new Ajax.Request('/workloads/hide_lines_with_no_workload', {
+  new Ajax.Request('/project_workloads/hide_lines_with_no_workload', {
     parameters: { on: $('hide_lines_with_no_workload').checked }
     });
 }
 
 function hide_workload_menu() {
   $('wmenu').toggle();
-  new Ajax.Request('/workloads/hide_wmenu', {
+  new Ajax.Request('/project_workloads/hide_wmenu', {
     parameters: { on: $('wmenu').style.display=='none' }
     });
 }
@@ -33,17 +33,17 @@ function wl_save_value(line_id, wlweek) {
   }
 
 function wl_edit(line_id) {
-  new Ajax.Request('/workloads/display_edit_line?l='+line_id, {
+  new Ajax.Request('/project_workloads/display_edit_line?l='+line_id, {
     asynchronous:true,
     evalScripts:true,
     onComplete: function(r) {new Draggable($('edit_line'));}
     });
 }
 
-function change_workload(person_id) {
+function change_workload(project_id) {
   document.body.style.cursor = 'wait';
   $('loading').show();
-  new Ajax.Request('/workloads/change_workload', {
-    parameters: { person_id: person_id }
+  new Ajax.Request('/project_workloads/change_workload', {
+    parameters: { project_id: project_id }
     });
   }

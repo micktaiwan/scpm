@@ -22,7 +22,7 @@ class WlLine < ActiveRecord::Base
     l = load_by_week(week)
     l ? l.wlload : 0.0
   end
-  
+
   def get_load_object_by_week(week)
     l = load_by_week(week)
     l ? l : 0
@@ -42,10 +42,20 @@ class WlLine < ActiveRecord::Base
     wl_loads.map{|load| ( (load.week < today_week or load.week >= near_week)  ? 0.0 : load.wlload)}.inject(:+)
   end
 
+  # task name
   def display_name
     #"<a href='#' title='#{name}'>#{name}</a>"
     name
   end
+
+  def person_name
+    if self.person
+      "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+    else
+      "#{name} (no person attached)"
+    end
+  end
+
 
   def request
     Request.find(:first, :conditions=>["request_id=?",filled_number(self.request_id,7)])
@@ -62,7 +72,7 @@ class WlLine < ActiveRecord::Base
     rv = []
     r = request
     p = self.project
-    
+
     if r && !p
       r.project.milestones.each { |m|
         date = m.date
@@ -74,7 +84,7 @@ class WlLine < ActiveRecord::Base
         rv << m if date and date >= week_start and date <= week_end
       }
     end
-    
+
     rv
   end
 

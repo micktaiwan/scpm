@@ -1,15 +1,15 @@
-class Workload
+class ProjectWorkload
 
   include ApplicationHelper
 
-  attr_reader :name,  # person's name
+  attr_reader :name,  # project's name
     :weeks,           # arrays of week's names '43', '44', ...
     :wl_weeks,        # array of week ids '201143'
     :months,          # "Oct"
     :days,            # week days display per week: "17-21"
     :opens,           # total of worked days per week (5 - nb of holidays)
-    :person,
-    :person_id,
+    :project,
+    :project_id,
     :wl_lines,        # arrays of loads, all lines (filtered and not filtered)
     :displayed_lines, # only filtered lines
     :line_sums,       # sum of days per line of workload
@@ -29,19 +29,19 @@ class Workload
 
   # options can have
   # :only_holidays => true
-  def initialize(person_id, options = {})
-    @person     = Person.find(person_id)
-    raise "could not find this person by id '#{person_id}'" if not @person
-    @person_id  = person_id
-    @name       = @person.name
+  def initialize(project_id, options = {})
+    @project    = Project.find(project_id)
+    raise "could not find this project by id '#{project_id}'" if not @project
+    @project_id = project_id
+    @name       = @project.name
 
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>"project_id,wl_type,name")
+    @wl_lines   = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
     Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
-      @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
+      @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :project_id=>project_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
     end
     @nb_total_lines = @wl_lines.size
     # must be after the preceding test as we suppress line and if wl_lines.size is 0 then we create a new Holidays line
@@ -132,10 +132,10 @@ class Workload
           @sdp_remaining_total        += s
           @to_be_validated_in_wl_remaining_total += s
         else
-          r = l.request.sdp_tasks_remaining_sum({:trigram=>@person.trigram})
+          r = l.request.sdp_tasks_remaining_sum({:trigram=>@project.trigram})
           #r = s if r == 0.0
-          @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.person.trigram})
-          @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.person.trigram})
+          @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.project.trigram})
+          @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.project.trigram})
           @line_sums[l.id][:remaining] = r
           @sdp_remaining_total        += r
         end
@@ -186,7 +186,7 @@ class Workload
     end
     # Add wl_lines to corresponding stream
     wl_lines.each { |wl|
-      if wl.project and wl.project.workstream!=''
+      if wl.project
         # Stream
         s = Stream.find_with_workstream(wl.project.workstream)
         # Previsional

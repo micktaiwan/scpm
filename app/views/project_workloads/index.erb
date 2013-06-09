@@ -1,0 +1,14 @@
+<script src="/javascripts/project_workload.js" type="text/javascript"></script>
+
+<%= select_tag('choose_project', options_for_select(@projects, session['workload_project_id'].to_i), {:onchange=>"change_workload(this.value)"}) %>
+<%= link_to('Switch to person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
+<%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:700px;") %>
+
+
+<%= render(:partial=>"workload") %>
+
+<script>
+  set_fixed_header();
+  new Draggable(wl_line_add_form); // does not mix well with scrollbar
+</script>
+

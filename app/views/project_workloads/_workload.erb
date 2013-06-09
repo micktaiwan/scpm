@@ -1,0 +1,125 @@
+<div id="wl_line_add_form" class="popup" style="display:none;">
+  <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
+  <div class="title">Add a person to <%= @workload.project.name %></div>
+  <% form_remote_tag(:url=>{:action => "add_a_person"}) do %>
+    <%= select_tag('person_id', options_for_select(@people)) %>
+    <%= hidden_field_tag('project_id', @workload.project_id) %>
+    <%= submit_tag("Add") %>
+  <% end %>
+</div>
+
+<div id="workload" class="workload">
+    <%= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
+    <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
+      <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
+    </div>
+
+  <b>
+  <%= @workload.nb_current_lines %> lines
+  <% if @workload.nb_hidden_lines > 0 %><strong><%end%>
+  (<%= @workload.nb_hidden_lines %> hidden)
+  <% if @workload.nb_hidden_lines > 0 %></strong><%end%>
+  </b>
+
+  <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
+
+  <!-- WORKLOAD GENERAL -->
+  <h2><%= @workload.name %></h2>
+  <table id="workload_table">
+  <thead>
+    <tr>
+    <th></th>
+    <th></th>
+    <th class="wl_names"></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.months) %>
+    </tr>
+
+    <tr>
+    <th></th>
+    <th></th>
+    <th class="wl_names"></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
+    </tr>
+
+    <tr>
+    <th></th>
+    <th></th>
+    <th class="wl_names"></th>
+    <th style="min-width:100px;">Status</th>
+    <th style="min-width:45px;">Init.</th>
+    <th style="min-width:45px;">Gain</th>
+    <th style="min-width:45px;">Rem.</th>
+    <th class="wl_total" style="min-width:45px;">Sum</th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
+    </tr>
+
+    <tr class="wl_opens">
+    <th></th>
+    <th></th>
+    <th class="wl_names">Nb of worked days</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
+    </tr>
+
+    <tr class="wl_total">
+    <th></th>
+    <th></th>
+    <th class="wl_names">Total</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.ctotals) %>
+    </tr>
+
+    <tr class="wl_total">
+    <th></th>
+    <th></th>
+    <th class="wl_names">Sums / Percents</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th><%= @workload.sdp_remaining_total %></th>
+    <th id="planned_total"><%= @workload.planned_total %></th>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.percents) %>
+    </tr>
+
+    <tr class="wl_total">
+    <th></th>
+    <th></th>
+    <th class="wl_names">Availability (Sum for the 2 next months)</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
+    </tr>
+  </thead>
+
+  <tbody class="scrollContent">
+    <%= render(:partial=>"wl_line", :collection=>@workload.displayed_lines) %>
+  </tbody>
+
+  </table>
+
+  <!-- CHART -->
+  <div style="position:absolute;"><%= image_tag(@chart_url) if @chart_url %></div>
+
+</div>
+<br/>

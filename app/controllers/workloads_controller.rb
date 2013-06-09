@@ -7,6 +7,8 @@ class WorkloadsController < ApplicationController
   layout 'pdc'
 
   def index
+    person_id = params[:person_id]
+    session['workload_person_id'] = person_id if person_id
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     change_workload(session['workload_person_id'])
@@ -399,7 +401,7 @@ class WorkloadsController < ApplicationController
     temp_lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
     @lines_qr_qwr = Hash.new
-    temp_lines_qr_qwr.each do |wl| 
+    temp_lines_qr_qwr.each do |wl|
         @lines_qr_qwr[wl.project_id] = [wl]
     end
     @owner_id = session['workload_person_id']
@@ -446,7 +448,7 @@ class WorkloadsController < ApplicationController
     @weeks    = params[:weeks]
     @wl_weeks = params[:wl_weeks]
     @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    
+
     # WL lines without project_id
     @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
