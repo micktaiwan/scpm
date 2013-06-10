@@ -40,9 +40,10 @@ class ProjectWorkload
     cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines   = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
     Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
-    if options[:only_holidays] != true
-      @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :project_id=>project_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
-    end
+    # no need to add a holidays line in DB for a projet. It will be consolidated at running time
+    #if options[:only_holidays] != true
+    #  @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :project_id=>project_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
+    #end
     @nb_total_lines = @wl_lines.size
     # must be after the preceding test as we suppress line and if wl_lines.size is 0 then we create a new Holidays line
     if options[:hide_lines_with_no_workload]

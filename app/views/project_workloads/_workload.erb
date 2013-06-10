@@ -1,18 +1,19 @@
-<div id="wl_line_add_form" class="popup" style="display:none;">
-  <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
-  <div class="title">Add a person to <%= @workload.project.name %></div>
-  <% form_remote_tag(:url=>{:action => "add_a_person"}) do %>
-    <%= select_tag('person_id', options_for_select(@people)) %>
-    <%= hidden_field_tag('project_id', @workload.project_id) %>
-    <%= submit_tag("Add") %>
-  <% end %>
-</div>
-
 <div id="workload" class="workload">
-    <%= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
-    <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
-      <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
-    </div>
+
+  <div id="wl_line_add_form" class="popup" style="display:none;">
+    <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
+    <div class="title">Add a person to <%= @workload.project.name %></div>
+    <% form_remote_tag(:url=>{:action => "add_a_person"}) do %>
+      <%= select_tag('person_id', options_for_select(@people)) %>
+      <%= hidden_field_tag('project_id', @workload.project_id) %>
+      <%= submit_tag("Add") %>
+    <% end %>
+  </div>
+
+  <%= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
+  <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
+    <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
+  </div>
 
   <b>
   <%= @workload.nb_current_lines %> lines
