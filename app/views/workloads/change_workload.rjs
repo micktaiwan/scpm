@@ -4,4 +4,3 @@ page.replace "workload", render(:partial=>"workload")
 page << "document.body.style.cursor = 'auto';"
 page << "$('loading').hide();"
 page << "set_fixed_header();"
-

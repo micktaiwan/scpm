@@ -56,6 +56,9 @@ class WlLine < ActiveRecord::Base
     end
   end
 
+  def title
+    "#{self.person_name} #{self.display_name}"
+  end
 
   def request
     Request.find(:first, :conditions=>["request_id=?",filled_number(self.request_id,7)])

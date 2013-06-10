@@ -9,12 +9,13 @@
       <%= submit_tag("Add") %>
     <% end %>
   </div>
-
-  <%= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
-  <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
+<br/>
+  <%#= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
+  <!--<div id="wmenu" <%#if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<%# end %>>-->
     <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
-  </div>
+  <!--</div>-->
 
+  <br/>
   <b>
   <%= @workload.nb_current_lines %> lines
   <% if @workload.nb_hidden_lines > 0 %><strong><%end%>

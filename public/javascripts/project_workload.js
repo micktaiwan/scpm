@@ -32,14 +32,6 @@ function wl_save_value(line_id, wlweek) {
     });
   }
 
-function wl_edit(line_id) {
-  new Ajax.Request('/project_workloads/display_edit_line?l='+line_id, {
-    asynchronous:true,
-    evalScripts:true,
-    onComplete: function(r) {new Draggable($('edit_line'));}
-    });
-}
-
 function change_workload(project_id) {
   document.body.style.cursor = 'wait';
   $('loading').show();

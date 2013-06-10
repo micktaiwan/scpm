@@ -23,16 +23,12 @@
 
 	<!-- Edit btn / Alert / Backup msg / Person name -->
   <td>
-    <!-- Edit btn -->
-		<% if wl_line.wl_type != 110 and wl_line.wl_type != 120  %>
-    	<%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>
-		<% end %>
     <!-- Alert -->
     <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= wl_line.person_name %>
+    <%= wl_line.person_name %> <%= wl_line.display_name %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)
@@ -63,7 +59,7 @@
     milestones = wl_line.milestones(week)
     m_names    = milestones.map { |m| "<b>#{m.name}</b>: #{m.date}"}.join("<br/>")
 	%>
-    <td title="<%= wl_line.name %>" class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones(event,'<%=m_names%>');" onmouseout="hide_milestones();"<% end %>>
+    <td title="<%= wl_line.title %>" class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones(event,'<%=m_names%>');" onmouseout="hide_milestones();"<% end %>>
     <%
       wlload = wl_line.get_load_by_week(week)
       wlload = wlload == 0.0 ? '' : wlload

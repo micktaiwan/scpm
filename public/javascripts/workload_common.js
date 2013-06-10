@@ -25,4 +25,3 @@ function display_milestones(evt,text) {
 function hide_milestones(text) {
   $('milestones').hide();
   }
-

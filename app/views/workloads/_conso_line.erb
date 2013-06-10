@@ -1,5 +1,5 @@
 <tr>
-  <td><%= short_name(conso_line.person.name) %></td>
+  <td><a href='/workloads/?person_id=<%= conso_line.person.id %>'><%= conso_line.person.short_name %></a></td>
   <td align="center"><%= conso_line.remain_to_plan_days %></td>
   <td align="center"><%= conso_line.next_month_percents %>%</td>
   <td align="center"><%= conso_line.three_next_months_percents %>% (<%= conso_line.three_next_months_percents-conso_line.next_month_percents %>)</td>
@@ -15,4 +15,3 @@
 		<% indexWeek += 1 %>
 	<% end %>
 </tr>
-

@@ -11,6 +11,7 @@ class WorkloadsController < ApplicationController
     session['workload_person_id'] = person_id if person_id
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    @projects = Project.find(:all).map {|p| ["#{p.name} (#{p.wl_lines.size} persons)", p.id]}
     change_workload(session['workload_person_id'])
   end
 
@@ -218,12 +219,7 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_person_id_and_request_id(person_id, request_id)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>request_id, :person_id=>person_id, :wl_type=>WL_LINE_REQUEST)
-      @workload = Workload.new(person_id)
-      get_last_sdp_update
-      get_suggested_requests(@workload)
-      #get_sdp_gain(@workload.person)
-      get_chart
-      get_sdp_gain(@workload.person)
+      get_workload_data(person_id)
     else
       @error = "This line already exists: #{request_id}"
     end
@@ -239,12 +235,7 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
-      @workload = Workload.new(person_id)
-      get_last_sdp_update
-      get_suggested_requests(@workload)
-      #get_sdp_gain(@workload.person)
-      get_chart
-      get_sdp_gain(@workload.person)
+      get_workload_data(person_id)
     else
       @error = "This line already exists: #{name}"
     end
@@ -264,11 +255,25 @@ class WorkloadsController < ApplicationController
     else
       @error = "This line already exists: #{found.name}"
     end
-    @workload = Workload.new(person_id)
-    get_last_sdp_update
-    get_suggested_requests(@workload)
-    get_sdp_gain(@workload.person)
-    get_chart
+    get_workload_data(person_id)
+  end
+
+  def add_by_project
+    project_id = params[:project_id].to_i
+    person_id = session['workload_person_id'].to_i
+    project = Project.find(project_id)
+    if not project
+      @error = "Can not find project with id #{project_id}"
+      return
+    end
+    found = WlLine.find_by_project_id_and_person_id(project_id, person_id)
+    # allow to add several lines by projet
+    #if not found
+      @line = WlLine.create(:name=>project.name, :project_id=>project_id, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+    #else
+    #  @error = "This line already exists: #{found.name}"
+    #end
+    get_workload_data(person_id)
   end
 
   def edit_load
@@ -532,6 +537,16 @@ class WorkloadsController < ApplicationController
   def hide_wmenu
     session['wmenu_hidden'] = params[:on]
     render(:nothing=>true)
+  end
+
+private
+
+  def get_workload_data(person_id)
+    @workload = Workload.new(person_id)
+    get_last_sdp_update
+    get_suggested_requests(@workload)
+    get_chart
+    get_sdp_gain(@workload.person)
   end
 
 end

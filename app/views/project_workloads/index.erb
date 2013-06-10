@@ -4,11 +4,10 @@
 <%= link_to('Switch to person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:700px;") %>
 
-
+<!--<div id="edit_line"></div>-->
 <%= render(:partial=>"workload") %>
 
 <script>
   set_fixed_header();
   new Draggable(wl_line_add_form); // does not mix well with scrollbar
 </script>
-
