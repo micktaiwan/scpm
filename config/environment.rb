@@ -28,6 +28,8 @@ Rails::Initializer.run do |config|
   # also needs sudo apt-get install libopenssl-ruby for net/https to work
   # gem install mysql
   # gem install spreadsheet
+  # rvm use @global && gem uninstall rake
+  # rvm use @global && gem install rake -v 0.8.7
   
 end
 
