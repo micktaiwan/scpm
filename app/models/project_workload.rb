@@ -93,10 +93,19 @@ class ProjectWorkload
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
         @cprodtotals    << {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
-        percent = (@ctotals.last[:value] / @opens.last)*100
+        if @opens and @opens.last > 0
+          percent = (@ctotals.last[:value] / @opens.last)*100
+        else
+          percent = 100
+        end
         open    = @opens.last
         avail   = [0,(open-col_sum)].max
-        @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>(avail/open).round}
+        if open > 0
+          avail_percent = (avail/open).round
+        else
+          avail_percent = 0
+        end
+        @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>avail_percent}
         @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
         @next_month_percents += percent if nb < 5
         @three_next_months_percents += percent if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
