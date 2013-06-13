@@ -26,6 +26,9 @@ Rails::Initializer.run do |config|
   #config.gem 'will_paginate', :version => '2.3.16'
   #config.gem 'gchartrb' # 0.8
   # also needs sudo apt-get install libopenssl-ruby for net/https to work
+  # gem install mysql
+  # gem install spreadsheet
+  
 end
 
 ActionMailer::Base.sendmail_settings = {
