@@ -92,7 +92,11 @@ class Workload
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
         @cprodtotals    << {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
-        percent = (@ctotals.last[:value] / @opens.last)*100
+        if @opens and @opens.last > 0
+          percent = (@ctotals.last[:value] / @opens.last)*100
+        else
+          percent = 100
+        end
         open    = @opens.last
         avail   = [0,(open-col_sum)].max
         if open > 0
