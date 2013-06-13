@@ -7,7 +7,7 @@ Differ.format = :html
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
-  protect_from_forgery # See ActionController::RequestForgeryProtection for details
+  #protect_from_forgery # See ActionController::RequestForgeryProtection for details
   layout 'general'
   include Authentication
   include ApplicationHelper
