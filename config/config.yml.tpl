@@ -2,6 +2,10 @@
 scpm_title: "SCPM Title"
 scpm_address: "http://scpm.sqli.com"
 
+# menu and access configuration
+# the menu is visible only if true
+workloads_view_by_project: false
+
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"
 sdp_import_email_object: "WriteObjectOfMailHere"
