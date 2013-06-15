@@ -1,13 +1,14 @@
 # General
 scpm_title: "SCPM Title"
 scpm_address: "http://scpm.sqli.com"
-project_name: "EISQ"
+project_name: "Your project code so you can configure display options"
 
 # menu and access configuration
 workloads_add_by_request_number: true
 workloads_add_by_sdp_task: true
-workloads_add_by_project: true
-workloads_view_by_project_menu: true
+workloads_add_by_project: false
+workloads_view_by_project_menu: false
+plannings_menu: false
 
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"
@@ -16,12 +17,12 @@ sdp_import_email_object: "WriteObjectOfMailHere"
 # Daily email
 daily_reminder_email_source: "addressMail@sqli.com"
 daily_reminder_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com,addressMail3@sqli.com"
-daily_reminder_email_object: "[BAM] Reminders for "
+daily_reminder_email_object: "[SCPM] Reminders for "
 
 # CI/Request reminder email
 request_ci_reminder_email_source: "addressMail@sqli.com"
 request_ci_reminder_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com,addressMail3@sqli.com"
-request_ci_reminder_email_object: "[BAM] Requests/CI reminders for "
+request_ci_reminder_email_object: "[SCPM] Requests/CI reminders for "
 
 # SDP by type
 sdp_by_type_order: "Yes,Suite,No,no_type"
