@@ -1,10 +1,13 @@
 # General
 scpm_title: "SCPM Title"
 scpm_address: "http://scpm.sqli.com"
+project_name: "EISQ"
 
 # menu and access configuration
-# the menu is visible only if true
-workloads_view_by_project: false
+workloads_add_by_request_number: true
+workloads_add_by_sdp_task: true
+workloads_add_by_project: true
+workloads_view_by_project_menu: true
 
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"
