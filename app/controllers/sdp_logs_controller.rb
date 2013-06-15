@@ -9,10 +9,10 @@ class SdpLogsController < ApplicationController
     delay     = params[:delay]
     balance   = params[:balance]
     percent   = params[:percent]
-    
+
     log = SdpLog.find(:first, :conditions=>["person_id=? and date=?", person_id, date])
     if log
-      puts "log found #{person_id} #{date} #{log.id}"
+      #puts "log found #{person_id} #{date} #{log.id}"
       log.update_attributes(:person_id=>person_id,
         :date=>date,
         :initial => initial,

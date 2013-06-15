@@ -5,39 +5,46 @@
 <div id="wl_line_add_form" class="popup" style="display:none;">
   <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
   <div class="title">Add a line</div>
-  By request number
-  <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
-    <%= label_tag(:request_id, "Request #") %>
-    <%= text_field_tag(:request_id, nil, {:id=>'input_request', :size=>5}) %>
-    <%= submit_tag("Add") %>
+  <% if APP_CONFIG['workloads_add_by_request_number'] %>
+    By request number
+    <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
+      <%= label_tag(:request_id, "Request #") %>
+      <%= text_field_tag(:request_id, nil, {:id=>'input_request', :size=>5}) %>
+      <%= submit_tag("Add") %>
+    <% end %>
+    <br/>
   <% end %>
-  <br/>
   By name ("Holidays", "Training",...)
   <% form_remote_tag(:url=>{:action => "add_by_name"}) do %>
     <%= label_tag(:name, "Name") %>
     <%= text_area_tag(:name, nil, {:id=>'input_name', :cols=>50, :rows=>3}) %>
     <%= submit_tag("Add") %>
   <% end %>
-  <br/>
-  By SDP task
-  <% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
-    <%= label_tag(:sdp_task, "SDP Task") %>
-    <%= render(:partial=>"sdp_tasks") %>
-    <%= submit_tag("Add") %>
+  <% if APP_CONFIG['workloads_add_by_sdp_task'] %>
+    <br/>
+    By SDP task
+    <% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
+      <%= label_tag(:sdp_task, "SDP Task") %>
+      <%= render(:partial=>"sdp_tasks") %>
+      <%= submit_tag("Add") %>
+    <% end %>
   <% end %>
-  <br/>
-  By project
-  <% form_remote_tag(:url=>{:action => "add_by_project"}) do %>
-    <%= label_tag(:sdp_task, "Project") %>
-    <%= select_tag('project_id', options_for_select(@projects), {:id=>"project_id"}) %>
-    <%= submit_tag("Add") %>
+  <% if APP_CONFIG['workloads_add_by_project'] %>
+    <br/>
+    By project
+    <% form_remote_tag(:url=>{:action => "add_by_project"}) do %>
+      <%= label_tag(:sdp_task, "Project") %>
+      <%= select_tag('project_id', options_for_select(@projects), {:id=>"project_id"}) %>
+      <%= submit_tag("Add") %>
+    <% end %>
   <% end %>
-  <br/>
-
-  <b>Suggested requests:</b><br/>
-  <div id="suggested_requests">
-    <%= render(:partial=>"suggested_request", :collection=>@suggested_requests) %>
-  </div>
+  <% if APP_CONFIG['workloads_suggested_request'] %>
+    <br/>
+    <b>Suggested requests:</b><br/>
+    <div id="suggested_requests">
+      <%= render(:partial=>"suggested_request", :collection=>@suggested_requests) %>
+    </div>
+  <% end %>
 </div>
 
 <% if @last_sdp_update != nil %>
@@ -52,7 +59,9 @@
 
 <% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
   <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %>
-  <%= link_to('Switch to project view', {:controller=>'project_workloads'}, {:class=>'btnlnk'}) %>
+  <% if APP_CONFIG['workloads_view_by_project_menu'] %>
+    <%= link_to('Switch to project view', {:controller=>'project_workloads'}, {:class=>'btnlnk'}) %>
+  <% end %>
   <br/>
   <br/>
 <% end %>

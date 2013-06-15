@@ -1,3 +1,14 @@
+<!-- Legends -->
+<table id='availabilities_legends_table'>
+<tr><td>Legends of Availabilities</td></tr>
+<tr><td class="availability_0">0 day available</td></tr>  
+<tr><td class="availability_1">1 day available</td></tr>  
+<tr><td class="availability_2">2 days available</td></tr> 
+<tr><td class="availability_3">3 days available</td></tr> 
+<tr><td class="availability_4">4 days available</td></tr> 
+<tr><td class="availability_5">5 days available</td></tr> 
+</table>
+          
 <b><%= @not_in_workload.size %></b> <%= link_to_function('requests are not in workloads', "$('tbv_requests').toggle();")%>:
 <b><%= @not_in_workload_days %></b> days not in the workload (including 20% gain)<br/>
 <div id="tbv_requests" style="display:none;">
@@ -15,19 +26,6 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
 <br/>
 <%= @workloads.size %> workloads (not displayed: <%= @transverse_people %>)<br/>
 <br/>
-
-<!-- Legends -->
-<table id='availabilities_legends_table'>
-<tr><td colspan="6">Legends of Availabilities</td></tr>
-<tr>
-	<td class="availability_0">0 day available</td>
-	<td class="availability_1">1 day available</td>
-	<td class="availability_2">2 days available</td>
-	<td class="availability_3">3 days available</td>
-	<td class="availability_4">4 days available</td>
-	<td class="availability_5">5 days available</td>
-</tr>	
-</table>
 
 <table class="refresh_conso_table">
   <tr style="font-weight:bold;">
