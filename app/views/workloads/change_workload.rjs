@@ -1,5 +1,9 @@
-page.replace_html "suggested_requests", render(:partial=>"suggested_request", :collection=>@suggested_requests)
-page.replace_html "sdp_tasks", render(:partial=>"sdp_tasks")
+if(APP_CONFIG['workloads_suggested_request'])
+  page.replace_html "suggested_requests", render(:partial=>"suggested_request", :collection=>@suggested_requests)
+end
+if(APP_CONFIG['workloads_add_by_sdp_task'])
+  page.replace_html "sdp_tasks", render(:partial=>"sdp_tasks")
+end
 page.replace "workload", render(:partial=>"workload")
 page << "document.body.style.cursor = 'auto';"
 page << "$('loading').hide();"

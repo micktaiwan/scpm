@@ -9,6 +9,8 @@ workloads_add_by_sdp_task: true
 workloads_add_by_project: false
 workloads_view_by_project_menu: false
 plannings_menu: false
+use_virtual_people: false
+workloads_suggested_request: true
 
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"
