@@ -141,6 +141,7 @@ class WorkloadsController < ApplicationController
       @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.availability[i][:avail]})
     end
 
+    # workload chart
     chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
     realmax     = [@totals[4..-1].max, @cap_totals[4..-1].max].max
     high_limit  = 150.0
@@ -170,6 +171,22 @@ class WorkloadsController < ApplicationController
     #chart.enable_interactivity = true
     #chart.params[:chm] = "h,FF0000,0,-1,1"
     @chart_url = chart.to_url #({:chm=>"r,DDDDDD,0,#{100.0/max-0.01},#{100.0/max}"}) #({:enableInteractivity=>true})
+    
+    if APP_CONFIG['use_virtual_people']
+      # staffing chart
+      serie = []
+      @workloads.first.weeks.each_with_index do |tmp,i|
+        serie << @workloads.inject(0) { |sum,w| sum += w.staffing[i]}
+      end
+      chart = GoogleChart::LineChart.new('1000x300', "Staffing", false)
+      max   = serie.max
+      chart.data "nb person", serie, 'ff0000'
+      chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
+      chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
+      chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
+      chart.show_legend = true
+      @staffing_chart_url = chart.to_url #({:chm=>"r,DDDDDD,0,#{100.0/max-0.01},#{100.0/max}"}) #({:enableInteractivity=>true})
+    end
     render :layout => false
   end
 

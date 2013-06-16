@@ -8,22 +8,24 @@
     <td class="availability_4">4 days</td>
     <td class="availability_5">5 days</td></tr> 
 </table>
-          
-<b><%= @not_in_workload.size %></b> <%= link_to_function('requests are not in workloads', "$('tbv_requests').toggle();")%>:
-<b><%= @not_in_workload_days %></b> days not in the workload (including 20% gain)<br/>
-<div id="tbv_requests" style="display:none;">
-<%= render(:partial=>'workloads/request', :collection=>@not_in_workload) %>
-</div>
-<% 
-	if @total_days > 0
-		planned_days_on_total_days_ratio = (@total_planned_days*100 / @total_days /0.1).round * 0.1
-	else
-		planned_days_on_total_days_ratio = 100
-	end
-%>
-<b><%= @total_planned_days %></b> days planned on <b><%= @total_days %></b> SDP or "to be validated" days (<%= planned_days_on_total_days_ratio %>%) (minus 20% for to be validated requests)<br/>
-To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaining_total %><br/>
-<br/>
+<% if APP_CONFIG['workloads_add_by_request_number'] %>
+  <b><%= @not_in_workload.size %></b> <%= link_to_function('requests are not in workloads', "$('tbv_requests').toggle();")%>:
+  <b><%= @not_in_workload_days %></b> days not in the workload (including 20% gain)<br/>
+  <div id="tbv_requests" style="display:none;">
+  <%= render(:partial=>'workloads/request', :collection=>@not_in_workload) %>
+  </div>
+  <% 
+  	if @total_days > 0
+  		planned_days_on_total_days_ratio = (@total_planned_days*100 / @total_days /0.1).round * 0.1
+  	else
+  		planned_days_on_total_days_ratio = 100
+  	end
+  %>
+  <b><%= @total_planned_days %></b> days planned on <b><%= @total_days %></b> SDP or "to be validated" days (<%= planned_days_on_total_days_ratio %>%) (minus 20% for to be validated requests)<br/>
+  To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaining_total %><br/>
+  <br/>
+<% end %>
+
 <%= @workloads.size %> workloads (not displayed: <%= @transverse_people %>)<br/>
 <br/>
 
@@ -85,5 +87,9 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
 <%= image_tag(@chart_url) %>
 <br/>
 <br/>
+<% if APP_CONFIG['use_virtual_people'] %>
+  <%= image_tag(@staffing_chart_url) %>
+  <br/>
+  <br/>
+<% end %>
 render time: <%= Time.now-@start_time %> secs. <%= Time.now().to_formatted_s(:db) %><br/>
-

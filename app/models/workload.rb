@@ -25,7 +25,8 @@ class Workload
     :to_be_validated_in_wl_remaining_total, # total of requests to be validated planned in workloads
     :nb_total_lines,  # total before filters
     :nb_current_lines,# total after filters
-    :nb_hidden_lines  # difference (filtered)
+    :nb_hidden_lines, # difference (filtered)
+    :staffing         # nb of person needed per week
 
   # options can have
   # :only_holidays => true
@@ -65,6 +66,7 @@ class Workload
     @percents   = []
     @months     = []
     @days       = []
+    @staffing   = []
     month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
     month_displayed = false
     nb = 0
@@ -105,6 +107,11 @@ class Workload
           avail_percent = (avail/open).round
         else
           avail_percent = 0
+        end
+        if person.is_virtual==1
+          @staffing << col_sum / open 
+        else
+          @staffing << 0
         end
         @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>avail_percent}
         @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
