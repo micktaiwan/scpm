@@ -1,12 +1,12 @@
 <!-- Legends -->
 <table id='availabilities_legends_table'>
-<tr><td>Legends of Availabilities</td></tr>
-<tr><td class="availability_0">0 day available</td></tr>  
-<tr><td class="availability_1">1 day available</td></tr>  
-<tr><td class="availability_2">2 days available</td></tr> 
-<tr><td class="availability_3">3 days available</td></tr> 
-<tr><td class="availability_4">4 days available</td></tr> 
-<tr><td class="availability_5">5 days available</td></tr> 
+<tr><td colspan="6">Legends of Availabilities</td></tr>
+<tr><td class="availability_0">0 day</td>
+    <td class="availability_1">1 day</td>
+    <td class="availability_2">2 days</td>
+    <td class="availability_3">3 days</td>
+    <td class="availability_4">4 days</td>
+    <td class="availability_5">5 days</td></tr> 
 </table>
           
 <b><%= @not_in_workload.size %></b> <%= link_to_function('requests are not in workloads', "$('tbv_requests').toggle();")%>:
@@ -31,7 +31,7 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
   <tr style="font-weight:bold;">
     <td colspan="5"></td>
     <% for w in @workloads.first.months %>
-        <td><%= w %></td>
+      <td><%= w %></td>
     <% end %>
   </tr>
 
@@ -40,9 +40,9 @@ To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaini
     <td>To plan</td>
     <td>Next 5 weeks</td>
     <td>Next 3 months</td>
-	<td>Avail 8w</td>
+    <td>Avail 8w</td>
     <% for w in @workloads.first.weeks %>
-        <td><%= w %></td>
+      <td><%= w %></td>
     <% end %>
   </tr>
 

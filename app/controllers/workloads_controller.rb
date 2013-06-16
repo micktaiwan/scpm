@@ -112,7 +112,7 @@ class WorkloadsController < ApplicationController
       @to_be_validated_in_wl_remaining_total += w.to_be_validated_in_wl_remaining_total
       #break
     end
-    @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
+    @workloads = @workloads.sort_by {|w| [-w.person.is_virtual, w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals       = []
     @cap_totals   = []
     @avail_totals = []
