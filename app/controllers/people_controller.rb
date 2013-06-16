@@ -52,7 +52,7 @@ class PeopleController < ApplicationController
           @person.remove_role(r.name)
         end
         }
-      redirect_to "/people/show/#{@person.id}"
+      redirect_to "/people/"
     else
       render :action => 'edit'
     end
