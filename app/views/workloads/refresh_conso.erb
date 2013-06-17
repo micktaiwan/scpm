@@ -28,68 +28,64 @@
 
 <%= @workloads.size %> workloads (not displayed: <%= @transverse_people %>)<br/>
 <br/>
+<% if @workloads.size > 0 %>
+  <table class="refresh_conso_table">
+    <tr style="font-weight:bold;">
+      <td colspan="5"></td>
+      <% for w in @workloads.first.months %>
+        <td><%= w %></td>
+      <% end %>
+    </tr>
 
-<table class="refresh_conso_table">
-  <tr style="font-weight:bold;">
-    <td colspan="5"></td>
-    <% for w in @workloads.first.months %>
-      <td><%= w %></td>
-    <% end %>
-  </tr>
+    <tr style="font-weight:bold;">
+      <td>Name</td>
+      <td>To plan</td>
+      <td>Next 5 weeks</td>
+      <td>Next 3 months</td>
+      <td>Avail 8w</td>
+      <% for w in @workloads.first.weeks %>
+        <td><%= w %></td>
+      <% end %>
+    </tr>
 
-  <tr style="font-weight:bold;">
-    <td>Name</td>
-    <td>To plan</td>
-    <td>Next 5 weeks</td>
-    <td>Next 3 months</td>
-    <td>Avail 8w</td>
-    <% for w in @workloads.first.weeks %>
-      <td><%= w %></td>
-    <% end %>
-  </tr>
+    <%= render(:partial=>'conso_line', :collection=>@workloads) %>
 
-  <%= render(:partial=>'conso_line', :collection=>@workloads) %>
+    <tr style="font-weight:bold;">
+      <td>Total</td>
+      <td align="center"><%= @totals[0] %></td>
+      <% for w in @totals[1..2] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+      <td align="center"><%= @totals[3] %></td>
+      <% for w in @totals[4..-1] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+    </tr>
 
-  <tr style="font-weight:bold;">
-    <td>Total</td>
-    <td align="center"><%= @totals[0] %></td>
-    <% for w in @totals[1..2] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-    <td align="center"><%= @totals[3] %></td>
-    <% for w in @totals[4..-1] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-  </tr>
-
-  <tr style="font-weight:bold;">
-    <td>Capped total</td>
-    <td align="center"><%= @cap_totals[0] %></td>
-    <% for w in @cap_totals[1..2] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-    <td align="center"><%= @cap_totals[3] %></td>
-    <% for w in @cap_totals[4..-1] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-  </tr>
-  
-  <tr style="font-weight:bold;">
-    <td>Availability</td>
-    <% for w in @avail_totals[0..-1] %>
-      <td align="center"><%= w %></td>
-    <% end %>
-  </tr>
-
-</table>
-<br/>
-<br/>
-<%= image_tag(@chart_url) %>
-<br/>
-<br/>
-<% if APP_CONFIG['use_virtual_people'] %>
-  <%= image_tag(@staffing_chart_url) %>
-  <br/>
-  <br/>
+    <tr style="font-weight:bold;">
+      <td>Capped total</td>
+      <td align="center"><%= @cap_totals[0] %></td>
+      <% for w in @cap_totals[1..2] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+      <td align="center"><%= @cap_totals[3] %></td>
+      <% for w in @cap_totals[4..-1] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+    </tr>
+    
+    <tr style="font-weight:bold;">
+      <td>Availability</td>
+      <% for w in @avail_totals[0..-1] %>
+        <td align="center"><%= w %></td>
+      <% end %>
+    </tr>
+  </table>
+  <br/><br/>
+  <%= image_tag(@chart_url) %><br/><br/>
+  <% if APP_CONFIG['use_virtual_people'] %>
+    <%= image_tag(@staffing_chart_url) %><br/><br/>
+  <% end %>
 <% end %>
+
 render time: <%= Time.now-@start_time %> secs. <%= Time.now().to_formatted_s(:db) %><br/>
