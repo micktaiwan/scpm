@@ -56,7 +56,7 @@ class Workload
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
-    farest_week = wlweek(from_day+6.months)
+    farest_week = wlweek(from_day+APP_CONFIG['workload_months'].to_i.months)
     @wl_weeks   = []
     @weeks      = []
     @opens      = []
@@ -76,7 +76,7 @@ class Workload
     @sum_availability           = 0
     while true
       w = wlweek(iteration) # output: year + week ("201143")
-      break if w > farest_week or nb > 6*4
+      break if w > farest_week or nb > 100*4
       # months
       if Date::ABBR_MONTHNAMES[(iteration+4.days).month] != month
         month = Date::ABBR_MONTHNAMES[(iteration+4.days).month]
