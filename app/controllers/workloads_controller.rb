@@ -86,8 +86,8 @@ class WorkloadsController < ApplicationController
     @sdp_logs = SdpLog.find(:all, :conditions=>["person_id=?", person.id], :order=>"`date` desc", :limit=>3).reverse
   end
 
-  # just for loading tabs
   def consolidation
+    @companies = Company.all.map {|p| ["#{p.name}", p.id]}
   end
 
   def refresh_conso

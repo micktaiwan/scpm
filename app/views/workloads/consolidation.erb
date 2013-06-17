@@ -16,7 +16,9 @@
     <div id="tabContent1" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="1"? "block" : "none"%>;">
         <br />
         <div id="conso_workloads">
-          <%= link_to_remote('Refresh',  :url => { :action => "refresh_conso" }, :loading => "$('error1').update('');$('loading1').appear()", :complete => "$('loading1').hide()", :update => { :success => "data1", :failure => "error1" }) %>
+          <%= select(:company, :company_id, options_for_select(@companies), :id=>'company') %><br/>
+          <br/>
+          <%= link_to_remote('Refresh',  :url => { :action => "refresh_conso", :company_id=>1}, :loading => "$('error1').update('');$('loading1').appear()", :complete => "$('loading1').hide()", :update => { :success => "data1", :failure => "error1" }) %>
           <br/>
           <br/>
           <%= image_tag('loading.gif', :id=>'loading1', :style=>"display:none;") %>

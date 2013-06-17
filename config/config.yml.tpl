@@ -12,6 +12,10 @@ plannings_menu: false
 use_virtual_people: false
 workloads_suggested_request: true
 
+# workloads
+# display length in months
+workloads_months: 6
+
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"
 sdp_import_email_object: "WriteObjectOfMailHere"
