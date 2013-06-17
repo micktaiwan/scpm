@@ -56,6 +56,14 @@ class WlLine < ActiveRecord::Base
     end
   end
 
+  def project_name
+    if self.project
+      self.project.name
+    else
+      "no project"
+    end
+  end
+
   def title
     "#{self.person_name} #{self.display_name}"
   end
