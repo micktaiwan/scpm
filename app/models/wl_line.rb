@@ -35,6 +35,10 @@ class WlLine < ActiveRecord::Base
     wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
   end
 
+  def sum
+    wl_loads.inject(0) { |sum, l| sum+l.wlload}
+  end
+
   def near_workload
     return 0 if wl_loads.size == 0
     today_week            = wlweek(Date.today)

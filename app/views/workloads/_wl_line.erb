@@ -57,8 +57,8 @@
 	<% else %>
 		<td colspan="3"></td>
 	<% end %>
-	<td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
-
+	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+  <td id="ltotal_<%= wl_line.id %>"><%= wl_line.sum %></td>
 
 	<!-- Values by week -->
 	<%
