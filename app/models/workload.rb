@@ -108,7 +108,7 @@ class Workload
         else
           avail_percent = 0
         end
-        if person.is_virtual==1
+        if person.is_virtual==1 and open > 0
           @staffing << col_sum / open 
         else
           @staffing << 0
