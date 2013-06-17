@@ -56,7 +56,7 @@ class Workload
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
-    farest_week = wlweek(from_day+APP_CONFIG['workload_months'].to_i.months)
+    farest_week = wlweek(from_day+APP_CONFIG['workloads_months'].to_i.months)
     @wl_weeks   = []
     @weeks      = []
     @opens      = []

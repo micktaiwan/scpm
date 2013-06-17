@@ -15,6 +15,7 @@ workloads_suggested_request: true
 # workloads
 # display length in months
 workloads_months: 6
+workloads_display_project_name_in_lines: false
 
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"

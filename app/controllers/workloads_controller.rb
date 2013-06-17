@@ -317,6 +317,7 @@ class WorkloadsController < ApplicationController
     line_id   = params[:l].to_i
     @wl_line  = WlLine.find(line_id)
     @workload = Workload.new(session['workload_person_id'])
+    @projects = Project.all.map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     if @workload.person.trigram == ""
       @sdp_tasks = []
     else
@@ -394,6 +395,26 @@ class WorkloadsController < ApplicationController
     @wl_line.save
     @workload = Workload.new(@wl_line.person_id)
   end
+
+  def link_to_project
+    project_id  = params[:project_id].to_i
+    line_id     = params[:id]
+    @wl_line = WlLine.find(line_id)
+    @wl_line.project_id = project_id
+    @wl_line.wl_type = WL_LINE_OTHER
+    @wl_line.save
+    @workload = Workload.new(@wl_line.person_id)
+  end
+
+  def unlink_project
+    line_id               = params[:id]
+    @wl_line              = WlLine.find(line_id)
+    @wl_line.project_id   = nil
+    @wl_line.wl_type      = WL_LINE_OTHER
+    @wl_line.save
+    @workload = Workload.new(@wl_line.person_id)
+  end
+
 
   def get_sums(line, week, person_id)
     today_week = wlweek(Date.today)
