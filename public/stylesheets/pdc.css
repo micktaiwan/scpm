@@ -105,6 +105,13 @@ tr.wl_opens {
 .wl_line_400 {
   background: #FDD;
   }
+
+.wl_line_virtual {
+  background: #FFD;
+  }
+.wl_line_virtual .wl_case input {
+  background: #FFD;
+  }
 .wl_line_110,.wl_line_120 {
   background: #A8FFE1;
   }

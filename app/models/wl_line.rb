@@ -102,6 +102,13 @@ class WlLine < ActiveRecord::Base
 
     rv
   end
-
+  
+  def wl_type_by_project
+    if self.person.is_virtual==1
+      return "virtual"
+    else
+      return self.wl_type
+    end
+  end
 end
 
