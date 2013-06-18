@@ -301,11 +301,13 @@ class WorkloadsController < ApplicationController
   end
 
   def edit_load
+    view_by = (params['view_by']=='1' ? :project : :person)
     @line_id  = params[:l].to_i
     @wlweek   = params[:w].to_i
     value     = round_to_hour(params[:v].to_f)
     line      = WlLine.find(@line_id)
     person_id = line.person_id
+    project_id= line.project_id
 
     if value == 0.0
       WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
@@ -317,7 +319,7 @@ class WorkloadsController < ApplicationController
       wl_load.save
       @value = value
     end
-    @lsum, @plsum, @csum, @cpercent, @total, @planned_total, @avail  = get_sums(line, @wlweek, person_id)
+    @lsum, @plsum, @csum, @cpercent, @total, @planned_total, @avail  = get_sums(line, @wlweek, project_id, view_by)
   end
 
   def display_edit_line
@@ -430,12 +432,14 @@ class WorkloadsController < ApplicationController
     plsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
     if(type==:project)
       wl_lines = WlLine.find(:all, :conditions=>["project_id=?", id])
+      nb_days_per_weeks = 5 * wl_lines.map{|l| l.person_id}.uniq.size
     else
       wl_lines = WlLine.find(:all, :conditions=>["person_id=?", id])
+      nb_days_per_weeks = 5
     end
     csum       = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
-    cpercent   = (csum / (5-WlHoliday.get_from_week(week))*100).round
-    open       = 5 - WlHoliday.get_from_week(week)
+    open       = nb_days_per_weeks - WlHoliday.get_from_week(week)*wl_lines.size
+    cpercent   = (csum / open*100).round
     avail      = [0,(open-csum)].max
     avail      = (avail==0 ? '' : avail)
 

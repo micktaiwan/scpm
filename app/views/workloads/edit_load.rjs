@@ -15,5 +15,5 @@ begin
     page << "wl_change_colors(#{@wlweek},'#FFF','#940')"
   end
 rescue Exception => e
-  page << "alert('Error')"
+  page << "alert('Error '+e)"
 end

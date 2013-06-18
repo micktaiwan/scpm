@@ -20,7 +20,8 @@ class ProjectWorkload
     :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
     :next_month_percents,         # next 5 weeks (including current)
     :three_next_months_percents,  # next 3 months (was _after_ the 5 coming weeks but changed later including next 5 weeks)
-    :planned_total,               # total number of days planned
+    :total,                       # total number of days planned (including past weeks)
+    :planned_total,               # total number of days planned (current week and after)
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
     :to_be_validated_in_wl_remaining_total, # total of requests to be validated planned in workloads
     :nb_total_lines,  # total before filters
@@ -73,7 +74,7 @@ class ProjectWorkload
     @sum_availability           = 0
     while true
       w = wlweek(iteration) # output: year + week ("201143")
-      break if w > farest_week or nb > 100*4
+      break if w > farest_week or nb > 36*4
       # months
       if Date::ABBR_MONTHNAMES[(iteration+4.days).month] != month
         month = Date::ABBR_MONTHNAMES[(iteration+4.days).month]
@@ -88,7 +89,7 @@ class ProjectWorkload
       @days << filled_number(iteration.day,2) + "-" + filled_number((iteration+4.days).day,2)
       @wl_weeks << w
       @weeks    << iteration.cweek
-      @opens    << 5 - WlHoliday.get_from_week(w)
+      @opens    << 5*wl_lines.size - WlHoliday.get_from_week(w)*wl_lines.size
       if @wl_lines.size > 0
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
@@ -120,6 +121,7 @@ class ProjectWorkload
     # sum the lines
     @line_sums            = Hash.new
     today_week            = wlweek(Date.today)
+    @total                = 0
     @planned_total        = 0
     @sdp_remaining_total  = 0
     @to_be_validated_in_wl_remaining_total = 0
@@ -127,6 +129,7 @@ class ProjectWorkload
       @line_sums[l.id] = Hash.new
       #@line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
       @line_sums[l.id][:sums] = l.planned_sum
+      @total          += l.sum if l.wl_type <= 200
       @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
       if l.sdp_task
         @sdp_remaining_total += l.sdp_task.remaining

@@ -25,13 +25,6 @@ Ajax.Replacer = Class.create(Ajax.Updater, {
   }
 })
 
-function wl_save_value(line_id, wlweek) {
-  new Ajax.Request('/workloads/edit_load?l='+line_id+'&w='+wlweek+'&v='+$(line_id+'_'+wlweek).value, {
-    asynchronous:true,
-    evalScripts:true
-    });
-  }
-
 function change_workload(project_id) {
   document.body.style.cursor = 'wait';
   $('loading').show();
