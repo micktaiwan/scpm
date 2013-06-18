@@ -50,8 +50,8 @@
 	<% else %>
 		<td colspan="3"></td>
 	<% end %>
-	<td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
-
+	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+  <td id="ltotal_<%= wl_line.id %>"><%= wl_line.sum %></td>
 
 	<!-- Values by week -->
 	<%
@@ -65,7 +65,7 @@
       wlload = wlload == 0.0 ? '' : wlload
     %>
 
-    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}');return false;") %>
+    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}', '1');return false;") %>
     </td>
 <% end %>
 </tr>

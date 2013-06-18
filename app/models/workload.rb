@@ -20,7 +20,8 @@ class Workload
     :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
     :next_month_percents,         # next 5 weeks (including current)
     :three_next_months_percents,  # next 3 months (was _after_ the 5 coming weeks but changed later including next 5 weeks)
-    :planned_total,               # total number of days planned
+    :total,                       # total number of days planned (including past weeks)
+    :planned_total,               # total number of days planned (current week and after)
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
     :to_be_validated_in_wl_remaining_total, # total of requests to be validated planned in workloads
     :nb_total_lines,  # total before filters
@@ -109,7 +110,7 @@ class Workload
           avail_percent = 0
         end
         if person.is_virtual==1 and open > 0
-          @staffing << col_sum / open 
+          @staffing << col_sum / open
         else
           @staffing << 0
         end
@@ -128,6 +129,7 @@ class Workload
     # sum the lines
     @line_sums            = Hash.new
     today_week            = wlweek(Date.today)
+    @total                = 0
     @planned_total        = 0
     @sdp_remaining_total  = 0
     @to_be_validated_in_wl_remaining_total = 0
@@ -135,6 +137,7 @@ class Workload
       @line_sums[l.id] = Hash.new
       #@line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
       @line_sums[l.id][:sums] = l.planned_sum
+      @total          += l.sum if l.wl_type <= 200
       @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
       if l.sdp_task
         @sdp_remaining_total += l.sdp_task.remaining

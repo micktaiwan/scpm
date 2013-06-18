@@ -25,3 +25,10 @@ function display_milestones(evt,text) {
 function hide_milestones(text) {
   $('milestones').hide();
   }
+
+function wl_save_value(line_id, wlweek, view_by) {
+  new Ajax.Request('/workloads/edit_load?l='+line_id+'&w='+wlweek+'&v='+$(line_id+'_'+wlweek).value+'&view_by='+view_by, {
+    asynchronous:true,
+    evalScripts:true
+    });
+  }

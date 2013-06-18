@@ -2,8 +2,13 @@
   remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
   error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.8) or (planned_total > remaining)))
+  if wl_line.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and APP_CONFIG['workloads_display_project_name_in_lines'] 
+    customized_name =     wl_line.project_name + wl_line.display_name
+  else
+    customized_name =     wl_line.display_name
+  end
 %>
-<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
+<tr id="wl_line_<%= wl_line.id %>" title="<%= customized_name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
 	<td align='center'>
     <%= link_to_remote(image_tag("delete.gif"),
@@ -32,10 +37,7 @@
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <% if wl_line.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and APP_CONFIG['workloads_display_project_name_in_lines'] %>
-      <%= wl_line.project_name %> -
-    <% end %>
-    <%= wl_line.display_name %>
+    <%= customized_name %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)
@@ -57,8 +59,8 @@
 	<% else %>
 		<td colspan="3"></td>
 	<% end %>
-	<td id="ltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
-
+	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+  <td id="ltotal_<%= wl_line.id %>"><%= wl_line.sum %></td>
 
 	<!-- Values by week -->
 	<%
@@ -72,7 +74,7 @@
       wlload = wlload == 0.0 ? '' : wlload
     %>
 
-    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}');return false;") %>
+    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}', '0');return false;") %>
     </td>
 <% end %>
 </tr>

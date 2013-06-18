@@ -178,7 +178,7 @@ class WorkloadsController < ApplicationController
     #chart.enable_interactivity = true
     #chart.params[:chm] = "h,FF0000,0,-1,1"
     @chart_url = chart.to_url #({:chm=>"r,DDDDDD,0,#{100.0/max-0.01},#{100.0/max}"}) #({:enableInteractivity=>true})
-    
+
     if APP_CONFIG['use_virtual_people']
       # staffing chart
       serie = []
@@ -301,11 +301,13 @@ class WorkloadsController < ApplicationController
   end
 
   def edit_load
+    view_by = (params['view_by']=='1' ? :project : :person)
     @line_id  = params[:l].to_i
     @wlweek   = params[:w].to_i
     value     = round_to_hour(params[:v].to_f)
     line      = WlLine.find(@line_id)
     person_id = line.person_id
+    project_id= line.project_id
 
     if value == 0.0
       WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
@@ -317,7 +319,7 @@ class WorkloadsController < ApplicationController
       wl_load.save
       @value = value
     end
-    @lsum, @csum, @cpercent, @planned_total, @avail  = get_sums(line, @wlweek, person_id)
+    @lsum, @plsum, @csum, @cpercent, @total, @planned_total, @avail  = get_sums(line, @wlweek, project_id, view_by)
   end
 
   def display_edit_line
@@ -404,42 +406,54 @@ class WorkloadsController < ApplicationController
   end
 
   def link_to_project
-    project_id  = params[:project_id].to_i
-    line_id     = params[:id]
-    @wl_line = WlLine.find(line_id)
+    project_id          = params[:project_id].to_i
+    line_id             = params[:id]
+    @wl_line            = WlLine.find(line_id)
     @wl_line.project_id = project_id
-    @wl_line.wl_type = WL_LINE_OTHER
+    @wl_line.wl_type    = WL_LINE_OTHER
     @wl_line.save
-    @workload = Workload.new(@wl_line.person_id)
+    @workload           = Workload.new(@wl_line.person_id)
   end
 
   def unlink_project
-    line_id               = params[:id]
-    @wl_line              = WlLine.find(line_id)
-    @wl_line.project_id   = nil
-    @wl_line.wl_type      = WL_LINE_OTHER
+    line_id             = params[:id]
+    @wl_line            = WlLine.find(line_id)
+    @wl_line.project_id = nil
+    @wl_line.wl_type    = WL_LINE_OTHER
     @wl_line.save
-    @workload = Workload.new(@wl_line.person_id)
+    @workload           = Workload.new(@wl_line.person_id)
   end
 
-
-  def get_sums(line, week, person_id)
+  # type is :person or :projet
+  # type indicates what is the id (person or projet)
+  def get_sums(line, week, id, type=:person)
     today_week = wlweek(Date.today)
-    lsum = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
-    wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])
-    csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
-    cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
-    open    = 5 - WlHoliday.get_from_week(week)
-    avail   = [0,(open-csum)].max
-    avail   = (avail==0 ? '' : avail)
+    lsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
+    plsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
+    if(type==:project)
+      wl_lines = WlLine.find(:all, :conditions=>["project_id=?", id])
+      nb_days_per_weeks = 5 * wl_lines.map{|l| l.person_id}.uniq.size
+    else
+      wl_lines = WlLine.find(:all, :conditions=>["person_id=?", id])
+      nb_days_per_weeks = 5
+    end
+    csum       = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
+    open       = nb_days_per_weeks - WlHoliday.get_from_week(week)*wl_lines.size
+    cpercent   = (csum / open*100).round
+    avail      = [0,(open-csum)].max
+    avail      = (avail==0 ? '' : avail)
 
     planned_total = 0
+    total         = 0
     for l in wl_lines
-      s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))
-      planned_total  +=  s if l.wl_type <= 200 and s
+      next if l.wl_type > 200
+      l.wl_loads.each { |load|
+        total += load.wlload
+        planned_total += (load.week < today_week ? 0 : load.wlload)
+        }
     end
 
-    [lsum, csum, cpercent, planned_total, avail]
+    [lsum, plsum, csum, cpercent, total, planned_total, avail]
   end
 
   def transfert
