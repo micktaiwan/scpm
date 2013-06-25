@@ -35,11 +35,18 @@
 
     <div onclick="location='/workloads'"        class="big_button workload">Plan</div>
     <div onclick="location='/ci_projects'"      class="big_button ci">Improve</div>
-    <div onclick="location='/tools/sdp_index'"  class="big_button tools"
-      onmouseover="$('manage_sub').appear({duration:0.3});">
+    <% if APP_CONFIG['project_name']=='EISQ' %>
+      <div onclick="location='/tools/sdp_index'"  class="big_button tools" onmouseover="$('manage_sub').appear({duration:0.3});">
+    <% else %>
+      <div onclick="location='/tools/mp_sdp_index'"  class="big_button tools" onmouseover="$('manage_sub').appear({duration:0.3});">
+    <% end %>
       <div class="btitle">Manage</div>
       <ul class="submenu manage" style="display:none" id="manage_sub">
-        <li><a href="/tools/sdp_index">SDP</a></li>
+        <% if APP_CONFIG['project_name']=='EISQ' %>
+          <li><a href="/tools/sdp_index">SDP</a></li>
+        <% else %>
+          <li><a href="/tools/mp_sdp_index">SDP</a></li>
+        <% end %>
         <li><a href="/requirements">Requirements</a></li>
         <li><a href="/notes/list">Capitalisations</a></li>
         <li><a href="/generic_risk_questions">Standard risks</a></li>

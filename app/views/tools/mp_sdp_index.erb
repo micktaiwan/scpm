@@ -1,0 +1,12 @@
+
+
+<% if APP_CONFIG['sdp_display_project_filter'] %>
+
+  <%= form_remote_tag(:url=> {:action => "refresh_conso"}, :loading => "$('error1').update('');$('loading1').appear()", :complete => "$('loading1').hide()", :update => { :success => "data1", :failure => "error1"}, :html=>{:name=>"refresh_form"})  %>
+    Project:  
+    <%= select(:project, :project, options_for_select(@projects), :include_blank=>"All" ) %>
+    <%= submit_tag('Refresh') %>
+  </form>
+
+<% end %>
+

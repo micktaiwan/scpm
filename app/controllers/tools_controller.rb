@@ -2,7 +2,11 @@ require 'google_chart'
 
 class ToolsController < ApplicationController
 
-  layout 'tools'
+  if APP_CONFIG['project_name']=='EISQ'
+    layout 'tools'
+  else
+    layout 'mp_tools'
+  end
 
   include WelcomeHelper
 
@@ -177,7 +181,6 @@ class ToolsController < ApplicationController
     end
   end
 
-
   def get_sdp_graph_series(method)
     serie   = []
     labels  = []
@@ -257,7 +260,6 @@ class ToolsController < ApplicationController
     end
   end
   
-  
   def default_to_zero(&block)
     begin
       yield block
@@ -287,6 +289,10 @@ class ToolsController < ApplicationController
     history_comparison
   end
   
+  def mp_sdp_index
+    @projects = SDPTask.find(:all, :select=>"project_code").map { |t| t.project_name }.uniq
+  end
+
   def sdp_index_by_type_prepare
     return if SDPTask.count.zero?
     begin      

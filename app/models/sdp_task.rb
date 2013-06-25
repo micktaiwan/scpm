@@ -9,6 +9,19 @@ class SDPTask < ActiveRecord::Base
     @difference             = 0.0
   end
 
+  def project
+    Project.find_by_project_code(self.project_code)
+  end
+
+  def project_name
+    p = self.project
+    if p
+      "#{p.name} (#{p.project_code})"
+    else
+      "can't find project for '#{self.project_code}'"
+    end
+  end
+
   # Analyze all sdpTasks and generate SDPphases/SDPActivities by specific types from RMT
   def self.format_stats_by_type
     # Reset data
