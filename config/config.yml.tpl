@@ -19,7 +19,7 @@ workloads_display_project_name_in_lines: false
 workloads_show_consolidation_filters: false
 
 # SDP
-sdp_display_project_filter: false
+use_multiple_projects_sdp_export: false
 
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"

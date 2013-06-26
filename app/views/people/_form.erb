@@ -1,9 +1,13 @@
 <p><%= label_tag 'name' %>
 <%= text_field :person, :name %></p>
 
-<p><%= label_tag 'is_virtual' %>
-<%= radio_button :person, :is_virtual, 0 %> No
-<%= radio_button :person, :is_virtual, 1 %> Yes (identified as a staffing need)</p>
+<% if APP_CONFIG['use_virtual_people'] %>
+  <p><%= label_tag 'is_virtual' %>
+  <%= radio_button :person, :is_virtual, 0 %> No
+  <%= radio_button :person, :is_virtual, 1 %> Yes (identified as a staffing need)</p>
+<% else %>
+  <%= hidden_field :person, :is_virtual, :value=>0 %>
+<% end %>
 
 <p><%= label_tag 'company' %>
 <%= select(:person, :company_id, @companies.map {|u| [u.name,u.id]}) %></p>

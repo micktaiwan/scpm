@@ -370,6 +370,7 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.string   "dwr"
     t.boolean  "is_qr_qwr",     :default => false
     t.integer  "suite_tag_id"
+    t.string   "project_code"
   end
 
   create_table "question_references", :force => true do |t|

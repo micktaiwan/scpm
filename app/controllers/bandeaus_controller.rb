@@ -1,6 +1,10 @@
 class BandeausController < ApplicationController
 
-  layout 'tools'
+  if APP_CONFIG['project_name']=='EISQ'
+    layout 'tools'
+  else
+    layout 'mp_tools'
+  end
 
   def index
     @bandeaus = Bandeau.find(:all, :conditions=>["person_id = ?", current_user.id], :order=>"id desc")

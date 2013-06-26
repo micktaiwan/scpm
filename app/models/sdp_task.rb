@@ -10,6 +10,7 @@ class SDPTask < ActiveRecord::Base
   end
 
   def project
+    return nil if !self.project_code
     Project.find_by_project_code(self.project_code)
   end
 

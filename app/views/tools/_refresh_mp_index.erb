@@ -1,0 +1,17 @@
+<%= @error %>
+
+<% if @phases and @phases.size > 1 %>
+
+<table>
+  <tr>
+  <td>Title</td>
+  <td>Initial</td>
+  <td>Remaining</td>
+  <td>Balance</td>
+  <td>Gain %</td>
+  </tr>
+
+  <%= render(:partial=>'phase', :collection=>@phases) %>
+</table><br/>
+
+<% end %>

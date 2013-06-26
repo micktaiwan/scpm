@@ -9,7 +9,7 @@ class SDP
 
   ID          = 0
   TITLE       = 1
-  PROJECT     = 2
+  PROJECT_CODE= 2
   INTIAL      = 3
   REEVALUATED = 4
   ASSIGNED    = 5
@@ -76,7 +76,7 @@ private
 
   def debug
     puts "=================================="
-    puts @row[PROJECT]
+    puts @row[PROJECT_CODE]
     puts @row[INTIAL]
     puts @row[REEVALUATED]
     puts @row[ASSIGNED]
@@ -126,7 +126,7 @@ private
     p.activity_id = @current_activity.id
     p.sdp_id      = @row[ID]
     p.title       = t
-    p.project_code= @row[PROJECT]
+    p.project_code= @row[PROJECT_CODE]
     r_id          = /^\[(\d+)\].*$/.match(t)
     p.request_id  = r_id[1] if r_id
     populate(p)
