@@ -17,11 +17,22 @@ class SDP
   REMAINING   = 7
   REVISED     = 8
   GAINED      = 9
+if APP_CONFIG['project_name']=='EISQ'
   ITERATION   = 11
   COLLAB      = 12
   BALANCEI    = 13
   BALANCER    = 14
   BALANCEA    = 15
+else
+  ITERATION   = 10
+  COLLAB      = 11
+  BALANCEI    = 12
+  BALANCER    = 13
+  BALANCEA    = 14
+end
+
+
+
 
 	def initialize(path)
     @path = path

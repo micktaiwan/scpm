@@ -427,8 +427,8 @@ class WorkloadsController < ApplicationController
   # type indicates what is the id (person or projet)
   def get_sums(line, week, id, type=:person)
     today_week = wlweek(Date.today)
-    lsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
-    plsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
+    plsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
+    lsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
     if(type==:project)
       wl_lines = WlLine.find(:all, :conditions=>["project_id=?", id])
       nb_days_per_weeks = 5 * wl_lines.map{|l| l.person_id}.uniq.size
