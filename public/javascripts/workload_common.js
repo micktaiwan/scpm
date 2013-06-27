@@ -12,7 +12,7 @@ function wl_case_change_colors(line, wlweek, background, color) {
   }
 
 function set_fixed_header() {
-  $j('#workload_table').fixedHeaderTable({ height: String($('workload_table').getElementsByTagName("tr").length*20), footer: false, fixedColumn: false });
+  $j('#workload_table').fixedHeaderTable({ height: String($('workload_table').getElementsByTagName("tr").length*22), footer: false, fixedColumn: false });
   //$j('#workload_qs_spider_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
   }
 
