@@ -1,0 +1,14 @@
+<% if APP_CONFIG['use_multiple_projects_sdp_export'] %>
+
+  <%= form_remote_tag(:url=> {:action => "refresh_mp_index"}, :loading => "$('error1').update('');$('loading1').appear()", :complete => "$('loading1').hide()", :update => { :success => "data", :failure => "error"}, :html=>{:name=>"refresh_form"})  %>
+    Project:  
+    <%= select(:project_code, :project_code, options_for_select(@projects), :include_blank=>"All" ) %>
+    <%= submit_tag('Refresh') %>
+  </form>
+
+<% end %>
+<div id='error'></div>
+
+<div id='data'>
+  <%= render(:partial=>'refresh_mp_index') %>
+</data>

@@ -6,6 +6,10 @@ function wl_change_colors(wlweek, background, color) {
   $('cpercent_'+wlweek).style.background  = background;
   $('cpercent_'+wlweek).style.color       = color;
   }
+function wl_case_change_colors(line, wlweek, background, color) {
+  $(line + '_' + wlweek).style.background  = background;
+  $(line + '_' + wlweek).style.color       = color;
+  }
 
 function set_fixed_header() {
   $j('#workload_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });

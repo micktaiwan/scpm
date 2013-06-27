@@ -1,5 +1,15 @@
 begin
   page << "$('#{@line_id}_#{@wlweek}').value = '#{@value}'"
+  #page << "$('#{@line_id}_#{@wlweek}').value = '#{@case_percent}'"
+  if @type == :project
+    if(@case_percent > 110)
+      page << "wl_case_change_colors(#{@line_id}, #{@wlweek},'#F00','#FFF')"
+    elsif(@case_percent < 90)
+      page << "wl_case_change_colors(#{@line_id}, #{@wlweek},'#8F8','#000')"
+    else
+      page << "wl_case_change_colors(#{@line_id}, #{@wlweek},'#FFF','#555')"
+    end
+  end
   page << "$('pltotal_#{@line_id}').innerHTML = '#{@plsum}'"
   page << "$('ltotal_#{@line_id}').innerHTML = '#{@lsum}'"
   page << "$('ctotal_#{@wlweek}').innerHTML = '#{@csum}'"

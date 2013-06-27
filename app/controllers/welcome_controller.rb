@@ -1,6 +1,10 @@
 class WelcomeController < ApplicationController
 
-  layout 'tools'
+  if APP_CONFIG['project_name']=='EISQ'
+    layout 'tools'
+  else
+    layout 'mp_tools'
+  end
   before_filter :require_login
 
   def index

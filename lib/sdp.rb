@@ -9,6 +9,7 @@ class SDP
 
   ID          = 0
   TITLE       = 1
+  PROJECT_CODE= 2
   INTIAL      = 3
   REEVALUATED = 4
   ASSIGNED    = 5
@@ -16,11 +17,22 @@ class SDP
   REMAINING   = 7
   REVISED     = 8
   GAINED      = 9
+if APP_CONFIG['project_name']=='EISQ'
   ITERATION   = 11
   COLLAB      = 12
   BALANCEI    = 13
   BALANCER    = 14
   BALANCEA    = 15
+else
+  ITERATION   = 10
+  COLLAB      = 11
+  BALANCEI    = 12
+  BALANCER    = 13
+  BALANCEA    = 14
+end
+
+
+
 
 	def initialize(path)
     @path = path
@@ -73,6 +85,24 @@ private
     p.balancea    = @row[BALANCEA]
   end
 
+  def debug
+    puts "=================================="
+    puts @row[PROJECT_CODE]
+    puts @row[INTIAL]
+    puts @row[REEVALUATED]
+    puts @row[ASSIGNED]
+    puts @row[CONSUMED]
+    puts @row[REMAINING]
+    puts @row[REVISED]
+    puts @row[GAINED]
+    puts @row[ITERATION]
+    puts @row[COLLAB]
+    puts @row[BALANCEI]
+    puts @row[BALANCER]
+    puts @row[BALANCEA]
+    puts "=================================="
+  end
+
   def create_phase
     t = sanitize(@row[TITLE])
     return if t == nil
@@ -100,13 +130,16 @@ private
     t = sanitize(@row[TITLE])
     return if t == nil
     #p = SDPTask.find_by_sdp_id(@row[ID])
-    p = SDPTask.new# if not p
+    #debug
+    #exit
+    p             = SDPTask.new # if not p
     p.phase_id    = @current_phase.id
     p.activity_id = @current_activity.id
-    p.sdp_id = @row[ID]
-    p.title  = t
-    r_id = /^\[(\d+)\].*$/.match(t)
-    p.request_id = r_id[1] if r_id
+    p.sdp_id      = @row[ID]
+    p.title       = t
+    p.project_code= @row[PROJECT_CODE]
+    r_id          = /^\[(\d+)\].*$/.match(t)
+    p.request_id  = r_id[1] if r_id
     populate(p)
     p.save
   end

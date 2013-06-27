@@ -1,7 +1,11 @@
 class PeopleController < ApplicationController
 
   before_filter :require_login
-  layout 'tools'
+  if APP_CONFIG['project_name']=='EISQ'
+    layout 'tools'
+  else
+    layout 'mp_tools'
+  end
 
   def index
     @people = Person.find(:all, :order=>"company_id, has_left, is_transverse, name")
