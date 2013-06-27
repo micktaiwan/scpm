@@ -57,7 +57,7 @@ th {
   }
 
 #workload_table {
-  white-space: nowrap;
+  /*white-space: nowrap;*/
   }
   
 #workload_table tr:hover #workload_qs_spider_table tr:hover {
@@ -66,7 +66,8 @@ th {
 
 .wl_names {
   text-align: left;
- white-space: nowrap;
+  /*white-space: nowrap;*/
+  min-width: 400px;
   }
 
 .wl_case {
