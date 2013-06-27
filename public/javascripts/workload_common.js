@@ -36,3 +36,7 @@ function wl_save_value(line_id, wlweek, view_by) {
     evalScripts:true
     });
   }
+
+function highlight_wl_line(id, color) {
+  $('wl_line_'+id).style.background  = color;
+}

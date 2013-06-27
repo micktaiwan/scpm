@@ -56,13 +56,17 @@ th {
   border: 1px solid #DDD;
   }
 
+#workload_table {
+  white-space: nowrap;
+  }
+  
 #workload_table tr:hover #workload_qs_spider_table tr:hover {
   background: #FFA;
   }
 
 .wl_names {
   text-align: left;
-  min-width: 600px;
+ white-space: nowrap;
   }
 
 .wl_case {
