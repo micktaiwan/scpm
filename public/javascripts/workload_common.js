@@ -12,7 +12,7 @@ function wl_case_change_colors(line, wlweek, background, color) {
   }
 
 function set_fixed_header() {
-  $j('#workload_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
+  $j('#workload_table').fixedHeaderTable({ height: String($('workload_table').getElementsByTagName("tr").length*20), footer: false, fixedColumn: false });
   //$j('#workload_qs_spider_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
   }
 
@@ -36,3 +36,7 @@ function wl_save_value(line_id, wlweek, view_by) {
     evalScripts:true
     });
   }
+
+function highlight_wl_line(id, color) {
+  $('wl_line_'+id).style.background  = color;
+}
