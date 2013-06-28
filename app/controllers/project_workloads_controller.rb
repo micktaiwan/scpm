@@ -5,6 +5,8 @@ class ProjectWorkloadsController < ApplicationController
   before_filter :require_admin
 
   def index
+    project_id = params[:project_id]
+    session['workload_project_id'] = project_id if project_id
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     if @projects.size > 0
       session['workload_project_id'] = @projects.first.id if not session['workload_project_id'] or !Project.find(session['workload_project_id'])
@@ -21,11 +23,6 @@ class ProjectWorkloadsController < ApplicationController
     project_id  = params[:project_id] if !project_id
     session['workload_project_id'] = project_id
     get_common_data(project_id)
-    #get_last_sdp_update
-    #get_suggested_requests(@workload)
-    #get_sdp_tasks(@workload)
-    #get_chart
-    #get_sdp_gain(@workload.person)
   end
 
   def add_a_person
@@ -37,11 +34,6 @@ class ProjectWorkloadsController < ApplicationController
     if not found
       @line = WlLine.create(:name=>project_name , :project_id=>project_id, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
       get_common_data(project_id)
-      #get_last_sdp_update
-      #get_suggested_requests(@workload)
-      #get_sdp_gain(@workload.person)
-      #get_chart
-      #get_sdp_gain(@workload.person)
     else
       @error = "This line already exists: #{person_name}"
     end

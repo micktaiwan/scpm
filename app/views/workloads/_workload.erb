@@ -123,7 +123,7 @@
     <th><%= @workload.sdp_remaining_total %></th>
     <th id="planned_total"><%= @workload.planned_total %></th>
     <th id="total"><%= @workload.total %></th>
-    <%= render(:partial=>"wl_ctotal", :collection=>@workload.percents) %>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.percents, :locals=>{:high_limit=>110, :low_limit=>85}) %>
     </tr>
 
     <tr class="wl_total">
