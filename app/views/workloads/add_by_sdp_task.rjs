@@ -2,6 +2,9 @@ if @error
   page.alert @error
 else
   page.replace "workload", render(:partial=>'workload')
+  if(APP_CONFIG['workloads_add_by_sdp_task'])
+    page.replace_html "sdp_tasks", render(:partial=>"sdp_tasks")
+  end  
   page << "set_fixed_header();"
 end
 

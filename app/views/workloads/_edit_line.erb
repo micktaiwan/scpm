@@ -31,7 +31,6 @@
 
   <div class="title">Link to a SDP task</div>
   <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
-    <%= label_tag(:task, "Task") %>
     <%= render(:partial=>"sdp_tasks") %>
     <%= submit_tag("Link") %>
   <% end %>
