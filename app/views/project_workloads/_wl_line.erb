@@ -23,6 +23,8 @@
 
 	<!-- Edit btn / Alert / Backup msg / Person name -->
   <td>
+    <!-- highlight function -->
+    <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line(#{wl_line.id}, '#FF0')") %>
     <!-- Alert -->
     <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
     <!-- Backup -->

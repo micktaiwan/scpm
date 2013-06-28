@@ -39,6 +39,18 @@ function wl_save_value(line_id, wlweek, view_by) {
     });
   }
 
+lines_hlighted = new Hash;
 function highlight_wl_line(id, color) {
-  $('wl_line_'+id).style.background  = color;
-}
+  el = $('wl_line_'+id);
+  if(!lines_hlighted[id]) {
+    lines_hlighted[id] = [0,el.style.backgroundColor];
+    }
+  if(lines_hlighted[id][0] == 1) {
+    el.style.backgroundColor  = lines_hlighted[id][1];
+    lines_hlighted[id][0] = 0;
+    }
+  else {
+    el.style.backgroundColor  = color;
+    lines_hlighted[id][0] = 1;
+    }
+  }
