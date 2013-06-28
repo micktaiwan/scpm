@@ -46,14 +46,14 @@
 
 	<!-- Sum if wl_type != 110/120 (not qr_qwr wl line) -->
 	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
-		<td><%= @workload.line_sums[wl_line.id][:init] %></td>
-  	<td><%= @workload.line_sums[wl_line.id][:balance] %></td>
-  	<td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% end %>><%= remaining %></td>
+		<td class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
+  	<td class="wl_case"><%= @workload.line_sums[wl_line.id][:balance] %></td>
+  	<td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% else %> class="wl_case"<% end %>><%= remaining %></td>
 	<% else %>
 		<td colspan="3"></td>
 	<% end %>
 	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
-  <td id="ltotal_<%= wl_line.id %>"><%= wl_line.sum %></td>
+  <td id="ltotal_<%= wl_line.id %>" class="wl_case"><%= wl_line.sum %></td>
 
 	<!-- Values by week -->
 	<%

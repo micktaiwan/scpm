@@ -29,6 +29,9 @@
   <% if (not person.login or person.login=='')%>
     <strong>no login</strong>
   <% end %>
+  <% if (not person.trigram or person.trigram=='')%>
+    <strong>no trigram</strong>
+  <% end %>
 <% end %>
 
 </li>

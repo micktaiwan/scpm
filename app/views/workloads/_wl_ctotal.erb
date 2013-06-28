@@ -1,1 +1,13 @@
-<th id="<%= wl_ctotal[:name]%>_<%= wl_ctotal[:id]%>"><%= wl_ctotal[:value] %></th>
+<th id="<%= wl_ctotal[:name]%>_<%= wl_ctotal[:id]%>"
+
+<% if defined?(high_limit) %>
+  <% if wl_ctotal[:value].to_i > high_limit %>
+    style="background-color: red; color:white;"
+  <% end %>
+  <% if wl_ctotal[:value].to_i < low_limit %>
+    style="background-color: orange; color:white;"
+  <% end %>
+<% end %>
+>
+<%= wl_ctotal[:value] %>
+</th>
