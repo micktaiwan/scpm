@@ -89,6 +89,8 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(params[:project])
+    # can not set project_id to 0 as we use that to filter projets later... but why...
+    #@project.project_id = 0 if !@project.project_id
     check_qr_qwr_pdc(@project)
     if not @project.save
       render :action => 'new'

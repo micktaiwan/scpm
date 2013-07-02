@@ -56,13 +56,18 @@ th {
   border: 1px solid #DDD;
   }
 
+#workload_table {
+  /*white-space: nowrap;*/
+  }
+  
 #workload_table tr:hover #workload_qs_spider_table tr:hover {
   background: #FFA;
   }
 
 .wl_names {
   text-align: left;
-  min-width: 600px;
+  /*white-space: nowrap;*/
+  min-width: 400px;
   }
 
 .wl_case {
@@ -70,10 +75,12 @@ th {
   min-width: 35px;
   margin: 0;
   padding:0;
+  text-align: center;
   }
 
 .wl_case input {
   color: #555;
+  text-align: center;
   }
 
 .wl_textfield {
@@ -84,11 +91,13 @@ th {
 tr.wl_total {
   border: 1px 0 0 0 solid #DDD;
   color: #AB8;
+  text-align: center;
   }
 
 .wl_total {
   border: 1px 0 0 0 solid #DDD;
   color: #690;
+  text-align: center;
   }
 
 
@@ -104,6 +113,13 @@ tr.wl_opens {
   }
 .wl_line_400 {
   background: #FDD;
+  }
+
+.wl_line_virtual {
+  background: #FFD;
+  }
+.wl_line_virtual .wl_case input {
+  background: #FFD;
   }
 .wl_line_110,.wl_line_120 {
   background: #A8FFE1;
@@ -138,10 +154,12 @@ tr.wl_opens {
 
 .wlerror {
   background: #FAA;
+  text-align: center;
   }
   
 .wlerror.no_sdp{
   background: #AAF;
+  text-align: center;
   }
 
 /* TABLE WORKLOAD BY STREAM FOR QS/SPIDER */

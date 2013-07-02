@@ -4,8 +4,8 @@ class WlLine < ActiveRecord::Base
   belongs_to :person
   belongs_to :request
   belongs_to :sdp_task, :class_name=>"SDPTask"
-  belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
   belongs_to :project
+  belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
   has_many   :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
 
   include ApplicationHelper
@@ -22,7 +22,7 @@ class WlLine < ActiveRecord::Base
     l = load_by_week(week)
     l ? l.wlload : 0.0
   end
-  
+
   def get_load_object_by_week(week)
     l = load_by_week(week)
     l ? l : 0
@@ -35,6 +35,10 @@ class WlLine < ActiveRecord::Base
     wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
   end
 
+  def sum
+    wl_loads.inject(0) { |sum, l| sum+l.wlload}
+  end
+
   def near_workload
     return 0 if wl_loads.size == 0
     today_week            = wlweek(Date.today)
@@ -42,9 +46,30 @@ class WlLine < ActiveRecord::Base
     wl_loads.map{|load| ( (load.week < today_week or load.week >= near_week)  ? 0.0 : load.wlload)}.inject(:+)
   end
 
+  # task name
   def display_name
     #"<a href='#' title='#{name}'>#{name}</a>"
     name
+  end
+
+  def person_name
+    if self.person
+      "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+    else
+      "#{name} (no person attached)"
+    end
+  end
+
+  def project_name
+    if self.project
+      "<a href='/project_workloads/?project_id=#{self.project.id}'>#{self.project.name}</a>"
+    else
+      "no project"
+    end
+  end
+
+  def title
+    "#{self.person_name} #{self.display_name}"
   end
 
   def request
@@ -62,7 +87,7 @@ class WlLine < ActiveRecord::Base
     rv = []
     r = request
     p = self.project
-    
+
     if r && !p
       r.project.milestones.each { |m|
         date = m.date
@@ -74,9 +99,16 @@ class WlLine < ActiveRecord::Base
         rv << m if date and date >= week_start and date <= week_end
       }
     end
-    
+
     rv
   end
-
+  
+  def wl_type_by_project
+    if self.person.is_virtual==1
+      return "virtual"
+    else
+      return self.wl_type
+    end
+  end
 end
 

@@ -7,8 +7,11 @@ class WorkloadsController < ApplicationController
   layout 'pdc'
 
   def index
+    person_id = params[:person_id]
+    session['workload_person_id'] = person_id if person_id
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    @projects = Project.find(:all).map {|p| ["#{p.name} (#{p.wl_lines.size} persons)", p.id]}
     change_workload(session['workload_person_id'])
   end
 
@@ -83,8 +86,8 @@ class WorkloadsController < ApplicationController
     @sdp_logs = SdpLog.find(:all, :conditions=>["person_id=?", person.id], :order=>"`date` desc", :limit=>3).reverse
   end
 
-  # just for loading tabs
   def consolidation
+    @companies = Company.all.map {|p| ["#{p.name}", p.id]}
   end
 
   def refresh_conso
@@ -95,7 +98,10 @@ class WorkloadsController < ApplicationController
     # find the corresponding production days (minus 20% of gain)
     @not_in_workload_days = @not_in_workload.inject(0) { |sum, r| sum += r.workload2} * 0.80
 
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
+    company_ids = params['company']['company_ids']
+    cond = ""
+    cond += " and company_id in (#{company_ids})" if company_ids and company_ids!=''
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0"+cond, :order=>"name")
     @transverse_people = Person.find(:all, :conditions=>"has_left=0 and is_transverse=1", :order=>"name").map{|p| p.name.split(" ")[0]}.join(", ")
     @workloads = []
     @total_days = 0
@@ -109,11 +115,15 @@ class WorkloadsController < ApplicationController
       @to_be_validated_in_wl_remaining_total += w.to_be_validated_in_wl_remaining_total
       #break
     end
-    @workloads = @workloads.sort_by {|w| [w.next_month_percents, w.three_next_months_percents, w.person.name]}
+    @workloads = @workloads.sort_by {|w| [-w.person.is_virtual, w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals       = []
     @cap_totals   = []
     @avail_totals = []
     size          = @workloads.size
+    if size == 0
+      render :layout => false
+      return
+    end
 
     # to plan
     @totals << (@workloads.inject(0) { |sum,w| sum += w.remain_to_plan_days })
@@ -138,6 +148,7 @@ class WorkloadsController < ApplicationController
       @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.availability[i][:avail]})
     end
 
+    # workload chart
     chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
     realmax     = [@totals[4..-1].max, @cap_totals[4..-1].max].max
     high_limit  = 150.0
@@ -167,6 +178,22 @@ class WorkloadsController < ApplicationController
     #chart.enable_interactivity = true
     #chart.params[:chm] = "h,FF0000,0,-1,1"
     @chart_url = chart.to_url #({:chm=>"r,DDDDDD,0,#{100.0/max-0.01},#{100.0/max}"}) #({:enableInteractivity=>true})
+
+    if APP_CONFIG['use_virtual_people']
+      # staffing chart
+      serie = []
+      @workloads.first.weeks.each_with_index do |tmp,i|
+        serie << @workloads.inject(0) { |sum,w| sum += w.staffing[i]}
+      end
+      chart = GoogleChart::LineChart.new('1000x300', "Staffing", false)
+      max   = serie.max
+      chart.data "nb person", serie, 'ff0000'
+      chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
+      chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
+      chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
+      chart.show_legend = true
+      @staffing_chart_url = chart.to_url #({:chm=>"r,DDDDDD,0,#{100.0/max-0.01},#{100.0/max}"}) #({:enableInteractivity=>true})
+    end
     render :layout => false
   end
 
@@ -216,12 +243,7 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_person_id_and_request_id(person_id, request_id)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>request_id, :person_id=>person_id, :wl_type=>WL_LINE_REQUEST)
-      @workload = Workload.new(person_id)
-      get_last_sdp_update
-      get_suggested_requests(@workload)
-      #get_sdp_gain(@workload.person)
-      get_chart
-      get_sdp_gain(@workload.person)
+      get_workload_data(person_id)
     else
       @error = "This line already exists: #{request_id}"
     end
@@ -237,12 +259,7 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
-      @workload = Workload.new(person_id)
-      get_last_sdp_update
-      get_suggested_requests(@workload)
-      #get_sdp_gain(@workload.person)
-      get_chart
-      get_sdp_gain(@workload.person)
+      get_workload_data(person_id)
     else
       @error = "This line already exists: #{name}"
     end
@@ -259,40 +276,39 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_sdp_task_id(sdp_task_id)
     if not found
       @line = WlLine.create(:name=>sdp_task.title, :sdp_task_id=>sdp_task_id, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+      if(APP_CONFIG['auto_link_task_to_project']) and sdp_task.project
+        @line.project_id = sdp_task.project.id 
+        @line.save
+      end
     else
       @error = "This line already exists: #{found.name}"
     end
-    @workload = Workload.new(person_id)
-    get_last_sdp_update
-    get_suggested_requests(@workload)
-    get_sdp_gain(@workload.person)
-    get_chart
+    get_workload_data(person_id)
   end
 
-  def edit_load
-    @line_id  = params[:l].to_i
-    @wlweek   = params[:w].to_i
-    value     = round_to_hour(params[:v].to_f)
-    line      = WlLine.find(@line_id)
-    person_id = line.person_id
-
-    if value == 0.0
-      WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
-      @value = ""
-    else
-      wl_load = WlLoad.find_by_wl_line_id_and_week(@line_id, @wlweek)
-      wl_load = WlLoad.create(:wl_line_id=>@line_id, :week=>@wlweek) if not wl_load
-      wl_load.wlload = value
-      wl_load.save
-      @value = value
+  def add_by_project
+    project_id = params[:project_id].to_i
+    person_id = session['workload_person_id'].to_i
+    project = Project.find(project_id)
+    if not project
+      @error = "Can not find project with id #{project_id}"
+      return
     end
-    @lsum, @csum, @cpercent, @planned_total, @avail  = get_sums(line, @wlweek, person_id)
+    found = WlLine.find_by_project_id_and_person_id(project_id, person_id)
+    # allow to add several lines by projet
+    #if not found
+      @line = WlLine.create(:name=>project.name, :project_id=>project_id, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+    #else
+    #  @error = "This line already exists: #{found.name}"
+    #end
+    get_workload_data(person_id)
   end
 
   def display_edit_line
     line_id   = params[:l].to_i
     @wl_line  = WlLine.find(line_id)
     @workload = Workload.new(session['workload_person_id'])
+    @projects = Project.all.map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     if @workload.person.trigram == ""
       @sdp_tasks = []
     else
@@ -371,23 +387,86 @@ class WorkloadsController < ApplicationController
     @workload = Workload.new(@wl_line.person_id)
   end
 
-  def get_sums(line, week, person_id)
+  def link_to_project
+    project_id          = params[:project_id].to_i
+    line_id             = params[:id]
+    @wl_line            = WlLine.find(line_id)
+    @wl_line.project_id = project_id
+    @wl_line.wl_type    = WL_LINE_OTHER
+    @wl_line.save
+    @workload           = Workload.new(@wl_line.person_id)
+  end
+
+  def unlink_project
+    line_id             = params[:id]
+    @wl_line            = WlLine.find(line_id)
+    @wl_line.project_id = nil
+    @wl_line.wl_type    = WL_LINE_OTHER
+    @wl_line.save
+    @workload           = Workload.new(@wl_line.person_id)
+  end
+
+  def edit_load
+    view_by = (params['view_by']=='1' ? :project : :person)
+    @line_id  = params[:l].to_i
+    @wlweek   = params[:w].to_i
+    value     = round_to_hour(params[:v].to_f)
+    line      = WlLine.find(@line_id)
+    id        = view_by==:person ? line.person_id : line.project_id
+
+    if value == 0.0
+      WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
+      @value = ""
+    else
+      wl_load = WlLoad.find_by_wl_line_id_and_week(@line_id, @wlweek)
+      wl_load = WlLoad.create(:wl_line_id=>@line_id, :week=>@wlweek) if not wl_load
+      wl_load.wlload = value
+      wl_load.save
+      @value = value
+    end
+    @lsum, @plsum, @csum, @cpercent, @case_percent, @total, @planned_total, @avail  = get_sums(line, @wlweek, id, view_by)
+  end
+
+  # type is :person or :projet
+  # type indicates what is the id (person or projet)
+  def get_sums(line, week, id, type=:person)
+    @type = type
     today_week = wlweek(Date.today)
-    lsum = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
-    wl_lines    = WlLine.find(:all, :conditions=>["person_id=?", person_id])
-    csum = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
-    cpercent = (csum / (5-WlHoliday.get_from_week(week))*100).round
-    open    = 5 - WlHoliday.get_from_week(week)
-    avail   = [0,(open-csum)].max
-    avail   = (avail==0 ? '' : avail)
+    plsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
+    lsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
+    if(type==:project)
+      wl_lines = WlLine.find(:all, :conditions=>["project_id=?", id])
+      person_wl_lines = WlLine.find(:all, :conditions=>["person_id=?", line.person.id])
+      case_sum       = person_wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
+      case_sum       = 0 if !case_sum
+      nb_days_per_weeks = 5 * wl_lines.map{|l| l.person_id}.uniq.size
+    else
+      wl_lines = WlLine.find(:all, :conditions=>["person_id=?", id])
+      nb_days_per_weeks = 5
+    end
+    csum       = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
+    csum       = 0 if !csum
+    case_sum   = csum if type==:person
+    open       = nb_days_per_weeks - WlHoliday.get_from_week(week)
+    person_open = 5 - WlHoliday.get_from_week(week)
+    # cpercent is the percent of occupation for a week. It depends of the view (person or project)
+    cpercent   = open > 0 ? (csum / open*100).round : 0
+    # case_percent is the percent of occupation for a week for a person. It does not depend of the view (person or project)
+    case_percent = open > 0 ? (case_sum / person_open*100).round : 0
+    avail      = [0,(open-csum)].max
+    avail      = (avail==0 ? '' : avail)
 
     planned_total = 0
+    total         = 0
     for l in wl_lines
-      s = (l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+))
-      planned_total  +=  s if l.wl_type <= 200 and s
+      next if l.wl_type > 200
+      l.wl_loads.each { |load|
+        total += load.wlload
+        planned_total += (load.week < today_week ? 0 : load.wlload)
+        }
     end
 
-    [lsum, csum, cpercent, planned_total, avail]
+    [lsum, plsum, csum, cpercent, case_percent, total, planned_total, avail]
   end
 
   def transfert
@@ -399,7 +478,7 @@ class WorkloadsController < ApplicationController
     temp_lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
     @lines_qr_qwr = Hash.new
-    temp_lines_qr_qwr.each do |wl| 
+    temp_lines_qr_qwr.each do |wl|
         @lines_qr_qwr[wl.project_id] = [wl]
     end
     @owner_id = session['workload_person_id']
@@ -446,7 +525,7 @@ class WorkloadsController < ApplicationController
     @weeks    = params[:weeks]
     @wl_weeks = params[:wl_weeks]
     @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    
+
     # WL lines without project_id
     @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
       :include=>["request","sdp_task","person"], :order=>"wl_type, name")
@@ -520,6 +599,7 @@ class WorkloadsController < ApplicationController
     session['workload_hide_lines_with_no_workload'] = on
     @workload = Workload.new(session['workload_person_id'], {:hide_lines_with_no_workload => on})
     @person   = @workload.person
+    get_workload_data(person_id)
     get_last_sdp_update
     get_suggested_requests(@workload)
     get_sdp_tasks(@workload)
@@ -530,6 +610,17 @@ class WorkloadsController < ApplicationController
   def hide_wmenu
     session['wmenu_hidden'] = params[:on]
     render(:nothing=>true)
+  end
+
+private
+
+  def get_workload_data(person_id)
+    @workload = Workload.new(person_id)
+    get_last_sdp_update
+    get_suggested_requests(@workload)
+    get_chart
+    get_sdp_gain(@workload.person)
+    get_sdp_tasks(@workload)
   end
 
 end

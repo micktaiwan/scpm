@@ -1,3 +1,24 @@
+- Import SDP en partant du fichier export de la Factory (plusieurs projets)
+- Faire une option pour ne pas afficher les projets dans add a line pour EISQ et les autres options quand on est sur la factory
+- Les milestones sont en dur dans le formulaire de création de miletones pour un projet et c'est du GPP, pas du EC
+- le delete d'une ligne de la vue par projet ne rafraichi pas la ligne
+
+
+Seeds
+=====
+
+31-Mai-2013: Faire un script de création de premier user admin pour l'appli
+
+INSERT INTO `scpm_development`.`people` (`name`, `email`, `phone`, `company_id`, `created_at`, `updated_at`, `rmt_user`, `is_supervisor`, `login`, `pwd`, `last_view`, `has_left`, `sdp_id`, `trigram`, `is_transverse`, `is_cpdp`) VALUES ('Mickael', 'mfaivremacon@sqli.com', '', 1, '', '', '', 0, 'mfaivremacon', '', '', 0, 0, 'MFM', 1, 1);
+INSERT INTO `scpm_development`.`person_roles` (`person_id`, `role_id`) VALUES (1,1);
+INSERT INTO `scpm_development`.`roles` (`name`, `display`, `description`) VALUES ('Admin', 'Administrator', 'Can do whatever the system permits');
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('QG2');
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('QG3');
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('QG4');
+INSERT INTO `scpm_development`.`milestone_names` (`title`) VALUES ('GLiv');
+INSERT INTO `scpm_development`.`lifecycles` (`name`) VALUES ('eFactory');
+
+
 Checklists
 ==========
 Vérifier toutes les "@last_update = query.updated_at"

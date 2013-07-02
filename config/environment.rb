@@ -24,8 +24,13 @@ Rails::Initializer.run do |config|
   #config.gem 'ruby-net-ldap', :version => '0.0.4', :lib => 'net/ldap'
   #config.gem 'differ', :version=> '0.1.2'
   #config.gem 'will_paginate', :version => '2.3.16'
-  #config.gem 'gchartrb' # 1.6.8 or 0.8 ?
+  #config.gem 'gchartrb' # 0.8
   # also needs sudo apt-get install libopenssl-ruby for net/https to work
+  # gem install mysql
+  # gem install spreadsheet
+  # rvm use @global && gem uninstall rake
+  # rvm use @global && gem install rake -v 0.8.7
+  
 end
 
 ActionMailer::Base.sendmail_settings = {

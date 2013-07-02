@@ -21,8 +21,17 @@
   <b>load</b>: <%= l %>
   <b>average</b>: <%= a %>
 <% end %>
-<% if current_user.has_role?('Admin') and (not person.login or person.login=='')%>
-<strong>no login</strong>
+<% if person.is_virtual==1%>
+  <strong>virtual</strong>
+<% end %>
+<% if current_user.has_role?('Admin') %>
+  <%= link_to(image_tag('icon_workload.gif'), :controller=>'workloads', :person_id=>person.id) %>
+  <% if (not person.login or person.login=='')%>
+    <strong>no login</strong>
+  <% end %>
+  <% if (not person.trigram or person.trigram=='')%>
+    <strong>no trigram</strong>
+  <% end %>
 <% end %>
 
 </li>

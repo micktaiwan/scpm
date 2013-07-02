@@ -2,7 +2,11 @@ require 'google_chart'
 
 class ToolsController < ApplicationController
 
-  layout 'tools'
+  if APP_CONFIG['project_name']=='EISQ'
+    layout 'tools'
+  else
+    layout 'mp_tools'
+  end
 
   include WelcomeHelper
 
@@ -103,7 +107,11 @@ class ToolsController < ApplicationController
     @sdp_index_by_mail = true    
     body = render_to_string(:action=>'sdp_index', :layout=>false) + render_to_string(:action=>'sdp_index_by_type', :layout=>false)
     Mailer::deliver_mail(APP_CONFIG['sdp_import_email_destination'],APP_CONFIG['sdp_import_email_object'],"<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
-    redirect_to '/tools/sdp_index'
+    if APP_CONFIG['use_multiple_projects_sdp_export']
+      redirect_to '/tools/mp_sdp_index'
+    else
+      redirect_to '/tools/sdp_index'
+    end
   end
 
   def sdp_index_prepare
@@ -176,7 +184,31 @@ class ToolsController < ApplicationController
       render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
     end
   end
+  
 
+  def mp_sdp_index
+    @projects = SDPTask.find(:all, :select=>"project_code").map { |t| [t.project_name, t.project_code] }.uniq.sort
+    prepare_mp_index
+  end
+  
+  def prepare_mp_index
+    begin
+      project_code = params['project_code']['project_code'] if params['project_code']
+      if !project_code or project_code==''
+        @phases   = SDPPhase.all
+      else
+        @phases   = SDPPhase.find(:all, :conditions=>"id=1")
+      end
+    rescue Exception => e
+      render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
+    end
+  end
+ 
+  def refresh_mp_index
+    prepare_mp_index
+    #render(:layout=>false)
+    render(:text=>'todo')
+  end
 
   def get_sdp_graph_series(method)
     serie   = []
@@ -257,7 +289,6 @@ class ToolsController < ApplicationController
     end
   end
   
-  
   def default_to_zero(&block)
     begin
       yield block
@@ -286,7 +317,7 @@ class ToolsController < ApplicationController
     sdp_index_prepare
     history_comparison
   end
-  
+
   def sdp_index_by_type_prepare
     return if SDPTask.count.zero?
     begin      

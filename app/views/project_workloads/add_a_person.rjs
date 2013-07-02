@@ -1,0 +1,7 @@
+if @error
+  page.alert @error
+else
+  page.replace "workload", render(:partial=>'workload', :object=>@workload)
+  page << "set_fixed_header();"
+  page.visual_effect(:highlight, "workload")
+end

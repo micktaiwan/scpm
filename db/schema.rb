@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130527163000) do
+ActiveRecord::Schema.define(:version => 20130625101601) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -315,6 +315,7 @@ ActiveRecord::Schema.define(:version => 20130527163000) do
     t.string   "trigram"
     t.integer  "is_transverse", :default => 0
     t.integer  "is_cpdp",       :default => 0
+    t.integer  "is_virtual",    :default => 0
   end
 
   create_table "person_roles", :force => true do |t|
@@ -378,6 +379,7 @@ ActiveRecord::Schema.define(:version => 20130527163000) do
     t.string   "dwr"
     t.boolean  "is_qr_qwr",     :default => false
     t.integer  "suite_tag_id"
+    t.string   "project_code"
   end
 
   add_index "projects", ["project_id"], :name => "IDX_PROJECTS_ON_PROJECT_ID"
@@ -673,6 +675,7 @@ ActiveRecord::Schema.define(:version => 20130527163000) do
     t.datetime "updated_at"
     t.integer  "activity_by_type_id"
     t.integer  "phase_by_type_id"
+    t.string   "project_code"
   end
 
   create_table "spider_consolidations", :force => true do |t|

@@ -1,91 +1,91 @@
-<b><%= @not_in_workload.size %></b> <%= link_to_function('requests are not in workloads', "$('tbv_requests').toggle();")%>:
-<b><%= @not_in_workload_days %></b> days not in the workload (including 20% gain)<br/>
-<div id="tbv_requests" style="display:none;">
-<%= render(:partial=>'workloads/request', :collection=>@not_in_workload) %>
-</div>
-<% 
-	if @total_days > 0
-		planned_days_on_total_days_ratio = (@total_planned_days*100 / @total_days /0.1).round * 0.1
-	else
-		planned_days_on_total_days_ratio = 100
-	end
-%>
-<b><%= @total_planned_days %></b> days planned on <b><%= @total_days %></b> SDP or "to be validated" days (<%= planned_days_on_total_days_ratio %>%) (minus 20% for to be validated requests)<br/>
-To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaining_total %><br/>
-<br/>
-<%= @workloads.size %> workloads (not displayed: <%= @transverse_people %>)<br/>
-<br/>
-
 <!-- Legends -->
 <table id='availabilities_legends_table'>
 <tr><td colspan="6">Legends of Availabilities</td></tr>
-<tr>
-	<td class="availability_0">0 day available</td>
-	<td class="availability_1">1 day available</td>
-	<td class="availability_2">2 days available</td>
-	<td class="availability_3">3 days available</td>
-	<td class="availability_4">4 days available</td>
-	<td class="availability_5">5 days available</td>
-</tr>	
+<tr><td class="availability_0">0 day</td>
+    <td class="availability_1">1 day</td>
+    <td class="availability_2">2 days</td>
+    <td class="availability_3">3 days</td>
+    <td class="availability_4">4 days</td>
+    <td class="availability_5">5 days</td></tr> 
 </table>
+<% if APP_CONFIG['workloads_add_by_request_number'] %>
+  <b><%= @not_in_workload.size %></b> <%= link_to_function('requests are not in workloads', "$('tbv_requests').toggle();")%>:
+  <b><%= @not_in_workload_days %></b> days not in the workload (including 20% gain)<br/>
+  <div id="tbv_requests" style="display:none;">
+  <%= render(:partial=>'workloads/request', :collection=>@not_in_workload) %>
+  </div>
+  <% 
+  	if @total_days > 0
+  		planned_days_on_total_days_ratio = (@total_planned_days*100 / @total_days /0.1).round * 0.1
+  	else
+  		planned_days_on_total_days_ratio = 100
+  	end
+  %>
+  <b><%= @total_planned_days %></b> days planned on <b><%= @total_days %></b> SDP or "to be validated" days (<%= planned_days_on_total_days_ratio %>%) (minus 20% for to be validated requests)<br/>
+  To be validated in workloads remaining total: <%= @to_be_validated_in_wl_remaining_total %><br/>
+  <br/>
+<% end %>
 
-<table class="refresh_conso_table">
-  <tr style="font-weight:bold;">
-    <td colspan="5"></td>
-    <% for w in @workloads.first.months %>
+<%= @workloads.size %> workloads (not displayed: <%= @transverse_people %>)<br/>
+<br/>
+<% if @workloads.size > 0 %>
+  <table class="refresh_conso_table">
+    <tr style="font-weight:bold;">
+      <td colspan="5"></td>
+      <% for w in @workloads.first.months %>
         <td><%= w %></td>
-    <% end %>
-  </tr>
+      <% end %>
+    </tr>
 
-  <tr style="font-weight:bold;">
-    <td>Name</td>
-    <td>To plan</td>
-    <td>Next 5 weeks</td>
-    <td>Next 3 months</td>
-	<td>Avail 8w</td>
-    <% for w in @workloads.first.weeks %>
+    <tr style="font-weight:bold;">
+      <td>Name</td>
+      <td>To plan</td>
+      <td>Next 5 weeks</td>
+      <td>Next 3 months</td>
+      <td>Avail 8w</td>
+      <% for w in @workloads.first.weeks %>
         <td><%= w %></td>
-    <% end %>
-  </tr>
+      <% end %>
+    </tr>
 
-  <%= render(:partial=>'conso_line', :collection=>@workloads) %>
+    <%= render(:partial=>'conso_line', :collection=>@workloads) %>
 
-  <tr style="font-weight:bold;">
-    <td>Total</td>
-    <td align="center"><%= @totals[0] %></td>
-    <% for w in @totals[1..2] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-    <td align="center"><%= @totals[3] %></td>
-    <% for w in @totals[4..-1] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-  </tr>
+    <tr style="font-weight:bold;">
+      <td>Total</td>
+      <td align="center"><%= @totals[0] %></td>
+      <% for w in @totals[1..2] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+      <td align="center"><%= @totals[3] %></td>
+      <% for w in @totals[4..-1] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+    </tr>
 
-  <tr style="font-weight:bold;">
-    <td>Capped total</td>
-    <td align="center"><%= @cap_totals[0] %></td>
-    <% for w in @cap_totals[1..2] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-    <td align="center"><%= @cap_totals[3] %></td>
-    <% for w in @cap_totals[4..-1] %>
-      <td align="center"><%= w %>%</td>
-    <% end %>
-  </tr>
-  
-  <tr style="font-weight:bold;">
-    <td>Availability</td>
-    <% for w in @avail_totals[0..-1] %>
-      <td align="center"><%= w %></td>
-    <% end %>
-  </tr>
+    <tr style="font-weight:bold;">
+      <td>Capped total</td>
+      <td align="center"><%= @cap_totals[0] %></td>
+      <% for w in @cap_totals[1..2] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+      <td align="center"><%= @cap_totals[3] %></td>
+      <% for w in @cap_totals[4..-1] %>
+        <td align="center"><%= w %>%</td>
+      <% end %>
+    </tr>
+    
+    <tr style="font-weight:bold;">
+      <td>Availability</td>
+      <% for w in @avail_totals[0..-1] %>
+        <td align="center"><%= w %></td>
+      <% end %>
+    </tr>
+  </table>
+  <br/><br/>
+  <%= image_tag(@chart_url) %><br/><br/>
+  <% if APP_CONFIG['use_virtual_people'] %>
+    <%= image_tag(@staffing_chart_url) %><br/><br/>
+  <% end %>
+<% end %>
 
-</table>
-<br/>
-<br/>
-<%= image_tag(@chart_url) %>
-<br/>
-<br/>
 render time: <%= Time.now-@start_time %> secs. <%= Time.now().to_formatted_s(:db) %><br/>
-

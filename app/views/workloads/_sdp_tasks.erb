@@ -1,1 +1,14 @@
-<%= select_tag('sdp_task_id', options_for_select(@sdp_tasks), {:id=>"sdp_tasks"}) %>
+<span id='sdp_tasks'>
+<% if !@workload.person or !@workload.person.trigram or @workload.person.trigram=='' %>
+  <strong>no trigram, so no SDP task</strong>
+  <% if @workload.person %>
+    <%= link_to('add a trigram', :controller=>'people', :action=>'edit', :id=>@workload.person.id) %><br/>
+  <% end %>
+  <br/>
+<% elsif @sdp_tasks.size == 0 %>
+  <strong>No tasks for <%= @workload.person.name %></strong><br/>
+<% end %>
+
+<%= label_tag(:sdp_task, "SDP Task") %>
+<%= select_tag('sdp_task_id', options_for_select(@sdp_tasks)) %>
+</span>

@@ -10,14 +10,18 @@
   </div>
 
   <ul id="last_changes">
-    <li><b>08-Apr-2013</b> Affichage des actions en cours sur la page de bienvenue / Correction bouton "Add/Refresh" dans la liste des projets.</li>
-		<li><b>22-Fev-2013</b> Intégration de la gestion des Streams. Workpackages 2013 et SDP Iteration 2013.</li>
-    <li><b>09-Jan-2012</b> Ajout de la gestion des Spiders.</li>
-  </ul> 
+    <% if(APP_CONFIG['project_name']=='eFactory') %>
+      <li><b>16-Jun-2013</b> Besoins en staffing</li>
+      <li><b>09-Jun-2013</b> Plan de charge par projet</li>
+    <% end %>
+    <% if(APP_CONFIG['project_name']=='EISQ') %>
+      <li><b>08-Apr-2013</b> Affichage des actions en cours sur la page de bienvenue / Correction bouton "Add/Refresh" dans la liste des projets.</li>
+    	<li><b>22-Fev-2013</b> Intégration de la gestion des Streams. Workpackages 2013 et SDP Iteration 2013.</li>
+      <li><b>09-Jan-2012</b> Ajout de la gestion des Spiders.</li>
+    <% end %>
+  </ul>
 
-  <% 5.times do %>
-    <br/>
-  <% end  %>
+  <% 5.times{ concat "<br/>" }%>
 
   <div class="center">
     <div onclick="location='/projects'"         class="big_button reporting"
@@ -31,11 +35,18 @@
 
     <div onclick="location='/workloads'"        class="big_button workload">Plan</div>
     <div onclick="location='/ci_projects'"      class="big_button ci">Improve</div>
-    <div onclick="location='/tools/sdp_index'"  class="big_button tools"
-      onmouseover="$('manage_sub').appear({duration:0.3});">
+    <% if APP_CONFIG['project_name']=='EISQ' %>
+      <div onclick="location='/tools/sdp_index'"  class="big_button tools" onmouseover="$('manage_sub').appear({duration:0.3});">
+    <% else %>
+      <div onclick="location='/tools/mp_sdp_index'"  class="big_button tools" onmouseover="$('manage_sub').appear({duration:0.3});">
+    <% end %>
       <div class="btitle">Manage</div>
       <ul class="submenu manage" style="display:none" id="manage_sub">
-        <li><a href="/tools/sdp_index">SDP</a></li>
+        <% if APP_CONFIG['project_name']=='EISQ' %>
+          <li><a href="/tools/sdp_index">SDP</a></li>
+        <% else %>
+          <li><a href="/tools/mp_sdp_index">SDP</a></li>
+        <% end %>
         <li><a href="/requirements">Requirements</a></li>
         <li><a href="/notes/list">Capitalisations</a></li>
         <li><a href="/generic_risk_questions">Standard risks</a></li>
@@ -44,9 +55,7 @@
 
       </div>
   </div>
-  <% 15.times do %>
-    <br/>
-  <% end  %>
+  <% 15.times{concat "<br/>"} %>
   <div class="center">
     <div onclick="location='/sessions/logout'" class="big_button logout">Log out</div>
   </div>
