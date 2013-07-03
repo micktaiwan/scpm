@@ -279,6 +279,10 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_sdp_task_id(sdp_task_id)
     if not found
       @line = WlLine.create(:name=>sdp_task.title, :sdp_task_id=>sdp_task_id, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+      if(APP_CONFIG['auto_link_task_to_project']) and sdp_task.project
+        @line.project_id = sdp_task.project.id 
+        @line.save
+      end
     else
       @error = "This line already exists: #{found.name}"
     end
@@ -598,6 +602,7 @@ class WorkloadsController < ApplicationController
     session['workload_hide_lines_with_no_workload'] = on
     @workload = Workload.new(session['workload_person_id'], {:hide_lines_with_no_workload => on})
     @person   = @workload.person
+    get_workload_data(person_id)
     get_last_sdp_update
     get_suggested_requests(@workload)
     get_sdp_tasks(@workload)
@@ -618,6 +623,7 @@ private
     get_suggested_requests(@workload)
     get_chart
     get_sdp_gain(@workload.person)
+    get_sdp_tasks(@workload)
   end
 
 end

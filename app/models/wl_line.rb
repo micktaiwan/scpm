@@ -62,7 +62,7 @@ class WlLine < ActiveRecord::Base
 
   def project_name
     if self.project
-      self.project.name
+      "<a href='/project_workloads/?project_id=#{self.project.id}'>#{self.project.name}</a>"
     else
       "no project"
     end

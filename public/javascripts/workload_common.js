@@ -12,7 +12,9 @@ function wl_case_change_colors(line, wlweek, background, color) {
   }
 
 function set_fixed_header() {
-  $j('#workload_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
+  h = $('workload_table').getElementsByTagName("tr").length*22
+  if(h>400) h = 400;
+  $j('#workload_table').fixedHeaderTable({ height: String(h), footer: false, fixedColumn: false });
   //$j('#workload_qs_spider_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
   }
 
@@ -35,4 +37,20 @@ function wl_save_value(line_id, wlweek, view_by) {
     asynchronous:true,
     evalScripts:true
     });
+  }
+
+lines_hlighted = new Hash;
+function highlight_wl_line(id, color) {
+  el = $('wl_line_'+id);
+  if(!lines_hlighted[id]) {
+    lines_hlighted[id] = [0,el.style.backgroundColor];
+    }
+  if(lines_hlighted[id][0] == 1) {
+    el.style.backgroundColor  = lines_hlighted[id][1];
+    lines_hlighted[id][0] = 0;
+    }
+  else {
+    el.style.backgroundColor  = color;
+    lines_hlighted[id][0] = 1;
+    }
   }
