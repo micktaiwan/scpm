@@ -202,6 +202,8 @@ function add(id, nb_months, has_requests, has_rights) {
 							<%= link_to('Start project', { :action => "start", :id => @project.id }) %>
 						<% end %>
 						<br />
+            <b>QS Counter:</b> <%= @project.qs_count.to_s %>  <br />
+            <b>Spider Counter:</b> <%= @project.spider_count.to_s %>  <br />
 
             <% if @project.description and @project.description!=''%>
               <%= simple_format(@project.description) %>
