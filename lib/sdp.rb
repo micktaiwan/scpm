@@ -1,5 +1,5 @@
 # import SDP
-# make a SDP export to Excel and save it as *.csv
+# input: make a SDP export to Excel and save it as *.csv
 #Identifiant,Phase/Activité/Tâche,Charge,,,Cons.,Reste à Faire,Charge révisée,Charge acquise,Itération,Collab,Solde,,
 #,,estimée,Ré-évaluée,Attribuée,,,,,,,Initial,Ré-évalué,Attribué
 
@@ -17,22 +17,19 @@ class SDP
   REMAINING   = 7
   REVISED     = 8
   GAINED      = 9
-if APP_CONFIG['project_name']=='EISQ'
-  ITERATION   = 11
-  COLLAB      = 12
-  BALANCEI    = 13
-  BALANCER    = 14
-  BALANCEA    = 15
-else
-  ITERATION   = 10
-  COLLAB      = 11
-  BALANCEI    = 12
-  BALANCER    = 13
-  BALANCEA    = 14
-end
-
-
-
+  if APP_CONFIG['project_name']=='EISQ'
+    ITERATION   = 11
+    COLLAB      = 12
+    BALANCEI    = 13
+    BALANCER    = 14
+    BALANCEA    = 15
+  else
+    ITERATION   = 10
+    COLLAB      = 11
+    BALANCEI    = 12
+    BALANCER    = 13
+    BALANCEA    = 14
+  end
 
 	def initialize(path)
     @path = path
