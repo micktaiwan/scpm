@@ -62,7 +62,9 @@
 		<td colspan="3"></td>
 	<% end %>
 	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+  <% if APP_CONFIG['workloads_display_total_column'] %>
   <td id="ltotal_<%= wl_line.id %>" class="wl_case"><%= wl_line.sum %></td>
+  <% end %>
 
 	<!-- Values by week -->
 	<%

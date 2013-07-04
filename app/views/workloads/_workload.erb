@@ -57,7 +57,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
+    <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.months) %>
     </tr>
 
@@ -70,7 +72,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
+    <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
     </tr>
 
@@ -83,7 +87,9 @@
     <th style="min-width:45px;">Gain</th>
     <th style="min-width:45px;">Rem.</th>
     <th class="wl_total" style="min-width:45px;">Planned</th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th style="min-width:45px;">Total</th>
+    <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
     </tr>
 
@@ -96,7 +102,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
+    <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
     </tr>
 
@@ -109,7 +117,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
+    <% end %>
     <%= render(:partial=>"wl_ctotal", :collection=>@workload.ctotals) %>
     </tr>
 
@@ -122,7 +132,9 @@
     <th></th>
     <th><%= @workload.sdp_remaining_total %></th>
     <th id="planned_total"><%= @workload.planned_total %></th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th id="total"><%= @workload.total %></th>
+    <% end %>
     <%= render(:partial=>"wl_ctotal", :collection=>@workload.percents, :locals=>{:high_limit=>110, :low_limit=>85}) %>
     </tr>
 
@@ -135,7 +147,9 @@
     <th></th>
     <th></th>
     <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
+    <% end %>
     <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
     </tr>
   </thead>
