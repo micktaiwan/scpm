@@ -11,12 +11,12 @@ begin
     end
   end
   page << "$('pltotal_#{@line_id}').innerHTML = '#{@plsum}'"
-  page << "$('ltotal_#{@line_id}').innerHTML = '#{@lsum}'"
+  page << "$('ltotal_#{@line_id}').innerHTML = '#{@lsum}'" if APP_CONFIG['workloads_display_total_column']
   page << "$('ctotal_#{@wlweek}').innerHTML = '#{@csum}'"
   page << "$('cpercent_#{@wlweek}').innerHTML = '#{@cpercent}%'"
   page << "$('avail_#{@wlweek}').innerHTML = '#{@avail}'"
   page << "$('planned_total').innerHTML = '#{@planned_total}'"
-  page << "$('total').innerHTML = '#{@total}'"
+  page << "$('total').innerHTML = '#{@total}'" if APP_CONFIG['workloads_display_total_column']
   if(@cpercent > 110)
     page << "wl_change_colors(#{@wlweek},'#F00','#FFF')"
   elsif(@cpercent < 90)

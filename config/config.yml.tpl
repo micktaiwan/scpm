@@ -17,6 +17,7 @@ workloads_suggested_request: true
 workloads_months: 6
 workloads_display_project_name_in_lines: false
 workloads_show_consolidation_filters: false
+workloads_display_total_column: false
 
 # SDP
 use_multiple_projects_sdp_export: false
