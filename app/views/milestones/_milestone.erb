@@ -19,4 +19,8 @@
   <% if milestone.name[0..1]!='QG' and milestone.status==2 and milestone.amendments.size == 0 %>
     <strong>No amend.</strong><br/>
   <% end %>
+
+  <% if milestone.has_spider_no_consolidated? %>
+    <strong>Spider to consolidate.</strong><br/>
+  <% end %>
 </div>

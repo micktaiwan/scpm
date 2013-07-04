@@ -152,4 +152,14 @@ class Milestone < ActiveRecord::Base
     return !MILESTONE_SPIDER_BLACKLIST.include?(self.name)
   end
 
+  def has_spider_no_consolidated?
+    result = false
+    self.spiders.each do |s|
+      if !s.is_consolidated?
+        result = true
+      end
+    end
+    return result;
+  end
+
 end

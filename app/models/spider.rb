@@ -53,6 +53,11 @@ def self.spider_export_by_projects_and_milestones(projects)
 	return resultArray
 end
 
-
+def is_consolidated?
+	if self.spider_consolidations.count == 0
+		return false;
+	end
+	return true;
+end
 
 end
