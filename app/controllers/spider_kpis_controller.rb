@@ -160,7 +160,7 @@ class SpiderKpisController < ApplicationController
     spiders_consolidated = get_spiders_consolidated(@lifecycle_id,@workstream, @milestone_name_id)
     
     # MONTHS CALCUL --------------------------------- 
-    timeline_size = 19 # in months
+    timeline_size = (DateTime.now.year * 12 + DateTime.now.month) - (DateTime.parse("2011-04-01 00:01:01").year * 12 + DateTime.parse("2011-04-01 00:01:01").month) # in months
     
     # @months_array = Array.new
     now_dateTime = DateTime.now.to_time
@@ -285,7 +285,7 @@ class SpiderKpisController < ApplicationController
     spiders_consolidated = get_spiders_consolidated(@lifecycle_id,@workstream, @milestone_name_id)
     
     # MONTHS CALCUL --------------------------------- 
-    timeline_size = 19 # in months
+    timeline_size = (DateTime.now.year * 12 + DateTime.now.month) - (DateTime.parse("2011-04-01 00:01:01").year * 12 + DateTime.parse("2011-04-01 00:01:01").month) # in months
     
     # @months_array = Array.new
     now_dateTime = DateTime.now.to_time
