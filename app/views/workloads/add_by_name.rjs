@@ -3,7 +3,6 @@ if @error
 else
   page << "$('input_name').value='';"
   page.replace "workload", render(:partial=>'workload', :object=>@workload)
-  page << "set_fixed_header();"
+  page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']});"
   page.visual_effect(:highlight, "workload")
 end
-
