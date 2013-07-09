@@ -796,9 +796,9 @@ class Project < ActiveRecord::Base
 
   def suggested_status
     rv = 1
-    self.quality_risks.each { |r|
-      rv = 2 if rv < 2 and r.severity >=6
-      rv = 3 if rv < 3 and r.severity >=8
+    self.risks.each { |r|
+      rv = 2 if rv < 2 and (r.isMedium? or r.isHigh?)
+      rv = 3 if rv < 3 and r.isCritical?
       }
     rv
   end

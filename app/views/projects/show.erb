@@ -113,18 +113,19 @@ function add(id, nb_months, has_requests, has_rights) {
 
             <a href="#" onclick="return false;" title="Probability:
             0:can not occur
-            1:low. 1% < x < 35%
-            2:normal. 36% < x < 70%
-            3:high. > 70%
-            4:occured
+            1:low, 1% < x < 20%
+            2:normal, 21% < x < 50%
+            3:high, 51% < x < 80%
+            4:very high, > 80%
 
             Impact:
-            1:low. cost, delay or quality impact < 10%
-            2:medium. cost, delay or quality impact > 10%
-            3:high. cost, demlay or quality impact > 20%">Help</a>
+            1:low, minor TCQ impact
+            2:medium, major TCQ impact with work around
+            3:high, major TCQ impact without work around
+            4:very high, unacceptable TCQ impact">Help</a>
             <table class="grid">
             <tr class="header">
-            <td>Severity</td>
+            <td>Criticality</td>
             <td>ID</td>
             <td>Context</td>
             <td>Q</td>
