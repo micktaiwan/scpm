@@ -211,7 +211,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Suite', 'Project', 'Workpackage', 'PM', 'BRN', 'Old status', 'Current Status', 'Date', 'Status', 'Last change', 'Actions', 'Operational Alert', 'Next milestone', 'M1/sM1/G0', 'M3/sM3/G2/g2/pg2', 'G3/g3/pg3', 'G4/g4/pg4', 'QG BRD', 'QG ARD', 'M5/sM5/CCB/G5/g5/pg5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10/G6/g6/pg6', 'QG TD/QG TD M', 'M10a', 'QG MIP', 'M11/G7/g7/pg7', 'M12', 'M12/M13', 'M13/sM13/G8/g8/pg8', 'M14/sM14/G9/g9/pg9'] do
+        for column in ['Supervisor', 'WS','Suite', 'Project', 'Workpackage', 'PM', 'BRN', 'Lifecycle', 'Old status', 'Current Status', 'Date', 'Status', 'Last change', 'Actions','Pratice spider GAP statuses', 'Deliverable Spider gap statuses', 'Operational Alert', 'Next milestone', 'M1/sM1/G0', 'M3/sM3/G2/g2/pg2', 'G3/g3/pg3', 'G4/g4/pg4', 'QG BRD', 'QG ARD', 'M5/sM5/CCB/G5/g5/pg5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10/G6/g6/pg6', 'QG TD/QG TD M', 'M10a', 'QG MIP', 'M11/G7/g7/pg7', 'M12', 'M12/M13', 'M13/sM13/G8/g8/pg8', 'M14/sM14/G9/g9/pg9'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -232,14 +232,17 @@ end
           @xml.Cell { @xml.Data p.full_wp_name,       'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.pm,                 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.brn,                'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.lifecycle_object.name,     'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.old_status)  do @xml.Data text_status(p.old_status),  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell 'ss:StyleID' => status_excel_style2(p.last_status) do @xml.Data text_status(p.last_status), 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' end
           @xml.Cell { @xml.Data status.updated_at ? "#{status.updated_at.to_date} (#{time_ago_in_words(status.updated_at.to_date)})" : "",   'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.reason); end;      @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.tag!("ss:Data", 'ss:Type' => 'String', 'xmlns'=>'http://www.w3.org/TR/REC-html40') do; @xml<<excel_text(status.get_last_change_excel); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.actions); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.pratice_spider_gap); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.deliverable_spider_gap); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(status.operational_alert); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          name, status, style = p.get_next_milestone_status
+          name, status, style = p.get_next_milestone_done
           @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<< excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           for ms in [['M1','sM1','G0'],
                      ['M3','sM3','G2','g2','pg2'],

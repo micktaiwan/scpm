@@ -232,6 +232,61 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.datetime "updated_at"
   end
 
+  create_table "lesson_collect_actions", :force => true do |t|
+    t.integer  "lesson_collect_file_id"
+    t.string   "ref"
+    t.date     "creation_date"
+    t.string   "source"
+    t.text     "title"
+    t.text     "status"
+    t.string   "actionne"
+    t.date     "due_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "benefit"
+    t.integer  "level_of_investment"
+  end
+
+  create_table "lesson_collect_assessments", :force => true do |t|
+    t.integer  "lesson_collect_file_id"
+    t.integer  "lesson_id"
+    t.string   "milestone"
+    t.string   "mt_detailed_desc"
+    t.string   "quality_gates"
+    t.string   "milestones_preparation"
+    t.string   "project_setting_up"
+    t.string   "lessons_learnt"
+    t.string   "support_level"
+    t.text     "mt_improvements"
+    t.text     "comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lesson_collect_files", :force => true do |t|
+    t.string   "pm"
+    t.string   "qwr_sqr"
+    t.string   "workstream"
+    t.string   "suite_name"
+    t.string   "project_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lesson_collects", :force => true do |t|
+    t.integer  "lesson_collect_file_id"
+    t.string   "lesson_id"
+    t.string   "milestone"
+    t.string   "type_lesson"
+    t.text     "topics"
+    t.text     "cause"
+    t.string   "improvement"
+    t.string   "axes"
+    t.string   "sub_axes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "lifecycle_milestones", :force => true do |t|
     t.integer  "lifecycle_id"
     t.integer  "milestone_name_id"

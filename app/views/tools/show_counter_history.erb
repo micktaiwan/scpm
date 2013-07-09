@@ -1,51 +1,67 @@
+
 <% form_tag(:action=>'show_counter_history') do %>
-	<%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
-	<%= select_tag ("request_id",options_for_select(@requests_array,@request_id.to_i))  %>
+  <%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
+  <%= select_tag ("request_id",options_for_select(@requests_array,@request_id.to_i))  %>
   <%= submit_tag('Filter') %>
 <% end %>
 
+<% 
+  row_number = 0
+  (current_user.has_role?('Admin')) ? (row_number = 4) : (row_number = 3)
+%>
 
 <h2>Spider Counters</h2>
 <% last_request_spider = 0 %>
 <!-- For each spider counter -->
 <% @spider_counter.each do |sc| %>
 
-	<!-- IF NEW REQUEST -->
-	<% if last_request_spider != sc.request_id %>
-		<!-- TABLE -->
-		<% if last_request_spider != 0 %>
-			</table><br />
-		<% end %>
-		<table class="history_counts_table" >
-		<!-- REQUEST TR -->
-		<tr class="bg_blue">
-			<td>
-				<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= sc.request.request_id %>">#<%= sc.request.request_id %></a>
-			</td>
-			<td COLSPAN="3"><%= sc.request.summary %></td>
-		</tr>
-		<!-- HEADER TR -->
-		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Delivery link</td></tr>
-		<% last_request_spider = sc.request_id %>
-	<% end %>
-	
-	<!-- DETAIL ACTION TR-->
-	<tr>
-		<td><%= sc.author.name %></td>
-		<td><%= sc.action_date.strftime("%Y-%m-%d %H:%M") %></td>		
-		<% project_name = sc.spider.project.name %>
-		<% if sc.spider.project.project %>
-			<% project_name = sc.spider.project.project.name + " > " + sc.spider.project.name %>
-		<% end %>
-		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc.spider.project.id}) %></td>
-		<% 
-			file_link = "None"
-			if (sc.spider.file_link)
-				file_link = sc.spider.file_link
-			end
-		%>
-		<td><%= link_to(file_link, {:controller=>'spiders', :action=>'update_spider_file_name_form', :id=>sc.spider.id}) %></td>
-	</tr>
+  <!-- IF NEW REQUEST -->
+  <% if last_request_spider != sc.request_id %>
+    <!-- TABLE -->
+    <% if last_request_spider != 0 %>
+      </table><br />
+    <% end %>
+    <table class="history_counts_table" >
+    <!-- REQUEST TR -->
+    <tr class="bg_blue">
+      <td>
+        <a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= sc.request.request_id %>">#<%= sc.request.request_id %></a>
+      </td>
+      <td COLSPAN="<%= row_number %>"><%= sc.request.summary %></td>
+    </tr>
+    <!-- HEADER TR -->
+    <tr class="bg_grey">
+      <td>Author</td>
+      <td>Action date</td>
+      <td>Project</td>
+      <td>Delivery link</td>
+      <% if (current_user.has_role?('Admin')) %>
+        <td>Admin</td>
+      <% end %>
+    </tr>
+    <% last_request_spider = sc.request_id %>
+  <% end %>
+  
+  <!-- DETAIL ACTION TR-->
+  <tr>
+    <td><%= sc.author.name %></td>
+    <td><%= sc.action_date.strftime("%Y-%m-%d %H:%M") %></td>   
+    <% project_name = sc.spider.project.name %>
+    <% if sc.spider.project.project %>
+      <% project_name = sc.spider.project.project.name + " > " + sc.spider.project.name %>
+    <% end %>
+    <td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc.spider.project.id}) %></td>
+    <% 
+      file_link = "None"
+      if (sc.spider.file_link)
+        file_link = sc.spider.file_link
+      end
+    %>
+    <td><%= link_to(file_link, {:controller=>'spiders', :action=>'update_spider_file_name_form', :id=>sc.spider.id}) %></td>
+    <% if (current_user.has_role?('Admin')) %>
+      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc.id}, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
+    <% end %>
+  </tr>
 <% end %>
 </table>
 
@@ -54,37 +70,48 @@
 <!-- For each QS counter -->
 <% @qs_counter.each do |qsc| %>
 
-	<!-- IF NEW REQUEST -->
-	<% if last_request_qs != qsc.request_id %>
-		<!-- TABLE -->
-		<% if last_request_qs != 0 %>
-			</table><br />
-			<% end %>		
-		<table class="history_counts_table" >
-		<!-- REQUEST TR -->
-		<tr class="bg_blue">
-			<td>
-				<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= qsc.request.request_id %>">#<%= qsc.request.request_id %></a>
-			</td>
-			<td COLSPAN="3"><%= qsc.request.summary %></td>
-		</tr>
-		<!-- HEADER TR -->
-		<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td></tr>
-		<% last_request_qs = qsc.request_id %>
-	<% end %>
-	
-	<!-- DETAIL ACTION TR -->	
-	<tr>
-		<td><%= qsc.author.name %></td>
-		<td><%= qsc.action_date.strftime("%Y-%m-%d %H:%M") %></td>
-		
-		<% project_name = qsc.status.project.name %>
-		<% if qsc.status.project.project %>
-			<% project_name = qsc.status.project.project.name + " > " + qsc.status.project.name %>
-		<% end %>
-		
-		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc.status.project.id}) %></td>
-		<td><%=html_status(qsc.status.status)%></td>
-	</tr>
+  <!-- IF NEW REQUEST -->
+  <% if last_request_qs != qsc.request_id %>
+    <!-- TABLE -->
+    <% if last_request_qs != 0 %>
+      </table><br />
+      <% end %>   
+    <table class="history_counts_table" >
+    <!-- REQUEST TR -->
+    <tr class="bg_blue">
+      <td>
+        <a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= qsc.request.request_id %>">#<%= qsc.request.request_id %></a>
+      </td>
+      <td COLSPAN="<%= row_number %>"><%= qsc.request.summary %></td>
+    </tr>
+    <!-- HEADER TR -->
+    <tr class="bg_grey">
+      <td>Author</td>
+      <td>Action date</td>
+      <td>Project</td>
+      <td>Color</td>
+      <% if (current_user.has_role?('Admin')) %>
+        <td>Admin</td>
+      <% end %>
+    </tr>
+    <% last_request_qs = qsc.request_id %>
+  <% end %>
+  
+  <!-- DETAIL ACTION TR --> 
+  <tr>
+    <td><%= qsc.author.name %></td>
+    <td><%= qsc.action_date.strftime("%Y-%m-%d %H:%M") %></td>
+    
+    <% project_name = qsc.status.project.name %>
+    <% if qsc.status.project.project %>
+      <% project_name = qsc.status.project.project.name + " > " + qsc.status.project.name %>
+    <% end %>
+    
+    <td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc.status.project.id}) %></td>
+    <td><%=html_status(qsc.status.status)%></td>
+    <% if (current_user.has_role?('Admin')) %>
+      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_qs', :id=>qsc.id}, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
+    <% end %>
+  </tr>
 <% end %>
 </table>

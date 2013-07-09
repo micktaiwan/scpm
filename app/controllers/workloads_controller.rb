@@ -98,7 +98,10 @@ class WorkloadsController < ApplicationController
     # find the corresponding production days (minus 20% of gain)
     @not_in_workload_days = @not_in_workload.inject(0) { |sum, r| sum += r.workload2} * 0.80
 
-    company_ids = params['company']['company_ids']
+    company_ids = params['company']
+    company_ids = company_ids['company_ids'] if company_ids
+    # FIXME: pass only a simple field....
+
     cond = ""
     cond += " and company_id in (#{company_ids})" if company_ids and company_ids!=''
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0"+cond, :order=>"name")

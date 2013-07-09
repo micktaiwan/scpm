@@ -485,7 +485,7 @@ class ProjectsController < ApplicationController
         }
       #@actions    = Action.find(:all, :conditions=>"private=0", :order=>"person_id, creation_date, progress")
       @requests   = Request.find(:all,:conditions=>"status!='assigned' and status!='cancelled' and status!='closed' and status!='removed'", :order=>"status, workstream")
-      @risks      = Risk.find(:all, :conditions => "stream_id IS NULL") #, :conditions=>"", :order=>"status, workstream")
+      @risks      = Risk.find(:all, :conditions => "stream_id IS NULL and is_quality=1") #, :conditions=>"", :order=>"status, workstream")
       @risks      = @risks.select { |r| r.project and r.severity > 0}.sort_by {|r|
         raise "no supervisor for #{r.project.full_name}" if !r.project.supervisor
         [r.project.supervisor.name, r.project.full_name, r.severity]

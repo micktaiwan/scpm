@@ -638,6 +638,22 @@ class Project < ActiveRecord::Base
     [m.name] + get_milestone_status(m.name)
   end
 
+  def get_next_milestone_done
+    # Current milestone
+    i = get_current_milestone_index
+    # Not managed
+    return ["", "", {}] if not i or i >= milestones.size-1
+    # Next milestone
+    # Get the next milestone which is "not done yet"
+    for y in i..milestones.size-1
+      if sorted_milestones[y].done == 0
+        return [sorted_milestones[y].name] + get_milestone_status(sorted_milestones[y].name)
+      end
+    end 
+    # Not managed
+    return ["", "", {}]
+  end
+
   def sorted_milestones
     #NaturalSort::naturalsort milestones
     milestones.sort_by { |m| [milestone_order(m.name), (m.date ? m.date : Date.today())]}

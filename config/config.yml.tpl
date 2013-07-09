@@ -17,10 +17,14 @@ workloads_suggested_request: true
 workloads_months: 6
 workloads_display_project_name_in_lines: false
 workloads_show_consolidation_filters: false
+workloads_display_total_column: false
+workloads_lines_sort: "project_id,wl_type,name"
+workloads_max_height: 500
 
 # SDP
 use_multiple_projects_sdp_export: false
 auto_link_task_to_project: false
+
 
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"

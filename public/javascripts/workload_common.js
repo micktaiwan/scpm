@@ -11,9 +11,10 @@ function wl_case_change_colors(line, wlweek, background, color) {
   $(line + '_' + wlweek).style.color       = color;
   }
 
-function set_fixed_header() {
-  h = $('workload_table').getElementsByTagName("tr").length*22
-  if(h>400) h = 400;
+function set_fixed_header(max_height) {
+  h = $('workload_table').getElementsByTagName("tr").length*22;
+  max_height = max_height || 400;
+  if(h>max_height) h = max_height;
   $j('#workload_table').fixedHeaderTable({ height: String(h), footer: false, fixedColumn: false });
   //$j('#workload_qs_spider_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
   }
@@ -23,8 +24,6 @@ function display_milestones(evt,text) {
   var e = evt;
   popup.style.top  = e.clientY + "px";
   popup.style.left = e.clientX + "px";
-  // popup.style.top = parseInt(Event.pointerY(e))+"px"
-  // popup.style.left = parseInt(Event.pointerX(e))+"px"
   popup.innerHTML = text;
   popup.show();
 }

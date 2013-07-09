@@ -10,11 +10,11 @@ class ToolsController < ApplicationController
 
   include WelcomeHelper
 
-  NB_QR 					            = 24
-  NB_FTE 					            = 20  # TODO: should be automatically calculated from workloads
-  NB_DAYS_PER_MONTH			      = 18
-  MEETINGS_LOAD_PER_MONTH 	  = 1
-  PM_LOAD_PER_MONTH 		      = 48 #was: NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
+  NB_QR                       = 24
+  NB_FTE                      = 20  # TODO: should be automatically calculated from workloads
+  NB_DAYS_PER_MONTH           = 18
+  MEETINGS_LOAD_PER_MONTH     = 1
+  PM_LOAD_PER_MONTH           = 48 #was: NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
   WP_LEADERS_DAYS_PER_MONTH   = 12 #was: 18 # 10 + 4*2
 
   PM_PROVISION_ADJUSTMENT     = -36.875
@@ -731,6 +731,67 @@ class ToolsController < ApplicationController
     end
   
   end
+
+  def delete_history_spider
+    project_object = nil
+
+    # Get the id
+    history_object_id = params[:id]
+
+    # Get the object
+    history_object = nil
+    if (history_object_id)
+      history_object = HistoryCounter.find(history_object_id)
+    end
+
+    # Delete the object
+    if (history_object)
+      if (history_object.spider and history_object.spider.project)
+        project_object = history_object.spider.project
+      end
+      history_object.destroy
+    end
+
+    # Update spider couter or qs counter of project
+    if (project_object)
+      project_object.spider_count = project_object.spider_count - 1
+      project_object.spider_count = 0 if (project_object.spider_count < 0)
+      project_object.save
+    end
+
+    redirect_to '/tools/show_counter_history'
+  end
+
+  def delete_history_qs
+    project_object = nil
+
+    # Get the id
+    history_object_id = params[:id]
+
+    # Get the object
+    history_object = nil
+    if (history_object_id)
+      history_object = HistoryCounter.find(history_object_id)
+    end
+
+    # Delete the object
+    if (history_object)
+      if (history_object.status and history_object.status.project)
+        project_object = history_object.status.project
+      end
+      history_object.destroy
+    end
+
+    # Update spider couter or qs counter of project
+    if (project_object)
+      project_object.qs_count = project_object.qs_count - 1
+      project_object.qs_count = 0 if (project_object.qs_count < 0)
+      project_object.save
+    end
+
+    redirect_to '/tools/show_counter_history'
+  end
+
 private
 
   def round_to_hour(f)

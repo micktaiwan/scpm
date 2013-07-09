@@ -68,7 +68,7 @@
 <%= render(:partial=>"workload") %>
 
 <script>
-  set_fixed_header();
+  set_fixed_header(<%=APP_CONFIG['workloads_max_height']%>);
   new Draggable(wl_line_add_form); // does not mix well with scrollbar
 </script>
 

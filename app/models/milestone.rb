@@ -6,7 +6,7 @@ class Milestone < ActiveRecord::Base
   has_many    :spiders
   
   MILESTONE_ELIGIBLE_FOR_NOTE = ['M3', 'G2', 'M5', 'G5', 'QG TD', 'M13', 'CCB']
-
+  MILESTONE_SPIDER_BLACKLIST  = ["M14", "G9", "sM14"]
   def date
     return self.actual_milestone_date if self.actual_milestone_date and self.actual_milestone_date!=""
     self.milestone_date
@@ -146,6 +146,20 @@ class Milestone < ActiveRecord::Base
 
   def is_eligible_for_note?
     MILESTONE_ELIGIBLE_FOR_NOTE.include?(self.name)
+  end
+
+  def is_eligible_for_spider?
+    return !MILESTONE_SPIDER_BLACKLIST.include?(self.name)
+  end
+
+  def has_spider_no_consolidated?
+    result = false
+    self.spiders.each do |s|
+      if !s.is_consolidated?
+        result = true
+      end
+    end
+    return result;
   end
 
 end
