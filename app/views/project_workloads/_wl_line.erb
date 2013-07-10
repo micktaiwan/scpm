@@ -9,7 +9,7 @@
     <%= link_to_remote(image_tag("delete.gif"),
      {:url=>{:controller=>'workloads', :action=>'destroy_line', :id=>wl_line.id},
      :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
-     :success=>"$('edit_line').fade(); $('wl_line_#{wl_line.id}').fade();",
+     :success=>"$('wl_line_#{wl_line.id}').fade();",
      :failure=>"alert('Error:' + request.responseText);"},
      {:class=>"delete"}) %>
   </td>
