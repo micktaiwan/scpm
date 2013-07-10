@@ -359,6 +359,8 @@ strong {
 .action_closed, .action_abandonned {font-style: italic; color: #999;}
 .amendment1 {font-style: italic; color: #999;}
 
+.workload_milestone { z-index:-1; border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
+
 .milestone_bar { margin: 50px 0 10px 0;}
 .milestone {margin-bottom: 10px; z-index:-1; border:black solid 1px; width: 94px; display: inline-block; vertical-align:top; border-radius: 5px;  -moz-border-radius: 5px;}
 .milestone.passed { opacity:0.4;}

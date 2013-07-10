@@ -24,7 +24,7 @@
 	<!-- Edit btn / Alert / Backup msg / Person name -->
   <td>
     <!-- highlight function -->
-    <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line(#{wl_line.id}, '#FF0'); return false;") %>
+    <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line(#{wl_line.id}, '#FF0')") %>
     <!-- Alert -->
     <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
     <!-- Backup -->
@@ -69,7 +69,7 @@
       wlload = wlload == 0.0 ? '' : wlload
     %>
 
-    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}', '1');return false;") %>
+    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' workload_milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}', '1');return false;") %>
     </td>
 <% end %>
 </tr>
