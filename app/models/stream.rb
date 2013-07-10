@@ -27,9 +27,11 @@ class Stream < ActiveRecord::Base
   def suggested_status
     rv = 1
     self.risks.each { |r|
-      rv = 2 if rv < 2 and (r.isMedium? or r.isHigh?)
-      rv = 3 if rv < 3 and r.isCritical?
-      }
+      if (r.is_quality == 1)
+        rv = 2 if rv < 2 and (r.isMedium? or r.isHigh?)
+        rv = 3 if rv < 3 and r.isCritical?
+      end
+    }
     rv
   end
 
