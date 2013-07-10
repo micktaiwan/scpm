@@ -10,7 +10,6 @@ class PeopleController < ApplicationController
   def index
     @people = Person.find(:all, :order=>"company_id, has_left, is_transverse, name")
     @allCompanies = Person.all(:select => "DISTINCT(company_id)") 
-    
   end
 
   def new
@@ -25,6 +24,15 @@ class PeopleController < ApplicationController
     if not @person.save
       render :action => 'new'
       return
+    else
+      @roles = Role.find(:all, :conditions=>"name != 'Super'")
+      @roles.each { |r|
+        if params[:role][r.name.to_sym] == '1'
+          @person.add_role(r.name)
+        else
+          @person.remove_role(r.name)
+        end
+        }      
     end
     redirect_to('/people')
   end

@@ -123,9 +123,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "project_id"
   end
 
-  add_index "checklist_items", ["parent_id"], :name => "IDX_CHECKLIST_ITEMS_PARENT_ID"
-  add_index "checklist_items", ["template_id"], :name => "IDX_CHECKLIST_ITEMS_TEMPLATE_ID"
-
   create_table "ci_projects", :force => true do |t|
     t.integer  "internal_id"
     t.integer  "external_id"
@@ -219,8 +216,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.text     "actions"
   end
 
-  add_index "generic_risks", ["generic_risk_question_id"], :name => "IDX_GENERIC_RISKS"
-
   create_table "history_counters", :force => true do |t|
     t.integer  "request_id"
     t.datetime "action_date"
@@ -228,61 +223,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "concerned_status_id"
     t.integer  "concerned_spider_id"
     t.integer  "stream_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "lesson_collect_actions", :force => true do |t|
-    t.integer  "lesson_collect_file_id"
-    t.string   "ref"
-    t.date     "creation_date"
-    t.string   "source"
-    t.text     "title"
-    t.text     "status"
-    t.string   "actionne"
-    t.date     "due_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "benefit"
-    t.integer  "level_of_investment"
-  end
-
-  create_table "lesson_collect_assessments", :force => true do |t|
-    t.integer  "lesson_collect_file_id"
-    t.integer  "lesson_id"
-    t.string   "milestone"
-    t.string   "mt_detailed_desc"
-    t.string   "quality_gates"
-    t.string   "milestones_preparation"
-    t.string   "project_setting_up"
-    t.string   "lessons_learnt"
-    t.string   "support_level"
-    t.text     "mt_improvements"
-    t.text     "comments"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "lesson_collect_files", :force => true do |t|
-    t.string   "pm"
-    t.string   "qwr_sqr"
-    t.string   "workstream"
-    t.string   "suite_name"
-    t.string   "project_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "lesson_collects", :force => true do |t|
-    t.integer  "lesson_collect_file_id"
-    t.string   "lesson_id"
-    t.string   "milestone"
-    t.string   "type_lesson"
-    t.text     "topics"
-    t.text     "cause"
-    t.string   "improvement"
-    t.string   "axes"
-    t.string   "sub_axes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -340,8 +280,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "checklist_not_applicable", :default => 0
   end
 
-  add_index "milestones", ["project_id"], :name => "IDX_MILESTONES"
-
   create_table "notes", :force => true do |t|
     t.text     "note"
     t.integer  "project_id"
@@ -378,8 +316,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "role_id"
     t.datetime "created_at"
   end
-
-  add_index "person_roles", ["person_id"], :name => "IDX_PERSON_ROLES_PERSON_ID"
 
   create_table "plannings", :force => true do |t|
     t.string   "name"
@@ -436,8 +372,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "suite_tag_id"
     t.string   "project_code"
   end
-
-  add_index "projects", ["project_id"], :name => "IDX_PROJECTS_ON_PROJECT_ID"
 
   create_table "question_references", :force => true do |t|
     t.integer  "question_id"
@@ -521,7 +455,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.string   "is_stream",               :default => "No"
   end
 
-  add_index "requests", ["project_id"], :name => "IDX_REQUESTS_ON_PROJECT_ID"
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
 
   create_table "requirement_versions", :force => true do |t|
@@ -743,8 +676,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.datetime "updated_at"
   end
 
-  add_index "spider_consolidations", ["spider_id"], :name => "IDX_SPIDER_CONSOLIDATIONS"
-
   create_table "spider_values", :force => true do |t|
     t.integer  "lifecycle_question_id"
     t.integer  "spider_id"
@@ -762,8 +693,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.datetime "updated_at"
     t.string   "file_link"
   end
-
-  add_index "spiders", ["milestone_id"], :name => "IDX_SPIDERS"
 
   create_table "statuses", :force => true do |t|
     t.integer  "project_id",                                                :null => false
@@ -790,8 +719,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.text     "deliverable_spider_gap"
   end
 
-  add_index "statuses", ["project_id"], :name => "IDX_STATUSES"
-
   create_table "stream_review_types", :force => true do |t|
     t.integer  "stream_id"
     t.integer  "review_type_id"
@@ -812,13 +739,13 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
   create_table "streams", :force => true do |t|
     t.string   "name"
     t.integer  "workstream_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.datetime "read_date"
     t.integer  "supervisor_id"
     t.string   "quality_manager"
     t.string   "dwl"
     t.string   "process_owner"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.text     "description"
   end
 
@@ -872,8 +799,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "project_id"
   end
 
-  add_index "wl_lines", ["request_id"], :name => "IDX_WL_LINES"
-
   create_table "wl_loads", :force => true do |t|
     t.integer  "wl_line_id"
     t.integer  "week"
@@ -881,8 +806,6 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "wl_loads", ["wl_line_id"], :name => "IDX_WL_LOADS"
 
   create_table "workpackages", :force => true do |t|
     t.string "title"
