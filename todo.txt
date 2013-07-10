@@ -1,4 +1,4 @@
-test
+test2
 
 - Import SDP en partant du fichier export de la Factory (plusieurs projets)
 - Faire une option pour ne pas afficher les projets dans add a line pour EISQ et les autres options quand on est sur la factory
