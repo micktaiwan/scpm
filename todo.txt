@@ -1,8 +1,9 @@
+test
+
 - Import SDP en partant du fichier export de la Factory (plusieurs projets)
 - Faire une option pour ne pas afficher les projets dans add a line pour EISQ et les autres options quand on est sur la factory
 - Les milestones sont en dur dans le formulaire de création de miletones pour un projet et c'est du GPP, pas du EC
 - le delete d'une ligne de la vue par projet ne rafraichi pas la ligne
-
 
 Seeds
 =====
