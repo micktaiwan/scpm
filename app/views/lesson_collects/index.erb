@@ -1,0 +1,58 @@
+<% if @imported %>
+	<div class="notification">
+	File imported
+	</div>
+<% end %>
+
+<!-- IMPORT -->
+<h2> Lessons Learnt Import </h2>
+
+<%= form_tag({:action => 'import'}, :multipart => true) %>
+<%= file_field 'upload', 'datafile' %>
+<%= submit_tag "Import" %></p>
+</form>
+
+<!-- LIST -->
+<h2> Lessons Learnt Imported files </h2>
+<% form_tag(:action=>'index') do %>
+  Workstreams :
+  <%= select_tag ("ws_id",options_for_select(@ws_array,@ws_selected.to_i))  %>
+  Suites :
+  <%= select_tag ("suite_id",options_for_select(@suites_array,@suite_selected.to_i))  %>
+  <%= submit_tag('Filter') %>
+<% end %>	
+<br />
+<% form_tag(:action=>'export') do %>
+  <%= hidden_field_tag('ws_id_hidden', @ws_selected.to_i) %>
+  <%= submit_tag('Export') %>
+<% end %>
+
+<table>
+	<tr>
+		<th>Id</th>
+		<th>PM</th>
+		<th>QWR SQR</th>
+		<th>Workstream</th>
+		<th>Suite name</th>
+		<th>Project Name</th>
+		<th>Import date</th>
+	</tr>
+<% @lessonFiles.each do |lf| %>
+	<tr>
+		<td><%= lf.id.to_s %></td>
+		<td><%= lf.pm %></td>
+		<td><%= lf.qwr_sqr %></td>
+		<td><%= lf.workstream %></td>
+		<td><%= lf.suite_name %></td>
+		<td><%= lf.project_name %></td>
+		<td><%= lf.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+		<!-- <td><% link_to("Delete", {:controller=>'lesson_collects', :action=>'delete', :id=>lf.id}) %></td> -->
+	</tr>
+<% end %>
+</table>
+
+<script type="text/javascript"> 
+	Event.observe($("ws_id"),'change', function(){
+		$('ws_id_hidden').value = $('ws_id')[$('ws_id').selectedIndex].value;
+	});
+</script>

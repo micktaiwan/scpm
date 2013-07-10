@@ -107,6 +107,7 @@
       </ul> 
     </li>
 
+    <!-- SPIDER MENU  -->
 		<% if (cu.has_role?('Admin') or (cu.is_cpdp==1) or cu.has_role?('ServiceLineResp'))  %>
 		<li><%= link_to('Spider', "", {:class=>menu_style('workstreams','*')}) %>
       <ul>
@@ -124,7 +125,9 @@
       </ul>
     </li>
 		<% end %>
-		
+    <!-- LESSON LEARNT MENU -->
+		<li><%= link_to('Lessons Learnt', {:controller=>'lesson_collects', :action=>'index'}, {:class=>menu_style('welcome','update')}) %></li>
+
     <% if cu.has_role?('Super') %>
       <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
     <% end %>

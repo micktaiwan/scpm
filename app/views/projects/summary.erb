@@ -43,7 +43,6 @@
    @xml.Style 'ss:ID' => 's80', 'ss:Name' => 'StatusRed' do
      @xml.Font 'ss:Color'=>'#FF0000'
    end
-
    @xml.Style 'ss:ID' => 's81', 'ss:Name' => 'CurrentStatusUnknown' do
      @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
      @xml.Interior 'ss:Color'=>"#DDDDDD", 'ss:Pattern'=>'Solid'
@@ -60,7 +59,6 @@
      @xml.Font 'ss:Color'=>'#FFFFFF', 'ss:Bold'=>'1'
      @xml.Interior 'ss:Color'=>"#FF0000", 'ss:Pattern'=>'Solid'
    end
-
    @xml.Style 'ss:ID' => 's85', 'ss:Name' => 'ToBeValidated' do
      @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
      @xml.Interior 'ss:Color'=>"#0087CC", 'ss:Pattern'=>'Solid'
@@ -83,6 +81,26 @@
    end
    @xml.Style 'ss:ID' => 's90', 'ss:Name' => 'CloseClosingDate' do
      @xml.Font 'ss:Color'=>'#F51DF4', 'ss:Bold'=>'0', 'ss:Italic' => '1'
+   end
+   @xml.Style 'ss:ID' => 's91', 'ss:Name' => 'CurrentStatusZero' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#DDDDDD", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's92', 'ss:Name' => 'CurrentStatusLow' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#82CA3F", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's93', 'ss:Name' => 'CurrentStatusMedium' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#FFFF0A", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's94', 'ss:Name' => 'CurrentStatusHigh' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#FDB409", 'ss:Pattern'=>'Solid'
+   end
+   @xml.Style 'ss:ID' => 's95', 'ss:Name' => 'CurrentStatusCritical' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#FB0007", 'ss:Pattern'=>'Solid'
    end
 end
 
@@ -293,7 +311,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'Severity', 'Date', 'Context', 'Risk', 'Prob', 'Consequence', 'Impact', 'Actions'] do
+        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'Criticality', 'Date', 'Context', 'Risk', 'Prob', 'Consequence', 'Impact', 'Actions'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'

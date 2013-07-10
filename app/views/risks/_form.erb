@@ -31,9 +31,10 @@ What situation we will be if the risk occur and what impact this will have on ou
 <p><%= label_tag 'impact' %>
 <%= select :risk, :impact, Risk::IMPACT %><br/>
 How bad the impact will be.<br/>
-1 is low. in general this is a risk we don't care too much about.<br/>
-2 is medium. This is serious<br/>
-3 is very bad for our business. This could lead to the project stop.
+1 is low. In general this is a risk we don't care too much about.<br/>
+2 is medium. We have to follow it and we should plan preventive actions.<br/>
+3 is bad for the project. This is serious and we have to take actions.<br/>
+4 is very bad for our business. This could lead to the project stop.<br/>
 </p>
 
 <p><%= label_tag 'actions and status' %>
