@@ -1,7 +1,7 @@
 # import SDP
 # input: make a SDP export to Excel and save it as *.csv
-#Identifiant,Phase/Activité/Tâche,Charge,,,Cons.,Reste à Faire,Charge révisée,Charge acquise,Itération,Collab,Solde,,
-#,,estimée,Ré-évaluée,Attribuée,,,,,,,Initial,Ré-évalué,Attribué
+#Identifiant,Phase/ActivitÃ©/TÃ¢che,Charge,,,Cons.,Reste Ã  Faire,Charge rÃ©visÃ©e,Charge acquise,ItÃ©ration,Collab,Solde,,
+#,,estimÃ©e,RÃ©-Ã©valuÃ©e,AttribuÃ©e,,,,,,,Initial,RÃ©-Ã©valuÃ©,AttribuÃ©
 
 require 'csv'
 
