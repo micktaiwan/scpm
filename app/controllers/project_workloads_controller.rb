@@ -39,6 +39,11 @@ class ProjectWorkloadsController < ApplicationController
     end
   end
 
+  def hide_lines_with_no_workload
+    on = (params[:on].to_s != 'false')
+    session['workload_hide_lines_with_no_workload'] = on
+    get_common_data(session['workload_project_id'])
+  end
 private
 
   def get_common_data(project_id)

@@ -1,6 +1,39 @@
-- hide lines with no workload in next 8 weeks ne marche pas dans la vue projet
 - Les milestones sont en dur dans le formulaire de création de miletones pour un projet et c'est du GPP, pas du EC
+- MFM: la somme des jours travaillés est fausse dans la vue projet si des gens sont affichés plusieurs fois
+- D'ailleurs le total des gens est faux aussi
 
+- A rapprocher de la fonction de regroupement par personne demandée par Mario
+ - L'object workload doit être intelligent et regrouper les personnes
+ - Cela ne changera pas le fait que l'affichage des lignes est indépendant
+ - MFM: import automatique de tâches (pas de SDP, d'une PP5 par exemple, ou bien non il faut remplir SDP d'abord ?)
+ - MMP: Faire apparaitre les phases projets (utiliser le planning) au dessus du PDC, sinon c'est pas pratique
+ - FLA: Sous projet (pour les lots)
+ - MMP: Associer des sous projets aux lignes et classer par sous projet
+ -   association des tâches SDP (plusieurs tâches par ligne, sinon on recrée un SDP, il faut que ça reste un PDC: on  associe plusieurs tâches à une seule ligne PDC et la ligne somme les RAF des tâches SDP associées)
+-    Faire une migration pour EISQ (en fait pour tous les projets)
+-  MMP: regrouper les lignes par personne dans la vue par projet
+-    Bien y réfléchir avec 1) l'association des tâches SDP et 2) les sous projects (pour les lots pour eTLB par exemple)
+-  MFM: rajouter alerte rouge si pas de code TO projet dans la liste des projets (configurable / EISQ)
+-  MFM: workloads: filtre par projet: checkboxes (multiple sélection) au lieu de combobox
+-  MFM: faire une page de workload graphique par projet avec toutes les personnes
+-  DAM: trouver un moyen de voir les jours en trop par rapport au RAF mais qu'on veut garder (une "simulation")
+-    Faire un boutton "dupliquer" (ou "baseliner") et faire un bandeau ou fond rouge
+-  CCA: voir les semaines passées (avec option, le cacher à EISQ)
+-  MFM: faire des dates d'entrée et sorties pour les personnes sinon le plan de charge consolidé est faussé
+-  MFM: sélection du projet (en plus de la company) pour la consolidation staffing par projet
+-  MFM: donner une description des mecs (stagaire, ET) ou carrément avec le profile de coût associé pour faire la PP4 :)
+-  MFM: option pour ne pas sommer les jours. La mettre transverse si c'est une personne ? Ou tout simplement hors projet ?  (d'un stagiaire par exemple => FangLi qui n'était pas prévue) dans le PDC vue par projet
+-  MFM: faire une option de sorter par charge, company, type de personne (archi, dev), alpahabétique ou virtual dans la vue par projet
+-  MFM: dans la conso rajouter le nom de la company en colonne (option pour EISQ)
+-  MFM: quand rajout d'une nouvelle ligne par projet, mettre le titre "NEW LINE" ou autre...
+-  MFM: ya EISQ qui traine dans le titre de l'onglet (favicon)
+-  MFM: changer le lien report bug (là ça pointe sur EISQ)
+-  DAM: Pour les activités hors projets factory dans le BAM, je vous propose de les limiter à liste suivante :
+- Holidays (déjà fait)
+- AVV Factory (Avant Vente pour la Factory)
+- Others (Activités hors Factory)
+- MFM: Les lignes d'AVV sont dans un projet aujourd'hui (ex: Socle AVV) mais les sommes ne sont pas faites (c'est normal)
+-    sommer les lignes d'AVV dans la conso pour avoir une idée du total ?
 Seeds
 =====
 
