@@ -602,7 +602,7 @@ class WorkloadsController < ApplicationController
     session['workload_hide_lines_with_no_workload'] = on
     @workload = Workload.new(session['workload_person_id'], {:hide_lines_with_no_workload => on})
     @person   = @workload.person
-    get_workload_data(person_id)
+    get_workload_data(@person.id)
     get_last_sdp_update
     get_suggested_requests(@workload)
     get_sdp_tasks(@workload)
