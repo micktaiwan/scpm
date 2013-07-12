@@ -598,16 +598,9 @@ class WorkloadsController < ApplicationController
   end
 
   def hide_lines_with_no_workload
-    on = params[:on].to_s == 'true'
+    on = (params[:on].to_s != 'false')
     session['workload_hide_lines_with_no_workload'] = on
-    @workload = Workload.new(session['workload_person_id'], {:hide_lines_with_no_workload => on})
-    @person   = @workload.person
-    get_workload_data(@person.id)
-    get_last_sdp_update
-    get_suggested_requests(@workload)
-    get_sdp_tasks(@workload)
-    get_chart
-    get_sdp_gain(@workload.person)
+    get_workload_data(session['workload_person_id'])
   end
 
   def hide_wmenu
@@ -618,7 +611,8 @@ class WorkloadsController < ApplicationController
 private
 
   def get_workload_data(person_id)
-    @workload = Workload.new(person_id)
+    @workload = Workload.new(person_id, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
+    @person   = @workload.person
     get_last_sdp_update
     get_suggested_requests(@workload)
     get_chart
