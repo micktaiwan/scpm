@@ -9,9 +9,9 @@ class ProjectWorkloadsController < ApplicationController
     session['workload_project_id'] = project_id if project_id
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     if @projects.size > 0
-      session['workload_project_id'] = @projects.first.id if not session['workload_project_id'] or !Project.find(session['workload_project_id'])
+      session['workload_project_id'] = @projects.first.id if not session['workload_project_id'] or not Project.find_by_id(session['workload_project_id'])
     else
-      render(:text=>'no project at all...')
+      render(:text=>'no project at all... Please create a new project.')
       return
     end
     get_common_data(session['workload_project_id'])
