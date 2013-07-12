@@ -1,11 +1,7 @@
 <tr<% if conso_line.person.is_virtual==1 %> style="background-color:#FDA"<% end %>>
-  <td width="100">
+  <td width="200">
     <a href='/workloads/?person_id=<%= conso_line.person.id %>'>
-      <% if conso_line.person.is_virtual==1 %>
-        <%= conso_line.person.name %>
-      <% else %>
-        <%= conso_line.person.short_name %>
-      <% end %>
+      <%= conso_line.person.name %>
     <a>
   </td>
   <td align="center"><%= conso_line.remain_to_plan_days %></td>
