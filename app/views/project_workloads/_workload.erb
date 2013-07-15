@@ -24,7 +24,7 @@
   </b>
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
-
+  <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person()'}) %> group by person
   <!-- WORKLOAD GENERAL -->
   <h2><%= @workload.name %></h2>
   <table id="workload_table">

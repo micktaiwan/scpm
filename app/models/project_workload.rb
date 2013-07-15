@@ -40,6 +40,8 @@ class ProjectWorkload
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines   = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+    
+    persons   = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"], :group => "person_id")
     if options[:group_by_person] == true
       
 
@@ -93,7 +95,7 @@ class ProjectWorkload
       @days << filled_number(iteration.day,2) + "-" + filled_number((iteration+4.days).day,2)
       @wl_weeks << w
       @weeks    << iteration.cweek
-      @opens    << 5*wl_lines.size - WlHoliday.get_from_week(w)*wl_lines.size
+      @opens    << 5*persons.size - WlHoliday.get_from_week(w)*persons.size
       if @wl_lines.size > 0
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
