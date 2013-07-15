@@ -1,4 +1,4 @@
-- Les milestones sont en dur dans le formulaire de création de miletones pour un projet et c'est du GPP, pas du EC
+- Les milestones sont en dur dans le formulaire de création de milestones pour un projet et c'est du GPP, pas du EC
 - MFM: la somme des jours travaillés est fausse dans la vue projet si des gens sont affichés plusieurs fois
 - D'ailleurs le total des gens est faux aussi
 
