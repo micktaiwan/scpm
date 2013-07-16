@@ -1,6 +1,7 @@
+- Page vue par projet (peut etre d'autres pages) : problème dans workload_common.js => popup null
 - Les milestones sont en dur dans le formulaire de création de miletones pour un projet et c'est du GPP, pas du EC
-- MFM: la somme des jours travaillés est fausse dans la vue projet si des gens sont affichés plusieurs fois
-- D'ailleurs le total des gens est faux aussi
+
+- Group by person : highlight / supprimer "delete" / no edit + fausses valeurs pour Init / Gain / Rem.
 
 - A rapprocher de la fonction de regroupement par personne demandée par Mario
  - L'object workload doit être intelligent et regrouper les personnes

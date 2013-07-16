@@ -114,6 +114,9 @@ tr.wl_opens {
 .wl_line_400 {
   background: #FDD;
   }
+.wl_line_500 {
+  background: #EEE;
+  }
 
 .wl_line_virtual {
   background: #FFD;
