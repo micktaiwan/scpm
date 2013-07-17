@@ -6,6 +6,15 @@ function hide_lines_with_no_workload() {
     });
 }
 
+function group_by_person() {
+  document.body.style.cursor = 'wait';
+  $('loading').show();
+  new Ajax.Request('/project_workloads/group_by_person', {
+    parameters: { on: $('group_by_person').checked }
+    });
+}
+
+
 function hide_workload_menu() {
   $('wmenu').toggle();
   new Ajax.Request('/project_workloads/hide_wmenu', {

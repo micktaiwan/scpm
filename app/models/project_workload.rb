@@ -39,7 +39,28 @@ class ProjectWorkload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines   = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+    @wl_lines           = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+    group_by_persons    = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"], :group => "person_id")
+    if options[:group_by_person] == true
+      persons_id    = []
+      groupBy_lines = []
+      @wl_lines.each do |l|
+        # Create a line for each person
+        if not(persons_id.include? l.person_id)
+          persons_id.push(l.person_id)
+          line = WlLine.new
+          init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads)
+          groupBy_lines << line
+        else # Update each line for each person with multiple lines
+          selected_line           = groupBy_lines.select{|t| t.person_id==l.person_id}.first
+          selected_line.name      += " + " + l.name
+          selected_line.wl_type   = ApplicationController::WL_LINE_CONSOLIDATED
+          selected_line.wl_loads  << l.wl_loads
+        end
+      end
+      @wl_lines = groupBy_lines
+    end
+
     Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     # no need to add a holidays line in DB for a projet. It will be consolidated at running time
     #if options[:only_holidays] != true
@@ -89,7 +110,7 @@ class ProjectWorkload
       @days << filled_number(iteration.day,2) + "-" + filled_number((iteration+4.days).day,2)
       @wl_weeks << w
       @weeks    << iteration.cweek
-      @opens    << 5*wl_lines.size - WlHoliday.get_from_week(w)*wl_lines.size
+      @opens    << 5*group_by_persons.size - WlHoliday.get_from_week(w)*group_by_persons.size
       if @wl_lines.size > 0
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
@@ -217,6 +238,15 @@ class ProjectWorkload
       end
     }
     return lines_by_streams
+  end
+
+private
+
+  def init_line(line, name, person_id, wl_type, wl_loads)
+    line.name = name
+    line.person= Person.find_by_id(person_id)
+    line.wl_type = wl_type
+    line.wl_loads = wl_loads
   end
 
 end

@@ -45,11 +45,17 @@ class ProjectWorkloadsController < ApplicationController
     get_common_data(session['workload_project_id'])
   end
 
+  def group_by_person
+    on = (params[:on].to_s != 'false')
+    session['group_by_person'] = on
+    get_common_data(session['workload_project_id'])
+  end
+
 private
 
   def get_common_data(project_id)
     @people   = Person.find(:all, :conditions=>"has_left=0", :order=>"name").map {|p| ["#{p.name}", p.id]}
-    @workload = ProjectWorkload.new(project_id, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
+    @workload = ProjectWorkload.new(project_id, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
   end
 
   def require_admin

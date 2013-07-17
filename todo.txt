@@ -1,15 +1,15 @@
 - Les milestones sont en dur dans le formulaire de création de milestones pour un projet et c'est du GPP, pas du EC
-- MFM: la somme des jours travaillés est fausse dans la vue projet si des gens sont affichés plusieurs fois
-- D'ailleurs le total des gens est faux aussi
-
+- Page vue par projet (peut etre d'autres pages) : problème dans workload_common.js => popup null
+- Les milestones sont en dur dans le formulaire de création de miletones pour un projet et c'est du GPP, pas du EC
+- Group by person : highlight / supprimer "delete" / no edit + fausses valeurs pour Init / Gain / Rem.
 - A rapprocher de la fonction de regroupement par personne demandée par Mario
  - L'object workload doit être intelligent et regrouper les personnes
  - Cela ne changera pas le fait que l'affichage des lignes est indépendant
- - MFM: import automatique de tâches (pas de SDP, d'une PP5 par exemple, ou bien non il faut remplir SDP d'abord ?)
- - MMP: Faire apparaitre les phases projets (utiliser le planning) au dessus du PDC, sinon c'est pas pratique
- - FLA: Sous projet (pour les lots)
- - MMP: Associer des sous projets aux lignes et classer par sous projet
- -   association des tâches SDP (plusieurs tâches par ligne, sinon on recrée un SDP, il faut que ça reste un PDC: on  associe plusieurs tâches à une seule ligne PDC et la ligne somme les RAF des tâches SDP associées)
+- MFM: import automatique de tâches (pas de SDP, d'une PP5 par exemple, ou bien non il faut remplir SDP d'abord ?)
+- MMP: Faire apparaitre les phases projets (utiliser le planning) au dessus du PDC, sinon c'est pas pratique
+- FLA: Sous projet (pour les lots)
+- MMP: Associer des sous projets aux lignes et classer par sous projet
+- association des tâches SDP (plusieurs tâches par ligne, sinon on recrée un SDP, il faut que ça reste un PDC: on  associe plusieurs tâches à une seule ligne PDC et la ligne somme les RAF des tâches SDP associées)
 -    Faire une migration pour EISQ (en fait pour tous les projets)
 -  MMP: regrouper les lignes par personne dans la vue par projet
 -    Bien y réfléchir avec 1) l'association des tâches SDP et 2) les sous projects (pour les lots pour eTLB par exemple)

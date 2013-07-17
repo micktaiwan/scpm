@@ -15,12 +15,14 @@ class WlLine < ActiveRecord::Base
   end
 
   def load_by_week(week)
-    WlLoad.find(:first, :conditions=>["wl_line_id=? and week=?", self.id, week])
+    #WlLoad.find(:first, :conditions=>["wl_line_id=? and week=?", self.id, week])
+    self.wl_loads.select {|l| l.week==week.to_i}
   end
 
   def get_load_by_week(week)
-    l = load_by_week(week)
-    l ? l.wlload : 0.0
+    loads = load_by_week(week)
+    return 0.0 if loads.size == 0
+    loads.map {|l| l.wlload}.inject(:+)
   end
 
   def get_load_object_by_week(week)
