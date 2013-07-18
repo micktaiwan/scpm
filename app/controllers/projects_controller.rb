@@ -353,7 +353,6 @@ class ProjectsController < ApplicationController
 
   def associate
     request = Request.find(params[:id].to_i)
-    #puts request.id
     if request.project.add_responsible_from_rmt_user(request.assigned_to)
       render(:text=>"")
     else
@@ -408,10 +407,12 @@ class ProjectsController < ApplicationController
     cut_id  = session[:cut].to_i
     cut     = Project.find(cut_id)
     from_id = cut.project_id
-    cut.project_id = to_id
-    cut.save
-    cut.update_status
-    Project.find(from_id).update_status if from_id
+    if to_id != cut_id # TODO: do more and verify circular references
+      cut.project_id = to_id
+      cut.save
+      cut.update_status
+      Project.find(from_id).update_status if from_id
+    end
     render(:nothing=>true)
   end
 
