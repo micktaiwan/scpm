@@ -90,6 +90,12 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     sdp.import
+
+    if APP_CONFIG['use_multiple_projects_sdp_export']
+      redirect_to '/tools/mp_sdp_index'
+      return
+    end
+
     sdp_index_prepare
     sdp_index_by_type_prepare
     SdpImportLog.create(
@@ -107,11 +113,7 @@ class ToolsController < ApplicationController
     @sdp_index_by_mail = true    
     body = render_to_string(:action=>'sdp_index', :layout=>false) + render_to_string(:action=>'sdp_index_by_type', :layout=>false)
     Mailer::deliver_mail(APP_CONFIG['sdp_import_email_destination'],APP_CONFIG['sdp_import_email_object'],"<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
-    if APP_CONFIG['use_multiple_projects_sdp_export']
-      redirect_to '/tools/mp_sdp_index'
-    else
-      redirect_to '/tools/sdp_index'
-    end
+    redirect_to '/tools/sdp_index'
   end
 
   def sdp_index_prepare

@@ -26,9 +26,9 @@ class ProjectWorkloadsController < ApplicationController
   end
 
   def add_a_person
-    person_id   = params[:person_id]
-    project_id  = params[:project_id]
-    found       = WlLine.find_by_person_id_and_project_id(person_id, project_id)
+    person_id     = params[:person_id]
+    project_id    = params[:project_id]
+    found         = WlLine.find_by_person_id_and_project_id(person_id, project_id)
     person_name   = Person.find(person_id).name
     project_name  = Project.find(project_id).name
     if not found
@@ -44,6 +44,7 @@ class ProjectWorkloadsController < ApplicationController
     session['workload_hide_lines_with_no_workload'] = on
     get_common_data(session['workload_project_id'])
   end
+
 
   def group_by_person
     on = (params[:on].to_s != 'false')
