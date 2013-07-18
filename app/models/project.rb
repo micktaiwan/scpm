@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   belongs_to  :lifecycle_object, :class_name=>"Lifecycle", :foreign_key=>"lifecycle_id"
   belongs_to  :qr_qwr, :class_name=>"Person"
   belongs_to  :suite_tag
-  has_many    :projects,    :order=>'name', :dependent=>:destroy
+  has_many    :projects,    :order=>'name'#, :dependent=>:destroy
   has_many    :requests,    :dependent=>:nullify
   has_many    :statuses,    :dependent => :destroy, :order=>"created_at desc"
   has_many    :actions,     :dependent => :destroy, :order=>"progress"
@@ -182,32 +182,33 @@ class Project < ActiveRecord::Base
   end
 
   # return true if the project or subprojects request is assigned to one of the users in the array
-  def has_responsible(user_id_arr)
+  def has_responsible(user_id_arr, trace=[])
+    trace << self
     user_id_arr.each { |id|
       return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
       self.projects.each { |p|
-        return true if p.has_responsible(user_id_arr)
+        if trace.include?(p)
+          Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}"
+          self.projects.delete(p)
+          next
+        end
+        return true if p.has_responsible(user_id_arr, trace)
         }
       }
-
-    #self.requests.each { |r|
-    #  next if not r.resp or r.status == "cancelled" or r.resolution =='ended' or r.resolution =='aborted'
-    #  return true if user_arr.include?(r.resp.id)
-    #  }
-    #self.projects.each { |p|
-    #  return true if p.has_responsible(user_arr)
-    #  }
-
     return false
   end
 
   # recursively get the last status date
-  def last_status_date
+  def last_status_date(trace=[])
+    trace << self
     status  = get_status
     date    = nil
     date    = status.updated_at if status
     self.projects.each { |p|
-      sub   = p.last_status_date
+      if trace.include?(p)
+        raise "circular reference between projects #{p.name} and #{self.name}"
+      end
+      sub   = p.last_status_date(trace)
       date  = sub if sub and (date == nil or sub > date)
       }
     return date
