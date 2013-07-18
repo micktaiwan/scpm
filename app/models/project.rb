@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   belongs_to  :lifecycle_object, :class_name=>"Lifecycle", :foreign_key=>"lifecycle_id"
   belongs_to  :qr_qwr, :class_name=>"Person"
   belongs_to  :suite_tag
-  has_many    :projects,    :order=>'name'#, :dependent=>:destroy
+  has_many    :projects,    :order=>'name', :dependent=>:destroy
   has_many    :requests,    :dependent=>:nullify
   has_many    :statuses,    :dependent => :destroy, :order=>"created_at desc"
   has_many    :actions,     :dependent => :destroy, :order=>"progress"
