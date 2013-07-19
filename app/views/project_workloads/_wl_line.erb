@@ -6,12 +6,14 @@
 <tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type_by_project %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
 	<td align='center'>
+    <% if wl_line.wl_type != 500 %>
     <%= link_to_remote(image_tag("delete.gif"),
      {:url=>{:controller=>'workloads', :action=>'destroy_line', :id=>wl_line.id},
      :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
      :success=>"$('wl_line_#{wl_line.id}').fade();",
      :failure=>"alert('Error:' + request.responseText);"},
      {:class=>"delete"}) %>
+     <% end %>
   </td>
 
 	<!-- Request link -->
@@ -69,7 +71,7 @@
       wlload = wlload == 0.0 ? '' : wlload
     %>
 
-    <% if wl_line.wl_type == 500 %>
+    <% if wl_line.wl_type == 500 %> 
       <%= wlload %>
     <% else %>
       <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' workload_milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}', '1');return false;") %>
