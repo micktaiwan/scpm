@@ -41,45 +41,54 @@ class ProjectWorkload
     cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines           = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
     group_by_persons    = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"], :group => "person_id")
-    nb = 0
+
     if options[:group_by_person] == true
       persons_id    = []
       groupBy_lines = []
+      person_task = Hash.new 
       @wl_lines.each_with_index do |l, index|
-        if l.sdp_task
-          nb += 1
-        end
+        
         # Create a line for each person
         if not(persons_id.include? l.person_id)
           persons_id.push(l.person_id)
           if person_is_uniq?(l.person_id, @wl_lines)
             # person appears only once in all the lines
             groupBy_lines << l
-            
           else
-            # person appears seveal times in all the lines
+            # person appears several times in all the lines
             line = WlLine.new
             init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads)
             groupBy_lines << line
-
           end
+          person_task[l.person_id] = Hash.new if l.sdp_task
+          person_task[l.person_id][:initial]   = l.sdp_task.initial   if l.sdp_task.initial
+          person_task[l.person_id][:balancei]  = l.sdp_task.balancei  if l.sdp_task.balancei
+          person_task[l.person_id][:remaining] = l.sdp_task.remaining if l.sdp_task.remaining
+        
         else # Update each line for each person with multiple lines
-          selected_line           = groupBy_lines.select{|t| t.person_id==l.person_id}.first
+          selected_line           =  groupBy_lines.select{|t| t.person_id==l.person_id}.first
           selected_line.name      += " + " + l.name
-          selected_line.wl_type   = ApplicationController::WL_LINE_CONSOLIDATED
-          selected_line.wl_loads  += l.wl_loads  
-          if selected_line.sdp_task
-            
-            if  l.sdp_task 
-              #selected_line.sdp_task.initial   += l.sdp_task.initial
-              #selected_line.sdp_task.balancei  += l.sdp_task.balancei
-              #selected_line.sdp_task.remaining += l.sdp_task.remaining
-              
-            else
-              #selected_line.sdp_task = SDPTask.select{|sdp| sdp==l.sdp_task}.first
-              #selected_line.sdp_task.initial   = l.sdp_task.initial
-              #selected_line.sdp_task.balancei  = l.sdp_task.balancei
-              #selected_line.sdp_task.remaining = l.sdp_task.remaining
+          selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
+          selected_line.wl_loads  += l.wl_loads
+
+          if l.sdp_task 
+
+            if ( l.sdp_task.initial  and person_task[l.person_id][:initial])
+              person_task[l.person_id][:initial]   += l.sdp_task.initial
+            elsif l.sdp_task.initial
+              person_task[l.person_id][:initial]   = l.sdp_task.initial
+            end
+
+            if (l.sdp_task.balancei  and person_task[l.person_id][:balancei])
+              person_task[l.person_id][:balancei]  += l.sdp_task.balancei 
+            elsif l.sdp_task.balancei
+              person_task[l.person_id][:balancei]  = l.sdp_task.balancei
+            end
+
+            if (l.sdp_task.remaining and person_task[l.person_id][:remaining])
+              person_task[l.person_id][:remaining] += l.sdp_task.remaining 
+            elsif l.sdp_task.remaining
+              person_task[l.person_id][:remaining] = l.sdp_task.remaining
             end
           end
 
@@ -89,20 +98,11 @@ class ProjectWorkload
       groupBy_lines.select { |l| l.wl_type == 500}.each_with_index { |l, index| 
         l.id = max + index
         }
+
       @wl_lines = groupBy_lines
     end 
-    #raise "nb=#{nb}"
-    #result = []
-    #for l in @wl_lines
-     # if l.sdp_task
-     #   result << l.sdp_task.initial 
-     #   result  << " | "
-     # end
-    #end
-      #l.sdp_task.initial
-      #l.sdp_task.balancei
-      #l.sdp_task.remaining
-    #raise "#{result}"
+
+
     Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     # no need to add a holidays line in DB for a projet. It will be consolidated at running time
     #if options[:only_holidays] != true
@@ -197,11 +197,18 @@ class ProjectWorkload
       @total          += l.sum.to_f if l.wl_type <= 200 or l.wl_type == 500
       @planned_total  += @line_sums[l.id][:sums] if (l.wl_type <= 200 or l.wl_type == 500) and @line_sums[l.id][:sums]
 
-      if l.sdp_task
+      if (options[:group_by_person] == true)
+        @sdp_remaining_total        += person_task[l.person_id][:remaining] if person_task[l.person_id][:remaining]
+        @line_sums[l.id][:init]      = person_task[l.person_id][:initial]   if person_task[l.person_id][:initial] 
+        @line_sums[l.id][:balance]   = person_task[l.person_id][:balancei]  if person_task[l.person_id][:balancei]
+        @line_sums[l.id][:remaining] = person_task[l.person_id][:remaining] if person_task[l.person_id][:remaining]
+
+      elsif (options[:group_by_person] == false) and (l.sdp_task)
         @sdp_remaining_total += l.sdp_task.remaining.to_f
-        @line_sums[l.id][:init]      = l.sdp_task.initial
+        @line_sums[l.id][:init]      = l.sdp_task.initial 
         @line_sums[l.id][:balance]   = l.sdp_task.balancei
         @line_sums[l.id][:remaining] = l.sdp_task.remaining
+
       elsif l.request
         s = round_to_hour(l.request.workload2)
         if l.request.sdp == "No"
