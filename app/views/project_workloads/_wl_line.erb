@@ -6,12 +6,14 @@
 <tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type_by_project %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
 	<td align='center'>
+    <% if wl_line.wl_type != 500 %>
     <%= link_to_remote(image_tag("delete.gif"),
      {:url=>{:controller=>'workloads', :action=>'destroy_line', :id=>wl_line.id},
      :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
      :success=>"$('wl_line_#{wl_line.id}').fade();",
      :failure=>"alert('Error:' + request.responseText);"},
      {:class=>"delete"}) %>
+     <% end %>
   </td>
 
 	<!-- Request link -->

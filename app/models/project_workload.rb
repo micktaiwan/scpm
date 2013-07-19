@@ -301,7 +301,7 @@ private
     line.wl_type = wl_type
     line.wl_loads = wl_loads
   end
-  def person_is_uniq?(person_id, lines)
+    def person_is_uniq?(person_id, lines)
     ( lines.select{|l| l.person_id == person_id}.size ) == 1
   end
 end
