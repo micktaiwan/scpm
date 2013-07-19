@@ -28,9 +28,14 @@ class ProjectWorkload
     :nb_current_lines,# total after filters
     :nb_hidden_lines  # difference (filtered)
 
-  # options can have
+  # options can be
   # :only_holidays => true
+  # :group_by_person => true
+  # :hide_lines_with_no_workload => true
   def initialize(project_id, options = {})
+    #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
+    #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
+    #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
     @project    = Project.find(project_id)
     raise "could not find this project by id '#{project_id}'" if not @project
     @project_id = project_id
@@ -42,68 +47,49 @@ class ProjectWorkload
     @wl_lines           = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
     group_by_persons    = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"], :group => "person_id")
 
-    if options[:group_by_person] == true
+    if options[:group_by_person]
       persons_id    = []
       groupBy_lines = []
       person_task = Hash.new 
       @wl_lines.each_with_index do |l, index|
-        
-        # Create a line for each person
-        if not(persons_id.include? l.person_id)
+        if not(persons_id.include? l.person_id) # Create a line for each person
           persons_id.push(l.person_id)
-          if person_is_uniq?(l.person_id, @wl_lines)
-            # person appears only once in all the lines
+          if person_is_uniq?(l.person_id, @wl_lines) # person appears only once in all the lines
             groupBy_lines << l
-          else
-            # person appears several times in all the lines
+          else # person appears several times in all the lines
             line = WlLine.new
             init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads)
             groupBy_lines << line
           end
-          person_task[l.person_id] = Hash.new if l.sdp_task
-          person_task[l.person_id][:initial]   = l.sdp_task.initial   if l.sdp_task.initial
-          person_task[l.person_id][:balancei]  = l.sdp_task.balancei  if l.sdp_task.balancei
-          person_task[l.person_id][:remaining] = l.sdp_task.remaining if l.sdp_task.remaining
-        
+          person_task[l.person_id] = Hash.new
+          if l.sdp_task
+            person_task[l.person_id][:initial]   = l.sdp_task.initial   #if l.sdp_task.initial
+            person_task[l.person_id][:balancei]  = l.sdp_task.balancei  #if l.sdp_task.balancei
+            person_task[l.person_id][:remaining] = l.sdp_task.remaining #if l.sdp_task.remaining
+          else
+            person_task[l.person_id][:initial]   = 0.0
+            person_task[l.person_id][:balancei]  = 0.0
+            person_task[l.person_id][:remaining] = 0.0
+          end        
         else # Update each line for each person with multiple lines
           selected_line           =  groupBy_lines.select{|t| t.person_id==l.person_id}.first
-          selected_line.name      += " + " + l.name
+          #selected_line.name      += " + " + l.name
           selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
           selected_line.wl_loads  += l.wl_loads
-
           if l.sdp_task 
-
-            if ( l.sdp_task.initial  and person_task[l.person_id][:initial])
-              person_task[l.person_id][:initial]   += l.sdp_task.initial
-            elsif l.sdp_task.initial
-              person_task[l.person_id][:initial]   = l.sdp_task.initial
-            end
-
-            if (l.sdp_task.balancei  and person_task[l.person_id][:balancei])
-              person_task[l.person_id][:balancei]  += l.sdp_task.balancei 
-            elsif l.sdp_task.balancei
-              person_task[l.person_id][:balancei]  = l.sdp_task.balancei
-            end
-
-            if (l.sdp_task.remaining and person_task[l.person_id][:remaining])
-              person_task[l.person_id][:remaining] += l.sdp_task.remaining 
-            elsif l.sdp_task.remaining
-              person_task[l.person_id][:remaining] = l.sdp_task.remaining
-            end
+            person_task[l.person_id][:initial]   += l.sdp_task.initial
+            person_task[l.person_id][:balancei]  += l.sdp_task.balancei
+            person_task[l.person_id][:remaining] += l.sdp_task.remaining
           end
-
         end
       end
       max = groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max + 1
       groupBy_lines.select { |l| l.wl_type == 500}.each_with_index { |l, index| 
         l.id = max + index
         }
-
       @wl_lines = groupBy_lines
     end 
 
-
-    Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     # no need to add a holidays line in DB for a projet. It will be consolidated at running time
     #if options[:only_holidays] != true
     #  @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :project_id=>project_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
@@ -130,14 +116,14 @@ class ProjectWorkload
     @days       = []
     month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
     month_displayed = false
-    nb = 0
+    week_counter = 0
     iteration                   = from_day
     @next_month_percents        = 0.0
     @three_next_months_percents = 0.0
     @sum_availability           = 0
     while true
       w = wlweek(iteration) # output: year + week ("201143")
-      break if w > farest_week or nb > 36*4
+      break if w > farest_week or week_counter > 36*4
       # months
       if Date::ABBR_MONTHNAMES[(iteration+4.days).month] != month
         month = Date::ABBR_MONTHNAMES[(iteration+4.days).month]
@@ -170,13 +156,13 @@ class ProjectWorkload
           avail_percent = 0
         end
         @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>avail_percent}
-        @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
-        @next_month_percents += percent if nb < 5
-        @three_next_months_percents += percent if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
+        @sum_availability += (avail==0 ? '' : avail).to_f if week_counter<=8
+        @next_month_percents += percent if week_counter < 5
+        @three_next_months_percents += percent if week_counter >= 0 and week_counter < 0+12 # if week_counter >= 5 and week_counter < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
-      iteration = iteration + 7.days
-      nb += 1
+      iteration    += 7.days
+      week_counter += 1
     end
     @next_month_percents        = (@next_month_percents / 5).round
     @three_next_months_percents = (@three_next_months_percents / 12).round
@@ -197,13 +183,13 @@ class ProjectWorkload
       @total          += l.sum.to_f if l.wl_type <= 200 or l.wl_type == 500
       @planned_total  += @line_sums[l.id][:sums] if (l.wl_type <= 200 or l.wl_type == 500) and @line_sums[l.id][:sums]
 
-      if (options[:group_by_person] == true)
-        @sdp_remaining_total        += person_task[l.person_id][:remaining] if person_task[l.person_id][:remaining]
-        @line_sums[l.id][:init]      = person_task[l.person_id][:initial]   if person_task[l.person_id][:initial] 
-        @line_sums[l.id][:balance]   = person_task[l.person_id][:balancei]  if person_task[l.person_id][:balancei]
-        @line_sums[l.id][:remaining] = person_task[l.person_id][:remaining] if person_task[l.person_id][:remaining]
+      if (options[:group_by_person])
+        @sdp_remaining_total        += person_task[l.person_id][:remaining]
+        @line_sums[l.id][:init]      = person_task[l.person_id][:initial]
+        @line_sums[l.id][:balance]   = person_task[l.person_id][:balancei]
+        @line_sums[l.id][:remaining] = person_task[l.person_id][:remaining]
 
-      elsif (options[:group_by_person] == false) and (l.sdp_task)
+      elsif l.sdp_task
         @sdp_remaining_total += l.sdp_task.remaining.to_f
         @line_sums[l.id][:init]      = l.sdp_task.initial 
         @line_sums[l.id][:balance]   = l.sdp_task.balancei
@@ -242,7 +228,7 @@ class ProjectWorkload
     wl_lines.select{|l| l.wl_type==100}.map{|l| l.get_load_by_week(w)}.inject(:+)
   end
 
-  # not DRY (already in application_controller)
+  # FIXME: not DRY (already in application_controller)
   def round_to_hour(f)
     (f/0.125).round*0.125
   end
@@ -251,57 +237,16 @@ class ProjectWorkload
     @sdp_remaining_total - @planned_total
   end
 
-  # Will generate a hash of hash following this format :
-  # lines_by_stream[stream.id]["prev"]        = Previsional total (QS + Spider) for this stream
-  # lines_by_stream[stream.id]["sum"]         = Total of imputation (QS + Spider) for this stream
-  # lines_by_stream[stream.id]["qs_prev"]     = Previsional load for QS of this stream
-  # lines_by_stream[stream.id]["qs_sum"]      = Total of imputation for QS of this stream
-  # lines_by_stream[stream.id]["spider_prev"] = Previsional load for Spider of this stream
-  # lines_by_stream[stream.id]["spider_sum"]  = Total of imputation for Spider of this stream
-  def get_qr_qwr_wl_lines_by_streams
-    lines_by_streams = Hash.new
-    # Create arrays for each stream
-    Stream.find(:all).each do |s|
-      # lines_by_streams[s.id]                = Array.new
-      lines_by_streams[s.id]                = Hash.new
-      lines_by_streams[s.id]["prev"]        = 0
-      lines_by_streams[s.id]["sum"]         = 0
-      lines_by_streams[s.id]["qs_prev"]     = 0
-      lines_by_streams[s.id]["spider_prev"] = 0
-      lines_by_streams[s.id]["qs_sum"]      = 0
-      lines_by_streams[s.id]["spider_sum"]  = 0
-    end
-    # Add wl_lines to corresponding stream
-    wl_lines.each { |wl|
-      if wl.project
-        # Stream
-        s = Stream.find_with_workstream(wl.project.workstream)
-        # Previsional
-        if(wl.wl_type == 110)
-          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]    + (wl.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f)
-          lines_by_streams[s.id]["qs_prev"]     = lines_by_streams[s.id]["qs_prev"] + (wl.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f)
-          lines_by_streams[s.id]["qs_sum"]      = lines_by_streams[s.id]["qs_sum"]  + wl.planned_sum.to_f
-          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]     + wl.planned_sum.to_f
-        elsif(wl.wl_type == 120)
-          lines_by_streams[s.id]["prev"]        = lines_by_streams[s.id]["prev"]        + (wl.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f)
-          lines_by_streams[s.id]["spider_prev"] = lines_by_streams[s.id]["spider_prev"] + (wl.project.calcul_spider_previsional.to_f * APP_CONFIG['spider_load'].to_f)
-          lines_by_streams[s.id]["spider_sum"]  = lines_by_streams[s.id]["spider_sum"]  + wl.planned_sum.to_f
-          lines_by_streams[s.id]["sum"]         = lines_by_streams[s.id]["sum"]         + wl.planned_sum.to_f
-        end
-      end
-    }
-    return lines_by_streams
-  end
-
 private
 
   def init_line(line, name, person_id, wl_type, wl_loads)
-    line.name = name
-    line.person= Person.find_by_id(person_id)
-    line.wl_type = wl_type
+    line.name     = "(grouped)" #name
+    line.person   = Person.find_by_id(person_id)
+    line.wl_type  = wl_type
     line.wl_loads = wl_loads
   end
-    def person_is_uniq?(person_id, lines)
+  
+  def person_is_uniq?(person_id, lines)
     ( lines.select{|l| l.person_id == person_id}.size ) == 1
   end
 end
