@@ -30,15 +30,16 @@ class WlLine < ActiveRecord::Base
     l ? l : 0
   end
 
-  def planned_sum
-    #wl_loads.inject(0) { |sum, l| sum+l.wlload} # did not take into account the fact that we should not sum the past
-    return 0 if wl_loads.size == 0
-    today_week            = wlweek(Date.today)
-    wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
+  # sum all loads, past and futur
+  def sum
+    wl_loads.map {|l| l.wlload}.inject(:+)
   end
 
-  def sum
-    wl_loads.inject(0) { |sum, l| sum+l.wlload}
+  # sum only the futur
+  def planned_sum
+    return 0 if self.wl_loads.size == 0
+    today_week = wlweek(Date.today)
+    self.wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
   end
 
   def near_workload
