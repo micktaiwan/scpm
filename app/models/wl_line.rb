@@ -32,7 +32,8 @@ class WlLine < ActiveRecord::Base
 
   # sum all loads, past and futur
   def sum
-    wl_loads.map {|l| l.wlload}.inject(:+)
+    return 0 if self.wl_loads.size == 0
+    self.wl_loads.map {|l| l.wlload}.inject(:+)
   end
 
   # sum only the futur
