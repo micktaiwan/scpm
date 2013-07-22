@@ -63,9 +63,9 @@ class ProjectWorkload
           end
           person_task[l.person_id] = Hash.new
           if l.sdp_task
-            person_task[l.person_id][:initial]   = l.sdp_task.initial   #if l.sdp_task.initial
-            person_task[l.person_id][:balancei]  = l.sdp_task.balancei  #if l.sdp_task.balancei
-            person_task[l.person_id][:remaining] = l.sdp_task.remaining #if l.sdp_task.remaining
+            person_task[l.person_id][:initial]   = l.sdp_task.initial.to_f   #if l.sdp_task.initial
+            person_task[l.person_id][:balancei]  = l.sdp_task.balancei.to_f  #if l.sdp_task.balancei
+            person_task[l.person_id][:remaining] = l.sdp_task.remaining.to_f #if l.sdp_task.remaining
           else
             person_task[l.person_id][:initial]   = 0.0
             person_task[l.person_id][:balancei]  = 0.0
@@ -77,9 +77,9 @@ class ProjectWorkload
           selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
           selected_line.wl_loads  += l.wl_loads
           if l.sdp_task 
-            person_task[l.person_id][:initial]   += l.sdp_task.initial
-            person_task[l.person_id][:balancei]  += l.sdp_task.balancei
-            person_task[l.person_id][:remaining] += l.sdp_task.remaining
+            person_task[l.person_id][:initial]   += l.sdp_task.initial.to_f
+            person_task[l.person_id][:balancei]  += l.sdp_task.balancei.to_f
+            person_task[l.person_id][:remaining] += l.sdp_task.remaining.to_f
           end
         end
       end
@@ -219,6 +219,7 @@ class ProjectWorkload
     end
 
   end
+
 
   def col_sum(w, wl_lines)
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)

@@ -4,6 +4,7 @@ class ProjectWorkloadsController < ApplicationController
   before_filter :require_login
   before_filter :require_admin
 
+
   def index
     project_id = params[:project_id]
     session['workload_project_id'] = project_id if project_id
@@ -17,8 +18,28 @@ class ProjectWorkloadsController < ApplicationController
     get_common_data(session['workload_project_id'])
     @projects = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
     change_workload(session['workload_project_id'])
+     # respond_to do |format|
+     #   format.csv { render :csv => @projects}
+     # end
   end
 
+
+  def xml_export
+    # begin
+    #   @xml = Builder::XmlMarkup.new(:indent => 1) #Builder::XmlMarkup.new(:target => $stdout, :indent => 1)
+      
+      
+
+    #   headers['Content-Type']         = "application/vnd.ms-excel"
+    #   headers['Content-Disposition']  = 'attachment; filename="porject_workload.xls"'
+    #   headers['Cache-Control']        = ''
+    #   render(:layout=>false)
+    # rescue Exception => e
+    #   render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
+    # end
+  end
+
+  
   def change_workload(project_id=nil)
     project_id  = params[:project_id] if !project_id
     session['workload_project_id'] = project_id
