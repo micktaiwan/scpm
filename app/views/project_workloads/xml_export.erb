@@ -1,0 +1,92 @@
+<%=
+@xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
+@xml.Workbook({
+  'xmlns'      => "urn:schemas-microsoft-com:office:spreadsheet",
+  'xmlns:o'    => "urn:schemas-microsoft-com:office:office",
+  'xmlns:x'    => "urn:schemas-microsoft-com:office:excel",
+  'xmlns:html' => "http://www.w3.org/TR/REC-html40",
+  'xmlns:ss'   => "urn:schemas-microsoft-com:office:spreadsheet"
+  }) do
+
+
+  @xml.Worksheet 'ss:Name' => 'project_workloads' do
+    @xml.Table do
+      # Columns width
+      for width in ['200','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50'] do
+        @xml.Column nil, {'ss:Width' => width}
+      end
+
+       
+       @xml.Row  do
+         for column in @months do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+         end
+       end
+        @xml.Row  do
+         for column in @weeks do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+         end
+       end
+        @xml.Row  do
+         for column in @days do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+         end
+       end
+        @xml.Row  do
+         for column in @opens do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+         end
+       end
+        @xml.Row  do
+         for column in @ctotals do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+         end
+       end
+        @xml.Row  do
+         for column in @sums_percents do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+         end
+       end
+        @xml.Row  do
+         for column in @availability do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+         end
+       end
+       for line in @lines
+        @xml.Row  do
+          for column in line do
+           @xml.Cell do
+             @xml.Data column, 'ss:Type' => 'String'
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+           end
+          end
+        end
+       end
+
+    end
+  end
+
+
+end
+%>

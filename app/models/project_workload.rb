@@ -86,6 +86,8 @@ class ProjectWorkload
       max = groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max + 1
       groupBy_lines.select { |l| l.wl_type == 500}.each_with_index { |l, index| 
         l.id = max + index
+        # les loads groupés doivent avoir leur propre wl_line_id 
+        #l.wl_loads.wl_line_id = l.id  
         }
       @wl_lines = groupBy_lines
     end 
@@ -101,6 +103,7 @@ class ProjectWorkload
     else
       @displayed_lines = @wl_lines
     end
+    
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
@@ -217,8 +220,10 @@ class ProjectWorkload
         @line_sums[l.id][:balancei]  = 0.0
       end
     end
-
   end
+
+
+
 
 
   def col_sum(w, wl_lines)
