@@ -73,6 +73,17 @@ class Stream < ActiveRecord::Base
     return historyCounters.count
   end
 
+  def get_consumed_qs_counter_for_request(request)
+    historyCounters = HistoryCounter.find(:all,:conditions => ["request_id = ? and concerned_status_id IS NOT NULL", request.id])
+    return historyCounters.count
+  end
+
+  def get_consumed_spider_counter_for_request(request)
+    historyCounters = HistoryCounter.find(:all,:conditions => ["request_id = ? and concerned_spider_id IS NOT NULL", request.id])
+    return historyCounters.count
+  end
+
+
   #               #
   # Total tickets #
   #               #
@@ -158,9 +169,16 @@ class Stream < ActiveRecord::Base
     # loop on requests of this stream by date
     self.requests.sort_by{|r| r.start_date }.each { |r|
        if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity) and (r.assigned_to == author.rmt_user))
+          
+          # Sum spider total
           sum_spider_count_for_request = sum_spider_count_for_request + r.counter_log.counter_value
           last_request = r
-          if (next_spider_counter_incrementation <= sum_spider_count_for_request)
+
+          # History by request
+          total_consumed_on_request = get_consumed_spider_counter_for_request(r)
+
+          # Check if the user is on this request (about counters) and check if the request was not consumed (by anothers users)
+          if ((next_spider_counter_incrementation <= sum_spider_count_for_request) and (total_consumed_on_request < r.counter_log.counter_value))
             found = true
             break
           end
@@ -184,9 +202,16 @@ class Stream < ActiveRecord::Base
     # loop on requests of this stream by date
     self.requests.sort_by{|r| r.start_date }.each { |r|
        if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity) and (r.assigned_to == author.rmt_user))
+          
+          # Sum counter total
           sum_qs_count_for_request = sum_qs_count_for_request + r.counter_log.counter_value
           last_request = r
-          if (next_qs_counter_incrementation <= sum_qs_count_for_request)
+
+          # History by request
+          total_consumed_on_request = get_consumed_qs_counter_for_request(r)
+
+          # Check if the user is on this request (about counters) and check if the request was not consumed (by anothers users)
+          if ((next_qs_counter_incrementation <= sum_qs_count_for_request) and (total_consumed_on_request < r.counter_log.counter_value))
             found = true
             break
           end
