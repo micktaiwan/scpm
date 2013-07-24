@@ -184,9 +184,11 @@
             else
               style = {'ss:StyleID' => 's13'} if (column_pos==column_planned)
               style = {'ss:StyleID' => 's5'} if (column==0 and column_pos!=column_planned)
-              style = {'ss:StyleID' => 's7'} if (line[column_line_name-1] == "(grouped)")
-              style = {'ss:StyleID' => 's8'} if (line[column_line_name-1] == "(grouped)" and column==0 and column_pos!=column_planned)
-              style = {'ss:StyleID' => 's9'} if (line[column_line_name-1] == "(grouped)" and column_pos==column_planned)
+              if (line[column_line_name-1] == "(grouped)")
+                style = {'ss:StyleID' => 's7'} 
+                style = {'ss:StyleID' => 's8'} if (column==0 and column_pos!=column_planned)
+                style = {'ss:StyleID' => 's9'} if (column_pos==column_planned)
+              end
             end
             @xml.Cell(style) do
               column_type = 'Number'
