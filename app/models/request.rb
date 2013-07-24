@@ -786,7 +786,7 @@ class Request < ActiveRecord::Base
   # return the corresponding project milestones for this request
   def milestones
     names = self.milestone_names
-    return [] if !names or !self.project
+    return [] if !names or !self.project # 24-Jul-2013: I fixed a bug, but why would this request not have a projet when displaying the projet page ?
     self.project.milestones.select{|m| names.include?(m.name)}
   end
 
