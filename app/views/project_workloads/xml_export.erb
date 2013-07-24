@@ -12,27 +12,27 @@
     @xml.Style 'ss:ID' => 's1', 'ss:Name' => 'Project_Name' do
       @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
       @xml.Alignment 'ss:Horizontal' => 'Center'
-      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF"
     end
 
     @xml.Style 'ss:ID' => 's2', 'ss:Name' => 'Planned' do
       @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'1'
-      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF"
     end
 
     @xml.Style 'ss:ID' => 's3', 'ss:Name' => 'Grey' do
       @xml.Font 'ss:Color'=>'#848484', 'ss:Bold'=>'0'
-      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF"
     end
 
     @xml.Style 'ss:ID' => 's4', 'ss:Name' => 'Green' do
       @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'0'
-      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF"
     end
 
     @xml.Style 'ss:ID' => 's5', 'ss:Name' => 'Zero' do
       @xml.Font 'ss:Color'=>'#BDBDBD', 'ss:Bold'=>'0'
-      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF"
     end
   end
 
@@ -97,13 +97,9 @@
           end
        end
         @xml.Row 'ss:StyleID' => 's4' do
-          column_pos = 0
           for column in @sums_percents do
-            column_pos += 1
             @xml.Cell do
-              column_type = 'Number'
-              column_type = 'String' if (column_pos==1)
-              @xml.Data column, 'ss:Type' => column_type
+              @xml.Data column, 'ss:Type' => 'String'
              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
           end
