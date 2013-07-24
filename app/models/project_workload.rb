@@ -46,7 +46,7 @@ class ProjectWorkload
     cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines           = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
     group_by_persons    = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"], :group => "person_id")
-
+    # i=0
     if options[:group_by_person]
       persons_id    = []
       groupBy_lines = []
@@ -58,14 +58,15 @@ class ProjectWorkload
             groupBy_lines << l
           else # person appears several times in all the lines
             line = WlLine.new
+            workloads = l.wl_loads
             init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads)
             groupBy_lines << line
           end
           person_task[l.person_id] = Hash.new
           if l.sdp_task
-            person_task[l.person_id][:initial]   = l.sdp_task.initial   #if l.sdp_task.initial
-            person_task[l.person_id][:balancei]  = l.sdp_task.balancei  #if l.sdp_task.balancei
-            person_task[l.person_id][:remaining] = l.sdp_task.remaining #if l.sdp_task.remaining
+            person_task[l.person_id][:initial]   = l.sdp_task.initial.to_f   #if l.sdp_task.initial
+            person_task[l.person_id][:balancei]  = l.sdp_task.balancei.to_f  #if l.sdp_task.balancei
+            person_task[l.person_id][:remaining] = l.sdp_task.remaining.to_f #if l.sdp_task.remaining
           else
             person_task[l.person_id][:initial]   = 0.0
             person_task[l.person_id][:balancei]  = 0.0
@@ -77,9 +78,9 @@ class ProjectWorkload
           selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
           selected_line.wl_loads  += l.wl_loads
           if l.sdp_task 
-            person_task[l.person_id][:initial]   += l.sdp_task.initial
-            person_task[l.person_id][:balancei]  += l.sdp_task.balancei
-            person_task[l.person_id][:remaining] += l.sdp_task.remaining
+            person_task[l.person_id][:initial]   += l.sdp_task.initial.to_f
+            person_task[l.person_id][:balancei]  += l.sdp_task.balancei.to_f
+            person_task[l.person_id][:remaining] += l.sdp_task.remaining.to_f
           end
         end
       end
@@ -101,6 +102,7 @@ class ProjectWorkload
     else
       @displayed_lines = @wl_lines
     end
+    
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
@@ -217,8 +219,11 @@ class ProjectWorkload
         @line_sums[l.id][:balancei]  = 0.0
       end
     end
-
   end
+
+
+
+
 
   def col_sum(w, wl_lines)
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)

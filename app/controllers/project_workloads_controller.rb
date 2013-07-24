@@ -4,6 +4,7 @@ class ProjectWorkloadsController < ApplicationController
   before_filter :require_login
   before_filter :require_admin
 
+
   def index
     project_id = params[:project_id]
     session['workload_project_id'] = project_id if project_id
@@ -17,8 +18,88 @@ class ProjectWorkloadsController < ApplicationController
     get_common_data(session['workload_project_id'])
     @projects = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
     change_workload(session['workload_project_id'])
+     # respond_to do |format|
+     #   format.csv { render :csv => @projects}
+     # end
   end
 
+
+  def xml_export
+    begin
+      @xml = Builder::XmlMarkup.new(:indent => 1)
+
+      @workload = ProjectWorkload.new(session['workload_project_id'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+      
+      # MONTHS EXPORT
+      @months = ["#{@workload.name}", "", "", "","",""]
+      for i in @workload.months
+        @months << i
+      end
+      
+      # WEEKS EXPORT
+      @weeks = ["","","","","",""]
+      for i in @workload.weeks
+        @weeks << i
+      end
+
+      # DAYS EXPORT
+      @days = ["","Init.","Gain","Rem.","Planned","Total"]
+      for i in @workload.days
+        @days << i
+      end
+
+      # OPENS EXPORT
+      @opens = ["Nb of worked days","","","","",""]
+      for i in @workload.opens
+        @opens << i
+      end
+
+      # CTOTALS EXPORT
+      @ctotals = ["Total","","","","",""]
+      for i in @workload.ctotals
+        @ctotals << i[:value]
+      end
+
+      # SUMS / PERCENTS EXPORT
+      @sums_percents = ["Sums / Percents","",""] << @workload.sdp_remaining_total
+      @sums_percents << @workload.planned_total
+      @sums_percents << @workload.total
+      for i in @workload.percents
+        @sums_percents << i[:value]
+      end
+
+      # AVAILABILITY EXPORT
+      @availability = ["Availability (Sum for the 2 next months)","","",""] << @workload.sum_availability
+      @availability << ""
+      for i in @workload.availability
+        @availability << i[:value]
+      end
+
+      # WORKLOADS EXPORT
+      @lines =[]
+      for l in @workload.wl_lines
+        line = []
+        line << l.person.name
+        line << @workload.line_sums[l.id][:init]
+        line << @workload.line_sums[l.id][:balance]
+        line << @workload.line_sums[l.id][:remaining]
+        line << @workload.line_sums[l.id][:sums]
+        line << l.sum
+        for week in @workload.wl_weeks
+          workload = l.get_load_by_week(week)
+          line << workload
+        end
+         @lines << line
+      end
+
+      headers['Content-Type']         = "application/vnd.ms-excel"
+      headers['Content-Disposition']  = 'attachment; filename="project_workload.xls"'
+      headers['Cache-Control']        = ''
+      render(:layout=>false)
+    end
+  end
+
+  
   def change_workload(project_id=nil)
     project_id  = params[:project_id] if !project_id
     session['workload_project_id'] = project_id
