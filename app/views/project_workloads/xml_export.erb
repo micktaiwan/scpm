@@ -97,13 +97,9 @@
           end
        end
         @xml.Row 'ss:StyleID' => 's4' do
-          column_pos = 0
           for column in @sums_percents do
-            column_pos += 1
             @xml.Cell do
-              column_type = 'Number'
-              column_type = 'String' if (column_pos==1)
-              @xml.Data column, 'ss:Type' => column_type
+              @xml.Data column, 'ss:Type' => 'String'
              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
           end
