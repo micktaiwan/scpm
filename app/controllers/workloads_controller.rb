@@ -121,12 +121,15 @@ class WorkloadsController < ApplicationController
     @workloads = @workloads.sort_by {|w| [-w.person.is_virtual, w.next_month_percents, w.three_next_months_percents, w.person.name]}
     @totals       = []
     @cap_totals   = []
+    @chart_totals       = []
+    @chart_cap_totals   = []
     @avail_totals = []
     size          = @workloads.size
     if size == 0
       render :layout => false
       return
     end
+    chart_size          = @workloads.select{|w| w.person.is_virtual==0}.size
 
     # to plan
     @totals << (@workloads.inject(0) { |sum,w| sum += w.remain_to_plan_days })
@@ -147,31 +150,33 @@ class WorkloadsController < ApplicationController
     # per weeks
     @workloads.first.weeks.each_with_index do |tmp,i|
       @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:precise]} / size).round
+      @chart_totals << (@workloads.inject(0) { |sum,w| w.person.is_virtual==1 ? 0.0 : sum += w.percents[i][:precise]} / chart_size).round
       @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
+      @chart_cap_totals << (@workloads.inject(0) { |sum,w| w.person.is_virtual==1 ? 0.0 : sum += cap(w.percents[i][:precise])} / chart_size).round
       @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.availability[i][:avail]})
     end
 
     # workload chart
-    chart = GoogleChart::LineChart.new('1000x300', "Workload", false)
-    realmax     = [@totals[4..-1].max, @cap_totals[4..-1].max].max
+    chart = GoogleChart::LineChart.new('1000x300', "Workload (without virtual people)", false)
+    realmax     = [@chart_totals.max, @chart_cap_totals.max].max
     high_limit  = 150.0
     max         = realmax > high_limit ? high_limit : realmax
     high_limit  = high_limit > max ? max : high_limit
-    cap_serie   = @cap_totals[4..-1].map { |p| p <= max ? p : max}
-    noncap_serie = @totals[4..-1].map { |p| p <= max ? p : max}
+    cap_serie   = @chart_cap_totals.map { |p| p <= max ? p : max}
+    noncap_serie = @chart_totals.map { |p| p <= max ? p : max}
     chart.data "capped", cap_serie, 'ff0000'
     chart.data "non capped", noncap_serie, '0000ff'
-    #chart.add_labels @cap_totals[3..-1]
+    #chart.add_labels @chart_cap_totals
     chart.axis :y, :range => [0,max], :font_size => 10, :alignment => :center
     chart.axis :x, :labels => @workloads.first.months, :font_size => 10, :alignment => :center
     chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>0, :data_point_index=>-1, :pixel_size=>8
     chart.shape_marker :circle, :color=>'3333ff', :data_set_index=>1, :data_point_index=>-1, :pixel_size=>8
-    @cap_totals[4..-1].each_with_index do |p,index|
+    @chart_cap_totals.each_with_index do |p,index|
       if p > high_limit
         chart.shape_marker :circle, :color=>'333333', :data_set_index=>0, :data_point_index=>index, :pixel_size=>8
       end
     end
-    @totals[4..-1].each_with_index do |p,index|
+    @chart_totals.each_with_index do |p,index|
       if p > high_limit
         chart.shape_marker :circle, :color=>'ff3333', :data_set_index=>1, :data_point_index=>index, :pixel_size=>8
       end

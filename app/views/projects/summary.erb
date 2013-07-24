@@ -482,7 +482,8 @@ end
         @xml.Row(style) do
           for column in @stream_column_array do
             @xml.Cell do
-              @xml.Data p[column], 'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+              @xml.Data p[column], 'ss:Type' => 'String';
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
           end
         end
