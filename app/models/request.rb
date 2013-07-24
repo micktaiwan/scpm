@@ -786,7 +786,7 @@ class Request < ActiveRecord::Base
   # return the corresponding project milestones for this request
   def milestones
     names = self.milestone_names
-    return [] if !names
+    return [] if !names or !self.project
     self.project.milestones.select{|m| names.include?(m.name)}
   end
 
