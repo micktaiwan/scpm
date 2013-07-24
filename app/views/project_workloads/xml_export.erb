@@ -7,7 +7,34 @@
   'xmlns:html' => "http://www.w3.org/TR/REC-html40",
   'xmlns:ss'   => "urn:schemas-microsoft-com:office:spreadsheet"
   }) do
+  @xml.Styles do
 
+    @xml.Style 'ss:ID' => 's1', 'ss:Name' => 'Project_Name' do
+      @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
+      @xml.Alignment 'ss:Horizontal' => 'Center'
+      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+    end
+
+    @xml.Style 'ss:ID' => 's2', 'ss:Name' => 'Planned' do
+      @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'1'
+      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+    end
+
+    @xml.Style 'ss:ID' => 's3', 'ss:Name' => 'Grey' do
+      @xml.Font 'ss:Color'=>'#848484', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+    end
+
+    @xml.Style 'ss:ID' => 's4', 'ss:Name' => 'Green' do
+      @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+    end
+
+    @xml.Style 'ss:ID' => 's5', 'ss:Name' => 'Zero' do
+      @xml.Font 'ss:Color'=>'#BDBDBD', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Bold'=>'0'
+    end
+  end
 
   @xml.Worksheet 'ss:Name' => 'project_workloads' do
     @xml.Table do
@@ -16,13 +43,15 @@
         @xml.Column nil, {'ss:Width' => width}
       end
 
-       
-       @xml.Row  do
+        
+       @xml.Row do
          for column in @months do
-           @xml.Cell do
-             @xml.Data column, 'ss:Type' => 'String'
-             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-           end
+          style = {}
+          style = {'ss:StyleID' => 's1'} if (column==@months.first)
+          @xml.Cell(style) do
+            @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
          end
        end
         @xml.Row  do
@@ -35,58 +64,85 @@
        end
         @xml.Row  do
          for column in @days do
-           @xml.Cell do
-             @xml.Data column, 'ss:Type' => 'String'
-             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-           end
+          style = {}
+          style = {'ss:StyleID' => 's2'} if (column=="Planned")
+          @xml.Cell(style) do
+            @xml.Data column, 'ss:Type' => 'String'
+            @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+          end
          end
        end
-        @xml.Row  do
-         for column in @opens do
-           @xml.Cell do
-             @xml.Data column, 'ss:Type' => 'String'
-             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-           end
-         end
-       end
-        @xml.Row  do
-         for column in @ctotals do
-           @xml.Cell do
-             @xml.Data column, 'ss:Type' => 'String'
-             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-           end
-         end
-       end
-        @xml.Row  do
-         for column in @sums_percents do
-           @xml.Cell do
-             @xml.Data column, 'ss:Type' => 'String'
-             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-           end
-         end
-       end
-        @xml.Row  do
-         for column in @availability do
-           @xml.Cell do
-             @xml.Data column, 'ss:Type' => 'String'
-             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-           end
-         end
-       end
-       for line in @lines
-        @xml.Row  do
-          for column in line do
-           @xml.Cell do
-             @xml.Data column, 'ss:Type' => 'String'
-             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+        @xml.Row 'ss:StyleID' => 's3' do
+          column_pos = 0
+          for column in @opens do
+            column_pos += 1
+            @xml.Cell do
+              column_type = 'Number'
+              column_type = 'String' if (column_pos<7)
+              @xml.Data column, 'ss:Type' => column_type
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
            end
           end
+       end
+        @xml.Row 'ss:StyleID' => 's4' do
+          column_pos = 0
+          for column in @ctotals do
+            column_pos += 1
+            @xml.Cell do
+              column_type = 'Number'
+              column_type = 'String' if (column_pos<7)
+              @xml.Data column, 'ss:Type' => column_type
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
+       end
+        @xml.Row 'ss:StyleID' => 's4' do
+          column_pos = 0
+          for column in @sums_percents do
+            column_pos += 1
+            @xml.Cell do
+              column_type = 'Number'
+              column_type = 'String' if (column_pos==1)
+              @xml.Data column, 'ss:Type' => column_type
+             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
+       end
+        @xml.Row 'ss:StyleID' => 's4' do
+          column_pos = 0
+          for column in @availability do
+            column_pos += 1
+            @xml.Cell do
+              column_type = 'Number'
+              column_type = 'String' if (column_pos==1)
+              @xml.Data column, 'ss:Type' => column_type
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+            end
+          end
+       end
+
+       @xml.Row
+
+       for line in @lines
+        @xml.Row  do
+          column_pos = 0
+          for column in line do
+            column_pos += 1
+            style = {}
+            style = {'ss:StyleID' => 's4'} if (column_pos==5)
+            style = {'ss:StyleID' => 's5'} if (column==0 and column_pos!=5)
+             @xml.Cell(style) do
+              column_type = 'Number'
+              column_type = 'String' if (column_pos==1)
+              @xml.Data column, 'ss:Type' => column_type
+              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+             end
+            end
         end
        end
 
     end
   end
-
 
 end
 %>

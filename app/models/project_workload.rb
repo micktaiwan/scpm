@@ -46,7 +46,7 @@ class ProjectWorkload
     cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines           = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
     group_by_persons    = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"], :group => "person_id")
-
+    # i=0
     if options[:group_by_person]
       persons_id    = []
       groupBy_lines = []
@@ -58,6 +58,7 @@ class ProjectWorkload
             groupBy_lines << l
           else # person appears several times in all the lines
             line = WlLine.new
+            workloads = l.wl_loads
             init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads)
             groupBy_lines << line
           end
@@ -86,8 +87,6 @@ class ProjectWorkload
       max = groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max + 1
       groupBy_lines.select { |l| l.wl_type == 500}.each_with_index { |l, index| 
         l.id = max + index
-        # les loads groupés doivent avoir leur propre wl_line_id 
-        #l.wl_loads.wl_line_id = l.id  
         }
       @wl_lines = groupBy_lines
     end 

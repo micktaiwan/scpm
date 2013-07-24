@@ -31,7 +31,7 @@ class ProjectWorkloadsController < ApplicationController
       @workload = ProjectWorkload.new(session['workload_project_id'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
       
       # MONTHS EXPORT
-      @months = ["", "", "", "","",""]
+      @months = ["#{@workload.name}", "", "", "","",""]
       for i in @workload.months
         @months << i
       end
@@ -86,19 +86,14 @@ class ProjectWorkloadsController < ApplicationController
         line << @workload.line_sums[l.id][:sums]
         line << l.sum
         for week in @workload.wl_weeks
-          workload = ""
-          for wl in l.wl_loads
-             if (wl.week == week) #and (wl.wl_line_id == l.id) A revoir
-              workload = wl.wlload
-             end
-          end
+          workload = l.get_load_by_week(week)
           line << workload
         end
          @lines << line
       end
 
       headers['Content-Type']         = "application/vnd.ms-excel"
-      headers['Content-Disposition']  = 'attachment; filename="porject_workload.xls"'
+      headers['Content-Disposition']  = 'attachment; filename="project_workload.xls"'
       headers['Cache-Control']        = ''
       render(:layout=>false)
     end
