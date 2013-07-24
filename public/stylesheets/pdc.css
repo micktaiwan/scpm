@@ -150,6 +150,12 @@ tr.wl_opens {
   width: 40px;
   }
 
+.wl_case input.workload_milestone {
+  background: #FAA;
+  border: 0;
+  width: 40px;
+  }
+
 .delete {
   }
 .delete:hover{
