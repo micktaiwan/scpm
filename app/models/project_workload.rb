@@ -1,3 +1,15 @@
+class VirtualWlLine < WlLine
+
+  attr_accessor :projects
+
+  def initialize
+    super
+    @projects = Array.new
+  end
+
+end
+
+
 class ProjectWorkload
 
   include ApplicationHelper
@@ -59,9 +71,9 @@ class ProjectWorkload
           if person_is_uniq?(l.person_id, @wl_lines) # person appears only once in all the lines
             groupBy_lines << l
           else # person appears several times in all the lines
-            line = WlLine.new
+            line = VirtualWlLine.new
             workloads = l.wl_loads
-            init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads)
+            init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads, l.project)
             groupBy_lines << line
           end
           person_task[l.person_id] = Hash.new
@@ -77,6 +89,7 @@ class ProjectWorkload
         else # Update each line for each person with multiple lines
           selected_line           =  groupBy_lines.select{|t| t.person_id==l.person_id}.first
           #selected_line.name      += " + " + l.name
+          selected_line.projects << l.project if not selected_line.projects.include?(l.project)
           selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
           selected_line.wl_loads  += l.wl_loads
           if l.sdp_task 
@@ -223,10 +236,6 @@ class ProjectWorkload
     end
   end
 
-
-
-
-
   def col_sum(w, wl_lines)
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)
   end
@@ -246,11 +255,12 @@ class ProjectWorkload
 
 private
 
-  def init_line(line, name, person_id, wl_type, wl_loads)
+  def init_line(line, name, person_id, wl_type, wl_loads, project)
     line.name     = "(grouped)" #name
     line.person   = Person.find_by_id(person_id)
     line.wl_type  = wl_type
     line.wl_loads = wl_loads
+    line.projects = [project]
   end
   
   def person_is_uniq?(person_id, lines)

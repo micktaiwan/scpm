@@ -8,7 +8,11 @@ class ProjectWorkloadsController < ApplicationController
   def index
     project_ids = params[:project_ids]
     if project_ids
-      session['workload_project_ids'] = project_ids
+      if project_ids.class==Array
+        session['workload_project_ids'] = project_ids # array of strings
+      else
+        session['workload_project_ids'] = [project_ids] # array with one string
+      end
     else
       session['workload_project_ids'] = []
     end

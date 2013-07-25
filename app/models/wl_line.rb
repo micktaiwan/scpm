@@ -65,8 +65,12 @@ class WlLine < ActiveRecord::Base
   end
 
   def project_name
-    if self.project
-      "<a href='/project_workloads/?project_id=#{self.project.id}'>#{self.project.name}</a>"
+    if defined?(self.projects)
+      # this line is a group of line (VirtualWlLine)
+      self.projects.map{ |p| "<a href='/project_workloads/?project_ids=#{p.id}'>#{p.name}</a>" }.join(', ')
+    elsif self.project
+      # this line use standard association to project model
+      "<a href='/project_workloads/?project_ids=#{self.project.id}'>#{self.project.name}</a>"
     else
       "no project"
     end
