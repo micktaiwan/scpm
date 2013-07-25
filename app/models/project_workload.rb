@@ -59,7 +59,8 @@ class ProjectWorkload
     #raise "#{project_ids.join(',')}"
     @names = project_ids.map{ |id| Project.find(id).name}.join(', ')
     @wl_lines           = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
-    group_by_persons    = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond], :include=>["request","sdp_task","project"], :group => "person_id")
+    uniq_person_number = @wl_lines.map{|l| l.person_id}.uniq.size
+    #group_by_persons    = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond], :include=>["request","sdp_task","project"], :group => "person_id")
   
     if options[:group_by_person]
       persons_id    = []
@@ -155,7 +156,7 @@ class ProjectWorkload
       @days << filled_number(iteration.day,2) + "-" + filled_number((iteration+4.days).day,2)
       @wl_weeks << w
       @weeks    << iteration.cweek
-      @opens    << 5*group_by_persons.size - WlHoliday.get_from_week(w)*group_by_persons.size
+      @opens    << 5*uniq_person_number - WlHoliday.get_from_week(w)*uniq_person_number
       if @wl_lines.size > 0
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
