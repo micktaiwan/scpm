@@ -2,14 +2,14 @@ class ProjectWorkload
 
   include ApplicationHelper
 
-  attr_reader :name,  # project's name
+  attr_reader :names,  # projects names
     :weeks,           # arrays of week's names '43', '44', ...
     :wl_weeks,        # array of week ids '201143'
     :months,          # "Oct"
     :days,            # week days display per week: "17-21"
     :opens,           # total of worked days per week (5 - nb of holidays)
     :project,
-    :project_id,
+    :project_ids,
     :wl_lines,        # arrays of loads, all lines (filtered and not filtered)
     :displayed_lines, # only filtered lines
     :line_sums,       # sum of days per line of workload
@@ -32,21 +32,23 @@ class ProjectWorkload
   # :only_holidays => true
   # :group_by_person => true
   # :hide_lines_with_no_workload => true
-  def initialize(project_id, options = {})
+  def initialize(project_ids, options = {})
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
-    @project    = Project.find(project_id)
-    raise "could not find this project by id '#{project_id}'" if not @project
-    @project_id = project_id
-    @name       = @project.name
+    #@project    = Project.find(project_id)
+    #raise "could not find this project by id '#{project_id}'" if not @project
+    #@project_id = project_id
+    #raise "#{project_ids.type}"
 
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines           = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
-    group_by_persons    = WlLine.find(:all, :conditions=>["project_id=?"+cond, project_id], :include=>["request","sdp_task","project"], :group => "person_id")
-    # i=0
+    #raise "#{project_ids.join(',')}"
+    @names = project_ids.map{ |id| Project.find(id).name}.join(', ')
+    @wl_lines           = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+    group_by_persons    = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond], :include=>["request","sdp_task","project"], :group => "person_id")
+  
     if options[:group_by_person]
       persons_id    = []
       groupBy_lines = []
@@ -84,7 +86,7 @@ class ProjectWorkload
           end
         end
       end
-      max = groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max + 1
+      max = groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max || 0 + 1
       groupBy_lines.select { |l| l.wl_type == 500}.each_with_index { |l, index| 
         l.id = max + index
         }
@@ -206,10 +208,10 @@ class ProjectWorkload
           @sdp_remaining_total        += s
           @to_be_validated_in_wl_remaining_total += s
         else
-          r = l.request.sdp_tasks_remaining_sum({:trigram=>@project.trigram})
+          r = l.request.sdp_tasks_remaining_sum()#{:trigram=>@project.trigram})
           #r = s if r == 0.0
-          @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.project.trigram})
-          @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.project.trigram})
+          @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum()#{:trigram=>l.project.trigram})
+          @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum()#{:trigram=>l.project.trigram})
           @line_sums[l.id][:remaining] = r
           @sdp_remaining_total        += r
         end
