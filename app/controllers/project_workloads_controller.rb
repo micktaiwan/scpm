@@ -31,37 +31,37 @@ class ProjectWorkloadsController < ApplicationController
       @workload = ProjectWorkload.new(session['workload_project_id'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
       
       # MONTHS EXPORT
-      @months = ["#{@workload.name}", "", "", "","",""]
+      @months = ["","#{@workload.name}","", "", "", "","",""]
       for i in @workload.months
         @months << i
       end
       
       # WEEKS EXPORT
-      @weeks = ["","","","","",""]
+      @weeks = ["","","","","","","",""]
       for i in @workload.weeks
         @weeks << i
       end
 
       # DAYS EXPORT
-      @days = ["","Init.","Gain","Rem.","Planned","Total"]
+      @days = ["","","","Init.","Gain","Rem.","Planned","Total"]
       for i in @workload.days
         @days << i
       end
 
       # OPENS EXPORT
-      @opens = ["Nb of worked days","","","","",""]
+      @opens = ["","Nb of worked days","","","","","",""]
       for i in @workload.opens
         @opens << i
       end
 
       # CTOTALS EXPORT
-      @ctotals = ["Total","","","","",""]
+      @ctotals = ["","Total","","","","","",""]
       for i in @workload.ctotals
         @ctotals << i[:value]
       end
 
       # SUMS / PERCENTS EXPORT
-      @sums_percents = ["Sums / Percents","",""] << @workload.sdp_remaining_total
+      @sums_percents = ["","Sums / Percents","","",""] << @workload.sdp_remaining_total
       @sums_percents << @workload.planned_total
       @sums_percents << @workload.total
       for i in @workload.percents
@@ -69,7 +69,7 @@ class ProjectWorkloadsController < ApplicationController
       end
 
       # AVAILABILITY EXPORT
-      @availability = ["Availability (Sum for the 2 next months)","","",""] << @workload.sum_availability
+      @availability = ["","Availability (Sum for the 2 next months)","","","",""] << @workload.sum_availability
       @availability << ""
       for i in @workload.availability
         @availability << i[:value]
@@ -77,9 +77,19 @@ class ProjectWorkloadsController < ApplicationController
 
       # WORKLOADS EXPORT
       @lines =[]
+      @virtual= Hash.new
+      line_pos = 0
       for l in @workload.wl_lines
+        line_pos += 1
+        if l.person and l.person.is_virtual == 1
+          @virtual[line_pos] = true
+        else
+          @virtual[line_pos] = false
+        end
         line = []
+        line << l.person.company.name
         line << l.person.name
+        line << l.name
         line << @workload.line_sums[l.id][:init]
         line << @workload.line_sums[l.id][:balance]
         line << @workload.line_sums[l.id][:remaining]
