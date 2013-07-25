@@ -9,6 +9,10 @@
   }) do
   @xml.Styles do
 
+    @xml.Style 'ss:ID' => 's0', 'ss:Name' => 'Default_line' do
+      @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"0"
+      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Pattern'=>'Solid'
+    end
     @xml.Style 'ss:ID' => 's1', 'ss:Name' => 'Project_Name' do
       @xml.Font  'ss:Color'=>'#000000', 'ss:Bold'=>"1"
       @xml.Alignment 'ss:Horizontal' => 'Center'
@@ -32,14 +36,57 @@
 
     @xml.Style 'ss:ID' => 's5', 'ss:Name' => 'Zero' do
       @xml.Font 'ss:Color'=>'#BDBDBD', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF" ,'ss:Pattern'=>'Solid' ###
+    end
+
+    @xml.Style 'ss:ID' => 's6', 'ss:Name' => 'Green_Aligned' do
+      @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'0'
+      @xml.Alignment 'ss:Horizontal' => 'Right'
       @xml.Interior 'ss:Color'=>"#FFFFFF"
     end
+    @xml.Style 'ss:ID' => 's7', 'ss:Name' => 'Grouped' do
+      @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#DDDDDD",'ss:Pattern'=>'Solid'
+    end
+    @xml.Style 'ss:ID' => 's8', 'ss:Name' => 'Grouped_zero' do
+      @xml.Font 'ss:Color'=>'#BDBDBD', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#DDDDDD",'ss:Pattern'=>'Solid'
+    end
+    @xml.Style 'ss:ID' => 's9', 'ss:Name' => 'Grouped_planned' do
+      @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#DDDDDD",'ss:Pattern'=>'Solid'
+    end
+    @xml.Style 'ss:ID' => 's10', 'ss:Name' => 'Virtual' do
+      @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#F5F6CE",'ss:Pattern'=>'Solid'
+    end
+    @xml.Style 'ss:ID' => 's11', 'ss:Name' => 'Virtual_planned' do
+      @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#F5F6CE",'ss:Pattern'=>'Solid'
+    end
+    @xml.Style 'ss:ID' => 's12', 'ss:Name' => 'Virtual_zero' do
+      @xml.Font 'ss:Color'=>'#BDBDBD', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#F5F6CE",'ss:Pattern'=>'Solid'
+    end
+    @xml.Style 'ss:ID' => 's13', 'ss:Name' => 'Green_Solid' do
+      @xml.Font 'ss:Color'=>'#088A08', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#FFFFFF",'ss:Pattern'=>'Solid'
+    end
+
   end
+  column_company   = 1
+  column_persons   = 2
+  column_line_name = 3
+  column_init      = 4
+  column_gain      = 5
+  column_rem       = 6
+  column_planned   = 7
+  column_total     = 8
 
   @xml.Worksheet 'ss:Name' => 'project_workloads' do
     @xml.Table do
       # Columns width
-      for width in ['200','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50'] do
+      for width in ['200','200','70','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50'] do
         @xml.Column nil, {'ss:Width' => width}
       end
 
@@ -78,7 +125,7 @@
             column_pos += 1
             @xml.Cell do
               column_type = 'Number'
-              column_type = 'String' if (column_pos<7)
+              column_type = 'String' if (column_pos <= column_planned)
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
            end
@@ -90,16 +137,22 @@
             column_pos += 1
             @xml.Cell do
               column_type = 'Number'
-              column_type = 'String' if (column_pos<7)
+              column_type = 'String' if (column_pos <= column_planned)
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
           end
        end
         @xml.Row 'ss:StyleID' => 's4' do
+          column_pos = 0
           for column in @sums_percents do
-            @xml.Cell do
-              @xml.Data column, 'ss:Type' => 'String'
+            column_pos += 1
+            style = {'ss:StyleID' => 's6'}
+            style = {'ss:StyleID' => 's4'} if ( column_pos < column_planned+1 )
+            @xml.Cell(style) do
+              column_type = 'String'
+              column_type = 'Number' if (column_pos == column_rem or column_pos == column_planned or column_pos == column_total)
+              @xml.Data column, 'ss:Type' => column_type
              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
           end
@@ -110,35 +163,55 @@
             column_pos += 1
             @xml.Cell do
               column_type = 'Number'
-              column_type = 'String' if (column_pos==1)
+              column_type = 'String' if (column_pos==column_persons or column_pos==column_company or column_pos==column_line_name)
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
           end
        end
-
-       @xml.Row
-
+       line_pos = 0
        for line in @lines
+        line_pos += 1
         @xml.Row  do
           column_pos = 0
           for column in line do
             column_pos += 1
-            style = {}
-            style = {'ss:StyleID' => 's4'} if (column_pos==5)
-            style = {'ss:StyleID' => 's5'} if (column==0 and column_pos!=5)
-             @xml.Cell(style) do
+            style = {'ss:StyleID' => 's0'}
+            if @virtual[line_pos]
+              style = {'ss:StyleID' => 's10'}
+              style = {'ss:StyleID' => 's11'} if (column_pos==column_planned)
+              style = {'ss:StyleID' => 's12'} if (column==0 and column_pos!=column_planned)
+            else
+              style = {'ss:StyleID' => 's13'} if (column_pos==column_planned)
+              style = {'ss:StyleID' => 's5'} if (column==0 and column_pos!=column_planned)
+              if (line[column_line_name-1] == "(grouped)")
+                style = {'ss:StyleID' => 's7'} 
+                style = {'ss:StyleID' => 's8'} if (column==0 and column_pos!=column_planned)
+                style = {'ss:StyleID' => 's9'} if (column_pos==column_planned)
+              end
+            end
+            @xml.Cell(style) do
               column_type = 'Number'
-              column_type = 'String' if (column_pos==1)
+              column_type = 'String' if (column_pos==column_persons or column_pos==column_company or column_pos==column_line_name)
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
-             end
             end
+          
+          end
         end
        end
 
     end
   end
-
+  # def excel_style
+  #   style = {}
+  #   #style = sssss if line.person and line.person.is_virtual == 1
+  #   style = {'ss:StyleID' => 's4'} if (column_pos==column_planned)
+  #   style = {'ss:StyleID' => 's5'} if (column==0 and column_pos!=column_planned)
+  #   style = {'ss:StyleID' => 's7'} if (line[column_line_name-1] == "(grouped)")
+  #   style = {'ss:StyleID' => 's8'} if (line[column_line_name-1] == "(grouped)" and column==0 and column_pos!=column_planned)
+  #   style = {'ss:StyleID' => 's9'} if (line[column_line_name-1] == "(grouped)" and column_pos==column_planned)
+  #   style
+  # end
 end
 %>

@@ -114,5 +114,7 @@ class WlLine < ActiveRecord::Base
       return self.wl_type
     end
   end
-end
 
+
+
+end
