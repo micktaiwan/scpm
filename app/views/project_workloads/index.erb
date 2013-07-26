@@ -8,9 +8,11 @@
   end
 %>
 
+<%= render(:partial=>'workloads/last_sdp_update') %>
+<%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:600px;") %>
+
 <%= link_to_function('Projects filter', "Effect.toggle('filters','blind');",{:class=>"btnlnk"}) %>
 <%= link_to('Switch to person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
-<%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:700px;") %>
 <% if display and session['workload_project_ids'].size == 1%>
   <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
 <% else %>

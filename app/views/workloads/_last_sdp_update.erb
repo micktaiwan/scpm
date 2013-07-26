@@ -1,0 +1,8 @@
+<% if @last_sdp_update != nil %>
+  <% last_sdp_update_ago_in_words = time_ago_in_words(@last_sdp_update) %>
+  <% last_sdp_update_ago = @last_sdp_update %>
+<% else %>
+  <% last_sdp_update_ago_in_words = "Never" %>
+  <% last_sdp_update_ago = "Never" %>
+<% end %>
+<div class="stats">Last SDP update: <%= last_sdp_update_ago_in_words %> ago (<%= last_sdp_update_ago %>)</div>
