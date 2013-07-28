@@ -26,8 +26,17 @@
   <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person()'}) %> group by person
 
   <%= link_to('XML Export', {:action => 'xml_export'}, {:class=>'btnlnk'}) %>
-
   <br/>
+  
+  <% if @workload.other_planned_days_count > 0 %>
+    <div class="workload_msg"> 
+      <%= @workload.other_planned_days_count %> days on <%= @workload.other_lines_count %> lines
+      are not summed here as their are lines ouside project scope, but there are associated
+      to a selected project. If you do not wish to see this message do not associate a project
+      to a line not related to your project (Holidays are neither counted)
+    </div>
+  <% end %>
+  
   <!-- WORKLOAD GENERAL -->
   <h2><%= @workload.names %></h2>
   <table id="workload_table">

@@ -13,7 +13,7 @@
 
 <%= link_to_function('Projects filter', "Effect.toggle('filters','blind');",{:class=>"btnlnk"}) %>
 <%= link_to('Switch to person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
-<% if display and session['workload_project_ids'].size == 1%>
+<% if display and session['workload_project_ids'].size == 1 %>
   <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
 <% else %>
   <a style="color:#FA5858">(Add a person is disabled when no project or more than one project is selected)</a>
@@ -22,7 +22,6 @@
 
 <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
 
-<%# form_remote_tag(:url=>{:action=>'change_workload'}) do %>
 <% form_tag(:action=>'index') do %>
 <table>
   <tr valign="top"><td>

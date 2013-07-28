@@ -255,3 +255,15 @@ td.availability_5 {
 {
 	display:none;
 }
+
+.workload_msg {
+  float:right;
+  width: 500px;
+  border:1px solid #DDD;
+  background: #FAA;
+  color: #444;
+  margin: 0;
+  padding: 2px 10px 2px 10px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+}

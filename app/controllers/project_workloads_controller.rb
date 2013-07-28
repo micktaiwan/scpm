@@ -32,7 +32,6 @@ class ProjectWorkloadsController < ApplicationController
     @project_options = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
     get_common_data(session['workload_project_ids'])
     get_last_sdp_update
-
   end
 
   def xml_export
@@ -176,7 +175,7 @@ private
     @people   = Person.find(:all, :conditions=>"has_left=0", :order=>"name").map {|p| ["#{p.name}", p.id]}
     @workload = ProjectWorkload.new(project_ids, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
   end
-  
+
   def get_last_sdp_update
     @last_sdp_phase = SDPPhase.find(:first, :order=>'updated_at desc')
     if @last_sdp_phase != nil

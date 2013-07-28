@@ -38,7 +38,10 @@ class ProjectWorkload
     :to_be_validated_in_wl_remaining_total, # total of requests to be validated planned in workloads
     :nb_total_lines,  # total before filters
     :nb_current_lines,# total after filters
-    :nb_hidden_lines  # difference (filtered)
+    :nb_hidden_lines,  # difference (filtered)
+    :other_planned_days_count, # planned days on a red line (OTHER) but still associated to an existing project
+    :other_lines_count # red lines (OTHER) but associated to an existing project
+
 
   # options can be
   # :only_holidays => true
@@ -191,6 +194,8 @@ class ProjectWorkload
     @total                = 0
     @planned_total        = 0
     @sdp_remaining_total  = 0
+    @other_lines_count     = 0
+    @other_planned_days_count = 0
     @to_be_validated_in_wl_remaining_total = 0
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
@@ -198,8 +203,17 @@ class ProjectWorkload
       
       @line_sums[l.id][:sums] = l.planned_sum
       
-      @total          += l.sum.to_f if l.wl_type <= 200 or l.wl_type == 500
-      @planned_total  += @line_sums[l.id][:sums] if (l.wl_type <= 200 or l.wl_type == 500) and @line_sums[l.id][:sums]
+      if l.wl_type <= 200 or l.wl_type == 500
+        @total          += l.sum.to_f
+      else
+        @other_lines_count += 1
+      end
+
+      if (l.wl_type <= 200 or l.wl_type == 500) and @line_sums[l.id][:sums]
+        @planned_total  += @line_sums[l.id][:sums]
+      else
+        @other_planned_days_count += @line_sums[l.id][:sums]
+      end
 
       if (options[:group_by_person])
         @sdp_remaining_total        += person_task[l.person_id][:remaining]
