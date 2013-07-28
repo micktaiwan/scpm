@@ -39,7 +39,7 @@ class ProjectWorkload
     :nb_total_lines,  # total before filters
     :nb_current_lines,# total after filters
     :nb_hidden_lines,  # difference (filtered)
-    :other_planned_days_count, # planned days on a red line (OTHER) but still associated to an existing project
+    :other_days_count, # planned days on a red line (OTHER) but still associated to an existing project
     :other_lines_count # red lines (OTHER) but associated to an existing project
 
 
@@ -70,14 +70,16 @@ class ProjectWorkload
       groupBy_lines = []
       person_task = Hash.new 
       @wl_lines.each_with_index do |l, index|
-        if not(persons_id.include? l.person_id) # Create a line for each person
+        if not persons_id.include?(l.person_id)
           persons_id.push(l.person_id)
-          if person_is_uniq?(l.person_id, @wl_lines) # person appears only once in all the lines
+          # Create a line for each person
+          if person_is_uniq?(l.person_id, @wl_lines)
+            # person appears only once in all the lines
             groupBy_lines << l
-          else # person appears several times in all the lines
+          else
+            # person appears several times in all the lines
             line = VirtualWlLine.new
-            workloads = l.wl_loads
-            init_line(line, l.name, l.person_id, l.wl_type, l.wl_loads, l.project)
+            init_line(line, l.person_id, l.wl_loads, l.wl_type, l.project)
             groupBy_lines << line
           end
           person_task[l.person_id] = Hash.new
@@ -90,22 +92,25 @@ class ProjectWorkload
             person_task[l.person_id][:balancei]  = 0.0
             person_task[l.person_id][:remaining] = 0.0
           end        
-        else # Update each line for each person with multiple lines
-          selected_line           =  groupBy_lines.select{|t| t.person_id==l.person_id}.first
-          #selected_line.name      += " + " + l.name
+        else
+          # Update each line for each person with multiple lines
+          selected_line           =  groupBy_lines.find{|t| t.person_id == l.person_id}
           selected_line.projects << l.project if not selected_line.projects.include?(l.project)
           selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
-          selected_line.wl_loads  += l.wl_loads
-          if l.sdp_task 
+          selected_line.wl_loads += l.wl_loads
+          #Rails.logger.info "===== adding #{l.wl_loads.map{|load| load.wlload}.inject(:+)}"
+          if l.sdp_task
             person_task[l.person_id][:initial]   += l.sdp_task.initial.to_f
             person_task[l.person_id][:balancei]  += l.sdp_task.balancei.to_f
             person_task[l.person_id][:remaining] += l.sdp_task.remaining.to_f
           end
         end
       end
-      max = groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max || 0 + 1
+      max = (groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max || 0) + 1
       groupBy_lines.select { |l| l.wl_type == 500}.each_with_index { |l, index| 
-        l.id = max + index
+        l.id = max + index        
+        #Rails.logger.info "===== ID: #{l.id}"
+        #Rails.logger.info "====== loads: #{l.wl_loads.select{|l| l.week <= 201330}.map{|l| l.wlload }.inject(:+)}"
         }
       @wl_lines = groupBy_lines
     end 
@@ -114,8 +119,7 @@ class ProjectWorkload
     #if options[:only_holidays] != true
     #  @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :project_id=>project_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS) if @wl_lines.size == 0
     #end
-    @nb_total_lines = @wl_lines.size
-    # must be after the preceding test as we suppress line and if wl_lines.size is 0 then we create a new Holidays line
+    @nb_total_lines = @wl_lines.size # must be after the preceding test as we suppress line and if wl_lines.size is 0 then we create a new Holidays line
     if options[:hide_lines_with_no_workload]
       @displayed_lines = @wl_lines.select{|l| l.near_workload > 0}
     else
@@ -135,19 +139,20 @@ class ProjectWorkload
     @percents   = []
     @months     = []
     @days       = []
-    month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
+    month       = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
     month_displayed = false
-    week_counter = 0
+    week_counter    = 0
     iteration                   = from_day
     @next_month_percents        = 0.0
     @three_next_months_percents = 0.0
     @sum_availability           = 0
     while true
-      w = wlweek(iteration) # output: year + week ("201143")
+      w = wlweek(iteration) # output: year + week (201143)
       break if w > farest_week or week_counter > 36*4
       # months
-      if Date::ABBR_MONTHNAMES[(iteration+4.days).month] != month
-        month = Date::ABBR_MONTHNAMES[(iteration+4.days).month]
+      current_month = Date::ABBR_MONTHNAMES[(iteration+4.days).month]
+      if current_month != month
+        month = current_month
         month_displayed = false
       end
       if not month_displayed
@@ -194,27 +199,24 @@ class ProjectWorkload
     @total                = 0
     @planned_total        = 0
     @sdp_remaining_total  = 0
-    @other_lines_count     = 0
-    @other_planned_days_count = 0
+    @other_lines_count        = 0
+    @other_days_count = 0
     @to_be_validated_in_wl_remaining_total = 0
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
       #@line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
       
       @line_sums[l.id][:sums] = l.planned_sum
+      #Rails.logger.info "===== adding #{l.planned_sum} to #{l.id}"
       
       if l.wl_type <= 200 or l.wl_type == 500
         @total          += l.sum.to_f
-      else
-        @other_lines_count += 1
-      end
-
-      if (l.wl_type <= 200 or l.wl_type == 500) and @line_sums[l.id][:sums]
         @planned_total  += @line_sums[l.id][:sums]
       else
-        @other_planned_days_count += @line_sums[l.id][:sums]
+        @other_lines_count += 1
+        @other_days_count += l.sum.to_f
       end
-
+      
       if (options[:group_by_person])
         @sdp_remaining_total        += person_task[l.person_id][:remaining]
         @line_sums[l.id][:init]      = person_task[l.person_id][:initial]
@@ -270,10 +272,10 @@ class ProjectWorkload
 
 private
 
-  def init_line(line, name, person_id, wl_type, wl_loads, project)
-    line.name     = "(grouped)" #name
+  def init_line(line, person_id, wl_loads, wl_type, project)
+    line.name     = "(grouped)"
     line.person   = Person.find_by_id(person_id)
-    line.wl_type  = wl_type
+    line.wl_type  = wl_type # initialysed with the real type of the line, changed later if this person appears more than once
     line.wl_loads = wl_loads
     line.projects = [project]
   end

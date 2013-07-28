@@ -40,7 +40,7 @@ class WlLine < ActiveRecord::Base
   def planned_sum
     return 0 if self.wl_loads.size == 0
     today_week = wlweek(Date.today)
-    self.wl_loads.map{|load| (load.week < today_week ? 0.0 : load.wlload)}.inject(:+)
+    self.wl_loads.map{|l| l.week < today_week ? 0.0 : l.wlload}.inject(:+)
   end
 
   def near_workload

@@ -13,8 +13,17 @@
   <%#= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
   <!--<div id="wmenu" <%#if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<%# end %>>-->
   <!--</div>-->
-
   <br/>
+
+  <% if @workload.other_lines_count > 0 %>
+    <div id="wmsg" class="workload_msg"> 
+      <%= @workload.other_days_count %> days on <%= @workload.other_lines_count %> lines
+      are not summed as their are lines ouside project scope but are associated
+      to a selected project. If you do not wish to see this message do not associate a project
+      to a line not related to your project. <%= link_to_function("hide","$('wmsg').hide()") %>
+    </div>
+  <% end %>
+
   <b>
   <%= @workload.nb_current_lines %> lines
   <% if @workload.nb_hidden_lines > 0 %><strong><%end%>
@@ -24,18 +33,8 @@
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
   <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person()'}) %> group by person
-
   <%= link_to('XML Export', {:action => 'xml_export'}, {:class=>'btnlnk'}) %>
   <br/>
-  
-  <% if @workload.other_planned_days_count > 0 %>
-    <div class="workload_msg"> 
-      <%= @workload.other_planned_days_count %> days on <%= @workload.other_lines_count %> lines
-      are not summed here as their are lines ouside project scope, but there are associated
-      to a selected project. If you do not wish to see this message do not associate a project
-      to a line not related to your project (Holidays are neither counted)
-    </div>
-  <% end %>
   
   <!-- WORKLOAD GENERAL -->
   <h2><%= @workload.names %></h2>
