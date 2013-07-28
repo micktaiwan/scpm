@@ -191,22 +191,27 @@ table.workload_qs_spider_table td.load_values {
 .refresh_conso_table td {
 	padding : 2px 0 2px 2px;
 }
-td.availability_0 {
+
+td.availability {
+  text-align: center;
+}
+
+td.availability.x0 {
 	background-color: #EEEEEE;
 }
-td.availability_1 {
+td.availability.x1 {
 	background-color: #FFFFA0;
 }
-td.availability_2 {
+td.availability.x2 {
 	background-color: #FFEEA0;
 }
-td.availability_3 {
+td.availability.x3 {
 	background-color: #FFD9A1;
 }
-td.availability_4 {
+td.availability.x4 {
 	background-color: #FFA1A1;
 }
-td.availability_5 {
+td.availability.x5 {
 	background-color: #000000;
 	color: #FFFFFF;
 }

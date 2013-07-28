@@ -15,11 +15,11 @@ class Workload
     :line_sums,       # sum of days per line of workload
     :ctotals,         # total days planned per week including not bundle days (holidays and other lines) {:id=>w, :value=>col_sum(w, @wl_lines)}
     :availability,    # total days of availability {:days=>xxx, :percent=>yyy}
-    :sum_availability,# Sum of availabity days for the next 8 weeks
+    :sum_availability,# sum of availabity days for the next 8 weeks
     :cprodtotals,     # total days planned per week on production only {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
     :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
-    :next_month_percents,         # next 5 weeks (including current)
-    :three_next_months_percents,  # next 3 months (was _after_ the 5 coming weeks but changed later including next 5 weeks)
+    :next_month_percents,         # next 5 weeks capped (including current)
+    :three_next_months_percents,  # next 3 months capped (was _after_ the 5 coming weeks but changed later including next 5 weeks)
     :total,                       # total number of days planned (including past weeks)
     :planned_total,               # total number of days planned (current week and after)
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
@@ -116,8 +116,8 @@ class Workload
         end
         @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>avail_percent}
         @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
-        @next_month_percents += percent if nb < 5
-        @three_next_months_percents += percent if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
+        @next_month_percents += [percent, 100].min if nb < 5
+        @three_next_months_percents += [percent, 100].min if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
       iteration = iteration + 7.days
