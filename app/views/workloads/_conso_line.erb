@@ -11,7 +11,7 @@
 	<% indexWeek = 0 %>
 	<% for w in conso_line.percents %>
 		<%
-			w_avail_value = 0
+			w_avail_value = 5-conso_line.opens[indexWeek] # can't just be zero. This takes care of week with less than 5 working days
 			w_avail_value += conso_line.availability[indexWeek][:value].to_f.round
 			w_avail_css = "availability_"+w_avail_value.to_s
 		%>
