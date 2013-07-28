@@ -43,10 +43,10 @@ class WlLine < ActiveRecord::Base
     self.wl_loads.map{|l| l.week < today_week ? 0.0 : l.wlload}.inject(:+)
   end
 
-  def near_workload
+  def near_workload(time=8.week)
     return 0 if wl_loads.size == 0
-    today_week            = wlweek(Date.today)
-    near_week            = wlweek(Date.today + 8.week)
+    today_week = wlweek(Date.today)
+    near_week  = wlweek(Date.today + time)
     wl_loads.map{|load| ( (load.week < today_week or load.week >= near_week)  ? 0.0 : load.wlload)}.inject(:+)
   end
 
@@ -118,7 +118,5 @@ class WlLine < ActiveRecord::Base
       return self.wl_type
     end
   end
-
-
 
 end

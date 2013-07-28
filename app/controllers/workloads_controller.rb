@@ -421,16 +421,6 @@ class WorkloadsController < ApplicationController
     value     = round_to_hour(params[:v].to_f)
     line      = WlLine.find(@line_id)
     id        = view_by==:person ? line.person_id : line.project_id
-    #if view_by == :person
-    #  id = line.person_id
-    #else
-    #  if defined?(line.projects)
-    #    id = line.projects.map{|p| p.id}
-    #  else
-    #    id = [line.project_id]
-    #  end
-    #end
-
     if value == 0.0
       WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
       @value = ""
@@ -453,7 +443,6 @@ class WorkloadsController < ApplicationController
     lsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
     if(type==:project)
       wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{session['workload_project_ids'].join(',')})"])
-      #raise "#{id.size}"
       person_wl_lines = WlLine.find(:all, :conditions=>["person_id=?", line.person.id])
       case_sum       = person_wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
       case_sum       = 0 if !case_sum

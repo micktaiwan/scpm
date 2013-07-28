@@ -51,10 +51,6 @@ class ProjectWorkload
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
-    #@project    = Project.find(project_id)
-    #raise "could not find this project by id '#{project_id}'" if not @project
-    #@project_id = project_id
-    #raise "#{project_ids.type}"
 
     # calculate lines
     cond = ""
@@ -216,7 +212,7 @@ class ProjectWorkload
         @other_lines_count += 1
         @other_days_count += l.sum.to_f
       end
-      
+
       if (options[:group_by_person])
         @sdp_remaining_total        += person_task[l.person_id][:remaining]
         @line_sums[l.id][:init]      = person_task[l.person_id][:initial]
@@ -275,7 +271,7 @@ private
   def init_line(line, person_id, wl_loads, wl_type, project)
     line.name     = "(grouped)"
     line.person   = Person.find_by_id(person_id)
-    line.wl_type  = wl_type # initialysed with the real type of the line, changed later if this person appears more than once
+    line.wl_type  = wl_type # initialized with the real type of the line, changed later if this person appears more than once
     line.wl_loads = wl_loads
     line.projects = [project]
   end
