@@ -101,7 +101,6 @@ tr.wl_total {
   text-align: center;
   }
 
-
 tr.wl_opens {
   color: #999;
   }
@@ -113,7 +112,7 @@ tr.wl_opens {
   background: #DFD;
   }
 .wl_line_400 {
-  background: #FAA;
+  background: #FCC;
   }
 .wl_line_500 {
   background: #EEE;
@@ -260,7 +259,7 @@ td.availability_5 {
   float:right;
   width: 500px;
   border:1px solid #DDD;
-  background: #FAA;
+  background: #FDD;
   color: #444;
   margin: 0;
   padding: 2px 10px 2px 10px;

@@ -14,7 +14,6 @@ function group_by_person() {
     });
 }
 
-
 function hide_workload_menu() {
   $('wmenu').toggle();
   new Ajax.Request('/project_workloads/hide_wmenu', {
