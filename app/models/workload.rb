@@ -116,8 +116,8 @@ class Workload
         end
         @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>avail_percent}
         @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
-        @next_month_percents += [percent, 100].min if nb < 5
-        @three_next_months_percents += [percent, 100].min if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
+        @next_month_percents += capped_if_option(percent) if nb < 5
+        @three_next_months_percents += capped_if_option(percent) if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
       iteration = iteration + 7.days
@@ -225,6 +225,12 @@ class Workload
       end
     }
     return lines_by_streams
+  end
+
+private
+  def capped_if_option(percent)
+    return [percent, 100].min if APP_CONFIG['consolidation_capped_next_weeks']
+    percent
   end
 
 end
