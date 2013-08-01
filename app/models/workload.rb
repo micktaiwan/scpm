@@ -228,10 +228,10 @@ class Workload
   end
 
 private
+
   def capped_if_option(percent)
     return [percent, 100].min if APP_CONFIG['consolidation_capped_next_weeks']
     percent
   end
 
 end
-
