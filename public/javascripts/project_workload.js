@@ -14,7 +14,6 @@ function group_by_person() {
     });
 }
 
-
 function hide_workload_menu() {
   $('wmenu').toggle();
   new Ajax.Request('/project_workloads/hide_wmenu', {
@@ -34,10 +33,10 @@ Ajax.Replacer = Class.create(Ajax.Updater, {
   }
 })
 
-function change_workload(project_id) {
+function change_workload(project_ids) {
   document.body.style.cursor = 'wait';
   $('loading').show();
   new Ajax.Request('/project_workloads/change_workload', {
-    parameters: { project_id: project_id }
+    parameters: { project_ids: project_ids }
     });
   }

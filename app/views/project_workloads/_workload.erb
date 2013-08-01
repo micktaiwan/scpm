@@ -2,20 +2,28 @@
 
   <div id="wl_line_add_form" class="popup" style="display:none;">
     <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
-    <div class="title">Add a person to <%= @workload.project.name %></div>
+    <div class="title">Add a person to <%= @workload.names %></div>
     <% form_remote_tag(:url=>{:action => "add_a_person"}) do %>
       <%= select_tag('person_id', options_for_select(@people)) %>
-      <%= hidden_field_tag('project_id', @workload.project_id) %>
+      <%= hidden_field_tag('project_id', @workload.project_ids) %>
       <%= submit_tag("Add") %>
     <% end %>
   </div>
-<br/>
+
   <%#= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
   <!--<div id="wmenu" <%#if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<%# end %>>-->
-    <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
   <!--</div>-->
-
   <br/>
+
+  <% if @workload.other_lines_count > 0 %>
+    <div id="wmsg" class="workload_msg"> 
+      <%= @workload.other_days_count %> days on <%= @workload.other_lines_count %> lines
+      are not summed as their are lines ouside project scope but are associated
+      to a selected project. If you do not wish to see this message do not associate a project
+      to a line not related to your project. <%= link_to_function("hide","$('wmsg').hide()") %>
+    </div>
+  <% end %>
+
   <b>
   <%= @workload.nb_current_lines %> lines
   <% if @workload.nb_hidden_lines > 0 %><strong><%end%>
@@ -25,10 +33,11 @@
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
   <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person()'}) %> group by person
-<%= link_to('Export XML', {:action => 'xml_export'}, {:class=>'btnlnk'}) %>
-
+  <%= link_to('XML Export', {:action => 'xml_export'}, {:class=>'btnlnk'}) %>
+  <br/>
+  
   <!-- WORKLOAD GENERAL -->
-  <h2><%= @workload.name %></h2>
+  <h2><%= @workload.names %></h2>
   <table id="workload_table">
   <thead>
     <tr>

@@ -20,6 +20,8 @@ workloads_show_consolidation_filters: false
 workloads_display_total_column: false
 workloads_lines_sort: "project_id,wl_type,name"
 workloads_max_height: 500
+consolidation_alert_on_overworkload: false
+consolidation_capped_next_weeks: false
 
 # SDP
 use_multiple_projects_sdp_export: false

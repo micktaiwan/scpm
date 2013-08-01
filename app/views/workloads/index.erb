@@ -1,5 +1,8 @@
 <script src="/javascripts/workload.js" type="text/javascript"></script>
 
+<%= render(:partial=>'workloads/last_sdp_update') %>
+<%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:500px;") %>
+
 <div id="edit_line"></div>
 
 <div id="wl_line_add_form" class="popup" style="display:none;">
@@ -45,16 +48,6 @@
     </div>
   <% end %>
 </div>
-
-<% if @last_sdp_update != nil %>
-	<% last_sdp_update_ago_in_words = time_ago_in_words(@last_sdp_update) %>
-	<% last_sdp_update_ago = @last_sdp_update %>
-<% else %>
-	<% last_sdp_update_ago_in_words = "Never" %>
-	<% last_sdp_update_ago = "Never" %>
-<% end %>
-<%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:500px;") %>
-<div class="stats">Last SDP update: <%= last_sdp_update_ago_in_words %> ago (<%= last_sdp_update_ago %>)</div>
 
 <% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
   <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %>

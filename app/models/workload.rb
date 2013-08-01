@@ -15,11 +15,11 @@ class Workload
     :line_sums,       # sum of days per line of workload
     :ctotals,         # total days planned per week including not bundle days (holidays and other lines) {:id=>w, :value=>col_sum(w, @wl_lines)}
     :availability,    # total days of availability {:days=>xxx, :percent=>yyy}
-    :sum_availability,# Sum of availabity days for the next 8 weeks
+    :sum_availability,# sum of availabity days for the next 8 weeks
     :cprodtotals,     # total days planned per week on production only {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
     :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
-    :next_month_percents,         # next 5 weeks (including current)
-    :three_next_months_percents,  # next 3 months (was _after_ the 5 coming weeks but changed later including next 5 weeks)
+    :next_month_percents,         # next 5 weeks capped (including current)
+    :three_next_months_percents,  # next 3 months capped (was _after_ the 5 coming weeks but changed later including next 5 weeks)
     :total,                       # total number of days planned (including past weeks)
     :planned_total,               # total number of days planned (current week and after)
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
@@ -41,7 +41,7 @@ class Workload
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
     @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
-    Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
+    #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
       if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==WorkloadsController::WL_LINE_HOLIDAYS}.size == 0
         @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS)
@@ -116,8 +116,8 @@ class Workload
         end
         @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>avail_percent}
         @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
-        @next_month_percents += percent if nb < 5
-        @three_next_months_percents += percent if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
+        @next_month_percents += capped_if_option(percent) if nb < 5
+        @three_next_months_percents += capped_if_option(percent) if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
       end
       iteration = iteration + 7.days
@@ -225,6 +225,12 @@ class Workload
       end
     }
     return lines_by_streams
+  end
+
+private
+  def capped_if_option(percent)
+    return [percent, 100].min if APP_CONFIG['consolidation_capped_next_weeks']
+    percent
   end
 
 end

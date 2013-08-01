@@ -11,11 +11,18 @@
 	<% indexWeek = 0 %>
 	<% for w in conso_line.percents %>
 		<%
-			w_avail_value = 0
-			w_avail_value += conso_line.availability[indexWeek][:value].to_f.round
-			w_avail_css = "availability_"+w_avail_value.to_s
+			w_avail_value = conso_line.availability[indexWeek][:value].to_f.round
+			w_avail_css = "availability x"+w_avail_value.to_s
 		%>
-		<td class="<%= w_avail_css %>"><%= w[:value] %></td>
-		<% indexWeek += 1 %>
+    <% if APP_CONFIG['consolidation_alert_on_overworkload'] %>
+      <% if conso_line.percents[indexWeek][:precise] > 100 %>
+        <td style="background-color:red"><%=conso_line.percents[indexWeek][:value]%></td>
+      <% else %>
+        <td class="<%= w_avail_css %>"><%= w_avail_value if w_avail_value > 0 %></td>
+      <% end %>
+    <% else %> 
+      <td class="<%= w_avail_css %>"><%= w[:value] %></td>
+		<% end %>
+    <% indexWeek += 1 %>
 	<% end %>
 </tr>

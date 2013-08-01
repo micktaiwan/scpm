@@ -6,32 +6,42 @@ class ProjectWorkloadsController < ApplicationController
 
 
   def index
-    project_id = params[:project_id]
-    session['workload_project_id'] = project_id if project_id
+    project_ids = params[:project_ids]
+    if project_ids
+      if project_ids.class==Array
+        session['workload_project_ids'] = project_ids # array of strings
+      else
+        session['workload_project_ids'] = [project_ids] # array with one string
+      end
+    else
+      session['workload_project_ids'] = []
+    end
+    #raise "#{session['workload_project_ids']}"
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
+    if not session['workload_project_ids'] or session['workload_project_ids']==[]
+      return
+    end
+
     if @projects.size > 0
-      session['workload_project_id'] = @projects.first.id if not session['workload_project_id'] or not Project.find_by_id(session['workload_project_id'])
+      session['workload_project_ids'] = [@projects.first.id] if not session['workload_project_ids']
+      # or not Project.find_by_id(session['workload_project_ids'])
     else
       render(:text=>'no project at all... Please create a new project.')
       return
     end
-    get_common_data(session['workload_project_id'])
-    @projects = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
-    change_workload(session['workload_project_id'])
-     # respond_to do |format|
-     #   format.csv { render :csv => @projects}
-     # end
+    @project_options = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
+    get_common_data(session['workload_project_ids'])
+    get_last_sdp_update
   end
-
 
   def xml_export
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1)
 
-      @workload = ProjectWorkload.new(session['workload_project_id'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+      @workload = ProjectWorkload.new(session['workload_project_ids'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
       
       # MONTHS EXPORT
-      @months = ["","#{@workload.name}","", "", "", "","",""]
+      @months = ["#{@workload.names}","","", "", "", "","",""]
       for i in @workload.months
         @months << i
       end
@@ -109,22 +119,39 @@ class ProjectWorkloadsController < ApplicationController
     end
   end
 
-  
-  def change_workload(project_id=nil)
-    project_id  = params[:project_id] if !project_id
-    session['workload_project_id'] = project_id
-    get_common_data(project_id)
+  def change_workload(project_ids=nil)
+    project_ids = params[:project_ids]
+    if project_ids
+      session['workload_project_ids'] = project_ids
+    else
+      session['workload_project_ids'] = []
+    end
+    #raise "#{session['workload_project_ids']}"
+    @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
+    if not session['workload_project_ids'] or session['workload_project_ids']==[]
+      return
+    end
+
+    if @projects.size > 0
+      session['workload_project_ids'] = [@projects.first.id] if not session['workload_project_ids']
+      # or not Project.find_by_id(session['workload_project_ids'])
+    else
+      render(:text=>'no project at all... Please create a new project.')
+      return
+    end
+    @project_options = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
+    get_common_data(session['workload_project_ids'])
   end
 
   def add_a_person
     person_id     = params[:person_id]
-    project_id    = params[:project_id]
-    found         = WlLine.find_by_person_id_and_project_id(person_id, project_id)
+    project_id    = params[:project_ids]
+    found         = WlLine.find_by_person_id_and_project_id(person_id, project_ids.first)
     person_name   = Person.find(person_id).name
-    project_name  = Project.find(project_id).name
+    project_name  = Project.find(project_ids.first).name
     if not found
-      @line = WlLine.create(:name=>project_name , :project_id=>project_id, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
-      get_common_data(project_id)
+      @line = WlLine.create(:name=>project_name , :project_id=>project_ids.first, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+      get_common_data(project_ids)
     else
       @error = "This line already exists: #{person_name}"
     end
@@ -133,20 +160,29 @@ class ProjectWorkloadsController < ApplicationController
   def hide_lines_with_no_workload
     on = (params[:on].to_s != 'false')
     session['workload_hide_lines_with_no_workload'] = on
-    get_common_data(session['workload_project_id'])
+    get_common_data(session['workload_project_ids'])
   end
 
   def group_by_person
     on = (params[:on].to_s != 'false')
     session['group_by_person'] = on
-    get_common_data(session['workload_project_id'])
+    get_common_data(session['workload_project_ids'])
   end
 
 private
 
-  def get_common_data(project_id)
+  def get_common_data(project_ids)
     @people   = Person.find(:all, :conditions=>"has_left=0", :order=>"name").map {|p| ["#{p.name}", p.id]}
-    @workload = ProjectWorkload.new(project_id, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+    @workload = ProjectWorkload.new(project_ids, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+  end
+
+  def get_last_sdp_update
+    @last_sdp_phase = SDPPhase.find(:first, :order=>'updated_at desc')
+    if @last_sdp_phase != nil
+      @last_sdp_update = @last_sdp_phase.updated_at
+    else
+      @last_sdp_update = nil
+    end
   end
 
   def require_admin
