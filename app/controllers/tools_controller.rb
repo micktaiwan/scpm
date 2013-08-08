@@ -735,8 +735,9 @@ class ToolsController < ApplicationController
   end
 
   def delete_history_spider
-    @stream_id        = params[:stream_id]
-    @request_id       = params[:request_id]
+    stream_id        = params[:stream_id]
+    request_id       = params[:request_id]
+    caller           = params[:caller]
 
     project_object = nil
 
@@ -764,14 +765,18 @@ class ToolsController < ApplicationController
       project_object.save
     end
 
-    redirect_to :controller => 'tools', :action => 'show_counter_history', :stream_id => @stream_id, :request_id => @request_id
+    if caller == "show_counter_history"
+      redirect_to :controller => 'tools', :action => 'show_counter_history', :stream_id => stream_id, :request_id => request_id
+    else
+      redirect_to :controller => 'tools', :action => 'show_counter_history_without_rmt', :stream_id => stream_id, :request_id => request_id
+    end
 
   end
 
   def delete_history_qs
-    
-    @stream_id        = params[:stream_id]
-    @request_id       = params[:request_id]
+    stream_id        = params[:stream_id]
+    request_id       = params[:request_id]
+    caller           = params[:caller]
 
     project_object = nil
 
@@ -799,7 +804,12 @@ class ToolsController < ApplicationController
       project_object.save
     end
 
-    redirect_to :controller => 'tools', :action => 'show_counter_history', :stream_id => @stream_id, :request_id => @request_id
+    if caller == "show_counter_history"
+      redirect_to :controller => 'tools', :action => 'show_counter_history', :stream_id => stream_id, :request_id => request_id
+    else
+      redirect_to :controller => 'tools', :action => 'show_counter_history_without_rmt', :stream_id => stream_id, :request_id => request_id
+    end
+
   end
 
 private

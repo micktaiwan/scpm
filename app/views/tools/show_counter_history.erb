@@ -59,7 +59,7 @@
     %>
     <td><%= link_to(file_link, {:controller=>'spiders', :action=>'update_spider_file_name_form', :id=>sc.spider.id}) %></td>
     <% if (current_user.has_role?('Admin')) %>
-      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc.id, :stream_id=>@stream_id.to_i, :request_id=>@request_id.to_i}, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
+      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc.id, :stream_id=>@stream_id.to_i, :request_id=>@request_id.to_i, :caller => "show_counter_history" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
     <% end %>
   </tr>
 <% end %>
@@ -110,7 +110,7 @@
     <td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>qsc.status.project.id}) %></td>
     <td><%=html_status(qsc.status.status)%></td>
     <% if (current_user.has_role?('Admin')) %>
-      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_qs', :id=>qsc.id, :stream_id=>@stream_id.to_i, :request_id=>@request_id.to_i}, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
+      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_qs', :id=>qsc.id, :stream_id=>@stream_id.to_i, :request_id=>@request_id.to_i, :caller => "show_counter_history" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
     <% end %>
   </tr>
 <% end %>
