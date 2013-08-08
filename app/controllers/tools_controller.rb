@@ -656,14 +656,14 @@ class ToolsController < ApplicationController
                                           "JOIN projects ON projects.id = spiders.project_id",
                                           "JOIN projects as parent ON parent.id = projects.project_id"
                                           ],
-                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC")
+                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
     
     @qs_counter     = HistoryCounter.find(:all,:conditions=>[qs_condition],
                                           :joins => ["JOIN requests ON requests.id = history_counters.request_id", 
                                           "JOIN statuses ON statuses.id = history_counters.concerned_status_id",
                                           "JOIN projects ON projects.id = statuses.project_id",
                                           "JOIN projects as parent ON parent.id = projects.project_id"],
-                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC")
+                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
   end
   
   def show_counter_history_without_rmt
@@ -735,6 +735,9 @@ class ToolsController < ApplicationController
   end
 
   def delete_history_spider
+    @stream_id        = params[:stream_id]
+    @request_id       = params[:request_id]
+
     project_object = nil
 
     # Get the id
@@ -761,10 +764,15 @@ class ToolsController < ApplicationController
       project_object.save
     end
 
-    redirect_to '/tools/show_counter_history'
+    redirect_to :controller => 'tools', :action => 'show_counter_history', :stream_id => @stream_id, :request_id => @request_id
+
   end
 
   def delete_history_qs
+    
+    @stream_id        = params[:stream_id]
+    @request_id       = params[:request_id]
+
     project_object = nil
 
     # Get the id
@@ -791,7 +799,7 @@ class ToolsController < ApplicationController
       project_object.save
     end
 
-    redirect_to '/tools/show_counter_history'
+    redirect_to :controller => 'tools', :action => 'show_counter_history', :stream_id => @stream_id, :request_id => @request_id
   end
 
 private
