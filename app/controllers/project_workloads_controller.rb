@@ -88,6 +88,7 @@ class ProjectWorkloadsController < ApplicationController
       # WORKLOADS EXPORT
       @lines =[]
       @virtual= Hash.new
+      @line_countable = Hash.new
       line_pos = 0
       for l in @workload.wl_lines
         line_pos += 1
@@ -95,6 +96,11 @@ class ProjectWorkloadsController < ApplicationController
           @virtual[line_pos] = true
         else
           @virtual[line_pos] = false
+        end
+        if l.wl_type <= 200 or l.wl_type == 500
+          @line_countable[line_pos] = true
+        else
+          @line_countable[line_pos] = false
         end
         line = []
         line << l.person.company.name
@@ -111,7 +117,7 @@ class ProjectWorkloadsController < ApplicationController
         end
          @lines << line
       end
-
+      #raise "#{@line_countable.collect { |t| t }}"
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="project_workload.xls"'
       headers['Cache-Control']        = ''
