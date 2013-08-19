@@ -1,5 +1,12 @@
 class CompaniesController < ApplicationController
 
+  before_filter :require_login
+  if APP_CONFIG['project_name']=='EISQ'
+    layout 'tools'
+  else
+    layout 'mp_tools'
+  end
+
   def edit
     @company = Company.find(params[:id])
   end
