@@ -14,9 +14,12 @@ class ProjectWorkloadsController < ApplicationController
         session['workload_project_ids'] = [project_ids] # array with one string
       end
     else
-      session['workload_project_ids'] = []
+      if session['workload_project_ids'] == nil
+        session['workload_project_ids'] = []
+      end
     end
-    #raise "#{session['workload_project_ids']}"
+    #raise "#{session['workload_project_ids'].map{ |id| id}.join(', ')}"
+
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     if not session['workload_project_ids'] or session['workload_project_ids']==[]
       return
@@ -132,7 +135,7 @@ class ProjectWorkloadsController < ApplicationController
     else
       session['workload_project_ids'] = []
     end
-    #raise "#{session['workload_project_ids']}"
+
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     if not session['workload_project_ids'] or session['workload_project_ids']==[]
       return
