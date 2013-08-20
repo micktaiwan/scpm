@@ -4,3 +4,5 @@
 <p><%= label_tag 'nb' %>
 <%= text_field :holiday, :nb %></p>
 
+<p><%= label_tag 'Holidays Calendar' %>
+<%= select("holiday", "wl_holidays_calendar_id", HolidaysCalendar.find(:all).collect {|p| [ p.name, p.id ] }) %></p>

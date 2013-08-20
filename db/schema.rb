@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130820144652) do
+ActiveRecord::Schema.define(:version => 20130820151421) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(:version => 20130820144652) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "wl_holidays_calendar_id"
+    t.integer  "wl_holidays_calendar_id"
   end
 
   create_table "counter_base_values", :force => true do |t|
@@ -856,6 +856,7 @@ ActiveRecord::Schema.define(:version => 20130820144652) do
     t.integer  "nb"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "wl_holidays_calendar_id"
   end
 
   create_table "wl_lines", :force => true do |t|

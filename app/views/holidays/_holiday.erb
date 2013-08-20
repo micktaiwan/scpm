@@ -1,6 +1,7 @@
 <li>
 <%= holiday.week %>
 <%= holiday.nb %>
+<%= HolidaysCalendar.find(holiday.wl_holidays_calendar_id).name %>
 <%= link_to('Edit', :action=>'edit', :id=>holiday.id) %>
 <%= link_to('Delete', :action=>'destroy', :id=>holiday.id) %>
 </li>
