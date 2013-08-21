@@ -4,7 +4,7 @@ class HolidaysController < ApplicationController
   layout 'pdc'
 
   def index
-    @holidays = WlHoliday.find(:all, :order=>"week")
+    @holidays = WlHoliday.find(:all, :order=>("wl_holidays_calendar_id, week"))
   end
 
   def new

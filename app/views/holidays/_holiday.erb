@@ -1,7 +1,11 @@
 <li>
 <%= holiday.week %>
 <%= holiday.nb %>
-<%= HolidaysCalendar.find(holiday.wl_holidays_calendar_id).name %>
+<% if HolidaysCalendar.find_by_id(holiday.wl_holidays_calendar_id) %>
+	<%= HolidaysCalendar.find(holiday.wl_holidays_calendar_id).name %>
+<% else %>
+	<a style="color:#FA5858">(The associated holidays calendar doesn't exist anymore)</a>
+<% end %>
 <%= link_to('Edit', :action=>'edit', :id=>holiday.id) %>
 <%= link_to('Delete', :action=>'destroy', :id=>holiday.id) %>
 </li>

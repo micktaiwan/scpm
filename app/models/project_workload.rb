@@ -160,7 +160,14 @@ class ProjectWorkload
       @days << filled_number(iteration.day,2) + "-" + filled_number((iteration+4.days).day,2)
       @wl_weeks << w
       @weeks    << iteration.cweek
-      @opens    << 5*uniq_person_number - WlHoliday.get_from_week(w)*uniq_person_number
+      open       = 5*uniq_person_number
+      @wl_lines.map{|l| l.person_id}.uniq.each do |person_id|
+        company  = Company.find_by_id(Person.find_by_id(person_id).company_id)
+        open     = open - WlHoliday.get_from_week_and_company(w,company)
+      end 
+
+      #@opens    << 5*uniq_person_number - WlHoliday.get_from_week(w)*uniq_person_number
+      opens << open
       if @wl_lines.size > 0
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}

@@ -1,0 +1,12 @@
+<h2>Holidays Calendars</h2>
+<% if current_user.has_role?('Admin') %>
+<%= link_to('Add a holidays calendar', {:action=>'new'},{:class=>"btnlnk"}) %>
+<%= link_to('Manage holidays', {:controller=>'holidays', :action=>'index'},{:class=>"btnlnk"}) %>
+<br/>
+<% end %>
+<br/>
+
+<ul>
+<%= render(:partial=>'holidays_calendar', :collection=>@holidays_calendar) %>
+</ul>
+
