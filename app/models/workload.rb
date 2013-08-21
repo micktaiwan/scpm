@@ -92,7 +92,9 @@ class Workload
       @days << filled_number(iteration.day,2) + "-" + filled_number((iteration+4.days).day,2)
       @wl_weeks << w
       @weeks    << iteration.cweek
-      @opens    << 5 - WlHoliday.get_from_week(w)
+      company = Company.find_by_id(Person.find_by_id(person_id).company_id)
+      @opens    << 5 - WlHoliday.get_from_week_and_company(w,company)
+
       if @wl_lines.size > 0
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}

@@ -1,0 +1,9 @@
+<h2>Edit</h2>
+
+<%= error_messages_for :holidays_calendar %>
+<% form_for :@holidays_calendar, :url=>{:action=>'update', :id=>@holidays_calendar.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Send' %></p>
+<% end -%>
+
