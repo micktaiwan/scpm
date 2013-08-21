@@ -37,4 +37,8 @@ class HolidaysController < ApplicationController
     end
   end
 
+  def destroy
+    WlHoliday.find(params[:id]).destroy
+    redirect_to('/holidays')
+  end
 end
