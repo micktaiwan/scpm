@@ -78,7 +78,7 @@ class WorkloadsController < ApplicationController
     task_ids   = wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
     cond = ""
     cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
-    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null and remaining > 0 #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
+    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
   end
 
   def get_sdp_gain(person)
