@@ -7,9 +7,17 @@
 
 <h2>People</h2>
 <% @allCompanies.each { |company| %>
+	<%= link_to(image_tag('edit.gif'), {:controller=>'companies', :action=>'edit', :id=>company.company_id}) %>
 	<% peopleNotLeft = @people.find_all{|person| ((person.has_left == 0) and (person.company_id == company.company_id )) } %>
-	<% if ((peopleNotLeft.count > 0) and (peopleNotLeft[0].company)) %><%= peopleNotLeft[0].company.name %><% else %>???<% end %>
+	<% if ((peopleNotLeft.count > 0) and (peopleNotLeft[0].company)) %><%= peopleNotLeft[0].company.name%> (
+		<% if HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id) %>
+			<%= HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id).name %>
+		<% else %>
+			<a style="color:#FA5858">No calendar associated</a>
+		<% end %>)
+	<% else %>???<% end %>
 	<ul>
+
 	  <%= render(:partial=>'person', :collection=>peopleNotLeft) %>
 	</ul>
 <% } %>

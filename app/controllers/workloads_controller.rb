@@ -220,7 +220,7 @@ class WorkloadsController < ApplicationController
   end
 
   def refresh_missing_tasks
-    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"person_id")
+    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"project_id, person_id")
     render :layout => false
   end
 
@@ -454,8 +454,14 @@ class WorkloadsController < ApplicationController
     csum       = wl_lines.map{|l| l.get_load_by_week(week)}.inject(:+)
     csum       = 0 if !csum
     case_sum   = csum if type==:person
-    open       = nb_days_per_weeks - WlHoliday.get_from_week(week)
-    person_open = 5 - WlHoliday.get_from_week(week)
+    open       = nb_days_per_weeks
+    
+    wl_lines.map{|l| l.person_id}.uniq.each do |p_id|
+      company  = Company.find_by_id(Person.find_by_id(p_id).company_id)
+      open     = open - WlHoliday.get_from_week_and_company(week,company)
+    end    
+    company    = Company.find_by_id(Person.find_by_id(id).company_id)
+    person_open = 5 - WlHoliday.get_from_week_and_company(week,company)
     # cpercent is the percent of occupation for a week. It depends of the view (person or project)
     cpercent   = open > 0 ? (csum / open*100).round : 0
     # case_percent is the percent of occupation for a week for a person. It does not depend of the view (person or project)

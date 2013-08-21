@@ -14,9 +14,12 @@ class ProjectWorkloadsController < ApplicationController
         session['workload_project_ids'] = [project_ids] # array with one string
       end
     else
-      session['workload_project_ids'] = []
+      if session['workload_project_ids'] == nil
+        session['workload_project_ids'] = []
+      end
     end
-    #raise "#{session['workload_project_ids']}"
+    #raise "#{session['workload_project_ids'].map{ |id| id}.join(', ')}"
+
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     if not session['workload_project_ids'] or session['workload_project_ids']==[]
       return
@@ -88,6 +91,7 @@ class ProjectWorkloadsController < ApplicationController
       # WORKLOADS EXPORT
       @lines =[]
       @virtual= Hash.new
+      @line_countable = Hash.new
       line_pos = 0
       for l in @workload.wl_lines
         line_pos += 1
@@ -95,6 +99,11 @@ class ProjectWorkloadsController < ApplicationController
           @virtual[line_pos] = true
         else
           @virtual[line_pos] = false
+        end
+        if l.wl_type <= 200 or l.wl_type == 500
+          @line_countable[line_pos] = true
+        else
+          @line_countable[line_pos] = false
         end
         line = []
         line << l.person.company.name
@@ -111,7 +120,7 @@ class ProjectWorkloadsController < ApplicationController
         end
          @lines << line
       end
-
+      #raise "#{@line_countable.collect { |t| t }}"
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="project_workload.xls"'
       headers['Cache-Control']        = ''
@@ -126,7 +135,7 @@ class ProjectWorkloadsController < ApplicationController
     else
       session['workload_project_ids'] = []
     end
-    #raise "#{session['workload_project_ids']}"
+
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     if not session['workload_project_ids'] or session['workload_project_ids']==[]
       return

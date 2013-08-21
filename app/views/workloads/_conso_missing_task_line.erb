@@ -1,6 +1,15 @@
-<tr id="wl_line_<%=line.id%>">
+<tr id="wl_line_<%=line.id%>"
+  <%
+    if @current!=line.person_id
+      @current = line.person_id
+  %>
+  style="background-color:#FFA;"
+  <% end %>
+>
+<td><%= line.project_name %></td>
 <td><%= line.person.name if line.person%></td>
 <td align="right"><%= line.planned_sum %></td>
+<td align="right"><%= line.sum %></td>
 <td>
   <%= link_to_remote(image_tag('delete.gif', :alt=>'Delete this line'),
    {:url=>{:action=>'destroy_line', :id=>line.id},
@@ -11,4 +20,3 @@
 </td>
 <td><%= line.name %></td>
 </tr>
-

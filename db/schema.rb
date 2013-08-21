@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130625101601) do
+ActiveRecord::Schema.define(:version => 20130820151421) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "wl_holidays_calendar_id"
   end
 
   create_table "counter_base_values", :force => true do |t|
@@ -223,6 +224,67 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "concerned_status_id"
     t.integer  "concerned_spider_id"
     t.integer  "stream_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "holidays_calendars", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lesson_collect_actions", :force => true do |t|
+    t.integer  "lesson_collect_file_id"
+    t.string   "ref"
+    t.date     "creation_date"
+    t.string   "source"
+    t.text     "title"
+    t.text     "status"
+    t.string   "actionne"
+    t.date     "due_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "benefit"
+    t.integer  "level_of_investment"
+  end
+
+  create_table "lesson_collect_assessments", :force => true do |t|
+    t.integer  "lesson_collect_file_id"
+    t.integer  "lesson_id"
+    t.string   "milestone"
+    t.string   "mt_detailed_desc"
+    t.string   "quality_gates"
+    t.string   "milestones_preparation"
+    t.string   "project_setting_up"
+    t.string   "lessons_learnt"
+    t.string   "support_level"
+    t.text     "mt_improvements"
+    t.text     "comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lesson_collect_files", :force => true do |t|
+    t.string   "pm"
+    t.string   "qwr_sqr"
+    t.string   "workstream"
+    t.string   "suite_name"
+    t.string   "project_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lesson_collects", :force => true do |t|
+    t.integer  "lesson_collect_file_id"
+    t.string   "lesson_id"
+    t.string   "milestone"
+    t.string   "type_lesson"
+    t.text     "topics"
+    t.text     "cause"
+    t.string   "improvement"
+    t.string   "axes"
+    t.string   "sub_axes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -666,6 +728,16 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.string   "project_code"
   end
 
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
   create_table "spider_consolidations", :force => true do |t|
     t.integer  "spider_id"
     t.integer  "pm_type_axe_id"
@@ -784,6 +856,7 @@ ActiveRecord::Schema.define(:version => 20130625101601) do
     t.integer  "nb"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "wl_holidays_calendar_id"
   end
 
   create_table "wl_lines", :force => true do |t|

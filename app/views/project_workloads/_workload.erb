@@ -33,6 +33,7 @@
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
   <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person()'}) %> group by person
+
   <%= link_to('XML Export', {:action => 'xml_export'}, {:class=>'btnlnk'}) %>
   <br/>
   
