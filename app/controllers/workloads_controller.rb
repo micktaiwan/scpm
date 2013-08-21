@@ -220,7 +220,7 @@ class WorkloadsController < ApplicationController
   end
 
   def refresh_missing_tasks
-    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"person_id, project_id")
+    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"project_id, person_id")
     render :layout => false
   end
 

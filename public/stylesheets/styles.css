@@ -590,6 +590,11 @@ table.sortable thead {
   font-weight: bold;
   cursor: pointer;
 }
+table.sortable .header  {
+  background: #AAF;
+  font-weight: bold;
+  cursor: pointer;
+  }
 table.sortable {
   font-family: Arial;
   padding: 0px;
@@ -605,12 +610,6 @@ table.sortable td    {
   padding: 3px;
   border: #555 1px solid;
   }
-table.sortable .header  {
-  background: #AAF;
-  font-weight: bold;
-  cursor: pointer;
-  }
-
 
 .req_deleted {
   background-color: #DDD;
