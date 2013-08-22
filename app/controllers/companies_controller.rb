@@ -20,5 +20,28 @@ class CompaniesController < ApplicationController
       render :action => 'edit'
     end
   end
+  def new
+    @company = Company.new
+  end
 
+  def create
+    @company = Company.new(params[:company])
+    if not @company.save
+      render :action => 'new'
+      return
+    end
+    redirect_to('/people')
+  end
+  def destroy
+    
+    # persons = Person.find(:all, :conditions=>["company_id=?", params[:id]])
+    # if persons
+    #   persons.each do |p|
+    #     p.company_id = nil ;
+    #     p.save
+    #   end
+    # end
+    Company.find(params[:id]).destroy
+    redirect_to('/people')
+  end
 end

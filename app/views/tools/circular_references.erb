@@ -1,0 +1,11 @@
+<%= @projects.size %> projects have circular references<br/>
+<br/>
+<% @projects.each do |p| %>
+	<%= p.name %> 
+	<% if p.project_id and p.project_id != 0 %>
+		(Pere= <%= p.project.name %>)
+		<%= link_to('delete parent', {:action=>'delete_parent', :id=>p.id},{:class=>"btnlnk"}) %>
+		<br/>
+	<% end %>
+	<br/>
+<% end %>

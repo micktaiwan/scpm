@@ -812,6 +812,16 @@ class ToolsController < ApplicationController
 
   end
 
+  def circular_references
+    @projects = Project.find(:all).select {|p| p.has_circular_reference?}
+  end
+
+  def delete_parent
+    project = Project.find(params[:id])
+    project.project_id = nil
+    project.save
+    redirect_to('/tools/circular_references')
+  end
 private
 
   def round_to_hour(f)
