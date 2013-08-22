@@ -407,7 +407,7 @@ class ProjectsController < ApplicationController
     cut_id  = session[:cut].to_i
     cut     = Project.find(cut_id)
     from_id = cut.project_id
-    if to_id != cut_id # TODO: do more and verify circular references
+    if to_id != cut_id and not cut.has_circular_reference?([Project.find(to_id)])
       cut.project_id = to_id
       cut.save
       cut.update_status
