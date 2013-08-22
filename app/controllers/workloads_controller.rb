@@ -434,13 +434,12 @@ class WorkloadsController < ApplicationController
     @lsum, @plsum, @csum, @cpercent, @case_percent, @total, @planned_total, @avail  = get_sums(line, @wlweek, id, view_by)
   end
 
-  # type is :person or :projet
-  # type indicates what is the id (person or projet)
+  # type is :person or :projet and indicates what is the id (person or projet)
   def get_sums(line, week, id, type=:person)
-    @type = type
-    today_week = wlweek(Date.today)
+    @type       = type
+    today_week  = wlweek(Date.today)
     plsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
-    lsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
+    lsum        = line.wl_loads.map{|l| l.wlload}.inject(:+)
     if(type==:project)
       wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{session['workload_project_ids'].join(',')})"])
       person_wl_lines = WlLine.find(:all, :conditions=>["person_id=?", line.person.id])
@@ -455,12 +454,11 @@ class WorkloadsController < ApplicationController
     csum       = 0 if !csum
     case_sum   = csum if type==:person
     open       = nb_days_per_weeks
-    
-    wl_lines.map{|l| l.person_id}.uniq.each do |p_id|
-      company  = Company.find_by_id(Person.find_by_id(p_id).company_id)
+    wl_lines.map{|l| l.person}.uniq.each do |p|
+      company  = Company.find_by_id(p.company_id)
       open     = open - WlHoliday.get_from_week_and_company(week,company)
-    end    
-    company    = Company.find_by_id(Person.find_by_id(id).company_id)
+    end
+    company    = Company.find_by_id(line.person.company_id)
     person_open = 5 - WlHoliday.get_from_week_and_company(week,company)
     # cpercent is the percent of occupation for a week. It depends of the view (person or project)
     cpercent   = open > 0 ? (csum / open*100).round : 0

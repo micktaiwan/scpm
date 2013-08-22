@@ -1,5 +1,5 @@
 class Company < ActiveRecord::Base
 
-  belongs_to :person
+	has_many :people, :dependent => :nullify
 
 end
