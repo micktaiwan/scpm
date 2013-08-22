@@ -37,7 +37,7 @@
 		</td>
 
     <% if (current_user.has_role?('Admin')) %>
-      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc_no_req.id}, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
+      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc_no_req.id, :stream_id=>@stream_id.to_i, :caller => "show_counter_history_without_rmt" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?" ) %></td>
     <% end %>
 
 	</tr>
@@ -78,7 +78,7 @@
 		</td>
 
     <% if (current_user.has_role?('Admin')) %>
-      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_qs', :id=>qsc_no_req.id}, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
+      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_qs', :id=>qsc_no_req.id, :stream_id=>@stream_id.to_i, :caller => "show_counter_history_without_rmt" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
     <% end %>
 
 	</tr>

@@ -78,7 +78,7 @@ class WorkloadsController < ApplicationController
     task_ids   = wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
     cond = ""
     cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
-    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null and remaining > 0 #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
+    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
   end
 
   def get_sdp_gain(person)
@@ -220,7 +220,7 @@ class WorkloadsController < ApplicationController
   end
 
   def refresh_missing_tasks
-    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"person_id")
+    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"project_id, person_id")
     render :layout => false
   end
 
@@ -434,13 +434,12 @@ class WorkloadsController < ApplicationController
     @lsum, @plsum, @csum, @cpercent, @case_percent, @total, @planned_total, @avail  = get_sums(line, @wlweek, id, view_by)
   end
 
-  # type is :person or :projet
-  # type indicates what is the id (person or projet)
+  # type is :person or :projet and indicates what is the id (person or projet)
   def get_sums(line, week, id, type=:person)
-    @type = type
-    today_week = wlweek(Date.today)
+    @type       = type
+    today_week  = wlweek(Date.today)
     plsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
-    lsum      = line.wl_loads.map{|l| l.wlload}.inject(:+)
+    lsum        = line.wl_loads.map{|l| l.wlload}.inject(:+)
     if(type==:project)
       wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{session['workload_project_ids'].join(',')})"])
       person_wl_lines = WlLine.find(:all, :conditions=>["person_id=?", line.person.id])
