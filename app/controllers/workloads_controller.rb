@@ -455,12 +455,11 @@ class WorkloadsController < ApplicationController
     csum       = 0 if !csum
     case_sum   = csum if type==:person
     open       = nb_days_per_weeks
-    
-    wl_lines.map{|l| l.person_id}.uniq.each do |p_id|
-      company  = Company.find_by_id(Person.find_by_id(p_id).company_id)
+    wl_lines.map{|l| l.person}.uniq.each do |p|
+      company  = Company.find_by_id(p.company_id)
       open     = open - WlHoliday.get_from_week_and_company(week,company)
-    end    
-    company    = Company.find_by_id(Person.find_by_id(id).company_id)
+    end
+    company    = Company.find_by_id(line.person.company_id)
     person_open = 5 - WlHoliday.get_from_week_and_company(week,company)
     # cpercent is the percent of occupation for a week. It depends of the view (person or project)
     cpercent   = open > 0 ? (csum / open*100).round : 0

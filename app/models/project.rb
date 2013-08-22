@@ -189,7 +189,7 @@ class Project < ActiveRecord::Base
       self.projects.each { |p|
         if trace.include?(p)
           Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}"
-          self.projects.delete(p)
+          #self.projects.delete(p)
           next
         end
         return true if p.has_responsible(user_id_arr, trace)
@@ -206,7 +206,8 @@ class Project < ActiveRecord::Base
     date    = status.updated_at if status
     self.projects.each { |p|
       if trace.include?(p)
-        raise "circular reference between projects #{p.name} and #{self.name}"
+        Rails.logger.error "circular reference between projects #{p.name} and #{self.name}"
+        next
       end
       sub   = p.last_status_date(trace)
       date  = sub if sub and (date == nil or sub > date)
