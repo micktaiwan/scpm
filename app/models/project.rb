@@ -182,35 +182,23 @@ class Project < ActiveRecord::Base
   end
 
   # return true if the project or subprojects request is assigned to one of the users in the array
-  def has_responsible(user_id_arr, trace=[])
-    trace << self
+  def has_responsible(user_id_arr)
     user_id_arr.each { |id|
       return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
       self.projects.each { |p|
-        if trace.include?(p)
-          Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.map{|pr| pr.name }.join(' => ')} (#{Time.now})"
-          #self.projects.delete(p)
-          next
-        end
-        return true if p.has_responsible(user_id_arr, trace)
+        return true if p.has_responsible(user_id_arr)
         }
       }
     return false
   end
 
   # recursively get the last status date
-  def last_status_date(trace=[])
-    trace << self
+  def last_status_date
     status  = get_status
     date    = nil
     date    = status.updated_at if status
     self.projects.each { |p|
-      if trace.include?(p)
-        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.map{|pr| pr.name }.join(' => ')} (#{Time.now})" 
-        #self.projects.delete(p)
-        next
-      end
-      sub   = p.last_status_date(trace)
+      sub   = p.last_status_date
       date  = sub if sub and (date == nil or sub > date)
       }
     return date
@@ -227,15 +215,19 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def project_requests_progress_status(trace=[])
+  def has_circular_reference?(trace=[])
+    trace << self
+    self.projects.each { |p|
+      return true if trace.include?(p)
+      return true if p.has_circular_reference?(trace)
+      }
+    false
+  end
+
+  def project_requests_progress_status()
     status = self.requests_progress_status
     self.projects.each { |p|
-      if trace.include?(p)
-        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.map{|pr| pr.name }.join(' => ')} (#{Time.now})" 
-        #self.projects.delete(p)
-        next
-      end      
-      s = p.project_requests_progress_status(trace)
+      s = p.project_requests_progress_status()
       status = s if s > status
       }
     return status
