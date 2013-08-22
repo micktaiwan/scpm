@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   belongs_to  :lifecycle_object, :class_name=>"Lifecycle", :foreign_key=>"lifecycle_id"
   belongs_to  :qr_qwr, :class_name=>"Person"
   belongs_to  :suite_tag
-  has_many    :projects,    :order=>'name', :dependent=>:destroy
+  has_many    :projects,    :order=>'name', :dependent=>:nullify
   has_many    :requests,    :dependent=>:nullify
   has_many    :statuses,    :dependent => :destroy, :order=>"created_at desc"
   has_many    :actions,     :dependent => :destroy, :order=>"progress"
@@ -188,9 +188,8 @@ class Project < ActiveRecord::Base
       return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
       self.projects.each { |p|
         if trace.include?(p)
-          Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}"
+          Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.join(',')} (#{Time.now})"
           self.projects.delete(p)
-          next
         end
         return true if p.has_responsible(user_id_arr, trace)
         }
@@ -206,7 +205,8 @@ class Project < ActiveRecord::Base
     date    = status.updated_at if status
     self.projects.each { |p|
       if trace.include?(p)
-        raise "circular reference between projects #{p.name} and #{self.name}"
+        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name} (#{Time.now})" 
+        self.projects.delete(p)
       end
       sub   = p.last_status_date(trace)
       date  = sub if sub and (date == nil or sub > date)
@@ -225,10 +225,14 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def project_requests_progress_status
+  def project_requests_progress_status(trace=[])
     status = self.requests_progress_status
     self.projects.each { |p|
-      s = p.project_requests_progress_status
+      if trace.include?(p)
+        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name} (#{Time.now})" 
+        self.projects.delete(p)
+      end      
+      s = p.project_requests_progress_status(trace)
       status = s if s > status
       }
     return status
