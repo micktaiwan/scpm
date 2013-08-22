@@ -188,8 +188,9 @@ class Project < ActiveRecord::Base
       return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
       self.projects.each { |p|
         if trace.include?(p)
-          Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.join(',')} (#{Time.now})"
-          self.projects.delete(p)
+          Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.map{|pr| pr.name }.join(' => ')} (#{Time.now})"
+          #self.projects.delete(p)
+          next
         end
         return true if p.has_responsible(user_id_arr, trace)
         }
@@ -205,8 +206,9 @@ class Project < ActiveRecord::Base
     date    = status.updated_at if status
     self.projects.each { |p|
       if trace.include?(p)
-        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name} (#{Time.now})" 
-        self.projects.delete(p)
+        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.map{|pr| pr.name }.join(' => ')} (#{Time.now})" 
+        #self.projects.delete(p)
+        next
       end
       sub   = p.last_status_date(trace)
       date  = sub if sub and (date == nil or sub > date)
@@ -229,8 +231,9 @@ class Project < ActiveRecord::Base
     status = self.requests_progress_status
     self.projects.each { |p|
       if trace.include?(p)
-        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name} (#{Time.now})" 
-        self.projects.delete(p)
+        Rails.logger.error "Error: circular reference between projects #{p.name} and #{self.name}: #{trace.map{|pr| pr.name }.join(' => ')} (#{Time.now})" 
+        #self.projects.delete(p)
+        next
       end      
       s = p.project_requests_progress_status(trace)
       status = s if s > status
