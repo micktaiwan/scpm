@@ -14,7 +14,8 @@ class ProjectWorkload
 
   include ApplicationHelper
 
-  attr_reader :names,  # projects names
+  attr_reader :names, # projects names
+    :companies,       # companies names
     :weeks,           # arrays of week's names '43', '44', ...
     :wl_weeks,        # array of week ids '201143'
     :months,          # "Oct"
@@ -47,7 +48,7 @@ class ProjectWorkload
   # :only_holidays => true
   # :group_by_person => true
   # :hide_lines_with_no_workload => true
-  def initialize(project_ids, options = {})
+  def initialize(project_ids, companies_ids,options = {})
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
@@ -55,12 +56,13 @@ class ProjectWorkload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    #raise "#{project_ids.join(',')}"
-    @names = project_ids.map{ |id| Project.find(id).name}.join(', ')
-    @wl_lines           = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+    @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
+    @companies  = companies_ids.map{ |id| Company.find(id).name}.join(', ')
+    persons_companies = Person.find(:all, :conditions=>["company_id in (#{companies_ids.join(',')})"]).map{|p| p.id}
+    @wl_lines           = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
     uniq_person_number = @wl_lines.map{|l| l.person_id}.uniq.size
-    #group_by_persons    = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond], :include=>["request","sdp_task","project"], :group => "person_id")
-  
+    
+
     if options[:group_by_person]
       persons_id    = []
       groupBy_lines = []
