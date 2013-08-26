@@ -70,14 +70,21 @@ class WorkloadsController < ApplicationController
     @suggested_requests = @suggested_requests.select { |r| r.sdp_tasks_remaining_sum > 0 }
   end
 
-  def get_sdp_tasks(wl)
+  def do_get_sdp_tasks()
+    person_id = session['workload_person_id']
+    p = Person.find(person_id)
+    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=?", p.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
+    render(:partial=>'sdp_task_options')
+  end
+
+  def get_sdp_tasks(wl,options = {})
     if wl.person.trigram == ""
       @sdp_tasks = []
       return
     end
     task_ids   = wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
     cond = ""
-    cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
+    cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
     @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
   end
 
