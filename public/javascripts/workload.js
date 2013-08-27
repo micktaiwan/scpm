@@ -12,6 +12,9 @@ function hide_workload_menu() {
     parameters: { on: $('wmenu').style.display=='none' }
     });
 }
+function get_all_sdp_tasks() {
+  new Ajax.Updater("sdp_task_id", "/workloads/do_get_sdp_tasks");  
+}
 
 Ajax.Replacer = Class.create(Ajax.Updater, {
   initialize: function($super, container, url, options) {
