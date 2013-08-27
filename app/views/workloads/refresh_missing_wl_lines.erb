@@ -1,0 +1,9 @@
+<%= @tasks.size %> tasks with remaining but without workload lines<br/>
+<br/>
+<table class="sortable">
+  <thead>
+    <td>Project</td>
+    <td>Task</td>
+  </thead>
+  <%= render(:partial=>'conso_missing_wl_lines', :collection=>@tasks, :as=>:task) %>
+</table>
