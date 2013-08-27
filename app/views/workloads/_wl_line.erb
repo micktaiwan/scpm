@@ -1,7 +1,7 @@
 <%
   remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
-  error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.8) or (planned_total > remaining)))
+  error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1)))
   if wl_line.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and APP_CONFIG['workloads_display_project_name_in_lines'] 
     customized_name =     wl_line.project_name + " - " + wl_line.display_name
   else
