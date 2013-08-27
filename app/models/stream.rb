@@ -64,12 +64,12 @@ class Stream < ActiveRecord::Base
   end
 
   def get_consumed_qs_count_for_user(user)
-    historyCounters = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NOT NULL", user.id, self.id])
+    historyCounters = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NOT NULL and request_id IS NOT NULL", user.id, self.id])
     return historyCounters.count
   end
 
   def get_consumed_spider_count_for_user(user)
-    historyCounters = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_spider_id IS NOT NULL", user.id, self.id])
+    historyCounters = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_spider_id IS NOT NULL and request_id IS NOT NULL", user.id, self.id])
     return historyCounters.count
   end
 
