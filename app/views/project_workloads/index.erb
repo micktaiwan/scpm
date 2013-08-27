@@ -1,7 +1,7 @@
 <script src="/javascripts/project_workload.js" type="text/javascript"></script>
 
 <%
-  if session['workload_project_ids'] and session['workload_project_ids'].size > 0
+  if session['workload_project_ids'] and session['workload_project_ids'].size > 0 and session['workload_companies_ids'] and session['workload_companies_ids'].size >0
     display = true
   else
     display = false
