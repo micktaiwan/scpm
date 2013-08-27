@@ -7,6 +7,7 @@ class ProjectWorkloadsController < ApplicationController
   def index
     project_ids = params[:project_ids]
     companies_ids = params[:companies_ids]
+
     if project_ids
       if project_ids.class==Array
         session['workload_project_ids'] = project_ids # array of strings
@@ -25,7 +26,7 @@ class ProjectWorkloadsController < ApplicationController
         session['workload_companies_ids'] = [companies_ids] # array with one string
       end
     else
-      if session['workload_companies_ids'] == nil or session['workload_companies_ids'] == ''
+      if session['workload_companies_ids'] == nil or session['workload_companies_ids'] == '' or companies_ids=[]
         session['workload_companies_ids'] = []
       end
     end
@@ -163,10 +164,11 @@ class ProjectWorkloadsController < ApplicationController
       end
 
       # WORKLOADS EXPORT
-      @lines =[]
-      @virtual= Hash.new
+      @lines          = []
+      @virtual        = Hash.new
       @line_countable = Hash.new
-      line_pos = 0
+      @error          = Hash.new
+      line_pos        = 0
       for l in @workload.wl_lines
         line_pos += 1
         if l.person and l.person.is_virtual == 1
@@ -179,6 +181,17 @@ class ProjectWorkloadsController < ApplicationController
         else
           @line_countable[line_pos] = false
         end
+
+        planned_total = @workload.line_sums[l.id][:sums].to_f       
+        remaining     = @workload.line_sums[l.id][:remaining].to_f
+        # if l.wl_type == 500
+        #   @error[line_pos] = true
+        if (( l.wl_type == 100 or l.wl_type == 200) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
+          @error[line_pos] = true
+        else
+          @error[line_pos] = false
+        end
+     
         line = []
         if session['group_by_person'].to_s=='true'
           line << Company.find(Person.find(l.person_id).company_id).name
