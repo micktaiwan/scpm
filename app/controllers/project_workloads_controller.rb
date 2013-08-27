@@ -7,6 +7,7 @@ class ProjectWorkloadsController < ApplicationController
   def index
     project_ids = params[:project_ids]
     companies_ids = params[:companies_ids]
+
     if project_ids
       if project_ids.class==Array
         session['workload_project_ids'] = project_ids # array of strings
@@ -25,7 +26,7 @@ class ProjectWorkloadsController < ApplicationController
         session['workload_companies_ids'] = [companies_ids] # array with one string
       end
     else
-      if session['workload_companies_ids'] == nil or session['workload_companies_ids'] == ''
+      if session['workload_companies_ids'] == nil or session['workload_companies_ids'] == '' or companies_ids=[]
         session['workload_companies_ids'] = []
       end
     end
