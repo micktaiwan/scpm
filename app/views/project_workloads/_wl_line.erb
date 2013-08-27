@@ -1,7 +1,7 @@
 <%
   remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
-  error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1)))
+  error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3)
 %>
 <tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type_by_project %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->

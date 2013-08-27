@@ -52,7 +52,7 @@ class ProjectWorkload
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
-    return if project_ids.size>0  and companies_ids.size>0
+    return if project_ids.size == 0  or companies_ids.size == 0
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
