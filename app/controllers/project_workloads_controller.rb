@@ -4,7 +4,6 @@ class ProjectWorkloadsController < ApplicationController
   before_filter :require_login
   before_filter :require_admin
 
-
   def index
     project_ids = params[:project_ids]
     companies_ids = params[:companies_ids]
@@ -33,9 +32,7 @@ class ProjectWorkloadsController < ApplicationController
     #raise "#{session['workload_project_ids'].map{ |id| id}.join(', ')}"
 
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
-    if not session['workload_project_ids'] or session['workload_project_ids']==[]
-      return
-    end
+    return if not session['workload_project_ids'] or session['workload_project_ids']==[]
 
     if @projects.size > 0
       session['workload_project_ids'] = [@projects.first.id] if not session['workload_project_ids']
