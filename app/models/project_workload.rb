@@ -52,7 +52,7 @@ class ProjectWorkload
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
-    return if project_ids.size==0
+    return if project_ids.size==0 or companies_ids.size==0
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
@@ -60,12 +60,11 @@ class ProjectWorkload
     #raise "#{project_ids.map{|id| id}.join(',')}"
     @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
     
-    if companies_ids==[]
-      companies_ids = Company.find(:all).map{ |c| c.id } 
-      @companies    = " All companies selected"
+    if Company.find(:all).size == companies_ids.size
+      @companies  = "All"
     else
       @companies  = companies_ids.map{ |id| Company.find(id).name}.join(', ')
-    end
+     end
     
     persons_companies = Person.find(:all, :conditions=>["company_id in (#{companies_ids.join(',')})"]).map{|p| p.id}
     @wl_lines           = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","sdp_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}

@@ -26,7 +26,7 @@ class ProjectWorkloadsController < ApplicationController
         session['workload_companies_ids'] = [companies_ids] # array with one string
       end
     else
-      if session['workload_companies_ids'] == nil or session['workload_companies_ids'] == '' or companies_ids=[]
+      if session['workload_companies_ids'] == nil or session['workload_companies_ids'] == ''
         session['workload_companies_ids'] = []
       end
     end
@@ -184,9 +184,7 @@ class ProjectWorkloadsController < ApplicationController
 
         planned_total = @workload.line_sums[l.id][:sums].to_f       
         remaining     = @workload.line_sums[l.id][:remaining].to_f
-        # if l.wl_type == 500
-        #   @error[line_pos] = true
-        if (( l.wl_type == 100 or l.wl_type == 200) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
+        if (( l.wl_type == 100 or l.wl_type == 200 or l.wl_type == 500) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
           @error[line_pos] = true
         else
           @error[line_pos] = false
