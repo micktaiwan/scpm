@@ -43,8 +43,14 @@ class Workload
     @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
-      if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==WorkloadsController::WL_LINE_HOLIDAYS}.size == 0
-        @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS)
+      if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_HOLIDAYS}.size == 0
+        @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_HOLIDAYS)
+      end
+      if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /Other/)}.size == 0
+        @wl_lines  << WlLine.create(:name=>"Other (out of #{APP_CONFIG['project_name']})", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
+      end
+      if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /#{APP_CONFIG['project_name']} AVV/)}.size == 0
+        @wl_lines  << WlLine.create(:name=>"#{APP_CONFIG['project_name']} AVV", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
       end
     end
     @nb_total_lines = @wl_lines.size
