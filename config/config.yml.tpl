@@ -22,11 +22,11 @@ workloads_lines_sort: "project_id,wl_type,name"
 workloads_max_height: 500
 consolidation_alert_on_overworkload: false
 consolidation_capped_next_weeks: false
+automatic_except_line_addition: false
 
 # SDP
 use_multiple_projects_sdp_export: false
 auto_link_task_to_project: false
-
 
 # SDP Import Email
 sdp_import_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com"
