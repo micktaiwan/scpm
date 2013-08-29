@@ -3,7 +3,7 @@
 <ul>
   <%= render(:partial=>'planning', :collection=>@plannings, :as=>:p) %>
 </ul>
-
+<div id="planning">
 <% if @planning %>
   <h2><%= @planning.name %></h2>
   <%= link_to('New task', {:controller=>:tasks, :action=>'new', :id=>@planning.id}, {:class=>'btnlnk'}) %>
@@ -12,9 +12,10 @@
     <%= render(:partial=>'task', :collection=>@planning.tasks, :as=>:t) %>
   </ul>
 
-  <canvas id='planning'>no canvas</canvas>
+  <canvas id='planning_canvas'>no canvas</canvas>
 
   <script>
-    planning = new Planning('planning', <%= @planning.tasks.to_json %>, <%= @planning.team_size_array.to_json %>);
+    planning = new Planning('planning_canvas', <%= @planning.tasks.to_json %>, <%= @planning.team_size_array.to_json %>);
   </script>
 <% end %>
+</div>
