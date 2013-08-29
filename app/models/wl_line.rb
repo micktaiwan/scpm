@@ -27,7 +27,7 @@ class WlLine < ActiveRecord::Base
 
   def get_load_object_by_week(week)
     l = load_by_week(week)
-    l ? l : 0
+    l.size > 0 ? l.first : 0
   end
 
   # sum all loads, past and futur
