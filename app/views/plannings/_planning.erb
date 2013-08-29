@@ -1,3 +1,9 @@
-<li>
+<li id="p_<%=p.id%>">
   <%= link_to(p.name, :id=>p.id) %>
+  <%= link_to_remote(image_tag("delete.gif"),
+   {:url=>{:action=>'destroy', :id=>p.id},
+   :confirm=>"Are you sure ?\nYou will lose all data related to this planning.",
+   :success=>"$('p_#{p.id}').fade();",
+   :failure=>"alert('Error:' + request.responseText);"},
+   {:class=>"delete"}) %>  
 <li>

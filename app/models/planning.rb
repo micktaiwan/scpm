@@ -1,6 +1,6 @@
 class Planning < ActiveRecord::Base
 
-  has_many :tasks, :order=>"start_date, end_date"
+  has_many :tasks, :order=>"start_date, end_date", :dependent=>:destroy
 
   # construct an array of nb of person needed (CMMI PP12)
   def team_size_array
