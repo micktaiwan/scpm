@@ -64,16 +64,27 @@ class Milestone < ActiveRecord::Base
   def deploy_checklists
     return if checklist_not_allowed?
 
-    self.project.active_requests.each { |r|
-      next if !r.milestone_names or !r.milestone_names.include?(self.name)
-      for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0").select{ |t|
-          t.milestone_names.map{|n| n.title}.include?(self.name) and
-          t.workpackages.map{|w| w.title}.include?(r.work_package) and
-          (r.contre_visite=="No" or r.contre_visite_milestone==self.name)
+    # With request
+    if (self.active_requests.count > 0)
+      self.project.active_requests.each { |r|
+        next if !r.milestone_names or !r.milestone_names.include?(self.name)
+        for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0").select{ |t|
+            t.milestone_names.map{|n| n.title}.include?(self.name) and
+            (t.workpackages.map{|w| w.title}.include?(r.work_package)) and
+            (r.contre_visite=="No" or r.contre_visite_milestone==self.name)
+            }
+          deploy_checklist(t,r)
+        end
+        }
+    # WITHOUT REQUEST
+    elsif self.project.is_qr_qwr == true
+      for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0 and is_qr_qwr=1").select{ |t|
+          t.milestone_names.map{|n| n.title}.include?(self.name)
           }
-        deploy_checklist(t,r)
+        deploy_checklist_without_request(t)
       end
-      }
+    end
+
   end
 
   def deploy_checklist(template, request)
@@ -81,8 +92,9 @@ class Milestone < ActiveRecord::Base
     parent_id = p ? p.id : 0
     i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id=?", template.id, self.id, request.id])
     if not i
-      ChecklistItem.create(:milestone_id=>self.id, :request_id=>request.id, :parent_id=>parent_id, :template_id=>template.id)
+       ChecklistItem.create(:milestone_id=>self.id, :request_id=>request.id, :parent_id=>parent_id, :template_id=>template.id)
     else
+
       # parent change handling
       i.parent_id = parent_id
       i.save
@@ -93,6 +105,26 @@ class Milestone < ActiveRecord::Base
       # for yes to no, the ChecklistItems will be created, cleanup the ProjectCheckItems
     end
   end
+
+  def deploy_checklist_without_request(template)
+    p = template.find_or_deploy_parent_without_request(self)
+    parent_id = p ? p.id : 0
+    i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=?", template.id, self.id])
+    if not i
+       ChecklistItem.create(:milestone_id=>self.id, :request_id=>nil, :parent_id=>parent_id, :template_id=>template.id)
+    else
+
+      # parent change handling
+      i.parent_id = parent_id
+      i.save
+      # if some milestone_names or workpackages have been added, the new ChecklistItem will be created
+      # The detection of removal of milestones or workpackages must be done elsewhere
+      # TODO is_transverse:
+      # if changed from no to yes, a lot of cleanup must be done
+      # for yes to no, the ChecklistItems will be created, cleanup the ProjectCheckItems
+    end
+  end
+
 
   def destroy_checklist
     ChecklistItem.destroy_all(["milestone_id=?", self.id])
@@ -121,6 +153,7 @@ class Milestone < ActiveRecord::Base
 
   def checklist_div(cu)
     items     = self.checklist_items.select{|i| i.ctemplate.ctype!='folder'}
+    Rails.logger.info("+++++>"+self.id.to_s)
     return "" if items.size == 0 and !cu.has_role?('Admin')
     non_zero  = items.select{|i| i.status!=0}
     modif = ""
