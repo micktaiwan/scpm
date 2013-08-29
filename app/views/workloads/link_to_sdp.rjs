@@ -1,8 +1,9 @@
 if @error
   page.alert @error
 else
-  page << "$('edit_line').fade();"
+  #page << "$('edit_line').fade();"
   page.replace "wl_line_#{@wl_line.id}", render(:partial=>"wl_line")
+  page.replace_html "sdp_tasks", render(:partial=>"sdp_tasks")
   page << "$('wl_line_#{@wl_line.id}').highlight();"
 end
 

@@ -31,7 +31,7 @@
 
   <div class="title">Link to a SDP task</div>
   <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
-    <%= render(:partial=>"sdp_tasks") %>
+    <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line_id=>edit_line.id}) %>
     <%= submit_tag("Link") %>
   <% end %>
   <%= label_tag(:unlink, "&nbsp;") %>
@@ -47,13 +47,11 @@
   <br/>
   Debug:<br/>
   Request id: <%= edit_line.request.request_id if edit_line.request %><br/>
-  SDP Task id: <%= edit_line.sdp_task_id %><br/>
-  SDP Task: <%= edit_line.sdp_task.title if edit_line.sdp_task %>
-  <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if edit_line.wl_type == 300 and not edit_line.sdp_task %>
+  SDP Tasks ids: <%= edit_line.sdp_tasks.map{|t|t.sdp_id} %><br/>
+  SDP Tasks: <%= edit_line.sdp_tasks.map{|t|t.title}.join(',') if edit_line.sdp_tasks %>
+  <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if edit_line.wl_type == 300 and not edit_line.sdp_tasks %>
   <br/>
-  <%= link_to_remote('Unlink',
-   {:url=>{:action=>'unlink_sdp', :id=>edit_line.id},
-   :confirm=>"Are you sure ?"}) %><br/>
+
   <br/>
 
   <div class="title">Delete line</div>

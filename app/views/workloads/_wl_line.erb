@@ -35,7 +35,7 @@
     	<%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>
 		<% end %>
     <!-- Alert -->
-    <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
+    <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and wl_line.sdp_tasks.size==0 %>
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->

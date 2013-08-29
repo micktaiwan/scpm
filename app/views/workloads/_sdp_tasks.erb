@@ -1,4 +1,7 @@
 <span id='sdp_tasks'>
+<%#= link_to_remote('Unlink',
+   {:url=>{:action=>'unlink_sdp', :id=>edit_line_id},
+   :confirm=>"Are you sure ?"}) %><br/>
 <% if !@workload.person or !@workload.person.trigram or @workload.person.trigram=='' %>
   <strong>no trigram, so no SDP task</strong>
   <% if @workload.person %>

@@ -28,11 +28,11 @@
     <!-- highlight function -->
     <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line(#{wl_line.id}, '#FF0')") %>
     <!-- Alert -->
-    <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
+    <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and wl_line.sdp_tasks.size == 0 %>
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= wl_line.person_name %> <%= wl_line.display_name %>
+    <%= wl_line.person_name %> <%= wl_line.sdp_tasks.map{|p| p.title}.join(',') %><!-- wl_line.display_name -->
     [<%= wl_line.project_name %>]
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
