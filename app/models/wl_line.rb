@@ -3,15 +3,21 @@ class WlLine < ActiveRecord::Base
   has_many   :wl_loads, :dependent => :destroy
   belongs_to :person
   belongs_to :request
-  belongs_to :sdp_task, :class_name=>"SDPTask"
+  #belongs_to :sdp_task, :class_name=>"SDPTask"
   belongs_to :project
   belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
   has_many   :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
 
   include ApplicationHelper
 
-  def sdp_task
-    SDPTask.find_by_sdp_id(self.sdp_task_id)
+  #def sdp_task
+  #  SDPTask.find_by_sdp_id(self.sdp_task_id)
+  #end
+
+  def sdp_tasks
+   wl_line_task_ids = WlLineTask.find(:all, :conditions=>["wl_line_id=?", self.id])
+   return [] if wl_line_task_ids.size == 0
+   SDPTask.find_by_sql("select * from sdp_tasks where sdp_tasks.sdp_id in (#{wl_line_task_ids.map{ |l| l.sdp_task_id}.join(',')})")
   end
 
   def load_by_week(week)
