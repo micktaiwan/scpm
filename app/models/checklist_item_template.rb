@@ -73,10 +73,10 @@ class ChecklistItemTemplate < ActiveRecord::Base
 
   def find_or_deploy_parent_without_request(m)
     return nil if self.parent_id == 0 or !self.parent_id
-    p = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=?", self.parent_id , m.id])
+    p = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=?",self.parent_id, m.id])
     return p if p
     self.parent.deploy(false)
-    return ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=?", self.parent_id, m.id])
+    return ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=?",self.parent_id, m.id])
   end
 
   def find_or_deploy_transverse_parent(project_id)

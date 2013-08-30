@@ -51,8 +51,6 @@ class Milestone < ActiveRecord::Base
     rv
   end
 
-
-
   def amendments
     self.project.amendments.select{|a| a.milestone == self.name}
   end
@@ -61,10 +59,11 @@ class Milestone < ActiveRecord::Base
     self.checklist_not_applicable==1 or self.done!=0 # self.status!=0
   end
 
+  # Deploy checklist items from checklist templates
   def deploy_checklists
     return if checklist_not_allowed?
 
-    # With request
+    # WITH REQUEST
     if (self.active_requests.count > 0)
       self.project.active_requests.each { |r|
         next if !r.milestone_names or !r.milestone_names.include?(self.name)
@@ -75,8 +74,9 @@ class Milestone < ActiveRecord::Base
             }
           deploy_checklist(t,r)
         end
+
         }
-    # WITHOUT REQUEST
+    # WITHOUT REQUEST + IS_QR_QWR
     elsif self.project.is_qr_qwr == true
       for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0 and is_qr_qwr=1").select{ |t|
           t.milestone_names.map{|n| n.title}.include?(self.name)
@@ -87,6 +87,7 @@ class Milestone < ActiveRecord::Base
 
   end
 
+  # Deploy checklist items from checklist template and for a specific request
   def deploy_checklist(template, request)
     p = template.find_or_deploy_parent(self,request)
     parent_id = p ? p.id : 0
@@ -94,7 +95,6 @@ class Milestone < ActiveRecord::Base
     if not i
        ChecklistItem.create(:milestone_id=>self.id, :request_id=>request.id, :parent_id=>parent_id, :template_id=>template.id)
     else
-
       # parent change handling
       i.parent_id = parent_id
       i.save
@@ -106,6 +106,7 @@ class Milestone < ActiveRecord::Base
     end
   end
 
+  # Deploy checklist items form checklist template but without request
   def deploy_checklist_without_request(template)
     p = template.find_or_deploy_parent_without_request(self)
     parent_id = p ? p.id : 0
@@ -113,7 +114,6 @@ class Milestone < ActiveRecord::Base
     if not i
        ChecklistItem.create(:milestone_id=>self.id, :request_id=>nil, :parent_id=>parent_id, :template_id=>template.id)
     else
-
       # parent change handling
       i.parent_id = parent_id
       i.save
@@ -124,7 +124,6 @@ class Milestone < ActiveRecord::Base
       # for yes to no, the ChecklistItems will be created, cleanup the ProjectCheckItems
     end
   end
-
 
   def destroy_checklist
     ChecklistItem.destroy_all(["milestone_id=?", self.id])
