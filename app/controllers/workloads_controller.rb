@@ -348,6 +348,9 @@ class WorkloadsController < ApplicationController
 
   def destroy_line
     WlLine.find(params[:id]).destroy
+    WlLineTask.find(:all, :conditions=>["wl_line_id=?",params[:id]]).each do |l|
+      l.destroy
+    end
     render(:nothing=>true)
   end
 
