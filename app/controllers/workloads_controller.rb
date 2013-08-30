@@ -349,11 +349,15 @@ class WorkloadsController < ApplicationController
   end
 
   def destroy_line
-    WlLine.find(params[:id]).destroy
-    WlLineTask.find(:all, :conditions=>["wl_line_id=?",params[:id]]).each do |l|
+    @wl_line_id     = params[:id]
+    wl_line         = WlLine.find(@wl_line_id)
+    person_id       = wl_line.person_id
+    wl_line.destroy
+    WlLineTask.find(:all, :conditions=>["wl_line_id=?",@wl_line_id]).each do |l|
       l.destroy
     end
-    render(:nothing=>true)
+    @workload = Workload.new(person_id)
+    get_sdp_tasks(@workload)
   end
 
   def link_to_request
