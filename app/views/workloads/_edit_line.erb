@@ -31,7 +31,7 @@
   <% if APP_CONFIG['workloads_add_by_sdp_task'] %>
     <div class="title">Link to a SDP task</div>
     <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
-      <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>edit_line}) %>
+      <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>edit_line, :partial_id=>"sdp_tasks_edit"}) %>
     <% end %>
     <br/>
   <% end %>

@@ -1,4 +1,4 @@
-<div id='sdp_tasks'>
+<div id='<%=partial_id%>'>
 <% if !@workload.person or !@workload.person.trigram or @workload.person.trigram=='' %>
   <strong>no trigram, so no SDP task</strong>
   <% if @workload.person %>
