@@ -10,5 +10,6 @@ class DeleteColumnSdpTaskId < ActiveRecord::Migration
 	#   jointer = WlLineTask.find(l.id)
 	#   l.sdp_task_id = jointer.sdp_task_id if jointer.size==1
 	# end
+	#
   end
 end
