@@ -28,16 +28,13 @@
   <%= label_tag(:unlink, "&nbsp;") %>
   <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_request', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
   <br/>
-
-  <div class="title">Link to a SDP task</div>
-  <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
-    <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line_id=>edit_line.id}) %>
-    <%= submit_tag("Add") %>
+  <% if APP_CONFIG['workloads_add_by_sdp_task'] %>
+    <div class="title">Link to a SDP task</div>
+    <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
+      <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>edit_line}) %>
+    <% end %>
+    <br/>
   <% end %>
-  <ul class="sdp_tasks">
-    <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %>
-  </ul>
-  <br/>
   <div class="title">Link to a project</div>
   <% form_remote_tag(:url=>{:action => "link_to_project", :id=>edit_line.id}) do %>
     <%= label_tag(:task, "Project") %>

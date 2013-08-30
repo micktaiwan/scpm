@@ -1,7 +1,4 @@
-<span id='sdp_tasks'>
-<%#= link_to_remote('Unlink',
-   {:url=>{:action=>'unlink_sdp', :id=>edit_line_id},
-   :confirm=>"Are you sure ?"}) %><br/>
+<div id='sdp_tasks'>
 <% if !@workload.person or !@workload.person.trigram or @workload.person.trigram=='' %>
   <strong>no trigram, so no SDP task</strong>
   <% if @workload.person %>
@@ -14,4 +11,12 @@
 <%= label_tag(:sdp_task, "SDP Task") %>
 <%= select_tag('sdp_task_id', options_for_select(@sdp_tasks)) %>
 <a onclick="get_all_sdp_tasks()" href="#">Display all SDP tasks</a>
-</span>
+<%= submit_tag("Add") %>
+
+<% if edit_line %>
+  <ul class="sdp_tasks">
+    <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %>
+  </ul>
+<% end %>
+
+</div>

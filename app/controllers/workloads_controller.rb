@@ -296,16 +296,16 @@ class WorkloadsController < ApplicationController
       @error = "Can not find SDP Task with id #{sdp_task_id}"
       return
     end
-    found = WlLineTask.find(:all, :conditions["sdp_task_id=?",sdp_task_id])
+    found = WlLineTask.find(:first, :conditions=>["sdp_task_id=?",sdp_task_id])
     if not found
       @line     = WlLine.create(:name=>sdp_task.title, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
-      @jointer  = WlLineTask.create(:wl_line_id=>@line.id, :sdp_task_id=>sdp_task_id) 
+      WlLineTask.create(:wl_line_id=>@line.id, :sdp_task_id=>sdp_task_id) 
       if(APP_CONFIG['auto_link_task_to_project']) and sdp_task.project
         @line.project_id = sdp_task.project.id 
         @line.save
       end
     else
-      @error = "This line already exists: #{found.name}"
+      @error = "#{found.sdp_task.title} is already linked to #{found.wl_line.name}"
     end
     get_workload_data(person_id)
   end
@@ -410,7 +410,8 @@ class WorkloadsController < ApplicationController
     @wl_line.delete_sdp(sdp_task_id)
     update_line_name(@wl_line)
     @wl_line.save
-    render(:nothing=>true)
+    @workload         = Workload.new(@wl_line.person_id)
+    get_sdp_tasks(@workload)
   end
 
   def link_to_project
