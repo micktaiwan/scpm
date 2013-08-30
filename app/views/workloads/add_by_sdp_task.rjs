@@ -1,10 +1,11 @@
 if @error
   page.alert @error
 else
-  page.replace "workload", render(:partial=>'workload')
-  page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']});"
-  if(APP_CONFIG['workloads_add_by_sdp_task'])
-    page.replace_html "sdp_tasks", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>nil})
-  end  
+	page.replace "workload", render(:partial=>'workload')
+	page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']});"
+	if(APP_CONFIG['workloads_add_by_sdp_task'])
+	page.replace_html "sdp_tasks", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>nil})
+	end
+	page << "$('wl_line_#{@line.id}').highlight();"
 end
 

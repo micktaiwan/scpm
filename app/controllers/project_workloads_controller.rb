@@ -217,6 +217,15 @@ class ProjectWorkloadsController < ApplicationController
     end
   end
 
+  def destroy_line
+    @wl_line_id     = params[:id]
+    wl_line         = WlLine.find(@wl_line_id)
+    wl_line.destroy
+    WlLineTask.find(:all, :conditions=>["wl_line_id=?",@wl_line_id]).each do |l|
+      l.destroy
+    end
+  end
+  
 private
 
   def get_common_data(project_ids, companies_ids)
