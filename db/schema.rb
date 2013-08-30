@@ -9,9 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
 ActiveRecord::Schema.define(:version => 20130829081018) do
-
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -126,9 +124,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.integer  "project_id"
   end
 
-  add_index "checklist_items", ["parent_id"], :name => "IDX_CHECKLIST_ITEMS_PARENT_ID"
-  add_index "checklist_items", ["template_id"], :name => "IDX_CHECKLIST_ITEMS_TEMPLATE_ID"
-
   create_table "ci_projects", :force => true do |t|
     t.integer  "internal_id"
     t.integer  "external_id"
@@ -222,8 +217,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.text     "consequence"
     t.text     "actions"
   end
-
-  add_index "generic_risks", ["generic_risk_question_id"], :name => "IDX_GENERIC_RISKS"
 
   create_table "history_counters", :force => true do |t|
     t.integer  "request_id"
@@ -350,8 +343,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.integer  "checklist_not_applicable", :default => 0
   end
 
-  add_index "milestones", ["project_id"], :name => "IDX_MILESTONES"
-
   create_table "notes", :force => true do |t|
     t.text     "note"
     t.integer  "project_id"
@@ -388,8 +379,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.integer  "role_id"
     t.datetime "created_at"
   end
-
-  add_index "person_roles", ["person_id"], :name => "IDX_PERSON_ROLES_PERSON_ID"
 
   create_table "plannings", :force => true do |t|
     t.string   "name"
@@ -446,8 +435,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.integer  "suite_tag_id"
     t.string   "project_code"
   end
-
-  add_index "projects", ["project_id"], :name => "IDX_PROJECTS_ON_PROJECT_ID"
 
   create_table "question_references", :force => true do |t|
     t.integer  "question_id"
@@ -531,7 +518,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.string   "is_stream",               :default => "No"
   end
 
-  add_index "requests", ["project_id"], :name => "IDX_REQUESTS_ON_PROJECT_ID"
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
 
   create_table "requirement_versions", :force => true do |t|
@@ -763,8 +749,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.datetime "updated_at"
   end
 
-  add_index "spider_consolidations", ["spider_id"], :name => "IDX_SPIDER_CONSOLIDATIONS"
-
   create_table "spider_values", :force => true do |t|
     t.integer  "lifecycle_question_id"
     t.integer  "spider_id"
@@ -782,8 +766,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.datetime "updated_at"
     t.string   "file_link"
   end
-
-  add_index "spiders", ["milestone_id"], :name => "IDX_SPIDERS"
 
   create_table "statuses", :force => true do |t|
     t.integer  "project_id",                                                :null => false
@@ -810,8 +792,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.text     "deliverable_spider_gap"
   end
 
-  add_index "statuses", ["project_id"], :name => "IDX_STATUSES"
-
   create_table "stream_review_types", :force => true do |t|
     t.integer  "stream_id"
     t.integer  "review_type_id"
@@ -832,13 +812,13 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
   create_table "streams", :force => true do |t|
     t.string   "name"
     t.integer  "workstream_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.datetime "read_date"
     t.integer  "supervisor_id"
     t.string   "quality_manager"
     t.string   "dwl"
     t.string   "process_owner"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.text     "description"
   end
 
@@ -898,8 +878,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.integer  "project_id"
   end
 
-  add_index "wl_lines", ["request_id"], :name => "IDX_WL_LINES"
-
   create_table "wl_loads", :force => true do |t|
     t.integer  "wl_line_id"
     t.integer  "week"
@@ -907,8 +885,6 @@ ActiveRecord::Schema.define(:version => 20130829081018) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "wl_loads", ["wl_line_id"], :name => "IDX_WL_LOADS"
 
   create_table "workpackages", :force => true do |t|
     t.string "title"

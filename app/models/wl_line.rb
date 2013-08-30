@@ -31,15 +31,21 @@ class WlLine < ActiveRecord::Base
   end
 
   def sdp_tasks_initial
-    sdp_tasks.map{|t| t.initial}.inject(:+)
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.initial}.inject(:+)
   end
 
   def sdp_tasks_balancei
-    sdp_tasks.map{|t| t.balancei}.inject(:+)
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.balancei}.inject(:+)
   end
 
   def sdp_tasks_remaining
-    sdp_tasks.map{|t| t.remaining}.inject(:+)
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.remaining}.inject(:+)
   end
 
   # def assemble_sdp_tasks(line_id)

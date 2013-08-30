@@ -120,7 +120,9 @@ class WorkloadsController < ApplicationController
     for p in @people
       w = Workload.new(p.id)
       @workloads << w
-      @total_days += w.line_sums.inject(0) { |sum, (k,v)| sum += v[:remaining] == '' ? 0 : v[:remaining]}
+      @total_days += w.line_sums.inject(0) { |sum, (k,v)|
+        sum += v[:remaining] == '' ? 0 : v[:remaining]
+      }
       @total_planned_days += w.planned_total
       @to_be_validated_in_wl_remaining_total += w.to_be_validated_in_wl_remaining_total
       #break
