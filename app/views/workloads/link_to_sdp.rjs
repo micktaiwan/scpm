@@ -2,6 +2,8 @@ if @error
   page.alert @error
 else
   page.replace "wl_line_#{@wl_line.id}", render(:partial=>"wl_line")
-  page.replace_html "sdp_tasks", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>@wl_line})
+  # page.replace_html "sdp_tasks", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>@wl_line})
+  page.replace_html "sdp_tasks_edit", render(:partial=>"sdp_tasks", :locals=>{:edit_line=>@wl_line, :partial_id=>"sdp_tasks_edit"})
+  page.replace_html "sdp_tasks_add_by_sdp_task", render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil, :partial_id=>"sdp_tasks_add_by_sdp_task"})
   page << "$('wl_line_#{@wl_line.id}').highlight();"
 end

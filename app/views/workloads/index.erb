@@ -27,7 +27,7 @@
     <br/>
     By SDP task
     <% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
-      <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil}) %>
+      <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil, :partial_id=>"sdp_tasks_add_by_sdp_task"}) %>
     <% end %>
   <% end %>
   <% if APP_CONFIG['workloads_add_by_project'] %>
