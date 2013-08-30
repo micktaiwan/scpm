@@ -305,7 +305,7 @@ class WorkloadsController < ApplicationController
         @line.save
       end
     else
-      @error = "#{found.sdp_task.title} is already linked to #{found.wl_line.name}"
+      @error = "Task '#{found.sdp_task.title}' is already linked to workload line '#{found.wl_line.name}'"
     end
     get_workload_data(person_id)
   end
