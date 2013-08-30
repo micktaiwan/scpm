@@ -19,7 +19,8 @@
 <%= link_to_function('Options',"$('options').toggle();") %>
 
 <div id="options" style="display:none;">
-  <div class="title">Link to a request</div>
+  <fieldset>
+  <legend>Link to a request</legend>
   <% form_remote_tag(:url=>{:action => "link_to_request", :id=>edit_line.id}) do %>
     <%= label_tag(:request_id, "Request #") %>
     <%= text_field_tag(:request_id, nil, {:size=>5}) %>
@@ -27,16 +28,18 @@
   <% end %>
   <%= label_tag(:unlink, "&nbsp;") %>
   <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_request', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
-  <br/>
+  </fieldset>
   <% if APP_CONFIG['workloads_add_by_sdp_task'] %>
-    <div class="title">Link to a SDP task</div>
+    <fieldset>
+    <legend>Link to a SDP task</legend>
     <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
       <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>edit_line, :partial_id=>"sdp_tasks_edit"}) %>
     <% end %>
-    <br/>
+    </fieldset>
   <% end %>
   <% if APP_CONFIG['workloads_add_by_project'] %>
-    <div class="title">Link to a project</div>
+    <fieldset>
+    <legend>Link to a project</legend>
     <% form_remote_tag(:url=>{:action => "link_to_project", :id=>edit_line.id}) do %>
       <%= label_tag(:task, "Project") %>
       <%= render(:partial=>"projects") %>
@@ -44,7 +47,7 @@
     <% end %>
     <%= label_tag(:unlink, "&nbsp;") %>
     <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_project', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
-    <br/>
+    </fieldset>
   <% end %>
   <%= link_to_function('Debug info',"$('debug').toggle();") %><br/>
   <div id="debug" style="display:none;">

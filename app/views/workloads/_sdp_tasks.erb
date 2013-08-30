@@ -10,14 +10,15 @@
 <% end %>
 <%= label_tag(:sdp_task, "SDP Task") %>
 <%= select_tag('sdp_task_id', options_for_select(@sdp_tasks)) %>
-<% @update_name = false %>
+<img src="/images/expand.gif" onclick="get_all_sdp_tasks()" title="Also display tasks with no remaining">
 <%= submit_tag("Add") %><br/>
 <% if partial_id=="sdp_tasks_edit" %>
-<%= check_box_tag('update_sdp_tasks_name', false) %> Update workload line name with all associated tasks<br/><br/>
+  <%= check_box_tag('update_sdp_tasks_name', false) %> Update workload line name with all associated tasks<br/>
 <% end %>
-<a onclick="get_all_sdp_tasks()" href="#"> Also display tasks with no remaining</a><br/>
 
 <% if edit_line %>
+  <br/>
+  Associated tasks: <%= edit_line.sdp_tasks_initial %> days
   <ul class="sdp_tasks">
     <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %> <!-- send checkbox value in locals -->
   </ul>

@@ -104,6 +104,10 @@ class WlLine < ActiveRecord::Base
     name
   end
 
+  def title
+    "#{self.person_name} #{self.display_name}"
+  end
+
   def person_name
     if self.person
       "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
@@ -122,10 +126,6 @@ class WlLine < ActiveRecord::Base
     else
       "no project"
     end
-  end
-
-  def title
-    "#{self.person_name} #{self.display_name}"
   end
 
   def request

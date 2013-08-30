@@ -273,4 +273,5 @@ td.availability.x5 {
 }
 ul.sdp_tasks {
   list-style-type: decimal-leading-zero;
+  margin:0;
   }
