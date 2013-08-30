@@ -332,7 +332,9 @@ class WorkloadsController < ApplicationController
     line_id   = params[:l].to_i
     @wl_line  = WlLine.find(line_id)
     @workload = Workload.new(session['workload_person_id'])
-    @projects = Project.all.map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    if APP_CONFIG['workloads_add_by_project']
+      @projects = Project.all.map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    end
     if @workload.person.trigram == ""
       @sdp_tasks = []
     else
