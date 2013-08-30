@@ -292,8 +292,8 @@ class WorkloadsController < ApplicationController
 
   def add_by_sdp_task
     sdp_task_id = params[:sdp_task_id].to_i
-    person_id = session['workload_person_id'].to_i
-    sdp_task = SDPTask.find_by_sdp_id(sdp_task_id)
+    person_id   = session['workload_person_id'].to_i
+    sdp_task    = SDPTask.find_by_sdp_id(sdp_task_id)
     if not sdp_task
       @error = "Can not find SDP Task with id #{sdp_task_id}"
       return
@@ -407,7 +407,7 @@ class WorkloadsController < ApplicationController
     task              = SDPTask.find_by_sdp_id(sdp_task_id)
     @wl_line          = WlLine.find(line_id)
     @wl_line.add_sdp_task_by_id(sdp_task_id) if not @wl_line.sdp_tasks.include?(task)
-    update_line_name(@wl_line)
+    update_line_name(@wl_line) if params['update_sdp_tasks_name']
     @wl_line.wl_type  = WL_LINE_OTHER
     @wl_line.save
     @workload         = Workload.new(@wl_line.person_id)
@@ -419,7 +419,7 @@ class WorkloadsController < ApplicationController
     line_id     = params[:id]
     @wl_line    = WlLine.find(line_id)
     @wl_line.delete_sdp(sdp_task_id)
-    update_line_name(@wl_line)
+    update_line_name(@wl_line) #if params['update_sdp_tasks_name']
     @wl_line.save
     @workload         = Workload.new(@wl_line.person_id)
     get_sdp_tasks(@workload)

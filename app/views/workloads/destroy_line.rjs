@@ -3,6 +3,8 @@ if @error
 else
 	page << "$('wl_line_#{@wl_line_id}').highlight();"
 	page << "$('wl_line_#{@wl_line_id}').fade();"
+	page << "if($('sdp_tasks_edit')) {"
 	page.replace_html "sdp_tasks_edit", render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil, :partial_id=>"sdp_tasks_edit"})
+	page << "}"
   	page.replace_html "sdp_tasks_add_by_sdp_task", render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil, :partial_id=>"sdp_tasks_add_by_sdp_task"})
 end
