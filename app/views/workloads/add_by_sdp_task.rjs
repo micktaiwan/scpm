@@ -4,8 +4,7 @@ else
   page.replace "workload", render(:partial=>'workload')
   page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']});"
   if(APP_CONFIG['workloads_add_by_sdp_task'])
-    # page.replace_html "sdp_tasks", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>nil})
-    page.replace_html "sdp_task_id", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>nil})
+    page.replace_html "sdp_tasks", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>nil})
   end  
 end
 
