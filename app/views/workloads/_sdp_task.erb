@@ -1,0 +1,9 @@
+<li id="sdp_task_<%=t.id%>">
+  <%= t.title %>
+  <%= link_to_remote(image_tag("delete.gif"),
+   {:url=>{:action=>'unlink_sdp_task', :id=>t.id},
+   :confirm=>"Are you sure ?",
+   :success=>"$('sdp_task_#{t.id}').fade();",
+   :failure=>"alert('Error:' + request.responseText);"},
+   {:class=>"delete"}) %>
+</li>

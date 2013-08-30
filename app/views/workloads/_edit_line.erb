@@ -32,9 +32,12 @@
   <div class="title">Link to a SDP task</div>
   <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
     <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line_id=>edit_line.id}) %>
-    <%= submit_tag("Link") %>
+    <%= submit_tag("Add") %>
   <% end %>
-  <%= label_tag(:unlink, "&nbsp;") %>
+  <%= label_tag(:unlink, "&nbsp;") %>.
+  <ul class="sdp_tasks">
+    <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t) %>
+  </ul>
   <br/>
   <div class="title">Link to a project</div>
   <% form_remote_tag(:url=>{:action => "link_to_project", :id=>edit_line.id}) do %>
@@ -45,10 +48,12 @@
   <%= label_tag(:unlink, "&nbsp;") %>
   <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_project', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
   <br/>
-  Debug:<br/>
-  Request id: <%= edit_line.request.request_id if edit_line.request %><br/>
-  SDP Tasks ids: <%= edit_line.sdp_tasks.map{|t|t.sdp_id} %><br/>
-  SDP Tasks: <%= edit_line.sdp_tasks.map{|t|t.title}.join(',') if edit_line.sdp_tasks %>
+  <%= link_to_function('Debug info',"$('debug').toggle();") %><br/>
+  <div id="debug" style="display:none;">
+    Request id: <%= edit_line.request.request_id if edit_line.request %><br/>
+    SDP Tasks ids: <%= edit_line.sdp_tasks.map{|t|t.sdp_id}.join(',') %><br/>
+    SDP Tasks: <%= edit_line.sdp_tasks.map{|t|t.title}.join(',') if edit_line.sdp_tasks %>
+  </div>
   <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if edit_line.wl_type == 300 and not edit_line.sdp_tasks %>
   <br/>
 

@@ -271,3 +271,6 @@ td.availability.x5 {
   border-radius: 10px;
   -moz-border-radius: 10px;
 }
+ul.sdp_tasks {
+  list-style-type: decimal-leading-zero;
+  }

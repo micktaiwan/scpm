@@ -396,14 +396,14 @@ class WorkloadsController < ApplicationController
     task              = SDPTask.find_by_sdp_id(sdp_task_id)
     @wl_line          = WlLine.find(line_id)
     @wl_line.add_sdp_task_by_id(sdp_task_id) if not @wl_line.sdp_tasks.include?(task)
-    @wl_line.name     = @wl_line.sdp_tasks.map{|p| p.title}.join(',')
+    @wl_line.name     = @wl_line.sdp_tasks.map{|p| p.title}.sort.join(',')
     @wl_line.wl_type  = WL_LINE_OTHER
     @wl_line.save
     @workload         = Workload.new(@wl_line.person_id)
     get_sdp_tasks(@workload)
   end
 
-  def unlink_sdp
+  def unlink_sdp_task
     sdp_task_id       = params[:sdp_task_id].to_i
     line_id           = params[:id]
     @wl_line          = WlLine.find(line_id)
