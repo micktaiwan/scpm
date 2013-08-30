@@ -20,18 +20,24 @@ class WlLine < ActiveRecord::Base
     return [] if wl_line_task_ids.size == 0
     SDPTask.find_by_sql("select * from sdp_tasks where sdp_tasks.sdp_id in (#{wl_line_task_ids.map{ |l| l.sdp_task_id}.join(',')})")
   end
+
   def add_sdp_task_by_id(sdp_task_id)
     WlLineTask.create(:wl_line_id=>self.id, :sdp_task_id=>sdp_task_id)
   end
+
   def delete_sdp(sdp_task_id)
-    WlLineTask.find(:all, :conditions=>["wl_line_id=#{self.id} and sdp_task_id=#{sdp_task_id}"]).destroy
+    t = WlLineTask.find(:first, :conditions=>["wl_line_id=#{self.id} and sdp_task_id=#{sdp_task_id}"])
+    t.destroy if t
   end
+
   def sdp_tasks_initial
     sdp_tasks.map{|t| t.initial}.inject(:+)
   end
+
   def sdp_tasks_balancei
     sdp_tasks.map{|t| t.balancei}.inject(:+)
   end
+
   def sdp_tasks_remaining
     sdp_tasks.map{|t| t.remaining}.inject(:+)
   end

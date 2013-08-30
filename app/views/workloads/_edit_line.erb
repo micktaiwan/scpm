@@ -36,7 +36,7 @@
   <% end %>
   <%= label_tag(:unlink, "&nbsp;") %>.
   <ul class="sdp_tasks">
-    <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t) %>
+    <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %>
   </ul>
   <br/>
   <div class="title">Link to a project</div>
