@@ -35,15 +35,17 @@
     <% end %>
     <br/>
   <% end %>
-  <div class="title">Link to a project</div>
-  <% form_remote_tag(:url=>{:action => "link_to_project", :id=>edit_line.id}) do %>
-    <%= label_tag(:task, "Project") %>
-    <%= render(:partial=>"projects") %>
-    <%= submit_tag("Link") %>
+  <% if APP_CONFIG['workloads_add_by_project'] %>
+    <div class="title">Link to a project</div>
+    <% form_remote_tag(:url=>{:action => "link_to_project", :id=>edit_line.id}) do %>
+      <%= label_tag(:task, "Project") %>
+      <%= render(:partial=>"projects") %>
+      <%= submit_tag("Link") %>
+    <% end %>
+    <%= label_tag(:unlink, "&nbsp;") %>
+    <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_project', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
+    <br/>
   <% end %>
-  <%= label_tag(:unlink, "&nbsp;") %>
-  <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_project', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
-  <br/>
   <%= link_to_function('Debug info',"$('debug').toggle();") %><br/>
   <div id="debug" style="display:none;">
     Request id: <%= edit_line.request.request_id if edit_line.request %><br/>
