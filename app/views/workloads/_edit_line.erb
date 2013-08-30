@@ -34,7 +34,6 @@
     <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line_id=>edit_line.id}) %>
     <%= submit_tag("Add") %>
   <% end %>
-  <%= label_tag(:unlink, "&nbsp;") %>.
   <ul class="sdp_tasks">
     <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %>
   </ul>

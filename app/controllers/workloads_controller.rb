@@ -396,7 +396,7 @@ class WorkloadsController < ApplicationController
     task              = SDPTask.find_by_sdp_id(sdp_task_id)
     @wl_line          = WlLine.find(line_id)
     @wl_line.add_sdp_task_by_id(sdp_task_id) if not @wl_line.sdp_tasks.include?(task)
-    @wl_line.name     = @wl_line.sdp_tasks.map{|p| p.title}.sort.join(',')
+    update_line_name(@wl_line)
     @wl_line.wl_type  = WL_LINE_OTHER
     @wl_line.save
     @workload         = Workload.new(@wl_line.person_id)
@@ -408,6 +408,8 @@ class WorkloadsController < ApplicationController
     line_id     = params[:id]
     @wl_line    = WlLine.find(line_id)
     @wl_line.delete_sdp(sdp_task_id)
+    update_line_name(@wl_line)
+    @wl_line.save
     render(:nothing=>true)
   end
 
@@ -642,6 +644,11 @@ private
     get_chart
     get_sdp_gain(@workload.person)
     get_sdp_tasks(@workload)
+  end
+
+  def update_line_name(line)
+    line.name = line.sdp_tasks.map{|p| p.title}.sort.join(', ')
+    line.name = "No line name" if line.name == ""
   end
 
 end
