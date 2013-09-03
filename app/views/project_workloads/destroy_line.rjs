@@ -1,0 +1,7 @@
+if @error
+  page.alert @error
+else
+	page << "$('wl_line_#{@wl_line_id}').highlight();"
+	page << "$('wl_line_#{@wl_line_id}').fade();"
+	#page.replace_html "sdp_tasks", render(:partial=>'sdp_tasks', :locals=>{:edit_line=>nil})
+end

@@ -82,7 +82,7 @@ class WorkloadsController < ApplicationController
       @sdp_tasks = []
       return
     end
-    task_ids   = wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
+    task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}#wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
     cond = ""
     cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
     @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
@@ -120,7 +120,9 @@ class WorkloadsController < ApplicationController
     for p in @people
       w = Workload.new(p.id)
       @workloads << w
-      @total_days += w.line_sums.inject(0) { |sum, (k,v)| sum += v[:remaining] == '' ? 0 : v[:remaining]}
+      @total_days += w.line_sums.inject(0) { |sum, (k,v)|
+        sum += v[:remaining] == '' ? 0 : v[:remaining]
+      }
       @total_planned_days += w.planned_total
       @to_be_validated_in_wl_remaining_total += w.to_be_validated_in_wl_remaining_total
       #break
@@ -228,13 +230,13 @@ class WorkloadsController < ApplicationController
 
   # Find all lines without tasks
   def refresh_missing_tasks
-    @lines = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is null and wl_lines.wl_type=200", :order=>"project_id, person_id")
+    @lines = WlLine.find(:all, :conditions=>"wl_lines.id not in (select wl_line_id from wl_line_tasks) and wl_lines.wl_type=200", :order=>"project_id, person_id")
     render :layout => false
   end
 
   # find all SDP tasks not associated to workload lines
   def refresh_missing_wl_lines
-    line_ids = WlLine.find(:all, :conditions=>"wl_lines.sdp_task_id is not null").map {|l| l.sdp_task_id}.uniq
+    line_ids = WlLineTask.all.map {|l| l.sdp_task_id}.uniq
     @tasks = SDPTask.find(:all, :conditions=>"remaining > 0 and id not in (#{line_ids.join(',')})", :order=>"project_code, title")
     render :layout => false
   end
@@ -290,21 +292,22 @@ class WorkloadsController < ApplicationController
 
   def add_by_sdp_task
     sdp_task_id = params[:sdp_task_id].to_i
-    person_id = session['workload_person_id'].to_i
-    sdp_task = SDPTask.find_by_sdp_id(sdp_task_id)
+    person_id   = session['workload_person_id'].to_i
+    sdp_task    = SDPTask.find_by_sdp_id(sdp_task_id)
     if not sdp_task
       @error = "Can not find SDP Task with id #{sdp_task_id}"
       return
     end
-    found = WlLine.find_by_sdp_task_id(sdp_task_id)
+    found = WlLineTask.find(:first, :conditions=>["sdp_task_id=?",sdp_task_id])
     if not found
-      @line = WlLine.create(:name=>sdp_task.title, :sdp_task_id=>sdp_task_id, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+      @line     = WlLine.create(:name=>sdp_task.title, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
+      WlLineTask.create(:wl_line_id=>@line.id, :sdp_task_id=>sdp_task_id) 
       if(APP_CONFIG['auto_link_task_to_project']) and sdp_task.project
         @line.project_id = sdp_task.project.id 
         @line.save
       end
     else
-      @error = "This line already exists: #{found.name}"
+      @error = "Task '#{found.sdp_task.title}' is already linked to workload line '#{found.wl_line.name}'"
     end
     get_workload_data(person_id)
   end
@@ -331,7 +334,9 @@ class WorkloadsController < ApplicationController
     line_id   = params[:l].to_i
     @wl_line  = WlLine.find(line_id)
     @workload = Workload.new(session['workload_person_id'])
-    @projects = Project.all.map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    if APP_CONFIG['workloads_add_by_project']
+      @projects = Project.all.map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    end
     if @workload.person.trigram == ""
       @sdp_tasks = []
     else
@@ -346,8 +351,15 @@ class WorkloadsController < ApplicationController
   end
 
   def destroy_line
-    WlLine.find(params[:id]).destroy
-    render(:nothing=>true)
+    @wl_line_id     = params[:id]
+    wl_line         = WlLine.find(@wl_line_id)
+    person_id       = wl_line.person_id
+    wl_line.destroy
+    WlLineTask.find(:all, :conditions=>["wl_line_id=?",@wl_line_id]).each do |l|
+      l.destroy
+    end
+    @workload = Workload.new(person_id)
+    get_sdp_tasks(@workload)
   end
 
   def link_to_request
@@ -385,29 +397,47 @@ class WorkloadsController < ApplicationController
     @wl_line.request_id = nil
     @wl_line.wl_type    = WL_LINE_OTHER
     @wl_line.save
-    @workload = Workload.new(@wl_line.person_id)
+    @workload           = Workload.new(@wl_line.person_id)
   end
 
   def link_to_sdp
-    sdp_task_id  = params[:sdp_task_id].to_i
-    line_id     = params[:id]
-    person_id = session['workload_person_id'].to_i
-    task = SDPTask.find_by_sdp_id(sdp_task_id)
-    @wl_line = WlLine.find(line_id)
-    @wl_line.name = task.title
-    @wl_line.sdp_task_id = sdp_task_id
-    @wl_line.wl_type = WL_LINE_OTHER
+    sdp_task_id       = params[:sdp_task_id].to_i
+    line_id           = params[:id]
+    #person_id         = session['workload_person_id'].to_i
+    #person            = Person.find(person_id)
+    task              = SDPTask.find_by_sdp_id(sdp_task_id)
+    @wl_line          = WlLine.find(line_id)
+    @wl_line.add_sdp_task_by_id(sdp_task_id) if not @wl_line.sdp_tasks.include?(task)
+    if params['update_sdp_tasks_name']
+      current_user.settings.wl_line_change_name = 1 
+    else
+      current_user.settings.wl_line_change_name = 0
+    end
+    current_user.save
+    update_line_name(@wl_line) if ( current_user.settings.wl_line_change_name == 1 )
+    @wl_line.wl_type  = WL_LINE_OTHER
     @wl_line.save
-    @workload = Workload.new(@wl_line.person_id)
+    @workload         = Workload.new(@wl_line.person_id)
+    get_sdp_tasks(@workload)
   end
 
-  def unlink_sdp
-    line_id               = params[:id]
-    @wl_line              = WlLine.find(line_id)
-    @wl_line.sdp_task_id  = nil
-    @wl_line.wl_type      = WL_LINE_OTHER
+  def unlink_sdp_task
+    sdp_task_id = params[:sdp_task_id].to_i
+    line_id     = params[:id]
+    @wl_line    = WlLine.find(line_id)
+    person      = Person.find(session['workload_person_id'].to_i)
+    # raise "param= #{params[:update_sdp_tasks_name]} , #{person.settings.wl_line_change_name}"
+    @wl_line.delete_sdp(sdp_task_id)
+    # if params[:update_sdp_tasks_name]
+    #   person.settings.wl_line_change_name = 1 
+    # else
+    #   person.settings.wl_line_change_name = 0
+    # end
+    # person.save
+    #update_line_name(@wl_line) if ( person.settings.wl_line_change_name == 1 )
     @wl_line.save
-    @workload = Workload.new(@wl_line.person_id)
+    @workload         = Workload.new(@wl_line.person_id)
+    get_sdp_tasks(@workload)
   end
 
   def link_to_project
@@ -641,6 +671,11 @@ private
     get_chart
     get_sdp_gain(@workload.person)
     get_sdp_tasks(@workload)
+  end
+
+  def update_line_name(line)
+    line.name = line.sdp_tasks.map{|p| p.title}.sort.join(', ')
+    line.name = "No line name" if line.name == ""
   end
 
 end

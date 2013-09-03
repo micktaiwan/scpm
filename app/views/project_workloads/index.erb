@@ -39,7 +39,8 @@
   <% @companies= Company.find(:all) %>
   <% if @companies %>
     <% for c in @companies %>
-      <%= check_box_tag('companies_ids[]', c.id, session['workload_companies_ids'].include?(c.id.to_s)) %><%= "#{c.name}"%><br/>
+      <% company_size = Person.find(:all, :conditions=>["company_id=?",c.id]).size %>
+      <%= check_box_tag('companies_ids[]', c.id, session['workload_companies_ids'].include?(c.id.to_s)) %><%= "#{c.name} (#{company_size})"%><br/>
     <% end %>
   <% end %>
   </td></tr>

@@ -1,6 +1,8 @@
 class SDPTask < ActiveRecord::Base
 
   attr_accessor :initial_should_be, :reevaluated_should_be, :difference
+  #has_many :WlLineTasks, :foreign_key=>
+  #has_many :
   
   def initialize
     super
