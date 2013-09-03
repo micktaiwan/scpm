@@ -15,7 +15,7 @@
 <% if partial_id=="sdp_tasks_edit" %>
   <%= check_box_tag('update_sdp_tasks_name', true, current_user.settings.wl_line_change_name==1, :onclick=>"get_checkbox_status('update_sdp_tasks_name')") %> Update workload line name with all associated tasks<br/>
 <% end %>
-<img src="/images/edit.gif" onclick="get_checkbox_status('update_sdp_tasks_name')" title="rag tag">
+
 <% if edit_line %>
   <br/>
   Associated tasks: <%= edit_line.sdp_tasks_initial %> days
