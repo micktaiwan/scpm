@@ -1,5 +1,15 @@
 require 'net/ldap'
 
+class PersonSettings
+
+  attr_accessor :wl_line_change_name # is used for updating lines' names
+
+  def initialize
+    @wl_line_change_name = 0
+  end
+
+end
+
 class Person < ActiveRecord::Base
 
   #include Authentication
@@ -15,11 +25,18 @@ class Person < ActiveRecord::Base
   has_many   :wl_lines
   has_many   :sdp_logs, :order=>"id"
   has_many   :history_counters
+  serialize  :settings, PersonSettings
 
   before_save :encrypt_password
 
   attr_accessor :password
-
+  
+  def save_default_settings
+    if self.settings.nil?
+      self.settings = PersonSettings.new()
+      self.save
+    end
+  end
   # calculate initial, remaining, balance, balance% and remaining delay
   def sdp_balance
     tasks = SDPTask.find(:all, :conditions=>"collab LIKE '%#{self.trigram}%'")

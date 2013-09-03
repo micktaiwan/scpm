@@ -15,12 +15,12 @@
 <% if partial_id=="sdp_tasks_edit" %>
   <%= check_box_tag('update_sdp_tasks_name', true, current_user.settings.wl_line_change_name==1, :onclick=>"get_checkbox_status('update_sdp_tasks_name')") %> Update workload line name with all associated tasks<br/>
 <% end %>
-
+<img src="/images/edit.gif" onclick="get_checkbox_status('update_sdp_tasks_name')" title="rag tag">
 <% if edit_line %>
   <br/>
   Associated tasks: <%= edit_line.sdp_tasks_initial %> days
   <ul class="sdp_tasks">
-    <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %> <!-- send checkbox value in locals -->
+    <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %> <!-- problem: checkbox value isn't refreshed here, should be done with javascript to get its value -->
   </ul>
 <% end %>
 
