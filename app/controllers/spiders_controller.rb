@@ -128,6 +128,18 @@ class SpidersController < ApplicationController
     @spider    = Spider.find(spider_id)
   end
 
+  def delete_spider
+    spider_id   = params[:id]
+    project_id  = params[:project_id]
+
+    spider = Spider.find(:first,:conditions => ["id = ?", spider_id])
+    if (spider.spider_consolidations.count == 0)
+      Spider.destroy(spider_id)
+    end
+
+    redirect_to :controller=>:projects, :action=>:show, :id=>project_id
+  end
+
 
   # ------------------------------------------------------------------------------------
   # CREATE HTML ELEMENTS
