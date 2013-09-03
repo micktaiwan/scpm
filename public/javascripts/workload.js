@@ -6,6 +6,11 @@ function hide_lines_with_no_workload() {
     });
 }
 
+function get_checkbox_status(id){
+  var checkbox = document.getElementsByName(id);
+  window.checkout_status = checkbox[0].checked==true;
+}
+
 function hide_workload_menu() {
   $('wmenu').toggle();
   new Ajax.Request('/workloads/hide_wmenu', {
