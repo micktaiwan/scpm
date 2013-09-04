@@ -96,7 +96,7 @@ class ProjectWorkload
             person_task[l.person_id][:initial]   = l.sdp_tasks_initial.to_f   #if l.sdp_task.initial
             person_task[l.person_id][:balancei]  = l.sdp_tasks_balancei.to_f  #if l.sdp_task.balancei
             person_task[l.person_id][:remaining] = l.sdp_tasks_remaining.to_f #if l.sdp_task.remaining
-            person_task[l.person_id][:consumed]  = l.sdp_tasks.map{|s| s.consumed}.inject(:+).to_f
+            person_task[l.person_id][:consumed]  = sdp_tasks_consumed
           else
             person_task[l.person_id][:initial]   = 0.0
             person_task[l.person_id][:balancei]  = 0.0
@@ -114,7 +114,7 @@ class ProjectWorkload
             person_task[l.person_id][:initial]   += l.sdp_tasks_initial.to_f
             person_task[l.person_id][:balancei]  += l.sdp_tasks_balancei.to_f
             person_task[l.person_id][:remaining] += l.sdp_tasks_remaining.to_f
-            person_task[l.person_id][:consumed]  += l.sdp_tasks.map{|s| s.consumed}.inject(:+).to_f
+            person_task[l.person_id][:consumed]  += l.sdp_tasks_consumed
           end
         end
       end
@@ -250,7 +250,7 @@ class ProjectWorkload
         @line_sums[l.id][:init]      = l.sdp_tasks_initial 
         @line_sums[l.id][:balance]   = l.sdp_tasks_balancei
         @line_sums[l.id][:remaining] = l.sdp_tasks_remaining
-        @line_sums[l.id][:consumed]  = l.sdp_tasks.map{|s| s.consumed}.inject(:+).to_f
+        @line_sums[l.id][:consumed]  = l.sdp_tasks_consumed
         @sdp_consumed_total         += @line_sums[l.id][:consumed]
 
       elsif l.request
