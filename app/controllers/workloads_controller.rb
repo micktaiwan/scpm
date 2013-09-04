@@ -416,12 +416,6 @@ class WorkloadsController < ApplicationController
     task              = SDPTask.find_by_sdp_id(sdp_task_id)
     @wl_line          = WlLine.find(line_id)
     @wl_line.add_sdp_task_by_id(sdp_task_id) if not @wl_line.sdp_tasks.include?(task)
-    # if params['update_sdp_tasks_name']
-    #   current_user.settings.wl_line_change_name = 1 
-    # else
-    #   current_user.settings.wl_line_change_name = 0
-    # end
-    # current_user.save
     update_line_name(@wl_line) if ( current_user.settings.wl_line_change_name == 1 )
     @wl_line.wl_type  = WL_LINE_OTHER
     @wl_line.save
@@ -434,14 +428,7 @@ class WorkloadsController < ApplicationController
     line_id     = params[:id]
     @wl_line    = WlLine.find(line_id)
     person      = Person.find(session['workload_person_id'].to_i)
-    # raise "param= #{params[:update_sdp_tasks_name]} , #{person.settings.wl_line_change_name}"
     @wl_line.delete_sdp(sdp_task_id)
-    # if params[:update_sdp_tasks_name]
-    #   person.settings.wl_line_change_name = 1 
-    # else
-    #   person.settings.wl_line_change_name = 0
-    # end
-    # person.save
     update_line_name(@wl_line) if ( current_user.settings.wl_line_change_name == 1 )
     @wl_line.save
     @workload         = Workload.new(@wl_line.person_id)
