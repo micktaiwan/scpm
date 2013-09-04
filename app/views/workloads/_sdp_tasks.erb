@@ -14,7 +14,7 @@
 <%= submit_tag("Add") %><br/>
 <% if partial_id=="sdp_tasks_edit" %>
   
-  <%= check_box_tag('update_sdp_tasks_name', true, @workload.person.settings.wl_line_change_name==1, :onclick=>"get_checkbox_status('update_sdp_tasks_name')") %> Update workload line name with all associated tasks<br/>
+  <%= check_box_tag('update_sdp_tasks_name', true, current_user.settings.wl_line_change_name==1, :onclick=>"update_settings_name()") %> Update workload line name with all associated tasks<br/>
 
 <% end %>
 <img src="/images/edit.gif" onclick="get_checkbox_status('update_sdp_tasks_name')" title="rag tag">
