@@ -524,10 +524,10 @@ class WorkloadsController < ApplicationController
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     # WL Lines without project
     @lines = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
     # WL lines by project
     temp_lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
     @lines_qr_qwr = Hash.new
     temp_lines_qr_qwr.each do |wl|
         @lines_qr_qwr[wl.project_id] = [wl]
@@ -579,11 +579,11 @@ class WorkloadsController < ApplicationController
 
     # WL lines without project_id
     @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
 
     # WL lines by project
     @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"project_id,wl_type,name")
+      :include=>["request","wl_line_task","person"], :order=>"project_id,wl_type,name")
   end
 
   def do_duplication
