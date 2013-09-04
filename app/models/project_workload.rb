@@ -96,7 +96,7 @@ class ProjectWorkload
             person_task[l.person_id][:initial]   = l.sdp_tasks_initial.to_f   #if l.sdp_task.initial
             person_task[l.person_id][:balancei]  = l.sdp_tasks_balancei.to_f  #if l.sdp_task.balancei
             person_task[l.person_id][:remaining] = l.sdp_tasks_remaining.to_f #if l.sdp_task.remaining
-            person_task[l.person_id][:consumed]  = sdp_tasks_consumed
+            person_task[l.person_id][:consumed]  = l.sdp_tasks_consumed
           else
             person_task[l.person_id][:initial]   = 0.0
             person_task[l.person_id][:balancei]  = 0.0
