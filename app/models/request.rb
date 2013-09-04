@@ -737,7 +737,9 @@ class Request < ActiveRecord::Base
   def sdp_tasks_balancei_sum(options=nil)
     sdp_tasks(options).inject(0.0) {|sum,t| sum += t.balancei}
   end
-
+  def sdp_tasks_consumed_sum(options=nil)
+    sdp_tasks(options).inject(0.0) {|sum,t| sum += t.consumed}
+  end
   def sdp_phase_id
     SdpDB.sdp_phase_id(self.work_package)
   end
