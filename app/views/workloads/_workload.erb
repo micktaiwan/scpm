@@ -56,6 +56,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
@@ -75,6 +78,9 @@
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
     </tr>
 
@@ -86,13 +92,15 @@
     <th style="min-width:45px;">Init.</th>
     <th style="min-width:45px;">Gain</th>
     <th style="min-width:45px;">Rem.</th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th style="min-width:45px;">Consumed</th>
+    <% end %>
     <th class="wl_total" style="min-width:45px;">Planned</th>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th style="min-width:45px;">Total</th>
     <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
     </tr>
-
     <tr class="wl_opens">
     <th></th>
     <th></th>
@@ -101,13 +109,15 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
     </tr>
-
     <tr class="wl_total">
     <th></th>
     <th></th>
@@ -116,6 +126,9 @@
     <th></th>
     <th></th>
     <th></th>
+l   <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
@@ -131,6 +144,9 @@
     <th></th>
     <th></th>
     <th><%= @workload.sdp_remaining_total %></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th id="consumed_total"><%= @workload.sdp_consumed_total %></th>
+    <% end %>
     <th id="planned_total"><%= @workload.planned_total %></th>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th id="total"><%= @workload.total %></th>
@@ -146,6 +162,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
