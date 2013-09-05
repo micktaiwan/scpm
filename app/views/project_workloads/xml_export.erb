@@ -109,16 +109,17 @@
 
   @xml.Worksheet 'ss:Name' => 'project_workloads' do
     @xml.Table do
-      # Columns width
-      if APP_CONFIG['workloads_display_consumed_column']
-        for width in ['100','200','70','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50'] do
+        # Columns width
+        export_width = ['100','200','70']
+        @months.size.downto(1+export_width.size) { |i|
+          export_width << '50'
+        }
+        export_width << '50' if APP_CONFIG['workloads_display_consumed_column']
+        
+        for width in export_width do
           @xml.Column nil, {'ss:Width' => width}
         end
-      else
-        for width in ['100','200','70','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50'] do
-          @xml.Column nil, {'ss:Width' => width}
-        end
-      end
+
         
        @xml.Row do
          for column in @months do
