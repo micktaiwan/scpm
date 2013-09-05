@@ -30,14 +30,11 @@ class ProjectWorkloadsController < ApplicationController
         session['workload_companies_ids'] = []
       end
     end
-    #raise "#{session['workload_project_ids'].map{ |id| id}.join(', ')}"
-
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     return if not session['workload_project_ids'] or session['workload_project_ids']==[]
 
     if @projects.size > 0
       session['workload_project_ids'] = [@projects.first.id] if not session['workload_project_ids']
-      # or not Project.find_by_id(session['workload_project_ids'])
     else
       render(:text=>'no project at all... Please create a new project.')
       return
@@ -90,8 +87,6 @@ class ProjectWorkloadsController < ApplicationController
     found         = WlLine.find(:all, :conditions=>["person_id=#{person_id} and project_id=#{project_ids[0]}"])
     person_name   = Person.find(person_id).name
     project_name  = Project.find(project_ids[0]).name
-     # Rails.logger.debug "person_id=#{person_id} |project id = #{project_ids.map{|p| p}.join(",")} | companies = #{companies_ids.map{|p| p}.join(",")} | project_name = #{project_name} | empty = #{found.empty?}"
-     # raise "#{project_ids.first}"
     if found.empty?
       @line = WlLine.create(:name=>project_name , :project_id=>project_ids[0], :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
       get_common_data(project_ids,companies_ids) 
@@ -222,7 +217,6 @@ class ProjectWorkloadsController < ApplicationController
         end
          @lines << line
       end
-      #raise "#{@line_countable.collect { |t| t }}"
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="project_workload.xls"'
       headers['Cache-Control']        = ''
