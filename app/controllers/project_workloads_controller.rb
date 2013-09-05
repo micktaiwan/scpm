@@ -120,36 +120,45 @@ class ProjectWorkloadsController < ApplicationController
       
       # MONTHS EXPORT
       @months = ["#{@workload.names}","","", "", "", "","",""]
+      @months << "" if APP_CONFIG['workloads_display_consumed_column']
+      # @months = 
       for i in @workload.months
         @months << i
       end
       
       # WEEKS EXPORT
       @weeks = ["","","","","","","",""]
+      @weeks << "" if APP_CONFIG['workloads_display_consumed_column']
       for i in @workload.weeks
         @weeks << i
       end
 
       # DAYS EXPORT
       @days = ["","","","Init.","Gain","Rem.","Planned","Total"]
+      @days = @days[0..3]+["Cons."]+@days[4..7] if APP_CONFIG['workloads_display_consumed_column']
       for i in @workload.days
         @days << i
       end
 
       # OPENS EXPORT
       @opens = ["","Nb of worked days","","","","","",""]
+      @opens << "" if APP_CONFIG['workloads_display_consumed_column']
       for i in @workload.opens
         @opens << i
       end
 
       # CTOTALS EXPORT
       @ctotals = ["","Total","","","","","",""]
+      @ctotals << "" if APP_CONFIG['workloads_display_consumed_column']
       for i in @workload.ctotals
         @ctotals << i[:value]
       end
 
       # SUMS / PERCENTS EXPORT
-      @sums_percents = ["","Sums / Percents","","",""] << @workload.sdp_remaining_total
+      @sums_percents = ["","Sums / Percents","",""]
+      @sums_percents << @workload.sdp_consumed_total if APP_CONFIG['workloads_display_consumed_column']
+      @sums_percents << ""
+      @sums_percents << @workload.sdp_remaining_total
       @sums_percents << @workload.planned_total
       @sums_percents << @workload.total
       for i in @workload.percents
@@ -157,7 +166,9 @@ class ProjectWorkloadsController < ApplicationController
       end
 
       # AVAILABILITY EXPORT
-      @availability = ["","Availability (Sum for the 2 next months)","","","",""] << @workload.sum_availability
+      @availability = ["","Availability (Sum for the 2 next months)","","","",""]
+      @availability << "" if APP_CONFIG['workloads_display_consumed_column']
+      @availability << @workload.sum_availability
       @availability << ""
       for i in @workload.availability
         @availability << i[:value]
@@ -184,6 +195,7 @@ class ProjectWorkloadsController < ApplicationController
 
         planned_total = @workload.line_sums[l.id][:sums].to_f       
         remaining     = @workload.line_sums[l.id][:remaining].to_f
+        consumed      = @workload.line_sums[l.id][:consumed].to_f if APP_CONFIG['workloads_display_consumed_column']
         if (( l.wl_type == 100 or l.wl_type == 200 or l.wl_type == 500) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
           @error[line_pos] = true
         else
@@ -199,6 +211,7 @@ class ProjectWorkloadsController < ApplicationController
         line << l.person.name
         line << l.name
         line << @workload.line_sums[l.id][:init]
+        line << @workload.line_sums[l.id][:consumed] if APP_CONFIG['workloads_display_consumed_column']
         line << @workload.line_sums[l.id][:balance]
         line << @workload.line_sums[l.id][:remaining]
         line << @workload.line_sums[l.id][:sums]

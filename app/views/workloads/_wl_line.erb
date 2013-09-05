@@ -55,9 +55,12 @@
 	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
 		<td class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
-    <td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% else %> class="wl_case" <% end %>><%= consumed %></td>
+    <td class="wl_case"><%= consumed %></td>
   <% end %>
-  	<td class="wl_case"><%= @workload.line_sums[wl_line.id][:balance] %></td>
+  <% gain_class = "wl_case" %>
+  <% gain_class = "wlerror" if @workload.line_sums[wl_line.id][:balance] < 0 %>
+  <% gain_class = "wlpositive" if @workload.line_sums[wl_line.id][:balance] > 0 %>
+  <td class=<%= gain_class %>><%= @workload.line_sums[wl_line.id][:balance] %></td>
   	<td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% else %> class="wl_case" <% end %>><%= remaining %></td>
   <% else %>
 		<td colspan="3"></td>
