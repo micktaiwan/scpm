@@ -157,7 +157,7 @@ class Workload
         @line_sums[l.id][:init]      = l.sdp_tasks_initial
         @line_sums[l.id][:balance]   = l.sdp_tasks_balancei
         @line_sums[l.id][:remaining] = l.sdp_tasks_remaining
-        @line_sums[l.id][:consumed]  = l.sdp_tasks.map{|s| s.consumed}.inject(:+).to_f
+        @line_sums[l.id][:consumed]  = l.sdp_tasks_consumed
         @sdp_consumed_total         += @line_sums[l.id][:consumed].to_f
       elsif l.request
         s = round_to_hour(l.request.workload2)
