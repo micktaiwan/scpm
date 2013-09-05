@@ -49,9 +49,9 @@
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
-    <th></th>
-    <th></th>
     <% end %>
+    <th></th>
+    <th></th>
     <th></th>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
@@ -65,13 +65,13 @@
     <th class="wl_names"></th>
     <th></th>
     <th></th>
-    <th></th>
-    <% if APP_CONFIG['workloads_display_total_column'] %>
-    <th></th>
-    <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
     <% end %>
-    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <th></th>
+    <th></th>
+    <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.weeks) %>
