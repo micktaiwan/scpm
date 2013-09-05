@@ -116,7 +116,6 @@ class ProjectWorkloadsController < ApplicationController
       # MONTHS EXPORT
       @months = ["#{@workload.names}","","", "", "", "","",""]
       @months << "" if APP_CONFIG['workloads_display_consumed_column']
-      # @months = 
       for i in @workload.months
         @months << i
       end
