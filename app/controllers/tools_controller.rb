@@ -90,7 +90,11 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     sdp.import
-
+    SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| sdp.iteration}.uniq.each { |i|
+      if Iteration.find_by_name(i).nil? and Iteration.find_by_name(i)!=""
+        Iteration.create(:name=>i)
+      end
+    }
     if APP_CONFIG['use_multiple_projects_sdp_export']
       redirect_to '/tools/mp_sdp_index'
       return
