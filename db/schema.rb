@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(:version => 20130905133924) do
 
   create_table "iterations", :force => true do |t|
     t.string   "name"
+    t.string   "project_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

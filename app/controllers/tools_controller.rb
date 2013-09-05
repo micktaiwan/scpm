@@ -90,9 +90,9 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     sdp.import
-    SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| sdp.iteration}.uniq.each { |i|
-      if Iteration.find_by_name(i).nil? and Iteration.find_by_name(i)!=""
-        Iteration.create(:name=>i)
+    SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| [sdp.iteration,sdp.project_code]}.uniq.each { |f|
+      if Iteration.find_by_name_and_project_code(f[0],f[1]).nil?
+        Iteration.create(:name=>f[0], :project_code=>f[1])
       end
     }
     if APP_CONFIG['use_multiple_projects_sdp_export']
