@@ -52,19 +52,12 @@ class ProjectWorkload
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
-    return if project_ids.size==0 or companies_ids.size==0
-    selection_exception = false
-    if iterations.size>0
-      iterations.each do |i|
-        selection_exception=true if not ( project_ids.include? i[:project_id].to_s )
-      end
-    end
-    return if selection_exception
+    
+    return if project_ids.size==0 or companies_ids.size==0 # or selection_exception
+
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    #project_ids=[1]
-    #raise "#{project_ids.map{|id| id}.join(',')}"
     @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
     
     if Company.find(:all).size == companies_ids.size
@@ -82,20 +75,43 @@ class ProjectWorkload
         @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
       end
     else
-      restaure_ids = []
       if persons_companies.size==0
         @wl_lines =[]
       else
         project_ids_without_iterations =[]
+        project_ids_with_iterations =[]
         project_ids.each do |p|
           project_ids_without_iterations << p
         end
         iterations.each do |i|
-          project_ids_without_iterations.delete(i[:project_id].to_s) if project_ids_without_iterations.include? i[:project_id].to_s
+          if project_ids_without_iterations.include? i[:project_id].to_s
+            project_ids_without_iterations.delete(i[:project_id].to_s) 
+            project_ids_with_iterations << i[:project_id].to_s
+          end
         end
-        # raise "#{project_ids.map{|p|p}.join(',')} | #{project_ids_without_iterations.map{|p|p}.join(',')} | #{iterations.map{|p|p[:project_id]}.uniq.join(',')}"
-        @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
-        @wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{iterations.map{|i|i[:project_id]}.uniq.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+        if project_ids_without_iterations.size>0
+          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+        else
+          @wl_lines = []
+        end
+        wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+        wl_lines_with_iteration.each do |l|
+          add_line_condition = false
+          if l.sdp_tasks
+            line_iterations = []
+            iterations.each do |i|
+              if i[:project_id]==l.project_id
+                line_iterations << [i[:name],i[:project_code]]
+              end
+            end
+
+            l.sdp_tasks.each do |s|
+              add_line_condition = true if line_iterations.include? [s.iteration,s.project_code] 
+            end
+            
+          end
+          @wl_lines << l if add_line_condition
+        end
       end
     end
     uniq_person_number = @wl_lines.map{|l| l.person_id}.uniq.size
