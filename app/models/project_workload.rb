@@ -53,7 +53,7 @@ class ProjectWorkload
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
     
-    return if project_ids.size==0 or companies_ids.size==0 # or selection_exception
+    return if project_ids.size==0 or companies_ids.size==0
 
     # calculate lines
     cond = ""
@@ -67,7 +67,7 @@ class ProjectWorkload
      end
     
     persons_companies = Person.find(:all, :conditions=>["company_id in (#{companies_ids.join(',')})"]).map{|p| p.id}
-
+    # Case: no iteration selected
     if iterations.size==0
       if persons_companies.size==0
         @wl_lines =[]
@@ -75,11 +75,12 @@ class ProjectWorkload
         @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
       end
     else
+    # Case: iteration(s) selected
       if persons_companies.size==0
         @wl_lines =[]
       else
-        project_ids_without_iterations =[]
-        project_ids_with_iterations =[]
+        project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
+        project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations 
         project_ids.each do |p|
           project_ids_without_iterations << p
         end
@@ -89,29 +90,36 @@ class ProjectWorkload
             project_ids_with_iterations << i[:project_id].to_s
           end
         end
+        # Generate lines without iterations
         if project_ids_without_iterations.size>0
           @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
         else
           @wl_lines = []
         end
-        wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
-        wl_lines_with_iteration.each do |l|
-          add_line_condition = false
-          if l.sdp_tasks
-            line_iterations = []
-            iterations.each do |i|
-              if i[:project_id]==l.project_id
-                line_iterations << [i[:name],i[:project_code]]
-              end
-            end
 
-            l.sdp_tasks.each do |s|
-              add_line_condition = true if line_iterations.include? [s.iteration,s.project_code] 
+        # Generate lines with iterations
+        if project_ids_with_iterations.size>0
+          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+          wl_lines_with_iteration.each do |l|
+            add_line_condition = false
+            if l.sdp_tasks
+              line_iterations = []
+              iterations.each do |i|
+                if i[:project_id]==l.project_id
+                  line_iterations << [i[:name],i[:project_code]]
+                end
+              end
+
+              l.sdp_tasks.each do |s|
+                add_line_condition = true if line_iterations.include? [s.iteration,s.project_code] 
+              end
+              
             end
-            
+            # Line respecting conditions added to the workload lines
+            @wl_lines << l if add_line_condition
           end
-          @wl_lines << l if add_line_condition
         end
+        
       end
     end
     uniq_person_number = @wl_lines.map{|l| l.person_id}.uniq.size
