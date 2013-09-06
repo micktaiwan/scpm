@@ -5,9 +5,10 @@ class ProjectWorkloadsController < ApplicationController
   before_filter :require_admin
 
   def index
-    project_ids = params[:project_ids]
-    companies_ids = params[:companies_ids]
-
+    project_ids    = params[:project_ids]
+    companies_ids  = params[:companies_ids]
+    iterations_ids = params[:iterations_ids]
+    
     if project_ids
       if project_ids.class==Array
         session['workload_project_ids'] = project_ids # array of strings
@@ -30,6 +31,16 @@ class ProjectWorkloadsController < ApplicationController
         session['workload_companies_ids'] = []
       end
     end
+    session['workload_iterations'] = []
+    if iterations_ids
+      iterations_ids.each do |i|
+        iteration       = Iteration.find(i)
+        iteration_name  = iteration.name
+        project_code    = iteration.project_code
+        project_id      = iteration.project.id
+        session['workload_iterations'] << {:name=>iteration_name, :project_code=>project_code, :project_id=>project_id}
+      end
+    end
     @projects = Project.find(:all, :conditions=>"project_id is null", :order=>"name")
     return if not session['workload_project_ids'] or session['workload_project_ids']==[]
 
@@ -40,7 +51,7 @@ class ProjectWorkloadsController < ApplicationController
       return
     end
     @project_options = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
-    get_common_data(session['workload_project_ids'],session['workload_companies_ids'])
+    get_common_data(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'])
     get_last_sdp_update
   end
 
@@ -75,7 +86,7 @@ class ProjectWorkloadsController < ApplicationController
       return
     end
     @project_options = @projects.map {|p| ["#{p.name} (#{p.wl_lines.size})", p.id]}
-    get_common_data(session['workload_project_ids'],session['workload_companies_ids'])
+    get_common_data(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'])
   end
 
   def add_a_person
@@ -89,7 +100,7 @@ class ProjectWorkloadsController < ApplicationController
     project_name  = Project.find(project_ids[0]).name
     if found.empty?
       @line = WlLine.create(:name=>project_name , :project_id=>project_ids[0], :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
-      get_common_data(project_ids,companies_ids) 
+      get_common_data(project_ids,companies_ids,session['workload_companies_ids']) 
     else
       @error = "This line already exists: #{person_name}"
     end
@@ -98,20 +109,20 @@ class ProjectWorkloadsController < ApplicationController
   def hide_lines_with_no_workload
     on = (params[:on].to_s != 'false')
     session['workload_hide_lines_with_no_workload'] = on
-    get_common_data(session['workload_project_ids'],session['workload_companies_ids'])
+    get_common_data(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'])
   end
 
   def group_by_person
     on = (params[:on].to_s != 'false')
     session['group_by_person'] = on
-    get_common_data(session['workload_project_ids'],session['workload_companies_ids'])
+    get_common_data(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'])
   end
 
   def xml_export
     begin
       @xml = Builder::XmlMarkup.new(:indent => 1)
 
-      @workload = ProjectWorkload.new(session['workload_project_ids'],session['workload_companies_ids'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+      @workload = ProjectWorkload.new(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
       
       # MONTHS EXPORT
       @months = ["#{@workload.names}","","", "", "", "","",""]
@@ -234,9 +245,9 @@ class ProjectWorkloadsController < ApplicationController
   
 private
 
-  def get_common_data(project_ids, companies_ids)
+  def get_common_data(project_ids, companies_ids, iterations)
     @people   = Person.find(:all, :conditions=>"has_left=0", :order=>"name").map {|p| ["#{p.name}", p.id]}
-    @workload = ProjectWorkload.new(project_ids, companies_ids, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+    @workload = ProjectWorkload.new(project_ids, companies_ids, iterations, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
   end
 
   def get_last_sdp_update

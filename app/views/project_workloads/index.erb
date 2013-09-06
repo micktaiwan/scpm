@@ -45,6 +45,22 @@
         <% end %>
       <% end %>
     </td>
+    <td>
+      <b>Iterations</b><br/><br/>
+      <% @iterations= Iteration.find(:all, :order=>:project_code) %>
+      <% if @iterations %>
+      <% previous_project = @iterations.first.project_code %>
+      <b><%= @iterations.first.project.name %></b><br/>
+        <% for i in @iterations %>
+          <% actual_project = i.project_code %>
+          <% if actual_project!=previous_project %>
+            <br/><b><%= i.project.name %></b><br/>
+            <% previous_project = actual_project %>
+            <% end %>
+          <%= check_box_tag('iterations_ids[]', i.id) %><%= "#{i.name}"%><br/>
+        <% end %>
+      <% end %>
+    </td>
   </tr>
 </table>
 <button class="btnlnk" type="button" id="submit_filter" onclick="verify_filter(this)">Filter</button>

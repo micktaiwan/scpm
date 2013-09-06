@@ -48,11 +48,18 @@ class ProjectWorkload
   # :only_holidays => true
   # :group_by_person => true
   # :hide_lines_with_no_workload => true
-  def initialize(project_ids, companies_ids,options = {})
+  def initialize(project_ids, companies_ids, iterations, options = {})
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
     return if project_ids.size==0 or companies_ids.size==0
+    selection_exception = false
+    if iterations.size>0
+      iterations.each do |i|
+        selection_exception=true if not ( project_ids.include? i[:project_id].to_s )
+      end
+    end
+    return if selection_exception
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
@@ -67,10 +74,29 @@ class ProjectWorkload
      end
     
     persons_companies = Person.find(:all, :conditions=>["company_id in (#{companies_ids.join(',')})"]).map{|p| p.id}
-    if persons_companies.size==0
-      @wl_lines =[]
+
+    if iterations.size==0
+      if persons_companies.size==0
+        @wl_lines =[]
+      else
+        @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+      end
     else
-      @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+      restaure_ids = []
+      if persons_companies.size==0
+        @wl_lines =[]
+      else
+        project_ids_without_iterations =[]
+        project_ids.each do |p|
+          project_ids_without_iterations << p
+        end
+        iterations.each do |i|
+          project_ids_without_iterations.delete(i[:project_id].to_s) if project_ids_without_iterations.include? i[:project_id].to_s
+        end
+        # raise "#{project_ids.map{|p|p}.join(',')} | #{project_ids_without_iterations.map{|p|p}.join(',')} | #{iterations.map{|p|p[:project_id]}.uniq.join(',')}"
+        @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+        @wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{iterations.map{|i|i[:project_id]}.uniq.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+      end
     end
     uniq_person_number = @wl_lines.map{|l| l.person_id}.uniq.size
 
