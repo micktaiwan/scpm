@@ -91,6 +91,11 @@ class ToolsController < ApplicationController
     sdp = SDP.new(path)
     sdp.import
 
+    SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| {:name=>sdp.iteration, :project_code=>sdp.project_code}}.uniq.each { |f|
+      if Iteration.find_by_name_and_project_code(f[:name], f[:project_code]).nil?
+        Iteration.create(f)
+      end
+    }
     if APP_CONFIG['use_multiple_projects_sdp_export']
       redirect_to '/tools/mp_sdp_index'
       return

@@ -6,6 +6,14 @@ function hide_lines_with_no_workload() {
     });
 }
 
+function update_settings_name(){
+  var checkbox = $('update_sdp_tasks_name');
+  // window.checkout_status = checkbox[0].checked==true;
+    new Ajax.Request('/workloads/update_settings_name', {
+    parameters: { on: checkbox.checked==true }
+    });
+}
+
 function hide_workload_menu() {
   $('wmenu').toggle();
   new Ajax.Request('/workloads/hide_wmenu', {

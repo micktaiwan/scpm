@@ -22,6 +22,7 @@ class Workload
     :three_next_months_percents,  # next 3 months capped (was _after_ the 5 coming weeks but changed later including next 5 weeks)
     :total,                       # total number of days planned (including past weeks)
     :planned_total,               # total number of days planned (current week and after)
+    :sdp_consumed_total,          # SDP consumed, including requests to be validated (non SDP task)
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
     :to_be_validated_in_wl_remaining_total, # total of requests to be validated planned in workloads
     :nb_total_lines,  # total before filters
@@ -40,7 +41,7 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
       if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_HOLIDAYS}.size == 0
@@ -143,6 +144,7 @@ class Workload
     @total                = 0
     @planned_total        = 0
     @sdp_remaining_total  = 0
+    @sdp_consumed_total   = 0
     @to_be_validated_in_wl_remaining_total = 0
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
@@ -150,11 +152,13 @@ class Workload
       @line_sums[l.id][:sums] = l.planned_sum
       @total          += l.sum if l.wl_type <= 200
       @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
-      if l.sdp_task
-        @sdp_remaining_total += l.sdp_task.remaining.to_f
-        @line_sums[l.id][:init]      = l.sdp_task.initial
-        @line_sums[l.id][:balance]   = l.sdp_task.balancei
-        @line_sums[l.id][:remaining] = l.sdp_task.remaining
+      if l.sdp_tasks
+        @sdp_remaining_total        += l.sdp_tasks_remaining.to_f
+        @line_sums[l.id][:init]      = l.sdp_tasks_initial
+        @line_sums[l.id][:balance]   = l.sdp_tasks_balancei
+        @line_sums[l.id][:remaining] = l.sdp_tasks_remaining
+        @line_sums[l.id][:consumed]  = l.sdp_tasks_consumed
+        @sdp_consumed_total         += @line_sums[l.id][:consumed].to_f
       elsif l.request
         s = round_to_hour(l.request.workload2)
         if l.request.sdp == "No"
@@ -168,13 +172,16 @@ class Workload
           #r = s if r == 0.0
           @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.person.trigram})
           @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.person.trigram})
+          @line_sums[l.id][:consumed]  = l.request.sdp_tasks_consumed_sum({:trigram=>l.person.trigram})
           @line_sums[l.id][:remaining] = r
           @sdp_remaining_total        += r
+          @sdp_consumed_total         += @line_sums[l.id][:consumed]
         end
       else
         @line_sums[l.id][:init]      = 0.0
         @line_sums[l.id][:remaining] = 0.0
         @line_sums[l.id][:balancei]  = 0.0
+        @line_sums[l.id][:consumed]  = 0.0
       end
     end
   end

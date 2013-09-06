@@ -25,6 +25,11 @@
 <%= Workpackage.all.map{|m| m.code}.join(', ') %>
 </p>
 
+<p><%= label_tag 'Is QR QWR' %>
+<%= check_box :ctemplate, :is_qr_qwr %>
+</p>
+
+
 <p><%= label_tag 'values' %>
 <%= text_area(:ctemplate, :values) %></p>
 
