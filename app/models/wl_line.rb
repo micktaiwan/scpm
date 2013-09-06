@@ -48,6 +48,12 @@ class WlLine < ActiveRecord::Base
     t.map{|t| t.remaining}.inject(:+)
   end
 
+  def sdp_tasks_consumed
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.consumed}.inject(:+)
+  end
+
   # def assemble_sdp_tasks(line_id)
   #   sdp_tasks = WlLine.find(line_id).sdp_tasks
   #   sdp_tasks.each do |sdp_task|

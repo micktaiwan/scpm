@@ -88,26 +88,37 @@
       @xml.Font 'ss:Color'=>'#FFFFFF', 'ss:Bold'=>'0'
       @xml.Interior 'ss:Color'=>"#736F6E",'ss:Pattern'=>'Solid'
     end
-    @xml.Style 'ss:ID' => 's18', 'ss:Name' => 'error_rem' do
+    @xml.Style 'ss:ID' => 's18', 'ss:Name' => 'error' do
       @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
       @xml.Interior 'ss:Color'=>"#E77471",'ss:Pattern'=>'Solid'
+    end
+    @xml.Style 'ss:ID' => 's19', 'ss:Name' => 'positive' do
+      @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'0'
+      @xml.Interior 'ss:Color'=>"#81F781",'ss:Pattern'=>'Solid'
     end
   end
   column_company   = 1
   column_persons   = 2
   column_line_name = 3
   column_init      = 4
-  column_gain      = 5
-  column_rem       = 6
-  column_planned   = 7
-  column_total     = 8
+  column_cons      = 5
+  column_gain      = 6
+  column_rem       = 7
+  column_planned   = 8
+  column_total     = 9
 
   @xml.Worksheet 'ss:Name' => 'project_workloads' do
     @xml.Table do
-      # Columns width
-      for width in ['100','200','70','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50','50'] do
-        @xml.Column nil, {'ss:Width' => width}
-      end
+        # Columns width
+        export_width = ['100','200','70']
+        @months.size.downto(1+export_width.size) {
+          export_width << '50'
+        }
+        export_width << '50' if APP_CONFIG['workloads_display_consumed_column']
+
+        for width in export_width do
+          @xml.Column nil, {'ss:Width' => width}
+        end
 
         
        @xml.Row do
@@ -173,7 +184,7 @@
             style = {'ss:StyleID' => 's4'} if ( column_pos < column_planned+1 )
             @xml.Cell(style) do
               column_type = 'String'
-              column_type = 'Number' if (column_pos == column_rem or column_pos == column_planned or column_pos == column_total)
+              column_type = 'Number' if (column_pos == column_rem or column_pos == column_planned or column_pos == column_total or column_pos == column_cons)
               @xml.Data column, 'ss:Type' => column_type
              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
@@ -221,6 +232,10 @@
               end
             end
             style = {'ss:StyleID' => 's18'} if (column_pos==column_rem) and (@error[line_pos] == true)
+            if (column_pos==column_gain)
+              style = {'ss:StyleID' => 's18'} if  line[column_cons] < 0
+              style = {'ss:StyleID' => 's19'} if  line[column_cons] > 0
+            end
             @xml.Cell(style) do
               column_type = 'Number'
               column_type = 'String' if (column_pos==column_persons or column_pos==column_company or column_pos==column_line_name)

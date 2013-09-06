@@ -47,6 +47,9 @@
     <th class="wl_names"></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <th></th>
     <th></th>
@@ -62,6 +65,9 @@
     <th class="wl_names"></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <th></th>
     <th></th>
@@ -77,6 +83,9 @@
     <th class="wl_names"></th>
     <th style="min-width:100px;">Status</th>
     <th style="min-width:45px;">Init.</th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th style="min-width:45px;">Cons.</th>
+    <% end %>
     <th style="min-width:45px;">Gain</th>
     <th style="min-width:45px;">Rem.</th>
     <th class="wl_total" style="min-width:45px;">Planned</th>
@@ -92,6 +101,9 @@
     <th class="wl_names">Nb of worked days</th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <th></th>
     <th></th>
@@ -107,6 +119,9 @@
     <th class="wl_names">Total</th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <th></th>
     <th></th>
@@ -122,6 +137,9 @@
     <th class="wl_names">Sums / Percents</th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th id="consumed_total"><%= @workload.sdp_consumed_total %></th>
+    <% end %>
     <th></th>
     <th><%= @workload.sdp_remaining_total %></th>
     <th id="planned_total"><%= @workload.planned_total %></th>
@@ -137,6 +155,9 @@
     <th class="wl_names">Availability (Sum for the 2 next months)</th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <th></th>
+    <% end %>
     <th></th>
     <th></th>
     <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>

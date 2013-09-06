@@ -165,7 +165,12 @@ tr.wl_opens {
   background: #FAA;
   text-align: center;
   }
-  
+
+.wlpositive {
+  background: #81F781;
+  text-align: center;
+}
+
 .wlerror.no_sdp{
   background: #AAF;
   text-align: center;

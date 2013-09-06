@@ -18,6 +18,7 @@ workloads_months: 6
 workloads_display_project_name_in_lines: false
 workloads_show_consolidation_filters: false
 workloads_display_total_column: false
+workloads_display_consumed_column: false
 workloads_lines_sort: "project_id,wl_type,name"
 workloads_max_height: 500
 consolidation_alert_on_overworkload: false

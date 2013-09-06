@@ -24,26 +24,44 @@
 <form action="/project_workloads/index/filter_projects_companies" name="filter_projects_companies" method="post">
 <!-- <% form_tag(:action=>'index') do %> -->
 <table>
-  <tr valign="top"><td>
-  <b>Projects</b><br/>
-  <% if @projects %>
-    <% for p in @projects %>
-      <%= check_box_tag('project_ids[]', p.id, session['workload_project_ids'].include?(p.id.to_s)) %><%= "#{p.name} (#{p.wl_lines.size})"%><br/>
-    <% end %>
-  <% end %>
-  </td>
-  <td>
-  <b>Companies</b><br/>
-  <button class="btnlnk" type="button" id="check_all" onclick="check(this)">Check All</button>
-    <button class="btnlnk" type="button" id="uncheck_all" onclick="uncheck(this)">Uncheck All</button><br/>
-  <% @companies= Company.find(:all) %>
-  <% if @companies %>
-    <% for c in @companies %>
-      <% company_size = Person.find(:all, :conditions=>["company_id=?",c.id]).size %>
-      <%= check_box_tag('companies_ids[]', c.id, session['workload_companies_ids'].include?(c.id.to_s)) %><%= "#{c.name} (#{company_size})"%><br/>
-    <% end %>
-  <% end %>
-  </td></tr>
+  <tr valign="top">
+    <td>
+      <b>Projects</b><br/>
+      <% if @projects %>
+        <% for p in @projects %>
+          <%= check_box_tag('project_ids[]', p.id, session['workload_project_ids'].include?(p.id.to_s)) %><%= "#{p.name} (#{p.wl_lines.size})"%><br/>
+        <% end %>
+      <% end %>
+    </td>
+    <td>
+      <b>Companies</b><br/>
+      <button class="btnlnk" type="button" id="check_all" onclick="check(this)">Check All</button>
+        <button class="btnlnk" type="button" id="uncheck_all" onclick="uncheck(this)">Uncheck All</button><br/>
+      <% @companies= Company.find(:all) %>
+      <% if @companies %>
+        <% for c in @companies %>
+          <% company_size = Person.find(:all, :conditions=>["company_id=?",c.id]).size %>
+          <%= check_box_tag('companies_ids[]', c.id, session['workload_companies_ids'].include?(c.id.to_s)) %><%= "#{c.name} (#{company_size})"%><br/>
+        <% end %>
+      <% end %>
+    </td>
+    <td>
+      <b>Iterations</b><br/><br/>
+      <% @iterations= Iteration.find(:all, :order=>:project_code) %>
+      <% if @iterations %>
+      <% previous_project = @iterations.first.project_code %>
+      <b><%= @iterations.first.project.name %></b><br/>
+        <% for i in @iterations %>
+          <% actual_project = i.project_code %>
+          <% if actual_project!=previous_project %>
+            <br/><b><%= i.project.name %></b><br/>
+            <% previous_project = actual_project %>
+            <% end %>
+          <%= check_box_tag('iterations_ids[]', i.id) %><%= "#{i.name}"%><br/>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
 </table>
 <button class="btnlnk" type="button" id="submit_filter" onclick="verify_filter(this)">Filter</button>
 <!-- <%= submit_tag('Filter') %> -->

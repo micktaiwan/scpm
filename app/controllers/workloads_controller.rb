@@ -399,21 +399,23 @@ class WorkloadsController < ApplicationController
     @wl_line.save
     @workload           = Workload.new(@wl_line.person_id)
   end
+  def update_settings_name
+    update_status = params[:on]
 
-  def link_to_sdp
-    sdp_task_id       = params[:sdp_task_id].to_i
-    line_id           = params[:id]
-    #person_id         = session['workload_person_id'].to_i
-    #person            = Person.find(person_id)
-    task              = SDPTask.find_by_sdp_id(sdp_task_id)
-    @wl_line          = WlLine.find(line_id)
-    @wl_line.add_sdp_task_by_id(sdp_task_id) if not @wl_line.sdp_tasks.include?(task)
-    if params['update_sdp_tasks_name']
-      current_user.settings.wl_line_change_name = 1 
+    if update_status=='true'
+      current_user.settings.wl_line_change_name = 1
     else
       current_user.settings.wl_line_change_name = 0
     end
     current_user.save
+    render(:nothing=>true)
+  end
+  def link_to_sdp
+    sdp_task_id       = params[:sdp_task_id].to_i
+    line_id           = params[:id]
+    task              = SDPTask.find_by_sdp_id(sdp_task_id)
+    @wl_line          = WlLine.find(line_id)
+    @wl_line.add_sdp_task_by_id(sdp_task_id) if not @wl_line.sdp_tasks.include?(task)
     update_line_name(@wl_line) if ( current_user.settings.wl_line_change_name == 1 )
     @wl_line.wl_type  = WL_LINE_OTHER
     @wl_line.save
@@ -426,15 +428,8 @@ class WorkloadsController < ApplicationController
     line_id     = params[:id]
     @wl_line    = WlLine.find(line_id)
     person      = Person.find(session['workload_person_id'].to_i)
-    # raise "param= #{params[:update_sdp_tasks_name]} , #{person.settings.wl_line_change_name}"
     @wl_line.delete_sdp(sdp_task_id)
-    # if params[:update_sdp_tasks_name]
-    #   person.settings.wl_line_change_name = 1 
-    # else
-    #   person.settings.wl_line_change_name = 0
-    # end
-    # person.save
-    #update_line_name(@wl_line) if ( person.settings.wl_line_change_name == 1 )
+    update_line_name(@wl_line) if ( current_user.settings.wl_line_change_name == 1 )
     @wl_line.save
     @workload         = Workload.new(@wl_line.person_id)
     get_sdp_tasks(@workload)
@@ -529,10 +524,10 @@ class WorkloadsController < ApplicationController
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     # WL Lines without project
     @lines = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
     # WL lines by project
     temp_lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
     @lines_qr_qwr = Hash.new
     temp_lines_qr_qwr.each do |wl|
         @lines_qr_qwr[wl.project_id] = [wl]
@@ -584,11 +579,11 @@ class WorkloadsController < ApplicationController
 
     # WL lines without project_id
     @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"wl_type, name")
+      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
 
     # WL lines by project
     @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
-      :include=>["request","sdp_task","person"], :order=>"project_id,wl_type,name")
+      :include=>["request","wl_line_task","person"], :order=>"project_id,wl_type,name")
   end
 
   def do_duplication
