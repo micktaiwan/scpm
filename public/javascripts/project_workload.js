@@ -8,7 +8,6 @@ function hide_lines_with_no_workload() {
 function check_uncheck(source,name) {
   var checkboxes = document.getElementsByName(name);
   var nb_checked = 0;
-  alert(checkboxes[2].value)
   for(var i=0, n=checkboxes.length;i<n;i++) {
     if (checkboxes[i].checked == true) {nb_checked=nb_checked+1;}
   }
@@ -22,12 +21,7 @@ function check_uncheck(source,name) {
     }
   }
 }
-function uncheck(source) {
-  var checkboxes = document.getElementsByName('companies_ids[]');
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = false;
-  }
-}
+
 function verify_filter(source) {
   var companies     = document.getElementsByName('companies_ids[]');
   var projects      = document.getElementsByName('project_ids[]');
