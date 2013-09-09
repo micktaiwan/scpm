@@ -236,8 +236,8 @@ class WorkloadsController < ApplicationController
 
   # find all SDP tasks not associated to workload lines
   def refresh_missing_wl_lines
-    line_ids = WlLineTask.all.map {|l| l.sdp_task_id}.uniq
-    @tasks = SDPTask.find(:all, :conditions=>"remaining > 0 and id not in (#{line_ids.join(',')})", :order=>"project_code, title")
+    task_ids  = WlLineTask.find(:all, :select=>"sdp_task_id").map{ |t| t.sdp_task_id}.uniq
+    @tasks    = SDPTask.find(:all, :conditions=>"remaining > 0 and sdp_id not in (#{task_ids.join(',')})", :order=>"project_code, title")
     render :layout => false
   end
 

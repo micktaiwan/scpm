@@ -5,18 +5,23 @@ function hide_lines_with_no_workload() {
     parameters: { on: $('hide_lines_with_no_workload').checked }
     });
 }
-function check(source) {
-var checkboxes = document.getElementsByName('companies_ids[]');
+function check_uncheck(source,name) {
+  var checkboxes = document.getElementsByName(name);
+  var nb_checked = 0;
   for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = true;
+    if (checkboxes[i].checked == true) {nb_checked=nb_checked+1;}
+  }
+  if (nb_checked<checkboxes.length) {
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = true;
+    }
+  }else{
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = false;
+    }
   }
 }
-function uncheck(source) {
-var checkboxes = document.getElementsByName('companies_ids[]');
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = false;
-  }
-}
+
 function verify_filter(source) {
   var companies     = document.getElementsByName('companies_ids[]');
   var projects      = document.getElementsByName('project_ids[]');

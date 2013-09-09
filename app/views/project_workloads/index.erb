@@ -26,7 +26,7 @@
 <table>
   <tr valign="top">
     <td>
-      <b>Projects</b><br/>
+      <b><a href="#" onclick="check_uncheck(this,'project_ids[]')" >Projects</a></b><br/>
       <% if @projects %>
         <% for p in @projects %>
           <%= check_box_tag('project_ids[]', p.id, session['workload_project_ids'].include?(p.id.to_s)) %><%= "#{p.name} (#{p.wl_lines.size})"%><br/>
@@ -34,9 +34,7 @@
       <% end %>
     </td>
     <td>
-      <b>Companies</b><br/>
-      <button class="btnlnk" type="button" id="check_all" onclick="check(this)">Check All</button>
-        <button class="btnlnk" type="button" id="uncheck_all" onclick="uncheck(this)">Uncheck All</button><br/>
+      <b><a href="#" onclick="check_uncheck(this,'companies_ids[]')" >Companies</a></b><br/>
       <% @companies= Company.find(:all) %>
       <% if @companies %>
         <% for c in @companies %>
@@ -46,7 +44,7 @@
       <% end %>
     </td>
     <td>
-      <b>Iterations</b><br/><br/>
+      <b><a href="#" onclick="check_uncheck(this,'iterations_ids[]')" >Iterations</a></b><br/><br/>
       <% @iterations= Iteration.find(:all, :order=>:project_code) %>
       <% if @iterations %>
       <% previous_project = @iterations.first.project_code %>
@@ -56,7 +54,7 @@
           <% if actual_project!=previous_project %>
             <br/><b><%= i.project.name %></b><br/>
             <% previous_project = actual_project %>
-            <% end %>
+          <% end %>
           <%= check_box_tag('iterations_ids[]', i.id) %><%= "#{i.name}"%><br/>
         <% end %>
       <% end %>
