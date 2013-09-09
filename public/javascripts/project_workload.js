@@ -21,7 +21,22 @@ function check_uncheck(source,name) {
     }
   }
 }
-
+function check_uncheck_iterations(source,id) {
+  var checkboxes = $$('#'+id);
+  var nb_checked = 0;
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    if (checkboxes[i].checked == true) {nb_checked=nb_checked+1;}
+  }
+  if (nb_checked<checkboxes.length) {
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = true;
+    }
+  }else{
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = false;
+    }
+  }
+}
 function verify_filter(source) {
   var companies     = document.getElementsByName('companies_ids[]');
   var projects      = document.getElementsByName('project_ids[]');
