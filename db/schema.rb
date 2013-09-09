@@ -881,7 +881,6 @@ ActiveRecord::Schema.define(:version => 20130905133924) do
     t.string   "color"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "sdp_task_id"
     t.integer  "parent_line"
     t.integer  "project_id"
   end
