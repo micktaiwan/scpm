@@ -65,13 +65,16 @@ class ProjectWorkload
       cpt         = 0
       project_ids.each do |id|
         cpt     = cpt+1
-        @names  = @names + Project.find(id).name
+        @names  << Project.find(id).name
+        @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
         iterations.each do |i|
           if id == i[:project_id].to_s
-            @names = @names + "["+i[:name]+"]"
+            @names << ", " if not i==iterations.first
+            @names << i[:name]
           end
         end
-        @names = @names + ", " if cpt < project_ids.length
+        @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id
+        @names << ", " if cpt < project_ids.length
       end
     end
     if Company.find(:all).size == companies_ids.size
