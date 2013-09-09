@@ -53,3 +53,35 @@ function highlight_wl_line(id, color) {
     lines_hlighted[id][0] = 1;
     }
   }
+function check_uncheck(source,name) {
+  var checkboxes = document.getElementsByName(name);
+  var nb_checked = 0;
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    if (checkboxes[i].checked == true) {nb_checked=nb_checked+1;}
+  }
+  if (nb_checked<checkboxes.length) {
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = true;
+    }
+  }else{
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = false;
+    }
+  }
+}
+function check_uncheck_iterations(source,id) {
+  var checkboxes = $$('#'+id);
+  var nb_checked = 0;
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    if (checkboxes[i].checked == true) {nb_checked=nb_checked+1;}
+  }
+  if (nb_checked<checkboxes.length) {
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = true;
+    }
+  }else{
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = false;
+    }
+  }
+}
