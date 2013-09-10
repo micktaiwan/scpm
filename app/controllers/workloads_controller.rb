@@ -7,9 +7,32 @@ class WorkloadsController < ApplicationController
   layout 'pdc'
 
   def index
-    person_id = params[:person_id]
+    person_id      = params[:person_id]
+    project_ids    = params[:project_ids]
+    iterations_ids = params[:iterations_ids]
     session['workload_person_id'] = person_id if person_id
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
+    if project_ids
+      if project_ids.class==Array
+        session['workload_person_project_ids'] = project_ids # array of strings
+      else
+        session['workload_person_project_ids'] = [project_ids] # array with one string
+      end
+    else
+      #if session['workload_person_project_ids'] == nil or session['workload_person_project_ids'] == ''
+        session['workload_person_project_ids'] = []
+      #end
+    end
+    session['workload_persons_iterations'] = []
+    if iterations_ids
+      iterations_ids.each do |i|
+        iteration       = Iteration.find(i)
+        iteration_name  = iteration.name
+        project_code    = iteration.project_code
+        project_id      = iteration.project.id
+        session['workload_persons_iterations'] << {:name=>iteration_name, :project_code=>project_code, :project_id=>project_id}
+      end
+    end
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     @projects = Project.find(:all).map {|p| ["#{p.name} (#{p.wl_lines.size} persons)", p.id]}
     change_workload(session['workload_person_id'])
@@ -18,7 +41,8 @@ class WorkloadsController < ApplicationController
   def change_workload(person_id=nil)
     person_id = params[:person_id] if !person_id
     session['workload_person_id'] = person_id
-    @workload = Workload.new(person_id, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
+    @workload = Workload.new(person_id,session['workload_person_project_ids'], session['workload_persons_iterations'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
+    
     @person   = @workload.person
     get_last_sdp_update
     get_suggested_requests(@workload)
@@ -78,14 +102,16 @@ class WorkloadsController < ApplicationController
   end
 
   def get_sdp_tasks(wl,options = {})
-    if wl.person.trigram == ""
-      @sdp_tasks = []
-      return
-    end
-    task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}#wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
-    cond = ""
-    cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
-    @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
+    # if  wl.nil? 
+      if wl.person.trigram == ""
+        @sdp_tasks = []
+        return
+      end
+      task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}#wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
+      cond = ""
+      cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
+      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
+    # end
   end
 
   def get_sdp_gain(person)
@@ -118,7 +144,7 @@ class WorkloadsController < ApplicationController
     @total_planned_days = 0
     @to_be_validated_in_wl_remaining_total = 0
     for p in @people
-      w = Workload.new(p.id)
+      w = Workload.new(p.id,session['workload_person_project_ids'],session['workload_persons_iterations'])
       @workloads << w
       @total_days += w.line_sums.inject(0) { |sum, (k,v)|
         sum += v[:remaining] == '' ? 0 : v[:remaining]
@@ -222,7 +248,7 @@ class WorkloadsController < ApplicationController
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name")
     @workloads = []
     for p in @people
-      @workloads << Workload.new(p.id, {:only_holidays=>true})
+      @workloads << Workload.new(p.id,session['workload_person_project_ids'],session['workload_persons_iterations'], {:only_holidays=>true})
     end
     @workloads = @workloads.sort_by {|w| [w.person.name]}
     render :layout => false
@@ -256,7 +282,9 @@ class WorkloadsController < ApplicationController
       return
     end
     request_id.strip!
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
     if not request
@@ -268,7 +296,7 @@ class WorkloadsController < ApplicationController
     found = WlLine.find_by_person_id_and_request_id(person_id, request_id)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>request_id, :person_id=>person_id, :wl_type=>WL_LINE_REQUEST)
-      get_workload_data(person_id)
+      get_workload_data(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
     else
       @error = "This line already exists: #{request_id}"
     end
@@ -280,19 +308,22 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a name."
       return
     end
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
-      get_workload_data(person_id)
+      get_workload_data(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
     else
       @error = "This line already exists: #{name}"
     end
   end
 
   def add_by_sdp_task
-    sdp_task_id = params[:sdp_task_id].to_i
-    person_id   = session['workload_person_id'].to_i
+    sdp_task_id                   = params[:sdp_task_id].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     sdp_task    = SDPTask.find_by_sdp_id(sdp_task_id)
     if not sdp_task
       @error = "Can not find SDP Task with id #{sdp_task_id}"
@@ -309,12 +340,14 @@ class WorkloadsController < ApplicationController
     else
       @error = "Task '#{found.sdp_task.title}' is already linked to workload line '#{found.wl_line.name}'"
     end
-    get_workload_data(person_id)
+    get_workload_data(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
   end
 
   def add_by_project
     project_id = params[:project_id].to_i
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     project = Project.find(project_id)
     if not project
       @error = "Can not find project with id #{project_id}"
@@ -327,13 +360,13 @@ class WorkloadsController < ApplicationController
     #else
     #  @error = "This line already exists: #{found.name}"
     #end
-    get_workload_data(person_id)
+    get_workload_data(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
   end
 
   def display_edit_line
     line_id   = params[:l].to_i
     @wl_line  = WlLine.find(line_id)
-    @workload = Workload.new(session['workload_person_id'])
+    @workload = Workload.new(session['workload_person_id'],session['workload_person_project_ids'],session['workload_persons_iterations'])
     if APP_CONFIG['workloads_add_by_project']
       @projects = Project.all.map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     end
@@ -347,7 +380,7 @@ class WorkloadsController < ApplicationController
   def edit_line
     @wl_line = WlLine.find(params[:id])
     @wl_line.update_attributes(params[:wl_line])
-    @workload = Workload.new(@wl_line.person_id)
+    @workload = Workload.new(@wl_line.person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
   end
 
   def destroy_line
@@ -358,7 +391,7 @@ class WorkloadsController < ApplicationController
     WlLineTask.find(:all, :conditions=>["wl_line_id=?",@wl_line_id]).each do |l|
       l.destroy
     end
-    @workload = Workload.new(person_id)
+    @workload = Workload.new(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
     get_sdp_tasks(@workload)
   end
 
@@ -369,7 +402,9 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a request number."
       return
     end
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
     if not request
@@ -385,7 +420,7 @@ class WorkloadsController < ApplicationController
       @wl_line.request_id = request_id
       @wl_line.wl_type = WL_LINE_REQUEST
       @wl_line.save
-      @workload = Workload.new(person_id)
+      @workload = Workload.new(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
     else
       @error = "This line already exists: #{request_id}"
     end
@@ -397,7 +432,7 @@ class WorkloadsController < ApplicationController
     @wl_line.request_id = nil
     @wl_line.wl_type    = WL_LINE_OTHER
     @wl_line.save
-    @workload           = Workload.new(@wl_line.person_id)
+    @workload           = Workload.new(@wl_line.person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
   end
   def update_settings_name
     update_status = params[:on]
@@ -419,7 +454,7 @@ class WorkloadsController < ApplicationController
     update_line_name(@wl_line) if ( current_user.settings.wl_line_change_name == 1 )
     @wl_line.wl_type  = WL_LINE_OTHER
     @wl_line.save
-    @workload         = Workload.new(@wl_line.person_id)
+    @workload         = Workload.new(@wl_line.person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
     get_sdp_tasks(@workload)
   end
 
@@ -431,7 +466,7 @@ class WorkloadsController < ApplicationController
     @wl_line.delete_sdp(sdp_task_id)
     update_line_name(@wl_line) if ( current_user.settings.wl_line_change_name == 1 )
     @wl_line.save
-    @workload         = Workload.new(@wl_line.person_id)
+    @workload         = Workload.new(@wl_line.person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
     get_sdp_tasks(@workload)
   end
 
@@ -442,7 +477,7 @@ class WorkloadsController < ApplicationController
     @wl_line.project_id = project_id
     @wl_line.wl_type    = WL_LINE_OTHER
     @wl_line.save
-    @workload           = Workload.new(@wl_line.person_id)
+    @workload           = Workload.new(@wl_line.person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
   end
 
   def unlink_project
@@ -451,7 +486,7 @@ class WorkloadsController < ApplicationController
     @wl_line.project_id = nil
     @wl_line.wl_type    = WL_LINE_OTHER
     @wl_line.save
-    @workload           = Workload.new(@wl_line.person_id)
+    @workload           = Workload.new(@wl_line.person_id,session['workload_person_project_ids'],session['workload_persons_iterations'])
   end
 
   def edit_load
@@ -648,7 +683,7 @@ class WorkloadsController < ApplicationController
   def hide_lines_with_no_workload
     on = (params[:on].to_s != 'false')
     session['workload_hide_lines_with_no_workload'] = on
-    get_workload_data(session['workload_person_id'])
+    get_workload_data(session['workload_person_id'],session['workload_person_project_ids'],session['workload_persons_iterations'])
   end
 
   def hide_wmenu
@@ -658,8 +693,8 @@ class WorkloadsController < ApplicationController
 
 private
 
-  def get_workload_data(person_id)
-    @workload = Workload.new(person_id, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
+  def get_workload_data(person_id, projects_ids, person_iterations)
+    @workload = Workload.new(person_id,projects_ids,person_iterations, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
     @person   = @workload.person
     get_last_sdp_update
     get_suggested_requests(@workload)

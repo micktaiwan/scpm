@@ -65,13 +65,16 @@ class ProjectWorkload
       cpt         = 0
       project_ids.each do |id|
         cpt     = cpt+1
-        @names  = @names + Project.find(id).name
+        @names  << Project.find(id).name
+        @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
         iterations.each do |i|
           if id == i[:project_id].to_s
-            @names = @names + "["+i[:name]+"]"
+            @names << ", " if not i==iterations.first
+            @names << i[:name]
           end
         end
-        @names = @names + ", " if cpt < project_ids.length
+        @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id
+        @names << ", " if cpt < project_ids.length
       end
     end
     if Company.find(:all).size == companies_ids.size
@@ -156,6 +159,11 @@ class ProjectWorkload
             groupBy_lines << line
           end
           person_task[l.person_id] = Hash.new
+          if l.sdp_tasks.size == 0
+            person_task[l.person_id][:sdp]       = false
+          else
+            person_task[l.person_id][:sdp]       = true
+          end
           if l.sdp_tasks
             person_task[l.person_id][:initial]   = l.sdp_tasks_initial.to_f   #if l.sdp_task.initial
             person_task[l.person_id][:balancei]  = l.sdp_tasks_balancei.to_f  #if l.sdp_task.balancei
@@ -166,7 +174,7 @@ class ProjectWorkload
             person_task[l.person_id][:balancei]  = 0.0
             person_task[l.person_id][:remaining] = 0.0
             person_task[l.person_id][:consumed]  = 0.0
-          end        
+          end
         else
           # Update each line for each person with multiple lines
           selected_line           =  groupBy_lines.find{|t| t.person_id == l.person_id}
@@ -174,14 +182,17 @@ class ProjectWorkload
           selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
           selected_line.wl_loads += l.wl_loads
           #Rails.logger.info "===== adding #{l.wl_loads.map{|load| load.wlload}.inject(:+)}"
-          if l.sdp_tasks
+          if l.sdp_tasks.size > 0
             person_task[l.person_id][:initial]   += l.sdp_tasks_initial.to_f
             person_task[l.person_id][:balancei]  += l.sdp_tasks_balancei.to_f
             person_task[l.person_id][:remaining] += l.sdp_tasks_remaining.to_f
             person_task[l.person_id][:consumed]  += l.sdp_tasks_consumed
+            person_task[l.person_id][:sdp]        = true
+
           end
         end
       end
+
       max = (groupBy_lines.select { |l| l.wl_type != 500}.map{ |l| l.id}.max || 0) + 1
       groupBy_lines.select { |l| l.wl_type == 500}.each_with_index { |l, index| 
         l.id = max + index        
@@ -307,6 +318,7 @@ class ProjectWorkload
         @line_sums[l.id][:balance]   = person_task[l.person_id][:balancei]
         @line_sums[l.id][:remaining] = person_task[l.person_id][:remaining]
         @line_sums[l.id][:consumed]  = person_task[l.person_id][:consumed]
+        @line_sums[l.id][:sdp]       = person_task[l.person_id][:sdp]
         @sdp_consumed_total         += person_task[l.person_id][:consumed]
 
       elsif l.sdp_tasks

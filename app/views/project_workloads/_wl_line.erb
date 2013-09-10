@@ -22,7 +22,7 @@
       <%= link_to(image_tag("link.gif"), :controller=>'projects', :action=>'show', :id=>wl_line.request.project.id) %>
     <% end %>
     <!-- SDP Alert -->
-    <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and wl_line.sdp_tasks.size == 0 %>
+    <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if (wl_line.wl_type == 200 and wl_line.sdp_tasks.size == 0) or (wl_line.wl_type == 500 and ( not @workload.line_sums[wl_line.id][:sdp])) %>
     <!-- Left Alert -->
     <%= image_tag('exit.png', :title=>'user has left the project', :width=>'15', :height=>'15') if wl_line.person.has_left? %>
   </td>
