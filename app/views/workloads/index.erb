@@ -89,7 +89,6 @@
     <td>
       <b><a href="#" onclick="check_uncheck(this,'project_ids[]')" >Projects</a></b><br/>
       <% @projects = Project.find(:all, :order=>:project_code) %>
-      <input id="disable_filter" type="checkbox" value="0" name="project_ids[]"><b>Disable filter</b></input><br/>
       <% if @projects %>
         <% for p in @projects %>
           <%= check_box_tag('project_ids[]', p.id, session['workload_person_project_ids'].include?(p.id.to_s)) %><%= "#{p.name} (#{p.wl_lines.size})"%><br/>
