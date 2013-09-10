@@ -256,7 +256,9 @@ class WorkloadsController < ApplicationController
       return
     end
     request_id.strip!
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
     if not request
@@ -280,7 +282,9 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a name."
       return
     end
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
       @line = WlLine.create(:name=>name, :request_id=>nil, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
@@ -291,8 +295,9 @@ class WorkloadsController < ApplicationController
   end
 
   def add_by_sdp_task
-    sdp_task_id = params[:sdp_task_id].to_i
-    person_id   = session['workload_person_id'].to_i
+    sdp_task_id                   = params[:sdp_task_id].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     sdp_task    = SDPTask.find_by_sdp_id(sdp_task_id)
     if not sdp_task
       @error = "Can not find SDP Task with id #{sdp_task_id}"
@@ -314,7 +319,9 @@ class WorkloadsController < ApplicationController
 
   def add_by_project
     project_id = params[:project_id].to_i
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     project = Project.find(project_id)
     if not project
       @error = "Can not find project with id #{project_id}"
@@ -369,7 +376,9 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a request number."
       return
     end
-    person_id = session['workload_person_id'].to_i
+    # person_id = session['workload_person_id'].to_i
+    person_id                     = params[:wl_person].to_i
+    session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
     if not request

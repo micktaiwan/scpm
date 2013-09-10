@@ -23,11 +23,14 @@
  </script> -->
 
 <div id="wl_line_add_form" class="popup" style="display:none;">
+
+<!-- <input id="wl_person" name="wl_person" type="hidden" value="<%= session['workload_person_id'] %>" /> -->
   <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
   <div class="title">Add a line</div>
   <% if APP_CONFIG['workloads_add_by_request_number'] %>
     By request number
     <% form_remote_tag(:url=>{:action => "add_by_request"}) do %>
+      <%= render(:partial=>"wl_person") %>
       <%= label_tag(:request_id, "Request #") %>
       <%= text_field_tag(:request_id, nil, {:id=>'input_request', :size=>5}) %>
       <%= submit_tag("Add") %>
@@ -36,6 +39,7 @@
   <% end %>
   By name ("Holidays", "Training",...)
   <% form_remote_tag(:url=>{:action => "add_by_name"}) do %>
+    <%= render(:partial=>"wl_person") %>
     <%= label_tag(:name, "Name") %>
     <%= text_area_tag(:name, nil, {:id=>'input_name', :cols=>50, :rows=>3}) %>
     <%= submit_tag("Add") %>
@@ -44,6 +48,7 @@
     <br/>
     By SDP task
     <% form_remote_tag(:url=>{:action => "add_by_sdp_task"}) do %>
+      <%= render(:partial=>"wl_person") %>
       <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil, :partial_id=>"sdp_tasks_add_by_sdp_task"}) %>
     <% end %>
   <% end %>
@@ -51,6 +56,7 @@
     <br/>
     By project
     <% form_remote_tag(:url=>{:action => "add_by_project"}) do %>
+      <%= render(:partial=>"wl_person") %>
       <%= label_tag(:sdp_task, "Project") %>
       <%= select_tag('project_id', options_for_select(@projects), {:id=>"project_id"}) %>
       <%= submit_tag("Add") %>
