@@ -97,16 +97,26 @@
       @xml.Interior 'ss:Color'=>"#81F781",'ss:Pattern'=>'Solid'
     end
   end
-  column_company   = 1
-  column_persons   = 2
-  column_line_name = 3
-  column_init      = 4
-  column_cons      = 5
-  column_gain      = 6
-  column_rem       = 7
-  column_planned   = 8
-  column_total     = 9
-
+  if APP_CONFIG['workloads_display_consumed_column'] 
+    column_company   = 1
+    column_persons   = 2
+    column_line_name = 3
+    column_init      = 4
+    column_cons      = 5
+    column_gain      = 6
+    column_rem       = 7
+    column_planned   = 8
+    column_total     = 9
+  else
+    column_company   = 1
+    column_persons   = 2
+    column_line_name = 3
+    column_init      = 4
+    column_gain      = 5
+    column_rem       = 6
+    column_planned   = 7
+    column_total     = 8
+  end
   @xml.Worksheet 'ss:Name' => 'project_workloads' do
     @xml.Table do
         # Columns width
@@ -184,7 +194,11 @@
             style = {'ss:StyleID' => 's4'} if ( column_pos < column_planned+1 )
             @xml.Cell(style) do
               column_type = 'String'
-              column_type = 'Number' if (column_pos == column_rem or column_pos == column_planned or column_pos == column_total or column_pos == column_cons)
+              if APP_CONFIG['workloads_display_consumed_column']
+                column_type = 'Number' if [column_cons,column_rem,column_planned,column_total].include? column_pos
+              else
+                column_type = 'Number' if [column_rem,column_planned,column_total].include? column_pos
+              end
               @xml.Data column, 'ss:Type' => column_type
              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
@@ -197,7 +211,7 @@
             column_pos += 1
             @xml.Cell(style) do
               column_type = 'Number'
-              column_type = 'String' if (column_pos==column_persons or column_pos==column_company or column_pos==column_line_name)
+              column_type = 'String' if [column_persons, column_company, column_line_name].include? column_pos
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
@@ -232,13 +246,15 @@
               end
             end
             style = {'ss:StyleID' => 's18'} if (column_pos==column_rem) and (@error[line_pos] == true)
-            if (column_pos==column_gain)
-              style = {'ss:StyleID' => 's18'} if  line[column_cons] < 0
-              style = {'ss:StyleID' => 's19'} if  line[column_cons] > 0
+            if APP_CONFIG['workloads_display_consumed_column']
+              if (column_pos==column_gain)
+                style = {'ss:StyleID' => 's18'} if  line[column_cons] < 0
+                style = {'ss:StyleID' => 's19'} if  line[column_cons] > 0
+              end
             end
             @xml.Cell(style) do
               column_type = 'Number'
-              column_type = 'String' if (column_pos==column_persons or column_pos==column_company or column_pos==column_line_name)
+              column_type = 'String' if [column_persons,column_company,column_line_name].include? column_pos
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
@@ -249,15 +265,5 @@
 
     end
   end
-  # def excel_style
-  #   style = {}
-  #   #style = sssss if line.person and line.person.is_virtual == 1
-  #   style = {'ss:StyleID' => 's4'} if (column_pos==column_planned)
-  #   style = {'ss:StyleID' => 's5'} if (column==0 and column_pos!=column_planned)
-  #   style = {'ss:StyleID' => 's7'} if (line[column_line_name-1] == "(grouped)")
-  #   style = {'ss:StyleID' => 's8'} if (line[column_line_name-1] == "(grouped)" and column==0 and column_pos!=column_planned)
-  #   style = {'ss:StyleID' => 's9'} if (line[column_line_name-1] == "(grouped)" and column_pos==column_planned)
-  #   style
-  # end
 end
 %>
