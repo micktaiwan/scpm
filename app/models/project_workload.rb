@@ -1,10 +1,13 @@
 class VirtualWlLine < WlLine
 
-  attr_accessor :projects
+  attr_accessor :projects, :sdp_tasks, :number, :alert_sdp_task
 
   def initialize
     super
-    @projects = Array.new
+    @projects   = Array.new
+    @sdp_tasks  = Array.new
+    @number     = 1
+    @alert_sdp_task = false
   end
 
 end
@@ -155,7 +158,7 @@ class ProjectWorkload
           else
             # person appears several times in all the lines
             line = VirtualWlLine.new
-            init_line(line, l.person_id, l.wl_loads, l.wl_type, l.project)
+            init_line(line, l)
             groupBy_lines << line
           end
           person_task[l.person_id] = Hash.new
@@ -179,6 +182,9 @@ class ProjectWorkload
           # Update each line for each person with multiple lines
           selected_line           =  groupBy_lines.find{|t| t.person_id == l.person_id}
           selected_line.projects << l.project if not selected_line.projects.include?(l.project)
+          selected_line.sdp_tasks += l.sdp_tasks
+          selected_line.alert_sdp_task = true if l.sdp_tasks.size == 0
+          selected_line.number += 1
           selected_line.wl_type   =  ApplicationController::WL_LINE_CONSOLIDATED
           selected_line.wl_loads += l.wl_loads
           #Rails.logger.info "===== adding #{l.wl_loads.map{|load| load.wlload}.inject(:+)}"
@@ -188,7 +194,6 @@ class ProjectWorkload
             person_task[l.person_id][:remaining] += l.sdp_tasks_remaining.to_f
             person_task[l.person_id][:consumed]  += l.sdp_tasks_consumed
             person_task[l.person_id][:sdp]        = true
-
           end
         end
       end
@@ -375,12 +380,14 @@ class ProjectWorkload
 
 private
 
-  def init_line(line, person_id, wl_loads, wl_type, project)
-    line.name     = "(grouped)"
-    line.person   = Person.find_by_id(person_id)
-    line.wl_type  = wl_type # initialized with the real type of the line, changed later if this person appears more than once
-    line.wl_loads = wl_loads
-    line.projects = [project]
+  def init_line(line, l)
+    line.name       = "(grouped)"
+    line.person     = Person.find_by_id(l.person_id)
+    line.wl_type    = l.wl_type # initialized with the real type of the line, changed later if this person appears more than once
+    line.wl_loads   = l.wl_loads
+    line.projects   = [l.project]
+    line.sdp_tasks  = l.sdp_tasks
+    line.alert_sdp_task = true if l.sdp_tasks.size == 0
   end
   
   def person_is_uniq?(person_id, lines)

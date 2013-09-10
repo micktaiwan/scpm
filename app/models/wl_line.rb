@@ -105,9 +105,23 @@ class WlLine < ActiveRecord::Base
   end
 
   # task name
-  def display_name
-    #"<a href='#' title='#{name}'>#{name}</a>"
-    name
+  def display_name(options={})
+    if self.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and
+       (self.wl_type!=WorkloadsController::WL_LINE_EXCEPT or self.project_id) 
+      tasks_size = self.sdp_tasks.size
+      if !options[:without_project_name] and APP_CONFIG['workloads_display_project_name_in_lines']
+        tmp =     "[#{self.project_name}"
+        tmp += " x #{tasks_size}" if tasks_size > 1
+        tmp += "] " + self.name
+      else
+        tmp = self.name
+        tmp += " #{self.number} lines" if self.class==VirtualWlLine
+        tmp += " x #{tasks_size} tasks" if tasks_size > 1
+      end
+      tmp
+    else
+      self.name
+    end
   end
 
   def title

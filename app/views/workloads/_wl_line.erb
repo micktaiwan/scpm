@@ -3,16 +3,8 @@
   consumed      = @workload.line_sums[wl_line.id][:consumed].to_f
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
   error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
-  if APP_CONFIG['workloads_display_project_name_in_lines'] and wl_line.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and (wl_line.wl_type!=WorkloadsController::WL_LINE_EXCEPT or wl_line.project_id) 
-    customized_name =     "[#{wl_line.project_name}"
-    tasks_size = wl_line.sdp_tasks.size
-    customized_name += " x #{tasks_size}" if tasks_size>1
-    customized_name += "] " + wl_line.display_name
-  else
-    customized_name =     wl_line.display_name
-  end
 %>
-<tr id="wl_line_<%= wl_line.id %>" title="<%= customized_name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
+<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
 	<td align='center'>
     <%= link_to_remote(image_tag("delete.gif"),
@@ -42,7 +34,7 @@
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= customized_name %>
+    <%= wl_line.display_name %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)

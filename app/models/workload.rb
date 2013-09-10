@@ -44,10 +44,10 @@ class Workload
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
     if !project_ids or project_ids.size==0
-      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"])
     else
       if iterations.size==0
-        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
       else
         project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
         project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations 
@@ -62,14 +62,14 @@ class Workload
         end
         # Generate lines without iterations
         if project_ids_without_iterations.size>0
-          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
         else
           @wl_lines = []
         end
 
         # Generate lines with iterations
         if project_ids_with_iterations.size>0
-          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
           wl_lines_with_iteration.each do |l|
             add_line_condition = false
             if l.sdp_tasks
@@ -90,9 +90,9 @@ class Workload
           end
         end  
       end
-      WlLine.find(:all, :conditions=>["project_id is null and person_id=#{person_id}"]).each do |l|
-        @wl_lines << l
-      end
+      #WlLine.find(:all, :conditions=>["project_id is null and person_id=#{person_id}"]).each do |l|
+      #  @wl_lines << l
+      #end
     end
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
@@ -116,6 +116,7 @@ class Workload
     else
       @displayed_lines = @wl_lines
     end
+    @displayed_lines  = @displayed_lines.sort_by { |l| [l.wl_type, l.display_name.upcase] }
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
