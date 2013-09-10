@@ -90,6 +90,9 @@ class Workload
           end
         end  
       end
+      WlLine.find(:all, :conditions=>["project_id is null and person_id=#{person_id}"]).each do |l|
+        @wl_lines << l
+      end
     end
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
