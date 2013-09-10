@@ -32,7 +32,9 @@ class Workload
 
   # options can have
   # :only_holidays => true
-  def initialize(person_id, options = {})
+  def initialize(person_id, project_ids, iterations, options = {})
+
+    # return if project_ids.size==0
     @person     = Person.find(person_id)
     raise "could not find this person by id '#{person_id}'" if not @person
     @person_id  = person_id
@@ -41,18 +43,68 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    if project_ids.size!=0 and project_ids.first!="0"
+      @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    else
+      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    end
+    # if iterations.size==0
+    #   @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    # else
+    #   project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
+    #   project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations 
+    #   project_ids.each do |p|
+    #     project_ids_without_iterations << p
+    #   end
+    #   iterations.each do |i|
+    #     if project_ids_without_iterations.include? i[:project_id].to_s
+    #       project_ids_without_iterations.delete(i[:project_id].to_s) 
+    #       project_ids_with_iterations << i[:project_id].to_s
+    #     end
+    #   end
+    #   # Generate lines without iterations
+    #   if project_ids_without_iterations.size>0
+    #     @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id=#{person_id})"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    #   else
+    #     @wl_lines = []
+    #   end
+
+    #   # Generate lines with iterations
+    #   if project_ids_with_iterations.size>0
+    #     wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id=#{person_id})"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    #     wl_lines_with_iteration.each do |l|
+    #       add_line_condition = false
+    #       if l.sdp_tasks
+    #         line_iterations = []
+    #         iterations.each do |i|
+    #           if i[:project_id]==l.project_id
+    #             line_iterations << [i[:name],i[:project_code]]
+    #           end
+    #         end
+
+    #         l.sdp_tasks.each do |s|
+    #           add_line_condition = true if line_iterations.include? [s.iteration,s.project_code] 
+    #         end
+            
+    #       end
+    #       # Line respecting conditions added to the workload lines
+    #       @wl_lines << l if add_line_condition
+    #     end
+    #   end  
+    # end
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
-    if options[:only_holidays] != true
-      if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_HOLIDAYS}.size == 0
-        @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_HOLIDAYS)
-      end
-      if APP_CONFIG['automatic_except_line_addition']
-        if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /Other/)}.size == 0
-          @wl_lines  << WlLine.create(:name=>"Other (out of #{APP_CONFIG['project_name']})", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
+    if project_ids.first=="0"
+      if options[:only_holidays] != true
+        if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_HOLIDAYS}.size == 0
+          @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_HOLIDAYS)
         end
-        if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /#{APP_CONFIG['project_name']} AVV/)}.size == 0
-          @wl_lines  << WlLine.create(:name=>"#{APP_CONFIG['project_name']} AVV", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
+        if APP_CONFIG['automatic_except_line_addition']
+          if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /Other/)}.size == 0
+            @wl_lines  << WlLine.create(:name=>"Other (out of #{APP_CONFIG['project_name']})", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
+          end
+          if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /#{APP_CONFIG['project_name']} AVV/)}.size == 0
+            @wl_lines  << WlLine.create(:name=>"#{APP_CONFIG['project_name']} AVV", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
+          end
         end
       end
     end
