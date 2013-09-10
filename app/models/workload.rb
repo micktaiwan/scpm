@@ -43,8 +43,7 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    if project_ids.size==0 #project_ids.size!=0 and project_ids.first!="0"
-
+    if !project_ids or project_ids.size==0
       @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
     else
       if iterations.size==0
@@ -94,15 +93,15 @@ class Workload
     end
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
-      lines = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
-      if lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_HOLIDAYS}.size == 0
+      line_count = WlLine.find(:all, :conditions=>["person_id=#{person_id}"])
+      if line_count.size == 0 or line_count.select {|l| l.wl_type==ApplicationController::WL_LINE_HOLIDAYS}.size == 0
         @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_HOLIDAYS)
       end
       if APP_CONFIG['automatic_except_line_addition']
-        if lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /Other/)}.size == 0
+        if line_count.size == 0 or line_count.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /Other/)}.size == 0
           @wl_lines  << WlLine.create(:name=>"Other (out of #{APP_CONFIG['project_name']})", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
         end
-        if lines.size == 0 or @wl_lines.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /#{APP_CONFIG['project_name']} AVV/)}.size == 0
+        if line_count.size == 0 or line_count.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /#{APP_CONFIG['project_name']} AVV/)}.size == 0
           @wl_lines  << WlLine.create(:name=>"#{APP_CONFIG['project_name']} AVV", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
         end
       end

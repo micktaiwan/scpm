@@ -19,9 +19,9 @@ class WorkloadsController < ApplicationController
         session['workload_person_project_ids'] = [project_ids] # array with one string
       end
     else
-      if session['workload_person_project_ids'] == nil or session['workload_person_project_ids'] == ''
+      #if session['workload_person_project_ids'] == nil or session['workload_person_project_ids'] == ''
         session['workload_person_project_ids'] = []
-      end
+      #end
     end
     session['workload_persons_iterations'] = []
     if iterations_ids
