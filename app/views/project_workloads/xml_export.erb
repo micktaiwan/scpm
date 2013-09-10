@@ -184,7 +184,7 @@
             style = {'ss:StyleID' => 's4'} if ( column_pos < column_planned+1 )
             @xml.Cell(style) do
               column_type = 'String'
-              column_type = 'Number' if (column_pos == column_rem or column_pos == column_planned or column_pos == column_total or column_pos == column_cons)
+              column_type = 'Number' if [column_cons,column_rem,column_planned,column_total].include? column_pos
               @xml.Data column, 'ss:Type' => column_type
              @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
@@ -197,7 +197,7 @@
             column_pos += 1
             @xml.Cell(style) do
               column_type = 'Number'
-              column_type = 'String' if (column_pos==column_persons or column_pos==column_company or column_pos==column_line_name)
+              column_type = 'String' if [column_persons, column_company, column_line_name].include? column_pos
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
@@ -238,7 +238,7 @@
             end
             @xml.Cell(style) do
               column_type = 'Number'
-              column_type = 'String' if (column_pos==column_persons or column_pos==column_company or column_pos==column_line_name)
+              column_type = 'String' if [column_persons,column_company,column_line_name].include? column_pos
               @xml.Data column, 'ss:Type' => column_type
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
@@ -249,15 +249,5 @@
 
     end
   end
-  # def excel_style
-  #   style = {}
-  #   #style = sssss if line.person and line.person.is_virtual == 1
-  #   style = {'ss:StyleID' => 's4'} if (column_pos==column_planned)
-  #   style = {'ss:StyleID' => 's5'} if (column==0 and column_pos!=column_planned)
-  #   style = {'ss:StyleID' => 's7'} if (line[column_line_name-1] == "(grouped)")
-  #   style = {'ss:StyleID' => 's8'} if (line[column_line_name-1] == "(grouped)" and column==0 and column_pos!=column_planned)
-  #   style = {'ss:StyleID' => 's9'} if (line[column_line_name-1] == "(grouped)" and column_pos==column_planned)
-  #   style
-  # end
 end
 %>
