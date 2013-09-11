@@ -59,10 +59,10 @@ class Person < ActiveRecord::Base
     iterations = []
     self.sdp_tasks.each do |sdp_task|
       iteration = sdp_task.get_iteration
-      iterations << iteration if not iterations.include? iteration
+      iterations << iteration if ( not iterations.include? iteration ) and (iteration)
     end
-
-    return iterations.sort_by{|i| [i.project_code, i.name]}
+    return iterations.sort_by{|i| [i.project_code, i.name]} if iterations != []
+    return iterations
   end
   def save_default_settings
     if self.settings.nil?
