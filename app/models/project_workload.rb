@@ -216,7 +216,7 @@ class ProjectWorkload
     else
       @displayed_lines = @wl_lines
     end
-    @displayed_lines  = @displayed_lines.sort_by { |l| l.display_name(:with_project_name=>false, :with_person_name=>true).upcase }
+    @displayed_lines  = @displayed_lines.sort_by { |l| l.display_name(:with_project_name=>false, :with_person_name=>true, :with_person_url=>false).upcase }
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days

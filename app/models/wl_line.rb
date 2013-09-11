@@ -93,12 +93,12 @@ class WlLine < ActiveRecord::Base
   # task name
   def display_name(options={})
     rv = ""
-    rv += "#{self.person_name} " if options[:with_person_name]
+    rv += "#{self.person_name(options)} " if options[:with_person_name]
     if self.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and
        (self.wl_type!=WorkloadsController::WL_LINE_EXCEPT or self.project_id) 
       tasks_size = self.sdp_tasks.size
       if options[:with_project_name] and APP_CONFIG['workloads_display_project_name_in_lines']
-        rv +=     "[#{self.project_name}"
+        rv +=     "[#{self.project_name(options)}"
         rv += " x #{tasks_size}" if tasks_size > 1
         rv += "] " + self.name
       else
@@ -117,21 +117,33 @@ class WlLine < ActiveRecord::Base
     "#{self.person_name} #{self.display_name}"
   end
 
-  def person_name
+  def person_name(options={})
     if self.person
-      "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+      if options[:with_person_url]
+        "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+      else
+        self.person.name
+      end
     else
       "#{name} (no person attached)"
     end
   end
 
-  def project_name
+  def project_name(options={})
     if defined?(self.projects)
       # this line is a group of line (VirtualWlLine)
-      self.projects.map{ |p| "<a href='/project_workloads/?project_ids=#{p.id}'>#{p.name}</a>" }.join(', ')
+      if options[:with_project_url]
+        self.projects.map{ |p| "<a href='/project_workloads/?project_ids=#{p.id}'>#{p.name}</a>" }.join(', ')
+      else
+        self.projects.map{ |p| p.name }.join(', ')
+      end
     elsif self.project
       # this line use standard association to project model
-      "<a href='/project_workloads/?project_ids=#{self.project.id}'>#{self.project.name}</a>"
+      if options[:with_project_url]
+        "<a href='/project_workloads/?project_ids=#{self.project.id}'>#{self.project.name}</a>"
+      else
+        self.project.name
+      end
     else
       "no project"
     end
