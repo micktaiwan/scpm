@@ -19,7 +19,8 @@ workloads_display_project_name_in_lines: false
 workloads_show_consolidation_filters: false
 workloads_display_total_column: false
 workloads_display_consumed_column: false
-workloads_lines_sort: "project_id,wl_type,name"
+workloads_lines_sort: "[l.project_id, l.wl_type, l.display_name.upcase]"
+project_workloads_lines_sort: "l.display_name.upcase"
 workloads_max_height: 500
 consolidation_alert_on_overworkload: false
 consolidation_capped_next_weeks: false

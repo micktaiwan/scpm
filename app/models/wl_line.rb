@@ -54,20 +54,6 @@ class WlLine < ActiveRecord::Base
     t.map{|t| t.consumed}.inject(:+)
   end
 
-  # def assemble_sdp_tasks(line_id)
-  #   sdp_tasks = WlLine.find(line_id).sdp_tasks
-  #   sdp_tasks.each do |sdp_task|
-  #     if sdp_task==sdp_tasks.first
-  #       line_sdp_tasks          = sdp_task
-  #       line_sdp_tasks.sdp_id   = [sdp_task.sdp_id]
-  #       line_sdp_tasks.phase_id = [sdp_task.phase_id]
-  #       line_sdp_tasks.request_id = [sdp_task.request_id]
-
-  #     else
-  #       line_sdp_tasks.sdp_id
-  #     end
-  #   end
-  # end
   def load_by_week(week)
     #WlLoad.find(:first, :conditions=>["wl_line_id=? and week=?", self.id, week])
     self.wl_loads.select {|l| l.week==week.to_i}
@@ -105,30 +91,59 @@ class WlLine < ActiveRecord::Base
   end
 
   # task name
-  def display_name
-    #"<a href='#' title='#{name}'>#{name}</a>"
-    name
+  def display_name(options={})
+    rv = ""
+    rv += "#{self.person_name(options)} " if options[:with_person_name]
+    if self.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and
+       (self.wl_type!=WorkloadsController::WL_LINE_EXCEPT or self.project_id) 
+      tasks_size = self.sdp_tasks.size
+      if options[:with_project_name] and APP_CONFIG['workloads_display_project_name_in_lines']
+        rv +=     "[#{self.project_name(options)}"
+        rv += " x #{tasks_size}" if tasks_size > 1
+        rv += "] " + self.name
+      else
+        rv += self.name
+        rv += " #{self.number} lines" if self.class==VirtualWlLine
+        rv += " x #{tasks_size} tasks" if tasks_size > 1
+      end
+      rv
+    else
+      rv += self.name
+    end
+    rv
   end
 
   def title
     "#{self.person_name} #{self.display_name}"
   end
 
-  def person_name
+  def person_name(options={})
     if self.person
-      "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+      if options[:with_person_url]
+        "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+      else
+        self.person.name
+      end
     else
       "#{name} (no person attached)"
     end
   end
 
-  def project_name
+  def project_name(options={})
     if defined?(self.projects)
       # this line is a group of line (VirtualWlLine)
-      self.projects.map{ |p| "<a href='/project_workloads/?project_ids=#{p.id}'>#{p.name}</a>" }.join(', ')
+      if options[:with_project_url]
+        self.projects.map{ |p| "<a href='/project_workloads/?project_ids=#{p.id}'>#{p.name}</a>" }.join(', ')
+      else
+        self.projects.map{ |p| p.name }.join(', ')
+      end
     elsif self.project
       # this line use standard association to project model
-      "<a href='/project_workloads/?project_ids=#{self.project.id}'>#{self.project.name}</a>"
+      if options[:with_project_url]
+        "<a href='/project_workloads/?project_ids=#{self.project.id}'>#{self.project.name}</a>"
+      else
+        self.project.name
+      end
     else
       "no project"
     end

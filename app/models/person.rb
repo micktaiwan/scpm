@@ -31,6 +31,15 @@ class Person < ActiveRecord::Base
 
   attr_accessor :password
   
+  def projects
+    projects_ids = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"]).collect{|l| l.project_id}.uniq
+    filter       = []
+    projects_ids.each do |id|
+      p= Project.find(id)
+      filter << {:id=>id, :name=>p.name, :nb=>p.number_lines_per_person(self.id)}
+    end
+    return filter
+  end
   def save_default_settings
     if self.settings.nil?
       self.settings = PersonSettings.new()
