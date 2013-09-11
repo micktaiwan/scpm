@@ -41,6 +41,9 @@
   <% if @workload.nb_hidden_lines > 0 %><strong><%end%>
   (<%= @workload.nb_hidden_lines %> hidden)
   <% if @workload.nb_hidden_lines > 0 %></strong><%end%>
+
+  <% if session['workload_persons_iterations'] != [] or session['workload_person_project_ids'] != [] %>
+  <strong>filtered</strong><%end%>
   </b>
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks

@@ -34,7 +34,7 @@
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= wl_line.display_name %>
+    <%= wl_line.display_name(:with_person_name=>false, :with_project_name=>true) %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)

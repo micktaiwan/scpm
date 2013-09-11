@@ -92,7 +92,7 @@ class ProjectWorkload
       if persons_companies.size==0
         @wl_lines =[]
       else
-        @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+        @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"])
       end
     else
     # Case: iteration(s) selected
@@ -112,14 +112,14 @@ class ProjectWorkload
         end
         # Generate lines without iterations
         if project_ids_without_iterations.size>0
-          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"])
         else
           @wl_lines = []
         end
 
         # Generate lines with iterations
         if project_ids_with_iterations.size>0
-          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"]).sort_by{|l| [l.wl_type, (l.person ? l.person.name : l.display_name)]}
+          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id in (#{persons_companies.join(',')})"], :include=>["request","wl_line_task","project"])
           wl_lines_with_iteration.each do |l|
             add_line_condition = false
             if l.sdp_tasks
@@ -133,7 +133,6 @@ class ProjectWorkload
               l.sdp_tasks.each do |s|
                 add_line_condition = true if line_iterations.include? [s.iteration,s.project_code] 
               end
-              
             end
             # Line respecting conditions added to the workload lines
             @wl_lines << l if add_line_condition
@@ -217,7 +216,7 @@ class ProjectWorkload
     else
       @displayed_lines = @wl_lines
     end
-    
+    @displayed_lines  = @displayed_lines.sort_by { |l| l.display_name(:with_project_name=>false, :with_person_name=>true).upcase }
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days

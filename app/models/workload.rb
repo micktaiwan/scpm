@@ -116,7 +116,7 @@ class Workload
     else
       @displayed_lines = @wl_lines
     end
-    @displayed_lines  = @displayed_lines.sort_by { |l| [l.wl_type, l.display_name.upcase] }
+    @displayed_lines  = @displayed_lines.sort_by { |l| eval(APP_CONFIG['workloads_lines_sort']) }
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days

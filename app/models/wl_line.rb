@@ -54,20 +54,6 @@ class WlLine < ActiveRecord::Base
     t.map{|t| t.consumed}.inject(:+)
   end
 
-  # def assemble_sdp_tasks(line_id)
-  #   sdp_tasks = WlLine.find(line_id).sdp_tasks
-  #   sdp_tasks.each do |sdp_task|
-  #     if sdp_task==sdp_tasks.first
-  #       line_sdp_tasks          = sdp_task
-  #       line_sdp_tasks.sdp_id   = [sdp_task.sdp_id]
-  #       line_sdp_tasks.phase_id = [sdp_task.phase_id]
-  #       line_sdp_tasks.request_id = [sdp_task.request_id]
-
-  #     else
-  #       line_sdp_tasks.sdp_id
-  #     end
-  #   end
-  # end
   def load_by_week(week)
     #WlLoad.find(:first, :conditions=>["wl_line_id=? and week=?", self.id, week])
     self.wl_loads.select {|l| l.week==week.to_i}
@@ -106,22 +92,25 @@ class WlLine < ActiveRecord::Base
 
   # task name
   def display_name(options={})
+    rv = ""
+    rv += "#{self.person_name} " if options[:with_person_name]
     if self.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and
        (self.wl_type!=WorkloadsController::WL_LINE_EXCEPT or self.project_id) 
       tasks_size = self.sdp_tasks.size
-      if !options[:without_project_name] and APP_CONFIG['workloads_display_project_name_in_lines']
-        tmp =     "[#{self.project_name}"
-        tmp += " x #{tasks_size}" if tasks_size > 1
-        tmp += "] " + self.name
+      if options[:with_project_name] and APP_CONFIG['workloads_display_project_name_in_lines']
+        rv +=     "[#{self.project_name}"
+        rv += " x #{tasks_size}" if tasks_size > 1
+        rv += "] " + self.name
       else
-        tmp = self.name
-        tmp += " #{self.number} lines" if self.class==VirtualWlLine
-        tmp += " x #{tasks_size} tasks" if tasks_size > 1
+        rv += self.name
+        rv += " #{self.number} lines" if self.class==VirtualWlLine
+        rv += " x #{tasks_size} tasks" if tasks_size > 1
       end
-      tmp
+      rv
     else
-      self.name
+      rv += self.name
     end
+    rv
   end
 
   def title
