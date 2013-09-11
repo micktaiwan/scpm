@@ -88,10 +88,11 @@
   <tr valign="top">
     <td>
       <b><a href="#" onclick="check_uncheck(this,'project_ids[]')" >Projects</a></b><br/>
-      <% @projects = Project.find(:all, :order=>:project_code) %>
+      <% @projects = Person.find(session['workload_person_id']).projects %>
+
       <% if @projects %>
         <% for p in @projects %>
-          <%= check_box_tag('project_ids[]', p.id, session['workload_person_project_ids'].include?(p.id.to_s)) %><%= "#{p.name} (#{p.wl_lines.size})"%><br/>
+          <%= check_box_tag('project_ids[]', p[:id], session['workload_person_project_ids'].include?(p[:id].to_s)) %><%= "#{p[:name]} (#{p[:nb]})"%><br/>
         <% end %>
       <% end %>
     </td>
