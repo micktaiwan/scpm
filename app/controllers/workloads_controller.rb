@@ -109,7 +109,7 @@ class WorkloadsController < ApplicationController
       task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}#wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
       cond = ""
       cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
-      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.remaining})", t.sdp_id]}
+      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
     # end
   end
 
