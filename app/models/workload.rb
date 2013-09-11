@@ -3,6 +3,7 @@ class Workload
   include ApplicationHelper
 
   attr_reader :name,  # person's name
+    :names,           # Filtre's projects names 
     :weeks,           # arrays of week's names '43', '44', ...
     :wl_weeks,        # array of week ids '201143'
     :months,          # "Oct"
@@ -43,6 +44,27 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
+    if iterations.size == 0
+      @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
+    else
+      @names      = ""
+      cpt         = 0
+      project_ids.each do |id|
+        cpt     = cpt+1
+        @names  << Project.find(id).name
+        @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
+        comma   = false
+        iterations.each do |i|
+          if id == i[:project_id].to_s
+            @names << ", " if comma
+            @names << i[:name]
+            comma   = true
+          end
+        end
+        @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id
+        @names << ", " if cpt < project_ids.length
+      end
+    end
     if !project_ids or project_ids.size==0
       @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"])
     else

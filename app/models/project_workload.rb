@@ -70,10 +70,12 @@ class ProjectWorkload
         cpt     = cpt+1
         @names  << Project.find(id).name
         @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
+        comma   = false
         iterations.each do |i|
           if id == i[:project_id].to_s
-            @names << ", " if not i==iterations.first
+            @names << ", " if comma
             @names << i[:name]
+            comma  = true
           end
         end
         @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id

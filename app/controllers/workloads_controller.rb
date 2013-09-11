@@ -12,6 +12,7 @@ class WorkloadsController < ApplicationController
     iterations_ids = params[:iterations_ids]
     session['workload_person_id'] = person_id if person_id
     session['workload_person_id'] = current_user.id if not session['workload_person_id']
+    session['workload_person_id'] = params[:wl_person] if params[:wl_person]
     if project_ids
       if project_ids.class==Array
         session['workload_person_project_ids'] = project_ids # array of strings
@@ -19,9 +20,7 @@ class WorkloadsController < ApplicationController
         session['workload_person_project_ids'] = [project_ids] # array with one string
       end
     else
-      #if session['workload_person_project_ids'] == nil or session['workload_person_project_ids'] == ''
         session['workload_person_project_ids'] = []
-      #end
     end
     session['workload_persons_iterations'] = []
     if iterations_ids
