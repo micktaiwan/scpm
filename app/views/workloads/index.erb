@@ -78,10 +78,8 @@
   <% if APP_CONFIG['workloads_view_by_project_menu'] %>
     <%= link_to('Switch to project view', {:controller=>'project_workloads'}, {:class=>'btnlnk'}) %>
   <% end %>
-  <br/>
-  <br/>
 <% end %>
-<br/>
+
 <%= render(:partial=>"workload") %>
 
 <script>

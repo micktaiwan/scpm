@@ -1,4 +1,5 @@
 <div id="workload" class="workload">
+
     <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
     <!-- <form action="/project_workloads/index/filter_persons_iterations" name="filter_persons_iterations" method="post"> -->
     <% form_tag(:action=>'index') do %>
@@ -6,7 +7,7 @@
       <tr valign="top">
         <td>
           <b><a href="#" onclick="check_uncheck(this,'project_ids[]')" >Projects</a></b><br/>
-          <% @projects = Person.find(session['workload_person_id']).projects %>
+          <% @projects = Person.find(session['workload_person_id']).projects_map %>
 
           <% if @projects %>
             <% for p in @projects %>
@@ -17,10 +18,10 @@
         <td>
         <td>
           <b><a href="#" onclick="check_uncheck(this,'iterations_ids[]')" >Iterations</a></b><br/><br/>
-          <% @iterations= Iteration.find(:all, :order=>:project_code) %>
+          <% @iterations= Person.find(session['workload_person_id']).iterations %>
           <% if @iterations %>
           <% previous_project = @iterations.first.project_code %>
-          <b><a href="#" onclick="check_uncheck_iterations(this,'iterations_<%= previous_project %>')" ><%= @iterations.first.project.name %></a></b><br/><br/>
+          <b><a href="#" onclick="check_uncheck_iterations(this,'iterations_<%= previous_project %>')" ><%= @iterations.first.project.name %></a></b><br/>
             <% for i in @iterations %>
               <% actual_project = i.project_code %>
               <% if actual_project!=previous_project %>
@@ -37,6 +38,7 @@
     <%= submit_tag('Filter') %>
     <% end %>
     </div>
+
     <%= link_to_function(image_tag('toggle.gif'), 'hide_workload_menu()', :id=>'wmenu_close') %>
     <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
     <table width="100%">

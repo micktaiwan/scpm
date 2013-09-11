@@ -25,6 +25,10 @@ class SDPTask < ActiveRecord::Base
     end
   end
 
+  def get_iteration
+    iteration = Iteration.find(:first, :conditions=>["name='#{self.iteration}' and project_code='#{self.project_code}'"])
+    return iteration
+  end
   # Analyze all sdpTasks and generate SDPphases/SDPActivities by specific types from RMT
   def self.format_stats_by_type
     # Reset data
