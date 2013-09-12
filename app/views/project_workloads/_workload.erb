@@ -45,17 +45,17 @@
   <table id="workload_table">
   <thead>
     <% if session['workload_project_ids'].size != 0 %>
+      <% colors = ["#00FF00","#98AFC7","#7FFFD4","#41A317","#F3E5AB","#C36241","#7D0552","#C25A7C","#D462FF","#EBDDE2"] %>
       <% @workload.projects.each do |p| %>
-        <% colors = ["#00FF00","#98AFC7","#7FFFD4","#41A317","#F3E5AB","#C36241","#7D0552","#C25A7C","#D462FF","#EBDDE2"] %>
         <% if p.planning %>
           <% color = colors.rand %>
+          <% colors.delete(color) %>
           <% if p.planning.tasks %>
-
             <% p.planning.tasks.each do |t| %>
               <tr>
                 <th style="background: <%=color%>; color: #000000;" ><%= p.name %></th>
-                <th style="background: <%=color%>;" ></th>
-                <th style="background: <%=color%>; color: #000000;" class="wl_names"><%= t.name %></th>
+                <th style="background: <%=color%>; color: #000000;" ><%= p.planning.name %></th>
+                <th style="background: <%=color%>; color: #000000; text-align: center;" class="wl_names"><%= t.name %></th>
                 <th></th>
                 <th></th>
                 <% if APP_CONFIG['workloads_display_consumed_column'] %>
@@ -69,7 +69,7 @@
                 <% end %>
                 <% c = []
                 @workload.planning_tasks.each do |pt|
-                  c << pt[:week] if pt[:task]==t.id
+                  c << pt if pt[:task]==t
                 end %>
                 <%= render(:partial=>"wl_task_planning", :collection=>c, :locals=>{:color=>color}) %>
               </tr>

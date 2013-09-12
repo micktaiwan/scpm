@@ -363,32 +363,7 @@ class ProjectWorkload
         @line_sums[l.id][:consumed]  = 0.0
       end
     end
-    @planning_tasks = []
-    @projects.each do |p|
-      planning = p.planning
-      if planning
-        tasks = planning.tasks
-        if tasks
-          tasks.each do |t|
-            start_week = t.start_date.cweek
-            end_week   = t.end_date.cweek
-            weeks_task = false
-            weeks_task = true if weeks.first > start_week 
-            weeks.each do |w|
-              if w == start_week and !weeks_task
-                weeks_task = true
-              end
-              @planning_tasks << {:task=>t.id, :week=>weeks_task}
-              if w == end_week and weeks_task
-                weeks_task = false
-              end
-            end
-
-          end
-        end
-      end
-    end
-    
+     @planning_tasks = get_plannings(@projects, wl_weeks)
   end
 
   def col_sum(w, wl_lines)
