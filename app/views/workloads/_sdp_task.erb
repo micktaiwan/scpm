@@ -1,5 +1,5 @@
 <li id="sdp_task_<%=t.id%>">
-  <%= t.title %> (<%= t.initial %>)
+  [<%= t.collab %>] <%= t.title %> (<%= t.assigned %>)
   <%= link_to_remote(image_tag("delete.gif"),
    {:url=>{:action=>'unlink_sdp_task', :id=>wl_line.id, :sdp_task_id=>t.sdp_id},# :update_sdp_tasks_name=>checkout_status},
    :confirm=>"Are you sure ?",
