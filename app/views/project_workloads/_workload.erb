@@ -71,7 +71,9 @@
                 @workload.planning_tasks.each do |pt|
                   c << pt if pt[:task]==t
                 end %>
-                <%= render(:partial=>"wl_task_planning", :collection=>c, :locals=>{:color=>color}) %>
+                <% @start_date_condition = "not detected" %>
+                <% nb_cells = c.select{|y|y[:week]==true}.length %>
+                <%= render(:partial=>"wl_task_planning", :collection=>c, :locals=>{:color=>color, :nb_cells=>nb_cells}) %>
               </tr>
             <% end %>
           <% end %>
