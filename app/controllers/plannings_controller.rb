@@ -14,6 +14,17 @@ class PlanningsController < ApplicationController
     redirect_to :action=>'index'
   end
 
+  def edit
+    id = params[:id]
+    @planning = Planning.find(id)
+  end
+
+  def update
+    p = Planning.find(params[:id])
+    p.update_attributes(params[:planning])
+    redirect_to "/plannings/index/#{p.id}"
+  end
+
   def destroy
     Planning.find(params[:id]).destroy
     render(:nothing=>true)

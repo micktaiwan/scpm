@@ -1,5 +1,6 @@
 <li id="p_<%=p.id%>">
   <%= link_to(p.name, :id=>p.id) %>
+  <%= link_to(image_tag('edit.gif'), :controller=>'plannings', :action=>'edit', :id=>p.id) %>
   <%= link_to_remote(image_tag("delete.gif"),
    {:url=>{:action=>'destroy', :id=>p.id},
    :confirm=>"Are you sure ?\nYou will lose all data related to this planning.",
