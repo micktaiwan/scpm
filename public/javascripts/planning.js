@@ -98,7 +98,7 @@ var Planning = Class.create({
   initialize: function(canvas_id, tasks, teamSize) {
     // initialize defaults, etc.
     window.Planning          = this; // define this class global, so it is accessible from event handlers
-    this.canvas_id           = canvas_id || "planning";
+    this.canvas_id           = canvas_id || "planning_canvas";
     this.canvas              = $(this.canvas_id);
     this.canvas.width        = window.screen.width - this.canvas.offsetLeft - 20;
     this.canvas.height       = 400;

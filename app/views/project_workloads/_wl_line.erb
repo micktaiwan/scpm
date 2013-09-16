@@ -1,16 +1,16 @@
 <%
   remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
+  consumed      = @workload.line_sums[wl_line.id][:consumed].to_f
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
-  error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500) and ((planned_total/remaining < 0.8) or (planned_total > remaining)))
+  error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
 %>
 <tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type_by_project %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
 	<td align='center'>
     <% if wl_line.wl_type != 500 %>
     <%= link_to_remote(image_tag("delete.gif"),
-     {:url=>{:controller=>'workloads', :action=>'destroy_line', :id=>wl_line.id},
+     {:url=>{:action=>'destroy_line', :id=>wl_line.id},
      :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
-     :success=>"$('wl_line_#{wl_line.id}').fade();",
      :failure=>"alert('Error:' + request.responseText);"},
      {:class=>"delete"}) %>
      <% end %>
@@ -21,19 +21,20 @@
     <% if wl_line.request and wl_line.request.project %>
       <%= link_to(image_tag("link.gif"), :controller=>'projects', :action=>'show', :id=>wl_line.request.project.id) %>
     <% end %>
+    <!-- SDP Alert -->
+    <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if (wl_line.wl_type == 200 and wl_line.sdp_tasks.size == 0) or (wl_line.wl_type == 500 and wl_line.alert_sdp_task) %>
+    <!-- Left Alert -->
+    <%= image_tag('exit.png', :title=>'user has left the project', :width=>'15', :height=>'15') if wl_line.person.has_left? %>
   </td>
 
 	<!-- Edit btn / Alert / Backup msg / Person name -->
   <td>
     <!-- highlight function -->
     <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line(#{wl_line.id}, '#FF0')") %>
-    <!-- Alert -->
-    <%= image_tag('alert.gif', :title=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and not wl_line.sdp_task %>
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= wl_line.person_name %> <%= wl_line.display_name %>
-    [<%= wl_line.project_name %>]
+    <%= wl_line.display_name(:with_project_name=>false, :with_person_name=>true, :with_person_url=>true) %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)
@@ -50,11 +51,17 @@
 	<!-- Sum if wl_type != 110/120 (not qr_qwr wl line) -->
 	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
 		<td class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
-  	<td class="wl_case"><%= @workload.line_sums[wl_line.id][:balance] %></td>
-  	<td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% else %> class="wl_case"<% end %>><%= remaining %></td>
-	<% else %>
-		<td colspan="3"></td>
-	<% end %>
+    <% if APP_CONFIG['workloads_display_consumed_column'] %>
+    <td class="wl_case"><%= consumed %></td>
+  <% end %>
+  <% gain_class = "wl_case" %>
+  <% gain_class = "wlerror" if @workload.line_sums[wl_line.id][:balance] < 0 %>
+  <% gain_class = "wlpositive" if @workload.line_sums[wl_line.id][:balance] > 0 %>
+  <td class=<%= gain_class %>><%= @workload.line_sums[wl_line.id][:balance] %></td>
+    <td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% else %> class="wl_case" <% end %>><%= remaining %></td>
+  <% else %>
+    <td colspan="3"></td>
+  <% end %>
 	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
   <% if APP_CONFIG['workloads_display_total_column'] %>
     <td id="ltotal_<%= wl_line.id %>" class="wl_case"><%= wl_line.sum %></td>

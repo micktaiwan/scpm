@@ -490,7 +490,7 @@ div#bandeau {
   top:  100px;
   left: 200px;
   z-index:300;
-  background: #DDF;
+  background: #ABC;
   padding:3px 30px 30px 30px;
   border: 1px solid black;
   border-radius: 10px;
@@ -504,6 +504,15 @@ div#bandeau {
   font-weight: normal;
   font-size: 2em;
 }
+
+legend {
+  font-family: 'Stardos Stencil', serif;
+  font-weight: normal;
+  font-size: 1.5em;
+  }
+fieldset {
+  margin-bottom: 20px;
+  }
 .checklist_item {
   display: inline;
   }
@@ -556,11 +565,11 @@ div#bandeau {
 /* TABLES */
 table, th {
   }
-tr    {
+tr {
   padding: 0px;
   margin: 0px;
   }
-td    {
+td {
   padding: 2px;
   }
 

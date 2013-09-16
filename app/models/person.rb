@@ -1,5 +1,15 @@
 require 'net/ldap'
 
+class PersonSettings
+
+  attr_accessor :wl_line_change_name # is used for updating lines' names
+
+  def initialize
+    @wl_line_change_name = 0
+  end
+
+end
+
 class Person < ActiveRecord::Base
 
   #include Authentication
@@ -15,11 +25,51 @@ class Person < ActiveRecord::Base
   has_many   :wl_lines
   has_many   :sdp_logs, :order=>"id"
   has_many   :history_counters
+  serialize  :settings, PersonSettings
 
   before_save :encrypt_password
 
   attr_accessor :password
-
+  
+  def projects
+    projects = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"])
+    return projects
+  end
+  def projects_map
+    projects_ids = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"]).collect{|l| l.project_id}.uniq
+    filter       = []
+    projects_ids.each do |id|
+      p= Project.find(id)
+      filter << {:id=>id, :name=>p.name, :nb=>p.number_lines_per_person(self.id)}
+    end
+    return filter
+  end
+  def sdp_tasks
+    sdp_tasks = []
+    WlLine.find(:all, :conditions=>["person_id=#{self.id}"]).each do |l|
+      if l.sdp_tasks
+        l.sdp_tasks.each do |sdp_task|
+          sdp_tasks << sdp_task
+        end
+      end
+    end
+    return sdp_tasks
+  end
+  def iterations
+    iterations = []
+    self.sdp_tasks.each do |sdp_task|
+      iteration = sdp_task.get_iteration
+      iterations << iteration if ( not iterations.include? iteration ) and (iteration)
+    end
+    return iterations.sort_by{|i| [i.project_code, i.name]} if iterations != []
+    return iterations
+  end
+  def save_default_settings
+    if self.settings.nil?
+      self.settings = PersonSettings.new()
+      self.save
+    end
+  end
   # calculate initial, remaining, balance, balance% and remaining delay
   def sdp_balance
     tasks = SDPTask.find(:all, :conditions=>"collab LIKE '%#{self.trigram}%'")

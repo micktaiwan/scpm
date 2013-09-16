@@ -2,7 +2,11 @@ if(APP_CONFIG['workloads_suggested_request'])
   page.replace_html "suggested_requests", render(:partial=>"suggested_request", :collection=>@suggested_requests)
 end
 if(APP_CONFIG['workloads_add_by_sdp_task'])
-  page.replace_html "sdp_tasks", render(:partial=>"sdp_tasks")
+  # page.replace_html "sdp_tasks_edit", render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil, :partial_id=>"sdp_tasks_edit"})
+  page.replace_html "sdp_tasks_add_by_sdp_task", render(:partial=>"sdp_tasks", :locals=>{:edit_line=>nil, :partial_id=>"sdp_tasks_add_by_sdp_task"})
+end
+page.select('#wl_person').each do |element|
+  page.replace element, render(:partial=>"wl_person")
 end
 page.replace "workload", render(:partial=>"workload")
 page << "document.body.style.cursor = 'auto';"

@@ -3,6 +3,7 @@ class Workload
   include ApplicationHelper
 
   attr_reader :name,  # person's name
+    :names,           # Filtre's projects names 
     :weeks,           # arrays of week's names '43', '44', ...
     :wl_weeks,        # array of week ids '201143'
     :months,          # "Oct"
@@ -22,6 +23,7 @@ class Workload
     :three_next_months_percents,  # next 3 months capped (was _after_ the 5 coming weeks but changed later including next 5 weeks)
     :total,                       # total number of days planned (including past weeks)
     :planned_total,               # total number of days planned (current week and after)
+    :sdp_consumed_total,          # SDP consumed, including requests to be validated (non SDP task)
     :sdp_remaining_total,         # SDP remaining, including requests to be validated (non SDP task)
     :to_be_validated_in_wl_remaining_total, # total of requests to be validated planned in workloads
     :nb_total_lines,  # total before filters
@@ -31,7 +33,9 @@ class Workload
 
   # options can have
   # :only_holidays => true
-  def initialize(person_id, options = {})
+  def initialize(person_id, project_ids, iterations, options = {})
+
+    # return if project_ids.size==0
     @person     = Person.find(person_id)
     raise "could not find this person by id '#{person_id}'" if not @person
     @person_id  = person_id
@@ -40,11 +44,91 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
-    @wl_lines   = WlLine.find(:all, :conditions=>["person_id=?"+cond, person_id], :include=>["request","sdp_task","person"], :order=>APP_CONFIG['workloads_lines_sort'])
+    if iterations.size == 0
+      @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
+    else
+      @names      = ""
+      cpt         = 0
+      project_ids.each do |id|
+        cpt     = cpt+1
+        @names  << Project.find(id).name
+        @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
+        comma   = false
+        iterations.each do |i|
+          if id == i[:project_id].to_s
+            @names << ", " if comma
+            @names << i[:name]
+            comma   = true
+          end
+        end
+        @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id
+        @names << ", " if cpt < project_ids.length
+      end
+    end
+    if !project_ids or project_ids.size==0
+      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"])
+    else
+      if iterations.size==0
+        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
+      else
+        project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
+        project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations 
+        project_ids.each do |p|
+          project_ids_without_iterations << p
+        end
+        iterations.each do |i|
+          if project_ids_without_iterations.include? i[:project_id].to_s
+            project_ids_without_iterations.delete(i[:project_id].to_s) 
+            project_ids_with_iterations << i[:project_id].to_s
+          end
+        end
+        # Generate lines without iterations
+        if project_ids_without_iterations.size>0
+          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
+        else
+          @wl_lines = []
+        end
+
+        # Generate lines with iterations
+        if project_ids_with_iterations.size>0
+          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
+          wl_lines_with_iteration.each do |l|
+            add_line_condition = false
+            if l.sdp_tasks
+              line_iterations = []
+              iterations.each do |i|
+                if i[:project_id]==l.project_id
+                  line_iterations << [i[:name],i[:project_code]]
+                end
+              end
+
+              l.sdp_tasks.each do |s|
+                add_line_condition = true if line_iterations.include? [s.iteration,s.project_code] 
+              end
+              
+            end
+            # Line respecting conditions added to the workload lines
+            @wl_lines << l if add_line_condition
+          end
+        end  
+      end
+      #WlLine.find(:all, :conditions=>["project_id is null and person_id=#{person_id}"]).each do |l|
+      #  @wl_lines << l
+      #end
+    end
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
-      if @wl_lines.size == 0 or @wl_lines.select {|l| l.wl_type==WorkloadsController::WL_LINE_HOLIDAYS}.size == 0
-        @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>WorkloadsController::WL_LINE_HOLIDAYS)
+      line_count = WlLine.find(:all, :conditions=>["person_id=#{person_id}"])
+      if line_count.size == 0 or line_count.select {|l| l.wl_type==ApplicationController::WL_LINE_HOLIDAYS}.size == 0
+        @wl_lines  << WlLine.create(:name=>"Holidays", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_HOLIDAYS)
+      end
+      if APP_CONFIG['automatic_except_line_addition']
+        if line_count.size == 0 or line_count.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /Other/)}.size == 0
+          @wl_lines  << WlLine.create(:name=>"Other (out of #{APP_CONFIG['project_name']})", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
+        end
+        if line_count.size == 0 or line_count.select {|l| l.wl_type==ApplicationController::WL_LINE_EXCEPT and (l.name =~ /#{APP_CONFIG['project_name']} AVV/)}.size == 0
+          @wl_lines  << WlLine.create(:name=>"#{APP_CONFIG['project_name']} AVV", :request_id=>nil, :person_id=>person_id, :wl_type=>ApplicationController::WL_LINE_EXCEPT)
+        end
       end
     end
     @nb_total_lines = @wl_lines.size
@@ -54,6 +138,7 @@ class Workload
     else
       @displayed_lines = @wl_lines
     end
+    @displayed_lines  = @displayed_lines.sort_by { |l| eval(APP_CONFIG['workloads_lines_sort'])}
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
@@ -135,6 +220,7 @@ class Workload
     @total                = 0
     @planned_total        = 0
     @sdp_remaining_total  = 0
+    @sdp_consumed_total   = 0
     @to_be_validated_in_wl_remaining_total = 0
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
@@ -142,11 +228,13 @@ class Workload
       @line_sums[l.id][:sums] = l.planned_sum
       @total          += l.sum if l.wl_type <= 200
       @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
-      if l.sdp_task
-        @sdp_remaining_total += l.sdp_task.remaining.to_f
-        @line_sums[l.id][:init]      = l.sdp_task.initial
-        @line_sums[l.id][:balance]   = l.sdp_task.balancei
-        @line_sums[l.id][:remaining] = l.sdp_task.remaining
+      if l.sdp_tasks
+        @sdp_remaining_total        += l.sdp_tasks_remaining.to_f
+        @line_sums[l.id][:init]      = l.sdp_tasks_initial
+        @line_sums[l.id][:balance]   = l.sdp_tasks_balancei
+        @line_sums[l.id][:remaining] = l.sdp_tasks_remaining
+        @line_sums[l.id][:consumed]  = l.sdp_tasks_consumed
+        @sdp_consumed_total         += @line_sums[l.id][:consumed].to_f
       elsif l.request
         s = round_to_hour(l.request.workload2)
         if l.request.sdp == "No"
@@ -160,13 +248,16 @@ class Workload
           #r = s if r == 0.0
           @line_sums[l.id][:init]      = l.request.sdp_tasks_initial_sum({:trigram=>l.person.trigram})
           @line_sums[l.id][:balance]   = l.request.sdp_tasks_balancei_sum({:trigram=>l.person.trigram})
+          @line_sums[l.id][:consumed]  = l.request.sdp_tasks_consumed_sum({:trigram=>l.person.trigram})
           @line_sums[l.id][:remaining] = r
           @sdp_remaining_total        += r
+          @sdp_consumed_total         += @line_sums[l.id][:consumed]
         end
       else
         @line_sums[l.id][:init]      = 0.0
         @line_sums[l.id][:remaining] = 0.0
         @line_sums[l.id][:balancei]  = 0.0
+        @line_sums[l.id][:consumed]  = 0.0
       end
     end
   end

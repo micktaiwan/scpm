@@ -36,6 +36,9 @@ class Project < ActiveRecord::Base
   has_many    :spiders,      :dependent => :destroy
   has_many    :wl_lines
 
+  def number_lines_per_person(person_id)
+    return WlLine.find(:all, :conditions=>["project_id=#{self.id} and person_id=#{person_id}"]).size
+  end
   def project_check_items_numbers
     cs = self.project_check_items.select{|c| c.ctemplate.ctype!="folder"}
     ns = cs.select{|c| c.status > 0}

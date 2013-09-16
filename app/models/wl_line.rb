@@ -3,15 +3,55 @@ class WlLine < ActiveRecord::Base
   has_many   :wl_loads, :dependent => :destroy
   belongs_to :person
   belongs_to :request
-  belongs_to :sdp_task, :class_name=>"SDPTask"
+  # belongs_to :sdp_task, :class_name=>"SDPTask"
+  has_many   :wl_line_task
   belongs_to :project
   belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
   has_many   :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
 
   include ApplicationHelper
 
-  def sdp_task
-    SDPTask.find_by_sdp_id(self.sdp_task_id)
+  # def sdp_task
+  #   SDPTask.find_by_sdp_id(self.sdp_task_id)
+  # end
+
+  def sdp_tasks
+    wl_line_task_ids = WlLineTask.find(:all, :conditions=>["wl_line_id=?", self.id])
+    return [] if wl_line_task_ids.size == 0
+    SDPTask.find_by_sql("select * from sdp_tasks where sdp_tasks.sdp_id in (#{wl_line_task_ids.map{ |l| l.sdp_task_id}.join(',')})")
+  end
+
+  def add_sdp_task_by_id(sdp_task_id)
+    WlLineTask.create(:wl_line_id=>self.id, :sdp_task_id=>sdp_task_id)
+  end
+
+  def delete_sdp(sdp_task_id)
+    t = WlLineTask.find(:first, :conditions=>["wl_line_id=#{self.id} and sdp_task_id=#{sdp_task_id}"])
+    t.destroy if t
+  end
+
+  def sdp_tasks_initial
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.initial}.inject(:+)
+  end
+
+  def sdp_tasks_balancei
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.balancei}.inject(:+)
+  end
+
+  def sdp_tasks_remaining
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.remaining}.inject(:+)
+  end
+
+  def sdp_tasks_consumed
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.consumed}.inject(:+)
   end
 
   def load_by_week(week)
@@ -51,33 +91,62 @@ class WlLine < ActiveRecord::Base
   end
 
   # task name
-  def display_name
-    #"<a href='#' title='#{name}'>#{name}</a>"
-    name
+  def display_name(options={})
+    rv = ""
+    rv += "#{self.person_name(options)} " if options[:with_person_name]
+    if self.wl_type!=WorkloadsController::WL_LINE_HOLIDAYS and
+       (self.wl_type!=WorkloadsController::WL_LINE_EXCEPT or self.project_id) 
+      tasks_size = self.sdp_tasks.size
+      if options[:with_project_name] and APP_CONFIG['workloads_display_project_name_in_lines']
+        rv +=     "[#{self.project_name(options)}"
+        rv += " x #{tasks_size}" if tasks_size > 1
+        rv += "] " + self.name
+      else
+        rv += self.name
+        rv += " #{self.number} lines" if self.class==VirtualWlLine
+        rv += " x #{tasks_size} tasks" if tasks_size > 1
+      end
+      rv
+    else
+      rv += self.name
+    end
+    rv
   end
 
-  def person_name
+  def title
+    "#{self.person_name} #{self.display_name}"
+  end
+
+  def person_name(options={})
     if self.person
-      "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+      if options[:with_person_url]
+        "<a href='/workloads/?person_id=#{self.person.id}'>#{self.person.name}</a>"
+      else
+        self.person.name
+      end
     else
       "#{name} (no person attached)"
     end
   end
 
-  def project_name
+  def project_name(options={})
     if defined?(self.projects)
       # this line is a group of line (VirtualWlLine)
-      self.projects.map{ |p| "<a href='/project_workloads/?project_ids=#{p.id}'>#{p.name}</a>" }.join(', ')
+      if options[:with_project_url]
+        self.projects.map{ |p| "<a href='/project_workloads/?project_ids=#{p.id}'>#{p.name}</a>" }.join(', ')
+      else
+        self.projects.map{ |p| p.name }.join(', ')
+      end
     elsif self.project
       # this line use standard association to project model
-      "<a href='/project_workloads/?project_ids=#{self.project.id}'>#{self.project.name}</a>"
+      if options[:with_project_url]
+        "<a href='/project_workloads/?project_ids=#{self.project.id}'>#{self.project.name}</a>"
+      else
+        self.project.name
+      end
     else
       "no project"
     end
-  end
-
-  def title
-    "#{self.person_name} #{self.display_name}"
   end
 
   def request

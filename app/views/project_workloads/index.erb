@@ -1,7 +1,7 @@
 <script src="/javascripts/project_workload.js" type="text/javascript"></script>
 
 <%
-  if session['workload_project_ids'] and session['workload_project_ids'].size > 0
+  if session['workload_project_ids'] and session['workload_project_ids'].size > 0 and session['workload_companies_ids'] and session['workload_companies_ids'].size > 0
     display = true
   else
     display = false
@@ -21,28 +21,48 @@
 <!--<div id="edit_line"></div>-->
 
 <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
-
-<% form_tag(:action=>'index') do %>
+<form action="/project_workloads/index/filter_projects_companies" name="filter_projects_companies" method="post">
+<!-- <% form_tag(:action=>'index') do %> -->
 <table>
-  <tr valign="top"><td>
-  <b>Projects</b><br/>
-  <% if @projects %>
-    <% for p in @projects %>
-      <%= check_box_tag('project_ids[]', p.id, session['workload_project_ids'].include?(p.id.to_s)) %><%= "#{p.name} (#{p.wl_lines.size})"%><br/>
-    <% end %>
-  <% end %>
-  </td>
-  <td>
-  <b>Companies</b><br/>
-  <% @companies= Company.find(:all) %>
-  <% if @companies %>
-    <% for c in @companies %>
-      <%= check_box_tag('companies_ids[]', c.id, session['workload_companies_ids'].include?(c.id.to_s)) %><%= "#{c.name}"%><br/>
-    <% end %>
-  <% end %>
-  </td></tr>
+  <tr valign="top">
+    <td>
+      <b><a href="#" onclick="check_uncheck(this,'project_ids[]')" >Projects</a></b><br/>
+      <% if @projects %>
+        <% for p in @projects %>
+          <%= check_box_tag('project_ids[]', p.id, session['workload_project_ids'].include?(p.id.to_s)) %><%= "#{p.name} (#{p.wl_lines.size})"%><br/>
+        <% end %>
+      <% end %>
+    </td>
+    <td>
+      <b><a href="#" onclick="check_uncheck(this,'companies_ids[]')" >Companies</a></b><br/>
+      <% @companies= Company.find(:all) %>
+      <% if @companies %>
+        <% for c in @companies %>
+          <% company_size = Person.find(:all, :conditions=>["company_id=?",c.id]).size %>
+          <%= check_box_tag('companies_ids[]', c.id, session['workload_companies_ids'].include?(c.id.to_s)) %><%= "#{c.name} (#{company_size})"%><br/>
+        <% end %>
+      <% end %>
+    </td>
+    <td>
+      <b><a href="#" onclick="check_uncheck(this,'iterations_ids[]')" >Iterations</a></b><br/><br/>
+      <% @iterations= Iteration.find(:all, :order=>:project_code) %>
+      <% if @iterations %>
+      <% previous_project = @iterations.first.project_code %>
+      <b><a href="#" onclick="check_uncheck_iterations(this,'iterations_<%= previous_project %>')" ><%= @iterations.first.project.name %></a></b><br/><br/>
+        <% for i in @iterations %>
+          <% actual_project = i.project_code %>
+          <% if actual_project!=previous_project %>
+            <br/><b><a href="#" onclick="check_uncheck_iterations(this,'iterations_<%= actual_project %>')" ><%= i.project.name %></a></b><br/>
+            <% previous_project = actual_project %>
+          <% end %>
+          <input id="iterations_<%= actual_project %>" type="checkbox" value="<%= i.id%>" name="iterations_ids[]"><%= "#{i.name}"%></input><br/>
+
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
 </table>
-<%= submit_tag('Filter') %>
+<button class="btnlnk" type="button" id="submit_filter" onclick="verify_filter(this)">Filter</button>
 <% end %>
 </div>
 <br/>

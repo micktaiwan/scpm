@@ -1,6 +1,8 @@
 class SDPTask < ActiveRecord::Base
 
   attr_accessor :initial_should_be, :reevaluated_should_be, :difference
+  #has_many :WlLineTasks, :foreign_key=>
+  #has_many :
   
   def initialize
     super
@@ -23,6 +25,10 @@ class SDPTask < ActiveRecord::Base
     end
   end
 
+  def get_iteration
+    iteration = Iteration.find(:first, :conditions=>["name='#{self.iteration}' and project_code='#{self.project_code}'"])
+    return iteration
+  end
   # Analyze all sdpTasks and generate SDPphases/SDPActivities by specific types from RMT
   def self.format_stats_by_type
     # Reset data

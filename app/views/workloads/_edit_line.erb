@@ -19,7 +19,8 @@
 <%= link_to_function('Options',"$('options').toggle();") %>
 
 <div id="options" style="display:none;">
-  <div class="title">Link to a request</div>
+  <fieldset>
+  <legend>Link to a request</legend>
   <% form_remote_tag(:url=>{:action => "link_to_request", :id=>edit_line.id}) do %>
     <%= label_tag(:request_id, "Request #") %>
     <%= text_field_tag(:request_id, nil, {:size=>5}) %>
@@ -27,33 +28,36 @@
   <% end %>
   <%= label_tag(:unlink, "&nbsp;") %>
   <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_request', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
+  </fieldset>
+  <% if APP_CONFIG['workloads_add_by_sdp_task'] %>
+    <fieldset>
+    <legend>Link to a SDP task</legend>
+    <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
+      <%= render(:partial=>"sdp_tasks", :locals=>{:edit_line=>edit_line, :partial_id=>"sdp_tasks_edit"}) %>
+    <% end %>
+    </fieldset>
+  <% end %>
+  <% if APP_CONFIG['workloads_add_by_project'] %>
+    <fieldset>
+    <legend>Link to a project</legend>
+    <% form_remote_tag(:url=>{:action => "link_to_project", :id=>edit_line.id}) do %>
+      <%= label_tag(:task, "Project") %>
+      <%= render(:partial=>"projects") %>
+      <%= submit_tag("Link") %>
+    <% end %>
+    <%= label_tag(:unlink, "&nbsp;") %>
+    <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_project', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
+    </fieldset>
+  <% end %>
+  <%= link_to_function('Debug info',"$('debug').toggle();") %><br/>
+  <div id="debug" style="display:none;">
+    Request id: <%= edit_line.request.request_id if edit_line.request %><br/>
+    SDP Tasks ids: <%= edit_line.sdp_tasks.map{|t|t.sdp_id}.join(',') %><br/>
+    SDP Tasks: <%= edit_line.sdp_tasks.map{|t|t.title}.join(',') if edit_line.sdp_tasks %>
+  </div>
+  <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if edit_line.wl_type == 300 and not edit_line.sdp_tasks %>
   <br/>
 
-  <div class="title">Link to a SDP task</div>
-  <% form_remote_tag(:url=>{:action => "link_to_sdp", :id=>edit_line.id}) do %>
-    <%= render(:partial=>"sdp_tasks") %>
-    <%= submit_tag("Link") %>
-  <% end %>
-  <%= label_tag(:unlink, "&nbsp;") %>
-  <br/>
-  <div class="title">Link to a project</div>
-  <% form_remote_tag(:url=>{:action => "link_to_project", :id=>edit_line.id}) do %>
-    <%= label_tag(:task, "Project") %>
-    <%= render(:partial=>"projects") %>
-    <%= submit_tag("Link") %>
-  <% end %>
-  <%= label_tag(:unlink, "&nbsp;") %>
-  <%= link_to_remote('Unlink', {:url=>{:action=>'unlink_project', :id=>edit_line.id},:confirm=>"Are you sure ?"}) %><br/>
-  <br/>
-  Debug:<br/>
-  Request id: <%= edit_line.request.request_id if edit_line.request %><br/>
-  SDP Task id: <%= edit_line.sdp_task_id %><br/>
-  SDP Task: <%= edit_line.sdp_task.title if edit_line.sdp_task %>
-  <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if edit_line.wl_type == 300 and not edit_line.sdp_task %>
-  <br/>
-  <%= link_to_remote('Unlink',
-   {:url=>{:action=>'unlink_sdp', :id=>edit_line.id},
-   :confirm=>"Are you sure ?"}) %><br/>
   <br/>
 
   <div class="title">Delete line</div>

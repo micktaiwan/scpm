@@ -1,3 +1,4 @@
+# planning task
 class Task < ActiveRecord::Base
 
   belongs_to  :planning
@@ -16,7 +17,6 @@ class Task < ActiveRecord::Base
     self.end_date -= 2.day if wday == 0
     self.end_date -= 1.day if wday == 6
   end
-
 
   def calculate_end_date_or_work
     if(self.end_date)
