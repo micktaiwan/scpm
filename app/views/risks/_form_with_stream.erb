@@ -1,5 +1,5 @@
 <%= hidden_field :risk, :stream_id %>
-<%= text_area :risk, :stream_id %>
+<% # text_area :risk, :stream_id %>
 
 <p><%= label_tag 'stream' %>
 <%= select(:risk, :stream_id, @streams.map{|s| [s.name,s.id]}) %></p>

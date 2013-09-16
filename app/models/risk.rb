@@ -4,6 +4,9 @@ class Risk < ActiveRecord::Base
   belongs_to :stream
   belongs_to :generic_risk
 
+  before_save :save_action
+
+
   PROBABILITY = [0,1,2,3,4]
   IMPACT      = [1,2,3,4]
 
@@ -47,7 +50,19 @@ class Risk < ActiveRecord::Base
   def severity
     self.probability * self.impact
   end
-  
+
+  def old_severity
+    self.old_probability * self.old_impact
+  end
+
+  def save_action
+    if self.impact_was != nil
+      self.old_impact = self.impact_was
+    end
+    if self.probability != nil
+      self.old_probability = self.probability_was
+    end
+  end
 
   def severity_excel_style
     if ((self.probability >= 0 and self.probability <= 4) and (self.impact >= 1 and self.impact <= 4))
