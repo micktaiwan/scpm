@@ -85,3 +85,27 @@ function check_uncheck_iterations(source,id) {
     }
   }
 }
+function change_task_color(source,id) {
+  var task_cells = $$('#'+id);
+  var color_cell = $('color_'+id);
+  for(var i=0, n=task_cells.length;i<n;i++) {
+    task_cells[i].style.backgroundColor  = color_cell.style.backgroundColor;
+  }
+  new Ajax.Request('/project_workloads/update_color_task', {
+    parameters: { id: id[id.length-1], color: colorToHex(color_cell.style.backgroundColor)  }
+  });
+}
+
+function colorToHex(color) {
+    if (color.substr(0, 1) === '#') {
+        return color;
+    }
+    var digits = /(.*?)rgb\((\d+), (\d+), (\d+)\)/.exec(color);
+    
+    var red = parseInt(digits[2]);
+    var green = parseInt(digits[3]);
+    var blue = parseInt(digits[4]);
+    
+    var rgb = blue | (green << 8) | (red << 16);
+    return digits[1] + '#' + rgb.toString(16);
+};

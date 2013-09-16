@@ -2,7 +2,7 @@
 <% @start_date_condition = "detected"%> 
 <% @cpt = 1 %>
 <%end%>
-<th <% if wl_task_planning[:week] %> title="<%=wl_task_planning[:task].name%>" style="background: <%=color%>; color: #000000;" <% end %>>
+<th <% if wl_task_planning[:week] %> title="<%=wl_task_planning[:task].name%>" id="<%= @task_id%>" style="background: <%=color%>; color: #000000;" <% end %>>
 <% if @start_date_condition == "detected"%><%= wl_task_planning[:task].start_date.day %>/<%=wl_task_planning[:task].start_date.month %> <%end%>
 <% if @cpt == nb_cells %><%= wl_task_planning[:task].end_date.day %>/<%=wl_task_planning[:task].end_date.month %> <%end%>
 </th>
