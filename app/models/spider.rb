@@ -1,10 +1,10 @@
 class Spider < ActiveRecord::Base
-  belongs_to    :milestone,  :foreign_key=>"milestone_id"
+  belongs_to    :milestone 				, :foreign_key=>"milestone_id"
   belongs_to    :project
-  has_many      :spider_values
-  has_many      :spider_consolidations
-  has_many      :lifecycle_questions, :through=>:spider_values
-  has_many      :history_counters
+  has_many      :spider_values			, :dependent => :destroy
+  has_many      :spider_consolidations 	, :dependent => :destroy
+  has_many      :lifecycle_questions 	, :through=>:spider_values		, :dependent => :destroy
+  has_many      :history_counters		
 
 def self.spider_export_by_projects_and_milestones(projects)
 # TODO FILTER PROEJCTS

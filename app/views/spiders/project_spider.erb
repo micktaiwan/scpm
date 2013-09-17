@@ -247,11 +247,16 @@ function getDocHeight() {
 		<span class="warning" id="warning_file_link">No delivery file link.</span>
 	</end>
 	<div id="spider_form_buttons">
-		<h3>Actions</h3>
+		<h3>Validation</h3>
 		<input type="submit" value="Save" />
 		<input type="button" value="Consolidate" id="consolidate_btn" />
 	</div>
 	<% end -%>	
+
+	<div id="spider_form_buttons_2">
+		<h3>Other Actions</h3>
+		<%= button_to("Delete", {:action=>'delete_spider', :id=>@spider.id, :project_id=>@project.id}, :confirm=>"Are you sure you want to delete this spider and its spider values ?", :method => :post) %>
+	</div>
 <% else %>
 	<p>No data.</p>
 	<% form_tag({:action => "project_spider"}, :method => "get", :id => "form_create_spider") do -%>
