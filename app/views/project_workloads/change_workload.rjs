@@ -2,6 +2,7 @@
 #page.replace_html "sdp_tasks", render(:partial=>"sdp_tasks")
 @tasks_header = 0
 page.replace "workload", render(:partial=>"workload")
+page << "jscolor.init()"
 page << "document.body.style.cursor = 'auto';"
 page << "$('loading').hide();"
 page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']}+( #{@tasks_header} * 22 ) );"

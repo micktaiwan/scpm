@@ -35,6 +35,7 @@
   <strong>filtered</strong><%end%>
   </b>
 
+
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
   <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person()'}) %> group by person
 
@@ -58,23 +59,23 @@
                 <% this_color = color %>
                 <% this_color = t.color if t.color%>
                 <% @task_id = "task_"+t.id.to_s %>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" ><%#= p.name %></th>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" ><%#= p.planning.name %></th>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" class="wl_names">[<%= p.name %>] <%= t.name %></th>
-                <th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="wl_names; planning_task">[<%= p.name %>] <%= t.name %></th>
+                <th class="planning_task">
                 <% if current_user.is_cpdp == 1%>
                   <input id="color_<%=@task_id%>" class="color_picker" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
                 <% end %>
                 </th>
-                <th></th>
+                <th class="planning_task"></th>
                 <% if APP_CONFIG['workloads_display_consumed_column'] %>
                   <th></th>
                 <% end %>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th class="planning_task"></th>
+                <th class="planning_task"></th>
+                <th class="planning_task"></th>
                 <% if APP_CONFIG['workloads_display_total_column'] %>
-                  <th></th>
+                  <th class="planning_task"></th>
                 <% end %>
                 <%
                   c = []

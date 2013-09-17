@@ -3,6 +3,7 @@ if @error
 else
     @tasks_header = 0
 	page.replace "workload", render(:partial=>'workload')
+	page << "jscolor.init()"
 	page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']}+( #{@tasks_header} * 22 ) );"
 	if(APP_CONFIG['workloads_add_by_sdp_task'])
 		page << "if($('sdp_tasks_edit')) {"
