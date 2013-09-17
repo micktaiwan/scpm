@@ -19,6 +19,19 @@
 <%= link_to_function('Options',"$('options').toggle();") %>
 
 <div id="options" style="display:none;">
+  <script type="text/javascript">
+        $j(document).ready(function() {
+            $j("#lineTags").tagit();
+        });
+  </script>
+  <fieldset>
+  <legend>Tags</legend>
+      <ul id="lineTags">
+        <!-- Existing list items will be pre-added to the tags -->
+        <li>Tag1</li>
+        <li>Tag2</li>
+    </ul>
+  </fieldset>
   <fieldset>
   <legend>Link to a request</legend>
   <% form_remote_tag(:url=>{:action => "link_to_request", :id=>edit_line.id}) do %>
