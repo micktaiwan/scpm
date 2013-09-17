@@ -491,6 +491,11 @@ class ProjectsController < ApplicationController
         raise "no supervisor for #{r.project.full_name}" if !r.project.supervisor
         [r.project.supervisor.name, r.project.full_name, r.severity]
         }
+      @stream_risks   = Risk.find(:all, :conditions => "stream_id IS NOT NULL and is_quality=1") 
+      @stream_risks   = @stream_risks.select { |r| r.severity > 0}.sort_by {|r|
+        [r.stream.name, r.severity]
+        }
+
       @topics     = Topic.find(:all,  :conditions=>"private=0", :order=>"done, person_id, id desc")
       if @wps.size > 0
         @amendments   = Amendment.find(:all, :conditions=>"project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"done_date DESC, done ASC, duedate ASC")

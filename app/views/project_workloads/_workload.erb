@@ -59,28 +59,30 @@
                 <% this_color = color %>
                 <% this_color = t.color if t.color%>
                 <% @task_id = "task_"+t.id.to_s %>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #000000;" ><%= p.name %></th>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #000000;" ><%= p.planning.name %></th>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #000000; text-align: center;" class="wl_names"><%= t.name %></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" ><%#= p.name %></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" ><%#= p.planning.name %></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" class="wl_names">[<%= p.name %>] <%= t.name %></th>
                 <th>
                 <% if current_user.is_cpdp == 1%>
-                <input id="color_<%=@task_id%>"class="color" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
+                  <input id="color_<%=@task_id%>" class="color_picker" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
                 <% end %>
                 </th>
                 <th></th>
                 <% if APP_CONFIG['workloads_display_consumed_column'] %>
-                <th></th>
+                  <th></th>
                 <% end %>
                 <th></th>
                 <th></th>
                 <th></th>
                 <% if APP_CONFIG['workloads_display_total_column'] %>
-                <th></th>
+                  <th></th>
                 <% end %>
-                <% c = []
-                @workload.planning_tasks.each do |pt|
-                  c << pt if pt[:task]==t
-                end %>
+                <%
+                  c = []
+                  @workload.planning_tasks.each do |pt|
+                    c << pt if pt[:task]==t
+                  end
+                %>
                 <% @start_date_condition = "not detected" %>
                 <% nb_cells = c.select{|y|y[:week]==true}.length %>
                 <%= render(:partial=>"wl_task_planning", :collection=>c, :locals=>{:color=>this_color, :nb_cells=>nb_cells}) %>

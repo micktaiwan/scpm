@@ -490,7 +490,7 @@ class LessonCollectsController < ApplicationController
     consoSheet.each do |conso_row|
       if ((i >= ASSESSMENT_BEGIN_CONTENT ) and (conso_row[ASSESSMENT_CELL_RMT_ID].to_s.size > 0))
         row_hash = Hash.new
-        row_hash[ASSESSMENT_CELL_RMT_ID_LABEL]      = conso_row[ASSESSMENT_CELL_RMT_ID].to_s
+        row_hash[ASSESSMENT_CELL_RMT_ID_LABEL]      = conso_row[ASSESSMENT_CELL_RMT_ID].to_s.gsub!('#',' ')
         row_hash[ASSESSMENT_CELL_MILESTONE_LABEL]   = conso_row[ASSESSMENT_CELL_MILESTONE].to_s
         row_hash[ASSESSMENT_CELL_DET_PRES_LABEL]    = conso_row[ASSESSMENT_CELL_DET_PRES].to_s
         row_hash[ASSESSMENT_CELL_QUAL_GATES_LABEL]  = conso_row[ASSESSMENT_CELL_QUAL_GATES].to_s

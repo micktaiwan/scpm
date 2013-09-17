@@ -280,3 +280,9 @@ ul.sdp_tasks {
   list-style-type: decimal-leading-zero;
   margin:0;
   }
+.color_picker {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  color: #333;
+}
