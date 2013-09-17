@@ -14,7 +14,12 @@ class WlLine < ActiveRecord::Base
   # def sdp_task
   #   SDPTask.find_by_sdp_id(self.sdp_task_id)
   # end
-
+  def tags
+    line_tags = LineTag.find(:all, :conditions=>["line_id = #{self.id}"]).map{|line_tag| line_tag.tag_id}
+    tags = nil
+    tags = Tag.find(:all, :conditions=>["id in (#{line_tags.map{|p|p}.join(',')})"]) if line_tags.size > 0
+    return tags
+  end
   def sdp_tasks
     wl_line_task_ids = WlLineTask.find(:all, :conditions=>["wl_line_id=?", self.id])
     return [] if wl_line_task_ids.size == 0

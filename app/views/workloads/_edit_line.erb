@@ -28,8 +28,11 @@
   <legend>Tags</legend>
       <ul id="lineTags">
         <!-- Existing list items will be pre-added to the tags -->
-        <li>Tag1</li>
-        <li>Tag2</li>
+        <% if !edit_line.tags.nil? %>
+          <% edit_line.tags.each do |tag| %>
+            <li><%= tag.name %></li>
+          <% end %>
+        <% end %>
     </ul>
   </fieldset>
   <fieldset>
