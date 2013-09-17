@@ -658,6 +658,7 @@ table.sortable td    {
   clear: none; 
 }
 .planning_task {
+  background-color: #FFF;
   color: #333; 
   border-left: 0px; 
   border-right: 0px;
