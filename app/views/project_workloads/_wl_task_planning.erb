@@ -5,11 +5,11 @@
 
 <th class="planning_task"<% if wl_task_planning[:week] %> title="<%=wl_task_planning[:task].name%>" id="<%= @task_id%>" style="background: <%=color%>;" <% end %> >
 
-	<% if @start_date_condition == "detected" and @cpt != nb_cells %>
+	<% if @start_date_condition == "detected" and @cpt != nb_cells and wl_task_planning[:week]%>
 		<%= wl_task_planning[:task].start_date.day %>/<%=wl_task_planning[:task].start_date.month %>
 	<%end%>
 
-	<% if @cpt == nb_cells %>
+	<% if @cpt == nb_cells and wl_task_planning[:week]%>
 		<%= wl_task_planning[:task].end_date.day %>/<%=wl_task_planning[:task].end_date.month %> 
 	<%end%>
 
