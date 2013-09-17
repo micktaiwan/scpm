@@ -58,12 +58,12 @@
                 <% this_color = color %>
                 <% this_color = t.color if t.color%>
                 <% @task_id = "task_"+t.id.to_s %>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #000000;" ><%= p.name %></th>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #000000;" ><%= p.planning.name %></th>
-                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #000000; text-align: center;" class="wl_names"><%= t.name %></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" ><%#= p.name %></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" ><%#= p.planning.name %></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>; color: #333;" class="wl_names">[<%= p.name %>] <%= t.name %></th>
                 <th>
                 <% if current_user.is_cpdp == 1%>
-                  <input id="color_<%=@task_id%>"class="color" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
+                  <input id="color_<%=@task_id%>" class="color_picker" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
                 <% end %>
                 </th>
                 <th></th>
