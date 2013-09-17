@@ -118,7 +118,7 @@ class SpiderKpisController < ApplicationController
   end
   
   def generate_kpi_charts_data
-    
+
     # PARAMS --------------------------------- 
     @lifecycle_id       = params[:lifecycle_id]
     lifecycle_object    = Lifecycle.find(@lifecycle_id)
@@ -196,7 +196,7 @@ class SpiderKpisController < ApplicationController
       charts_data_by_date                 = Hash.new
 
       #
-      # Quary Data
+      # Query Data
       #
       query = "SELECT avg(sc.average), avg(sc.average_ref), MONTH(sc.created_at),YEAR(sc.created_at) 
       FROM spider_consolidations sc,  pm_type_axes pta
@@ -269,12 +269,14 @@ class SpiderKpisController < ApplicationController
 
 
   def generate_kpi_cumul_charts_data
-    @lifecycle_id = params[:lifecycle_id]
-    lifecycle_object = Lifecycle.find(@lifecycle_id)
-    lifecycle_title = lifecycle_object.name
-    @workstream = params[:workstream]
-    @milestone_name_id = params[:milestone_name_id]
-    milestone_title = ""
+
+    # PARAMS --------------------------------- 
+    @lifecycle_id       = params[:lifecycle_id]
+    lifecycle_object    = Lifecycle.find(@lifecycle_id)
+    lifecycle_title     = lifecycle_object.name
+    @workstream         = params[:workstream]
+    @milestone_name_id  = params[:milestone_name_id]
+    milestone_title     = ""
     if ((@milestone_name_id != nil) and (@milestone_name_id != "0"))
       milestone_title = MilestoneName.find(@milestone_name_id)
     end
@@ -328,51 +330,65 @@ class SpiderKpisController < ApplicationController
     first_year_ref = temp_date_begin.strftime("%Y")
 
     # REQUEST --------------------------------- 
-
     @charts_data = Hash.new
     charts_data_temp = Hash.new
     @titles_data = Hash.new
     charts_element.each do |chart_element|
-      query = "SELECT sum(sc.average),count(sc.average),MONTH(sc.created_at),YEAR(sc.created_at) 
+
+      charts_data_temp[chart_element.id.to_s] = Array.new
+      charts_data_by_date                     = Hash.new
+
+      #
+      # Query Data
+      #
+      query = "SELECT sum(sc.average),count(sc.average),sum(sc.average_ref),count(sc.average_ref),MONTH(sc.created_at),YEAR(sc.created_at) 
       FROM spider_consolidations sc,  pm_type_axes pta
       WHERE sc.pm_type_axe_id = pta.id
       AND sc.spider_id IN (" + spiders_consolidated.join(",") + ")"
       query += " AND sc.created_at >= '" + sql_query_begin.to_s + "'"
       query += " AND sc.created_at <= '" + sql_query_end.to_s + "'"
-      
       if (@kpi_type == "pm_type")
         query += " AND pta.pm_type_id = " + chart_element.id.to_s
       else
         query += " AND pta.id = " + chart_element.id.to_s
       end
-      
       query += " GROUP BY MONTH(created_at),YEAR(created_at) 
       ORDER BY YEAR(created_at),MONTH(created_at)";
       
-      # Analyse return data
-      charts_data_temp[chart_element.id.to_s] = Array.new
-      charts_data_by_date = Hash.new
       
+      #
       # Save query data in hash[month-year]
+      #
       ActiveRecord::Base.connection.execute(query).each do |query_data|
-        charts_data_by_date[query_data[2]+"-"+query_data[3]] = query_data
+        charts_data_by_date[query_data[4]+"-"+query_data[5]] = query_data
       end
       
-      # Check if we have all months/years
+      #
+      # Set final Values in charts_data_temp
+      #
       month_index = 0
+      # For each month between two dates
       (Date.new(first_year_ref.to_i, first_month_ref.to_i)..Date.new(last_year_ref.to_i, last_month_ref.to_i)).select {|d| 
+
+        # if new month to manage
         if (month_index.to_i != d.month.to_i)
+
+          # If we have a value for this month-year
           if(charts_data_by_date[d.month.to_s+"-"+d.year.to_s] != nil)
             charts_data_temp[chart_element.id.to_s] << charts_data_by_date[d.month.to_s+"-"+d.year.to_s]
+          # If we haven't a value for this month-year
           else
-            unassigned_month = Array.new<<0<<0<<d.month.to_i<<d.year.to_i
+            unassigned_month = Array.new<<0<<0<<0<<0<<d.month.to_i<<d.year.to_i # sum/count/sum ref/count ref/month/year
             charts_data_temp[chart_element.id.to_s] << unassigned_month
           end
+
           month_index = d.month
         end
       }
       
+      # 
       # Set title
+      #
       title = lifecycle_title
       if ((@workstream != nil) and (@workstream != "0"))
         title += " - " + @workstream
@@ -384,16 +400,42 @@ class SpiderKpisController < ApplicationController
       @titles_data[chart_element.id.to_s] = title + " - " + chart_element.title  
     end
     
+    # CUMUL CALCULATION --------------------------------- 
+    # c[0] = id of chart element (id of pm type or id of axes)
+    # c[1] =  Array of (sum/count/sum ref/count ref/month/year)
+    # c[1] == cc
+    # cc[0] sum avg
+    # cc[1] count avg
+    # cc[2] sum avg ref
+    # cc[3] count avg ref
+    # cc[4] month
+    # cc[5] year
+    # new_c[0] avg sum
+    # new_c[1] avg sum ref
+    # new_c[2] month
+    # new_c[3] year
+    # cc == new_c after format
     # Each chart
     charts_data_temp.each do |c|
+
+      # Params
       @charts_data[c[0]] = Array.new
-      sum_avg = 0
-      sum_count = 0
-      last_avg = -1
+      sum_avg       = 0
+      sum_count     = 0
+      sum_avg_ref   = 0
+      sum_count_ref = 0
+      last_avg      = -1
+      last_avg_ref  = -1
+
       # Each values
       c[1].each do |cc|
+        new_c = Array.new # New set of values (sum/count/month/year)
+
+        #
+        # Calcul cumul sum
+        #
+        # First loop, we don't have a last_avg value
         if(last_avg == -1)
-            new_c = Array.new
             count_to_divise = cc[1].to_f
             if(count_to_divise == 0)
               new_c[0] = 0
@@ -401,18 +443,14 @@ class SpiderKpisController < ApplicationController
               new_c[0] = cc[0].to_f / count_to_divise
             end
             last_avg = new_c[0]
-            new_c[1] = cc[2]
-            new_c[2] = cc[3]
-            @charts_data[c[0]] << new_c
+
+        # The sum is to 0
         elsif (cc[0].to_f == 0)
-            new_c = Array.new
             new_c[0] = last_avg
             last_avg = last_avg
-            new_c[1] = cc[2]
-            new_c[2] = cc[3]
-            @charts_data[c[0]] << new_c
+
+        # The last sum was to 0
         elsif(last_avg == 0)
-            new_c = Array.new
             count_to_divise = cc[1].to_f
             if(count_to_divise == 0)
               new_c[0] = 0
@@ -420,23 +458,59 @@ class SpiderKpisController < ApplicationController
               new_c[0] = cc[0].to_f / count_to_divise
             end
             last_avg = new_c[0]
-            new_c[1] = cc[2]
-            new_c[2] = cc[3]
-            @charts_data[c[0]] << new_c
+
+        # If the sum and last sum is > 0
         else
-            new_c = Array.new
             new_c[0] = ((sum_avg.to_f + cc[0].to_f).to_f / (sum_count.to_f + cc[1].to_f).to_f)
             last_avg = new_c[0]
-            new_c[1] = cc[2]
-            new_c[2] = cc[3]
-            @charts_data[c[0]] << new_c
-        end    
-            
-        sum_avg += cc[0].to_f
-        sum_count += cc[1].to_f
+        end  
+
+        #
+        # Calcul cumul sum ref
+        #
+        # First loop, we don't have a last_avg value
+        if(last_avg_ref == -1)
+            count_to_divise = cc[3].to_f
+            if(count_to_divise == 0)
+              new_c[1] = 0
+            else
+              new_c[1] = cc[2].to_f / count_to_divise
+            end
+            last_avg_ref = new_c[1]
+
+        # The sum is to 0
+        elsif (cc[2].to_f == 0)
+            new_c[1] = last_avg_ref
+            last_avg_ref = last_avg_ref
+
+        # The last sum was to 0
+        elsif(last_avg == 0)
+            count_to_divise = cc[3].to_f
+            if(count_to_divise == 0)
+              new_c[1] = 0
+            else
+              new_c[1] = cc[2].to_f / count_to_divise
+            end
+            last_avg_ref = new_c[1]
+
+        # If the sum and last sum is > 0
+        else
+            new_c[1] = ((sum_avg_ref.to_f + cc[2].to_f).to_f / (sum_count_ref.to_f + cc[3].to_f).to_f)
+            last_avg_ref = new_c[1]
+        end  
+
+        # Set month and year  
+        new_c[2] = cc[4]
+        new_c[3] = cc[5]
+        @charts_data[c[0]] << new_c
+        
+        # history for cumul    
+        sum_avg       += cc[0].to_f
+        sum_count     += cc[1].to_f
+        sum_avg_ref   += cc[2].to_f
+        sum_count_ref += cc[3].to_f
       end
     end
-    
     if(@kpi_type_param == nil)
       render :generate_kpi_charts_data, :layout => false   
     else
