@@ -1,4 +1,5 @@
+@tasks_header = 0
 page.replace "workload", render(:partial=>"workload")
 page << "document.body.style.cursor = 'auto';"
 page << "$('loading').hide();"
-page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']});"
+page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']}+( #{@tasks_header} * 22 ) );"

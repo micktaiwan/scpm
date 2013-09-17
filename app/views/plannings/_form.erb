@@ -1,0 +1,5 @@
+<p><%= label_tag(:name) %>
+<%= text_field(:planning, :name) %></p>
+
+<p><%= label_tag(:project_id) %>
+<%= select("planning", "project_id", Project.find(:all).collect {|p| [ p.name, p.id ] }) %></p>

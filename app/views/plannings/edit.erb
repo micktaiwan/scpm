@@ -1,0 +1,8 @@
+<h2>Planning Edit</h2>
+
+<%= error_messages_for :planning %>
+<% form_for @planning, :url=>{:action=>'update', :id=>@planning.id} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'send' %></p>
+<% end -%>
