@@ -36,4 +36,8 @@ class Planning < ActiveRecord::Base
     rv
   end
 
+  def project
+    project = Project.find(self.project_id)
+    return project
+  end
 end

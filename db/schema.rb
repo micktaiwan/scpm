@@ -9,6 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+
 ActiveRecord::Schema.define(:version => 20130916173600) do
 
   create_table "actions", :force => true do |t|
@@ -858,6 +859,7 @@ ActiveRecord::Schema.define(:version => 20130916173600) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "team_size",   :default => 0.0
+    t.text     "color"
   end
 
   create_table "topics", :force => true do |t|

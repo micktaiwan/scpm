@@ -1,6 +1,6 @@
 class Workload
 
-  include ApplicationHelper
+  include ApplicationHelper, WorkloadPlanningsHelper
 
   attr_reader :name,  # person's name
     :names,           # Filtre's projects names 

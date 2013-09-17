@@ -90,13 +90,15 @@ th {
   }
 
 tr.wl_total {
-  border: 1px 0 0 0 solid #DDD;
+  border: 0px solid #DDD;
+  border-top: 1px;
   color: #AB8;
   text-align: center;
   }
 
 .wl_total {
-  border: 1px 0 0 0 solid #DDD;
+  border: 0px solid #DDD;
+  border-top: 1px;
   color: #690;
   text-align: center;
   }
@@ -280,3 +282,9 @@ ul.sdp_tasks {
   list-style-type: decimal-leading-zero;
   margin:0;
   }
+.color_picker {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  color: #333;
+}

@@ -14,9 +14,10 @@ function wl_case_change_colors(line, wlweek, background, color) {
 function set_fixed_header(max_height) {
   h = $('workload_table').getElementsByTagName("tr").length*22;
   max_height = max_height || 400;
-  if(h>max_height) h = max_height;
+  if(h > max_height) h = max_height;
   $j('#workload_table').fixedHeaderTable({ height: String(h), footer: false, fixedColumn: false });
   //$j('#workload_qs_spider_table').fixedHeaderTable({ height: '500', footer: false, fixedColumn: false });
+  return h;
   }
 
 function display_milestones(evt,text) {
@@ -85,3 +86,27 @@ function check_uncheck_iterations(source,id) {
     }
   }
 }
+function change_task_color(source,id) {
+  var task_cells = $$('#'+id);
+  var color_cell = $('color_'+id);
+  for(var i=0, n=task_cells.length;i<n;i++) {
+    task_cells[i].style.backgroundColor  = color_cell.style.backgroundColor;
+  }
+  new Ajax.Request('/project_workloads/update_color_task', {
+    parameters: { id: id[id.length-1], color: colorToHex(color_cell.style.backgroundColor)  }
+  });
+}
+
+function colorToHex(color) {
+    if (color.substr(0, 1) === '#') {
+        return color;
+    }
+    var digits = /(.*?)rgb\((\d+), (\d+), (\d+)\)/.exec(color);
+    
+    var red = parseInt(digits[2]);
+    var green = parseInt(digits[3]);
+    var blue = parseInt(digits[4]);
+    
+    var rgb = blue | (green << 8) | (red << 16);
+    return digits[1] + '#' + rgb.toString(16);
+};

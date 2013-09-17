@@ -14,10 +14,11 @@ end
 
 class ProjectWorkload
 
-  include ApplicationHelper
+  include ApplicationHelper, WorkloadPlanningsHelper
 
   attr_reader :names, # projects names
     :companies,       # companies names
+    :planning_tasks,  # arrays of week's tasks
     :weeks,           # arrays of week's names '43', '44', ...
     :wl_weeks,        # array of week ids '201143'
     :months,          # "Oct"
@@ -25,6 +26,7 @@ class ProjectWorkload
     :opens,           # total of worked days per week (5 - nb of holidays)
     :project,
     :project_ids,
+    :projects,
     :wl_lines,        # arrays of loads, all lines (filtered and not filtered)
     :displayed_lines, # only filtered lines
     :line_sums,       # sum of days per line of workload
@@ -57,7 +59,7 @@ class ProjectWorkload
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
     
     return if project_ids.size==0 or companies_ids.size==0
-
+    @projects = Project.find(:all, :conditions=>["id in (#{project_ids.join(',')})"])
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
@@ -236,6 +238,7 @@ class ProjectWorkload
     month_displayed = false
     week_counter    = 0
     iteration                   = from_day
+    # raise "test = #{wlweek(Date.today+1)}"
     @next_month_percents        = 0.0
     @three_next_months_percents = 0.0
     @sum_availability           = 0
@@ -360,6 +363,7 @@ class ProjectWorkload
         @line_sums[l.id][:consumed]  = 0.0
       end
     end
+     @planning_tasks = get_plannings(@projects, wl_weeks)
   end
 
   def col_sum(w, wl_lines)

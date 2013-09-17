@@ -233,7 +233,14 @@ class ProjectWorkloadsController < ApplicationController
       render(:layout=>false)
     end
   end
-
+  def update_color_task
+    id    = params[:id].to_i
+    color = params[:color] 
+    task  = Task.find(id)
+    task.color = color
+    task.save
+    render(:nothing=>true)
+  end
   def destroy_line
     @wl_line_id     = params[:id]
     wl_line         = WlLine.find(@wl_line_id)

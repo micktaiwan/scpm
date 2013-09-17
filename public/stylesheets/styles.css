@@ -220,7 +220,7 @@ a {text-decoration:none;}
 #content {
   margin:  90px 10px 10px 10px;
   padding: 0px 5px 5px 15px;
-  border-bottom: 1px solid #AAAm;
+  border-bottom: 1px solid #AAA;
 }
 ul {
   list-style-type: none;
@@ -656,4 +656,10 @@ table.sortable td    {
   width: 400px;
   float: left;
   clear: none; 
+}
+.planning_task {
+  background-color: #D9D9D9;
+  color: #333; 
+  border-left: 0px; 
+  border-right: 0px;
 }

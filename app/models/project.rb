@@ -36,6 +36,10 @@ class Project < ActiveRecord::Base
   has_many    :spiders,      :dependent => :destroy
   has_many    :wl_lines
 
+  def planning
+    planning = Planning.find(:first, :conditions=>["project_id=#{self.id}"])
+    return planning
+  end
   def number_lines_per_person(person_id)
     return WlLine.find(:all, :conditions=>["project_id=#{self.id} and person_id=#{person_id}"]).size
   end
