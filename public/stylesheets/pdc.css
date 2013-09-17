@@ -90,13 +90,15 @@ th {
   }
 
 tr.wl_total {
-  border: 1px 0 0 0 solid #DDD;
+  border: 0px solid #DDD;
+  border-top: 1px;
   color: #AB8;
   text-align: center;
   }
 
 .wl_total {
-  border: 1px 0 0 0 solid #DDD;
+  border: 0px solid #DDD;
+  border-top: 1px;
   color: #690;
   text-align: center;
   }
