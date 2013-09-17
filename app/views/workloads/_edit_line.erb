@@ -21,19 +21,30 @@
 <div id="options" style="display:none;">
   <script type="text/javascript">
         $j(document).ready(function() {
-            $j("#lineTags").tagit();
+          $j("#lineTags").tagit({
+            afterTagAdded: function(event, ui) {
+            // do something special
+            a = $j('#lineTags').tagit('assignedTags')
+            alert(a[a.length -1]);
+            }},
+            {
+             availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"]
+            }
+          );
         });
   </script>
+  <!-- README LINK => https://github.com/aehlke/tag-it/blob/master/README.markdown -->
   <fieldset>
   <legend>Tags</legend>
-      <ul id="lineTags">
-        <!-- Existing list items will be pre-added to the tags -->
-        <% if !edit_line.tags.nil? %>
-          <% edit_line.tags.each do |tag| %>
-            <li><%= tag.name %></li>
-          <% end %>
+    <ul id="lineTags">
+      <!-- Existing list items will be pre-added to the tags -->
+      <% if !edit_line.tags.nil? %>
+        <% edit_line.tags.each do |tag| %>
+          <li><%= tag.name %></li>
         <% end %>
+      <% end %>
     </ul>
+    <button class="btnlnk" type="button" id="test" onclick="alert($j('#lineTags').tagit('assignedTags'))">Filter</button>
   </fieldset>
   <fieldset>
   <legend>Link to a request</legend>
