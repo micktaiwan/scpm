@@ -118,14 +118,16 @@ class SpiderKpisController < ApplicationController
   end
   
   def generate_kpi_charts_data
-    @lifecycle_id = params[:lifecycle_id]
-    lifecycle_object = Lifecycle.find(@lifecycle_id)
-    lifecycle_title = lifecycle_object.name
-    @workstream = params[:workstream]
-    @milestone_name_id = params[:milestone_name_id]
-    milestone_title = ""
+    
+    # PARAMS --------------------------------- 
+    @lifecycle_id       = params[:lifecycle_id]
+    lifecycle_object    = Lifecycle.find(@lifecycle_id)
+    lifecycle_title     = lifecycle_object.name
+    @workstream         = params[:workstream]
+    @milestone_name_id  = params[:milestone_name_id]
+    milestone_title     = ""
     if ((@milestone_name_id != nil) and (@milestone_name_id != "0"))
-      milestone_title = MilestoneName.find(@milestone_name_id)
+      milestone_title   = MilestoneName.find(@milestone_name_id)
     end
     
     # CHART TYPE --------------------------------- 
@@ -176,15 +178,27 @@ class SpiderKpisController < ApplicationController
     first_month_ref =  temp_date_begin.strftime("%m")   
     first_year_ref = temp_date_begin.strftime("%Y")
 
-    # REQUEST --------------------------------- 
+
+    # REQUEST PARAMS--------------------------------- 
+
+    @charts_data           = Hash.new
+    @charts_reference_data = Hash.new
+    @titles_data           = Hash.new
+
+    # REQUEST VALUE--------------------------------- 
 
     # MULTIPLE GROUP BY : Seem broken (https://rails.lighthouseapp.com/projects/8994/tickets/497-activerecord-calculate-broken-for-multiple-fields-in-group-option)
     # So I use a SQL Query (yes, it's ugly in a RoR project)
     
-    @charts_data = Hash.new
-    @titles_data = Hash.new
     charts_element.each do |chart_element|
-      query = "SELECT avg(sc.average),MONTH(sc.created_at),YEAR(sc.created_at) 
+
+      @charts_data[chart_element.id.to_s] = Array.new
+      charts_data_by_date                 = Hash.new
+
+      #
+      # Quary Data
+      #
+      query = "SELECT avg(sc.average), avg(sc.average_ref), MONTH(sc.created_at),YEAR(sc.created_at) 
       FROM spider_consolidations sc,  pm_type_axes pta
       WHERE sc.pm_type_axe_id = pta.id
       AND sc.spider_id IN (" + spiders_consolidated.join(",") + ")"
@@ -200,32 +214,40 @@ class SpiderKpisController < ApplicationController
       query += " GROUP BY MONTH(created_at),YEAR(created_at) 
       ORDER BY YEAR(created_at),MONTH(created_at)";
       
-      Rails.logger.info(query);
-      
-      # Analyse return data
-      @charts_data[chart_element.id.to_s] = Array.new
-      charts_data_by_date = Hash.new
-      
+      # 
       # Save query data in hash[month-year]
+      #
       ActiveRecord::Base.connection.execute(query).each do |query_data|
-        charts_data_by_date[query_data[1]+"-"+query_data[2]] = query_data
+        charts_data_by_date[query_data[2]+"-"+query_data[3]] = query_data
       end
       
-      # Check if we have all months/years
+      #
+      # Set final Values in @chart_data
+      #
       month_index = 0
+      # For each month between two dates
       (Date.new(first_year_ref.to_i, first_month_ref.to_i)..Date.new(last_year_ref.to_i, last_month_ref.to_i)).select {|d| 
+
+        # if new month to manage
         if (month_index.to_i != d.month.to_i)
+
+          # If we have a value for this month-year
           if(charts_data_by_date[d.month.to_s+"-"+d.year.to_s] != nil)
             @charts_data[chart_element.id.to_s] << charts_data_by_date[d.month.to_s+"-"+d.year.to_s]
+          # If we haven't a value for this month-year
           else
-            unassigned_month = Array.new<<0<<d.month.to_i<<d.year.to_i
+            unassigned_month = Array.new<<0<<0<<d.month.to_i<<d.year.to_i # << Val << Ref << Month << Year
             @charts_data[chart_element.id.to_s] << unassigned_month
           end
+
           month_index = d.month
         end
       }
       
+      #
       # Set title
+      #
+
       title = lifecycle_title
       if ((@workstream != nil) and (@workstream != "0"))
         title += " - " + @workstream
@@ -233,15 +255,19 @@ class SpiderKpisController < ApplicationController
       if ((milestone_title != nil) and (milestone_title != ""))
         title += " - " + milestone_title.title
       end
-      
       @titles_data[chart_element.id.to_s] = title + " - " + chart_element.title  
     end
+
+
+
+    # RENDER --------------------------------- 
 
     if(@kpi_type_param == nil)
       render :layout => false     
     end
   end
-  
+
+
   def generate_kpi_cumul_charts_data
     @lifecycle_id = params[:lifecycle_id]
     lifecycle_object = Lifecycle.find(@lifecycle_id)
