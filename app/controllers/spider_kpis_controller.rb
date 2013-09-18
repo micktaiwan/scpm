@@ -50,13 +50,22 @@ class SpiderKpisController < ApplicationController
     @lifecycles = Lifecycle.all.map {|u| [u.name,u.id]}    
     @milestones = MilestoneName.all.map {|u| [u.title,u.id]} 
     @milestones.insert(0,["None",0])
+
     @workstreams = Workstream.all.map {|u| [u.name,u.name]}
     @workstreams.insert(0,["None",0])
-    
-    @lifecycle_id = params[:lifecycle_id]
-    @workstream = params[:workstream]
-    @milestone_name_id = params[:milestone_name_id]
-    
+
+    @begin_date = "2013-01-01"
+    @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
+
+    @lifecycle_id       = params[:lifecycle_id]
+    @workstream         = params[:workstream]
+    @milestone_name_id  = params[:milestone_name_id]
+    if (params[:begin_date])
+      @begin_date  = params[:begin_date]
+    end
+    if (params[:end_date])
+      @end_date  = params[:end_date]
+    end
     
     # lifecycleMilestones = LifecycleMilestone.find(:all,:conditions => ["lifecycle_id = ?",@lifecycle_id])   
     #     @milestones = MilestoneName.find(:all,:conditions => ["id in (?)",lifecycleMilestones]).map {|u| [u.title,u.id]} 
@@ -86,7 +95,7 @@ class SpiderKpisController < ApplicationController
   end
   
   # Get all spiders which need to be used in KPI
-  def get_spiders_consolidated(lifecycle,workstream,milestone)
+  def get_spiders_consolidated(lifecycle,workstream,milestone,b_date,e_date)
     spiders_consolidated = Array.new
     
     spider_conso_query = "SELECT s.id,s.milestone_id FROM spiders s, spider_consolidations sc, milestones m, projects p, milestone_names as mn "
@@ -103,6 +112,14 @@ class SpiderKpisController < ApplicationController
     end
     if ((milestone != nil) && (milestone != "0"))
       spider_conso_query += " AND mn.id = " + milestone
+    end
+    if ((b_date != nil) && (b_date != "0") && (e_date != nil) && (e_date != "0"))
+      b_date_split = b_date.split("/")
+      e_date_split = e_date.split("/")
+      if (b_date_split.count == 3) and (e_date_split.count == 3)
+        spider_conso_query += " AND YEAR(sc.created_at) BETWEEN "   + b_date_split[0] + " AND " + e_date_split[0]
+        spider_conso_query += " AND MONTH(sc.created_at) BETWEEN "  + b_date_split[1] + " AND " + e_date_split[1]
+      end
     end
     spider_conso_query += " AND s.created_at = (SELECT MAX(sbis.created_at) FROM spiders sbis WHERE id = s.id)"
     spider_conso_query += " GROUP BY s.milestone_id"
@@ -129,7 +146,15 @@ class SpiderKpisController < ApplicationController
     if ((@milestone_name_id != nil) and (@milestone_name_id != "0"))
       milestone_title   = MilestoneName.find(@milestone_name_id)
     end
-    
+    @begin_date = "2013-01-01"
+    @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
+    if (params[:begin_date])
+      @begin_date  = params[:begin_date]
+    end
+    if (params[:end_date])
+      @end_date  = params[:end_date]
+    end
+
     # CHART TYPE --------------------------------- 
     @kpi_type = ""
     if (@kpi_type_param != nil)
@@ -159,24 +184,26 @@ class SpiderKpisController < ApplicationController
       @chart_type = params[:chart_type]
     end
 
-    spiders_consolidated = get_spiders_consolidated(@lifecycle_id,@workstream, @milestone_name_id)
+    spiders_consolidated = get_spiders_consolidated(@lifecycle_id,@workstream, @milestone_name_id, @begin_date, @end_date)
     
+
     # MONTHS CALCUL --------------------------------- 
-    timeline_size = (DateTime.now.year * 12 + DateTime.now.month) - (DateTime.parse("2011-04-01 00:01:01").year * 12 + DateTime.parse("2011-04-01 00:01:01").month) # in months
+    b_date_split  = @begin_date.split("-")
+    e_date_split  = @end_date.split("-")
+    b_date        = Date.strptime(b_date_split[0]+" "+b_date_split[1], "%Y %m")
+    e_date        = Date.strptime(e_date_split[0]+" "+e_date_split[1], "%Y %m")
     
     # @months_array = Array.new
-    now_dateTime = DateTime.now.to_time
-    last_month = now_dateTime - 1.month
-    
-    temp_date_end = now_dateTime
-    sql_query_end = temp_date_end.strftime("%Y-%m-01 00:00")   
-    last_month_ref =  last_month.month   
-    last_year_ref = last_month.year 
-    
-    temp_date_begin = last_month - timeline_size.month
-    sql_query_begin = temp_date_begin.strftime("%Y-%m-01 00:00:00")
-    first_month_ref =  temp_date_begin.strftime("%m")   
-    first_year_ref = temp_date_begin.strftime("%Y")
+    end_dateTime        = e_date.to_time
+    end_dateTime_final  = end_dateTime - 1.month #we will show one month before the selection
+
+    sql_query_end   = end_dateTime.strftime("%Y-%m-01 00:00")  
+    last_month_ref  =  end_dateTime_final.month   
+    last_year_ref   = end_dateTime_final.year 
+
+    sql_query_begin = b_date.strftime("%Y-%m-01 00:00:00")
+    first_month_ref =  b_date.strftime("%m")   
+    first_year_ref  = b_date.strftime("%Y")
 
 
     # REQUEST PARAMS--------------------------------- 
@@ -203,7 +230,7 @@ class SpiderKpisController < ApplicationController
       WHERE sc.pm_type_axe_id = pta.id
       AND sc.spider_id IN (" + spiders_consolidated.join(",") + ")"
       query += " AND sc.created_at >= '" + sql_query_begin.to_s + "'"
-      query += " AND sc.created_at <= '" + sql_query_end.to_s + "'"
+      query += " AND sc.created_at < '" + sql_query_end.to_s + "'" # < and not <= Before the date is the next month at 00:00:00
       
       if (@kpi_type == "pm_type")
         query += " AND pta.pm_type_id = " + chart_element.id.to_s
@@ -280,7 +307,15 @@ class SpiderKpisController < ApplicationController
     if ((@milestone_name_id != nil) and (@milestone_name_id != "0"))
       milestone_title = MilestoneName.find(@milestone_name_id)
     end
-    
+    @begin_date = "2013-01-01"
+    @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
+    if (params[:begin_date])
+      @begin_date  = params[:begin_date]
+    end
+    if (params[:end_date])
+      @end_date  = params[:end_date]
+    end
+
     # CHART TYPE --------------------------------- 
     @kpi_type = ""
     if (@kpi_type_param != nil)
@@ -310,24 +345,26 @@ class SpiderKpisController < ApplicationController
       @chart_type = params[:chart_type]
     end
 
-    spiders_consolidated = get_spiders_consolidated(@lifecycle_id,@workstream, @milestone_name_id)
+    spiders_consolidated = get_spiders_consolidated(@lifecycle_id,@workstream, @milestone_name_id, @begin_date, @end_date)
     
     # MONTHS CALCUL --------------------------------- 
-    timeline_size = (DateTime.now.year * 12 + DateTime.now.month) - (DateTime.parse("2011-04-01 00:01:01").year * 12 + DateTime.parse("2011-04-01 00:01:01").month) # in months
+    b_date_split  = @begin_date.split("-")
+    e_date_split  = @end_date.split("-")
+    b_date        = Date.strptime(b_date_split[0]+" "+b_date_split[1], "%Y %m")
+    e_date        = Date.strptime(e_date_split[0]+" "+e_date_split[1], "%Y %m")
     
     # @months_array = Array.new
-    now_dateTime = DateTime.now.to_time
-    last_month = now_dateTime - 1.month
-    
-    temp_date_end = now_dateTime
-    sql_query_end = temp_date_end.strftime("%Y-%m-01 00:00")   
-    last_month_ref =  last_month.month   
-    last_year_ref = last_month.year 
-    
-    temp_date_begin = last_month - timeline_size.month
-    sql_query_begin = temp_date_begin.strftime("%Y-%m-01 00:00:00")
-    first_month_ref =  temp_date_begin.strftime("%m")   
-    first_year_ref = temp_date_begin.strftime("%Y")
+    end_dateTime        = e_date.to_time
+    end_dateTime_final  = end_dateTime - 1.month #we will show one month before the selection
+
+    sql_query_end   = end_dateTime.strftime("%Y-%m-01 00:00")  
+    last_month_ref  =  end_dateTime_final.month   
+    last_year_ref   = end_dateTime_final.year 
+
+    sql_query_begin = b_date.strftime("%Y-%m-01 00:00:00")
+    first_month_ref =  b_date.strftime("%m")   
+    first_year_ref  = b_date.strftime("%Y")
+
 
     # REQUEST --------------------------------- 
     @charts_data = Hash.new
@@ -346,7 +383,7 @@ class SpiderKpisController < ApplicationController
       WHERE sc.pm_type_axe_id = pta.id
       AND sc.spider_id IN (" + spiders_consolidated.join(",") + ")"
       query += " AND sc.created_at >= '" + sql_query_begin.to_s + "'"
-      query += " AND sc.created_at <= '" + sql_query_end.to_s + "'"
+      query += " AND sc.created_at < '" + sql_query_end.to_s + "'"
       if (@kpi_type == "pm_type")
         query += " AND pta.pm_type_id = " + chart_element.id.to_s
       else
@@ -522,7 +559,7 @@ class SpiderKpisController < ApplicationController
    dataPath = Rails.public_path + "/data/kpi_export/data"
    
    # Get consolidated spiders
-   spiders_consolidated = get_spiders_consolidated(nil,nil,nil)
+   spiders_consolidated = get_spiders_consolidated(nil,nil,nil,nil,nil)
    
    # MONTHS CALCUL --------------------------------- 
    timeline_size = 19 # in months
