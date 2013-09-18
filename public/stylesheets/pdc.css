@@ -288,3 +288,9 @@ ul.sdp_tasks {
   padding: 0;
   color: #333;
 }
+
+.wl_tag {
+  padding-left: 5px;
+  color: red;
+  font-size:0.8em;
+}
