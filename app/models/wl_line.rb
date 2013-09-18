@@ -14,7 +14,20 @@ class WlLine < ActiveRecord::Base
   # def sdp_task
   #   SDPTask.find_by_sdp_id(self.sdp_task_id)
   # end
-
+  def tags
+    line_tags = LineTag.find(:all, :conditions=>["line_id = #{self.id}"]).map{|line_tag| line_tag.tag_id}
+    tags = nil
+    tags = Tag.find(:all, :conditions=>["id in (#{line_tags.map{|p|p}.join(',')})"]) if line_tags.size > 0
+    return tags
+  end
+  def tag_in(tags_ids)
+    line_tag = LineTag.find(:all, :conditions=>["line_id = #{self.id}"]).map{|line_tag| line_tag.tag_id}
+    return false if ( line_tag.nil? or line_tag.size == 0 ) 
+    line_tag.each do |l|
+      return true if tags_ids.include?(l.to_s)
+    end
+    return false
+  end
   def sdp_tasks
     wl_line_task_ids = WlLineTask.find(:all, :conditions=>["wl_line_id=?", self.id])
     return [] if wl_line_task_ids.size == 0
@@ -106,6 +119,7 @@ class WlLine < ActiveRecord::Base
         rv += " #{self.number} lines" if self.class==VirtualWlLine
         rv += " x #{tasks_size} tasks" if tasks_size > 1
       end
+      rv += self.tags.map{|t|"<span class='wl_tag'>#{t.name}</span>"}.join(',') if options[:with_tags_names] and !self.tags.nil?
       rv
     else
       rv += self.name

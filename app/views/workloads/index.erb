@@ -1,11 +1,14 @@
 <script src="/javascripts/workload.js" type="text/javascript"></script>
+<script src="/javascripts/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="/stylesheets/jquery.tagit.css" />
+<link rel="stylesheet" type="text/css" href="/stylesheets/tagit.ui-zendesk.css" />
+<script src="/javascripts/tag-it.js" type="text/javascript"></script>
 
 <%= render(:partial=>'workloads/last_sdp_update') %>
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:500px;") %>
+    
 
 <div id="edit_line"></div>
-
-
 <!-- <div id="debug"></div>
 <script type="text/javascript">
     Ajax.Responders.register({

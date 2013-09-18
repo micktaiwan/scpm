@@ -53,7 +53,7 @@ class ProjectWorkload
   # :only_holidays => true
   # :group_by_person => true
   # :hide_lines_with_no_workload => true
-  def initialize(project_ids, companies_ids, iterations, options = {})
+  def initialize(project_ids, companies_ids, iterations,tags_ids, options = {})
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
@@ -144,6 +144,8 @@ class ProjectWorkload
         end  
       end
     end
+    # Case: tags selected
+    @wl_lines = @wl_lines.select{|l|l.tag_in(tags_ids) == true} if tags_ids.size > 0
 
     uniq_person_number = @wl_lines.map{|l| l.person_id}.uniq.size
 

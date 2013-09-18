@@ -110,3 +110,31 @@ function colorToHex(color) {
     var rgb = blue | (green << 8) | (red << 16);
     return digits[1] + '#' + rgb.toString(16);
 };
+
+function addTag(last_tag, line_id){
+  new Ajax.Request('/project_workloads/add_tag', {
+    parameters: { tag_name: last_tag, line_id: line_id }
+  });
+}
+
+function removeTag(tags, line_id){
+  new Ajax.Request('/project_workloads/remove_tag', {
+    parameters: { tags: String(tags), line_id: line_id }
+  });
+}
+
+function init_tags(line_id) {
+  $j("#lineTags_"+line_id).tagit({
+    // availableTags: sampleTags,
+    removeConfirmation: true,
+    caseSensitive: false,
+    afterTagAdded: function(event, ui) {
+      a = $j('#lineTags_'+line_id).tagit('assignedTags');
+      addTag(a[a.length -1],line_id);
+    },
+    afterTagRemoved: function(event, ui) {
+      a = $j('#lineTags_'+line_id).tagit('assignedTags');
+      removeTag(a,line_id);
+    }
+  });
+}
