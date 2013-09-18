@@ -127,6 +127,7 @@ function init_tags(line_id) {
   $j("#lineTags_"+line_id).tagit({
     // availableTags: sampleTags,
     removeConfirmation: true,
+    caseSensitive: false,
     afterTagAdded: function(event, ui) {
       a = $j('#lineTags_'+line_id).tagit('assignedTags');
       addTag(a[a.length -1],line_id);

@@ -259,7 +259,7 @@ class ProjectWorkloadsController < ApplicationController
   end
 
   def add_tag
-    tag_name  = params[:tag_name]
+    tag_name  = params[:tag_name].titleize
     line_id   = params[:line_id]
     tag       = Tag.find_by_name(tag_name)
     tag       = Tag.create(:name=>tag_name) if tag.nil?
