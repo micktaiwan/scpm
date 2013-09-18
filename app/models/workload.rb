@@ -33,7 +33,7 @@ class Workload
 
   # options can have
   # :only_holidays => true
-  def initialize(person_id, project_ids, iterations, options = {})
+  def initialize(person_id, project_ids, iterations, tags_ids, options = {})
 
     # return if project_ids.size==0
     @person     = Person.find(person_id)
@@ -44,6 +44,7 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
+
     if iterations.size == 0
       @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
     else
@@ -65,12 +66,16 @@ class Workload
         @names << ", " if cpt < project_ids.length
       end
     end
+    # Case: no project selected
     if !project_ids or project_ids.size==0
       @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"])
     else
+    # Case: at least, one project selected
+    # No iteration selected
       if iterations.size==0
         @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
       else
+    # at least, one iteration selected
         project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
         project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations 
         project_ids.each do |p|
@@ -112,10 +117,11 @@ class Workload
           end
         end  
       end
-      #WlLine.find(:all, :conditions=>["project_id is null and person_id=#{person_id}"]).each do |l|
-      #  @wl_lines << l
-      #end
     end
+
+    # Case: tags selected
+    @wl_lines = @wl_lines.select{|l|l.tag_in(tags_ids) == true} if tags_ids.size > 0
+
     #Rails.logger.debug "\n===== hide_lines_with_no_workload: #{options[:hide_lines_with_no_workload]}\n\n"
     if options[:only_holidays] != true
       line_count = WlLine.find(:all, :conditions=>["person_id=#{person_id}"])

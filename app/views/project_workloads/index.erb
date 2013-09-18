@@ -49,7 +49,7 @@
       <% if @tags %>
         <% for t in @tags %>
           <% tag_size = LineTag.find(:all, :conditions=>["tag_id=?",t.id]).size %>
-          <%= check_box_tag('tags_ids[]', t.id) %><%= "#{t.name} (#{tag_size})"%><br/>
+          <%= check_box_tag('tags_ids[]', t.id, session['workload_tags'].include?(t.id.to_s)) %><%= "#{t.name} (#{tag_size})"%><br/>
         <% end %>
       <% end %>
     </td>
