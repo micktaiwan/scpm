@@ -30,18 +30,18 @@ class SpiderKpisController < ApplicationController
     render :kpi_charts
   end
   
-  def kpi_total_export
-    kpi_total_export_generate()
-    dataPath = Rails.public_path + "/data"
+  # def old_kpi_total_export
+  #   kpi_total_export_generate()
+  #   dataPath = Rails.public_path + "/data"
     
-    if(FileTest.exists?("#{@dataPath}/kpi_export_package.zip"))
-      File.delete("#{dataPath}/kpi_export_package.zip") 
-    end
+  #   if(FileTest.exists?("#{@dataPath}/kpi_export_package.zip"))
+  #     File.delete("#{dataPath}/kpi_export_package.zip") 
+  #   end
     
-    # system("cd #{dataPath} && tar -cvzf #{dataPath}/kpi_export.tar.gz kpi_export/")
-    system("cd #{dataPath} && zip -9 -r #{dataPath}/kpi_export_package.zip kpi_export/")
-    @link = "kpi_export_package.zip"
-  end
+  #   # system("cd #{dataPath} && tar -cvzf #{dataPath}/kpi_export.tar.gz kpi_export/")
+  #   system("cd #{dataPath} && zip -9 -r #{dataPath}/kpi_export_package.zip kpi_export/")
+  #   @link = "kpi_export_package.zip"
+  # end
   
   # ------------------------------------------------------------------------------------
   # KPI FUNCTIONS
@@ -78,12 +78,6 @@ class SpiderKpisController < ApplicationController
     else
       @kpi_type = params[:kpi_type]
     end
-    # charts_element = Array.new
-    #     if (@kpi_type == "pm_type")
-    #       charts_element = PmType.all
-    #     else
-    #       charts_element = PmTypeAxe.all
-    #     end
     
     @chart_type = ""
     if(@chart_type_param != nil)
@@ -555,7 +549,7 @@ class SpiderKpisController < ApplicationController
     end
   end
  
- def kpi_total_export_generate
+ def old_kpi_total_export_generate
    dataPath = Rails.public_path + "/data/kpi_export/data"
    
    # Get consolidated spiders
