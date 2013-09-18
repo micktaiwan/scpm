@@ -18,7 +18,7 @@
 
 <% if edit_line %>
   <br/>
-  Associated tasks: <%= edit_line.sdp_tasks_initial %> days
+  Associated tasks: <%= edit_line.sdp_tasks_assigned %> days
   <ul class="sdp_tasks">
     <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %> <!-- problem: checkbox value isn't refreshed here, should be done with javascript to get its value -->
   </ul>
