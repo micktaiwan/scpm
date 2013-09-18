@@ -30,7 +30,19 @@ class Person < ActiveRecord::Base
   before_save :encrypt_password
 
   attr_accessor :password
-  
+  def tags
+    lines_tags = LineTag.find(:all, :conditions=>"line_id in ( select id from wl_lines where person_id=#{self.id} )").map{|l|l.tag_id}.uniq
+    tags = []
+    if !lines_tags.nil?
+      lines_tags.each do |l|
+        tags << Tag.find(l)
+      end
+    end
+    return tags
+  end
+  def lines_tagged
+    return LineTag.find(:all, :conditions=>"line_id in ( select id from wl_lines where person_id=#{self.id} )").map{|l|l.id}
+  end
   def projects
     projects = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"])
     return projects
