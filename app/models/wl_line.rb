@@ -119,6 +119,7 @@ class WlLine < ActiveRecord::Base
         rv += " #{self.number} lines" if self.class==VirtualWlLine
         rv += " x #{tasks_size} tasks" if tasks_size > 1
       end
+      rv += self.tags.map{|t|"<span class='wl_tag'>#{t.name}</span>"}.join(',') if options[:with_tags_names] and !self.tags.nil?
       rv
     else
       rv += self.name
