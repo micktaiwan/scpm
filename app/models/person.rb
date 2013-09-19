@@ -43,7 +43,7 @@ class Person < ActiveRecord::Base
   def lines_tagged
     return LineTag.find(:all, :conditions=>"line_id in ( select id from wl_lines where person_id=#{self.id} )").map{|l|l.id}
   end
-  def projects
+  def projects # lines associated to projects
     projects = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"])
     return projects
   end

@@ -46,11 +46,10 @@
   <h2><%= @workload.names %> (<%= @workload.companies %>)</h2>
   <table id="workload_table">
   <thead>
-    <% if session['workload_project_ids'].size != 0 %>
-      <% colors = ["#00FF00","#98AFC7","#7FFFD4","#41A317","#F3E5AB","#C36241","#7D0552","#C25A7C","#D462FF","#EBDDE2"] %>
+    <% if session['workload_person_project_ids'].size != 0 %>
       <% @workload.projects.each do |p| %>
-        <% color = colors.rand %>
-        <% colors.delete(color) %>
+        <% color = ApplicationController::COLORS.rand %>
+        <% ApplicationController::COLORS.delete(color) %>
         <% if p.planning %>
           <% if p.planning.tasks %>
             <% p.planning.tasks.each do |t| %>

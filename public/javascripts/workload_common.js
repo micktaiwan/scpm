@@ -112,13 +112,13 @@ function colorToHex(color) {
 };
 
 function addTag(last_tag, line_id){
-  new Ajax.Request('/project_workloads/add_tag', {
+  new Ajax.Request('/tags/add_tag', {
     parameters: { tag_name: last_tag, line_id: line_id }
   });
 }
 
 function removeTag(tags, line_id){
-  new Ajax.Request('/project_workloads/remove_tag', {
+  new Ajax.Request('/tags/remove_tag', {
     parameters: { tags: String(tags), line_id: line_id }
   });
 }

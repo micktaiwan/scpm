@@ -11,6 +11,8 @@ class Workload
     :opens,           # total of worked days per week (5 - nb of holidays)
     :person,
     :person_id,
+    :projects,
+    :planning_tasks,
     :wl_lines,        # arrays of loads, all lines (filtered and not filtered)
     :displayed_lines, # only filtered lines
     :line_sums,       # sum of days per line of workload
@@ -38,6 +40,8 @@ class Workload
     # return if project_ids.size==0
     @person     = Person.find(person_id)
     raise "could not find this person by id '#{person_id}'" if not @person
+    @projects = Project.find(:all, :conditions=>["id in (#{project_ids.join(',')})"]) if project_ids.size!=0
+    @projects = WlLine.find(:all, :conditions=>["person_id=#{person_id} and project_id is not null"]).collect{|l| Project.find(l.project_id)}.uniq if project_ids.size==0
     @person_id  = person_id
     @name       = @person.name
 
@@ -266,6 +270,7 @@ class Workload
         @line_sums[l.id][:consumed]  = 0.0
       end
     end
+    @planning_tasks = get_plannings(@projects, wl_weeks)
   end
 
   def col_sum(w, wl_lines)
