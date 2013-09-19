@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/javascripts/jscolor.js" ></script>
 <div id="workload" class="workload">
 
     <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
@@ -112,6 +113,51 @@
   <% if @workload.names.size !=0 %><h2><%= @workload.names %></h2><% end %>
   <table id="workload_table">
   <thead>
+    <% if session['workload_project_ids'].size != 0 %>
+      <% @workload.projects.each do |p| %>
+        <% color = ApplicationController::COLORS.rand %>
+        <% ApplicationController::COLORS.delete(color) %>
+        <% if p.planning %>
+          <% if p.planning.tasks %>
+            <% p.planning.tasks.each do |t| %>
+              <tr>
+                <% @tasks_header += 1 %>
+                <% this_color = color %>
+                <% this_color = t.color if t.color%>
+                <% @task_id = "task_"+t.id.to_s %>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
+                <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="wl_names planning_task">[<%= p.name %>] <%= t.name %></th>
+                <th class="planning_task">
+                <% if current_user.is_cpdp == 1%>
+                  <input id="color_<%=@task_id%>" class="color_picker" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
+                <% end %>
+                </th>
+                <th class="planning_task"></th>
+                <% if APP_CONFIG['workloads_display_consumed_column'] %>
+                  <th class="planning_task"></th>
+                <% end %>
+                <th class="planning_task"></th>
+                <th class="planning_task"></th>
+                <th class="planning_task"></th>
+                <% if APP_CONFIG['workloads_display_total_column'] %>
+                  <th class="planning_task"></th>
+                <% end %>
+                <%
+                  c = []
+                  @workload.planning_tasks.each do |pt|
+                    c << pt if pt[:task]==t
+                  end
+                %>
+                <% @start_date_condition = "not detected" %>
+                <% nb_cells = c.select{|y|y[:week]==true}.length %>
+                <%= render(:partial=>"wl_task_planning", :collection=>c, :locals=>{:color=>this_color, :nb_cells=>nb_cells}) %>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      <%  end %>
+    <% end %>
     <tr>
     <th></th>
     <th></th>
