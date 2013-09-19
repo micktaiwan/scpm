@@ -1,7 +1,7 @@
 <tr>
 	<th><%= line.id %></th>
 	<th><%= line.person.name %></th>
-	<th align="left"><%= line.display_name(:with_tags_names=>false, :with_person_name=>false, :with_project_name=>true, :with_project_url=>true) %></th>
+	<th align="left"><%= line.display_name(:with_tags_names=>false, :with_person_name=>false, :with_project_name=>true, :with_project_url=>false) %></th>
 	<th>
 		<ul id="lineTags_<%=line.id%>">
 	      <!-- Existing list items will be pre-added to the tags -->
