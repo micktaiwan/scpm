@@ -24,9 +24,8 @@ class ProjectWorkload
     :months,          # "Oct"
     :days,            # week days display per week: "17-21"
     :opens,           # total of worked days per week (5 - nb of holidays)
-    :project,
-    :project_ids,
-    :projects,
+    :project_ids,     # Array of project_ids
+    :projects,        # Array of projects
     :wl_lines,        # arrays of loads, all lines (filtered and not filtered)
     :displayed_lines, # only filtered lines
     :line_sums,       # sum of days per line of workload
