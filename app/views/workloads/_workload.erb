@@ -128,7 +128,7 @@
               <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
               <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="wl_names planning_task">[<%= p.name %>] <%= t.name %></th>
               <th class="planning_task">
-              <% if current_user.is_cpdp == 1%>
+              <% if current_user.is_cpdp == 1 or current_user.has_role?('Admin')%>
                 <input id="color_<%=@task_id%>" class="color_picker" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
               <% end %>
               </th>
