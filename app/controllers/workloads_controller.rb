@@ -399,6 +399,18 @@ class WorkloadsController < ApplicationController
     WlLineTask.find(:all, :conditions=>["wl_line_id=?",@wl_line_id]).each do |l|
       l.destroy
     end
+    line_tags = LineTag.find(:all, :conditions=>["line_id=#{@wl_line_id}"])
+    tags = []
+    line_tags.each do |l|
+      tag = Tag.find(l.tag_id)
+      tags <<  tag if !tags.include?(tag) 
+    end
+    line_tags.each do |l|
+      l.destroy
+    end
+    tags.each do |t|
+      t.destroy if LineTag.find(:all, :conditions=>["tag_id=#{t.id}"]).size == 0 
+    end
     @workload = Workload.new(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'],session['workload_person_tags'])
     get_sdp_tasks(@workload)
   end
