@@ -49,6 +49,12 @@ class WlLine < ActiveRecord::Base
     t.map{|t| t.initial}.inject(:+)
   end
 
+  def sdp_tasks_assigned
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.assigned}.inject(:+)
+  end
+
   def sdp_tasks_balancei
     t = sdp_tasks
     return 0.0 if t.size == 0
