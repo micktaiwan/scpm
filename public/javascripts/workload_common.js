@@ -1,5 +1,10 @@
 function wl_add_line() {
   $('wl_line_add_form').appear({duration:0.2});
+  window.onkeyup = function (event) {
+    if (event.keyCode == 27) {
+      $('wl_line_add_form').fade({duration:0.2});
+    }
+  }
   }
 
 function wl_change_colors(wlweek, background, color) {
@@ -123,9 +128,9 @@ function removeTag(tags, line_id){
   });
 }
 
-function init_tags(line_id) {
+function init_tags(line_id, sampleTags) {
   $j("#lineTags_"+line_id).tagit({
-    // availableTags: sampleTags,
+    availableTags: sampleTags,
     removeConfirmation: true,
     caseSensitive: false,
     afterTagAdded: function(event, ui) {

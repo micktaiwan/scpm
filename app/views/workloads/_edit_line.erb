@@ -84,6 +84,6 @@
 </div>
 
   <script type="text/javascript">
-    init_tags(<%= edit_line.id %>);
+    init_tags(<%= edit_line.id %>, <%= "[\"#{Tag.all.map{|p|p.name}.join('","')}\"]"%>);
   </script>
 
