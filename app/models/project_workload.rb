@@ -185,10 +185,8 @@ class ProjectWorkload
             person_task[l.person_id][:consumed]  += l.sdp_tasks_consumed
             person_task[l.person_id][:sdp]        = true
           end
-          if l.tags 
-            l.tags.each do |t|
-              selected_line.tags << t if !selected_line.tags.include?(t)
-            end
+          l.tags.each do |t|
+            selected_line.tags << t if !selected_line.tags.include?(t)
           end
         end
       end
@@ -385,11 +383,7 @@ private
     line.projects   = [l.project]
     line.sdp_tasks  = l.sdp_tasks
     line.alert_sdp_task = true if l.sdp_tasks.size == 0
-    if l.tags 
-      l.tags.each do |t|
-        line.tags << t if !line.tags.include?(t)
-      end
-    end
+    line.tags       = l.tags
   end
   
   def person_is_uniq?(person_id, lines)

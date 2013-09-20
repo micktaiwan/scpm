@@ -1,6 +1,6 @@
 class VirtualWlLine < WlLine
 
-  attr_accessor :projects, :sdp_tasks, :number, :alert_sdp_task
+  attr_accessor :projects, :sdp_tasks, :number, :alert_sdp_task, :tags
 
   def initialize
     super
@@ -8,6 +8,7 @@ class VirtualWlLine < WlLine
     @sdp_tasks  = Array.new
     @number     = 1
     @alert_sdp_task = false
+    @tags       = []
   end
 
 end
