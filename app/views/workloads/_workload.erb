@@ -113,7 +113,7 @@
   <% if @workload.names.size !=0 %><h2><%= @workload.names %></h2><% end %>
   <table id="workload_table">
   <thead>
-    <% if session['workload_project_ids'].size != 0 %>
+    <% if session['workload_project_ids'] and session['workload_project_ids'].size != 0 %>
       <% @workload.projects.each do |p| %>
         <% color = ApplicationController::COLORS.rand %>
         <% ApplicationController::COLORS.delete(color) %>
