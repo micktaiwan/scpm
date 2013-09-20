@@ -80,6 +80,22 @@ class Risk < ActiveRecord::Base
     end    
   end
 
+  def old_severity_excel_style
+    if ((self.old_probability >= 0 and self.old_probability <= 4) and (self.old_impact >= 1 and self.old_impact <= 4))
+      return {'ss:StyleID' => COLOR_ARRAY_EXCEL[self.old_probability][self.old_impact-1] }
+    end
+    return {'ss:StyleID' => ZERO_SEVERITY_EXCEL }
+  end
+
+  def old_probability_excel_style
+    case
+      when old_probability < 4
+        return {'ss:StyleID' => 'Default'}
+      else
+        return {'ss:StyleID' => 's84'}
+    end    
+  end
+
   def get_severity_color
     if ((self.probability >= 0 and self.probability <= 4) and (self.impact >= 1 and self.impact <= 4))
       return COLOR_ARRAY[self.probability][self.impact-1]

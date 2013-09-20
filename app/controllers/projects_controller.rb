@@ -530,8 +530,8 @@ class ProjectsController < ApplicationController
       # STREAMS REVIEW BEGIN
       stream                = Stream.find(:all)
       @review_types         = ReviewType.find(:all)
-      @stream_width_array   = ["100","60"]
-      @stream_column_array  = ["workstream","stream"]
+      @stream_width_array   = ["100","60","100","100","100"]
+      @stream_column_array  = ["workstream","stream","green_project", "amber_project", "red_project"]
       @stream_columns_content = Array.new
 
       @review_types.each { |rt|
@@ -541,8 +541,11 @@ class ProjectsController < ApplicationController
 
       stream.each do |s|
         stream_params_array = Hash.new
-        stream_params_array["workstream"] = s.workstream.name
-        stream_params_array["stream"] = s.name
+        stream_params_array["workstream"]     = s.workstream.name
+        stream_params_array["stream"]         = s.name
+        stream_params_array["green_project"]  = s.get_total_green_projects.to_s
+        stream_params_array["amber_project"]  = s.get_total_amber_projects.to_s
+        stream_params_array["red_project"]    = s.get_total_red_projects.to_s
 
         @review_types.each do |rt|
           last_review = StreamReview.first(:conditions => ["stream_id = ? and review_type_id = ?",s.id ,rt.id], :order => "created_at DESC")
