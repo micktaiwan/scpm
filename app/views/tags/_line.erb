@@ -14,5 +14,6 @@
 	</th>
 </tr>
 <script type="text/javascript">
-	init_tags(<%= line.id %>);
+    //Existing tags will be added to the sample tags for the auto completion
+	init_tags(<%= line.id %>, <%= "[\"#{Tag.all.map{|p|p.name}.join('","')}\"]"%>);
 </script>
