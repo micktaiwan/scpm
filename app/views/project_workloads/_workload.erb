@@ -49,6 +49,7 @@
     <% if session['workload_project_ids'].size != 0 %>
       <% @workload.projects.each do |p| %>
         <% color = ApplicationController::COLORS.rand %>
+        <% color = "#FFFFFF" if color.nil? %>
         <% ApplicationController::COLORS.delete(color) %>
         <% if p.planning %>
           <% if p.planning.tasks %>
