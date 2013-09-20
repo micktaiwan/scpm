@@ -79,11 +79,13 @@
 
 <% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
   <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %>
+<% end %>
+<%= link_to_function('Filters', "Effect.toggle('filters','blind', {duration: 0.5});",{:class=>"btnlnk"}) %>
+<% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
   <% if APP_CONFIG['workloads_view_by_project_menu'] %>
     <%= link_to('Switch to project view', {:controller=>'project_workloads'}, {:class=>'btnlnk'}) %>
   <% end %>
 <% end %>
-<%= link_to_function('Filters', "Effect.toggle('filters','blind', {duration: 0.5});",{:class=>"btnlnk"}) %>
 <% @tasks_header = 0 %>
 <%= render(:partial=>"workload") %>
 
