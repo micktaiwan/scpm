@@ -35,6 +35,18 @@ class Stream < ActiveRecord::Base
     rv
   end
 
+  def get_total_green_projects
+      return Project.count(:all,:conditions => ["workstream = ? and last_status = '1'", Workstream.find(self.workstream).name])
+  end
+
+  def get_total_amber_projects 
+      return Project.count(:all,:conditions => ["workstream = ? and last_status = '2'", Workstream.find(self.workstream).name])
+  end
+
+  def get_total_red_projects
+      return Project.count(:all,:conditions => ["workstream = ? and last_status = '3'", Workstream.find(self.workstream).name])
+  end
+
   #                         #
   # Consumed tickets count  #
   #                         #
