@@ -14,7 +14,7 @@
   <script src="/javascripts/sort_table.js" type="text/javascript"></script>
   <script src="/javascripts/raphael-min.js" type="text/javascript"></script>
   <!--<script src="/javascripts/timeline/timeline_js/timeline-api.js?bundle=true" type="text/javascript"></script>-->
-  <!--<script src="/javascripts/chat.js" type="text/javascript"></script>-->
+  <script src="/javascripts/chat.js" type="text/javascript"></script>
   <link rel="Shortcut Icon" type="image/x-icon" href="/images/favicon.ico" />
 </head>
 
@@ -25,8 +25,8 @@
   cu.save
 %>
 
-<%#= render :file => 'chat/main' %>
-
+<%= render(:file => 'chat/main') %>
+test
 <div id="banner">
   <%= render :file => 'layouts/context_select' %>
   <div id="title">Tools</div>
