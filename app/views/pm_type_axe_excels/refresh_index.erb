@@ -1,0 +1,8 @@
+<%= link_to("New", {:action=>'new', :lifecycle_id=>@lifecycle_id}) %>
+<% @excel_axes.each do |excel_axe| %>
+	<li>
+		<%= link_to(excel_axe.id.to_s, {:action=>'edit', :id=>excel_axe.id, :lifecycle_id=>@lifecycle_id}) %>
+		<%= excel_axe.pm_type_axe.title %>
+		<%= excel_axe.excel_position.to_s %>
+	</li>
+<% end %>

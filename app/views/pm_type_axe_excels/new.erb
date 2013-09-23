@@ -1,0 +1,10 @@
+<%= link_to("Back", {:controller=>'pm_type_axe_excels', :action=>'index'}) %>
+
+<h2>PM Type Axe Excel Creation</h2>
+
+<%= error_messages_for :pmtypeaxeexcel %>
+<% form_for @pmtypeaxeexcel, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f, :locals => {:lifecycle_id => @lifecycle_id}) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'OK' %></p>
+<% end -%>
