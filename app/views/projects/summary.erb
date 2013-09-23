@@ -311,7 +311,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'Criticality', 'Date', 'Context', 'Risk', 'Prob', 'Consequence', 'Impact', 'Actions', 'RIA Logged', 'RIA Action', 'Old Impact', 'Old Prob', 'Old Criticality'] do
+        for column in ['Supervisor', 'WS','Project', 'Workpackage', 'Criticality', 'Date', 'Context', 'Risk', 'Prob', 'Consequence', 'Impact', 'Actions', 'Risk Logged', 'Risk Action', 'Old Impact', 'Old Prob', 'Old Criticality'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -334,8 +334,8 @@ end
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(p.consequence); end;          @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.impact,                   'ss:Type' => 'String';                        @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(p.actions); end;              @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          @xml.Cell { @xml.Data p.is_ria_logged==1 ? "Y" : "",                     'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
-          @xml.Cell { @xml.Data p.is_ria_action==1 ? "Y" : "",                     'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.is_ria_logged==1 ? "Y" : "N",                     'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.is_ria_action==1 ? "Y" : "N",                     'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.old_impact,                       'ss:Type' => 'String';                @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell(p.old_probability_excel_style) { @xml.Data p.old_probability,  'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell(p.old_severity_excel_style) { @xml.Data p.old_severity,        'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
@@ -561,7 +561,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Workstream', 'Criticality', 'Date', 'Context', 'Risk', 'Prob', 'Consequence', 'Impact', 'Actions', 'Old Impact', 'Old Prob', 'Old Criticality'] do
+        for column in ['Workstream', 'Criticality', 'Date', 'Context', 'Risk', 'Prob', 'Consequence', 'Impact', 'Actions', 'Risk Logged', 'Risk Action',   'Old Impact', 'Old Prob', 'Old Criticality'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -581,6 +581,8 @@ end
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(p.consequence); end;            @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.impact,                   'ss:Type' => 'String';                          @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(p.actions); end;                @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.is_ria_logged==1 ? "Y" : "N",                     'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data p.is_ria_action==1 ? "Y" : "N",                     'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data p.old_impact,                   'ss:Type' => 'String';                      @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell(p.old_probability_excel_style) { @xml.Data p.old_probability,  'ss:Type' => 'String';   @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell(p.old_severity_excel_style) { @xml.Data p.old_severity,        'ss:Type' => 'String';   @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
