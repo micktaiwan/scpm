@@ -8,29 +8,9 @@
 
 <%= render(:partial=>'workloads/last_sdp_update') %>
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:500px;") %>
-    
 
 <div id="edit_line"></div>
-<!-- <div id="debug"></div>
-<script type="text/javascript">
-    Ajax.Responders.register({
-    // log the beginning of the requests
-    onCreate: function(request, transport) {
-      new Insertion.Bottom('debug', '<p><strong>[' + new Date().toString() + '] accessing ' + request.url + '</strong></p>')
-      },
-     
-    // log the completion of the requests
-    onComplete: function(request, transport) {
-      new Insertion.Bottom('debug',
-      '<p><strong>http status: ' + transport.status + '</strong></p>' +
-      '<pre>' + transport.responseText.escapeHTML() + '</pre>')
-      }
-    });
- </script> -->
-
 <div id="wl_line_add_form" class="popup" style="display:none;">
-
-<!-- <input id="wl_person" name="wl_person" type="hidden" value="<%= session['workload_person_id'] %>" /> -->
   <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
   <div class="title">Add a line</div>
   <% if APP_CONFIG['workloads_add_by_request_number'] %>
@@ -86,7 +66,6 @@
     <%= link_to('Switch to project view', {:controller=>'project_workloads'}, {:class=>'btnlnk'}) %>
   <% end %>
 <% end %>
-<% @tasks_header = 0 %>
 <%= render(:partial=>"workload") %>
 
 <script>
