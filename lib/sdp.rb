@@ -64,14 +64,14 @@ private
   def sanitize(name)
     return nil if not name
     name.gsub!(160.chr,"")
-    name.gsub!(130.chr.force_encoding('CP850'), "e") # eacute
-    name.gsub!(133.chr.force_encoding('CP850'), "a") # a grave
-    name.gsub!(135.chr.force_encoding('CP850'), "c") # c cedille
-    name.gsub!(138.chr.force_encoding('CP850'), "e") # e grave
-    name.gsub!(140.chr.force_encoding('CP850'), "i") # i flex
-    name.gsub!(147.chr.force_encoding('CP850'), "o") # o flex
-    name.gsub!(156.chr.force_encoding('CP850'), "oe") # oe
-    name.gsub!(167.chr.force_encoding('CP850'), "o") # °    
+    name.gsub!(130.chr, "e") # eacute
+    name.gsub!(133.chr, "a") # a grave
+    name.gsub!(135.chr, "c") # c cedille
+    name.gsub!(138.chr, "e") # e grave
+    name.gsub!(140.chr, "i") # i flex
+    name.gsub!(147.chr, "o") # o flex
+    name.gsub!(156.chr, "oe") # oe
+    name.gsub!(167.chr, "o") # °    
     name.strip
   end
 
