@@ -9,8 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
-ActiveRecord::Schema.define(:version => 20130916173600) do
+ActiveRecord::Schema.define(:version => 20130918174000) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -405,6 +404,14 @@ ActiveRecord::Schema.define(:version => 20130916173600) do
     t.datetime "updated_at"
   end
 
+  create_table "pm_type_axe_excels", :force => true do |t|
+    t.integer  "axe_id"
+    t.integer  "lifecycle_id"
+    t.integer  "excel_position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pm_type_axes", :force => true do |t|
     t.integer  "pm_type_id"
     t.string   "title"
@@ -612,10 +619,10 @@ ActiveRecord::Schema.define(:version => 20130916173600) do
     t.integer  "is_quality",      :default => 1
     t.integer  "generic_risk_id"
     t.integer  "stream_id"
-    t.integer  "is_ria_logged",   :default => 0
-    t.integer  "is_ria_action",   :default => 0
-    t.integer  "old_impact"
-    t.integer  "old_probability"
+    t.boolean  "is_ria_logged",   :default => false
+    t.boolean  "is_ria_action",   :default => false
+    t.integer  "old_impact",      :default => 0
+    t.integer  "old_probability", :default => 0
   end
 
   create_table "roles", :force => true do |t|
