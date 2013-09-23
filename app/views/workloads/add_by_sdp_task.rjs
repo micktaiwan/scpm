@@ -1,7 +1,7 @@
 if @error
   page.alert @error
 else
-    @tasks_header = 0
+  @tasks_header = 0
 	page.replace "workload", render(:partial=>'workload')
 	page << "jscolor.init()"
 	page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']}+( #{@tasks_header} * 22 ) );"
