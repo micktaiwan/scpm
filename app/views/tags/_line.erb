@@ -1,7 +1,7 @@
 <tr>
-	<td><%= line.id %></td>
+	<td><%= line.project_name %></td>
 	<td><%= line.person_name %></td>
-	<td align="left"><%= line.display_name(:with_tags_names=>false, :with_person_name=>false, :with_project_name=>true, :with_project_url=>false) %></td>
+	<td align="left"><%= line.display_name(:with_tags_names=>false, :with_person_name=>false, :with_project_name=>false, :with_project_url=>false) %></td>
 	<td>
 		<ul id="lineTags_<%=line.id%>">
 			<%= line.tags.map { |t| "<li>#{t.name}</li>"} %>
