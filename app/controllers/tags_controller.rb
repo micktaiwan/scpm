@@ -1,7 +1,10 @@
 class TagsController < ApplicationController
   
+  layout 'pdc'
+
   def index
   	@wl_lines = WlLine.all.sort_by{|l|l.person_id}
+    @projects = Project.all
   end
 
   def add_tag

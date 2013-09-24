@@ -1,19 +1,17 @@
 <tr>
-	<th><%= line.id %></th>
-	<th><%= line.person.name %></th>
-	<th align="left"><%= line.display_name(:with_tags_names=>false, :with_person_name=>false, :with_project_name=>true, :with_project_url=>false) %></th>
-	<th>
+	<td><%= line.id %></td>
+	<td><%= line.person_name %></td>
+	<td align="left"><%= line.display_name(:with_tags_names=>false, :with_person_name=>false, :with_project_name=>true, :with_project_url=>false) %></td>
+	<td>
 		<ul id="lineTags_<%=line.id%>">
-	      <!-- Existing list items will be pre-added to the tags -->
-	      <% if !line.tags.nil? %>
-	        <% line.tags.each do |tag| %>
-	          <li><%= tag.name %></li>
-	        <% end %>
-	      <% end %>
-	    </ul>
-	</th>
+			<%= line.tags.map { |t| "<li>#{t.name}</li>"} %>
+    </ul>
+	</td>
 </tr>
+<%
+# Existing tags will be added to the sample tags for the auto completion
+# FIXME: add only one script tag at the end of the html page
+%>
 <script type="text/javascript">
-    //Existing tags will be added to the sample tags for the auto completion
 	init_tags(<%= line.id %>, <%= "[\"#{Tag.all.map{|p|p.name}.join('","')}\"]"%>);
 </script>

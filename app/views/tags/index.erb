@@ -1,22 +1,18 @@
-<script src="/javascripts/jquery-1.6.2.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-var $j = jQuery.noConflict();
-</script>
 <script src="/javascripts/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="/javascripts/workload_common.js" type="text/javascript"></script>
-<script src="/javascripts/tag-it.js" type="text/javascript"></script>
-<script src="/javascripts/sort_table.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="/stylesheets/jquery.tagit.css" />
 <link rel="stylesheet" type="text/css" href="/stylesheets/tagit.ui-zendesk.css" />
-<link rel="stylesheet" type="text/css" href="/stylesheets/pdc.css" />
 <link rel="stylesheet" type="text/css" href="/stylesheets/jquery-ui.css">
+<script src="/javascripts/tag-it.js" type="text/javascript"></script>
 <h2>Tags</h2>
-<table>
+
+
+
+<table class="grid">
 	<tr> 
-	<th> Line id </th>
-	<th> Person</th>
-	<th> Line Name </th>
-	<th> Tags </th>
+	<td>#</td>
+	<td>Person</td>
+	<td>Line Name</td>
+	<td>Tags</td>
 	</tr>
 	<%= render(:partial=>"line", :collection=>@wl_lines) %>
 </table>

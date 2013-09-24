@@ -6,8 +6,7 @@
   error_line    = (wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500)
   error = 1 if error_line and (planned_total/remaining < 0.9)
   error = 2 if error_line and (planned_total/remaining > 1.1)
-  error = 3 if error_line and (planned_total-remaining).abs > 3
-
+  #error = 3 if error_line and (planned_total-remaining).abs > 3
 %>
 <tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type_by_project %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
