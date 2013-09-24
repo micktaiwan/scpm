@@ -163,9 +163,21 @@ tr.wl_opens {
   color: #F33;
   }
 
+.wlerror, .wlerror1, .wlerror2, .wlerror3 {
+  text-align: center;
+  }
+
 .wlerror {
   background: #FAA;
-  text-align: center;
+  }
+.wlerror1 {
+  background: #FAA;
+  }
+.wlerror2 {
+  background: #FDA;
+  }
+.wlerror3 {
+  background: #FDF;
   }
 
 .wlpositive {
@@ -173,7 +185,16 @@ tr.wl_opens {
   text-align: center;
 }
 
+/* FIXME: not DIY */
 .wlerror.no_sdp{
+  background: #AAF;
+  text-align: center;
+  }
+.wlerror1.no_sdp{
+  background: #AAF;
+  text-align: center;
+  }
+.wlerror2.no_sdp{
   background: #AAF;
   text-align: center;
   }
