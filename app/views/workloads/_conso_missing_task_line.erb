@@ -8,7 +8,7 @@
 >
 <td><%= line.project_name %></td>
 <td><%= line.person.name if line.person%></td>
-<td align="right"><%= line.planned_sum %></td>
+<td align="right"<% if line.planned_sum > 0 %> style="background-color:#FAA;"<%end%>><%= line.planned_sum %></td>
 <td align="right"><%= line.sum %></td>
 <td>
   <%= link_to_remote(image_tag('delete.gif', :alt=>'Delete this line'),
