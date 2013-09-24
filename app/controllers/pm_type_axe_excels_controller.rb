@@ -29,7 +29,7 @@ class PmTypeAxeExcelsController < ApplicationController
   def create
     @pmtypeaxeexcel = PmTypeAxeExcel.new(params[:pmtypeaxeexcel])
     @pmtypeaxeexcel.save
-    redirect_to("/pm_type_axe_excels/index")
+    redirect_to("/pm_type_axe_excels")
   end
 
   def edit
@@ -42,7 +42,7 @@ class PmTypeAxeExcelsController < ApplicationController
   def update
     pmtypeaxeexcel = PmTypeAxeExcel.find(params[:id])
     pmtypeaxeexcel.update_attributes(params[:pmtypeaxeexcel])
-    redirect_to("/pm_type_axe_excels/index")
+    redirect_to("/pm_type_axe_excels")
   end
 
   def destroy
