@@ -7,17 +7,19 @@ ul.tagit {
     border-width: 1px;
     border-color: #C6C6C6;
     background: inherit;
+    padding: 0;
+    margin:  0;
 }
 ul.tagit li.tagit-choice {
     -moz-border-radius: 6px;
     border-radius: 6px;
     -webkit-border-radius: 6px;
     border: 1px solid #CAD8F3;
-
     background: none;
     background-color: #DEE7F8;
-
     font-weight: normal;
+    font-size: 0.8em;
+    margin: 2px;
 }
 ul.tagit li.tagit-choice .tagit-label:not(a) {
     color: #555;
@@ -51,6 +53,6 @@ ul.tagit input[type="text"] {
     background: none;
 }
 .ui-widget {
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
