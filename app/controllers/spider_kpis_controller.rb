@@ -118,9 +118,10 @@ class SpiderKpisController < ApplicationController
       spiders_conditions += " AND projects.workstream = '" + @workstream.to_s + "'"
     end
     if ((@milestone_name_id != nil) && (@milestone_name_id != "0"))
-      spiders_conditions += " AND spiders.milestone_id = '" + @milestone_name_id.to_s + "'"
+      m_name = MilestoneName.find(@milestone_name_id)
+      spiders_conditions += " AND milestones.name = '" + m_name.title + "'"
     end
-    spiders_consolidated = Spider.find(:all, :include => [:project => [:lifecycle_object]], :conditions=>spiders_conditions)
+    spiders_consolidated = Spider.find(:all, :include => [:project => [:lifecycle_object], :milestone =>[]], :conditions=>spiders_conditions)
 
 
     # ----------------------------------------------------------
