@@ -156,9 +156,10 @@ class SpiderKpisController < ApplicationController
     # ----------------------------------------------------------
     # EXCEL
     # ---------------------------------------------------------- 
+    excel_name = "kpi_export_" + lifecycle_object.name + ".xls"
     @xml = Builder::XmlMarkup.new(:indent => 1)
     headers['Content-Type']         = "application/vnd.ms-excel"
-    headers['Content-Disposition']  = 'attachment; filename="spider_conso.xls"'
+    headers['Content-Disposition']  = 'attachment; filename="' + excel_name + '"'
     headers['Cache-Control']  
 
     rescue Exception => e
