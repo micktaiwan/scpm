@@ -67,6 +67,11 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def show_project_list
+    get_projects
+    sort_projects
+  end
+
   def sort_projects
     case
       when session[:project_sort]=='read'

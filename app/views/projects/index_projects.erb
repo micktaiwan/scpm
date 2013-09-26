@@ -115,22 +115,15 @@
   </div>
 </div>
 
-<%= link_to_function('Toggle Timelines', "Effect.toggle('timeline','blind')",{:class=>"btnlnk"}) %><br/>
+<%= link_to("Open Project List", {:controller=>'projects', :action=>'show_project_list'},:class=>"btnlnk", :target => "_blank") %> 
+<%= submit_tag 'Show All Timelines',:class=>"btnlnk", :onclick=>"show_all_timeline()" %>
+<br/>
 <br/>
 
 Sorting: <%= select_tag('project_sort', options_for_select([['Alpha','alpha'], ['Workstream','workstream'], ['Update date','update'], ['Read','read']], session[:project_sort]), :onchange=>"refresh_projects(this.value)") %>
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;") %>
-<%= submit_tag 'Show All Timelines', {:onclick=>"show_all_timeline()"} %>
 
 <div id="timeline">
   <%= render(:partial=>'home_project', :collection=>@wps, :as=>:project) %>
 </div>
-<br/>
-<br/>
-
-<%= link_to_function('Toggle projects', "Effect.toggle('projects','blind')",{:class=>"btnlnk"}) %>
-<div id="projects" style="display:none;">
-<ul>
-  <%= render(:partial=>'project', :collection=>@projects) %>
-</ul>
 </div>
