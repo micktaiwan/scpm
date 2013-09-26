@@ -20,15 +20,15 @@ class ProjectsController < ApplicationController
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")
 
-    # TODO: use model "workstream"
-    # @workstreams = ['EP','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC','EC']
     @workstreams = Workstream.all()
     @workstreams = @workstreams.map { |ws| ws.name }
-    #Project.all.collect{|p| p.workstream}.uniq.sort
 
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
     @total_wps    = Project.count
     @total_status = Status.count
+
+    @total_wps_filtered = @wps.size
+
     if @wps.size > 0
       @amendments           = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
       @risks                = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
@@ -40,12 +40,23 @@ class ProjectsController < ApplicationController
           i.ctemplate.ctype!='folder' and i.status==0
           }.size > 0
         }.sort_by { |m| [m.project.full_name, m.name] }
+
+      i_wps = 0 
+      @projects_id = ""
+      @wps.each do |wp_project|
+        if i_wps > 0
+          @projects_id += ","
+        end
+        @projects_id += "'"+wp_project.id.to_s+"'"
+        i_wps += 1
+      end
     else
       @amendments           = []
       @risks                = []
       @risks_with_severity  = []
       @inconsistencies      = []
       @checklist_milestones = []
+      @projects_id          = ""
     end
     f = session[:project_filter_qr]
     if f and f.size == 1

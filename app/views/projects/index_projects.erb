@@ -1,3 +1,52 @@
+
+<SCRIPT language="Javascript">
+
+  show_timeline = function(project_id)
+  {
+      div_str = "milestone_ajax_div_"+project_id;
+      if ($(div_str).innerHTML == '')
+      {
+        $(div_str).innerHTML = '<%= image_tag "loading.gif", :alt => "Loading", :id => "image_loading" %>';
+
+        new Ajax.Request('/milestones/ajax_milestone', 
+        {
+          parameters: { project_id: project_id },
+          onSuccess: function(response) 
+          {
+            div_str_response = "milestone_ajax_div_"+project_id;
+            $(div_str_response).innerHTML = response.responseText;
+          },
+          onFailure:function(response) 
+          {
+            div_str_response = "milestone_ajax_div_"+project_id;
+            $(div_str_response).innerHTML = "Loading Error";
+          }
+        });
+      }
+      else
+      {
+        $(div_str).innerHTML = '';
+      }
+  }
+  show_all_timeline = function()
+  {  
+    var nb_projects = "<%= @total_wps_filtered %>";
+    if (nb_projects <= 30)
+    {
+      var project_list = [<%= @projects_id %>];
+      for (var i = 0; i < project_list.length; i++)
+      {
+       show_timeline(project_list[i].replace("'",""));
+      }
+    }
+    else
+    {
+      alert("Too many project to open all timeline. Please, reduce your filters.")
+    }
+  }
+
+</script>
+
 <%= link_to_function('Legend',"$('legend').toggle();", :style=>"float:right;") %>
 <div class="legend" id="legend" style="display:none;">
   <div class="milestone">
@@ -71,6 +120,7 @@
 
 Sorting: <%= select_tag('project_sort', options_for_select([['Alpha','alpha'], ['Workstream','workstream'], ['Update date','update'], ['Read','read']], session[:project_sort]), :onchange=>"refresh_projects(this.value)") %>
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;") %>
+<%= submit_tag 'Show All Timelines', {:onclick=>"show_all_timeline()"} %>
 
 <div id="timeline">
   <%= render(:partial=>'home_project', :collection=>@wps, :as=>:project) %>
