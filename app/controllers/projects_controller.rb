@@ -68,8 +68,8 @@ class ProjectsController < ApplicationController
   end
 
   def show_project_list
-    get_projects
-    sort_projects
+    get_projects_without_wps
+    sort_projects_without_wps
   end
 
   def sort_projects
@@ -86,6 +86,19 @@ class ProjectsController < ApplicationController
       when session[:project_sort]=='workstream'
         @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
         @wps = @wps.sort_by { |p| [p.workstream, p.full_name] }
+    end
+  end
+
+ def sort_projects_without_wps
+    case
+      when session[:project_sort]=='read'
+        @projects = @projects.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year }
+      when session[:project_sort]=='update'
+        @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
+      when session[:project_sort]=='alpha'
+        @projects = @projects.sort_by { |p| p.full_name }
+      when session[:project_sort]=='workstream'
+        @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
     end
   end
 
@@ -759,6 +772,27 @@ private
     if session[:project_filter_qr] != nil
       @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
       @wps = @wps.select {|p| p.has_responsible(session[:project_filter_qr]) }
+    end
+
+  end
+
+  def get_projects_without_wps
+    if session[:project_filter_text] != "" and session[:project_filter_text] != nil
+      @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
+      return
+    end
+
+    cond_projects = []
+    cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_projects << "project_id is null"
+
+
+    @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
+
+    if session[:project_filter_qr] != nil
+      @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
     end
 
   end

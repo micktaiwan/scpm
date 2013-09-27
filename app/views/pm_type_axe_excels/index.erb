@@ -1,18 +1,20 @@
+
 <SCRIPT language="Javascript">
-$(document).ready(function()
+
+jQuery(document).ready(function()
 {
 	l_id_save	 	= '<%= @lifecycle_id %>'
 
 	change_lifecycle = function(lifecycle_id)
 	{
 		l_id_save = lifecycle_id
-		$.ajax({
+		jQuery.ajax({
 			url: "pm_type_axe_excels/refresh_index",
 			type: "POST",
 			data: "lifecycle_id="+l_id_save})
 			.done(function(result) 
 			{ 
-				$("#excel_axe_list").html(result);
+				jQuery("#excel_axe_list").html(result);
 			})
 			.fail(function() 
 			{ 
