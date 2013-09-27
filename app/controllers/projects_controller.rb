@@ -739,19 +739,28 @@ private
       @wps      = @projects #.select {|wp| wp.has_status and wp.has_requests }
       return
     end
-    cond = []
-    cond << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    cond << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
-    #@wps = @wps.select {|wp| wp.open_requests.size > 0 } # wp.has_status
-    @wps = @wps.select {|wp| wp.is_running and wp.project_id != nil}
-    cond << "project_id is null"
-    @projects = Project.find(:all, :conditions=>cond.join(" and "))
+    cond_wps = []
+    cond_wps << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond_wps << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond_wps << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_wps << "is_running = 1"
+    cond_wps << "project_id IS NOT NULL"
+
+    cond_projects = []
+    cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_projects << "project_id is null"
+
+    @wps = Project.find(:all, :conditions=>cond_wps.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
+
+    @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
+
     if session[:project_filter_qr] != nil
       @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
       @wps = @wps.select {|p| p.has_responsible(session[:project_filter_qr]) }
     end
+
   end
 
   def no_responsible(p)
