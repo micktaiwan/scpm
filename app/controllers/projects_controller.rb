@@ -734,33 +734,51 @@ private
   end
 
   def get_projects
+    # Text filtering
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
       @wps      = @projects #.select {|wp| wp.has_status and wp.has_requests }
       return
     end
-    cond_wps = []
-    cond_wps << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond_wps << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    cond_wps << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    cond_wps << "is_running = 1"
-    cond_wps << "project_id IS NOT NULL"
 
-    cond_projects = []
-    cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    cond_projects << "project_id is null"
+    # Conditions
+    cond            = []
+    cond            << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond            << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond            << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    
+    cond_projects   = []
+    cond_projects   << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond_projects   << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_projects   << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond_projects   << "projects.project_id is null"
 
-    @wps = Project.find(:all, :conditions=>cond_wps.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
-
-    @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
-
+    # Requests
     if session[:project_filter_qr] != nil
-      @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
-      @wps = @wps.select {|p| p.has_responsible(session[:project_filter_qr]) }
-    end
+      cond          << "pp1.person_id in (#{session[:project_filter_qr].join(",")})"
+      cond_projects << "pp1.person_id in (#{session[:project_filter_qr].join(",")})"
+      cond          << "pp2.person_id in (#{session[:project_filter_qr].join(",")})"
+      cond_projects << "pp2.person_id in (#{session[:project_filter_qr].join(",")})"
 
+      @wps = Project.find(:all, 
+        :conditions=>cond.join(" and "), 
+        :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments'], 
+        :joins => ['INNER JOIN project_people as pp1 ON pp1.project_id = projects.id','INNER JOIN project_people as pp2 ON pp2.project_id = projects.project_id']) 
+      @wps = @wps.select {|wp| wp.is_running and wp.project_id != nil}
+      
+      @projects = Project.find(:all, 
+        :conditions=>cond_projects.join(" and "), 
+        :joins => ['INNER JOIN project_people as pp1 ON pp1.project_id = projects.id','INNER JOIN project_people as pp2 ON pp2.project_id = projects.project_id'])
+
+
+    else
+
+      @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
+      @wps = @wps.select {|wp| wp.is_running and wp.project_id != nil}
+      
+      @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
+    end
+    
   end
 
   def no_responsible(p)
