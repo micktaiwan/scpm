@@ -1,6 +1,9 @@
 class SpiderKpisController < ApplicationController
-  layout "tools_spider", :except => :generate_kpi_charts_data
+  layout "tools_spider", :except => [:generate_kpi_charts_data, :generate_kpi_export]
   
+  # ------------------------------------------------------------------------------------
+  # ACTIONS
+  # ------------------------------------------------------------------------------------
   #http://0.0.0.0:3000/spiders/kpi_charts_by_pm_types?lifecycle_id=1&workstream=0&milestone_name_id=0
   def kpi_charts_by_pm_types 
     @chart_type_param = "classic"
@@ -29,105 +32,143 @@ class SpiderKpisController < ApplicationController
     kpi_prepare_parameters
     render :kpi_charts
   end
-  
-  # def old_kpi_total_export
-  #   kpi_total_export_generate()
-  #   dataPath = Rails.public_path + "/data"
-    
-  #   if(FileTest.exists?("#{@dataPath}/kpi_export_package.zip"))
-  #     File.delete("#{dataPath}/kpi_export_package.zip") 
-  #   end
-    
-  #   # system("cd #{dataPath} && tar -cvzf #{dataPath}/kpi_export.tar.gz kpi_export/")
-  #   system("cd #{dataPath} && zip -9 -r #{dataPath}/kpi_export_package.zip kpi_export/")
-  #   @link = "kpi_export_package.zip"
-  # end
-  
-  # ------------------------------------------------------------------------------------
-  # KPI FUNCTIONS
-  # ------------------------------------------------------------------------------------
-  def kpi_prepare_parameters
-    @lifecycles = Lifecycle.all.map {|u| [u.name,u.id]}    
-    @milestones = MilestoneName.all.map {|u| [u.title,u.id]} 
-    @milestones.insert(0,["None",0])
 
-    @workstreams = Workstream.all.map {|u| [u.name,u.name]}
-    @workstreams.insert(0,["None",0])
+ def generate_kpi_export
+    begin
+    # ----------------------------------------------------------
+    # PARAMS
+    # ----------------------------------------------------------
+    @excel_data = Array.new
 
+    # Lifecycle
+    @lifecycle_id       = params[:lifecycle_id]
+    lifecycle_object    = Lifecycle.find(@lifecycle_id)
+    lifecycle_title     = lifecycle_object.name
+
+    # Workstream
+    @workstream         = params[:workstream]
+
+    # Milestone
+    @milestone_name_id  = params[:milestone_name_id]
+    milestone_title     = ""
+    if ((@milestone_name_id != nil) and (@milestone_name_id != "0"))
+      milestone_title   = MilestoneName.find(@milestone_name_id)
+    end
+
+    # Begin/End date
     @begin_date = "2013-01-01"
     @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
-
-    @lifecycle_id       = params[:lifecycle_id]
-    @workstream         = params[:workstream]
-    @milestone_name_id  = params[:milestone_name_id]
     if (params[:begin_date])
       @begin_date  = params[:begin_date]
     end
     if (params[:end_date])
       @end_date  = params[:end_date]
     end
-    
-    # lifecycleMilestones = LifecycleMilestone.find(:all,:conditions => ["lifecycle_id = ?",@lifecycle_id])   
-    #     @milestones = MilestoneName.find(:all,:conditions => ["id in (?)",lifecycleMilestones]).map {|u| [u.title,u.id]} 
-    #     @milestones.insert(0,["None",0])
-    
-    # CHART TYPE --------------------------------- 
-    @kpi_type = ""
-    if (@kpi_type_param != nil)
-      @kpi_type = @kpi_type_param
-    else
-      @kpi_type = params[:kpi_type]
+
+    # ----------------------------------------------------------
+    # AXES
+    # ----------------------------------------------------------
+    query = 'SELECT DISTINCT(p.id) FROM pm_type_axes as p, lifecycle_questions as lc, pm_type_axe_excels as px   
+        WHERE p.id = lc.pm_type_axe_id 
+        AND p.id = px.axe_id
+        AND lc.lifecycle_id = ' + lifecycle_object.id.to_s + ' 
+         ORDER BY px.excel_position'
+    pm_type_axes_id = Array.new
+    ActiveRecord::Base.connection.execute(query).each do |query_data|
+      pm_type_axes_id << query_data[0].to_i
     end
-    
-    @chart_type = ""
-    if(@chart_type_param != nil)
-      @chart_type = @chart_type_param
-    else
-      @chart_type = params[:chart_type]
-    end
-    
-  end
-  
-  # Get all spiders which need to be used in KPI
-  def get_spiders_consolidated(lifecycle,workstream,milestone,b_date,e_date)
-    spiders_consolidated = Array.new
-    
-    spider_conso_query = "SELECT s.id,s.milestone_id FROM spiders s, spider_consolidations sc, milestones m, projects p, milestone_names as mn "
-    spider_conso_query += " WHERE sc.spider_id = s.id"
-    spider_conso_query += " AND s.milestone_id = m.id"
-    spider_conso_query += " AND m.project_id = p.id"
-    spider_conso_query += " AND m.name = mn.title"
-    
-    if ((lifecycle != nil) && (lifecycle != "0"))
-      spider_conso_query += " AND p.lifecycle_id = '" + lifecycle.to_s + "'"
-    end
-    if ((workstream != nil) && (workstream != "0"))
-      spider_conso_query += " AND p.workstream = '" + workstream + "'"
-    end
-    if ((milestone != nil) && (milestone != "0"))
-      spider_conso_query += " AND mn.id = " + milestone
-    end
-    if ((b_date != nil) && (b_date != "0") && (e_date != nil) && (e_date != "0"))
-      b_date_split = b_date.split("/")
-      e_date_split = e_date.split("/")
-      if (b_date_split.count == 3) and (e_date_split.count == 3)
-        spider_conso_query += " AND YEAR(sc.created_at) BETWEEN "   + b_date_split[0] + " AND " + e_date_split[0]
-        spider_conso_query += " AND MONTH(sc.created_at) BETWEEN "  + b_date_split[1] + " AND " + e_date_split[1]
+    pm_type_axes_id_join = pm_type_axes_id.join(",")
+    axes          = PmTypeAxe.find(:all,:conditions => ["id in (?)",pm_type_axes_id_join.split(',')])
+    excel_columns = PmTypeAxeExcel.find(:all, :conditions => ["lifecycle_id = ? and axe_id IN (?)", @lifecycle_id.to_s, pm_type_axes_id_join.split(',')], :order => "excel_position")
+    @excel_columns_title = Array.new
+    @excel_columns_title << "Project Name" << "Project Workstream" << "Milestone" << "Year" << "Month" << "day"
+    excel_columns.each do |excel_column|
+      for i in 1..3
+        @excel_columns_title << excel_column.pm_type_axe.pm_type.title + "-" + excel_column.pm_type_axe.title
       end
     end
-    spider_conso_query += " AND s.created_at = (SELECT MAX(sbis.created_at) FROM spiders sbis WHERE id = s.id)"
-    spider_conso_query += " GROUP BY s.milestone_id"
+    @excel_columns_title 
+
+    # ----------------------------------------------------------
+    # DATES CALCULCATION
+    # ----------------------------------------------------------
+    b_date_split        = @begin_date.split("-")
+    e_date_split        = @end_date.split("-")
+    b_date              = Date.strptime(b_date_split[0]+" "+b_date_split[1], "%Y %m")
+    e_date              = Date.strptime(e_date_split[0]+" "+e_date_split[1], "%Y %m")
     
-    ActiveRecord::Base.connection.execute(spider_conso_query).each do |spider|
-      spiders_consolidated << spider[0].to_s
-    end
+    end_dateTime        = e_date.to_time
+    end_dateTime_final  = end_dateTime - 1.month #we will show one month before the selection
+
+    sql_query_end       = end_dateTime.strftime("%Y-%m-01 00:00")  
+    last_month_ref      = end_dateTime_final.month   
+    last_year_ref       = end_dateTime_final.year 
+
+    sql_query_begin     = b_date.strftime("%Y-%m-01 00:00:00")
+    first_month_ref     = b_date.strftime("%m")   
+    first_year_ref      = b_date.strftime("%Y")
+
+    # ----------------------------------------------------------
+    # GET SPIDERS
+    # ----------------------------------------------------------
+    spiders_conditions =  "spiders.created_at >= '" + sql_query_begin + "' AND spiders.created_at < '" + sql_query_end + "'"
+    spiders_conditions += " AND projects.lifecycle_id = '" + @lifecycle_id.to_s + "'"
     
-    if spiders_consolidated.count == 0
-      spiders_consolidated << 0
+    if ((@workstream != nil) && (@workstream != "0"))
+      spiders_conditions += " AND projects.workstream = '" + @workstream.to_s + "'"
     end
-    return spiders_consolidated
+    if ((@milestone_name_id != nil) && (@milestone_name_id != "0"))
+      m_name = MilestoneName.find(@milestone_name_id)
+      spiders_conditions += " AND milestones.name = '" + m_name.title + "'"
+    end
+    spiders_consolidated = Spider.find(:all, :include => [:project => [:lifecycle_object], :milestone =>[]], :conditions=>spiders_conditions)
+
+
+    # ----------------------------------------------------------
+    # GET DATA FOR EACH SPIDERS
+    # ----------------------------------------------------------
+    # For each spider (from spiders_consolidated)
+    spiders_consolidated.each do |spider_consolidated|
+
+      # spider_consolidated
+      spider_hash = Hash.new
+      spider_hash["project_name"]       = spider_consolidated.project.name    
+      spider_hash["project_workstream"] = spider_consolidated.project.workstream  
+      spider_hash["milestone"]          = spider_consolidated.milestone
+      spider_hash["year"]               = spider_consolidated.created_at.year
+      spider_hash["month"]              = spider_consolidated.created_at.month
+      spider_hash["day"]                = spider_consolidated.created_at.day
+
+      #excel_columns
+      spider_axe_values = Array.new
+      excel_columns.each do |excel_column|
+        spiderConsolidation = SpiderConsolidation.find(:first, :conditions => ["spider_id = ? and pm_type_axe_id = ?", spider_consolidated.id, excel_column.axe_id])
+        if spiderConsolidation
+          spider_axe_values << spiderConsolidation.average << spiderConsolidation.average_ref << spiderConsolidation.ni_number
+        else
+          spider_axe_values << "NA" << "NA" << "NA"
+        end
+      end
+      spider_hash["axe_values"]       = spider_axe_values
+      @excel_data << spider_hash
+
+    end
+     
+    # ----------------------------------------------------------
+    # EXCEL
+    # ---------------------------------------------------------- 
+    excel_name = "kpi_export_" + lifecycle_object.name + ".xls"
+    @xml = Builder::XmlMarkup.new(:indent => 1)
+    headers['Content-Type']         = "application/vnd.ms-excel"
+    headers['Content-Disposition']  = 'attachment; filename="' + excel_name + '"'
+    headers['Cache-Control']  
+
+    rescue Exception => e
+      render(:text=>"<b>#{e}</b><br>#{e.backtrace.join("<br>")}")
+    end  
   end
-  
+
+
   def generate_kpi_charts_data
 
     # PARAMS --------------------------------- 
@@ -548,144 +589,93 @@ class SpiderKpisController < ApplicationController
       render :generate_kpi_charts_data
     end
   end
- 
- def old_kpi_total_export_generate
-   dataPath = Rails.public_path + "/data/kpi_export/data"
-   
-   # Get consolidated spiders
-   spiders_consolidated = get_spiders_consolidated(nil,nil,nil,nil,nil)
-   
-   # MONTHS CALCUL --------------------------------- 
-   timeline_size = 19 # in months
-   
-   now_dateTime = DateTime.now.to_time
-   last_month = now_dateTime - 1.month
-   
-   temp_date_end = now_dateTime
-   sql_query_end = temp_date_end.strftime("%Y-%m-01 00:00")   
-   last_month_ref =  last_month.month   
-   last_year_ref = last_month.year 
-   
-   temp_date_begin = last_month - timeline_size.month
-   sql_query_begin = temp_date_begin.strftime("%Y-%m-01 00:00:00")
-   first_month_ref =  temp_date_begin.strftime("%m")   
-   first_year_ref = temp_date_begin.strftime("%Y")
-   
-   iDate = 0
-   month_index = 0
-   date_json = '"date" : ['
-   (Date.new(first_year_ref.to_i, first_month_ref.to_i)..Date.new(last_year_ref.to_i, last_month_ref.to_i)).select {|d| 
-     if (month_index.to_i != d.month.to_i)
-     
-       if(iDate != 0)
-         date_json += ','
-       end
-       date_json += '{"month":"'+d.month.to_s+'","year":"'+d.year.to_s+'"}'
-       iDate += 1
-      end
-      month_index = d.month
-   }
-   date_json += "]"
-   
-   # axes
-   iAxeElement = 0
-   axe_json = '"axe" : ['
-   PmTypeAxe.find(:all).each do |axe_element|
-     if(iAxeElement != 0)
-       axe_json += ','
-     end
-     axe_json += '{"id":"' + axe_element.id.to_s + '","title": "' + axe_element.title + '"}'
-     iAxeElement += 1
-   end
-   axe_json += "]"
-   
-   # axes id by lifecycle
-   iLifecycle = 0
-   axe_by_lifecycle_json = '"axe_by_lifecycle" : ['
-   Lifecycle.find(:all).each do |lifecycle_element|
-     if(iLifecycle != 0)
-       axe_by_lifecycle_json += ','
-     end
-     axe_by_lifecycle_json += '{"id" : "' + lifecycle_element.id.to_s + '", "axes" : ['
-     iAxeByLifecycleElement = 0
-     lifecycle_element.pm_type_axe.uniq.each do |axe_element|
-       if(iAxeByLifecycleElement != 0)
-         axe_by_lifecycle_json += ','
-       end
-       axe_by_lifecycle_json += axe_element.id.to_s 
-       iAxeByLifecycleElement += 1
-     end
-     iLifecycle += 1
-     axe_by_lifecycle_json += "]}"
-   end
-   axe_by_lifecycle_json += "]"
-   
-   # types
-   iTypeElement = 0
-   type_json = '"type" : ['
-   PmType.find(:all).each do |type_element|
-    if(iTypeElement != 0)
-     type_json += ','
+
+  # ------------------------------------------------------------------------------------
+  # PRIVATE FUNCTIONS
+  # ------------------------------------------------------------------------------------
+  def kpi_prepare_parameters
+    @lifecycles = Lifecycle.all.map {|u| [u.name,u.id]}    
+    @milestones = MilestoneName.all.map {|u| [u.title,u.id]} 
+    @milestones.insert(0,["None",0])
+
+    @workstreams = Workstream.all.map {|u| [u.name,u.name]}
+    @workstreams.insert(0,["None",0])
+
+    @begin_date = "2013-01-01"
+    @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
+
+    @lifecycle_id       = params[:lifecycle_id]
+    @workstream         = params[:workstream]
+    @milestone_name_id  = params[:milestone_name_id]
+    if (params[:begin_date])
+      @begin_date  = params[:begin_date]
     end
-    type_json += '{"id":"' + type_element.id.to_s + '","title": "' + type_element.title + '"}'
-    iTypeElement += 1
-   end
-   type_json += "]"
-   
-   # Query
-   query ="SELECT sum(sc.average),count(sc.average),MONTH(sc.created_at),YEAR(sc.created_at), pta.pm_type_id as type_id ,pta.id as axe_id,mn.id as milestone_id,p.workstream,p.lifecycle_id
-   FROM spider_consolidations sc,  pm_type_axes pta, spiders s, milestones m, milestone_names mn, projects p
-   WHERE sc.pm_type_axe_id = pta.id
-   AND sc.spider_id = s.id
-   AND s.milestone_id = m.id
-   AND m.name = mn.title
-   AND m.project_id = p.id
-   
-   AND sc.spider_id IN (" + spiders_consolidated.join(",") + ")"
-   query += " AND sc.created_at >= '" + sql_query_begin.to_s + "'"
-   query += " AND sc.created_at <= '" + sql_query_end.to_s + "'"
-   
-   query += " GROUP BY MONTH(created_at),YEAR(created_at),pta.id,mn.id,p.workstream,p.lifecycle_id
-   ORDER BY YEAR(created_at),MONTH(created_at)";
-   
-   File.open(dataPath+"/data.json", 'w') {|f| 
-    f.write('{"data": [')
-     iQuery = 0
-     iData = 0
-     monthYearStr = ""
-     @query_reults = ActiveRecord::Base.connection.execute(query).each do |q|
-       str_write = ""
-       if(monthYearStr != helper_check_data_query(q,2)+"_"+helper_check_data_query(q,3))
-          if(iQuery != 0)
-            str_write += ']},'
-          end
-          iData = 0
-          monthYearStr = helper_check_data_query(q,2)+"_"+helper_check_data_query(q,3)
-          str_write += '{"'+ helper_check_data_query(q,2) +"_"+ helper_check_data_query(q,3) +'" : ['
-       end
-       
-       if(iData != 0)
-         str_write += ','
-       end
-       str_write += '{"sum":"'+ helper_check_data_query(q,0) +
-       '","count":"'+ helper_check_data_query(q,1) +
-       '","month":"'+ helper_check_data_query(q,2) +
-       '","year":"'+ helper_check_data_query(q,3) +
-       '","type":"'+ helper_check_data_query(q,4) +
-       '","axe":"'+ helper_check_data_query(q,5) +
-       '","milestone":"'+ helper_check_data_query(q,6) +
-       '","workstream":"'+ helper_check_data_query(q,7) +
-        '","lifecycle":"'+ helper_check_data_query(q,8) + '"}'
-       
-       f.write(str_write)
-       iQuery += 1
-       iData += 1
-     end
-    f.write("]}]," + date_json + "," + axe_json + "," + type_json + "," + axe_by_lifecycle_json + "}")
-     
-     }
- end
- 
+    if (params[:end_date])
+      @end_date  = params[:end_date]
+    end
+    
+    # lifecycleMilestones = LifecycleMilestone.find(:all,:conditions => ["lifecycle_id = ?",@lifecycle_id])   
+    #     @milestones = MilestoneName.find(:all,:conditions => ["id in (?)",lifecycleMilestones]).map {|u| [u.title,u.id]} 
+    #     @milestones.insert(0,["None",0])
+    
+    # CHART TYPE --------------------------------- 
+    @kpi_type = ""
+    if (@kpi_type_param != nil)
+      @kpi_type = @kpi_type_param
+    else
+      @kpi_type = params[:kpi_type]
+    end
+    
+    @chart_type = ""
+    if(@chart_type_param != nil)
+      @chart_type = @chart_type_param
+    else
+      @chart_type = params[:chart_type]
+    end
+    
+  end
+  
+  # Get all spiders which need to be used in KPI
+  def get_spiders_consolidated(lifecycle,workstream,milestone,b_date,e_date)
+    spiders_consolidated = Array.new
+    
+    spider_conso_query = "SELECT s.id,s.milestone_id FROM spiders s, spider_consolidations sc, milestones m, projects p, milestone_names as mn "
+    spider_conso_query += " WHERE sc.spider_id = s.id"
+    spider_conso_query += " AND s.milestone_id = m.id"
+    spider_conso_query += " AND m.project_id = p.id"
+    spider_conso_query += " AND m.name = mn.title"
+    
+    if ((lifecycle != nil) && (lifecycle != "0"))
+      spider_conso_query += " AND p.lifecycle_id = '" + lifecycle.to_s + "'"
+    end
+    if ((workstream != nil) && (workstream != "0"))
+      spider_conso_query += " AND p.workstream = '" + workstream + "'"
+    end
+    if ((milestone != nil) && (milestone != "0"))
+      spider_conso_query += " AND mn.id = " + milestone
+    end
+    if ((b_date != nil) && (b_date != "0") && (e_date != nil) && (e_date != "0"))
+      b_date_split = b_date.split("/")
+      e_date_split = e_date.split("/")
+      if (b_date_split.count == 3) and (e_date_split.count == 3)
+        spider_conso_query += " AND YEAR(sc.created_at) BETWEEN "   + b_date_split[0] + " AND " + e_date_split[0]
+        spider_conso_query += " AND MONTH(sc.created_at) BETWEEN "  + b_date_split[1] + " AND " + e_date_split[1]
+      end
+    end
+    spider_conso_query += " AND s.created_at = (SELECT MAX(sbis.created_at) FROM spiders sbis WHERE id = s.id)"
+    spider_conso_query += " GROUP BY s.milestone_id"
+    
+    ActiveRecord::Base.connection.execute(spider_conso_query).each do |spider|
+      spiders_consolidated << spider[0].to_s
+    end
+    
+    if spiders_consolidated.count == 0
+      spiders_consolidated << 0
+    end
+    return spiders_consolidated
+  end
+  
+
  def helper_check_data_query(row,indexRow)
    if(row[indexRow] == nil)
      return ""

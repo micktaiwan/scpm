@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/stylesheets/jquery-ui.css" />
 
 <SCRIPT language="Javascript">
-$(document).ready(function(){
+jQuery(document).ready(function(){
 
 	l_id_save	 	= '<%= @lifecycle_id %>'
 	ws_save 	 	= '<%= @workstream %>'
@@ -12,23 +12,24 @@ $(document).ready(function(){
 	begin_date_save = '<%= @begin_date %>'
 	end_date_save 	= '<%= @end_date %>'
 
-	url = "/spider_kpis/generate_kpi_charts_data"
+	url 		= "/spider_kpis/generate_kpi_charts_data"
+	url_export 	= "/spider_kpis/generate_kpi_export"
 	<% if (@chart_type == "cumul") %>
-		url = "/spider_kpis/generate_kpi_cumul_charts_data"
+		url 		= "/spider_kpis/generate_kpi_cumul_charts_data"
 	<% end %>
 
-	$("#loading_container").show();
-	$.ajax({
+	jQuery("#loading_container").show();
+	jQuery.ajax({
 		url: url,
 		type: "POST",
 		data: "lifecycle_id="+l_id_save+"&workstream="+ws_save+"&milestone_name_id="+mn_id_save+"&kpi_type="+kpi_type+"&chart_type="+chart_type
 	})
 	.done(function(result) { 
-	  $("#charts_list").html(result);
-		$("#loading_container").hide();
+	  jQuery("#charts_list").html(result);
+	  jQuery("#loading_container").hide();
 	})
 	.fail(function() { 
-		$("#loading_container").hide(); 
+		jQuery("#loading_container").hide(); 
 	});
 
 
@@ -57,9 +58,9 @@ $(document).ready(function(){
 
 	filter = function()
 	{
-		$("#loading_container").show();
-		
-		$.ajax({
+		jQuery("#loading_container").show();
+
+		jQuery.ajax({
 			url: url,
 			type: "POST",
 			data: "lifecycle_id="+l_id_save+"&workstream="+ws_save+"&milestone_name_id="+mn_id_save+
@@ -67,22 +68,47 @@ $(document).ready(function(){
 					"&kpi_type="+kpi_type+"&chart_type="+chart_type})
 			.done(function(result) 
 			{ 
-				$("#charts_list").html(result);
-				$("#loading_container").hide();
+				jQuery("#charts_list").html(result);
+				jQuery("#loading_container").hide();
 			})
 			.fail(function() 
 			{ 
-				$("#loading_container").hide(); 
+				jQuery("#loading_container").hide(); 
 			}
 		);
 	}
 
+	export_excel = function()
+	{
+		//generate_kpi_export
+		window.location.replace("" + url_export + "?" + "lifecycle_id=" + l_id_save + "&workstream=" + ws_save + "&milestone_name_id=" + mn_id_save +
+					"&begin_date=" + begin_date_save + "&end_date=" + end_date_save +
+					"&kpi_type=" + kpi_type + "&chart_type=" + chart_type)
+		// jQuery.ajax({
+		// 	url: url_export,
+		// 	type: "POST",
+			// data: "lifecycle_id="+l_id_save+"&workstream="+ws_save+"&milestone_name_id="+mn_id_save+
+			// 		"&begin_date="+begin_date_save+"&end_date="+end_date_save+
+			// 		"&kpi_type="+kpi_type+"&chart_type="+chart_type})
+		// 	.done(function(result) 
+		// 	{ 
+		// 		jQuery("#loading_container").hide();
+		// 	})
+		// 	.fail(function() 
+		// 	{ 
+		// 		jQuery("#loading_container").hide(); 
+		// 	}
+		// );
+	
+		
+	}
+
 	// Date picker
-	$(function() {
-  		$( "#begin_date" ).datepicker();
+	jQuery(function() {
+  		jQuery( "#begin_date" ).datepicker();
   	});
-  	$(function() {
-    	$( "#end_date" ).datepicker();
+  	jQuery(function() {
+    	jQuery( "#end_date" ).datepicker();
     });
 });
 </SCRIPT>
@@ -96,6 +122,7 @@ Milestones 	: <%= select_tag('choose_milestone', options_for_select(@milestones)
 Begin 		: <%= text_field_tag 'begin_date', @begin_date, {:onchange=>"change_begin_date(this.value)"} %> 
 End 		: <%= text_field_tag 'end_date', @end_date, {:onchange=>"change_end_date(this.value)"} %> 
 <%= submit_tag 'Filter', {:onclick=>"filter()"} %>
+<%= submit_tag 'Export in excel', {:onclick=>"export_excel()"} %>
 </div>
 
 <div style="margin-top:10px;display:none;" id="loading_container">

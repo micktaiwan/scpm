@@ -20,15 +20,15 @@ class ProjectsController < ApplicationController
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")
 
-    # TODO: use model "workstream"
-    # @workstreams = ['EP','EI','EV','EG','ES','EY','EZ','EZMB','EZMC','EZC','EC']
     @workstreams = Workstream.all()
     @workstreams = @workstreams.map { |ws| ws.name }
-    #Project.all.collect{|p| p.workstream}.uniq.sort
 
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
     @total_wps    = Project.count
     @total_status = Status.count
+
+    @total_wps_filtered = @wps.size
+
     if @wps.size > 0
       @amendments           = Amendment.find(:all, :conditions=>"done=0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"duedate")
       @risks                = Risk.find(:all, :conditions=>"probability>0 and project_id in (#{@wps.collect{|p| p.id}.join(',')})", :order=>"updated_at")
@@ -40,12 +40,23 @@ class ProjectsController < ApplicationController
           i.ctemplate.ctype!='folder' and i.status==0
           }.size > 0
         }.sort_by { |m| [m.project.full_name, m.name] }
+
+      i_wps = 0 
+      @projects_id = ""
+      @wps.each do |wp_project|
+        if i_wps > 0
+          @projects_id += ","
+        end
+        @projects_id += "'"+wp_project.id.to_s+"'"
+        i_wps += 1
+      end
     else
       @amendments           = []
       @risks                = []
       @risks_with_severity  = []
       @inconsistencies      = []
       @checklist_milestones = []
+      @projects_id          = ""
     end
     f = session[:project_filter_qr]
     if f and f.size == 1
@@ -54,6 +65,11 @@ class ProjectsController < ApplicationController
     else
       @ci = []
     end
+  end
+
+  def show_project_list
+    get_projects
+    sort_projects
   end
 
   def sort_projects
@@ -718,24 +734,51 @@ private
   end
 
   def get_projects
+    # Text filtering
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
       @wps      = @projects #.select {|wp| wp.has_status and wp.has_requests }
       return
     end
-    cond = []
-    cond << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    cond << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
-    #@wps = @wps.select {|wp| wp.open_requests.size > 0 } # wp.has_status
-    @wps = @wps.select {|wp| wp.is_running and wp.project_id != nil}
-    cond << "project_id is null"
-    @projects = Project.find(:all, :conditions=>cond.join(" and "))
+
+    # Conditions
+    cond            = []
+    cond            << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond            << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond            << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    
+    cond_projects   = []
+    cond_projects   << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond_projects   << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_projects   << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond_projects   << "projects.project_id is null"
+
+    # Requests
     if session[:project_filter_qr] != nil
-      @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
-      @wps = @wps.select {|p| p.has_responsible(session[:project_filter_qr]) }
+      cond          << "pp1.person_id in (#{session[:project_filter_qr].join(",")})"
+      cond_projects << "pp1.person_id in (#{session[:project_filter_qr].join(",")})"
+      cond          << "pp2.person_id in (#{session[:project_filter_qr].join(",")})"
+      cond_projects << "pp2.person_id in (#{session[:project_filter_qr].join(",")})"
+
+      @wps = Project.find(:all, 
+        :conditions=>cond.join(" and "), 
+        :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments'], 
+        :joins => ['INNER JOIN project_people as pp1 ON pp1.project_id = projects.id','INNER JOIN project_people as pp2 ON pp2.project_id = projects.project_id']) 
+      @wps = @wps.select {|wp| wp.is_running and wp.project_id != nil}
+      
+      @projects = Project.find(:all, 
+        :conditions=>cond_projects.join(" and "), 
+        :joins => ['INNER JOIN project_people as pp1 ON pp1.project_id = projects.id','INNER JOIN project_people as pp2 ON pp2.project_id = projects.project_id'])
+
+
+    else
+
+      @wps = Project.find(:all, :conditions=>cond.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
+      @wps = @wps.select {|wp| wp.is_running and wp.project_id != nil}
+      
+      @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
     end
+    
   end
 
   def no_responsible(p)

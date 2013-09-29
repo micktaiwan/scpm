@@ -64,6 +64,11 @@ class MilestonesController < ApplicationController
     render(:nothing=>true)
   end
 
+  def ajax_milestone
+    project = Project.find(params[:project_id])
+    render(:partial=>'milestones/milestone', :collection=>project.sorted_milestones)
+  end
+
 private
 
   def get_infos

@@ -6,7 +6,7 @@ Highcharts.getSVG = function(charts) {
         top = 0,
         width = 0;
 
-    $.each(charts, function(i, chart) {
+    jQuery.each(charts, function(i, chart) {
         var svg = chart.getSVG();
         svg = svg.replace('<svg', '<g transform="translate(0,' + top + ')" ');
         svg = svg.replace('</svg>', '</g>');

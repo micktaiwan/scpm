@@ -1,5 +1,7 @@
+
 <h3>
   <%= link_to('Open', {:action=>'show', :id=>project.id}, {:class=>'menu grey'}) %>
+  <%= submit_tag 'Show Timeline', :class=>"menu grey", :onclick=>"show_timeline(" + project.id.to_s + ")" %>
   <% next_m_date = project.next_milestone_date;  bool = (next_m_date and next_m_date-Date.today() <= 5) %>
   <% if bool %><font color="red"><% end %>
   <%= next_m_date %>
@@ -26,6 +28,4 @@
   <% end %>
 </h3>
 
-<div class="milestone_bar">
-  <%= render(:partial=>'milestones/milestone', :collection=>project.sorted_milestones) %>
-</div>
+<div id="milestone_ajax_div_<%= project.id.to_s %>" class="milestone_bar"></div>
