@@ -1,0 +1,9 @@
+<%= hidden_field :pmtypeaxeexcel, :lifecycle_id, :value=>lifecycle_id %>
+
+<p><%= label_tag 'Axes' %>
+<%= select(:pmtypeaxeexcel, :axe_id, @axes) %>
+</p>
+
+<p><%= label_tag 'Position' %>
+<%= text_field :pmtypeaxeexcel, :excel_position	%> 
+</p>

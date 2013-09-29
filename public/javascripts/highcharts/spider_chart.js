@@ -2,7 +2,7 @@
 function calculAverage()
 {
 	// Get all table of class pm_type_tab (PM TYPE)
-	var pmTypeList = $(".pm_type_tab");
+	var pmTypeList = jQuery(".pm_type_tab");
 	for (var i=0; i < pmTypeList.length; i++)
 	{
 		// Get id of PM type tab
@@ -14,7 +14,7 @@ function calculAverage()
 		var averageReferencesList = new Array();
 		
 		// Get all elements of class axe_tab in pm_type_tab (AXES)
-		var axeList = $("#"+pmTypeList[i].id+" .axe_tab");
+		var axeList = jQuery("#"+pmTypeList[i].id+" .axe_tab");
 		for (var j=0; j<axeList.length; j++)
 		{
 			// Params for axe's average calculation
@@ -31,8 +31,8 @@ function calculAverage()
 			var averageRefCellId = pm_type_tab_id + "_axe_average_ref_"+axe_id;
 			
 			// Get all notes and references of questions of the current axe_tab
-			var questions = $('.question_note_'+axe_id);
-			var references = $('.question_reference_'+axe_id);
+			var questions = jQuery('.question_note_'+axe_id);
+			var references = jQuery('.question_reference_'+axe_id);
 			
 			// For each questions, add values to params
 			for (var y=0; y<questions.length; y++)
@@ -73,7 +73,7 @@ function calculAverage()
 			{
 				averageNotesList.push(0);
 			}
-			$("#"+averageNoteCellId).text(averageNotesList[averageNotesList.length-1]);
+			jQuery("#"+averageNoteCellId).text(averageNotesList[averageNotesList.length-1]);
 			if(questionRefsCount != 0)
 			{
 				var resultAvgRef = questionRefsList/questionRefsCount
@@ -83,12 +83,12 @@ function calculAverage()
 			{
 				averageReferencesList.push(0);
 			}
-			$("#"+averageRefCellId).text(averageReferencesList[averageReferencesList.length-1]);
+			jQuery("#"+averageRefCellId).text(averageReferencesList[averageReferencesList.length-1]);
 		}
 		
 		// Draw chart for pm_type_tab
 		var chartId = "chartContainer_"+pm_type_tab_id;
-		var chartName = $("#table_title_"+pm_type_tab_id).text();
+		var chartName = jQuery("#table_title_"+pm_type_tab_id).text();
 		generate_spider_chart(chartId,chartName,axesList,averageNotesList,averageReferencesList)
 	}
 }
