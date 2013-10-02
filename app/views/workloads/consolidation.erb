@@ -9,6 +9,7 @@
         "Holidays",
         "Missing tasks",
         "Missing lines",
+        "Errors in affectation",
         "Requests to validate"
         ]) %>
   </ol>
@@ -71,13 +72,25 @@
 
     <div id="tabContent5" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="5"? "block" : "none"%>;">
       <br />
-      <div id="requests_to_validate">
-        <%= link_to_remote('Refresh',  :url => { :action => "refresh_requests_to_validate" }, :loading => "$('error3').update('');$('loading5').appear()", :complete => "$('loading5').hide()", :update => { :success => "data5", :failure => "error5" }) %>
+      <div id="errors_in_affectations">
+        <%= link_to_remote('Refresh',  :url => { :action => "refresh_errors_in_affectations" }, :loading => "$('error3').update('');$('loading5').appear()", :complete => "$('loading5').hide()", :update => { :success => "data5", :failure => "error5" }) %>
         <br/>
         <br/>
         <%= image_tag('loading.gif', :id=>'loading5', :style=>"display:none;") %>
         <div id="error5"></div>
         <div id="data5"></div>
+      </div>
+    </div>
+
+    <div id="tabContent6" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="6"? "block" : "none"%>;">
+      <br />
+      <div id="requests_to_validate">
+        <%= link_to_remote('Refresh',  :url => { :action => "refresh_requests_to_validate" }, :loading => "$('error3').update('');$('loading6').appear()", :complete => "$('loading6').hide()", :update => { :success => "data6", :failure => "error6" }) %>
+        <br/>
+        <br/>
+        <%= image_tag('loading.gif', :id=>'loading6', :style=>"display:none;") %>
+        <div id="error6"></div>
+        <div id="data6"></div>
       </div>
     </div>
 

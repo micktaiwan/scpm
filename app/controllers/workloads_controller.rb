@@ -275,6 +275,12 @@ class WorkloadsController < ApplicationController
     render :layout => false
   end
 
+  # find all sdp tasks affected to wrong workload
+  def refresh_errors_in_affectations
+    @associations    = WlLineTask.find(:all)
+    render :layout => false
+  end
+
   def refresh_requests_to_validate
     @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"summary")
     @week1    = wlweek(Date.today)
