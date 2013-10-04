@@ -21,6 +21,8 @@
     <% end %>
     <!-- SDP Alert -->
     <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and wl_line.sdp_tasks.size==0 %>
+    <!-- Assignation Alert -->
+    <%= image_tag('alert.gif', :alt=>'wrong assignation', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and wl_line.has_wrong_assignation %>
   </td>
 
 	<!-- Edit btn / Alert / Backup msg / Project name -->

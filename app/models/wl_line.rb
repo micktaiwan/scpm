@@ -33,6 +33,14 @@ class WlLine < ActiveRecord::Base
     SDPTask.find_by_sql("select * from sdp_tasks where sdp_tasks.sdp_id in (#{wl_line_task_ids.map{ |l| l.sdp_task_id}.join(',')})")
   end
 
+  def has_wrong_assignation
+    return false if !self.person
+    sdp_tasks.each { |t|
+      return true if t.collab != self.person.trigram
+      }
+    false
+  end
+
   def add_sdp_task_by_id(sdp_task_id)
     WlLineTask.create(:wl_line_id=>self.id, :sdp_task_id=>sdp_task_id)
   end
