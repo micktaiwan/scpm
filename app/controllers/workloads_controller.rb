@@ -277,7 +277,7 @@ class WorkloadsController < ApplicationController
 
   # find all sdp tasks affected to wrong workload
   def refresh_errors_in_affectations
-    @associations    = WlLineTask.find(:all)
+    @associations    = WlLineTask.find(:all).sort_by { |a| [a.wl_line.project_name, a.wl_line.name]}
     render :layout => false
   end
 

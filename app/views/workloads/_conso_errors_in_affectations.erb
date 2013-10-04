@@ -3,7 +3,13 @@
  line = a.wl_line
 %>
 <tr>
-
+<td>
+  <% if line %>
+    <%= line.project_name %>
+  <% elsif task %>
+    <%= task.project_code%> (no line projet?)
+  <% end %>
+</td>
 <td>
   <% if line %>
     <%= truncate(h(line.name), :length=>40,  :separator=>' ', :omission=>"...")%>
