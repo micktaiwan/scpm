@@ -45,9 +45,9 @@
     <% end %>
   </td>
 	<!-- Request -->
-  <td align="center">
-		<% if wl_line.request %><%= wl_line.request.status %><% end %>
-	</td>
+  <% if APP_CONFIG['workloads_display_status_column'] %>
+    <td align="center"><% if wl_line.request %><%= wl_line.request.status %><% end %></td>
+  <% end %>
 	<!-- Sum if wl_type != 110/120 (not qr_qwr wl line) -->
 	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
 		<td class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
@@ -64,6 +64,11 @@
 	<% end %>
 
 	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+
+  <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+  <td id="diff_planned_remaining_<%= wl_line.id %>" class="wl_case"><%= planned_total - remaining %></td>
+  <% end %>
+
   <% if APP_CONFIG['workloads_display_total_column'] %>
   <td id="ltotal_<%= wl_line.id %>" class="wl_case"><%= wl_line.sum %></td>
   <% end %>
