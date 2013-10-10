@@ -3,7 +3,7 @@ class Workload
   include ApplicationHelper, WorkloadPlanningsHelper
 
   attr_reader :name,  # person's name
-    :names,           # Filtre's projects names 
+    :names,           # Filtre's projects names
     :weeks,           # arrays of week's names '43', '44', ...
     :wl_weeks,        # array of week ids '201143'
     :months,          # "Oct"
@@ -81,13 +81,13 @@ class Workload
       else
     # at least, one iteration selected
         project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
-        project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations 
+        project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations
         project_ids.each do |p|
           project_ids_without_iterations << p
         end
         iterations.each do |i|
           if project_ids_without_iterations.include? i[:project_id].to_s
-            project_ids_without_iterations.delete(i[:project_id].to_s) 
+            project_ids_without_iterations.delete(i[:project_id].to_s)
             project_ids_with_iterations << i[:project_id].to_s
           end
         end
@@ -112,14 +112,14 @@ class Workload
               end
 
               l.sdp_tasks.each do |s|
-                add_line_condition = true if line_iterations.include? [s.iteration,s.project_code] 
+                add_line_condition = true if line_iterations.include? [s.iteration,s.project_code]
               end
-              
+
             end
             # Line respecting conditions added to the workload lines
             @wl_lines << l if add_line_condition
           end
-        end  
+        end
       end
     end
 
@@ -201,7 +201,7 @@ class Workload
           percent = 100
         end
         open    = @opens.last
-        avail   = [0,(open-col_sum)].max
+        avail   = open-col_sum # [0,(open-col_sum)].max
         if open > 0
           avail_percent = (avail/open).round
         else
@@ -212,11 +212,11 @@ class Workload
         else
           @staffing << 0
         end
-        @availability   << {:name=>'avail',:id=>w, :avail=>avail, :value=>(avail==0 ? '' : avail), :percent=>avail_percent}
+        @availability   << {:name=>'avail',:id=>w, :value=>avail, :display=>(avail==0 ? '' : avail), :percent=>avail_percent}
         @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
         @next_month_percents += capped_if_option(percent) if nb < 5
         @three_next_months_percents += capped_if_option(percent) if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
-        @percents << {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
+        @percents << {:name=>'cpercent', :id=>w, :value=>percent, :display=>percent.round.to_s+"%"}
       end
       iteration = iteration + 7.days
       nb += 1

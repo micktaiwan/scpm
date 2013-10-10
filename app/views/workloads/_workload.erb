@@ -114,9 +114,7 @@
   <table id="workload_table">
   <thead>
     <% @workload.projects.each do |p| %>
-      <% color = ApplicationController::COLORS.rand %>
-      <% color = "#FFFFFF" if color.nil? %>
-      <% ApplicationController::COLORS.delete(color) %>
+      <% color = "#ABC" %>
       <% if p.planning %>
         <% if p.planning.tasks %>
           <% p.planning.tasks.each do |t| %>
@@ -166,7 +164,9 @@
     <th></th>
     <th></th>
     <th class="wl_names"></th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -187,7 +187,9 @@
     <th></th>
     <th></th>
     <th class="wl_names"></th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -226,6 +228,7 @@
     <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
     </tr>
+
     <tr class="wl_opens">
     <th></th>
     <th></th>
@@ -240,16 +243,22 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
     </tr>
+
     <tr class="wl_total">
     <th></th>
     <th></th>
     <th class="wl_names">Total</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -309,7 +318,7 @@
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
-    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability, :locals=>{:low_limit=>0, :reverse=>true}) %>
     </tr>
   </thead>
 
