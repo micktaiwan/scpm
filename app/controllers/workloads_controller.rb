@@ -532,7 +532,7 @@ class WorkloadsController < ApplicationController
       wl_load.save
       @value = value
     end
-    @lsum, @plsum, @csum, @cpercent, @case_percent, @total, @planned_total, @avail  = get_sums(line, @wlweek, id, view_by)
+    @lsum, @plsum, @csum, @cpercent, @case_percent, @total, @planned_total, @availability, @diff_planned_remaining_line, @diff_planned_remaining  = get_sums(line, @wlweek, id, view_by)
   end
 
   # type is :person or :projet and indicates what is the id (person or projet)
@@ -570,15 +570,20 @@ class WorkloadsController < ApplicationController
 
     planned_total = 0
     total         = 0
+    total_remaining = 0
     for l in wl_lines
       next if l.wl_type > 200
       l.wl_loads.each { |load|
         total += load.wlload
         planned_total += (load.week < today_week ? 0 : load.wlload)
         }
+      total_remaining += l.sdp_tasks_remaining
     end
 
-    [lsum, plsum, csum, cpercent, case_percent, total, planned_total, avail]
+    diff_planned_remaining_line = plsum - line.sdp_tasks_remaining
+    diff_planned_remaining = planned_total - total_remaining
+
+    [lsum, plsum, csum, cpercent, case_percent, total, planned_total, avail, diff_planned_remaining_line, diff_planned_remaining]
   end
 
   def transfert

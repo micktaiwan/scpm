@@ -18,7 +18,7 @@
           <% else %>
             <br/>
             <b style="color:#FF0000"> No Project for </b><br/>
-            <b style="color:#FF0000"> <%= person.name %> </b>          
+            <b style="color:#FF0000"> <%= person.name %> </b>
           <% end %>
         </td>
         <td>
@@ -128,18 +128,23 @@
               <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
               <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
               <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="wl_names planning_task">[<%= p.name %>] <%= t.name %></th>
+              <% if APP_CONFIG['workloads_display_status_column'] %>
+              <th class="planning_task"></th>
+              <% end %>
               <th class="planning_task">
               <% if current_user.is_cpdp == 1 or current_user.has_role?('Admin')%>
                 <input id="color_<%=@task_id%>" class="color_picker" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
               <% end %>
               </th>
-              <th class="planning_task"></th>
               <% if APP_CONFIG['workloads_display_consumed_column'] %>
                 <th class="planning_task"></th>
               <% end %>
               <th class="planning_task"></th>
               <th class="planning_task"></th>
               <th class="planning_task"></th>
+              <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+                <th class="planning_task"></th>
+              <% end %>
               <% if APP_CONFIG['workloads_display_total_column'] %>
                 <th class="planning_task"></th>
               <% end %>
@@ -169,6 +174,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
@@ -187,6 +195,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
@@ -197,7 +208,9 @@
     <th></th>
     <th></th>
     <th class="wl_names"></th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th style="min-width:100px;">Status</th>
+    <% end %>
     <th style="min-width:45px;">Init.</th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th style="min-width:45px;">Cons.</th>
@@ -205,6 +218,9 @@
     <th style="min-width:45px;">Gain</th>
     <th style="min-width:45px;">Rem.</th>
     <th class="wl_total" style="min-width:45px;">Planned</th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th style="min-width:45px;">Diff</th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th style="min-width:45px;">Total</th>
     <% end %>
@@ -214,7 +230,9 @@
     <th></th>
     <th></th>
     <th class="wl_names">Nb of worked days</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -239,6 +257,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
@@ -249,7 +270,9 @@
     <th></th>
     <th></th>
     <th class="wl_names">Sums / Percents</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th id="consumed_total"><%= @workload.sdp_consumed_total %></th>
@@ -257,6 +280,9 @@
     <th></th>
     <th><%= @workload.sdp_remaining_total %></th>
     <th id="planned_total"><%= @workload.planned_total %></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th id="diff_planned_remaining"><%= @workload.planned_total - @workload.sdp_remaining_total %></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th id="total"><%= @workload.total %></th>
     <% end %>
@@ -267,7 +293,9 @@
     <th></th>
     <th></th>
     <th class="wl_names">Availability (Sum for the 2 next months)</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -275,6 +303,9 @@
     <th></th>
     <th></th>
     <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
