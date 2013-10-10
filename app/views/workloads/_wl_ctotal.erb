@@ -1,13 +1,18 @@
 <th id="<%= wl_ctotal[:name]%>_<%= wl_ctotal[:id]%>"
 
-<% if defined?(high_limit) %>
-  <% if wl_ctotal[:value].to_i > high_limit %>
+<% if defined?(high_limit) and wl_ctotal[:value] > high_limit %>
+  <% if not defined?(reverse) or !reverse %>
     style="background-color: red; color:white;"
-  <% end %>
-  <% if wl_ctotal[:value].to_i < low_limit %>
+  <% else %>
     style="background-color: orange; color:white;"
+  <% end %>
+<% elsif defined?(low_limit) and wl_ctotal[:value] < low_limit %>
+  <% if not defined?(reverse) or !reverse %>
+    style="background-color: orange; color:#333;"
+  <% else %>
+    style="background-color: red; color:white;"
   <% end %>
 <% end %>
 >
-<%= wl_ctotal[:value] %>
+<%= wl_ctotal[:display] %>
 </th>

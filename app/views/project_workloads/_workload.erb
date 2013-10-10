@@ -17,7 +17,7 @@
   <br/>
 
   <% if @workload.other_lines_count > 0 %>
-    <div id="wmsg" class="workload_msg"> 
+    <div id="wmsg" class="workload_msg">
       <%= @workload.other_days_count %> days on <%= @workload.other_lines_count %> lines
       are not summed as their are lines ouside project scope but are associated
       to a selected project. If you do not wish to see this message do not associate a project
@@ -30,7 +30,7 @@
   <% if @workload.nb_hidden_lines > 0 %><strong><%end%>
   (<%= @workload.nb_hidden_lines %> hidden)
   <% if @workload.nb_hidden_lines > 0 %></strong><%end%>
-  
+
   <% if session['workload_persons_iterations'] != [] or session['workload_person_project_ids'] != [] or session['workload_companies_ids'] != [] %>
   <strong>filtered</strong><%end%>
   </b>
@@ -48,9 +48,7 @@
   <thead>
     <% if session['workload_project_ids'].size != 0 %>
       <% @workload.projects.each do |p| %>
-        <% color = ApplicationController::COLORS.rand %>
-        <% color = "#FFFFFF" if color.nil? %>
-        <% ApplicationController::COLORS.delete(color) %>
+        <% color = "#ABC" %>
         <% if p.planning %>
           <% if p.planning.tasks %>
             <% p.planning.tasks.each do |t| %>

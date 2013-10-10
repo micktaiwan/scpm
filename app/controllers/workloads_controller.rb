@@ -70,7 +70,7 @@ class WorkloadsController < ApplicationController
 
   def get_chart
     chart = GoogleChart::LineChart.new('1000x300', "#{@workload.person.name} workload", false)
-    serie = @workload.percents.map{ |p| p[:precise] }
+    serie = @workload.percents.map{ |p| p[:value] }
     return if serie.size == 0
     realmax     = serie.max
     high_limit  = 150.0
@@ -520,6 +520,7 @@ class WorkloadsController < ApplicationController
     @line_id  = params[:l].to_i
     @wlweek   = params[:w].to_i
     value     = round_to_hour(params[:v].to_f)
+    value     = 0 if value < 0
     line      = WlLine.find(@line_id)
     id        = view_by==:person ? line.person_id : line.project_id
     if value == 0.0
@@ -539,7 +540,7 @@ class WorkloadsController < ApplicationController
   def get_sums(line, week, id, type=:person)
     @type       = type
     today_week  = wlweek(Date.today)
-    plsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+)
+    plsum       = line.wl_loads.map{|l| (l.week < today_week ? 0 : l.wlload)}.inject(:+) || 0
     lsum        = line.wl_loads.map{|l| l.wlload}.inject(:+)
     if(type==:project)
       wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{session['workload_project_ids'].join(',')})"])
@@ -565,8 +566,9 @@ class WorkloadsController < ApplicationController
     cpercent   = open > 0 ? (csum / open*100).round : 0
     # case_percent is the percent of occupation for a week for a person. It does not depend of the view (person or project)
     case_percent = open > 0 ? (case_sum / person_open*100).round : 0
-    avail      = [0,(open-csum)].max
-    avail      = (avail==0 ? '' : avail)
+    avail = open-csum
+    #avail      = [0,(open-csum)].max
+    #avail      = (avail==0 ? '' : avail)
 
     planned_total = 0
     total         = 0
