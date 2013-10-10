@@ -27,6 +27,7 @@ consolidation_capped_next_weeks: false
 automatic_except_line_addition: false
 workloads_display_consumed_column: true
 workloads_display_diff_between_consumed_and_planned_column: true
+workloads_display_status_column: true
 
 # SDP
 use_multiple_projects_sdp_export: false
