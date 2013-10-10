@@ -50,7 +50,7 @@ class WorkloadsController < ApplicationController
     person_id = params[:person_id] if !person_id
     session['workload_person_id'] = person_id
     @workload = Workload.new(person_id,session['workload_person_project_ids'], session['workload_persons_iterations'],session['workload_person_tags'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
-    
+
     @person   = @workload.person
     get_last_sdp_update
     get_suggested_requests(@workload)
@@ -110,7 +110,7 @@ class WorkloadsController < ApplicationController
   end
 
   def get_sdp_tasks(wl,options = {})
-    # if  wl.nil? 
+    # if  wl.nil?
       if wl.person.trigram == ""
         @sdp_tasks = []
         return
@@ -346,9 +346,9 @@ class WorkloadsController < ApplicationController
     found = WlLineTask.find(:first, :conditions=>["sdp_task_id=?",sdp_task_id])
     if not found
       @line     = WlLine.create(:name=>sdp_task.title, :person_id=>person_id, :wl_type=>WL_LINE_OTHER)
-      WlLineTask.create(:wl_line_id=>@line.id, :sdp_task_id=>sdp_task_id) 
+      WlLineTask.create(:wl_line_id=>@line.id, :sdp_task_id=>sdp_task_id)
       if(APP_CONFIG['auto_link_task_to_project']) and sdp_task.project
-        @line.project_id = sdp_task.project.id 
+        @line.project_id = sdp_task.project.id
         @line.save
       end
     else
@@ -409,13 +409,13 @@ class WorkloadsController < ApplicationController
     tags = []
     line_tags.each do |l|
       tag = Tag.find(l.tag_id)
-      tags <<  tag if !tags.include?(tag) 
+      tags <<  tag if !tags.include?(tag)
     end
     line_tags.each do |l|
       l.destroy
     end
     tags.each do |t|
-      t.destroy if LineTag.find(:all, :conditions=>["tag_id=#{t.id}"]).size == 0 
+      t.destroy if LineTag.find(:all, :conditions=>["tag_id=#{t.id}"]).size == 0
     end
     @workload = Workload.new(person_id,session['workload_person_project_ids'],session['workload_persons_iterations'],session['workload_person_tags'])
     get_sdp_tasks(@workload)
@@ -532,7 +532,7 @@ class WorkloadsController < ApplicationController
       wl_load.save
       @value = value
     end
-    @lsum, @plsum, @csum, @cpercent, @case_percent, @total, @planned_total, @availability, @diff_planned_remaining_line, @diff_planned_remaining  = get_sums(line, @wlweek, id, view_by)
+    @lsum, @plsum, @csum, @cpercent, @case_percent, @total, @planned_total, @avail, @diff_planned_remaining_line, @diff_planned_remaining  = get_sums(line, @wlweek, id, view_by)
   end
 
   # type is :person or :projet and indicates what is the id (person or projet)
