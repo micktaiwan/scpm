@@ -20,7 +20,7 @@ class Workload
     :availability,    # total days of availability {:days=>xxx, :percent=>yyy}
     :sum_availability,# sum of availabity days for the next 8 weeks
     :cprodtotals,     # total days planned per week on production only {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
-    :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :value=>percent.round.to_s+"%", :precise=>percent}
+    :percents,        # total percent per week: {:name=>'cpercent', :id=>w, :display=>percent.round.to_s+"%", :value=>percent}
     :next_month_percents,         # next 5 weeks capped (including current)
     :three_next_months_percents,  # next 3 months capped (was _after_ the 5 coming weeks but changed later including next 5 weeks)
     :total,                       # total number of days planned (including past weeks)

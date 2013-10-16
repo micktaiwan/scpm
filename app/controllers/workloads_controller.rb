@@ -192,11 +192,11 @@ class WorkloadsController < ApplicationController
     @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.sum_availability })
     # per weeks
     @workloads.first.weeks.each_with_index do |tmp,i|
-      @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:precise]} / size).round
-      @chart_totals << (@workloads.inject(0) { |sum,w| w.person.is_virtual==1 ? 0.0 : sum += w.percents[i][:precise]} / chart_size).round
-      @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:precise])} / size).round
-      @chart_cap_totals << (@workloads.inject(0) { |sum,w| w.person.is_virtual==1 ? 0.0 : sum += cap(w.percents[i][:precise])} / chart_size).round
-      @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.availability[i][:avail]})
+      @totals << (@workloads.inject(0) { |sum,w| sum += w.percents[i][:value]} / size).round
+      @chart_totals << (@workloads.inject(0) { |sum,w| w.person.is_virtual==1 ? 0.0 : sum += w.percents[i][:value]} / chart_size).round
+      @cap_totals << (@workloads.inject(0) { |sum,w| sum += cap(w.percents[i][:value])} / size).round
+      @chart_cap_totals << (@workloads.inject(0) { |sum,w| w.person.is_virtual==1 ? 0.0 : sum += cap(w.percents[i][:value])} / chart_size).round
+      @avail_totals << (@workloads.inject(0) { |sum,w| sum += w.availability[i][:value]})
     end
 
     # workload chart
