@@ -95,7 +95,25 @@ class ChecklistItemTemplate < ActiveRecord::Base
   end
 
   def deploy(deploy_children=true)
-    if self.is_transverse == 0
+    if self.is_qr_qwr == true
+      # for project in Project.all.select { |p| !p.is_ended}
+      for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
+        
+        parent = self.find_or_deploy_transverse_parent(project.id)
+        parent_id = parent ? parent.id : 0
+        i = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=?", self.id, project.id])
+        if not i
+          ChecklistItem.create(:project_id=>project.id, :parent_id=>parent_id, :template_id=>self.id)
+        else
+          # parent change handling
+          i.parent_id = parent_id
+          i.save
+          # TODO is_transverse:
+          # if changed from yes to no, a lot of cleanup must be done
+          # for no to yes, cleanup the ChecklistItems, the ProjectCheckItem will be created
+        end
+      end
+    elsif self.is_transverse == 0
       check_parent
       self.requests.each { |r|
         r.deploy_checklist(self)
@@ -106,6 +124,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
         parent_id = parent ? parent.id : 0
         i = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=?", self.id, project.id])
         if not i
+
           ChecklistItem.create(:project_id=>project.id, :parent_id=>parent_id, :template_id=>self.id)
         else
           # parent change handling

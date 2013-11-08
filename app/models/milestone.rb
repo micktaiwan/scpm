@@ -61,10 +61,20 @@ class Milestone < ActiveRecord::Base
 
   # Deploy checklist items from checklist templates
   def deploy_checklists
-    return if checklist_not_allowed?
+
+    # IS_QR_QWR
+    if self.project.is_qr_qwr == true
+
+      for t in ChecklistItemTemplate.find(:all, :conditions=>"is_qr_qwr=1").select{ |t|
+          t.milestone_names.map{|n| n.title}.include?(self.name)
+          }
+        deploy_checklist_without_request(t)
+      end
 
     # WITH REQUEST
-    if (self.active_requests.count > 0)
+    elsif (self.active_requests.count > 0)
+      return if checklist_not_allowed?
+
       self.project.active_requests.each { |r|
         next if !r.milestone_names or !r.milestone_names.include?(self.name)
         for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0").select{ |t|
@@ -74,15 +84,7 @@ class Milestone < ActiveRecord::Base
             }
           deploy_checklist(t,r)
         end
-
         }
-    # WITHOUT REQUEST + IS_QR_QWR
-    elsif self.project.is_qr_qwr == true
-      for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0 and is_qr_qwr=1").select{ |t|
-          t.milestone_names.map{|n| n.title}.include?(self.name)
-          }
-        deploy_checklist_without_request(t)
-      end
     end
 
   end
@@ -150,9 +152,11 @@ class Milestone < ActiveRecord::Base
     self.deploy_checklists
   end
 
+
+  # Show the numer of checklist for cu (one user) and the current milestone
   def checklist_div(cu)
     items     = self.checklist_items.select{|i| i.ctemplate.ctype!='folder'}
-    Rails.logger.info("+++++>"+self.id.to_s)
+
     return "" if items.size == 0 and !cu.has_role?('Admin')
     non_zero  = items.select{|i| i.status!=0}
     modif = ""
