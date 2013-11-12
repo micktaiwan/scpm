@@ -66,10 +66,10 @@ class Workload
       end
     end
     if !project_ids or project_ids.size==0
-      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"])
+      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
     else
       if iterations.size==0
-        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
+        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
       else
         project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
         project_ids_with_iterations     =[]     # Array which contains ids of projects we want to filter with iterations 
