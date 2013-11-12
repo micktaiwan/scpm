@@ -20,11 +20,13 @@ workloads_show_consolidation_filters: false
 workloads_display_total_column: false
 workloads_display_consumed_column: false
 workloads_lines_sort: "[l.project_id, l.wl_type, l.display_name.upcase]"
-project_workloads_lines_sort: "l.display_name.upcase"
+project_workloads_lines_sort: "project_id,wl_type,name" # Order of wlline in workload
 workloads_max_height: 500
 consolidation_alert_on_overworkload: false
 consolidation_capped_next_weeks: false
 automatic_except_line_addition: false
+workloads_show_filter: false # Show or hide the filter buttn
+
 
 # SDP
 use_multiple_projects_sdp_export: false
