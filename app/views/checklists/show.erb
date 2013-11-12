@@ -32,16 +32,18 @@
 
 <% #WITH  QR QWR %>
 <% if @milestone.project.is_qr_qwr == true %>
-  <h4>QR/QWR</h4>
+  <h3>QR/QWR</h3>
   <% items = @items.select{|i| i.ctemplate.is_qr_qwr == true} %>
   <% if items.size > 0 %>
     <%= render(:partial=>"checklist_item", :collection=>items, :as=> :i) %>
+  <% else %>
+    None
   <% end %>
 <% end %>
 
 <% # WITH REQUEST %>
 <% if @requests.count > 0 %>
-  <h4>With requests</h4>
+  <h3>With requests</h3>
   <% for r in @requests %>
     <% items = @items.select{|i| i.request_id==r.id} %>
     <% if items.size > 0 %>
