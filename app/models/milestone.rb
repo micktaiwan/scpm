@@ -64,15 +64,15 @@ class Milestone < ActiveRecord::Base
 
     # IS_QR_QWR
     if self.project.is_qr_qwr == true
-
       for t in ChecklistItemTemplate.find(:all, :conditions=>"is_qr_qwr=1").select{ |t|
           t.milestone_names.map{|n| n.title}.include?(self.name)
           }
         deploy_checklist_without_request(t)
       end
+    end
 
     # WITH REQUEST
-    elsif (self.active_requests.count > 0)
+    if (self.active_requests.count > 0)
       return if checklist_not_allowed?
 
       self.project.active_requests.each { |r|

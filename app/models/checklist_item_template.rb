@@ -95,6 +95,8 @@ class ChecklistItemTemplate < ActiveRecord::Base
   end
 
   def deploy(deploy_children=true)
+
+    # IS QR QWR
     if self.is_qr_qwr == true
       # for project in Project.all.select { |p| !p.is_ended}
       for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
@@ -113,11 +115,15 @@ class ChecklistItemTemplate < ActiveRecord::Base
           # for no to yes, cleanup the ChecklistItems, the ProjectCheckItem will be created
         end
       end
-    elsif self.is_transverse == 0
+    end
+
+    # IS NOT TRANSVERSE
+    if self.is_transverse == 0
       check_parent
       self.requests.each { |r|
         r.deploy_checklist(self)
         }
+    # IS TRANSVERSE
     else
       for project in Project.all.select { |p| !p.is_ended}
         parent = self.find_or_deploy_transverse_parent(project.id)
@@ -136,10 +142,12 @@ class ChecklistItemTemplate < ActiveRecord::Base
         end
       end
     end
+
     self.update_attributes(:deployed=>1)
     if deploy_children
       self.children.select{|c| c.deployed==0}.each(&:deploy)
     end
+
   end
 
   def items_done_count
