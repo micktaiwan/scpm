@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130918174000) do
+ActiveRecord::Schema.define(:version => 20131115143807) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -619,8 +619,8 @@ ActiveRecord::Schema.define(:version => 20130918174000) do
     t.integer  "is_quality",      :default => 1
     t.integer  "generic_risk_id"
     t.integer  "stream_id"
-    t.boolean  "is_ria_logged",   :default => false
-    t.boolean  "is_ria_action",   :default => false
+    t.integer  "is_ria_logged",   :default => 0
+    t.integer  "is_ria_action",   :default => 0
     t.integer  "old_impact",      :default => 0
     t.integer  "old_probability", :default => 0
   end
@@ -789,6 +789,7 @@ ActiveRecord::Schema.define(:version => 20130918174000) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "file_link"
+    t.boolean  "impact_count", :default => false
   end
 
   add_index "spiders", ["milestone_id"], :name => "IDX_SPIDERS"
