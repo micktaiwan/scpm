@@ -164,6 +164,12 @@ class Stream < ActiveRecord::Base
     newHistoryCounter.save
   end
 
+  #                                                   #
+  # History ticket destroy                            #
+  #                                                   #
+  def delete_spider_history_counter(author,spider)
+    # HistoryCounter.find(:first, :conditions=>["id = ? and "])
+  end
 
   #                                                   #
   # Retrieve the current Request (1.6.4 / 1.6.5) used #

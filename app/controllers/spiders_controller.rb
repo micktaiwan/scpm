@@ -141,6 +141,21 @@ class SpidersController < ApplicationController
   end
 
 
+  def delete_spider_consolidated
+    spider_id   = params[:id]
+    project_id  = params[:project_id]
+
+    spider = Spider.find(:first,:conditions => ["id = ?", spider_id])
+
+    if spider.impact_count
+      
+    end
+
+    Spider.destroy(spider_id)
+
+    redirect_to :controller=>:projects, :action=>:show, :id=>project_id
+  end
+
   # ------------------------------------------------------------------------------------
   # CREATE HTML ELEMENTS
   # ------------------------------------------------------------------------------------
@@ -319,6 +334,10 @@ class SpidersController < ApplicationController
     spiderProject = Project.find(spiderParam.project_id)
     
     if((spiderProject) && (params[:AQ_spider] == "NO"))
+      
+      spiderParam.impact_count = true;
+      spiderParam.save
+
       # Insert in history_counter
       streamRef     = Stream.find_with_workstream(spiderProject.workstream)
       streamRef.set_spider_history_counter(current_user,spiderParam)
