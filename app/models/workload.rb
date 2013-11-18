@@ -228,7 +228,7 @@ class Workload
       @line_sums[l.id][:sums] = l.planned_sum
       @total          += l.sum if l.wl_type <= 200
       @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
-      if l.sdp_tasks
+      if l.sdp_tasks.count > 0
         @sdp_remaining_total        += l.sdp_tasks_remaining.to_f
         @line_sums[l.id][:init]      = l.sdp_tasks_initial
         @line_sums[l.id][:balance]   = l.sdp_tasks_balancei
