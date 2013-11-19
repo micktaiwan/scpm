@@ -142,6 +142,7 @@ class SpidersController < ApplicationController
 
 
   def delete_spider_consolidated
+
     result      = 0
     spider_id   = params[:id]
     project_id  = params[:project_id]
@@ -172,6 +173,7 @@ class SpidersController < ApplicationController
     else
       redirect_to :controller=>:spiders, :action=>:project_spider_history, :id=>spiderParam.id.to_s
     end
+
   end
 
   # ------------------------------------------------------------------------------------
