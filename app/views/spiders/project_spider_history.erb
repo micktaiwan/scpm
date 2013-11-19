@@ -87,7 +87,11 @@ function getDocHeight() {
 	end
 	projectName += " > " + @spider.project.name
 %>
-<h3>Project : <%= projectName %> - Milestone : <%= @spider.milestone.name %> - <a href='#' id="chart_visibility_btn">Toggle Hide/show charts</a></h3>
+<h3>
+	Project : <%= projectName %> - Milestone : <%= @spider.milestone.name %> - 
+	<a href='#' id="chart_visibility_btn">Toggle Hide/show charts</a>
+	<%= button_to("Delete", {:action=>'delete_spider_consolidated', :id=>@spider.id, :project_id=>@spider.project_id}, :confirm=>"WARNING, This spider is already consolidated. Are you sure that you want to delete this spider and its spider values ?", :method => :post) %>
+</h3>
 
 <%
 concat "<h2>Spider [created the "

@@ -141,6 +141,39 @@ class SpidersController < ApplicationController
   end
 
 
+  def delete_spider_consolidated
+    result      = 0
+    spider_id   = params[:id]
+    project_id  = params[:project_id]
+    spiderParam = Spider.find(:first,:conditions => ["id = ?", spider_id])
+
+
+    spider_history = HistoryCounter.find(:first, :conditions=>["concerned_spider_id = ?", spiderParam.id.to_s])
+    if spider_history and spider_history.author_id.to_s == current_user.id.to_s
+     
+      result = 1
+
+      if spiderParam.impact_count
+        # Remove from history_counter
+        streamRef     = Stream.find_with_workstream(spiderParam.project.workstream)
+        streamRef.delete_spider_history_counter(current_user,spiderParam)
+
+        # Decrement counter
+        spiderParam.project.spider_count = spiderParam.project.spider_count - 1
+        spiderParam.project.save
+      end
+
+    end
+
+    if result == 1
+      # Delete spider
+      Spider.destroy(spider_id)
+      redirect_to :controller=>:projects, :action=>:show, :id=>project_id
+    else
+      redirect_to :controller=>:spiders, :action=>:project_spider_history, :id=>spiderParam.id.to_s
+    end
+  end
+
   # ------------------------------------------------------------------------------------
   # CREATE HTML ELEMENTS
   # ------------------------------------------------------------------------------------
@@ -319,6 +352,10 @@ class SpidersController < ApplicationController
     spiderProject = Project.find(spiderParam.project_id)
     
     if((spiderProject) && (params[:AQ_spider] == "NO"))
+      
+      spiderParam.impact_count = true;
+      spiderParam.save
+
       # Insert in history_counter
       streamRef     = Stream.find_with_workstream(spiderProject.workstream)
       streamRef.set_spider_history_counter(current_user,spiderParam)
