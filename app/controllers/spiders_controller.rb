@@ -153,12 +153,12 @@ class SpidersController < ApplicationController
     spiderParam = Spider.find(:first,:conditions => ["id = ?", spider_id])
 
 
-    spider_history = HistoryCounter.find(:first, :conditions=>["concerned_spider_id = ?", spiderParam.id.to_s])
-    if spider_history and spider_history.author_id.to_s == current_user.id.to_s
+    # If ticket
+    if spiderParam.impact_count
+      spider_history = HistoryCounter.find(:first, :conditions=>["concerned_spider_id = ?", spiderParam.id.to_s])
+      if spider_history and spider_history.author_id.to_s == current_user.id.to_s
      
-      result = 1
-
-      if spiderParam.impact_count
+        result = 1
         # Remove from history_counter
         streamRef     = Stream.find_with_workstream(spiderParam.project.workstream)
         streamRef.delete_spider_history_counter(current_user,spiderParam)
@@ -167,7 +167,9 @@ class SpidersController < ApplicationController
         spiderParam.project.spider_count = spiderParam.project.spider_count - 1
         spiderParam.project.save
       end
-
+    # If without ticket
+    else 
+      result = 1
     end
 
     if result == 1
