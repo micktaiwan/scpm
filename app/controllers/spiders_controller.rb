@@ -18,7 +18,9 @@ class SpidersController < ApplicationController
   # Spider page for a project
   def project_spider
     # Search project from parameter
-    id = params[:project_id]
+    id                   = params[:project_id]
+    @delete_spider_conso = params[:delete_spider_conso]
+
     @project = Project.find(id)
     
     # search milestonename from parameter
@@ -37,7 +39,9 @@ class SpidersController < ApplicationController
   # History of one spider
   def project_spider_history
     # Search project for paramater
-    id = params[:spider_id]
+    id                   = params[:spider_id]
+    @delete_spider_conso = params[:delete_spider_conso]
+
     @spider = Spider.find(id)
     # generate_table_history
     generate_table_history(@spider)
@@ -169,9 +173,9 @@ class SpidersController < ApplicationController
     if result == 1
       # Delete spider
       Spider.destroy(spider_id)
-      redirect_to :controller=>:projects, :action=>:show, :id=>project_id
+      redirect_to :controller=>:spiders, :action=>:project_spider, :project_id=>spiderParam.project_id.to_s, :milestone_id=>spiderParam.milestone_id.to_s, :delete_spider_conso=>result
     else
-      redirect_to :controller=>:spiders, :action=>:project_spider_history, :id=>spiderParam.id.to_s
+      redirect_to :controller=>:spiders, :action=>:project_spider_history, :spider_id=>spiderParam.id.to_s, :delete_spider_conso=>result
     end
 
   end
