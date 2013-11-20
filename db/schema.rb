@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131112164211) do
+ActiveRecord::Schema.define(:version => 20131120111300) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -619,8 +619,8 @@ ActiveRecord::Schema.define(:version => 20131112164211) do
     t.integer  "is_quality",      :default => 1
     t.integer  "generic_risk_id"
     t.integer  "stream_id"
-    t.integer  "is_ria_logged"
-    t.integer  "is_ria_action"
+    t.integer  "is_ria_logged",   :default => 0
+    t.integer  "is_ria_action",   :default => 0
     t.integer  "old_impact",      :default => 0
     t.integer  "old_probability", :default => 0
   end
