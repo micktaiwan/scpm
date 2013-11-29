@@ -45,5 +45,14 @@ class ChecklistItem < ActiveRecord::Base
     return true
   end
 
+  def isChildrenActive
+    self.children.each do |c|
+      if c.status != 0
+        return true
+      end
+    end
+    return false
+  end
+
 end
 
