@@ -31,10 +31,11 @@ class Person < ActiveRecord::Base
 
   attr_accessor :password
   
-  def projects
+  def projects_line
     projects = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"])
     return projects
   end
+
   def projects_map
     projects_ids = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"]).collect{|l| l.project_id}.uniq
     filter       = []

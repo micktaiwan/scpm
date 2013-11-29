@@ -12,7 +12,7 @@ for p in Person.find(:all, :conditions=>"is_supervisor=0 and has_left=0 and is_t
   tbv = p.tbv_based_on_wl
   
   # To plan and percent_planed
-  p_workload = Workload.new(p.id)
+  p_workload = Workload.new(p.id,[],[],{})
   wl_to_plan = p_workload.remain_to_plan_days
   if p_workload.sdp_remaining_total == 0
     wl_percent_planned = 0
