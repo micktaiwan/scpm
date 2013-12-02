@@ -34,7 +34,8 @@
 <% if @milestone.project.is_qr_qwr == true %>
 
   <h3>QR/QWR</h3>
-  <% items = @items.select{|i| i.ctemplate.is_qr_qwr == true} %>
+  <% # Request_id == nil to not loading checklist_items for request, and project_id == nil to not loading checklist_items transverse %>
+  <% items = @items.select{|i| i.ctemplate.is_qr_qwr == true and i.request_id == nil and i.project_id == nil} %>
   <% if items.size > 0 %>
     <%= render(:partial=>"checklist_item_qr_qwr", :collection=>items, :as=> :i, :locals=>{:milestone=>@milestone}) %>
   <% else %>

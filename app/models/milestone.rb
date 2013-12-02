@@ -112,7 +112,7 @@ class Milestone < ActiveRecord::Base
   def deploy_checklist_without_request(template)
     p = template.find_or_deploy_parent_without_request(self)
     parent_id = p ? p.id : 0
-    i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=?", template.id, self.id])
+    i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL", template.id, self.id])
     if not i
        ChecklistItem.create(:milestone_id=>self.id, :request_id=>nil, :parent_id=>parent_id, :template_id=>template.id)
     else
