@@ -21,8 +21,7 @@
       <div style="display:none;" class="checklist_item time" id='checklist_item_time_<%=i.id%>'><%= time_ago_in_words(i.updated_at) %></div>
     <% end %>
     <ul>
-      <%= render(:partial=>"checklists/checklist_item", :collection=>i.children, :as=>:i) %>
+        <%= render(:partial=>"checklists/project_checklist_item", :collection=>i.children, :as=>:i) %>
     </ul>
   <% end %>
 </li>
-

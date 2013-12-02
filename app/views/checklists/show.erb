@@ -36,7 +36,7 @@
   <h3>QR/QWR</h3>
   <% items = @items.select{|i| i.ctemplate.is_qr_qwr == true} %>
   <% if items.size > 0 %>
-    <%= render(:partial=>"checklist_item", :collection=>items, :as=> :i, :locals=>{:milestone=>@milestone}) %>
+    <%= render(:partial=>"checklist_item_qr_qwr", :collection=>items, :as=> :i, :locals=>{:milestone=>@milestone}) %>
   <% else %>
     None
   <% end %>
@@ -51,7 +51,7 @@
       <b><%= r.work_package%> <%= r.milestone if r.milestone!='N/A'%> <%= r.resolution%> <%= r.contre_visite=='Yes' ? '<strong>Contre-Visite</strong>' : ''%></b>
       (<a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= r.request_id %>">#<%= r.request_id.to_i%></a>)<br/>
       <ul>
-        <%= render(:partial=>"checklist_item", :collection=>items, :as=> :i, :locals=>{:milestone=>@milestone}) %>
+        <%= render(:partial=>"checklist_item", :collection=>items, :as=> :i) %>
       </ul>
     <% end %>
   <% end %>
