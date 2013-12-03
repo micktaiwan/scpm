@@ -94,54 +94,149 @@ class ChecklistItemTemplate < ActiveRecord::Base
     raise "Parent of #{self.title} does not contains:\n#{diff.map{|i| i.title}.join(', ')}" if (diff) != []
   end
 
-  def deploy(deploy_children=true)
+  # def deploy(deploy_children=true)
 
-    # IS NOT TRANSVERSE
-    if self.is_transverse == 0
+  #   # IS NOT TRANSVERSE
+  #   if self.is_transverse == 0
 
-      # IS QR QWR
-      if self.is_qr_qwr == true
-        check_parent
-        # for project in Project.all.select { |p| !p.is_ended}
-        for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
-          project.milestones.each do |milestone|
-            milestone.deploy_checklists
+  #     # IS QR QWR
+  #     if self.is_qr_qwr == true
+  #       check_parent
+  #       # for project in Project.all.select { |p| !p.is_ended}
+  #       for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
+  #         project.milestones.each do |milestone|
+  #           milestone.deploy_checklists
+  #         end
+  #       end
+  #     end
+      
+  #     # Request
+  #     check_parent
+  #     self.requests.each { |r|
+  #       r.deploy_checklist(self)
+  #     }
+
+  #   # IS TRANSVERSE
+  #   else
+  #     for project in Project.all.select { |p| !p.is_ended}
+  #       parent = self.find_or_deploy_transverse_parent(project.id)
+  #       parent_id = parent ? parent.id : 0
+  #       i = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=? and request_id IS NULL and milestone_id IS NULL", self.id, project.id])
+  #       if not i
+
+  #         ChecklistItem.create(:project_id=>project.id, :parent_id=>parent_id, :template_id=>self.id)
+  #       else
+  #         # parent change handling
+  #         i.parent_id = parent_id
+  #         i.save
+  #         # TODO is_transverse:
+  #         # if changed from yes to no, a lot of cleanup must be done
+  #         # for no to yes, cleanup the ChecklistItems, the ProjectCheckItem will be created
+  #       end
+  #     end
+  #   end
+
+  #   self.update_attributes(:deployed=>1)
+  #   if deploy_children
+  #     self.children.select{|c| c.deployed==0}.each(&:deploy)
+  #   end
+
+  # end
+
+
+  # 
+  # Deploy parents
+  #
+
+  # Deploy this checklist item template as parent for each projects/milestones is_qr_qwr
+  def deploy_as_parent_is_qr_qwr
+    for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
+      project.milestones.each do |milestone|
+        i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.id, milestone.id])
+        if i == nil
+          ChecklistItem.create(:milestone_id=>milestone.id, :parent_id=>0, :template_id=>self.id)
+        end
+      end
+    end
+  end
+
+  # Deploy this checklist item template as parent for each requests
+  def deploy_as_parent_request
+    # Each requests found for this template
+    self.requests.each { |r|
+      # Each milestones linked to this request
+      r.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
+        p = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.id, r.id, m.id])
+        if p == nil
+          ChecklistItem.create(:milestone_id=>m.id, :request_id=>r.id, :parent_id=>0, :template_id=>self.id)
+        end
+      }
+    }
+  end
+
+  # Deploy this checklist for each projects as parent
+  def deploy_as_parent_is_transverse
+    for project in Project.all.select { |p| !p.is_ended}
+      i = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=? and request_id IS NULL and milestone_id IS NULL", self.id, project.id])
+      if i == nil
+        ChecklistItem.create(:project_id=>project.id, :parent_id=>0, :template_id=>self.id)
+      end
+    end
+  end
+
+  # 
+  # Deploy childs
+  #
+
+  # Deploy this checklist item template as child for each projects/milestones is_qr_qwr
+  def deploy_as_childs_is_qr_qwr
+    # Each projects
+    for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
+      # Each milestones
+      project.milestones.each do |milestone|
+        i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.id, milestone.id])
+        if i == nil
+          # Get the parent
+          parent = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.parent.id, milestone.id])
+          if parent
+            ChecklistItem.create(:milestone_id=>milestone.id, :parent_id=>parent.id, :template_id=>self.id)
           end
         end
       end
-      
-      # Request
-      check_parent
-      self.requests.each { |r|
-        r.deploy_checklist(self)
+    end
+  end
+
+  # Deploy this checklist item template as childs for each requests
+  def deploy_as_childs_request
+    # Each requests found for this template
+    self.requests.each { |r|
+      # Each milestones linked to this request
+      r.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
+        c = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.id, r.id, m.id])
+        if c == nil
+          parent = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.parent.id, r.id, m.id])
+          if parent
+            ChecklistItem.create(:milestone_id=>m.id, :request_id=>r.id, :parent_id=>parent.id, :template_id=>self.id)
+          end
+        end
       }
+    }
+  end
 
-    # IS TRANSVERSE
-    else
+  # Deploy this checklist for each projects as child
+  def deploy_as_childs_is_transverse
       for project in Project.all.select { |p| !p.is_ended}
-        parent = self.find_or_deploy_transverse_parent(project.id)
-        parent_id = parent ? parent.id : 0
         i = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=? and request_id IS NULL and milestone_id IS NULL", self.id, project.id])
-        if not i
-
-          ChecklistItem.create(:project_id=>project.id, :parent_id=>parent_id, :template_id=>self.id)
-        else
-          # parent change handling
-          i.parent_id = parent_id
-          i.save
-          # TODO is_transverse:
-          # if changed from yes to no, a lot of cleanup must be done
-          # for no to yes, cleanup the ChecklistItems, the ProjectCheckItem will be created
+        if i == nil
+          parent = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=? and request_id IS NULL and milestone_id IS NULL", self.parent.id, project.id])
+          if parent
+            ChecklistItem.create(:project_id=>project.id, :parent_id=>parent.id, :template_id=>self.id )
+          end
         end
       end
-    end
-
-    self.update_attributes(:deployed=>1)
-    if deploy_children
-      self.children.select{|c| c.deployed==0}.each(&:deploy)
-    end
-
   end
+
+
 
   def items_done_count
     ChecklistItem.find(:all, :include=>["milestone", "request"], :conditions=>["template_id=?", self.id]).select { |i| i.milestone and i.milestone.done==1 and i.request.contre_visite=="No"}.size
