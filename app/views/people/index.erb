@@ -1,8 +1,10 @@
 <% if current_user.has_role?('Admin') %>
-<%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
-<%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
-<%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
-<br/>
+	<%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
+	<%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
+	<%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
+	<br/>
+<% else %>
+<%= current_user.name %>
 <% end %>
 <br/>
 
@@ -12,7 +14,7 @@
 	<% if not Company.find_by_id(peopleNotLeft[0].company_id).nil? %>
 		<%= link_to(image_tag('edit.gif'), {:controller=>'companies', :action=>'edit', :id=>company.company_id}) %>
 		<%= link_to(image_tag('delete.gif'), {:controller=>'companies', :action=>'destroy', :id=>company.company_id}) %>
-		
+
 		<% if ((peopleNotLeft.count > 0) and (peopleNotLeft[0].company)) %><%= peopleNotLeft[0].company.name%> (
 			<% if HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id) %>
 				<%= HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id).name %>
@@ -20,7 +22,7 @@
 				<a style="color:#FA5858">No calendar associated</a>
 			<% end %>)
 		<% else %>???<% end %>
-		
+
 	<% else %>
 		<a style="color:#FA5858"> Nonexistant company for the following persons :</a>
 	<% end %>
