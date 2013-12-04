@@ -281,8 +281,8 @@ class WorkloadsController < ApplicationController
       return
     end
     request_id.strip!
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
@@ -307,8 +307,8 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a name."
       return
     end
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
@@ -344,8 +344,8 @@ class WorkloadsController < ApplicationController
 
   def add_by_project
     project_id = params[:project_id].to_i
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     project = Project.find(project_id)
     if not project
@@ -401,8 +401,8 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a request number."
       return
     end
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
