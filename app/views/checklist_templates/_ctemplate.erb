@@ -6,13 +6,15 @@
     <a href="#" title="<%= ctemplate.milestone_names.map {|m| m.title}.join(', ') %>">M</a>
     <a href="#" title="<%= ctemplate.workpackages.map {|m| m.shortname}.join(', ') %>">WP</a>
   <% end %>
-  <%= ctemplate.deployed==1 ? '' : link_to_remote('deploy',
-    :url=>{:action=>'deploy', :id=>ctemplate.id},
+
+  <%= ctemplate.parent_id!=0 ? '' : link_to_remote('check and deploy parent and its childs',
+    :url=>{:action=>'deploy_parent_and_childs', :ctemplate_id=>ctemplate.id},
     :loading=>"$('deploy_#{ctemplate.id}').innerHTML='deploying...'",
     :success=>"$('deploy_#{ctemplate.id}').hide()",
     :update => { :failure => "error" },
     :confirm=>'Deploy this template and all its children ?',
     :html=>{:id=>"deploy_#{ctemplate.id}", :class=>'btnlnk'}) %>
+
   <%= link_to('New', {:controller=>'checklist_templates', :action=>'new', :parent_id=>ctemplate.id}) %>
   <%= link_to_remote(image_tag('delete.gif'), :url=>{:action=>'destroy', :id=>ctemplate.id}, :success=>"$('template_#{ctemplate.id}').hide()", :confirm=>'Sure?') %>
   <ul>

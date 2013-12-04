@@ -89,6 +89,7 @@ options:
     render(:nothing=>true)
   end
 
+
   # def deploy
   #   id = params[:id]
   #   begin
@@ -105,6 +106,15 @@ options:
     render(:nothing=>true)
   end
   
+  def deploy_parent_and_childs
+    parent = ChecklistItemTemplate.find(:first, :conditions=>["id = ?", params[:ctemplate_id]])
+    if parent
+      deploy_parents(parent)
+      deploy_childs(parent)
+    end
+    render(:nothing=>true)
+  end
+
   #
   # Faire une méthode qui va vérifier que les templates parents ont les bons milestones et WP de ses enfants, cette méthode sera appelée en premier lieu
   #
@@ -118,29 +128,47 @@ options:
   #
   # DEPLOY PARENTS 
   #
-  def deploy_parents
-    self.deploy_parents_is_qr_qwr
-    self.deploy_parents_request
-    self.deploy_parents_is_transverse
+  def deploy_parents(parent = nil)
+    self.deploy_parents_is_qr_qwr(parent)
+    self.deploy_parents_request(parent)
+    self.deploy_parents_is_transverse(parent)
   end
 
   # Deploy all checklistitemtemplate for is qr qwr
-  def deploy_parents_is_qr_qwr
-    ChecklistItemTemplate.find(:all,:conditions=>["parent_id = 0 and is_qr_qwr = 1 and is_transverse = 0"]).each do |ct|
+  def deploy_parents_is_qr_qwr(parent = nil)
+
+    query = "parent_id = 0 and is_qr_qwr = 1 and is_transverse = 0"
+    if parent != nil
+      query += " and id = " + parent.id.to_s
+    end
+    
+    ChecklistItemTemplate.find(:all,:conditions=>[query]).each do |ct|
       ct.deploy_as_parent_is_qr_qwr
     end      
   end
 
   # Deploy all checklistitemtemplate for requests
-  def deploy_parents_request
-    ChecklistItemTemplate.find(:all,:conditions=>["parent_id = 0 and is_transverse = 0"]).each do |ct|
+  def deploy_parents_request(parent = nil)
+    
+    query = "parent_id = 0 and is_transverse = 0"
+    if parent != nil
+      query += " and id = " + parent.id.to_s
+    end
+
+    ChecklistItemTemplate.find(:all,:conditions=>[query]).each do |ct|
       ct.deploy_as_parent_request
     end
   end
   
   # Deploy all checklistitemtemplate for is transverse
-  def deploy_parents_is_transverse
-    ChecklistItemTemplate.find(:all,:conditions=>["parent_id = 0 and is_transverse = 1"]).each do |ct|
+  def deploy_parents_is_transverse(parent = nil)
+
+    query = "parent_id = 0 and is_transverse = 1"
+    if parent != nil
+      query += " and id = " + parent.id.to_s
+    end
+
+    ChecklistItemTemplate.find(:all,:conditions=>[query]).each do |ct|
       ct.deploy_as_parent_is_transverse
     end
   end
@@ -148,32 +176,47 @@ options:
   # 
   # DEPLOY CHILDS
   # 
-  def deploy_childs
-    self.deploy_childs_is_qr_qwr
-    self.deploy_childs_request
-    self.deploy_childs_is_transverse
+  def deploy_childs(parent = nil)
+    self.deploy_childs_is_qr_qwr(parent)
+    self.deploy_childs_request(parent)
+    self.deploy_childs_is_transverse(parent)
   end
 
-  def deploy_childs_is_qr_qwr
-    ChecklistItemTemplate.find(:all,:conditions=>["parent_id != 0 and is_qr_qwr = 1 and is_transverse = 0"]).each do |ct|
+  def deploy_childs_is_qr_qwr(parent = nil)
+
+    query = "parent_id != 0 and is_qr_qwr = 1 and is_transverse = 0"
+    if parent != nil
+      query += " and parent_id = " + parent.id.to_s
+    end
+
+    ChecklistItemTemplate.find(:all,:conditions=>[query]).each do |ct|
       ct.deploy_as_childs_is_qr_qwr
     end   
   end
 
-  def deploy_childs_request
-    ChecklistItemTemplate.find(:all,:conditions=>["parent_id != 0 and is_transverse = 0"]).each do |ct|
-                  Rails.logger.info("++DEPLOY CHILDS REQUEST")
+  def deploy_childs_request(parent = nil)
 
+    query = "parent_id != 0 and is_transverse = 0"
+    if parent != nil
+      query += " and parent_id = " + parent.id.to_s
+    end
+
+    ChecklistItemTemplate.find(:all,:conditions=>[query]).each do |ct|
       ct.deploy_as_childs_request
     end
   end
 
-  def deploy_childs_is_transverse
-    ChecklistItemTemplate.find(:all,:conditions=>["parent_id != 0 and is_transverse = 1"]).each do |ct|
+  def deploy_childs_is_transverse(parent = nil)
+
+    query = "parent_id != 0 and is_transverse = 1"
+    if parent != nil
+      query += " and parent_id = " + parent.id.to_s
+    end
+
+    ChecklistItemTemplate.find(:all,:conditions=>[query]).each do |ct|
       ct.deploy_as_childs_is_transverse
     end
   end
-
 
   def indicators
     @templates = ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0 and parent_id!=0", :order=>"is_transverse, `order`, id")
