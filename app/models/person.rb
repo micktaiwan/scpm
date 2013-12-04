@@ -28,8 +28,8 @@ class Person < ActiveRecord::Base
   serialize  :settings, PersonSettings
 
   before_save :encrypt_password
-
   attr_accessor :password
+
   def tags
     lines_tags = LineTag.find(:all, :conditions=>"line_id in ( select id from wl_lines where person_id=#{self.id} )").map{|l|l.tag_id}.uniq
     tags = []
@@ -40,13 +40,16 @@ class Person < ActiveRecord::Base
     end
     return tags
   end
+
   def lines_tagged
     return LineTag.find(:all, :conditions=>"line_id in ( select id from wl_lines where person_id=#{self.id} )").map{|l|l.id}
   end
+
   def projects # lines associated to projects
     projects = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"])
     return projects
   end
+
   def projects_map
     projects_ids = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"]).collect{|l| l.project_id}.uniq
     filter       = []
@@ -56,6 +59,7 @@ class Person < ActiveRecord::Base
     end
     return filter
   end
+
   def sdp_tasks
     sdp_tasks = []
     WlLine.find(:all, :conditions=>["person_id=#{self.id}"]).each do |l|
@@ -67,6 +71,7 @@ class Person < ActiveRecord::Base
     end
     return sdp_tasks
   end
+
   def iterations
     iterations = []
     self.sdp_tasks.each do |sdp_task|
@@ -76,12 +81,14 @@ class Person < ActiveRecord::Base
     return iterations.sort_by{|i| [i.project_code, i.name]} if iterations != []
     return iterations
   end
+
   def save_default_settings
     if self.settings.nil?
       self.settings = PersonSettings.new()
       self.save
     end
   end
+
   # calculate initial, remaining, balance, balance% and remaining delay
   def sdp_balance
     tasks = SDPTask.find(:all, :conditions=>"collab LIKE '%#{self.trigram}%'")
@@ -267,7 +274,7 @@ class Person < ActiveRecord::Base
       m.checklist_items.select{ |i|
         i.ctemplate.ctype!='folder' and i.status==0
         }.size > 0
-      }.sort_by { |m| [m.project.full_name, m.name] }  
+      }.sort_by { |m| [m.project.full_name, m.name] }
   end
 
   # based on workload, find tbv requests that need to be validated asap
@@ -317,7 +324,7 @@ class Person < ActiveRecord::Base
     end
     return returnHash
   end
-  
+
   def get_request_reminder
     #all = Request.all
     not_started          = Request.find(:all, :conditions=>["start_date != '' and start_date <= ? and resolution!='in progress' and resolution!='ended' and resolution!='aborted' and status!='cancelled'  and status!='removed' and status!='to be validated' and assigned_to = ?", Date.today(), self.rmt_user], :order=>"start_date")
@@ -346,7 +353,7 @@ class Person < ActiveRecord::Base
     #end
     return returnHash;
   end
-  
+
 protected
 
   # before filter
