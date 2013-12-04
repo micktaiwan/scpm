@@ -89,16 +89,6 @@ options:
     render(:nothing=>true)
   end
 
-
-  # def deploy
-  #   id = params[:id]
-  #   begin
-  #     ChecklistItemTemplate.find(id).deploy
-  #   rescue Exception => e
-  #     @error =  e.message
-  #   end
-  # end
-
   def deploy_all
     check_parents
     deploy_parents
@@ -109,19 +99,23 @@ options:
   def deploy_parent_and_childs
     parent = ChecklistItemTemplate.find(:first, :conditions=>["id = ?", params[:ctemplate_id]])
     if parent
+      check_parents(parent)
       deploy_parents(parent)
       deploy_childs(parent)
     end
     render(:nothing=>true)
   end
 
-  #
-  # Faire une méthode qui va vérifier que les templates parents ont les bons milestones et WP de ses enfants, cette méthode sera appelée en premier lieu
-  #
-  #
-  def check_parents
-    ChecklistItemTemplate.find(:all).each do |ct|
-      ct.check_parent
+  # Check parents
+  def check_parents(parent = nil)
+    if parent != nil
+      ChecklistItemTemplate.find(:all, :conditions=>["id = ?",parent.id.to_s]).each do |ct|
+        ct.check_parent
+      end
+    else
+      ChecklistItemTemplate.find(:all).each do |ct|
+        ct.check_parent
+      end
     end
   end
 
