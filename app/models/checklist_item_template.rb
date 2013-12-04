@@ -77,7 +77,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
   # Deploy this checklist item template as parent for each projects/milestones is_qr_qwr
   def deploy_as_parent_is_qr_qwr
     for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
-      project.milestones.each do |milestone|
+      project.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each do |mlestone|
         i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.id, milestone.id])
         if i == nil
           ChecklistItem.create(:milestone_id=>milestone.id, :parent_id=>0, :template_id=>self.id)
@@ -119,7 +119,7 @@ class ChecklistItemTemplate < ActiveRecord::Base
     # Each projects
     for project in Project.find(:all, :conditions => ["is_qr_qwr = 1"]).select { |p| !p.is_ended}
       # Each milestones
-      project.milestones.each do |milestone|
+      project.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each do |mlestone|
         i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.id, milestone.id])
         if i == nil
           # Get the parent

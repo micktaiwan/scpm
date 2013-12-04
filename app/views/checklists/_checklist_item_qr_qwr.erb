@@ -1,4 +1,4 @@
-<% if (@milestone.done == 0 or i.status != 0 or (i.ctemplate.parent_id == 0 and i.isChildrenActive) or i.request_id != nil) %>
+<%# if (@milestone.done == 0 or i.status != 0 or (i.ctemplate.parent_id == 0 and i.isChildrenActive) or i.request_id != nil) %>
   <li>
     <% if !i.ctemplate %>
       <strong>No template!</strong>
@@ -27,4 +27,4 @@
     <% end %>
   </li>
 
-<% end %>
+<%# end %>

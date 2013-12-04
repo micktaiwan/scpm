@@ -62,7 +62,12 @@ class Milestone < ActiveRecord::Base
 
   # Deploy checklist items from checklist templates
   def deploy_checklists
-    return if checklist_not_allowed?
+
+    # If ths milestone shouldn't have anymore some checklists. We delete the checklist items which are not already be used
+    if checklist_not_allowed?
+      ChecklistItem.find(:all, :conditions=>["status = 0 and milestone_id=? and project_id IS NULL", self.id]).each(&:destroy)
+      return
+    end
 
     # IS_QR_QWR 
     if self.project.is_qr_qwr == true
@@ -135,44 +140,6 @@ class Milestone < ActiveRecord::Base
     end
 
   end
-
-  # # Deploy checklist items from checklist template and for a specific request
-  # def deploy_checklist(template, request)
-  #   p = template.find_or_deploy_parent(self,request)
-  #   parent_id = p ? p.id : 0
-  #   i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id=?", template.id, self.id, request.id])
-  #   if not i
-  #      ChecklistItem.create(:milestone_id=>self.id, :request_id=>request.id, :parent_id=>parent_id, :template_id=>template.id)
-  #   else
-  #     # parent change handling
-  #     i.parent_id = parent_id
-  #     i.save
-  #     # if some milestone_names or workpackages have been added, the new ChecklistItem will be created
-  #     # The detection of removal of milestones or workpackages must be done elsewhere
-  #     # TODO is_transverse:
-  #     # if changed from no to yes, a lot of cleanup must be done
-  #     # for yes to no, the ChecklistItems will be created, cleanup the ProjectCheckItems
-  #   end
-  # end
-
-  # # Deploy checklist items form checklist template but without request
-  # def deploy_checklist_without_request(template)
-  #   p = template.find_or_deploy_parent_without_request(self)
-  #   parent_id = p ? p.id : 0
-  #   i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL", template.id, self.id])
-  #   if not i
-  #      ChecklistItem.create(:milestone_id=>self.id, :request_id=>nil, :parent_id=>parent_id, :template_id=>template.id)
-  #   else
-  #     # parent change handling
-  #     i.parent_id = parent_id
-  #     i.save
-  #     # if some milestone_names or workpackages have been added, the new ChecklistItem will be created
-  #     # The detection of removal of milestones or workpackages must be done elsewhere
-  #     # TODO is_transverse:
-  #     # if changed from no to yes, a lot of cleanup must be done
-  #     # for yes to no, the ChecklistItems will be created, cleanup the ProjectCheckItems
-  #   end
-  # end
 
   def destroy_checklist
     ChecklistItem.destroy_all(["milestone_id=?", self.id])
