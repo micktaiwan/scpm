@@ -99,7 +99,7 @@ options:
   # end
 
   def deploy_all
-    # check_parents
+    check_parents
     deploy_parents
     deploy_childs
     render(:nothing=>true)
