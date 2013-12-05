@@ -65,7 +65,7 @@ class Milestone < ActiveRecord::Base
 
     # If ths milestone shouldn't have anymore some checklists. We delete the checklist items which are not already be used
     if checklist_not_allowed?
-      ChecklistItem.find(:all, :conditions=>["status = 0 and milestone_id=? and project_id IS NULL", self.id]).each(&:destroy)
+      ChecklistItem.find(:all, :conditions=>["parent_id != 0 and status = 0 and milestone_id=? and project_id IS NULL", self.id]).each(&:destroy)
       return
     end
 
@@ -88,7 +88,7 @@ class Milestone < ActiveRecord::Base
           }
             # Deploy child is qr qwr
             i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", t.id, self.id])
-            if !i
+            if i == nil
               # Get the parent
               parent = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", t.parent.id, self.id])
               if parent
