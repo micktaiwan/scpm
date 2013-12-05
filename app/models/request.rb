@@ -792,18 +792,6 @@ class Request < ActiveRecord::Base
     self.project.milestones.select{|m| names.include?(m.name)}
   end
 
-  def deploy_checklists
-    for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0")
-      deploy_checklist(t)
-    end
-  end
-
-  def deploy_checklist(ctemplate)
-    self.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and ctemplate.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
-      m.deploy_checklist(ctemplate, self)
-      }
-  end
-
   def wl_load_by_year(year)
     # get workload line
     line = WlLine.find_by_request_id(self.request_id)
