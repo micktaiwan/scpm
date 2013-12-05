@@ -8,7 +8,11 @@
 			<li><span class="bold">Total Spider Prev</span> 				: <%= hash_by_qr_qwr["total_spider_prev"].to_s %></li>
 			<!-- QS Counters -->
 			<li>
-				<span class="bold">QS (realised/available)</span> 			: <%= hash_by_qr_qwr["qs_x"].to_s %> / <%= hash_by_qr_qwr["qs_y"].to_s %>
+				<span class="bold">QS (realised/available)</span> 			: 
+				<%= hash_by_qr_qwr["qs_x"].to_s %> / <%= hash_by_qr_qwr["qs_y"].to_s %> 
+				<% if hash_by_qr_qwr["qs_consumed_by_other_author"].to_i > 0 %>
+					(- <%= hash_by_qr_qwr["qs_consumed_by_other_author"] %> which have been consumed by other QR)
+				<% end %>
 				<% if ((hash_by_qr_qwr["qs_x"].to_i + 5 >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
 					<span class="warning"> Not enough QS tickets </span>
 				<% elsif ((hash_by_qr_qwr["qs_x"].to_i  >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
@@ -17,7 +21,11 @@
 			</li>
 			<!-- Spiders Counters -->
 			<li>
-				<span class="bold">Spiders (realised/available)</span>		: <%= hash_by_qr_qwr["spider_x"].to_s %> / <%= hash_by_qr_qwr["spider_y"].to_s %>
+				<span class="bold">Spiders (realised/available)</span>		: 
+				<%= hash_by_qr_qwr["spider_x"].to_s %> / <%= hash_by_qr_qwr["spider_y"].to_s %>
+				<% if hash_by_qr_qwr["spider_consumed_by_other_author"].to_i > 0 %>
+					 (- <%= hash_by_qr_qwr["spider_consumed_by_other_author"] %> which have been consumed by other QR)
+				<% end %>
 				<% if ((hash_by_qr_qwr["spider_x"].to_i + 5 >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
 					<span class="warning"> Not enough QS tickets </span>
 				<% elsif ((hash_by_qr_qwr["spider_x"].to_i  >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
