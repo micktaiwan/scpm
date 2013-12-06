@@ -42,6 +42,18 @@ class ChecklistItem < ActiveRecord::Base
     else
       return false if !self.project
     end
+
+    # if self.request_id != nil and (self.parent and self.parent.request_id == nil)
+      # return false 
+    # end
+
+    # Check requests
+    if self.request != nil and self.status != 0
+      if !self.ctemplate.workpackages.map{|w| w.title}.include?(self.request.work_package)
+        return false
+      end
+    end
+
     return true
   end
 
