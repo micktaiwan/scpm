@@ -43,9 +43,9 @@ class ChecklistItem < ActiveRecord::Base
       return false if !self.project
     end
 
-    # if self.request_id != nil and (self.parent and self.parent.request_id == nil)
-      # return false 
-    # end
+    if self.request_id != nil and (self.parent and self.parent.request_id == nil)
+      return false 
+    end
 
     # Check requests
     if self.request != nil and self.status != 0
