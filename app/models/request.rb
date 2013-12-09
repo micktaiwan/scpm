@@ -606,7 +606,7 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    if self.sdpiteration == "2013-Y3" or self.sdpiteration == "2014-Y1"
+    if self.sdpiteration == "2013-Y3"
       return LoadsRFP2013[wp_index_RFP2013(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2013" or  self.sdpiteration == "2012" or Date.parse(self.date_submitted) >= Date.parse('2012-01-10') or (self.status_new and self.status_new >= Date.parse('2012-01-10'))
       return LoadsRFP2012[wp_index_RFP2012(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
