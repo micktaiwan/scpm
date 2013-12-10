@@ -123,11 +123,19 @@ class ChecklistItemTemplate < ActiveRecord::Base
       # Each milestones
       project.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and self.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each do |milestone|
         i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.id, milestone.id])
+        # Create
         if i == nil
           # Get the parent
           parent = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.parent.id, milestone.id])
           if parent
             ChecklistItem.create(:milestone_id=>milestone.id, :parent_id=>parent.id, :template_id=>self.id)
+          end
+        # Update
+        else
+          parent = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", self.parent.id, milestone.id])
+          if parent
+            i.parent_id = parent.id
+            i.save
           end
         end
       end
@@ -143,10 +151,18 @@ class ChecklistItemTemplate < ActiveRecord::Base
         m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and (r.contre_visite=="No" or r.contre_visite_milestone==m1.name) and self.milestone_names.map{|mn| mn.title}.include?(m1.name)
         }.each { |m|
         c = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.id, r.id, m.id])
+        # Create
         if c == nil
           parent = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.parent.id, r.id, m.id])
           if parent
             ChecklistItem.create(:milestone_id=>m.id, :request_id=>r.id, :parent_id=>parent.id, :template_id=>self.id)
+          end
+        # Update
+        else
+          parent = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", self.parent.id, r.id, m.id])
+          if parent
+            c.parent_id = parent.id
+            c.save
           end
         end
       }
@@ -161,6 +177,12 @@ class ChecklistItemTemplate < ActiveRecord::Base
           parent = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=? and request_id IS NULL and milestone_id IS NULL", self.parent.id, project.id])
           if parent
             ChecklistItem.create(:project_id=>project.id, :parent_id=>parent.id, :template_id=>self.id )
+          end
+        else
+          parent = ChecklistItem.find(:first, :conditions=>["template_id=? and project_id=? and request_id IS NULL and milestone_id IS NULL", self.parent.id, project.id])
+          if parent
+            i.parent_id = parent.id
+            i.save
           end
         end
       end

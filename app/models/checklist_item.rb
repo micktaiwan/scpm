@@ -33,6 +33,11 @@ class ChecklistItem < ActiveRecord::Base
     self.ctemplate.values.alt(self.status)
   end
 
+  def is_qr_qwr
+    return true if self.request_id == nil and self.project == nil and self.milestone !=nil
+    return false
+  end
+
   def good?
     return false if !self.ctemplate
     if self.ctemplate.is_transverse == 0
@@ -43,6 +48,17 @@ class ChecklistItem < ActiveRecord::Base
       return false if !self.project
     end
 
+    # Check old is_qr_qwr. If checklistItem created for QR_QWR but the template is not QR_QWR anymore
+    if self.is_qr_qwr and self.ctemplate.is_qr_qwr == false and self.status == 0
+      return false
+    end
+
+    # Check old is_qr_qwr. If checklistItem created for QR_QWR but the project is not QR_QWR anymore
+    if self.is_qr_qwr and self.milestone.project.is_qr_qwr == false and self.status == 0
+      return false
+    end 
+
+    # Check if child with no request has a parent with request
     if self.request_id == nil and (self.parent and self.parent.request_id != nil)
       return false 
     end

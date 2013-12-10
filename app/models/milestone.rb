@@ -88,11 +88,20 @@ class Milestone < ActiveRecord::Base
           }
             # Deploy child is qr qwr
             i = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", t.id, self.id])
+            # Create
             if i == nil
               # Get the parent
               parent = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", t.parent.id, self.id])
               if parent
                 ChecklistItem.create(:milestone_id=>self.id, :parent_id=>parent.id, :template_id=>t.id)
+              end
+            # Update
+            else
+              # Get the parent
+              parent = ChecklistItem.find(:first, :conditions=>["template_id=? and milestone_id=? and request_id IS NULL and project_id IS NULL", t.parent.id, self.id])
+              if parent
+                i.parent_id = parent.id
+                i.save
               end
             end
       end
@@ -128,12 +137,20 @@ class Milestone < ActiveRecord::Base
 
               # Deploy child request
               c = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", t.id, r.id, self.id])
+              # Create
               if c == nil
-               parent = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", t.parent.id, r.id, self.id])
-               if parent
-                 ChecklistItem.create(:milestone_id=>self.id, :request_id=>r.id, :parent_id=>parent.id, :template_id=>t.id)
+                parent = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", t.parent.id, r.id, self.id])
+                if parent
+                  ChecklistItem.create(:milestone_id=>self.id, :request_id=>r.id, :parent_id=>parent.id, :template_id=>t.id)
                 end
-             end
+              # Update
+              else
+                parent = ChecklistItem.find(:first, :conditions=>["template_id=? and request_id=? and milestone_id=?", t.parent.id, r.id, self.id])
+                if parent
+                  c.parent_id = parent.id
+                  c.save
+                end
+              end
         end
         }
 
