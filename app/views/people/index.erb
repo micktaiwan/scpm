@@ -2,7 +2,6 @@
 <%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
 <%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
 <%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
-<%= link_to('Check settings', {:action=>'check_settings'},{:class=>"btnlnk"}) %>
 <%= link_to_remote('Check setting', {:url=>{ 
 	:action=>'check_settings'}, 
 	:success=>"alert('Success')",
