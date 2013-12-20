@@ -6,33 +6,50 @@
 			<li><span class="bold">Project number</span> 					: <%= hash_by_qr_qwr["nbProjects"].to_s %></li>
 			<li><span class="bold">Total QS Prev</span> 					: <%= hash_by_qr_qwr["total_qs_prev"].to_s %></li>
 			<li><span class="bold">Total Spider Prev</span> 				: <%= hash_by_qr_qwr["total_spider_prev"].to_s %></li>
+
+			<!-- ** -->
 			<!-- QS Counters -->
+			<!-- ** -->
 			<li>
 				<span class="bold">QS (realised/available)</span> 			: 
-				<%= hash_by_qr_qwr["qs_x"].to_s %> / <%= hash_by_qr_qwr["qs_y"].to_s %> 
+				<!-- Numbers comparison -->
+				<%= (hash_by_qr_qwr["qs_x"].to_i + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i).to_s %> / <%= hash_by_qr_qwr["qs_y"].to_s %>
+				<!-- Details -->
 				<% if hash_by_qr_qwr["qs_consumed_by_other_author"].to_i > 0 %>
-					(- <%= hash_by_qr_qwr["qs_consumed_by_other_author"] %> which have been consumed by other QR)
+					(<b><%= (hash_by_qr_qwr["qs_x"].to_i + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i).to_s %></b> including <b><%= hash_by_qr_qwr["qs_consumed_by_other_author"] %></b> which have been consumed by other QR)
 				<% end %>
-				<% if ((hash_by_qr_qwr["qs_x"].to_i + 5 >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
+
+				<!-- Warnings -->
+				<% if ((hash_by_qr_qwr["qs_x"].to_i + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i + 5 >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
 					<span class="warning"> Not enough QS tickets </span>
-				<% elsif ((hash_by_qr_qwr["qs_x"].to_i  >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
+				<% elsif ((hash_by_qr_qwr["qs_x"].to_i + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
 					<span class="alert"> Not enough QS tickets </span>
 				<% end %>
 			</li>
+
+			<!-- ** -->
 			<!-- Spiders Counters -->
+			<!-- ** -->
 			<li>
 				<span class="bold">Spiders (realised/available)</span>		: 
-				<%= hash_by_qr_qwr["spider_x"].to_s %> / <%= hash_by_qr_qwr["spider_y"].to_s %>
+				<!-- Numbers comparison -->
+				<%= (hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i) %> / <%= hash_by_qr_qwr["spider_y"].to_s %>
+				<!-- Details -->
 				<% if hash_by_qr_qwr["spider_consumed_by_other_author"].to_i > 0 %>
-					 (- <%= hash_by_qr_qwr["spider_consumed_by_other_author"] %> which have been consumed by other QR)
+					 (<b><%= (hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i) %></b> including <b><%= hash_by_qr_qwr["spider_consumed_by_other_author"] %></b> which have been consumed by other QR)
 				<% end %>
-				<% if ((hash_by_qr_qwr["spider_x"].to_i + 5 >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
+
+				<!-- Warnings -->
+				<% if ((hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i + 5 >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
 					<span class="warning"> Not enough QS tickets </span>
-				<% elsif ((hash_by_qr_qwr["spider_x"].to_i  >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
+				<% elsif ((hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i  >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
 					<span class="alert"> Not enough QS tickets </span>
 				<% end %>
 			</li>
+
+			<!-- ** -->
 			<!-- QS/spiders compare -->
+			<!-- ** -->
 			<li>
 				<span class="bold">Warnings</span> :
 				<% if hash_by_qr_qwr["qs_comp"].to_i != 0 %>
