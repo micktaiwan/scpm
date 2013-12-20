@@ -19,6 +19,7 @@ class ProjectsController < ApplicationController
     end
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")
+    @suite_tags  = SuiteTag.find(:all)
 
     @workstreams = Workstream.all()
     @workstreams = @workstreams.map { |ws| ws.name }

@@ -176,3 +176,8 @@ function check_duplicate_workload_interactions()
 	  }
 	});
 }
+
+function multiple_select_list_unselect(sender)
+{
+  alert(sender);
+}

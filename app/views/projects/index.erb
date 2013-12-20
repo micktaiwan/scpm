@@ -41,6 +41,11 @@
   <% for s in @qr %>
     <%= check_box_tag('qr[]',s.id) %> <%= s.name %><br/>
   <% end %>
+  </td><td>
+  <b>Suite</b><br/>
+  <% #select_tag "milestones", options_for_select(@milestones.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @workpackages.size  %>
+
+  <%= select_tag "suiteTags", options_for_select(@suite_tags.map {|st| [st.name, st.id]}), {:multiple => true, :size => 15, :onchange=>"multiple_select_list_unselect();"}  %>
   </td></tr>
   <tr>
   <td colspan=4>

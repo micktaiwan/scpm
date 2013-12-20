@@ -3,6 +3,9 @@ scpm_title: "SCPM Title"
 scpm_address: "http://scpm.sqli.com"
 project_name: "Your project code so you can configure display options"
 
+# report
+report_timeline_count: 30 # Number of timeline displayed in the list of projects
+
 # menu and access configuration
 workloads_add_by_request_number: true
 workloads_add_by_sdp_task: true
