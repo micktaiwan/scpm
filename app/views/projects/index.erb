@@ -43,9 +43,7 @@
   <% end %>
   </td><td>
   <b>Suite</b><br/>
-  <% #select_tag "milestones", options_for_select(@milestones.map{ |option_w| [option_w.title, option_w.id ]}), :multiple => true, :size => @workpackages.size  %>
-
-  <%= select_tag "suiteTags", options_for_select(@suite_tags.map {|st| [st.name, st.id]}), {:multiple => true, :size => 15, :onchange=>"multiple_select_list_unselect();"}  %>
+  <%= select_tag "suiteTags", options_for_select(@suite_tags.map {|st| [st.name, st.id]}, @selected_suite_tags), {:multiple => true, :size => 15}  %>
   </td></tr>
   <tr>
   <td colspan=4>

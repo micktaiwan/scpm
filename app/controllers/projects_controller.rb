@@ -20,6 +20,11 @@ class ProjectsController < ApplicationController
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")
     @suite_tags  = SuiteTag.find(:all)
+    @selected_suite_tags = nil
+    if  session[:project_filter_suiteTags]
+       @selected_suite_tags = session[:project_filter_suiteTags][1...-1].gsub("'","").split(",")
+       @selected_suite_tags = @selected_suite_tags.map{|t| t.to_i}
+    end
 
     @workstreams = Workstream.all()
     @workstreams = @workstreams.map { |ws| ws.name }
@@ -149,6 +154,11 @@ class ProjectsController < ApplicationController
     if not qr;  session[:project_filter_qr] = nil
     else;       session[:project_filter_qr] = qr.map {|t| t.to_i}
     end
+    suiteTags = params[:suiteTags]
+    if not suiteTags; session[:project_filter_suiteTags] = nil
+    else;             session[:project_filter_suiteTags] = "(#{suiteTags.map{|t| "'#{t}'"}.join(',')})"
+    end
+
     session[:project_filter_text] = params[:text]
     redirect_to(:action=>'index')
   end
@@ -757,6 +767,7 @@ private
     cond_wps << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond_wps << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond_wps << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_wps << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
     cond_wps << "is_running = 1"
     cond_wps << "project_id IS NOT NULL"
 
@@ -764,6 +775,7 @@ private
     cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_projects << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
     cond_projects << "project_id is null"
 
     @wps = Project.find(:all, :conditions=>cond_wps.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
@@ -787,6 +799,7 @@ private
     cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
     cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_projects << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
     cond_projects << "project_id is null"
 
 
