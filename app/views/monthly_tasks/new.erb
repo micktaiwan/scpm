@@ -1,0 +1,7 @@
+<h2>Add a monthly task</h2>
+<%= error_messages_for :monthlyTask %>
+<% form_for @monthlyTask, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>

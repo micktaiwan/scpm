@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131115143807) do
+ActiveRecord::Schema.define(:version => 20140106094007) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -356,6 +356,20 @@ ActiveRecord::Schema.define(:version => 20131115143807) do
   end
 
   add_index "milestones", ["project_id"], :name => "IDX_MILESTONES"
+
+  create_table "monthly_task_people", :force => true do |t|
+    t.integer  "monthly_task_id"
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "monthly_tasks", :force => true do |t|
+    t.string   "title"
+    t.integer  "load_value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "notes", :force => true do |t|
     t.text     "note"
@@ -789,7 +803,6 @@ ActiveRecord::Schema.define(:version => 20131115143807) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "file_link"
-    t.boolean  "impact_count", :default => false
   end
 
   add_index "spiders", ["milestone_id"], :name => "IDX_SPIDERS"
