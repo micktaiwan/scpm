@@ -1,54 +1,65 @@
 
+<% if create == 0 %>
 <SCRIPT language="Javascript">
-function add_new_person() {
-	 // alert($("new_person").getValue());
+	function add_new_person() {
+		 new Ajax.Request('/monthly_tasks/add_new_person', 
+	      {
+	        parameters: { id: <%= @monthlyTask.id %>, person_id: $("new_person").getValue()},
+	        onSuccess: function(response) 
+	        {
+				refresh_people("<%= @monthlyTask.id.to_s %>");
+	        },
+	        onFailure:function(response) 
+	        {
+	        	alert("Can't add the person");
+	        }
+	      });
 
-	// ajax
-	 new Ajax.Request('/monthly_tasks/add_new_person', 
-      {
-        parameters: { id: <%= @monthlyTask.id %>, person_id: $("new_person").getValue()},
-        onSuccess: function(response) 
-        {
-          // div_str_response = "milestone_ajax_div_"+project_id;
-          // $(div_str_response).innerHTML = response.responseText;
-        },
-        onFailure:function(response) 
-        {
-          // div_str_response = "milestone_ajax_div_"+project_id;
-          // $(div_str_response).innerHTML = "Loading Error";
-        }
-      });
+	}
 
-}
+	function remove_person(person_id) {
+		 new Ajax.Request('/monthly_tasks/remove_person', 
+	      {
+	        parameters: { id: <%= @monthlyTask.id %>, person_id: person_id},
+	        onSuccess: function(response) 
+	        {
+				refresh_people("<%= @monthlyTask.id.to_s %>");
+	        },
+	        onFailure:function(response) {
+	        	alert("Can't remove the person");
+	        }
+	      });
 
-function refresh_people(id) {
-	 new Ajax.Request('/monthly_tasks/get_people_for_monthly_task', 
-      {
-        parameters: { id: id},
-        onSuccess: function(response) 
-        {
-          // div_str_response = "milestone_ajax_div_"+project_id;
-          // $(div_str_response).innerHTML = response.responseText;
-        },
-        onFailure:function(response) 
-        {
-          // div_str_response = "milestone_ajax_div_"+project_id;
-          // $(div_str_response).innerHTML = "Loading Error";
-        }
-      });
-}
+	}
 
-refresh_people("<%= @monthlyTask.id.to_s %>");
+	function refresh_people(id) {
+		 new Ajax.Request('/monthly_tasks/get_people_for_monthly_task', 
+	      {
+	        parameters: {id: id},
+	        onSuccess: function(response) 
+	        {
+	        	$("people").innerHTML = response.responseText;
+	        },
+	        onFailure:function(response) 
+	        {
+	        	alert("Can't refresh the people view");
+	        }
+	      });
+	}
+
+	refresh_people("<%= @monthlyTask.id.to_s %>");
 </SCRIPT>
+<div style="background-color:#A9D0F5;float:right;" id="people"></div>
 
+<% end %>
 <p><%= label_tag 'Monthly Tasks Name' %>
 <%= text_field :monthlyTask, :title %> </p>
 
 <p><%= label_tag 'Load' %>
 <%= text_field :monthlyTask, :load_value %> </p>
 
+<% if create == 0 %>
 <br />
-<p><%= label_tag 'Add new person' %>
-<%= select_tag "new_person", options_for_select(@people.map{ |option_w| [option_w.name, option_w.id ]})  %>  <input type="button" value="Add" id="add_person" onClick="add_new_person();" /></p>
-
-<div id="people"></div>
+	<p><%= label_tag 'Add new person' %>
+	<%= select_tag "new_person", options_for_select(@people.map{ |option_w| [option_w.name, option_w.id ]})  %>  <input type="button" value="Add" id="add_person" onClick="add_new_person();" /></p>
+<% end %>

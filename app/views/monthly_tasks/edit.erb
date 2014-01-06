@@ -2,7 +2,7 @@
 
 <%= error_messages_for :monthlyTask %>
 <% form_for @monthlyTask, :url=>{:action=>'update', :id=>@monthlyTask.id} do |f| -%>
-  <%= render(:partial => f) %>
+  <%= render(:partial => f, :locals=>{:create=>0}) %>
   <p><label>&nbsp;</label>
   <%= submit_tag 'send' %></p>
 <% end -%>
