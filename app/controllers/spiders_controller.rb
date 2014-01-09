@@ -18,7 +18,9 @@ class SpidersController < ApplicationController
   # Spider page for a project
   def project_spider
     # Search project from parameter
-    id = params[:project_id]
+    id                   = params[:project_id]
+    @delete_spider_conso = params[:delete_spider_conso]
+
     @project = Project.find(id)
     
     # search milestonename from parameter
@@ -37,7 +39,9 @@ class SpidersController < ApplicationController
   # History of one spider
   def project_spider_history
     # Search project for paramater
-    id = params[:spider_id]
+    id                   = params[:spider_id]
+    @delete_spider_conso = params[:delete_spider_conso]
+
     @spider = Spider.find(id)
     # generate_table_history
     generate_table_history(@spider)
@@ -140,6 +144,43 @@ class SpidersController < ApplicationController
     redirect_to :controller=>:projects, :action=>:show, :id=>project_id
   end
 
+
+  def delete_spider_consolidated
+
+    result      = 0
+    spider_id   = params[:id]
+    project_id  = params[:project_id]
+    spiderParam = Spider.find(:first,:conditions => ["id = ?", spider_id])
+
+
+    # If ticket
+    if spiderParam.impact_count
+      spider_history = HistoryCounter.find(:first, :conditions=>["concerned_spider_id = ?", spiderParam.id.to_s])
+      if spider_history and spider_history.author_id.to_s == current_user.id.to_s
+     
+        result = 1
+        # Remove from history_counter
+        streamRef     = Stream.find_with_workstream(spiderParam.project.workstream)
+        streamRef.delete_spider_history_counter(current_user,spiderParam)
+
+        # Decrement counter
+        spiderParam.project.spider_count = spiderParam.project.spider_count - 1
+        spiderParam.project.save
+      end
+    # If without ticket
+    else 
+      result = 1
+    end
+
+    if result == 1
+      # Delete spider
+      Spider.destroy(spider_id)
+      redirect_to :controller=>:spiders, :action=>:project_spider, :project_id=>spiderParam.project_id.to_s, :milestone_id=>spiderParam.milestone_id.to_s, :delete_spider_conso=>result
+    else
+      redirect_to :controller=>:spiders, :action=>:project_spider_history, :spider_id=>spiderParam.id.to_s, :delete_spider_conso=>result
+    end
+
+  end
 
   # ------------------------------------------------------------------------------------
   # CREATE HTML ELEMENTS
@@ -319,6 +360,10 @@ class SpidersController < ApplicationController
     spiderProject = Project.find(spiderParam.project_id)
     
     if((spiderProject) && (params[:AQ_spider] == "NO"))
+      
+      spiderParam.impact_count = true;
+      spiderParam.save
+
       # Insert in history_counter
       streamRef     = Stream.find_with_workstream(spiderProject.workstream)
       streamRef.set_spider_history_counter(current_user,spiderParam)

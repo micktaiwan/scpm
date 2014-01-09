@@ -110,6 +110,10 @@ function getDocHeight() {
 }
 </script>
 
+<% if @delete_spider_conso == "1" %>
+	<div class="log_message">Spider Consolidation deleted</div>
+<% end %>
+
 
 <%= link_to "Back to project", :controller=>'projects', :action=>'show', :id=>@currentProjectId %>
 <!-- *** -->
