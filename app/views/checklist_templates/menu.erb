@@ -5,7 +5,7 @@
 <%= link_to('Last', {:controller=>'checklists', :action=>'last'}, {:class=>"btnlnk"}) %>
 <%= link_to('Deliverable list per WP', {:controller=>'checklist_templates', :action=>'list_per_wp'}, {:class=>"btnlnk"}) %>
 
-<%= link_to_remote('Deploy all', {:url=>{:controller=>'checklist_templates', 
+<%= link_to_remote('Deploy all / Check All', {:url=>{:controller=>'checklist_templates', 
 	:action=>'deploy_all'}, :loading=>"$('deploy_all').innerHTML='Deploying...'", 
 	:success=>"$('deploy_all').innerHTML='Deploy all';alert('Deployed all templates')",
 	:failure=>"$('deploy_all').innerHTML='Deploy all';alert('Failure')"},
@@ -13,6 +13,5 @@
 
 <%= link_to_remote('Clean up', {:url=>{:controller=>'checklists', :action=>'cleanup'}, :loading=>"$('cleanup').innerHTML='Cleaning up...'", :complete=>"$('cleanup').innerHTML='Clean up';alert('Cleaned up')"},{:class=>"btnlnk special",:id=>"cleanup"}) %>
 
-<%= link_to_remote('Check all milestones', {:url=>{:controller=>'projects', :action=>'check_all_milestones'}, :loading=>"$('check_milestones').innerHTML='Checking up...'", :complete=>"$('check_milestones').innerHTML='Check all milestones';alert('Checked all milestones')"},{:class=>"btnlnk special",:id=>"check_milestones"}) %>
 <br/>
 <br/>

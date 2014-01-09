@@ -76,7 +76,7 @@ function add(id, nb_months, has_requests, has_rights) {
                 </font>
               <% end %>
               <ul id="checks" style="display:none">
-                <%= render(:partial=>'checklists/checklist_item', :collection=>@project.project_check_root_items, :as=>:i) %>
+                <%= render(:partial=>'checklists/project_checklist_item', :collection=>@project.project_check_root_items, :as=>:i) %>
               </ul>
             <% end %>
             <%= render(:partial=>'status', :object=>@status) %>
