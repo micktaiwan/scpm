@@ -32,7 +32,7 @@ module SdpDB
     'WP4.1 - Surveillance Audit'=>[32546,31248],
     'WP4.2 - Surveillance Root cause'=>[32547,31248],
     'WP4.3 - Actions Implementation & Control'   => [32548,31248], #NEW
-    'WP4.4 – Fast Root Cause Analysis' => [35603, 31248], #2014
+    'WP4.4 - Fast Root Cause Analysis' => [35603, 31248], #2014
     'WP5 - Change Accompaniment'=>[32323,31249],
     'WP5.1 - Change: Diagnosis & Action Plan'    => [32549,31249], #NEW
     'WP5.2 - Change : Implementation Support & Follow-up' => [32550,31249], #NEW
@@ -48,9 +48,9 @@ module SdpDB
     "WP6.10.1 - Coaching Agility: Diagnosis & project launch"   => [32503,31250], #NEW
     "WP6.10.2 - Coaching Agility: Sprint 0 support"             => [32551,31250], #NEW
     "WP6.10.3 - Coaching Agility: Sprint coaching"              => [32552,31250], #NEW
-    'WP6.11 – Coaching Risks Management'                        => [35604,31250], #2014
-    'WP7.1 – Light Expertise'                                   => [35605,31568], #2014
-    'WP7.2 – Complete Expertise'                                => [35606,31568], #2014
+    'WP6.11 - Coaching Risks Management'                        => [35604,31250], #2014
+    'WP7.1 - Light Expertise'                                   => [35605,31568], #2014
+    'WP7.2 - Complete Expertise'                                => [35606,31568], #2014
     "WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management"      => [32489,31568], #NEW
     "WP7.1.2 - Expertise Activities for Multi Projects: Risks Management"             => [32553,31568], #NEW
     "WP7.1.3 - Expertise Activities for Multi Projects: Test Management"              => [32554,31568], #NEW

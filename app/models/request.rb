@@ -67,7 +67,7 @@ class Request < ActiveRecord::Base
   "WP7.1.4 - Expertise Activities for Multi Projects: Change Management"                  => "Multi Proj. Change ", #NEW
   "WP7.1.5 - Expertise Activities for Multi Projects: Lessons Learnt"                     => "Multi Proj. Lessons", #NEW
   "WP7.1.6 - Expertise Activities for Multi Projects: Configuration Management"           => "Multi Proj. Conf.", #NEW
-  "WP7.2 – Complete Expertise"                                                            => "Compl. Exp.", #2014
+  "WP7.2 - Complete Expertise"                                                            => "Compl. Exp.", #2014
   "WP7.2.1 - Expertise Activities for Project: Requirements Management"                   => "Proj. Req.", #NEW
   "WP7.2.2 - Expertise Activities for Project: Risks Management"                          => "Proj. Risks", #NEW
   "WP7.2.3 - Expertise Activities for Project: Test Management"                           => "Proj. Test", #NEW
@@ -788,7 +788,13 @@ class Request < ActiveRecord::Base
     raise "no workpackage #{wp}" if not rv
     rv
   end
-  
+
+  def wp_index_RFP2014(wp, cv)
+    rv = Wp_index_RFP2014[wp+(cv=="Yes" ? "CV":"")]
+    raise "no workpackage #{wp}" if not rv
+    rv
+  end
+
   def milestone_index(m)
     rv = Milestone_index[m]
     raise "no milestone #{m}" if not rv
