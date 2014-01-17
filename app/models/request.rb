@@ -43,6 +43,7 @@ class Request < ActiveRecord::Base
   "WP4.1 - Surveillance Audit" 		                      => "Audit",
   "WP4.2 - Surveillance Root cause"                     => "RCA",
   "WP4.3 - Actions Implementation & Control"            => "Act. Impl. Ctrl.", #NEW
+  "WP4.4 - Fast Root Cause Analysis"                    => "Fast RCA", #2014
   "WP5 - Change Accompaniment" 		                      => "Change",
   "WP5.1 - Change: Diagnosis & Action Plan"             => "Change Diag.", #NEW
   "WP5.2 - Change : Implementation Support & Follow-up" => "Change Impl. Supp.", #NEW
@@ -58,12 +59,15 @@ class Request < ActiveRecord::Base
   "WP6.10.1 - Coaching Agility: Diagnosis & project launch" => "CA. Diag.", #NEW
   "WP6.10.2 - Coaching Agility: Sprint 0 support"           => "CA. Sprint 0", #NEW
   "WP6.10.3 - Coaching Agility: Sprint coaching"            => "CA. Sprint n", #NEW
+  "WP6.11 - Coaching Risks Management"                      => "C. Risks", #2014
+  "WP7.1 - Light Expertise"                                 => "Light Exp.", #2014
   "WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management"            => "Multi Proj. Req.", #NEW
   "WP7.1.2 - Expertise Activities for Multi Projects: Risks Management"                   => "Multi Proj. Risks", #NEW
   "WP7.1.3 - Expertise Activities for Multi Projects: Test Management"                    => "Multi Proj. Test", #NEW
   "WP7.1.4 - Expertise Activities for Multi Projects: Change Management"                  => "Multi Proj. Change ", #NEW
   "WP7.1.5 - Expertise Activities for Multi Projects: Lessons Learnt"                     => "Multi Proj. Lessons", #NEW
   "WP7.1.6 - Expertise Activities for Multi Projects: Configuration Management"           => "Multi Proj. Conf.", #NEW
+  "WP7.2 - Complete Expertise"                                                            => "Compl. Exp.", #2014
   "WP7.2.1 - Expertise Activities for Project: Requirements Management"                   => "Proj. Req.", #NEW
   "WP7.2.2 - Expertise Activities for Project: Risks Management"                          => "Proj. Risks", #NEW
   "WP7.2.3 - Expertise Activities for Project: Test Management"                           => "Proj. Test", #NEW
@@ -178,6 +182,69 @@ class Request < ActiveRecord::Base
     "WP1.1 - Quality ControlCV"                           => 4,
     "WP1.2 - Quality AssuranceCV"                         => 12
   }
+  
+  Wp_index_RFP2014 = {
+    "WP1.1 - Quality Control"                             => 0,
+    "WP1.2 - Quality Assurance"                           => 8,
+    "WP1.3 - BAT"                                         => 16,
+    "WP1.4 - Agility"                                     => 20,
+    "WP1.5 - SQR"                                         => 24,
+    "WP1.6.1 - QWR DWQAP"                                 => 28,
+    "WP1.6.2 - QWR Project Setting-up"                    => 29,
+    "WP1.6.3 - QWR Support, Reporting & KPI"              => 30,
+    "WP1.6.4 - QWR Quality Status"                        => 31,
+    "WP1.6.5 - QWR Spiders"                               => 32,
+    "WP1.6.6 - QWR QG BRD"                                => 33,
+    "WP1.6.7 - QWR QG TD"                                 => 34,
+    "WP1.6.8 - QWR Lessons Learnt"                        => 35,
+    "WP2 - Quality for Maintenance"                       => 36,
+    "WP3.0 - Old Modeling"                                => 37,
+    "WP3.1 - Modeling Support"                            => 38,
+    "WP3.2 - Modeling Conception and Production"          => 39,
+    "WP3.2.1 - Business Process Layout"                   => 40,
+    "WP3.2.2 - Functional Layout (Use Cases)"             => 41,
+    "WP3.2.3 - Information Layout (Data Model)"           => 42,
+    "WP3.3 - Modeling BAT specific Control"               => 43,
+    "WP3.4 - Modeling BAT specific Production"            => 44,
+    "WP4 - Surveillance"                                  => 45,
+    "WP4.1 - Surveillance Audit"                          => 46,
+    "WP4.2 - Surveillance Root cause"                     => 47,
+    "WP4.3 - Actions Implementation & Control"            => 48,
+    "WP4.4 - Fast Root Cause Analysis"                    => 49,
+
+    "WP5 - Change Accompaniment"                          => 50,
+    "WP5.1 - Change: Diagnosis & Action Plan"             => 51,
+    "WP5.2 - Change : Implementation Support & Follow-up" => 52,
+    "WP6.1 - Coaching PP"                                 => 53,
+    "WP6.2 - Coaching BRD"                                => 54,
+    "WP6.3 - Coaching V&V"                                => 55,
+    "WP6.4 - Coaching ConfMgt"                            => 56,
+    "WP6.5 - Coaching Maintenance"                        => 57,
+    "WP6.6 - Coaching HLR"                                => 58,
+    "WP6.7 - Coaching Business Process"                   => 59,
+    "WP6.8 - Coaching Use Case"                           => 60,
+    "WP6.9 - Coaching Data Model"                         => 61,
+    "WP6.10.1 - Coaching Agility: Diagnosis & project launch"=> 62,
+    "WP6.10.2 - Coaching Agility: Sprint 0 support"       => 63,
+    "WP6.10.3 - Coaching Agility: Sprint coaching"        => 64,
+    "WP6.11 - Coaching Risks Management"                  => 65,
+    "WP7.1 - Light Expertise"                             => 66,
+    "WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management"            => 67,
+    "WP7.1.2 - Expertise Activities for Multi Projects: Risks Management"                   => 68,
+    "WP7.1.3 - Expertise Activities for Multi Projects: Test Management"                    => 69,
+    "WP7.1.4 - Expertise Activities for Multi Projects: Change Management"                  => 70,
+    "WP7.1.5 - Expertise Activities for Multi Projects: Lessons Learnt"                     => 71,
+    "WP7.1.6 - Expertise Activities for Multi Projects: Configuration Management"           => 72,
+    "WP7.2 - Complete Expertise"                                                            => 73,
+    "WP7.2.1 - Expertise Activities for Project: Requirements Management"                   => 74,
+    "WP7.2.2 - Expertise Activities for Project: Risks Management"                          => 75,
+    "WP7.2.3 - Expertise Activities for Project: Test Management"                           => 76,
+    "WP7.2.4 - Expertise Activities for Project: Change Management"                         => 77,
+    "WP7.2.5 - Expertise Activities for Project: Lessons Learnt"                            => 78,
+    "WP7.2.6 - Expertise Activities for Project: Configuration Management"                  => 79,
+    "WP1.1 - Quality ControlCV"                           => 4,
+    "WP1.2 - Quality AssuranceCV"                         => 12
+  }
 
   Comp_index = {
   "Easy" 		  => 0,
@@ -193,6 +260,149 @@ class Request < ActiveRecord::Base
   "Post-M10" 	=> 3,
   "N/A" 		  => 0
   }
+
+ # reminder: minus 10% for operational meetings
+  LoadsRFP2014 = [
+    # WP 1.1
+    [1.875, 2,  2.375], #0
+    [3.125, 3.75, 5.25],
+    [2.375, 3.25, 5.5],
+    [3.75,  4.5,  6.5],
+    # WP 1.1 contre visite
+    [0.375, 0.375,  0.625], #4
+    [0.875, 0.875,  1.25],
+    [0.375, 0.375,  0.3750],
+    [1.75,  2.125,  2.5],
+    # WP 1.2 Quality assurance
+    [2.875, 3.25, 3.75], #8
+    [5.375, 6.875,  9.25],
+    [5.25,  5.75, 6.625],
+    [5.125, 6.5,  8.625],
+    # WP 1.2 Contre visite
+    [0.375, 0.375,  0.375], #12
+    [1.75,  2.125,  2.5],
+    [1.75,  2.5,  3.375],
+    [2.5, 3.375,  4.25],
+    # WP 1.3
+    [0, 0, 0], # no M1-M3 #16
+    [2.125, 3,  3.875], 
+    [0.625, 0.875,  1.25],
+    [1.75,  2.375,  3.625],
+    # WP 1.4
+    [0, 0, 0], # no M1-M3 #20
+    [5.375, 6.875,  9.25], 
+    [1.125, 2,  2.75],
+    [1.75,  2.5,  3.5],
+    # WP 1.5
+    [ 0, 0, 4.375], #24  # WARNING N/A
+    [ 0, 2.5, 5.125],
+    [ 0, 2.5, 7],
+    [ 0, 0, 7.75],
+    # WP 1.6.1
+    [1.25,  2.5,  4.375], #28
+    # WP 1.6.2
+    [3.375, 4.25, 5], #29
+    # WP 1.6.3
+    [5.875, 7.75, 10.375], #30
+    # WP 1.6.4
+    [3.25,  16.25,  32.375], #31
+    # WP 1.6.5
+    [3.25,  13, 25.875], #32
+    # WP 1.6.6
+    [0.875, 1.25, 1.75], #33
+    # WP 1.6.7
+    [0.875, 1.25, 1.75], #34
+    # WP 1.6.8
+    [1, 1.25, 1.375], #35
+    # WP 2
+    [4.875, 7.25, 11.25], #36
+    # WP 3.0 Old (NOTE : Should not be used  WP3.0 OLD = WP3.1)
+    [9.310, 17.640, 24.990], #37
+    # WP 3.1
+    [8.5, 16.25,  22.5], #38
+    # WP 3.2 (Values from previous RFP)
+    [18.5, 42.75, 58.75], #39
+    # WP 3.2.1
+    [6.875, 20.625, 26.625], #40
+    # WP 3.2.2
+    [7.5, 13.75,  18.625], #41
+    # WP 3.2.3
+    [6.75,  12.5, 18.125], #42
+    # WP 3.3
+    [3.625, 6.25, 10], #43
+    # WP 3.4
+    [7.625, 14, 19.375], #44
+    # WP 4 (Values from previous RFP)
+    [5.125, 7.25, 11.375], #45
+    # WP 4.1
+    [13,  17.25,  26], #46
+    # WP 4.2
+    [8.625, 13, 21.625], #47
+    # WP 4.3
+    [4.375, 8.625,  17.250], #48
+    # WP 4.4
+    [2.625, 3.875,  5.125], #49
+    # WP 5  (Values from previous RFP)
+    [10, 21.75, 40], #50
+    # WP 5.1
+    [5, 11, 20], #51
+    # WP 5.2
+    [5, 11, 20], #52
+    # WP 6.1
+    [4.5, 10.625, 19.5], #53
+    # WP 6.2
+    [3.125, 9.75, 20.375], #54
+    # WP 6.3
+    [1.875, 5.5,  13.5], #55
+    # WP 6.4
+    [2.5, 12.75,  29.625], #56
+    # WP 6.5
+    [7.375, 11.25,  15.5], #57
+    # WP 6.6
+    [1.75,  5, 7.5], #58 # WARNING
+    # WP 6.7
+    [1.5, 6.25, 0], #59 # WARNING
+    # WP 6.8
+    [1.5, 6.25, 0], #60 # WARNING
+    # WP 6.9
+    [1.75,  7, 0], #61 #WARNING
+    # WP 6.10.1
+    [3.375, 5.125,  5.125], #62
+    # WP 6.10.2
+    [6.75,  10.25,  17], #63
+    # WP 6.10.3
+    [3.375, 6.75, 13.625], #64
+    # WP 6.11
+    [1.25, 2.5, 9], #65
+    # WP 7.1
+    [4.875, 7.25, 9.625], #66
+    # WP 7.1.1
+    [4.75,  8.625,  13], #67
+    # WP 7.1.2
+    [3, 7,  11.25], #68
+    # WP 7.1.3
+    [3.875, 7,  11.25], #69
+    # WP 7.1.4
+    [3, 0, 0], #70 # WARNING
+    # WP 7.1.5
+    [3, 7,  11.25], #71
+    # WP 7.1.6
+    [3, 7,  11.25], #72
+    # WP 7.2
+    [16, 22.75, 31.75], #73
+    # WP 7.2.1
+    [3.875, 5.125,  7.75], #74
+    # WP 7.2.2
+    [1.5, 0, 0], #75 # WARNING
+    # WP 7.2.3
+    [2.875, 3.5,  6], #76
+    # WP 7.2.4
+    [1.5, 5.125,  7.75], #77
+    # WP 7.2.5
+    [1.5, 0, 0], #78 # WARNING
+    # WP 7.2.6
+    [1.5, 3.5,  6] #79
+  ]
 
   # reminder: minus 10% for operational meetings
   LoadsRFP2013 = [
@@ -552,6 +762,7 @@ class Request < ActiveRecord::Base
     'WP6.10.1 - Coaching Agility - Diagnosis & Project Launch' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
     'WP6.10.2 - Coaching Agility - Sprint 0' =>     ['M5', 'M5/M7', 'G5', 'pg5', 'g5'],
     'WP6.10.3 - Coaching Agility - Sprint n' =>     ['M7', 'M9', 'M9/M10', 'M10','G6','pg6','g6'],
+    'WP6.11 - Coaching Risks Management'     =>     ['M13', 'G8', 'pg8', 'g8'],
     'WP7.2.1 - Expertise Activities for Project: Requirements Management' => ['M11', 'G7', 'pg7', 'g7'],
     'WP7.2.2 - Expertise Activities for Project: Risks Management' => ['M13', 'G8', 'pg8', 'g8'],
     'WP7.2.3 - Expertise Activities for Project: Test Management' => ['M11', 'G7', 'pg7', 'g7'],
@@ -577,7 +788,13 @@ class Request < ActiveRecord::Base
     raise "no workpackage #{wp}" if not rv
     rv
   end
-  
+
+  def wp_index_RFP2014(wp, cv)
+    rv = Wp_index_RFP2014[wp+(cv=="Yes" ? "CV":"")]
+    raise "no workpackage #{wp}" if not rv
+    rv
+  end
+
   def milestone_index(m)
     rv = Milestone_index[m]
     raise "no milestone #{m}" if not rv
@@ -606,7 +823,9 @@ class Request < ActiveRecord::Base
   end
 
   def workload2
-    if self.sdpiteration == "2013-Y3"
+    if self.sdpiteration    == "2014"
+      return LoadsRFP2014[wp_index_RFP2014(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
+    elsif self.sdpiteration == "2013-Y3"
       return LoadsRFP2013[wp_index_RFP2013(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
     elsif self.sdpiteration == "2013" or  self.sdpiteration == "2012" or Date.parse(self.date_submitted) >= Date.parse('2012-01-10') or (self.status_new and self.status_new >= Date.parse('2012-01-10'))
       return LoadsRFP2012[wp_index_RFP2012(self.work_package, self.contre_visite)+milestone_index(self.milestone)][comp_index(self.complexity)]
@@ -790,18 +1009,6 @@ class Request < ActiveRecord::Base
     names = self.milestone_names
     return [] if !names or !self.project # 24-Jul-2013: or !self.project  because a request can be associated to a stream and no project
     self.project.milestones.select{|m| names.include?(m.name)}
-  end
-
-  def deploy_checklists
-    for t in ChecklistItemTemplate.find(:all, :conditions=>"is_transverse=0")
-      deploy_checklist(t)
-    end
-  end
-
-  def deploy_checklist(ctemplate)
-    self.milestones.select{ |m1| m1.checklist_not_applicable==0 and m1.status==0 and m1.done==0 and ctemplate.milestone_names.map{|mn| mn.title}.include?(m1.name)}.each { |m|
-      m.deploy_checklist(ctemplate, self)
-      }
   end
 
   def wl_load_by_year(year)

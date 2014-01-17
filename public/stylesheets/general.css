@@ -34,3 +34,15 @@ div#banner {
   font-weight: bold;
   color: green;
 }
+
+.log_message 
+{
+  font-weight: bold;
+  background: #89A;
+  color: red;
+  opacity: 0.8;
+  padding:10px;
+  width:100%;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+}
