@@ -9,12 +9,14 @@ class MonthlyTasksController < ApplicationController
   def new
   	@monthlyTask = MonthlyTask.new()
   	@people = Person.find(:all)
+    @monthlyTaskTypes = MonthlyTaskType.find(:all)
   end
 
   def edit
     id = params[:id]
     @monthlyTask = MonthlyTask.find(id)
     @people = Person.find(:all)
+    @monthlyTaskTypes = MonthlyTaskType.find(:all)
   end
 
   def create

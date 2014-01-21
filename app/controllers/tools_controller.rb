@@ -456,33 +456,8 @@ class ToolsController < ApplicationController
       }
   end
 
-  def import_monthly_tasks_form
-
-    
-    @ope = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
-    @service_resp = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").select{ |p| p.has_role?('ServiceLineResp')}
-    @cpdp_people = Person.find(:all, :conditions=>"has_left=0 and is_cpdp=1", :order=>"name")
-  end
-
   def import_monthly_tasks
-    # operational people
-    ope_ids  = params["qr"]["ids"].join(",")
-    @oname   = params["qr_name"]
-    @oload   = params["qr_load"]
-    @ope     = Person.find(:all, :conditions=>"id in (#{ope_ids})", :order=>"name")
-    # line responsible people
-    resp_ids = params["resp"]
-    if not resp_ids; resp_ids = "0"; else; resp_ids = resp_ids["ids"].join(","); end
-    @rname = params["resp_name"]
-    @rload = params["resp_load"]
-    @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
-    # cp/dp people
-    cpdp_ids = params["cpdp"]
-    if not cpdp_ids; cpdp_ids = "0"; else; cpdp_ids = cpdp_ids["ids"].join(","); end
-    @cpdpName = params["cpdp_name"]
-    @cpdpLoad = params["cpdp_load"]
-    @cpdp = Person.find(:all, :conditions=>"id in(#{cpdp_ids})", :order=>"name")
-    render(:layout=>false)
+    @monthlyTasks = MonthlyTask.find(:all)
   end
 
   def requests_by_year

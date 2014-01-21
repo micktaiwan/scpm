@@ -52,14 +52,20 @@
 <div style="background-color:#A9D0F5;float:right;" id="people"></div>
 
 <% end %>
-<p><%= label_tag 'Monthly Tasks Name' %>
+<p><%= label_tag 'Monthly Task Name' %>
 <%= text_field :monthlyTask, :title %> </p>
 
 <p><%= label_tag 'Load' %>
 <%= text_field :monthlyTask, :load_value %> </p>
+
+<p><%= label_tag 'Type' %>
+<%= select(:monthlyTask, :monthly_task_type_id, @monthlyTaskTypes.map {|p| [p.name, p.id]}) %></td></tr>
 
 <% if create == 0 %>
 <br />
 	<p><%= label_tag 'Add new person' %>
 	<%= select_tag "new_person", options_for_select(@people.map{ |option_w| [option_w.name, option_w.id ]})  %>  <input type="button" value="Add" id="add_person" onClick="add_new_person();" /></p>
 <% end %>
+
+
+
