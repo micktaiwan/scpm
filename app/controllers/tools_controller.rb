@@ -133,19 +133,27 @@ class ToolsController < ApplicationController
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")
       tasks2012                          = SDPTask.find(:all, :conditions=>"iteration='2012'")
       tasks2013                          = SDPTask.find(:all, :conditions=>"iteration='2013'")
+      tasks2014                          = SDPTask.find(:all, :conditions=>"iteration='2014'")
       op2010                             = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011                             = tasks2011.inject(0) { |sum, t| t.initial+sum}
       op2012                             = tasks2012.inject(0) { |sum, t| t.initial+sum}
       op2013                             = tasks2013.inject(0) { |sum, t| t.initial+sum}
+      op2014                             = tasks2014.inject(0) { |sum, t| t.initial+sum}
       @operational2011_10percent         = round_to_hour(op2011*0.11111111111)
       @operational2012_10percent         = round_to_hour(op2012*0.11111111111)
       @operational2013_10percent         = round_to_hour(op2013*0.11111111111)
-      @operational_percent_total         = @operational2011_10percent + @operational2012_10percent + @operational2013_10percent
+      @operational2014_10percent         = round_to_hour(op2014*0.11111111111)
+      @operational_percent_total         = @operational2011_10percent + @operational2012_10percent + @operational2013_10percent + operational2014_10percent
       @operational_total_2011            = op2010 + op2011 + @operational2011_10percent
       @operational_total_2012            = op2012 + @operational2012_10percent
       @operational_total_2013            = op2013 + @operational2013_10percent
-      @operational_total                 = @operational_total_2011 + @operational_total_2012 + @operational_total_2013
-      @remaining                         = (tasks2010.inject(0) {|sum, t| t.remaining+sum} + tasks2011.inject(0) {|sum, t| t.remaining+sum} + tasks2012.inject(0) {|sum, t| t.remaining+sum} + tasks2013.inject(0) {|sum, t| t.remaining+sum})
+      @operational_total_2014            = op2014 + @operational2014_10percent
+      @operational_total                 = @operational_total_2011 + @operational_total_2012 + @operational_total_2013 + operational_total_2014
+      @remaining                         = (tasks2010.inject(0) {|sum, t| t.remaining+sum} 
+        + tasks2011.inject(0) {|sum, t| t.remaining+sum} 
+        + tasks2012.inject(0) {|sum, t| t.remaining+sum} 
+        + tasks2013.inject(0) {|sum, t| t.remaining+sum}  
+        + tasks2014.inject(0) {|sum, t| t.remaining+sum})
       @remaining_time                    = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.001).round * 0.001
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
       @theorical_management              = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH)*@remaining_time)
@@ -167,7 +175,7 @@ class ToolsController < ApplicationController
       @risks_remaining_should_be         = 0
       provision_qa_ci                    = 0
       @provisions.each { |p|
-        calculate_provision(p,@operational_total_2011, @operational_total_2012, @operational_total_2013, @operational_percent_total)
+        calculate_provision(p,@operational_total_2011, @operational_total_2012, @operational_total_2013, @operational_total_2014, @operational_percent_total)
         @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
         if p.title == 'Operational Management' or p.title == 'Project Management'
           @provisions_initial             += p.initial
@@ -339,18 +347,22 @@ class ToolsController < ApplicationController
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")
       tasks2012                          = SDPTask.find(:all, :conditions=>"iteration='2012'")
       tasks2013                          = SDPTask.find(:all, :conditions=>"iteration='2013'")
+      tasks2014                          = SDPTask.find(:all, :conditions=>"iteration='2014'")
       op2010                             = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011                             = tasks2011.inject(0) { |sum, t| t.initial+sum}
       op2012                             = tasks2012.inject(0) { |sum, t| t.initial+sum}
       op2013                             = tasks2013.inject(0) { |sum, t| t.initial+sum}
+      op2014                             = tasks2014.inject(0) { |sum, t| t.initial+sum}
       @operational2011_10percent_by_type         = round_to_hour(op2011*0.11111111111)
       @operational2012_10percent_by_type         = round_to_hour(op2012*0.11111111111)
-      @operational2013_10percent_by_type         = round_to_hour(op2012*0.11111111111)
-      @operational_percent_total_by_type         = @operational2011_10percent_by_type + @operational2012_10percent_by_type + @operational2013_10percent_by_type
+      @operational2013_10percent_by_type         = round_to_hour(op2013*0.11111111111)
+      @operational2014_10percent_by_type         = round_to_hour(op2014*0.11111111111)
+      @operational_percent_total_by_type         = @operational2011_10percent_by_type + @operational2012_10percent_by_type + @operational2013_10percent_by_type + @operational2014_10percent_by_type
       @operational_total_2011_by_type            = op2010 + op2011 + @operational2011_10percent_by_type
       @operational_total_2012_by_type            = op2012 + @operational2012_10percent_by_type
       @operational_total_2013_by_type            = op2013 + @operational2013_10percent_by_type
-      @operational_total_by_type                 = @operational_total_2011_by_type + @operational_total_2012_by_type + @operational_total_2013_by_type
+      @operational_total_2014_by_type            = op2014 + @operational2014_10percent_by_type
+      @operational_total_by_type                 = @operational_total_2011_by_type + @operational_total_2012_by_type + @operational_total_2013_by_type + @operational_total_2014_by_type 
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
     end
@@ -833,21 +845,21 @@ private
     (f/0.125).round * 0.125
   end
 
-  def calculate_provision(p, total2011, total2012, total2013, operational_percent)
+  def calculate_provision(p, total2011, total2012, total2013, total2014, operational_percent)
     factor = 1.25 # 20% of PM (reciprocal)
     case p.title
       when 'Project Management'
-        p.difference = round_to_hour(total2011*factor*0.09) + round_to_hour(total2012*factor*0.12) + round_to_hour(total2013*factor*0.12) - p.initial + PM_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.09) + round_to_hour(total2012*factor*0.12) + round_to_hour(total2013*factor*0.12) + round_to_hour(total2014*factor*0.12) - p.initial + PM_PROVISION_ADJUSTMENT
       when 'Risks'
-        p.difference = round_to_hour(total2011*factor*0.04) + round_to_hour(total2012*factor*0.02) + round_to_hour(total2013*factor*0.02)  - p.initial + RK_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.04) + round_to_hour(total2012*factor*0.02) + round_to_hour(total2013*factor*0.02) + round_to_hour(total2014*factor*0.02) - p.initial + RK_PROVISION_ADJUSTMENT
       when 'Operational Management'
         p.difference = operational_percent - p.initial      + OP_PROVISION_ADJUSTMENT
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total2011*factor*0.02) + round_to_hour(total2012*factor*0.01) + round_to_hour(total2013*factor*0.01) - p.initial+ QA_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.02) + round_to_hour(total2012*factor*0.01) + round_to_hour(total2013*factor*0.01) + round_to_hour(total2014*factor*0.01)  - p.initial+ QA_PROVISION_ADJUSTMENT
       when 'Continuous Improvement'
-        p.difference = round_to_hour((total2011+total2012+total2013)*factor*0.05) - p.initial  + CI_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour((total2011+total2012+total2013+total2014)*factor*0.05) - p.initial  + CI_PROVISION_ADJUSTMENT
       else
         p.difference = 0
     end
