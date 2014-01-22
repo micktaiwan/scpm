@@ -164,6 +164,26 @@ class Stream < ActiveRecord::Base
     newHistoryCounter.save
   end
 
+  #                                                   #
+  # History ticket destroy                            #
+  #                                                   #
+  def delete_spider_history_counter(author,spider)
+    # Current history counter
+    currentHistoryCounter = HistoryCounter.find(:first, :conditions=>["concerned_spider_id = ?", spider.id.to_s])
+    
+    # Le last doit se baser sur la date mais uassi la request (exemlpe du cas qui pose pb là : On fait deux supp, ça change deux fois la request du même ticket)
+    lastHistoryCounter    = HistoryCounter.find(:last, 
+      :include => :request, 
+      :conditions=> ["author_id = ? and history_counters.stream_id = ? and history_counters.request_id IS NOT NULL and concerned_spider_id IS NOT NULL", author.id, self.id], 
+      :order=>"requests.start_date asc, history_counters.created_at asc")
+
+    if lastHistoryCounter != nil
+      lastHistoryCounter.request_id = currentHistoryCounter.request_id
+      lastHistoryCounter.save
+    end
+
+    currentHistoryCounter.delete
+  end
 
   #                                                   #
   # Retrieve the current Request (1.6.4 / 1.6.5) used #

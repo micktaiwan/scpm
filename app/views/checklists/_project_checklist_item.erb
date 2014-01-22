@@ -1,0 +1,27 @@
+<li>
+  <% if !i.ctemplate %>
+    <strong>No template!</strong>
+    <%=i.id%>
+    <%= link_to_remote(image_tag('delete.gif'), :url=>{:controller=>'checklists', :action=>'destroy', :id=>i.id}) %>
+  <% else %>
+    <% if i.ctemplate.ctype == "checkbox" %>
+      <% if !i.image_name %>
+        <strong>No image name!</strong>
+      <% else %>
+        <%= image_tag(i.image_name,
+          :id=>"cl_image_#{i.id}",
+          :onclick=>"checklist_item_set_next_status(#{i.id})",
+          :class=>"checkbox",
+          :title=>i.alt) %>
+      <% end %>
+    <% end %>
+    <div <% if i.ctemplate.ctype != "folder" %>onmouseover="$('checklist_item_time_<%=i.id%>').show();" onmouseout="$('checklist_item_time_<%=i.id%>').hide();"<% end %> class="<%= i.css_class %>"><%= i.ctemplate.title %></div>
+    <% if i.ctemplate.ctype != "folder" %>
+      <div class="checklist_item msg" id='checklist_item_msg_<%=i.id%>'></div>
+      <div style="display:none;" class="checklist_item time" id='checklist_item_time_<%=i.id%>'><%= time_ago_in_words(i.updated_at) %></div>
+    <% end %>
+    <ul>
+        <%= render(:partial=>"checklists/project_checklist_item", :collection=>i.children, :as=>:i) %>
+    </ul>
+  <% end %>
+</li>
