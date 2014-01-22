@@ -1,9 +1,20 @@
 
+<p>Markups :<br />
+[NAME] 		= Name of the task<br />
+[LOAD] 		= Value of the task<br />
+[LOGIN] 	= Login of the collaborator<br />
+[PROFIL] 	= Profile cost<br />
+[DATE]		= Date of task<br />
+Example		= [NAME];0;0;[LOAD];32329;142239;110;;-1;-1;3989;-1;-1;-1;13;[LOGIN];[PROFIL];0;31245;[DATE];0;1;"Internal SQLI Meetings (imported from BAM)";;;1;fintask
+</p>
+<br />
+
 <p><%= label_tag 'Monthly Task Type Name' %>
 <%= text_field :monthlyTaskType, :name %> </p>
 
-<p><%= label_tag 'Template' %>
-<%= text_area :monthlyTaskType, :template, {:rows=>3} %></p>
+<p><%= label_tag 'Template' %></p>
+
+<p><%= text_area :monthlyTaskType, :template, {:rows=>3} %></p>
 
 
 

@@ -1,4 +1,12 @@
-<%= link_to("New", {:action=>'new'}) %>
+
+
+<h2><%= link_to("New", {:action=>'new'}, {:class=>'btnlnk'}) %>
+ Monthly Tasks</h2>
+<ul>
 <% @monthlyTasks.each do |mt| %>
-	<p><%= mt.title %> <%= link_to("Edit", { :action=>'edit', :id=>mt.id}) %> <%= link_to("Delete", { :action=>'destroy', :id=>mt.id}) %></p>
+	<li> 
+		[<%= link_to("Edit", { :action=>'edit', :id=>mt.id}) %>] [<%= link_to("Delete", { :action=>'destroy', :id=>mt.id}) %>]
+		<%= mt.title %>
+	</li>
 <% end %>
+</ul>
