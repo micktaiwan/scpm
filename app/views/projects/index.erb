@@ -20,36 +20,44 @@
 <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
 <% form_tag(:action=>'filter') do %>
 <table>
-  <tr valign="top"><td>
-  <b>Status</b><br/>
-  <%= check_box_tag('st[]', 0) %> unknown<br/>
-  <%= check_box_tag('st[]', 1) %> green<br/>
-  <%= check_box_tag('st[]', 2) %> amber<br/>
-  <%= check_box_tag('st[]', 3) %> red<br/>
-  </td><td>
-  <b>Workstreams</b><br/>
-  <% for workstream in @workstreams %>
-    <%= check_box_tag('ws[]',workstream) %> <%= workstream %><br/>
-  <% end %>
-  </td><td>
-  <b>Supervisors</b><br/>
-  <% for s in @supervisors %>
-    <%= check_box_tag('sup[]',s.id) %> <%= s.name %><br/>
-  <% end %>
-  </td><td>
-  <b>QR</b><br/>
-  <% for s in @qr %>
-    <%= check_box_tag('qr[]',s.id) %> <%= s.name %><br/>
-  <% end %>
-  </td><td>
-  <b>Suite</b><br/>
-  <%= select_tag "suiteTags", options_for_select(@suite_tags.map {|st| [st.name, st.id]}, @selected_suite_tags), {:multiple => true, :size => 15}  %>
-  </td></tr>
+  <tr valign="top">
+    <td>
+      <b>Status</b><br/>
+      <%= check_box_tag('st[]', 0) %> unknown<br/>
+      <%= check_box_tag('st[]', 1) %> green<br/>
+      <%= check_box_tag('st[]', 2) %> amber<br/>
+      <%= check_box_tag('st[]', 3) %> red<br/>
+    </td>
+    <td>
+      <b>Workstreams</b><br/>
+      <% for workstream in @workstreams %>
+        <%= check_box_tag('ws[]',workstream) %> <%= workstream %><br/>
+      <% end %>
+    </td>
+    <td>
+      <b>Supervisors</b><br/>
+      <% for s in @supervisors %>
+        <%= check_box_tag('sup[]',s.id) %> <%= s.name %><br/>
+      <% end %>
+    </td>
+    <td>
+      <b>QR</b><br/>
+      <% for s in @qr %>
+        <%= check_box_tag('qr[]',s.id) %> <%= s.name %><br/>
+      <% end %>
+    </td>
+    <td>
+      <b>Suite</b><br/>
+      <%= select_tag "suiteTags", options_for_select(@suite_tags.map {|st| [st.name, st.id]}, @selected_suite_tags), {:multiple => true, :size => 18}  %>
+      <p><button class="btnlnk" type="button" id="reset_filter" onclick="clear_project_filter_suite($('suiteTags'))">Reset Filter suite</button></p>
+    </td>
+  </tr>
+  
   <tr>
-  <td colspan=4>
-  Text: <%= text_field_tag('text') %> precedence on other filters<br/>
-  Searches project title and description, statuses, request summary and PM names
-  </td>
+    <td colspan=4>
+      Text: <%= text_field_tag('text') %> precedence on other filters<br/>
+      Searches project title and description, statuses, request summary and PM names
+    </td>
   </tr>
 </table>
 <%= submit_tag('Filter') %>
