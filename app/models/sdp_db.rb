@@ -1,196 +1,195 @@
 module SdpDB
 
   PhaseDB = { # name => [phase_id, proposal_id]
-	  'Bundle Management'        =>[32329,31245],
-    'Continuous Improvement'   =>[32331,31375],
-    'Quality Assurance'        =>[32330,31376],
-    'Provisions'			   =>[32332,31377],
-    'WP1.1 - Quality Control'  =>[32317,31244],
-    'WP1.2 - Quality Assurance'=>[32318,31244],
-    'WP1.3 - BAT'=>[32319,31244],
+	  'Bundle Management'        =>[35706,31245],#
+    'Continuous Improvement'   =>[35708,31375],#
+    'Quality Assurance'        =>[35707,31376],#
+    'Provisions'			         =>[35709,31377],#
+    'WP1.1 - Quality Control'  =>[35710,31244],#
+    'WP1.2 - Quality Assurance'=>[35711,31244],#
+    'WP1.3 - BAT'=>[35712,31244],#
     'WP1.4 - Quality Assurance + BAT'=>[29634,31244], # Not used anymore # ?
-    'WP1.4 - Agility'          =>[32488,31244], #NEW
-    'WP1.5 - SQR'              =>[32497,31244], #NEW
-    'WP1.6.1 - QWR DWQAP'          =>[32498,31244], #NEW
-    'WP1.6.2 - QWR Project Setting-up' =>[32533,31244], #NEW
-    'WP1.6.3 - QWR Support, Reporting & KPI' =>[32534,31244], #NEW
-    'WP1.6.4 - QWR Quality Status'          =>[32535,31244], #NEW
-    'WP1.6.5 - QWR Spiders'                 =>[32536,31244], #NEW
-    'WP1.6.6 - QWR QG BRD'                  =>[32537,31244], #NEW
-    'WP1.6.7 - QWR QG TD'                   =>[32538,31244], #NEW
-    'WP1.6.8 - QWR Lessons Learnt'          =>[32539,31244], #NEW
-    'WP2 - Quality for Maintenance'=>[32320,31246], # WP2 - Maintenance
-    'WP3.0 - Old Modeling'            => [32321,31247],
-    'WP3 - Modeling'                  =>[32321,31247],
-    'WP3.1 - Modeling Support'        => [32540,31247],
-    'WP3.2 - Modeling Conception and Production' => [32541,31247],
-    'WP3.2.1 - Business Process Layout'          => [32541,31247], #NEW
-    'WP3.2.2 - Functional Layout (Use Cases)'    => [32542,31247], #NEW
-    'WP3.2.3 - Information Layout (Data Model)'  => [32543,31247], #NEW
-    'WP3.3 - Modeling BAT specific Control'      => [32544,31247],
-    'WP3.4 - Modeling BAT specific Production'   => [32545,31247],
-    'WP4.1 - Surveillance Audit'=>[32546,31248],
-    'WP4.2 - Surveillance Root cause'=>[32547,31248],
-    'WP4.3 - Actions Implementation & Control'   => [32548,31248], #NEW
-    'WP4.4 - Fast Root Cause Analysis' => [35603, 31248], #2014
-    'WP5 - Change Accompaniment'=>[32323,31249],
-    'WP5.1 - Change: Diagnosis & Action Plan'    => [32549,31249], #NEW
-    'WP5.2 - Change : Implementation Support & Follow-up' => [32550,31249], #NEW
-    'WP6.1 - Coaching PP'=>[32324,31250],     #WP6.1 - Coaching for Project setting-up
-    'WP6.2 - Coaching BRD'=>[32325,31250],    #WP6.2 - Coaching for Business Requirements
-    'WP6.3 - Coaching V&V'=>[32326,31250],    #WP6.3 - Coaching for Verification and Validation
-    'WP6.4 - Coaching ConfMgt'=>[32327,31250],  #WP6.4 - Coaching for Configuration Management
-    'WP6.5 - Coaching Maintenance'=>[32328,31250],   #WP6.5 - Coaching for Maintenance
-    "WP6.6 - Coaching HLR" => [32499,31250], #NEW
-    "WP6.7 - Coaching Business Process"                   => [32500,31250], #NEW
-    "WP6.8 - Coaching Use Case"                           => [32501,31250], #NEW
-    "WP6.9 - Coaching Data Model"                         => [32502,31250], #NEW
-    "WP6.10.1 - Coaching Agility: Diagnosis & project launch"   => [32503,31250], #NEW
-    "WP6.10.2 - Coaching Agility: Sprint 0 support"             => [32551,31250], #NEW
-    "WP6.10.3 - Coaching Agility: Sprint coaching"              => [32552,31250], #NEW
-    'WP6.11 - Coaching Risks Management'                        => [35604,31250], #2014
-    'WP7.1 - Light Expertise'                                   => [35605,31568], #2014
-    'WP7.2 - Complete Expertise'                                => [35606,31568], #2014
-    "WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management"      => [32489,31568], #NEW
-    "WP7.1.2 - Expertise Activities for Multi Projects: Risks Management"             => [32553,31568], #NEW
-    "WP7.1.3 - Expertise Activities for Multi Projects: Test Management"              => [32554,31568], #NEW
-    "WP7.1.4 - Expertise Activities for Multi Projects: Change Management"            => [32555,31568], #NEW
-    "WP7.1.5 - Expertise Activities for Multi Projects: Lessons Learnt"               => [32556,31568], #NEW
-    "WP7.1.6 - Expertise Activities for Multi Projects: Configuration Management"     => [32557,31568], #NEW
-    "WP7.2.1 - Expertise Activities for Multi Projects: Requirements Management"      => [32504,31568], #NEW
-    "WP7.2.2 - Expertise Activities for Multi Projects: Risks Management"             => [32558,31568], #NEW
-    "WP7.2.3 - Expertise Activities for Multi Projects: Test Management"              => [32559,31568], #NEW
-    "WP7.2.4 - Expertise Activities for Multi Projects: Change Management"            => [32560,31568], #NEW
-    "WP7.2.5 - Expertise Activities for Multi Projects: Lessons Learnt"               => [32561,31568], #NEW
-    "WP7.2.6 - Expertise Activities for Multi Projects: Configuration Management"     => [32562,31568]  #NEW
+    'WP1.4 - Agility'          =>[35779,31244], #
+    'WP1.5 - SQR'              =>[35780,31244], #
+    'WP1.6.1 - QWR DWQAP'          =>[35781,31244], #
+    'WP1.6.2 - QWR Project Setting-up' =>[35782,31244], #
+    'WP1.6.3 - QWR Support, Reporting & KPI' =>[35783,31244], #
+    'WP1.6.4 - QWR Quality Status'          =>[35784,31244], #
+    'WP1.6.5 - QWR Spiders'                 =>[35785,31244], #
+    'WP1.6.6 - QWR QG BRD'                  =>[35786,31244], #
+    'WP1.6.7 - QWR QG TD'                   =>[35787,31244], #
+    'WP1.6.8 - QWR Lessons Learnt'          =>[35788,31244], #
+    'WP2 - Quality for Maintenance'=>[35789,31246], # WP2 - Maintenance
+    'WP3.0 - Old Modeling'            => [35790,31247], #
+    'WP3 - Modeling'                  =>[35790,31247], #
+    'WP3.1 - Modeling Support'        => [35791,31247], #
+    'WP3.2 - Modeling Conception and Production' => [35792,31247], #
+    'WP3.2.1 - Business Process Layout'          => [35792,31247], #
+    'WP3.2.2 - Functional Layout (Use Cases)'    => [35793,31247], #
+    'WP3.2.3 - Information Layout (Data Model)'  => [35794,31247], #
+    'WP3.3 - Modeling BAT specific Control'      => [35795,31247], #
+    'WP3.4 - Modeling BAT specific Production'   => [35796,31247], #
+    'WP4.1 - Surveillance Audit'=>[35798,31248], #
+    'WP4.2 - Surveillance Root cause'=>[35799,31248], #
+    'WP4.3 - Actions Implementation & Control'   => [35800,31248], #
+    'WP4.4 - Fast Root Cause Analysis' => [35801, 31248], #2014
+    'WP5 - Change Accompaniment'=>[35802,31249], #
+    'WP5.1 - Change: Diagnosis & Action Plan'    => [35803,31249], #
+    'WP5.2 - Change : Implementation Support & Follow-up' => [35804,31249], #
+    'WP6.1 - Coaching PP'=>[35805,31250],     #
+    'WP6.2 - Coaching BRD'=>[35806,31250],    #
+    'WP6.3 - Coaching V&V'=>[35807,31250],    #
+    'WP6.4 - Coaching ConfMgt'=>[35808,31250],  #
+    'WP6.5 - Coaching Maintenance'=>[35809,31250],   #
+    "WP6.6 - Coaching HLR" => [35810,31250], #
+    "WP6.7 - Coaching Business Process"                   => [35811,31250], #
+    "WP6.8 - Coaching Use Case"                           => [35812,31250], #
+    "WP6.9 - Coaching Data Model"                         => [35813,31250], #
+    "WP6.10.1 - Coaching Agility: Diagnosis & project launch"   => [35814,31250], #
+    "WP6.10.2 - Coaching Agility: Sprint 0 support"             => [35815,31250], #
+    "WP6.10.3 - Coaching Agility: Sprint coaching"              => [35816,31250], #
+    'WP6.11 - Coaching Risks Management'                        => [35817,31250], #2014
+    'WP7.1 - Light Expertise'                                   => [35818,31568], #2014
+    'WP7.2 - Complete Expertise'                                => [35825,31568], #2014
+    "WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management"      => [35819,31568], #
+    "WP7.1.2 - Expertise Activities for Multi Projects: Risks Management"             => [35820,31568], #
+    "WP7.1.3 - Expertise Activities for Multi Projects: Test Management"              => [35821,31568], #
+    "WP7.1.4 - Expertise Activities for Multi Projects: Change Management"            => [35822,31568], #
+    "WP7.1.5 - Expertise Activities for Multi Projects: Lessons Learnt"               => [35823,31568], #
+    "WP7.1.6 - Expertise Activities for Multi Projects: Configuration Management"     => [35824,31568], #
+    "WP7.2.1 - Expertise Activities for Multi Projects: Requirements Management"      => [35826,31568], #
+    "WP7.2.2 - Expertise Activities for Multi Projects: Risks Management"             => [35827,31568], #
+    "WP7.2.3 - Expertise Activities for Multi Projects: Test Management"              => [35828,31568], #
+    "WP7.2.4 - Expertise Activities for Multi Projects: Change Management"            => [35829,31568], #
+    "WP7.2.5 - Expertise Activities for Multi Projects: Lessons Learnt"               => [35830,31568], #
+    "WP7.2.6 - Expertise Activities for Multi Projects: Configuration Management"     => [35831,31568]  #
   }
 
 
     #[milestone, WP] = ID activity
     ActivityDB = {
       # WP1.1
-      ['M1-M3','WP1.1 - Quality Control']=>142217,
-      ['M3-M5','WP1.1 - Quality Control']=>142218,
-      ['M5-M10','WP1.1 - Quality Control']=>142219,
-      ['Post-M10','WP1.1 - Quality Control']=>142220,
+      ['M1-M3','WP1.1 - Quality Control']=>158133,
+      ['M3-M5','WP1.1 - Quality Control']=>158134,
+      ['M5-M10','WP1.1 - Quality Control']=>158135,
+      ['Post-M10','WP1.1 - Quality Control']=>158136,
       # WP 1.2
-      ['M1-M3','WP1.2 - Quality Assurance']=>142221,
-      ['M3-M5','WP1.2 - Quality Assurance']=>142222,
-      ['M5-M10','WP1.2 - Quality Assurance']=>142223,
-      ['Post-M10','WP1.2 - Quality Assurance']=>142224,
+      ['M1-M3','WP1.2 - Quality Assurance']=>158137,
+      ['M3-M5','WP1.2 - Quality Assurance']=>158138,
+      ['M5-M10','WP1.2 - Quality Assurance']=>158139,
+      ['Post-M10','WP1.2 - Quality Assurance']=>158140,
       # WP 1.3
-      ['M3-M5','WP1.3 - BAT']=>145689,
-      ['M5-M10','WP1.3 - BAT']=>145690,
-      ['Post-M10','WP1.3 - BAT']=>145691,
+      ['M3-M5','WP1.3 - BAT']=>158141,
+      ['M5-M10','WP1.3 - BAT']=>158142,
+      ['Post-M10','WP1.3 - BAT']=>158143,
       # WP 1.4
-      ['M3-M5','WP1.4 - Agility']=>143003,
-      ['M5-M10','WP1.4 - Agility']=>143004,
-      ['Post-M10','WP1.4 - Agility']=>143005,
+      ['M3-M5','WP1.4 - Agility']=>158144,
+      ['M5-M10','WP1.4 - Agility']=>158145,
+      ['Post-M10','WP1.4 - Agility']=>158146,
       # WP 1.5
-      ['M1-M3','WP1.5 - SQR']=>143042,
-      ['M3-M5','WP1.5 - SQR']=>143043,
-      ['M5-M10','WP1.5 - SQR']=>143044,
-      ['Post-M10','WP1.5 - SQR']=>143045,
+      ['M1-M3','WP1.5 - SQR']=>158147,
+      ['M3-M5','WP1.5 - SQR']=>158148,
+      ['M5-M10','WP1.5 - SQR']=>158149,
+      ['Post-M10','WP1.5 - SQR']=>158150,
       # WP 1.6.1
-      ['All','WP1.6.1 - QWR DWQAP']=>143046,
+      ['All','WP1.6.1 - QWR DWQAP']=>158151,
       # WP 1.6.2
-      ['All','WP1.6.2 - QWR Project Setting-up']=>143047,
+      ['All','WP1.6.2 - QWR Project Setting-up']=>158152,
       # WP 1.6.3
-      ['All','WP1.6.3 - QWR Support, Reporting & KPI']=>143048,
+      ['All','WP1.6.3 - QWR Support, Reporting & KPI']=>158153,
       # WP 1.6.4
-      ['All','WP1.6.4 - QWR Quality Status']=>143049,
+      ['All','WP1.6.4 - QWR Quality Status']=>158154,
       # WP 1.6.5
-      ['All','WP1.6.5 - QWR Spiders']=>143050,
+      ['All','WP1.6.5 - QWR Spiders']=>158155,
       # WP 1.6.6
-      ['All','WP1.6.6 - QWR QG BRD']=>143051,
+      ['All','WP1.6.6 - QWR QG BRD']=>158156,
       # WP 1.6.7
-      ['All','WP1.6.7 - QWR QG TD']=>143052,
+      ['All','WP1.6.7 - QWR QG TD']=>158157,
       # WP 1.6.8
-      ['All','WP1.6.8 - QWR Lessons Learnt']=>143053,
+      ['All','WP1.6.8 - QWR Lessons Learnt']=>158158,
       
       # WP 2
-      ['All','WP2 - Quality for Maintenance']=>142225,
+      ['All','WP2 - Quality for Maintenance']=>158159,
       
       # WP 3
-      ['All','WP3.0 - Old Modeling']=>142226,                         
-      ['All','WP3 - Modeling']=>142226, 
-      ['All','WP3.1 - Modeling Support']=>143054,
-      ['All','WP3.2 - Modeling Conception and Production']=>142226,   
-      ['All','WP3.2.1 - Business Process Layout']=>143055,
-      ['All','WP3.2.2 - Functional Layout (Use Cases)']=>143056,
-      ['All','WP3.2.3 - Information Layout (Data Model)']=>143057,
-      ['All','WP3.3 - Modeling BAT specific Control']=>143058,
-      ['All','WP3.4 - Modeling BAT specific Production']=>143059,
+      ['All','WP3.0 - Old Modeling']=>158466,                         
+      ['All','WP3 - Modeling']=>158466, 
+      ['All','WP3.1 - Modeling Support']=>158160,
+      ['All','WP3.2 - Modeling Conception and Production']=>158466,   
+      ['All','WP3.2.1 - Business Process Layout']=>158161,
+      ['All','WP3.2.2 - Functional Layout (Use Cases)']=>158162,
+      ['All','WP3.2.3 - Information Layout (Data Model)']=>158163,
+      ['All','WP3.3 - Modeling BAT specific Control']=>158164,
+      ['All','WP3.4 - Modeling BAT specific Production']=>158165,
       
       # WP 4
-      ['All','WP4.1 - Surveillance Audit']=>142227,
-      ['All','WP4.2 - Surveillance Root cause']=>142228,
-      ['All','WP4.3 - Actions Implementation & Control']=>142229,
-      ['All','WP4.4 - Fast Root Cause Analysis']=>157657, # 2014
+      ['All','WP4.1 - Surveillance Audit']=>158503,
+      ['All','WP4.2 - Surveillance Root cause']=>158504,
+      ['All','WP4.3 - Actions Implementation & Control']=>158505,
+      ['All','WP4.4 - Fast Root Cause Analysis']=>158506, # 2014
       
       # WP 5
-      ['All','WP5 - Change Accompaniment']=>142230,
-      ['All','WP5.1 - Change: Diagnosis & Action Plan']=>143060,
-      ['All','WP5.2 - Change : Implementation Support & Follow-up']=>143061,
+      ['All','WP5 - Change Accompaniment']=>158507,
+      ['All','WP5.1 - Change: Diagnosis & Action Plan']=>158508,
+      ['All','WP5.2 - Change : Implementation Support & Follow-up']=>158509,
       
       # WP 6
-      ['All','WP6.1 - Coaching PP']=>142231,
-      ['All','WP6.2 - Coaching BRD']=>142232,
-      ['All','WP6.3 - Coaching V&V']=>142233,
-      ['All','WP6.4 - Coaching ConfMgt']=>142234,
-      ['All','WP6.5 - Coaching Maintenance']=>142235,
-      ['All','WP6.6 - Coaching HLR']=>143062,
-      ['All','WP6.7 - Coaching Business Process']=>143063,
-      ['All','WP6.8 - Coaching Use Case']=>143064,
-      ['All','WP6.9 - Coaching Data Model']=>143065,
-      ['All','WP6.10.1 - Coaching Agility: Diagnosis & project launch']=>143066,
-      ['All','WP6.10.2 - Coaching Agility: Sprint 0 support']=>143067,
-      ['All','WP6.10.3 - Coaching Agility: Sprint coaching']=>143068,
-      ['All','WP6.11 - Coaching Risks Management']=>157658, # 2014
+      ['All','WP6.1 - Coaching PP']=>158510,
+      ['All','WP6.2 - Coaching BRD']=>158511,
+      ['All','WP6.3 - Coaching V&V']=>158512,
+      ['All','WP6.4 - Coaching ConfMgt']=>158513,
+      ['All','WP6.5 - Coaching Maintenance']=>158514,
+      ['All','WP6.6 - Coaching HLR']=>158515,
+      ['All','WP6.7 - Coaching Business Process']=>158516,
+      ['All','WP6.8 - Coaching Use Case']=>158517,
+      ['All','WP6.9 - Coaching Data Model']=>158518,
+      ['All','WP6.10.1 - Coaching Agility: Diagnosis & project launch']=>158519,
+      ['All','WP6.10.2 - Coaching Agility: Sprint 0 support']=>158520,
+      ['All','WP6.10.3 - Coaching Agility: Sprint coaching']=>158521,
+      ['All','WP6.11 - Coaching Risks Management']=>158522, # 2014
       
       # WP 7
-      ['All','WP7.1 - Light Expertise']=>157659, # 2014
-      ['All','WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management']=>143006, 
-      ['All','WP7.1.2 - Expertise Activities for Multi Projects: Risks Management']=>143069,
-      ['All','WP7.1.3 - Expertise Activities for Multi Projects: Test Management']=>143070,		 
-      ['All','WP7.1.4 - Expertise Activities for Multi Projects: Change Management']=>143071,		 
-      ['All','WP7.1.5 - Expertise Activities for Multi Projects: Lessons Learnt']=>143072,		 
-      ['All','WP7.1.6 - Expertise Activities for Multi Projects: Configuration Management']=>143073,		 
-      ['All','WP7.2 - Complete Expertise']=>157695, # 2014
-      ['All','WP7.2.1 - Expertise Activities for Project: Requirements Management']=>143074,		 
-      ['All','WP7.2.2 - Expertise Activities for Project: Risks Management']=>143075,		 
-      ['All','WP7.2.3 - Expertise Activities for Project: Test Management']=>143076,		 
-      ['All','WP7.2.4 - Expertise Activities for Project: Change Management']=>143077,		 
-      ['All','WP7.2.5 - Expertise Activities for Project: Lessons Learnt']=>143078,		 
-      ['All','WP7.2.6 - Expertise Activities for Project: Configuration Management']=>143079,
+      ['All','WP7.1 - Light Expertise']=>158523, # 2014
+      ['All','WP7.1.1 - Expertise Activities for Multi Projects: Requirements Management']=>158524, 
+      ['All','WP7.1.2 - Expertise Activities for Multi Projects: Risks Management']=>158525,
+      ['All','WP7.1.3 - Expertise Activities for Multi Projects: Test Management']=>158526,		 
+      ['All','WP7.1.4 - Expertise Activities for Multi Projects: Change Management']=>158527,		 
+      ['All','WP7.1.5 - Expertise Activities for Multi Projects: Lessons Learnt']=>158528,		 
+      ['All','WP7.1.6 - Expertise Activities for Multi Projects: Configuration Management']=>158529,		 
+      ['All','WP7.2 - Complete Expertise']=>158530, # 2014
+      ['All','WP7.2.1 - Expertise Activities for Project: Requirements Management']=>158531,		 
+      ['All','WP7.2.2 - Expertise Activities for Project: Risks Management']=>158532,		 
+      ['All','WP7.2.3 - Expertise Activities for Project: Test Management']=>158533,		 
+      ['All','WP7.2.4 - Expertise Activities for Project: Change Management']=>158534,		 
+      ['All','WP7.2.5 - Expertise Activities for Project: Lessons Learnt']=>158535,		 
+      ['All','WP7.2.6 - Expertise Activities for Project: Configuration Management']=>158536,
       
       # BUNDLE MANAGEMENT
-      ['Bundle Management','']=>142237,
-      ['Bundle Quality Assurance','']=>142236,
-      ['Operational Management',nil]=>142239,
-      ['Montée en compétences',nil]=>142240,
-      ['Continuous Improvement','']=>142238,
-      ['Sous charges',nil]=>142241,
+      ['Bundle Management','']=>158538,
+      ['Bundle Quality Assurance','']=>158537,
+      ['Operational Management',nil]=>158540,
+      ['Montée en compétences',nil]=>158541,
+      ['Continuous Improvement','']=>158539,
+      ['Sous charges',nil]=>158542,
       
       # WP4
-      ['Processes Evaluation',nil]=>143222,
-      ['Root Causes Analysis',nil]=>142228
+      ['Processes Evaluation',nil]=>158166,
+      ['Root Causes Analysis',nil]=>158167
       }
 
   # SDP Doamin
   DomainDB = {
-      #'EA'  =>2865,
-      'EV'  =>3734,
-      'EP'  =>3733,
-      'EY'  =>3736,
-      'EG'  =>3743,
-      'ES'  =>3735,
-      'EZ'  =>3737,
-      'EI'  =>3739,
-      'EZC' =>3738,
-      'EZMC'=>3740,
-      'EZMB'=>3741,
-      'EC'=>3742
+      'EV'  =>4455,
+      'EP'  =>4454,
+      'EY'  =>4457,
+      'EG'  =>4464,
+      'ES'  =>4456,
+      'EZ'  =>4458,
+      'EI'  =>4460,
+      'EZC' =>4459,
+      'EZMC'=>4461,
+      'EZMB'=>4462,
+      'EC'  =>4463
       }
 
   def self.sdp_phase_id(name)
