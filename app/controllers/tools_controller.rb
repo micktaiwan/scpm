@@ -143,12 +143,12 @@ class ToolsController < ApplicationController
       @operational2012_10percent         = round_to_hour(op2012*0.11111111111)
       @operational2013_10percent         = round_to_hour(op2013*0.11111111111)
       @operational2014_10percent         = round_to_hour(op2014*0.11111111111)
-      @operational_percent_total         = @operational2011_10percent + @operational2012_10percent + @operational2013_10percent + operational2014_10percent
+      @operational_percent_total         = @operational2011_10percent + @operational2012_10percent + @operational2013_10percent + @operational2014_10percent
       @operational_total_2011            = op2010 + op2011 + @operational2011_10percent
       @operational_total_2012            = op2012 + @operational2012_10percent
       @operational_total_2013            = op2013 + @operational2013_10percent
       @operational_total_2014            = op2014 + @operational2014_10percent
-      @operational_total                 = @operational_total_2011 + @operational_total_2012 + @operational_total_2013 + operational_total_2014
+      @operational_total                 = @operational_total_2011 + @operational_total_2012 + @operational_total_2013 + @operational_total_2014
       @remaining                         = (tasks2010.inject(0) {|sum, t| t.remaining+sum} 
         + tasks2011.inject(0) {|sum, t| t.remaining+sum} 
         + tasks2012.inject(0) {|sum, t| t.remaining+sum} 
