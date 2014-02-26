@@ -34,7 +34,7 @@ class Project < ActiveRecord::Base
   has_many    :project_check_items, :class_name=>"ChecklistItem"
   has_many    :project_check_root_items, :conditions=>"parent_id=0", :class_name=>"ChecklistItem"
   has_many    :spiders,      :dependent => :destroy
-  has_many    :wl_lines
+  has_many    :wl_lines, :dependent => :nullify
 
   def planning
     planning = Planning.find(:first, :conditions=>["project_id=#{self.id}"])
