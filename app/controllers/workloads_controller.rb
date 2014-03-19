@@ -690,6 +690,41 @@ class WorkloadsController < ApplicationController
     render(:nothing=>true)
   end
 
+  def backup
+    @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+
+    # WL lines without project_id
+    @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
+      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
+
+    # WL lines by project
+    @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
+      :include=>["request","wl_line_task","person"], :order=>"project_id,wl_type,name")
+  end
+  
+  def backup_line    
+    l_id  = params['line_id']
+    p_id  = params['person_id']
+
+    backups = WlBackup.first(:conditions=>["wl_line_id = ? and person_id = ?", l_id, p_id]);
+    if (backups == nil)
+      backup = WlBackup.new
+      backup.wl_line_id = l_id;
+      backup.person_id = p_id;
+      backup.save
+      render :text=>backup.person.name
+    else
+      render(:nothing=>true)
+    end
+  end
+
+  def delete_backup_line
+    backup_id = params['backup_id']
+    backup = WlBackup.first(:conditions=>["id = ?", backup_id]);
+    backup.destroy
+    render(:nothing=>true)
+  end
+
 private
 
   def get_workload_data(person_id, projects_ids, person_iterations)

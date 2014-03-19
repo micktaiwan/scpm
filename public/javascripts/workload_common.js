@@ -110,3 +110,84 @@ function colorToHex(color) {
     var rgb = blue | (green << 8) | (red << 16);
     return digits[1] + '#' + rgb.toString(16);
 };
+
+
+// Duplicate / backup functiosn
+var selected_backup_line_id   = null;
+var selected_backup_person_id = null;
+
+function check_duplicate_workload_interactions()
+{
+  $$(".duplicate_load_td").invoke('observe', 'click', function(){
+    if (this.select("input")[0].checked == true)
+    {
+      this.select("input")[0].checked=false;
+      this.setStyle({
+          backgroundColor: "white"
+      });
+    }
+    else
+    {
+      this.select("input")[0].checked=true;
+      this.setStyle({
+          backgroundColor: "#FF9BAB"
+      });
+    }
+  });
+}
+
+function check_backup_person_change()
+{  
+  Event.observe($('select_list_backup_person'), 'change', function()
+  {
+      selected_backup_person_id = $('select_list_backup_person').getValue();
+      // selected_backup_name      = $('select_list_backup_person').options[$('select_list_backup_person').selectedIndex].innerHTML;
+  });
+}
+
+function line_duplicate_add_user(line_id, line_name)
+{
+  selected_backup_line_id = line_id;
+  $("view_line_backup").show();
+  $("label_line_id").innerHTML = line_name;
+}
+
+function line_backup(line_id, person_id)
+{
+  // Call the controller/action in ajax
+  new Ajax.Request('/workloads/backup_line', 
+  {
+    parameters: { line_id: line_id, person_id: person_id },
+    onSuccess: function(response) 
+    {
+        if ( (response.responseText != null) && (response.responseText.length > 0))
+        {
+          div_str_response = "backup_"+line_id;
+          $(div_str_response).innerHTML = $(div_str_response).innerHTML + "<li>" +response.responseText + " </li>";
+        }
+        $("view_line_backup").hide();
+    },
+    onFailure:function(response) 
+    {
+      alert("Error: Can't add the person has backup of the selected line.")
+      $("view_line_backup").hide();
+    }
+  });
+}
+
+function delete_wl_backup(backup_id)
+{
+  new Ajax.Request('/workloads/delete_backup_line', 
+  {
+    parameters: { backup_id: backup_id},
+    onSuccess: function(response) 
+    {
+        $("wl_backup_id_"+backup_id).hide();
+    },
+    onFailure:function(response) 
+    {
+      alert("Error: Can't delete the backup.")
+    }
+  });
+
+}

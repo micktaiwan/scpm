@@ -26,6 +26,7 @@ class Person < ActiveRecord::Base
   has_many   :sdp_logs, :order=>"id"
   has_many   :history_counters
   serialize  :settings, PersonSettings
+  has_many   :wl_backups, :dependent => :destroy
 
   before_save :encrypt_password
 
