@@ -1,0 +1,13 @@
+<td>
+	<ul class="backup_list_person" id="backup_<%= l.id.to_s %>">
+		<% l.wl_backups.each do |b| %>
+			<li id="wl_backup_id_<%= b.id.to_s %>" >
+				<%= submit_tag "x", :type=>'button', :onclick=>'delete_wl_backup(' + b.id.to_s + ');' %>
+				<%= b.person.name %>
+			</li>
+		<% end %>
+	</ul>
+</td>
+<td>
+<%= submit_tag "Add backup", :type=>'button', :onclick=>'line_duplicate_add_user("'+l.id.to_s+'", "'+l.name.to_s+'");' %>
+</td>
