@@ -692,14 +692,17 @@ class WorkloadsController < ApplicationController
 
   def backup
     @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-
     # WL lines without project_id
     @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
       :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
-
     # WL lines by project
     @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
       :include=>["request","wl_line_task","person"], :order=>"project_id,wl_type,name")
+    @my_backups = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
+
+    Rails.logger.info("DEBUG_CDB ")
+    Rails.logger.info("\e[31m WARNING LOG HERE -------------------------- \e[0m")
+    Rails.logger.info(session['workload_person_id'].to_s)
   end
   
   def backup_line    

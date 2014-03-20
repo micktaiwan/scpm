@@ -1,0 +1,5 @@
+<tr id="self_backup_<%= b.id.to_s %>">
+	<td><%= b.wl_line.name %></td>
+	<td><%= b.wl_line.person.name %></td>
+	<td><%= submit_tag "Remove", :type=>'button', :onclick=>'delete_wl_backup("'+b.id.to_s+'", true);', :confirm=>"Are you sure ?" %></td>
+</tr>

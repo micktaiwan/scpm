@@ -175,19 +175,21 @@ function line_backup(line_id, person_id)
   });
 }
 
-function delete_wl_backup(backup_id)
+function delete_wl_backup(backup_id, self_backup)
 {
   new Ajax.Request('/workloads/delete_backup_line', 
   {
     parameters: { backup_id: backup_id},
     onSuccess: function(response) 
     {
-        $("wl_backup_id_"+backup_id).hide();
+        if (self_backup)
+          $("self_backup_"+backup_id).hide();
+        else
+          $("wl_backup_id_"+backup_id).hide();
     },
     onFailure:function(response) 
     {
       alert("Error: Can't delete the backup.")
     }
   });
-
 }

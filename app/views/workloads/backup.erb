@@ -1,36 +1,48 @@
 <%= link_to('Back to workload', :action=>'index') %>
-<h2>Workload line backup(Backup)</h2>
 
+<!-- Add backup view -->
 <div id="view_line_backup">
     <%= submit_tag "X", :id=>"button_line_backup_close", :type=>'button', :onclick=>'$("view_line_backup").hide();' %>
     <h3>Add backup for line <span id="label_line_id"></span></h3>
     <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'line_backup(selected_backup_line_id,selected_backup_person_id);' %>
 </div>
 
-  <h3>Classic lines</h3>
-  <table>
+<!-- Add backups to classic lines -->
+<h1>Classic lines (Who are my backups ?)</h1>
+<table>
     <tr class="duplicate_tr_header">
-      <th>Line</th>
-      <th style="width:800px;">Backups</th>
-      <th>Actions</th>
+        <th>Line</th>
+        <th style="width:800px;">Backups</th>
+        <th>Actions</th>
     </tr>
 
     <tr>
-      <%= render(:partial=>"duplicate_line", :collection=>@lines, :as=>:l, :locals => { :is_qr_qwr => false, :backup => true }) %>
+        <%= render(:partial=>"duplicate_line", :collection=>@lines, :as=>:l, :locals => { :is_qr_qwr => false, :backup => true }) %>
     <tr>
-  </table>
+</table>
 
-  <h3>QR/QWR lines</h3>
-  <table>
+<!-- Add backups to qr/qwr -->
+<h1>QR/QWR lines (Who are my backups ?)</h1>
+<table>
     <tr class="duplicate_tr_header">
-      <th>Line</th>
-      <th style="width:800px;">Backups</th>
-      <th>Actions</th>
+        <th>Line</th>
+        <th style="width:800px;">Backups</th>
+        <th>Actions</th>
     </tr>
     <tr>
-      <%= render(:partial=>"duplicate_line", :collection=>@lines_qr_qwr, :as=>:l, :locals => { :is_qr_qwr => true, :backup => true }) %>
+        <%= render(:partial=>"duplicate_line", :collection=>@lines_qr_qwr, :as=>:l, :locals => { :is_qr_qwr => true, :backup => true }) %>
     <tr>
-  </table>
+</table>
+
+<h1>I'm the backup of</h1>
+<table>
+    <tr class="duplicate_tr_header">
+        <th>Line</th>
+        <th>Backup From</th>
+        <th>Actions</th>
+    </tr>
+    <%= render(:partial=>"backup_line", :collection=>@my_backups, :as=>:b) %>
+</table>
 
 
 <SCRIPT language="Javascript">
