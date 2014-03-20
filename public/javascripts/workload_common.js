@@ -195,15 +195,23 @@ function delete_wl_backup(backup_id, self_backup)
   });
 }
 
-function update_backup_comment(backup_id)
+function update_backup_comment(backup_id, self_backup)
 {
+  var comment = null;
+  if (self_backup)
+    comment = $('self_backup_comment_'+backup_id).value;
+  else 
+    comment = $('backup_comment_'+backup_id).value;
   new Ajax.Request('/workloads/update_backup_comment', 
   {
-    parameters: { backup_id: backup_id, backup_comment: $('backup_comment_'+backup_id).value},
+    parameters: { backup_id: backup_id, backup_comment: comment},
     onSuccess: function(response) 
     {
       if ( (response.responseText != null) && (response.responseText.length > 0))
-        $('backup_comment_'+backup_id).innerHTML = response.responseText
+        if (self_backup)
+          $('self_backup_comment_'+backup_id).innerHTML = response.responseText
+        else
+          $('backup_comment_'+backup_id).innerHTML = response.responseText
     },
     onFailure:function(response) 
     {

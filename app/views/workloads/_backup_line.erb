@@ -1,5 +1,6 @@
 <tr id="self_backup_<%= b.id.to_s %>">
 	<td><%= b.wl_line.name %></td>
 	<td><%= b.wl_line.person.name %></td>
+	<td><%= text_area_tag "self_backup_comment_"+b.id.to_s, b.comment, :size => "40x1", :class=>"backup_comment", :onchange=>"update_backup_comment("+b.id.to_s+", true);" %></td>
 	<td><%= submit_tag "Remove", :type=>'button', :onclick=>'delete_wl_backup("'+b.id.to_s+'", true);', :confirm=>"Are you sure ?" %></td>
 </tr>

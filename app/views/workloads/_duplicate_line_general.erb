@@ -4,7 +4,7 @@
 			<tr id="wl_backup_id_<%= b.id.to_s %>" >
 				<td><%= submit_tag "x", :type=>'button', :onclick=>'delete_wl_backup(' + b.id.to_s + ', false);', :confirm=>"Are you sure ?" %>
 				<%= b.person.name %></td><td>
-				<%= text_area_tag "backup_comment_"+b.id.to_s, b.comment, :size => "40x1", :class=>"backup_comment", :onchange=>"update_backup_comment("+b.id.to_s+");" %></td>
+				<%= text_area_tag "backup_comment_"+b.id.to_s, b.comment, :size => "40x1", :class=>"backup_comment", :onchange=>"update_backup_comment("+b.id.to_s+", false);" %></td>
 			</tr>
 		<% end %>
 	</table>
