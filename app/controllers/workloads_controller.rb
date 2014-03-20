@@ -6,6 +6,8 @@ class WorkloadsController < ApplicationController
 
   layout 'pdc'
 
+  $backup_holiday_threshold = 3
+
   def index
     person_id      = params[:person_id]
     project_ids    = params[:project_ids]
@@ -48,6 +50,7 @@ class WorkloadsController < ApplicationController
     get_sdp_tasks(@workload)
     get_chart
     get_sdp_gain(@workload.person)
+    get_backup_warnings(@workload.person)
   end
 
   def get_last_sdp_update
@@ -91,6 +94,31 @@ class WorkloadsController < ApplicationController
     cond = " and request_id not in (#{request_ids.join(',')})" if request_ids.size > 0
     @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}' and status!='closed' and status!='performed' and status!='cancelled' and status!='removed' and resolution!='ended' #{cond}", :order=>"project_name, summary")
     @suggested_requests = @suggested_requests.select { |r| r.sdp_tasks_remaining_sum > 0 }
+  end
+
+  def get_backup_warnings(person_id)
+    backups = WlBackup.find(:all, :conditions=>["person_id = ?", person_id])
+    currentWeek = wlweek(Date.today)
+    nextWeek    = wlweek(Date.today+7.days)
+
+    @backup_holidays = []
+    backups.each do |b|  
+      # Load for holyday and concerned user (for the 14 next days)
+      person_holiday_load = WlLoad.find(:all,
+        :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and (wl_loads.week = ? or wl_loads.week = ?)", b.wl_line.person.id.to_s, currentWeek, nextWeek])
+
+      if person_holiday_load.count > 0
+        load_total = 0
+
+        # Calcul the number of day of holiday. If it's over the threshold, display the warning
+        person_holiday_load.map { |wload| load_total += wload.wlload }
+        if (load_total > $backup_holiday_threshold)
+         @backup_holidays << b.wl_line.person.name if !@backup_holidays.include?(b.wl_line.person.name)
+        end
+      end
+
+    end
   end
 
   def do_get_sdp_tasks()
@@ -699,10 +727,6 @@ class WorkloadsController < ApplicationController
     @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
       :include=>["request","wl_line_task","person"], :order=>"project_id,wl_type,name")
     @my_backups = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
-
-    Rails.logger.info("DEBUG_CDB ")
-    Rails.logger.info("\e[31m WARNING LOG HERE -------------------------- \e[0m")
-    Rails.logger.info(session['workload_person_id'].to_s)
   end
   
   def backup_line    
