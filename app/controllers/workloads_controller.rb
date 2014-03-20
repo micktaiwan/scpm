@@ -752,6 +752,17 @@ class WorkloadsController < ApplicationController
     render(:nothing=>true)
   end
 
+  def update_backup_comment
+    backup_id      = params['backup_id']
+    backup_comment = params['backup_comment']
+    backup = WlBackup.first(:conditions=>["id = ?", backup_id]);
+    if backup != nil
+      backup.comment = backup_comment
+      backup.save
+    end
+    render :text=>backup.comment
+  end
+
 private
 
   def get_workload_data(person_id, projects_ids, person_iterations)

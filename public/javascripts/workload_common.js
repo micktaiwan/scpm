@@ -134,6 +134,7 @@ function check_duplicate_workload_interactions()
       });
     }
   });
+
 }
 
 function check_backup_person_change()
@@ -163,7 +164,7 @@ function line_backup(line_id, person_id)
         if ( (response.responseText != null) && (response.responseText.length > 0))
         {
           div_str_response = "backup_"+line_id;
-          $(div_str_response).innerHTML = $(div_str_response).innerHTML + "<li>" +response.responseText + " </li>";
+          $(div_str_response).innerHTML = $(div_str_response).innerHTML + "<tr><td>" +response.responseText + "</td></tr>";
         }
         $("view_line_backup").hide();
     },
@@ -190,6 +191,23 @@ function delete_wl_backup(backup_id, self_backup)
     onFailure:function(response) 
     {
       alert("Error: Can't delete the backup.")
+    }
+  });
+}
+
+function update_backup_comment(backup_id)
+{
+  new Ajax.Request('/workloads/update_backup_comment', 
+  {
+    parameters: { backup_id: backup_id, backup_comment: $('backup_comment_'+backup_id).value},
+    onSuccess: function(response) 
+    {
+      if ( (response.responseText != null) && (response.responseText.length > 0))
+        $('backup_comment_'+backup_id).innerHTML = response.responseText
+    },
+    onFailure:function(response) 
+    {
+      alert("Error: Can't update the backup.")
     }
   });
 }
