@@ -7,8 +7,8 @@
 <div id="view_backup_add">
     <%= submit_tag "X", :id=>"button_backup_add_close", :type=>'button', :onclick=>'$("view_backup_add").hide();' %>
     <h3>Add backup</span></h3>
-    <%= text_field_tag 'week' %>
-    <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'add_backup('+session["workload_person_id"]+', selected_backup_person_id, 0000);' %>
+    <%= submit_tag "Date", :id=>'week', :type=>'button' %>
+    <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'add_backup('+session["workload_person_id"]+', selected_backup_person_id, selected_backup_date);' %>
 </div>
 
 <!-- Backups for me -->
@@ -31,7 +31,7 @@
         <th>Backup From</th>
         <th>Actions</th>
     </tr>
-    <%= render(:partial=>"backup_line", :collection=>@self_backups, :as=>:b, :locals => { :self_backup => false }) %>
+    <%= render(:partial=>"backup_line", :collection=>@self_backups, :as=>:b, :locals => { :self_backup => true }) %>
 </table>
 
 
@@ -47,8 +47,24 @@
   $("view_backup_add").hide();
   check_backup_person_change();
 
-jQuery(document).ready(function(){
-    jQuery( "#week" ).datepicker();
-});
+  jQuery(document).ready(function(){
+    jQuery( "#week" ).datepicker({onSelect:function(dateText){
+      new Ajax.Request('/workloads/get_week', 
+      {
+        parameters: { date: dateText },
+        onSuccess: function(response) 
+        {
+          if ( (response.responseText != null) && (response.responseText.length > 1))
+          {
+            selected_backup_date = response.responseText;
+          }
+        },
+        onFailure:function(response) 
+        {
+          alert("Error: Can't retrieve the date");
+        }
+      });
+    }});
+   });
 
 </SCRIPT>

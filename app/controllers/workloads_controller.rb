@@ -97,16 +97,23 @@ class WorkloadsController < ApplicationController
   end
 
   def get_backup_warnings(person_id)
-    backups = WlBackup.find(:all, :conditions=>["person_id = ?", person_id])
+
     currentWeek = wlweek(Date.today)
     nextWeek    = wlweek(Date.today+7.days)
+    backups = WlBackup.find(:all, :conditions=>["backup_person_id = ? and (week = ? or week = ?)", person_id, currentWeek, nextWeek])
+
+
+
+    # backups = WlBackup.find(:all, :conditions=>["backup_person_id = ?", person_id])
+    # currentWeek = wlweek(Date.today)
+    # nextWeek    = wlweek(Date.today+7.days)
 
     @backup_holidays = []
     backups.each do |b|  
       # Load for holyday and concerned user (for the 14 next days)
       person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and (wl_loads.week = ? or wl_loads.week = ?)", b.wl_line.person.id.to_s, currentWeek, nextWeek])
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and (wl_loads.week = ? or wl_loads.week = ?)", b.person.id.to_s, currentWeek, nextWeek])
 
       if person_holiday_load.count > 0
         load_total = 0
@@ -114,7 +121,7 @@ class WorkloadsController < ApplicationController
         # Calcul the number of day of holiday. If it's over the threshold, display the warning
         person_holiday_load.map { |wload| load_total += wload.wlload }
         if (load_total > $backup_holiday_threshold)
-         @backup_holidays << b.wl_line.person.name if !@backup_holidays.include?(b.wl_line.person.name)
+         @backup_holidays << b.person.name if !@backup_holidays.include?(b.person.name)
         end
       end
 
@@ -721,8 +728,8 @@ class WorkloadsController < ApplicationController
   def backup
     @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
     
-    @backups      = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
-    @self_backups = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
+    @backups      = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
+    @self_backups = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
   end
   
   def create_backup    
@@ -730,14 +737,14 @@ class WorkloadsController < ApplicationController
     p_id  = params['person_id']
     week  = params['week']
 
-    backups = WlBackup.first(:conditions=>["backup_person_id = ? and person_id = ?", b_id, p_id]);
+    backups = WlBackup.first(:conditions=>["backup_person_id = ? and person_id = ? and week = ?", b_id, p_id, week]);
     if (backups == nil)
       backup = WlBackup.new
       backup.backup_person_id = b_id
       backup.person_id = p_id
       backup.week = week
       backup.save
-      render :text=>backup.person.name
+      render :text=>backup.week.to_s+"_"+backup.backup.name
     else
       render(:nothing=>true)
     end
@@ -758,7 +765,13 @@ class WorkloadsController < ApplicationController
       backup.comment = backup_comment
       backup.save
     end
-    render :text=>backup.comment
+    render :text=>backup.comment, :layout => false 
+  end
+
+  def get_week
+    date_str = params['date']
+    date = Date.strptime(date_str, "%Y-%m-%d")
+    render :text=> wlweek(date)
   end
 
 private

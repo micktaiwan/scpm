@@ -139,6 +139,7 @@ function check_duplicate_workload_interactions()
 // backup functions
 
 var selected_backup_person_id = null;
+var selected_backup_date = null;
 function check_backup_person_change()
 {  
   Event.observe($('select_list_backup_person'), 'change', function()
@@ -152,7 +153,7 @@ function add_backup_action()
   $("view_backup_add").show();
 }
 
-function add_backup(backup_person_id, person_id, week)
+function add_backup(person_id, backup_person_id, week)
 {
   // Call the controller/action in ajax
   new Ajax.Request('/workloads/create_backup', 
@@ -162,7 +163,16 @@ function add_backup(backup_person_id, person_id, week)
     {
         if ( (response.responseText != null) && (response.responseText.length > 1))
         {
-           $("backup_list").innerHTML += "<tr><td>DATE</td><td>" +response.responseText + "</td><td></td></tr>";
+           var date = "";
+           var name = "";
+           var responseArray = response.responseText.split('_');
+           if (responseArray.length == 2)
+           {
+             date = responseArray[0];
+             name = responseArray[1];
+           }
+
+           $("backup_list").innerHTML += "<tr><td>" + date + "</td><td>" + name + "</td><td></td></tr>";
         }
         $("view_backup_add").hide();
     },
