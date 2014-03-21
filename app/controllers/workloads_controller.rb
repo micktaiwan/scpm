@@ -720,24 +720,22 @@ class WorkloadsController < ApplicationController
 
   def backup
     @people   = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    # WL lines without project_id
-    @lines    = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NULL",  session['workload_person_id']],
-      :include=>["request","wl_line_task","person"], :order=>"wl_type, name")
-    # WL lines by project
-    @lines_qr_qwr = WlLine.find(:all, :conditions=>["person_id=? and project_id IS NOT NULL",  session['workload_person_id']],
-      :include=>["request","wl_line_task","person"], :order=>"project_id,wl_type,name")
-    @my_backups = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
+    
+    @backups      = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
+    @self_backups = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
   end
   
-  def backup_line    
-    l_id  = params['line_id']
+  def create_backup    
+    b_id  = params['backup_person_id']
     p_id  = params['person_id']
+    week  = params['week']
 
-    backups = WlBackup.first(:conditions=>["wl_line_id = ? and person_id = ?", l_id, p_id]);
+    backups = WlBackup.first(:conditions=>["backup_person_id = ? and person_id = ?", b_id, p_id]);
     if (backups == nil)
       backup = WlBackup.new
-      backup.wl_line_id = l_id;
-      backup.person_id = p_id;
+      backup.backup_person_id = b_id
+      backup.person_id = p_id
+      backup.week = week
       backup.save
       render :text=>backup.person.name
     else
@@ -745,7 +743,7 @@ class WorkloadsController < ApplicationController
     end
   end
 
-  def delete_backup_line
+  def delete_backup
     backup_id = params['backup_id']
     backup = WlBackup.first(:conditions=>["id = ?", backup_id]);
     backup.destroy

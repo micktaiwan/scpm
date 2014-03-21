@@ -290,7 +290,7 @@ ul.sdp_tasks {
 }
 
 /* Duplicate view */
-#view_line_backup {
+#view_backup_add {
   position: absolute;
   border-radius: 10px;
   -moz-border-radius: 10px;
@@ -307,7 +307,7 @@ ul.sdp_tasks {
   position: fixed;
 }
 
-#button_line_backup_close
+#button_backup_add_close
 {
   float:left;
 }

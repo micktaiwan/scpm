@@ -6,10 +6,6 @@ end
 %>
 <tr class="duplicate_line_tr">
   <td class="duplicate_line_title"><%= isBackup %><%= l.name %></td>
-  <% if !backup %>
  	 <%= render(:partial=>"duplicate_load", :collection=>wl_weeks, :as=>:week, :locals => { :l => l, :is_qr_qwr => is_qr_qwr } ) %>
- 	<% else %>
-	  <%= render(:partial=>"duplicate_line_general", :locals => { :l => l, :is_qr_qwr => is_qr_qwr } ) %>
-	<% end %>
 <tr>
 

@@ -8,7 +8,6 @@ class WlLine < ActiveRecord::Base
   belongs_to :project
   belongs_to :parent, :class_name => "WlLine", :foreign_key => "parent_line"
   has_many   :duplicates, :foreign_key => "parent_line", :class_name => "WlLine"
-  has_many   :wl_backups, :dependent => :destroy
 
   include ApplicationHelper
 

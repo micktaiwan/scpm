@@ -1,47 +1,37 @@
+<script src="/javascripts/jquery-ui.js"></script>
+<link rel="stylesheet" href="/stylesheets/jquery-ui.css" />
+
 <%= link_to('Back to workload', :action=>'index') %>
 
 <!-- Add backup view -->
-<div id="view_line_backup">
-    <%= submit_tag "X", :id=>"button_line_backup_close", :type=>'button', :onclick=>'$("view_line_backup").hide();' %>
-    <h3>Add backup for line <span id="label_line_id"></span></h3>
-    <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'line_backup(selected_backup_line_id,selected_backup_person_id);' %>
+<div id="view_backup_add">
+    <%= submit_tag "X", :id=>"button_backup_add_close", :type=>'button', :onclick=>'$("view_backup_add").hide();' %>
+    <h3>Add backup</span></h3>
+    <%= text_field_tag 'week' %>
+    <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'add_backup('+session["workload_person_id"]+', selected_backup_person_id, 0000);' %>
 </div>
 
-<!-- Add backups to classic lines -->
-<h1>Classic lines (Who are my backups ?)</h1>
-<table>
+<!-- Backups for me -->
+<h1>My backups</h1>
+<%= submit_tag "Add backup", :type=>'button', :onclick=>'add_backup_action();' %>
+<table id="backup_list">
     <tr class="duplicate_tr_header">
-        <th>Line</th>
-        <th style="width:800px;">Backups</th>
+        <th>Date</th>
+        <th>Backup</th>
         <th>Actions</th>
     </tr>
-
-    <tr>
-        <%= render(:partial=>"duplicate_line", :collection=>@lines, :as=>:l, :locals => { :is_qr_qwr => false, :backup => true }) %>
-    <tr>
+    <%= render(:partial=>"backup_line", :collection=>@backups, :as=>:b, :locals => { :self_backup => false }) %>
 </table>
 
-<!-- Add backups to qr/qwr -->
-<h1>QR/QWR lines (Who are my backups ?)</h1>
-<table>
-    <tr class="duplicate_tr_header">
-        <th>Line</th>
-        <th style="width:800px;">Backups</th>
-        <th>Actions</th>
-    </tr>
-    <tr>
-        <%= render(:partial=>"duplicate_line", :collection=>@lines_qr_qwr, :as=>:l, :locals => { :is_qr_qwr => true, :backup => true }) %>
-    <tr>
-</table>
-
+<!-- I'm the backup of -->
 <h1>I'm the backup of</h1>
-<table>
+<table id="self_backup_list">
     <tr class="duplicate_tr_header">
         <th>Line</th>
         <th>Backup From</th>
         <th>Actions</th>
     </tr>
-    <%= render(:partial=>"backup_line", :collection=>@my_backups, :as=>:b) %>
+    <%= render(:partial=>"backup_line", :collection=>@self_backups, :as=>:b, :locals => { :self_backup => false }) %>
 </table>
 
 
@@ -54,6 +44,11 @@
     var selected_backup_name = "<%= @people[0][0] %>";
   <% end %>
 
-  $("view_line_backup").hide();
+  $("view_backup_add").hide();
   check_backup_person_change();
+
+jQuery(document).ready(function(){
+    jQuery( "#week" ).datepicker();
+});
+
 </SCRIPT>

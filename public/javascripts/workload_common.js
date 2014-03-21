@@ -112,9 +112,7 @@ function colorToHex(color) {
 };
 
 
-// Duplicate / backup functiosn
-var selected_backup_line_id   = null;
-var selected_backup_person_id = null;
+// Duplicate
 
 function check_duplicate_workload_interactions()
 {
@@ -137,48 +135,48 @@ function check_duplicate_workload_interactions()
 
 }
 
+
+// backup functions
+
+var selected_backup_person_id = null;
 function check_backup_person_change()
 {  
   Event.observe($('select_list_backup_person'), 'change', function()
   {
       selected_backup_person_id = $('select_list_backup_person').getValue();
-      // selected_backup_name      = $('select_list_backup_person').options[$('select_list_backup_person').selectedIndex].innerHTML;
   });
 }
 
-function line_duplicate_add_user(line_id, line_name)
+function add_backup_action()
 {
-  selected_backup_line_id = line_id;
-  $("view_line_backup").show();
-  $("label_line_id").innerHTML = line_name;
+  $("view_backup_add").show();
 }
 
-function line_backup(line_id, person_id)
+function add_backup(backup_person_id, person_id, week)
 {
   // Call the controller/action in ajax
-  new Ajax.Request('/workloads/backup_line', 
+  new Ajax.Request('/workloads/create_backup', 
   {
-    parameters: { line_id: line_id, person_id: person_id },
+    parameters: { backup_person_id: backup_person_id, person_id: person_id, week: week },
     onSuccess: function(response) 
     {
-        if ( (response.responseText != null) && (response.responseText.length > 0))
+        if ( (response.responseText != null) && (response.responseText.length > 1))
         {
-          div_str_response = "backup_"+line_id;
-          $(div_str_response).innerHTML = $(div_str_response).innerHTML + "<tr><td>" +response.responseText + "</td></tr>";
+           $("backup_list").innerHTML += "<tr><td>DATE</td><td>" +response.responseText + "</td><td></td></tr>";
         }
-        $("view_line_backup").hide();
+        $("view_backup_add").hide();
     },
     onFailure:function(response) 
     {
-      alert("Error: Can't add the person has backup of the selected line.")
-      $("view_line_backup").hide();
+      alert("Error: Can't add the person has backup.")
+      $("view_backup_add").hide();
     }
   });
 }
 
 function delete_wl_backup(backup_id, self_backup)
 {
-  new Ajax.Request('/workloads/delete_backup_line', 
+  new Ajax.Request('/workloads/delete_backup', 
   {
     parameters: { backup_id: backup_id},
     onSuccess: function(response) 
@@ -186,7 +184,7 @@ function delete_wl_backup(backup_id, self_backup)
         if (self_backup)
           $("self_backup_"+backup_id).hide();
         else
-          $("wl_backup_id_"+backup_id).hide();
+          $("backup_"+backup_id).hide();
     },
     onFailure:function(response) 
     {
