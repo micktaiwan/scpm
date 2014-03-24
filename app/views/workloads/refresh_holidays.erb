@@ -16,3 +16,21 @@
   </tr>
   <%= render(:partial=>'conso_holidays', :collection=>@workloads) %>
 </table>
+
+<SCRIPT language="Javascript">
+  jQuery( document ).ready(function() {
+    jQuery(".holiday_td").hover(
+      function(e) {
+      	if (holiday_hover_detail[jQuery( this ).attr('id')].length > 0)
+      	{
+        	jQuery("#holiday_detail").show();
+        	jQuery("#holiday_detail").html(holiday_hover_detail[jQuery( this ).attr('id')]);
+        	jQuery("#holiday_detail").css({top:e.pageY, left:e.pageX});
+        }
+      }, function() {
+      	    jQuery("#holiday_detail").hide();
+      }
+    );
+  });
+
+</SCRIPT>

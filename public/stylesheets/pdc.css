@@ -316,3 +316,22 @@ ul.sdp_tasks {
 {
   /*display:inline;*/
 }
+
+#holiday_detail 
+{
+  display: none;
+  position: absolute;
+
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+
+  border:1px solid #DDD;
+  background: #909190;
+  opacity: 0.90;
+
+}
+#holiday_detail ul
+{
+  list-style-type: circle;
+  padding-right: 15px;
+}

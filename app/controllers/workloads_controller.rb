@@ -102,12 +102,6 @@ class WorkloadsController < ApplicationController
     nextWeek    = wlweek(Date.today+7.days)
     backups = WlBackup.find(:all, :conditions=>["backup_person_id = ? and (week = ? or week = ?)", person_id, currentWeek, nextWeek])
 
-
-
-    # backups = WlBackup.find(:all, :conditions=>["backup_person_id = ?", person_id])
-    # currentWeek = wlweek(Date.today)
-    # nextWeek    = wlweek(Date.today+7.days)
-
     @backup_holidays = []
     backups.each do |b|  
       # Load for holyday and concerned user (for the 14 next days)
