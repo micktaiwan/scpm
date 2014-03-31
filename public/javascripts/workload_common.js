@@ -135,7 +135,6 @@ function check_duplicate_workload_interactions()
 
 }
 
-
 // backup functions
 
 var selected_backup_person_id = null;
@@ -155,33 +154,41 @@ function add_backup_action()
 
 function add_backup(person_id, backup_person_id, week)
 {
-  // Call the controller/action in ajax
-  new Ajax.Request('/workloads/create_backup', 
-  {
-    parameters: { backup_person_id: backup_person_id, person_id: person_id, week: week },
-    onSuccess: function(response) 
-    {
-        if ( (response.responseText != null) && (response.responseText.length > 1))
-        {
-           var date = "";
-           var name = "";
-           var responseArray = response.responseText.split('_');
-           if (responseArray.length == 2)
-           {
-             date = responseArray[0];
-             name = responseArray[1];
-           }
 
-           $("backup_list").innerHTML += "<tr><td>" + date + "</td><td>" + name + "</td><td></td></tr>";
-        }
-        $("view_backup_add").hide();
-    },
-    onFailure:function(response) 
+  if (week != null)
+  {
+    // Call the controller/action in ajax
+    new Ajax.Request('/workloads/create_backup', 
     {
-      alert("Error: Can't add the person has backup.")
-      $("view_backup_add").hide();
-    }
-  });
+      parameters: { backup_person_id: backup_person_id, person_id: person_id, week: week },
+      onSuccess: function(response) 
+      {
+          if ( (response.responseText != null) && (response.responseText.length > 1))
+          {
+             var date = "";
+             var name = "";
+             var responseArray = response.responseText.split('_');
+             if (responseArray.length == 2)
+             {
+               date = responseArray[0];
+               name = responseArray[1];
+             }
+
+             $("backup_list").innerHTML += "<tr><td>" + date.substring(4,6) + "-" + date.substring(0,4) + "</td><td>" + name + "</td><td></td></tr>";
+          }
+          $("view_backup_add").hide();
+      },
+      onFailure:function(response) 
+      {
+        alert("Error: Can't add the person has backup.")
+        $("view_backup_add").hide();
+      }
+    });
+  }
+  else
+  {
+    alert("Please, select a date.");
+  }
 }
 
 function delete_wl_backup(backup_id, self_backup)

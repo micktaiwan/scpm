@@ -10,7 +10,13 @@
 
   	backups = WlBackup.find(:all, :conditions=>["person_id=? and week = ?", conso_holidays.person.id.to_s, week]);
   	backups_name = backups.map { |b| "<li>" + b.backup.name + "</li>" }
-  	color   = (backups.size > 0 or wlload.to_i < 4) ? "#9F9" : "red"
+    if wlload.to_i < 4
+      color = "#9F9"
+    elsif backups.size > 0
+      color = "#91E9FF"
+    else
+      color = "red"
+    end
 %>
     <td class="holiday_td" id="holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>" style="border:1px solid black<% if wlload!='' %>;background:<%= color %>;<% end %>">
       <%= wlload %>

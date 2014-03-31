@@ -8,17 +8,17 @@
     <%= submit_tag "X", :id=>"button_backup_add_close", :type=>'button', :onclick=>'$("view_backup_add").hide();' %>
     <h3>Add backup</span></h3>
     <%= submit_tag "Date", :id=>'week', :type=>'button' %>
-    <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'add_backup('+session["workload_person_id"]+', selected_backup_person_id, selected_backup_date);' %>
+    <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'add_backup('+session["workload_person_id"].to_s+', selected_backup_person_id, selected_backup_date);' %>
 </div>
 
 <!-- Backups for me -->
-<h1>My backups</h1>
-<%= submit_tag "Add backup", :type=>'button', :onclick=>'add_backup_action();' %>
+<h1>My backups <%= submit_tag "Add backup", :type=>'button', :onclick=>'add_backup_action();' %>
+</h1>
 <table id="backup_list">
     <tr class="duplicate_tr_header">
         <th>Date</th>
         <th>Backup</th>
-        <th>Actions</th>
+        <th>Comments</th>
     </tr>
     <%= render(:partial=>"backup_line", :collection=>@backups, :as=>:b, :locals => { :self_backup => false }) %>
 </table>
@@ -29,7 +29,7 @@
     <tr class="duplicate_tr_header">
         <th>Line</th>
         <th>Backup From</th>
-        <th>Actions</th>
+        <th>Comments</th>
     </tr>
     <%= render(:partial=>"backup_line", :collection=>@self_backups, :as=>:b, :locals => { :self_backup => true }) %>
 </table>

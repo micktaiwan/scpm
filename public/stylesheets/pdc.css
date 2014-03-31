@@ -297,7 +297,7 @@ ul.sdp_tasks {
   border:1px solid #DDD;
   background: #909190;
   left:40%;
-  width:400px;
+  width:500px;
   text-align: center;
   opacity: 0.90;
   vertical-align: middle;
@@ -327,7 +327,9 @@ ul.sdp_tasks {
 
   border:1px solid #DDD;
   background: #909190;
-  opacity: 0.90;
+  opacity: 0.95;
+  color:white;
+  font-weight: bold;
 
 }
 #holiday_detail ul
