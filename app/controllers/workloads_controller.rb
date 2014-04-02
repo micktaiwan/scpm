@@ -48,6 +48,7 @@ class WorkloadsController < ApplicationController
     get_sdp_tasks(@workload)
     get_chart
     get_sdp_gain(@workload.person)
+    get_unlinked_sdp_tasks(@workload)
   end
 
   def get_last_sdp_update
@@ -111,6 +112,17 @@ class WorkloadsController < ApplicationController
       cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
       @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
     # end
+  end
+
+  def get_unlinked_sdp_tasks(wl)
+    # Directly linked wl<=> sdp
+    wl_line_sdp_task_ids = WlLineTask.find(:all, :joins => 'JOIN wl_lines ON wl_lines.id = wl_line_tasks.id', :conditions => ["person_id = ?", session['workload_person_id']]).map{ |wl_sdp| wl_sdp.sdp_task_id }
+    @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL AND id NOT IN (?)", wl.person.trigram, wl_line_sdp_task_ids])
+    # By requests
+    wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
+    @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id IN (?)", wl.person.trigram, wl_lines_id])
+
+    # render :layout => false
   end
 
   def get_sdp_gain(person)
@@ -700,6 +712,7 @@ private
     get_chart
     get_sdp_gain(@workload.person)
     get_sdp_tasks(@workload)
+    get_unlinked_sdp_tasks(@workload)
   end
 
   def update_line_name(line)
