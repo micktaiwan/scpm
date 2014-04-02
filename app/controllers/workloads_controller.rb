@@ -120,7 +120,7 @@ class WorkloadsController < ApplicationController
     @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL AND id NOT IN (?)", wl.person.trigram, wl_line_sdp_task_ids])
     # By requests
     wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
-    @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id IN (?)", wl.person.trigram, wl_lines_id])
+    @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?)", wl.person.trigram, wl_lines_id])
 
     # render :layout => false
   end
