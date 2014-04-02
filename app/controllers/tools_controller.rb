@@ -89,36 +89,39 @@ class ToolsController < ApplicationController
     path = File.join(directory, name)
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
-    sdp.import
-
-    SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| {:name=>sdp.iteration, :project_code=>sdp.project_code}}.uniq.each { |f|
-      if Iteration.find_by_name_and_project_code(f[:name], f[:project_code]).nil?
-        Iteration.create(f)
+    begin
+      sdp.import
+      SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| {:name=>sdp.iteration, :project_code=>sdp.project_code}}.uniq.each { |f|
+        if Iteration.find_by_name_and_project_code(f[:name], f[:project_code]).nil?
+          Iteration.create(f)
+        end
+      }
+      if APP_CONFIG['use_multiple_projects_sdp_export']
+        redirect_to '/tools/mp_sdp_index'
+        return
       end
-    }
-    if APP_CONFIG['use_multiple_projects_sdp_export']
-      redirect_to '/tools/mp_sdp_index'
-      return
-    end
 
-    sdp_index_prepare
-    sdp_index_by_type_prepare
-    SdpImportLog.create(
-        :sdp_initial_balance             => @sdp_initial_balance,
-        :sdp_real_balance                => @real_balance,
-        :sdp_real_balance_and_provisions => @real_balance_and_provisions,
-        :operational_total_minus_om      => @operational_total-@operational_percent_total,
-        :not_included_remaining          => @not_included_remaining,
-        :provisions                      => @provisions_remaining_should_be,
-        :sold                            => @sold,
-        :remaining_time                  => @remaining_time
-        )
-    sdp_graph # aleady in sdp_index_prepare, but repeated here so grap in email is updated
-    history_comparison
-    @sdp_index_by_mail = true    
-    body = render_to_string(:action=>'sdp_index', :layout=>false) + render_to_string(:action=>'sdp_index_by_type', :layout=>false)
-    Mailer::deliver_mail(APP_CONFIG['sdp_import_email_destination'],APP_CONFIG['sdp_import_email_object'],"<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
-    redirect_to '/tools/sdp_index'
+      sdp_index_prepare
+      sdp_index_by_type_prepare
+      SdpImportLog.create(
+          :sdp_initial_balance             => @sdp_initial_balance,
+          :sdp_real_balance                => @real_balance,
+          :sdp_real_balance_and_provisions => @real_balance_and_provisions,
+          :operational_total_minus_om      => @operational_total-@operational_percent_total,
+          :not_included_remaining          => @not_included_remaining,
+          :provisions                      => @provisions_remaining_should_be,
+          :sold                            => @sold,
+          :remaining_time                  => @remaining_time
+          )
+      sdp_graph # aleady in sdp_index_prepare, but repeated here so grap in email is updated
+      history_comparison
+      @sdp_index_by_mail = true    
+      body = render_to_string(:action=>'sdp_index', :layout=>false) + render_to_string(:action=>'sdp_index_by_type', :layout=>false)
+      Mailer::deliver_mail(APP_CONFIG['sdp_import_email_destination'],APP_CONFIG['sdp_import_email_object'],"<b>SDP has been updated by #{current_user.name}</b><br/><br/>"+body)
+      redirect_to '/tools/sdp_index'
+    rescue Exception => e
+      render(:text=>e)
+    end
   end
 
   def sdp_index_prepare

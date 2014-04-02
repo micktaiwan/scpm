@@ -38,25 +38,37 @@ class SDP
   def import
     @reader = CSV.open(@path, 'r')
 
-    # skip 2 first lines
-    @reader.shift
-    @reader.shift
-    ActiveRecord::Base.connection.execute("TRUNCATE sdp_phases")
-    ActiveRecord::Base.connection.execute("TRUNCATE sdp_activities")
-    ActiveRecord::Base.connection.execute("TRUNCATE sdp_tasks")
-    @state = :init
-    while true
-      if @next_row == nil
-        @row = @reader.shift
-      else
-        @row = @next_row
-        @next_row = nil
+    begin    
+      # skip 2 first lines
+      header = @reader.shift
+      @reader.shift
+      if header.count <= 1
+        raise "CSV file not correctly formated"
       end
-      break if @row.empty?
-      insert
-      break if @state == :end
+      ActiveRecord::Base.connection.execute("TRUNCATE sdp_phases")
+      ActiveRecord::Base.connection.execute("TRUNCATE sdp_activities")
+      ActiveRecord::Base.connection.execute("TRUNCATE sdp_tasks")
+      @state = :init
+      while true
+        if @next_row == nil
+          @row = @reader.shift
+        else
+          @row = @next_row
+          @next_row = nil
+        end
+        break if @row.empty?
+        insert
+        break if @state == :end
+      end
+      SDPTask.format_stats_by_type()
+    rescue Exception => e
+      if e.to_s == "CSV::IllegalFormatError"
+        raise "Unexpected file format"
+      else
+        raise e
+      end
     end
-    SDPTask.format_stats_by_type()
+
   end
 
 private
