@@ -121,6 +121,7 @@ class StreamsController < ApplicationController
 
         # Get x/y for qs (alert managed in view)
         qr_qwr_data["qs_x"]     = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL",qr.id.to_s, @stream.id.to_s]).count
+        qr_qwr_data["qs_x_ghost"] = HistoryCounter.find(:all,:include => [:request], :conditions => ["author_id = ? and history_counters.stream_id = ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL and requests.assigned_to != ?",qr.id.to_s, @stream.id.to_s, qr.rmt_user]).count
         qr_qwr_data["qs_y"]     = 0 
         request_qs_array        = Array.new
 
@@ -134,6 +135,7 @@ class StreamsController < ApplicationController
 
         # Get x/y for spider (alert managed in view)
         qr_qwr_data["spider_x"] = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL",qr.id.to_s, @stream.id.to_s]).count
+        qr_qwr_data["spider_x_ghost"] = HistoryCounter.find(:all,:include => [:request],:conditions => ["author_id = ? and history_counters.stream_id = ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL and requests.assigned_to != ?",qr.id.to_s, @stream.id.to_s, qr.rmt_user]).count
         qr_qwr_data["spider_y"] = 0 
         request_spider_array    = Array.new
 
