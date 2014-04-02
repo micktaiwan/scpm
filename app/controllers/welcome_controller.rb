@@ -43,24 +43,29 @@ class WelcomeController < ApplicationController
     path      = File.join(directory, name)
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     report    = CvsReport.new(path)
-    report.parse
+    begin
+      report.parse
 
-    # transform the Report into a Request
-    report.requests.each { |req|
-      # get the id if it exist, else create it
-      r = Request.find_by_request_id(req.id)
-      r = Request.create(:request_id=>req.id) if not r
-      r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
-      #r.deploy_checklists if r.status == 'assigned' and r.status_changed?
-      r.save
+      # transform the Report into a Request
+      report.requests.each { |req|
+        # get the id if it exist, else create it
+        r = Request.find_by_request_id(req.id)
+        r = Request.create(:request_id=>req.id) if not r
+        r.update_attributes(req.to_hash) # and it updates only the attributes that have changed !
+        #r.deploy_checklists if r.status == 'assigned' and r.status_changed?
+        r.save
 
-      # Create or update the counter log of this request
-      if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6])
-        r.update_ticket_counters
-      end
-    }
-    SDPTask.format_stats_by_type()
-    redirect_to '/projects/import'
+        # Create or update the counter log of this request
+        if WORKPACKAGE_COUNTERS.include?(r.work_package[0..6])
+          r.update_ticket_counters
+        end
+      }
+      SDPTask.format_stats_by_type()
+      redirect_to '/projects/import'
+    rescue Exception => e
+      render(:text=>e)
+    end
+
   end
 
   def workload_schedule
