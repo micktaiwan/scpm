@@ -116,11 +116,12 @@ class WorkloadsController < ApplicationController
 
   def get_unlinked_sdp_tasks(wl)
     # Directly linked wl<=> sdp
-    wl_line_sdp_task_ids = WlLineTask.find(:all, :joins => 'JOIN wl_lines ON wl_lines.id = wl_line_tasks.id', :conditions => ["person_id = ?", session['workload_person_id']]).map{ |wl_sdp| wl_sdp.sdp_task_id }
-    @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL AND id NOT IN (?)", wl.person.trigram, wl_line_sdp_task_ids])
+    task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}
+    cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
+    @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL #{cond}", wl.person.trigram])
     # By requests
     wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
-    @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?)", wl.person.trigram, wl_lines_id])
+    @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
 
     # render :layout => false
   end
