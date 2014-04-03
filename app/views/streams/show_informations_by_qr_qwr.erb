@@ -13,19 +13,19 @@
 			<li>
 				<span class="bold">QS (realised/available)</span> 			: 
 				<!-- Numbers comparison -->
-				<%= ((hash_by_qr_qwr["qs_x"].to_i - hash_by_qr_qwr["qs_x_ghost"].to_i) + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i).to_s %> / <%= hash_by_qr_qwr["qs_y"].to_s %>
+				<%= (hash_by_qr_qwr["qs_x"].to_i + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i).to_s %> / <%= hash_by_qr_qwr["qs_y"].to_s %>
 				<!-- Details -->
 				<% if hash_by_qr_qwr["qs_consumed_by_other_author"].to_i > 0 %>
 					(<b><%= (hash_by_qr_qwr["qs_x"].to_i + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i).to_s %></b> including <b><%= hash_by_qr_qwr["qs_consumed_by_other_author"] %></b> which have been consumed by other QR)
 				<% end %>
 				<% if hash_by_qr_qwr["qs_x_ghost"].to_i > 0 %>
-					(<b><%= hash_by_qr_qwr["qs_x_ghost"].to_s %></b> have been consumed on a tickets which are now assigned to another person.)
+					(<b><%= hash_by_qr_qwr["qs_x_ghost"].to_s %></b> have been consumed on tickets which are now assigned to another people.)
 				<% end %>
 
 				<!-- Warnings -->
-				<% if (((hash_by_qr_qwr["qs_x"].to_i - hash_by_qr_qwr["qs_x_ghost"].to_i) + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i + 5 >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
+				<% if ((hash_by_qr_qwr["qs_x"].to_i  + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i + 5 >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
 					<span class="warning"> Not enough QS tickets </span>
-				<% elsif (((hash_by_qr_qwr["qs_x"].to_i - hash_by_qr_qwr["qs_x_ghost"].to_i) + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
+				<% elsif ((hash_by_qr_qwr["qs_x"].to_i + hash_by_qr_qwr["qs_consumed_by_other_author"].to_i >= hash_by_qr_qwr["qs_y"].to_i) && (hash_by_qr_qwr["qs_x"].to_i > 0)) %>
 					<span class="alert"> Not enough QS tickets </span>
 				<% end %>
 			</li>
@@ -36,20 +36,20 @@
 			<li>
 				<span class="bold">Spiders (realised/available)</span>		: 
 				<!-- Numbers comparison -->
-				<%= ((hash_by_qr_qwr["spider_x"].to_i - hash_by_qr_qwr["spider_x_ghost"].to_i) + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i) %> / <%= hash_by_qr_qwr["spider_y"].to_s %>
+				<%= (hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i) %> / <%= hash_by_qr_qwr["spider_y"].to_s %>
 				<!-- Details -->
 				<% if hash_by_qr_qwr["spider_consumed_by_other_author"].to_i > 0 %>
 					 (<b><%= (hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i) %></b> including <b><%= hash_by_qr_qwr["spider_consumed_by_other_author"] %></b> which have been consumed by other QR)
 				<% end %>
 				<% if hash_by_qr_qwr["spider_x_ghost"].to_i > 0 %>
-					(<b><%= hash_by_qr_qwr["spider_x_ghost"].to_s %></b> have been consumed on a tickets which are now assigned to another person.)
+					(<b><%= hash_by_qr_qwr["spider_x_ghost"].to_s %></b> have been consumed on tickets which are now assigned to another people.)
 				<% end %>
 
 				<!-- Warnings -->
-				<% if (((hash_by_qr_qwr["spider_x"].to_i - hash_by_qr_qwr["spider_x_ghost"]) + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i + 5 >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
-					<span class="warning"> Not enough QS tickets </span>
-				<% elsif (((hash_by_qr_qwr["spider_x"].to_i - hash_by_qr_qwr["spider_x_ghost"]) + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i  >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
-					<span class="alert"> Not enough QS tickets </span>
+				<% if ((hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i + 5 >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
+					<span class="warning"> Not enough Spider tickets </span>
+				<% elsif ((hash_by_qr_qwr["spider_x"].to_i + hash_by_qr_qwr["spider_consumed_by_other_author"].to_i  >= hash_by_qr_qwr["spider_y"].to_i) && (hash_by_qr_qwr["spider_x"].to_i > 0)) %>
+					<span class="alert"> Not enough Spider tickets </span>
 				<% end %>
 			</li>
 

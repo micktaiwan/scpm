@@ -61,3 +61,10 @@ h2 {
 	border: 1px solid grey;
 	width:500px;
 }
+
+.line_number
+{
+  font-size: 36px;
+  color: grey;
+  font-weight: bold;
+}
