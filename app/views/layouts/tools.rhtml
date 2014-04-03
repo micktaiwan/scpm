@@ -54,7 +54,7 @@
       <li class="hsep">Imports</li>
       <li><%= link_to('SDP import',       {:controller=>'tools', :action=>'sdp_import'}) %></li>
       <li><%= link_to('RMT to SDP task import',          {:controller=>'tools', :action=>'sdp_add'}) %></li>
-      <li><%= link_to('Monthly tasks SDP import', {:controller=>'tools', :action=>'import_monthly_tasks_form'}) %></li>
+      <li><%= link_to('Monthly tasks SDP import', {:controller=>'tools', :action=>'import_monthly_tasks'}) %></li>
       <li class="hsep">Checks</li>
       <li><%= link_to('CHECK Loads',{:controller=>'tools', :action=>'load_errors'}) %></li>
       <li><%= link_to('CHECK RMT <=> SDP',{:controller=>'tools', :action=>'sdp_yes_check'}) %></li>
@@ -91,6 +91,8 @@
         <li><%= link_to('Capi',           {:controller=>'notes',                  :action=>'list'})   %></li>
         <li><%= link_to('Capi Axes',      {:controller=>'capi_axes',              :action=>'index'})  %></li>
         <li><%= link_to('Suite Tags',     {:controller=>'suite_tags',             :action=>'index'})  %></li>
+        <li><%= link_to('Monthly tasks',     {:controller=>'monthly_tasks',          :action=>'index'})  %></li>
+        <li><%= link_to('Monthly task Types',     {:controller=>'monthly_task_types',          :action=>'index'})  %></li>
         <li class="hsep">Stats</li>
         <li><%= link_to('Requests by year', {:controller=>'tools', :action=>'requests_by_year'}) %></li>
         <li><%= link_to('Projects length',  {:controller=>'tools', :action=>'projects_length'}) %></li>

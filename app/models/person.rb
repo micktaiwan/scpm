@@ -25,6 +25,7 @@ class Person < ActiveRecord::Base
   has_many   :wl_lines
   has_many   :sdp_logs, :order=>"id"
   has_many   :history_counters
+  has_many   :monthly_task_people
   serialize  :settings, PersonSettings
 
   before_save :encrypt_password

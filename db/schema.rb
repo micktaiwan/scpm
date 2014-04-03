@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131120111300) do
+ActiveRecord::Schema.define(:version => 20140121154007) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -356,6 +356,28 @@ ActiveRecord::Schema.define(:version => 20131120111300) do
   end
 
   add_index "milestones", ["project_id"], :name => "IDX_MILESTONES"
+
+  create_table "monthly_task_people", :force => true do |t|
+    t.integer  "monthly_task_id"
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "monthly_task_types", :force => true do |t|
+    t.string   "name"
+    t.text     "template"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "monthly_tasks", :force => true do |t|
+    t.string   "title"
+    t.integer  "load_value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "monthly_task_type_id"
+  end
 
   create_table "notes", :force => true do |t|
     t.text     "note"
