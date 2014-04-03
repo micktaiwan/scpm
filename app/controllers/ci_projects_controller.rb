@@ -46,18 +46,22 @@ class CiProjectsController < ApplicationController
     path = File.join(directory, name)
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     report = CsvCiReport.new(path)
-    report.parse
-    # transform the Report into a CiProject
-    report.projects.each { |p|
-      # get the id if it exist, else create it
-      if (p.stage != "BAM" and p.stage != "")
-      ci = CiProject.find_by_external_id(p.external_id)
-        ci = CiProject.create(:external_id=>p.exterbal_id) if not ci
-        ci.update_attributes(p.to_hash) # and it updates only the attributes that have changed !
-        ci.save
-      end
-    }
-    redirect_to '/ci_projects/index'
+    begin
+      report.parse
+      # transform the Report into a CiProject
+      report.projects.each { |p|
+        # get the id if it exist, else create it
+        if (p.stage != "BAM" and p.stage != "")
+          ci = CiProject.find_by_external_id(p.external_id)
+          ci = CiProject.create(:external_id=>p.exterbal_id) if not ci
+          ci.update_attributes(p.to_hash) # and it updates only the attributes that have changed !
+          ci.save
+        end
+      }
+      redirect_to '/ci_projects/index'
+    rescue Exception => e
+      render(:text=>e)
+    end
   end
 
   def edit
