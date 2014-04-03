@@ -8,14 +8,14 @@ class MonthlyTasksController < ApplicationController
 
   def new
   	@monthlyTask = MonthlyTask.new()
-  	@people = Person.find(:all)
+  	@people = Person.find(:all, :conditions=>["is_supervisor = 0 and has_left = 0"])
     @monthlyTaskTypes = MonthlyTaskType.find(:all)
   end
 
   def edit
     id = params[:id]
     @monthlyTask = MonthlyTask.find(id)
-    @people = Person.find(:all)
+    @people = Person.find(:all, :conditions=>["is_supervisor = 0 and has_left = 0"])
     @monthlyTaskTypes = MonthlyTaskType.find(:all)
   end
 
@@ -46,8 +46,8 @@ class MonthlyTasksController < ApplicationController
   	id 			= params[:id]
   	person_id 	= params[:person_id]
 	
-	monthlyTask = MonthlyTask.find(id)
-	monthlyTask.add_person(Person.find(person_id))
+	  monthlyTask = MonthlyTask.find(id)
+	  monthlyTask.add_person(Person.find(person_id))
     render(:nothing=>true)
   end
 
@@ -55,8 +55,8 @@ class MonthlyTasksController < ApplicationController
   	id 			= params[:id]
   	person_id 	= params[:person_id]
 	
-	monthlyTask = MonthlyTask.find(id)
-	monthlyTask.remove_person(Person.find(person_id))
+	  monthlyTask = MonthlyTask.find(id)
+	  monthlyTask.remove_person(Person.find(person_id))
     render(:nothing=>true)
   end
 
