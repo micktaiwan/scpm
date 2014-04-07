@@ -8,14 +8,14 @@ class MonthlyTasksController < ApplicationController
 
   def new
   	@monthlyTask = MonthlyTask.new()
-  	@people = Person.find(:all, :conditions=>["is_supervisor = 0 and has_left = 0"])
+  	@people = Person.find(:all, :conditions=>["is_supervisor = 0 and has_left = 0"], :order=>"name")
     @monthlyTaskTypes = MonthlyTaskType.find(:all)
   end
 
   def edit
     id = params[:id]
     @monthlyTask = MonthlyTask.find(id)
-    @people = Person.find(:all, :conditions=>["is_supervisor = 0 and has_left = 0"])
+    @people = Person.find(:all, :conditions=>["is_supervisor = 0 and has_left = 0"], :order=>"name")
     @monthlyTaskTypes = MonthlyTaskType.find(:all)
   end
 
