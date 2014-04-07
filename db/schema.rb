@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140121154007) do
+ActiveRecord::Schema.define(:version => 20140407105759) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -877,6 +877,7 @@ ActiveRecord::Schema.define(:version => 20140121154007) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_active",  :default => true
   end
 
   create_table "tasks", :force => true do |t|
@@ -902,6 +903,15 @@ ActiveRecord::Schema.define(:version => 20140121154007) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sqli_action", :default => 0
+  end
+
+  create_table "wl_backups", :force => true do |t|
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "comment"
+    t.integer  "backup_person_id"
+    t.integer  "week"
   end
 
   create_table "wl_holidays", :force => true do |t|
