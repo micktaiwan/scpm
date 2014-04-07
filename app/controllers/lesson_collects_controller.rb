@@ -189,6 +189,11 @@ class LessonCollectsController < ApplicationController
         lesson_collect.axes                   = l[LESSON_CELL_AXES_LABEL]         
         lesson_collect.sub_axes               = l[LESSON_CELL_SUB_AXES_LABEL]   
         lesson_collect.save
+      elsif lesson_objs != nil
+        lesson_objs.each do |lo|
+          lo.lesson_collect_file_id = lesson_file.id
+          lo.save
+        end
       end 
     end
     # Save Actions
@@ -207,7 +212,12 @@ class LessonCollectsController < ApplicationController
         lesson_collect_action.benefit                 = a[ACTION_CELL_BENEFIT_LABEL]      
         lesson_collect_action.level_of_investment     = a[ACTION_CELL_LEVEL_INVEST_LABEL]      
         lesson_collect_action.save
-      end
+      elsif action_objs != nil
+        action_objs.each do |ao|
+          ao.lesson_collect_file_id = lesson_file.id
+          ao.save
+        end
+      end 
     end
     # Save Assessemnets
     assessments_content_array.each do |a|
@@ -226,7 +236,12 @@ class LessonCollectsController < ApplicationController
         lesson_collect_assessment.mt_improvements         = a[ASSESSMENT_CELL_IMP_LABEL]           
         lesson_collect_assessment.comments                = a[ASSESSMENT_CELL_COMMENTS_LABEL]           
         lesson_collect_assessment.save  
-      end
+      elsif assessment_objs != nil
+        assessment_objs.each do |ao|
+          ao.lesson_collect_file_id = lesson_file.id
+          ao.save
+        end
+      end 
     end
 
     redirect_to(:action=>'index', :imported=>1)
@@ -318,7 +333,12 @@ class LessonCollectsController < ApplicationController
   end
 
   def delete
-
+    lesson_file_id = params[:id]
+    if lesson_file_id != nil
+      lesson_file = LessonCollectFile.find(:first, :conditions=>["id = ?", lesson_file_id])
+      lesson_file.destroy
+    end
+    redirect_to "/lesson_collects/index"
   end
   
   # ------------------------------------------------------------------------------------
