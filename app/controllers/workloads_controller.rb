@@ -109,16 +109,16 @@ class WorkloadsController < ApplicationController
       end
       task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}#wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
       cond = ""
-      cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
-      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
+      cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
+      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond} and remaining > 0", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
     # end
   end
 
   def get_unlinked_sdp_tasks(wl)
     # Directly linked wl<=> sdp
     task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}
-    cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
-    @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL #{cond}", wl.person.trigram])
+    cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
+    @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL #{cond} and remaining > 0", wl.person.trigram])
     # By requests
     wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
     @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
