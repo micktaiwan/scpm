@@ -19,13 +19,14 @@ class ProjectsController < ApplicationController
     end
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1 and has_left=0", :order=>"name asc")
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0 and is_transverse=0"], :order=>"people.name asc")
-    @suite_tags  = SuiteTag.find(:all, :order => "name")
-    
-    @selected_suite_tags = nil
-    if  session[:project_filter_suiteTags]
-       @selected_suite_tags = session[:project_filter_suiteTags][1...-1].gsub("'","").split(",")
-       @selected_suite_tags = @selected_suite_tags.map{|t| t.to_i}
-    end
+    suite_tags   = SuiteTag.find(:all, :conditions => ["is_active = 1"])
+    @suite_tags  = suite_tags.sort_by{ |st|
+      if st[:name].scan(/\d+[,.]\d+|\d+/).count > 0
+        st[:name].scan(/\d+[,.]\d+|\d+/)[0].to_f
+      else
+        st[:name]
+      end
+    }
 
     @workstreams = Workstream.all()
     @workstreams = @workstreams.map { |ws| ws.name }

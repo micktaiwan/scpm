@@ -48,8 +48,9 @@
     </td>
     <td>
       <b>Suite</b><br/>
-      <%= select_tag "suiteTags", options_for_select(@suite_tags.map {|st| [st.name, st.id]}, @selected_suite_tags), {:multiple => true, :size => 18}  %>
-      <p><button class="btnlnk" type="button" id="reset_filter" onclick="clear_project_filter_suite($('suiteTags'))">Reset Filter suite</button></p>
+      <% for st in @suite_tags %>
+        <%= check_box_tag('suiteTags[]',st.id) %> <%= st.name %><br/>
+      <% end %>
     </td>
   </tr>
   
