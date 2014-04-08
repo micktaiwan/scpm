@@ -1,13 +1,29 @@
 <tr>
 <td><%= conso_holidays.person.name %></td>
 <%
+
   wl_line = conso_holidays.wl_lines.first
   for week in conso_holidays.wl_weeks
-    wlload = wl_line.get_load_by_week(week) if wl_line
-    wlload = (wlload == 0.0 ? '' : wlload)
+
+    wlload  = wl_line.get_load_by_week(week) if wl_line
+    wlload  = (wlload == 0.0 ? '' : wlload)
+
+  	backups = WlBackup.find(:all, :conditions=>["person_id=? and week = ?", conso_holidays.person.id.to_s, week]);
+  	backups_name = backups.map { |b| "<li>" + b.backup.name + "</li>" }
+    if wlload.to_i < 4
+      color = "#9F9"
+    elsif backups.size > 0
+      color = "#91E9FF"
+    else
+      color = "red"
+    end
 %>
-    <td style="border:1px solid black<% if wlload!='' %>;background:#9F9;<% end %>">
+    <td class="holiday_td" id="holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>" style="border:1px solid black<% if wlload!='' %>;background:<%= color %>;<% end %>">
       <%= wlload %>
     </td>
+    <!-- Add backups to array -->
+    <SCRIPT language="Javascript">
+		<%= backups_name.size %> > 0 ? holiday_hover_detail["holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>"] = "<ul><%= backups_name.to_s %></ul>" : holiday_hover_detail["holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>"] = "";
+	</SCRIPT>
 <% end %>
 </tr>

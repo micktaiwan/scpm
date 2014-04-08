@@ -289,6 +289,56 @@ ul.sdp_tasks {
   color: #333;
 }
 
+<<<<<<< HEAD
+/* Duplicate view */
+#view_backup_add {
+  position: absolute;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  border:1px solid #DDD;
+  background: #909190;
+  left:40%;
+  width:500px;
+  text-align: center;
+  opacity: 0.90;
+  vertical-align: middle;
+  padding-bottom: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  position: fixed;
+}
+
+#button_backup_add_close
+{
+  float:left;
+}
+
+.backup_list_person li
+{
+  /*display:inline;*/
+}
+
+#holiday_detail 
+{
+  display: none;
+  position: absolute;
+
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+
+  border:1px solid #DDD;
+  background: #909190;
+  opacity: 0.95;
+  color:white;
+  font-weight: bold;
+
+}
+#holiday_detail ul
+{
+  list-style-type: circle;
+  padding-right: 15px;
+}
+=======
 #view_alert_sdp{
   position: absolute;
   border-radius: 10px;
@@ -313,3 +363,4 @@ ul.sdp_tasks {
 #button_alert_sdp{
   float: left;
 }
+>>>>>>> 8707719095ecbcb0c52ee40846936f32747e7b62

@@ -27,6 +27,7 @@ class Person < ActiveRecord::Base
   has_many   :history_counters
   has_many   :monthly_task_people
   serialize  :settings, PersonSettings
+  has_many   :wl_backups, :dependent => :destroy
 
   before_save :before_person_save
 
