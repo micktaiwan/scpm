@@ -36,7 +36,7 @@ class StreamsController < ApplicationController
     #                                               and is_qr_qwr = 1", Workstream.find(@stream.workstream).name])
     @projects = Project.find(:all,:conditions => ["workstream = ? 
                                                   and is_running = 1 
-                                                  and project_id is null", Workstream.find(@stream.workstream).name])
+                                                  and project_id is null", Workstream.find(@stream.workstream).name], :order=>"name")
   end
   
   def show_stream_informations

@@ -3,7 +3,14 @@ layout 'tools'
 
 
 def index
-	@suiteTags = SuiteTag.find(:all)	
+	suiteTags   = SuiteTag.find(:all)	
+    @suiteTags  = suiteTags.sort_by{ |st|
+      if st[:name].scan(/\d+[,.]\d+|\d+/).count > 0
+        st[:name].scan(/\d+[,.]\d+|\d+/)[0].to_f
+      else
+        st[:name]
+      end
+    }
 end
 
 def new

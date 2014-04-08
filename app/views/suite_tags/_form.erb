@@ -1,3 +1,6 @@
 <table class="edit">
-	<tr><td>Name</td><td><%= text_field :suite_tag, :name %></td></tr>
+	<tr>
+		<td>Name</td><td><%= text_field :suite_tag, :name %>  
+		<td>Is active</td><td><%= check_box :suite_tag, :is_active %></td>
+	</tr>
 </table>
