@@ -618,6 +618,10 @@ class ToolsController < ApplicationController
   def show_counter_history
     @stream_id        = params[:stream_id]
     @request_id       = params[:request_id]
+    @filter = false
+    if params[:filter]
+      @filter = true
+    end
     streams           = Stream.find(:all)
     @streams_array    = [["All",0]]
     streams.each{ |s| 

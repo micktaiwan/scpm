@@ -2,6 +2,7 @@
 <% form_tag(:action=>'show_counter_history') do %>
   <%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
   <%= select_tag ("request_id",options_for_select(@requests_array,@request_id.to_i))  %>
+  <%= hidden_field_tag 'filter' %>
   <%= submit_tag('Filter') %>
 <% end %>
 
@@ -10,6 +11,7 @@
   (current_user.has_role?('Admin')) ? (row_number = 5) : (row_number = 4)
 %>
 
+<% if @filter == true %>
 <h2>Spider Counters</h2>
 <% last_request_spider = 0 %>
 <% line_count = 0 %>
@@ -125,3 +127,4 @@
   </tr>
 <% end %>
 </table>
+<% end %>

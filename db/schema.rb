@@ -834,7 +834,7 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.integer  "last_modifier"
     t.integer  "locked",                 :default => 0
     t.datetime "locked_time"
-    t.text     "ws_report"
+    t.text     "reporting"
     t.datetime "reason_updated_at",      :default => '2011-07-19 09:15:21'
     t.datetime "ws_updated_at",          :default => '2011-07-19 09:15:21'
     t.text     "pratice_spider_gap"
