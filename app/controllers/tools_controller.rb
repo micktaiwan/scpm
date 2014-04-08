@@ -370,8 +370,8 @@ class ToolsController < ApplicationController
 
   def sdp_yes_check
     @task_ids = SDPTask.find(:all, :conditions=>"initial > 0").collect{ |t| "'#{t.request_id}'" }.uniq
-    @yes_but_no_task_requests = Request.find(:all, :conditions=>"sdp='yes' and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id not in (#{@task_ids.join(',')})")
-    @yes_but_cancelled_requests = Request.find(:all, :conditions=>"sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id in (#{@task_ids.join(',')}) and (status='cancelled' or status='removed')")
+    @yes_but_no_task_requests = Request.find(:all, :conditions=>["sdp='yes' and (start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id not in (#{@task_ids.join(',')})", Date.parse('2014-02-01')])
+    @yes_but_cancelled_requests = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id in (#{@task_ids.join(',')}) and (status='cancelled' or status='removed')", Date.parse('2014-02-01')])
     @no_but_sdp = Request.find(:all, :conditions=>"request_id in (#{@task_ids.join(',')}) and sdp='no'")
   end
 
@@ -458,7 +458,7 @@ class ToolsController < ApplicationController
     # check if sdp loads are corrects
     @empty_sdp_iteration = Request.find(:all, :conditions=>"sdpiteration='' and status!='removed'", :order=>"request_id")
     # TODO: not portable
-    @checks = Request.find(:all, :conditions=>"status!='removed' and sdp='Yes' and sdpiteration!='' and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010'", :order=>"request_id")
+    @checks = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and status!='removed' and sdp='Yes' and sdpiteration!='' and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010'", Date.parse('2014-02-01')], :order=>"request_id")
     @checks = @checks.select {|r|
       r.workload2.to_f != r.sdp_tasks_initial_sum
       }
@@ -470,7 +470,7 @@ class ToolsController < ApplicationController
 
   def requests_by_year
     @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"workstream, summary, milestone")
-    @years = [2011, 2012, 2013]
+    @years = [2011, 2012, 2013, 2014]
   end
 
   def projects_length
@@ -618,6 +618,10 @@ class ToolsController < ApplicationController
   def show_counter_history
     @stream_id        = params[:stream_id]
     @request_id       = params[:request_id]
+    @filter = false
+    if params[:filter]
+      @filter = true
+    end
     streams           = Stream.find(:all)
     @streams_array    = [["All",0]]
     streams.each{ |s| 
