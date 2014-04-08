@@ -373,8 +373,8 @@ class ToolsController < ApplicationController
 
   def sdp_yes_check
     @task_ids = SDPTask.find(:all, :conditions=>"initial > 0").collect{ |t| "'#{t.request_id}'" }.uniq
-    @yes_but_no_task_requests = Request.find(:all, :conditions=>["sdp='yes' and (start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id not in (#{@task_ids.join(',')})", Date.parse('2014-01-01')])
-    @yes_but_cancelled_requests = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id in (#{@task_ids.join(',')}) and (status='cancelled' or status='removed')", Date.parse('2014-01-01')])
+    @yes_but_no_task_requests = Request.find(:all, :conditions=>["sdp='yes' and (start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id not in (#{@task_ids.join(',')})", Date.parse('2014-02-01')])
+    @yes_but_cancelled_requests = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id in (#{@task_ids.join(',')}) and (status='cancelled' or status='removed')", Date.parse('2014-02-01')])
     @no_but_sdp = Request.find(:all, :conditions=>"request_id in (#{@task_ids.join(',')}) and sdp='no'")
   end
 
@@ -461,37 +461,14 @@ class ToolsController < ApplicationController
     # check if sdp loads are corrects
     @empty_sdp_iteration = Request.find(:all, :conditions=>"sdpiteration='' and status!='removed'", :order=>"request_id")
     # TODO: not portable
-    @checks = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and status!='removed' and sdp='Yes' and sdpiteration!='' and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010'", Date.parse('2014-01-01')], :order=>"request_id")
+    @checks = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and status!='removed' and sdp='Yes' and sdpiteration!='' and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010'", Date.parse('2014-02-01')], :order=>"request_id")
     @checks = @checks.select {|r|
       r.workload2.to_f != r.sdp_tasks_initial_sum
       }
   end
 
-  def import_monthly_tasks_form
-    @ope = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
-    @service_resp = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").select{ |p| p.has_role?('ServiceLineResp')}
-    @cpdp_people = Person.find(:all, :conditions=>"has_left=0 and is_cpdp=1", :order=>"name")
-  end
-
   def import_monthly_tasks
-    # operational people
-    ope_ids  = params["qr"]["ids"].join(",")
-    @oname   = params["qr_name"]
-    @oload   = params["qr_load"]
-    @ope     = Person.find(:all, :conditions=>"id in (#{ope_ids})", :order=>"name")
-    # line responsible people
-    resp_ids = params["resp"]
-    if not resp_ids; resp_ids = "0"; else; resp_ids = resp_ids["ids"].join(","); end
-    @rname = params["resp_name"]
-    @rload = params["resp_load"]
-    @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
-    # cp/dp people
-    cpdp_ids = params["cpdp"]
-    if not cpdp_ids; cpdp_ids = "0"; else; cpdp_ids = cpdp_ids["ids"].join(","); end
-    @cpdpName = params["cpdp_name"]
-    @cpdpLoad = params["cpdp_load"]
-    @cpdp = Person.find(:all, :conditions=>"id in(#{cpdp_ids})", :order=>"name")
-    render(:layout=>false)
+    @monthlyTasks = MonthlyTask.find(:all)
   end
 
   def requests_by_year
@@ -644,6 +621,10 @@ class ToolsController < ApplicationController
   def show_counter_history
     @stream_id        = params[:stream_id]
     @request_id       = params[:request_id]
+    @filter = false
+    if params[:filter]
+      @filter = true
+    end
     streams           = Stream.find(:all)
     @streams_array    = [["All",0]]
     streams.each{ |s| 

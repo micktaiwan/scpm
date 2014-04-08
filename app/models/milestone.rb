@@ -56,16 +56,29 @@ class Milestone < ActiveRecord::Base
   end
 
   def checklist_not_allowed?
-    self.checklist_not_applicable==1 or self.done!=0 # self.status!=0
+    if checklist_to_deploy? or checklist_to_delete?
+      return true
+    end
+    return false
   end
 
+  def checklist_to_deploy?
+     self.done==0
+  end
+
+  def checklist_to_delete?
+    self.checklist_not_applicable==1
+  end
 
   # Deploy checklist items from checklist templates
   def deploy_checklists
 
     # If ths milestone shouldn't have anymore some checklists. We delete the checklist items which are not already be used
-    if checklist_not_allowed?
+    if checklist_to_delete?
       ChecklistItem.find(:all, :conditions=>["parent_id != 0 and status = 0 and milestone_id=? and project_id IS NULL", self.id]).each(&:destroy)
+      return
+    end
+    if checklist_to_deploy?
       return
     end
 

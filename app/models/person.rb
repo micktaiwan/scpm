@@ -25,10 +25,11 @@ class Person < ActiveRecord::Base
   has_many   :wl_lines
   has_many   :sdp_logs, :order=>"id"
   has_many   :history_counters
+  has_many   :monthly_task_people
   serialize  :settings, PersonSettings
   has_many   :wl_backups, :dependent => :destroy
 
-  before_save :encrypt_password
+  before_save :before_person_save
 
   attr_accessor :password
   
@@ -340,8 +341,17 @@ class Person < ActiveRecord::Base
 protected
 
   # before filter
-  def encrypt_password
+  def before_person_save
+    # Encrypt password
     self.pwd = self.class.encrypt(password) if password_required?
+
+    # Remove from monthly tasks if person has left
+    if (self.has_left_was == 0) && (self.has_left == 1)
+      MonthlyTask.find(:all, :include=>:people, :conditions=>["people.id = ?", self.id.to_s]).each do |mt|
+        mt.remove_person(self)
+      end
+    end
+
   end
 
   def password_required?

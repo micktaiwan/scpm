@@ -491,8 +491,6 @@ end
             @xml.Cell do
               if (col_number >= 4) and (p[column] != 0)
               @xml.tag!("ss:Data", 'ss:Type' => 'String', 'xmlns'=>'http://www.w3.org/TR/REC-html40') do; @xml<<excel_text(p[column].to_s.split('\r\n').join('&#10;&#10;')); end;
-              #                @xml.Data p[column].to_s.gsub(/<br>/i,"<br/>").split("\r\n").join('&#10;'), 'ss:Type' => 'String';
-
               else
                @xml.Data p[column], 'ss:Type' => 'String';
               end

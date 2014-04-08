@@ -1,0 +1,7 @@
+<ul>
+<% @monthlyTask.people.each do |p| %>
+	<li> 
+		<%= p.name %> - <input type="button" value="Remove" id="remove_person_id" onClick="remove_person('<%= p.id.to_s %>');" />
+	</li>
+<% end %>
+</ul>
