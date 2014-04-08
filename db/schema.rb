@@ -834,7 +834,7 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.integer  "last_modifier"
     t.integer  "locked",                 :default => 0
     t.datetime "locked_time"
-    t.text     "reporting"
+    t.text     "ws_report"
     t.datetime "reason_updated_at",      :default => '2011-07-19 09:15:21'
     t.datetime "ws_updated_at",          :default => '2011-07-19 09:15:21'
     t.text     "pratice_spider_gap"
@@ -903,15 +903,6 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sqli_action", :default => 0
-  end
-
-  create_table "wl_backups", :force => true do |t|
-    t.integer  "person_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "comment"
-    t.integer  "backup_person_id"
-    t.integer  "week"
   end
 
   create_table "wl_holidays", :force => true do |t|

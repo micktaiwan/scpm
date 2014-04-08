@@ -23,6 +23,14 @@ class Stream < ActiveRecord::Base
     rv
   end
 
+  def qs_requests_sorted_by_counters
+    self.requests.sort_by { |r|  [-get_consumed_qs_counter_for_request(r), r.start_date] }
+  end
+
+  def spider_requests_sorted_by_counters
+    self.requests.sort_by { |r|  [-get_consumed_spider_counter_for_request(r), r.start_date] }
+  end
+
   # Risks
   def suggested_status
     rv = 1
@@ -199,7 +207,7 @@ class Stream < ActiveRecord::Base
     next_spider_counter_incrementation = self.get_consumed_spider_count_for_user(author) + 1 # Get the next counter incrementation
 
     # loop on requests of this stream by date
-    self.requests.sort_by{|r| r.start_date }.each { |r|
+    self.spider_requests_sorted_by_counters.each { |r|
        if ((WORKPACKAGE_SPIDERS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity) and (r.assigned_to == author.rmt_user))
           
           # Sum spider total
@@ -232,7 +240,7 @@ class Stream < ActiveRecord::Base
     next_qs_counter_incrementation = self.get_consumed_qs_count_for_user(author) + 1 # Get the next counter incrementation
 
     # loop on requests of this stream by date
-    self.requests.sort_by{|r| r.start_date }.each { |r|
+    self.qs_requests_sorted_by_counters.each { |r|
        if ((WORKPACKAGE_QS == r.work_package[0..6]) and (r.counter_log) and (r.counter_log.validity) and (r.assigned_to == author.rmt_user))
           
           # Sum counter total
