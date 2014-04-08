@@ -289,7 +289,6 @@ ul.sdp_tasks {
   color: #333;
 }
 
-<<<<<<< HEAD
 /* Duplicate view */
 #view_backup_add {
   position: absolute;
@@ -338,7 +337,8 @@ ul.sdp_tasks {
   list-style-type: circle;
   padding-right: 15px;
 }
-=======
+
+/* ALERT SDP */
 #view_alert_sdp{
   position: absolute;
   border-radius: 10px;
@@ -363,4 +363,3 @@ ul.sdp_tasks {
 #button_alert_sdp{
   float: left;
 }
->>>>>>> 8707719095ecbcb0c52ee40846936f32747e7b62
