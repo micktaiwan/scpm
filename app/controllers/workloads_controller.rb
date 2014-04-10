@@ -6,6 +6,8 @@ class WorkloadsController < ApplicationController
 
   layout 'pdc'
 
+  $backup_holiday_threshold = 3
+
   def index
     person_id      = params[:person_id]
     project_ids    = params[:project_ids]
@@ -48,6 +50,7 @@ class WorkloadsController < ApplicationController
     get_sdp_tasks(@workload)
     get_chart
     get_sdp_gain(@workload.person)
+    get_backup_warnings(@workload.person)
     get_unlinked_sdp_tasks(@workload)
   end
 
@@ -92,6 +95,32 @@ class WorkloadsController < ApplicationController
     cond = " and request_id not in (#{request_ids.join(',')})" if request_ids.size > 0
     @suggested_requests = Request.find(:all, :conditions => "assigned_to='#{wl.person.rmt_user}' and status!='closed' and status!='performed' and status!='cancelled' and status!='removed' and resolution!='ended' #{cond}", :order=>"project_name, summary")
     @suggested_requests = @suggested_requests.select { |r| r.sdp_tasks_remaining_sum > 0 }
+  end
+
+  def get_backup_warnings(person_id)
+
+    currentWeek = wlweek(Date.today)
+    nextWeek    = wlweek(Date.today+7.days)
+    backups = WlBackup.find(:all, :conditions=>["backup_person_id = ? and (week = ? or week = ?)", person_id, currentWeek, nextWeek])
+
+    @backup_holidays = []
+    backups.each do |b|  
+      # Load for holyday and concerned user (for the 14 next days)
+      person_holiday_load = WlLoad.find(:all,
+        :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and (wl_loads.week = ? or wl_loads.week = ?)", b.person.id.to_s, currentWeek, nextWeek])
+
+      if person_holiday_load.count > 0
+        load_total = 0
+
+        # Calcul the number of day of holiday. If it's over the threshold, display the warning
+        person_holiday_load.map { |wload| load_total += wload.wlload }
+        if (load_total > $backup_holiday_threshold)
+         @backup_holidays << b.person.name if !@backup_holidays.include?(b.person.name)
+        end
+      end
+
+    end
   end
 
   def do_get_sdp_tasks()
@@ -701,6 +730,55 @@ class WorkloadsController < ApplicationController
   def hide_wmenu
     session['wmenu_hidden'] = params[:on]
     render(:nothing=>true)
+  end
+
+  def backup
+    @people   = Person.find(:all, :conditions=>["has_left=0 and is_supervisor=0 and id != ?", session['workload_person_id']], :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    
+    @backups      = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
+    @self_backups = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
+  end
+  
+  def create_backup    
+    b_id  = params['backup_person_id']
+    p_id  = params['person_id']
+    week  = params['week']
+
+    backups = WlBackup.first(:conditions=>["backup_person_id = ? and person_id = ? and week = ?", b_id, p_id, week]);
+    if (backups == nil)
+      backup = WlBackup.new
+      backup.backup_person_id = b_id
+      backup.person_id = p_id
+      backup.week = week
+      backup.save
+      render :text=>backup.week.to_s+"_"+backup.backup.name
+    else
+      render(:nothing=>true)
+    end
+  end
+
+  def delete_backup
+    backup_id = params['backup_id']
+    backup = WlBackup.first(:conditions=>["id = ?", backup_id]);
+    backup.destroy
+    render(:nothing=>true)
+  end
+
+  def update_backup_comment
+    backup_id      = params['backup_id']
+    backup_comment = params['backup_comment']
+    backup = WlBackup.first(:conditions=>["id = ?", backup_id]);
+    if backup != nil
+      backup.comment = backup_comment
+      backup.save
+    end
+    render :text=>backup.comment, :layout => false 
+  end
+
+  def get_week
+    date_str = params['date']
+    date = Date.strptime(date_str, "%Y-%m-%d")
+    render :text=> wlweek(date)
   end
 
 private

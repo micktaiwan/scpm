@@ -156,30 +156,3 @@ function check_submit_form_list_per_wp()
     }
   });
 }
-
-function check_duplicate_workload_interactions()
-{
-	$$(".duplicate_load_td").invoke('observe', 'click', function(){
-	  if (this.select("input")[0].checked == true)
-	  {
-	    this.select("input")[0].checked=false;
-	    this.setStyle({
-	        backgroundColor: "white"
-	    });
-	  }
-	  else
-	  {
-	    this.select("input")[0].checked=true;
-	    this.setStyle({
-	        backgroundColor: "#FF9BAB"
-	    });
-	  }
-	});
-}
-
-function clear_project_filter_suite(sender)
-{
-  sender.select('option:selected').each(function(i){
-    i.selected = false;
-  });
-}
