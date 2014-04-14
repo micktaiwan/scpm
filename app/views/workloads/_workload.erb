@@ -1,6 +1,26 @@
+<div id="view_alert_sdp">
+    <%= submit_tag "X", :id=>"button_alert_sdp", :type=>'button', :onclick=> "jQuery('#view_alert_sdp').hide();" %><br />   
+    <div id="view_alert_sdp_content">
+        <h4>SDP Tasks not linked to your workload</h4>
+        <ul>
+            <% @sdp_tasks_unlinked.each do |sdp| %>
+                <li><%= sdp.title %></li>
+            <% end %>
+        </ul>
+        <h4>SDP Tasks (with requests) not linked to your workload</h4>
+        <ul>
+            <% @sdp_tasks_unlinked_req.each do |sdp| %>
+                <li><%= sdp.title %></li>
+            <% end %>
+        </ul>
+    </div>
+</div>
+
 <script type="text/javascript" src="/javascripts/jscolor.js" ></script>
 <% @tasks_header = 0 %>
+
 <div id="workload" class="workload">
+
     <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
     <!-- <form action="/project_workloads/index/filter_persons_iterations" name="filter_persons_iterations" method="post"> -->
     <% form_tag(:action=>'index') do %>
@@ -64,9 +84,13 @@
     <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
     <table width="100%">
     <tr><td valign="top">
+      <% if @sdp_tasks_unlinked.size > 0 || @sdp_tasks_unlinked_req.size > 0 %>
+        <%= submit_tag "Alert SDP", :id=>'btn_alert_sdp', :type=>'button', :onclick=>"jQuery('#view_alert_sdp').css('display','block');" , :class=>"btnlnk" %>
+      <% end %>
       <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
       <%= link_to('Transfert', {:action=>'transfert'}, {:class=>"btnlnk"}) %>
-      <%= link_to('Backup', {:action=>'duplicate',:weeks=>@workload.weeks,:wl_weeks=>@workload.wl_weeks,:months=>@workload.months}, {:class=>"btnlnk"}) %>
+      <%= link_to('Backup by load', {:action=>'duplicate',:weeks=>@workload.weeks,:wl_weeks=>@workload.wl_weeks,:months=>@workload.months}, {:class=>"btnlnk"}) %>
+      <%= link_to('Backup', {:action=>'backup'}, {:class=>"btnlnk"}) %>
       <% if @suggested_requests.size > 0 %>
       You have <b><%=@suggested_requests.size%></b> suggested requests
       <% end %>
@@ -86,6 +110,15 @@
       if percent_planned < 95
       %>
         You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
+      <% end %>
+
+      <% if @backup_holidays.count > 0 %>
+        <strong>Warning, the following coworkers have holidays during the next 2 weeks while you are their backup: </strong>
+        <ul>
+        <% @backup_holidays.each do |bh| %>
+          <li><strong>- <%= bh %></strong></li>
+        <% end %>
+      </ul>
       <% end %>
 
     </td>

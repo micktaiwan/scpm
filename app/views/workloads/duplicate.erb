@@ -13,7 +13,7 @@
       <%= render(:partial=>"wl_head", :collection=>@weeks) %>
     </tr>
     <tr>
-      <%= render(:partial=>"duplicate_line", :collection=>@lines, :as=>:l, :locals => { :wl_weeks => @wl_weeks, :is_qr_qwr => false }) %>
+      <%= render(:partial=>"duplicate_line", :collection=>@lines, :as=>:l, :locals => { :wl_weeks => @wl_weeks, :is_qr_qwr => false, :backup => false }) %>
     <tr>
   </table>
 
@@ -28,7 +28,7 @@
       <%= render(:partial=>"wl_head", :collection=>@weeks) %>
     </tr>
     <tr>
-      <%= render(:partial=>"duplicate_line", :collection=>@lines_qr_qwr, :as=>:l, :locals => { :wl_weeks => @wl_weeks, :is_qr_qwr => true }) %>
+      <%= render(:partial=>"duplicate_line", :collection=>@lines_qr_qwr, :as=>:l, :locals => { :wl_weeks => @wl_weeks, :is_qr_qwr => true, :backup => false }) %>
     <tr>
   </table>
 
@@ -40,21 +40,4 @@
 
 <SCRIPT language="Javascript">
 check_duplicate_workload_interactions();
-// $$(".duplicate_load_td").invoke('observe', 'click', function(){
-//   if (this.select("input")[0].checked == true)
-//   {
-//     this.select("input")[0].checked=false;
-//     this.setStyle({
-//         backgroundColor: "white"
-//     });
-//   }
-//   else
-//   {
-//     this.select("input")[0].checked=true;
-//     this.setStyle({
-//         backgroundColor: "#FF9BAB"
-//     });
-//   }
-// });
-
 </SCRIPT>

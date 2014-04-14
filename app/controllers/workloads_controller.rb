@@ -6,6 +6,8 @@ class WorkloadsController < ApplicationController
 
   layout 'pdc'
 
+  $backup_holiday_threshold = 3
+
   def index
     person_id      = params[:person_id]
     project_ids    = params[:project_ids]
@@ -57,6 +59,8 @@ class WorkloadsController < ApplicationController
     get_sdp_tasks(@workload)
     get_chart
     get_sdp_gain(@workload.person)
+    get_backup_warnings(@workload.person)
+    get_unlinked_sdp_tasks(@workload)
   end
 
   def get_last_sdp_update
@@ -102,6 +106,32 @@ class WorkloadsController < ApplicationController
     @suggested_requests = @suggested_requests.select { |r| r.sdp_tasks_remaining_sum > 0 }
   end
 
+  def get_backup_warnings(person_id)
+
+    currentWeek = wlweek(Date.today)
+    nextWeek    = wlweek(Date.today+7.days)
+    backups = WlBackup.find(:all, :conditions=>["backup_person_id = ? and (week = ? or week = ?)", person_id, currentWeek, nextWeek])
+
+    @backup_holidays = []
+    backups.each do |b|  
+      # Load for holyday and concerned user (for the 14 next days)
+      person_holiday_load = WlLoad.find(:all,
+        :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and (wl_loads.week = ? or wl_loads.week = ?)", b.person.id.to_s, currentWeek, nextWeek])
+
+      if person_holiday_load.count > 0
+        load_total = 0
+
+        # Calcul the number of day of holiday. If it's over the threshold, display the warning
+        person_holiday_load.map { |wload| load_total += wload.wlload }
+        if (load_total > $backup_holiday_threshold)
+         @backup_holidays << b.person.name if !@backup_holidays.include?(b.person.name)
+        end
+      end
+
+    end
+  end
+
   def do_get_sdp_tasks()
     person_id = session['workload_person_id']
     p = Person.find(person_id)
@@ -117,9 +147,21 @@ class WorkloadsController < ApplicationController
       end
       task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}#wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
       cond = ""
-      cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
-      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
+      cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
+      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond} and remaining > 0", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
     # end
+  end
+
+  def get_unlinked_sdp_tasks(wl)
+    # Directly linked wl<=> sdp
+    task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}
+    cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
+    @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL #{cond} and remaining > 0", wl.person.trigram])
+    # By requests
+    wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
+    @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
+
+    # render :layout => false
   end
 
   def get_sdp_gain(person)
@@ -296,8 +338,8 @@ class WorkloadsController < ApplicationController
       return
     end
     request_id.strip!
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
@@ -322,8 +364,8 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a name."
       return
     end
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
@@ -359,8 +401,8 @@ class WorkloadsController < ApplicationController
 
   def add_by_project
     project_id = params[:project_id].to_i
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     project = Project.find(project_id)
     if not project
@@ -428,8 +470,8 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a request number."
       return
     end
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
@@ -724,6 +766,55 @@ class WorkloadsController < ApplicationController
     render(:nothing=>true)
   end
 
+  def backup
+    @people   = Person.find(:all, :conditions=>["has_left=0 and is_supervisor=0 and id != ?", session['workload_person_id']], :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
+    
+    @backups      = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
+    @self_backups = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
+  end
+  
+  def create_backup    
+    b_id  = params['backup_person_id']
+    p_id  = params['person_id']
+    week  = params['week']
+
+    backups = WlBackup.first(:conditions=>["backup_person_id = ? and person_id = ? and week = ?", b_id, p_id, week]);
+    if (backups == nil)
+      backup = WlBackup.new
+      backup.backup_person_id = b_id
+      backup.person_id = p_id
+      backup.week = week
+      backup.save
+      render :text=>backup.week.to_s+"_"+backup.backup.name
+    else
+      render(:nothing=>true)
+    end
+  end
+
+  def delete_backup
+    backup_id = params['backup_id']
+    backup = WlBackup.first(:conditions=>["id = ?", backup_id]);
+    backup.destroy
+    render(:nothing=>true)
+  end
+
+  def update_backup_comment
+    backup_id      = params['backup_id']
+    backup_comment = params['backup_comment']
+    backup = WlBackup.first(:conditions=>["id = ?", backup_id]);
+    if backup != nil
+      backup.comment = backup_comment
+      backup.save
+    end
+    render :text=>backup.comment, :layout => false 
+  end
+
+  def get_week
+    date_str = params['date']
+    date = Date.strptime(date_str, "%Y-%m-%d")
+    render :text=> wlweek(date)
+  end
+
 private
 
   def get_workload_data(person_id, projects_ids, person_iterations, tags_ids)
@@ -734,6 +825,7 @@ private
     get_chart
     get_sdp_gain(@workload.person)
     get_sdp_tasks(@workload)
+    get_unlinked_sdp_tasks(@workload)
   end
 
   def update_line_name(line)

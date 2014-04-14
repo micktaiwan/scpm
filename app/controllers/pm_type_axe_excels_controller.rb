@@ -46,6 +46,8 @@ class PmTypeAxeExcelsController < ApplicationController
   end
 
   def destroy
+    PmTypeAxeExcel.find(params[:id].to_i).destroy
+    redirect_to("/pm_type_axe_excels")
   end
 
   def show

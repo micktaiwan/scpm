@@ -1,9 +1,31 @@
+<script src="/javascripts/workload.js" type="text/javascript"></script>
 
 <%= render(:partial=>'workloads/last_sdp_update') %>
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:500px;") %>
 
 <div id="edit_line"></div>
+
+
+<!-- <div id="debug"></div>
+<script type="text/javascript">
+    Ajax.Responders.register({
+    // log the beginning of the requests
+    onCreate: function(request, transport) {
+      new Insertion.Bottom('debug', '<p><strong>[' + new Date().toString() + '] accessing ' + request.url + '</strong></p>')
+      },
+     
+    // log the completion of the requests
+    onComplete: function(request, transport) {
+      new Insertion.Bottom('debug',
+      '<p><strong>http status: ' + transport.status + '</strong></p>' +
+      '<pre>' + transport.responseText.escapeHTML() + '</pre>')
+      }
+    });
+ </script> -->
+
 <div id="wl_line_add_form" class="popup" style="display:none;">
+
+<!-- <input id="wl_person" name="wl_person" type="hidden" value="<%= session['workload_person_id'] %>" /> -->
   <%= link_to_function(image_tag("close.png", :style=>"float: right;margin-top:20px;"),"$('wl_line_add_form').fade({duration:0.2});") %><br/>
   <div class="title">Add a line</div>
   <% if APP_CONFIG['workloads_add_by_request_number'] %>
@@ -52,13 +74,14 @@
 
 <% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
   <%= select_tag('choose_name', options_for_select(@people, session['workload_person_id'].to_i), {:onchange=>"change_workload(this.value)"}) %>
-<% end %>
-<%= link_to_function('Filters', "Effect.toggle('filters','blind', {duration: 0.5});",{:class=>"btnlnk"}) %>
-<% if current_user.has_role?('Admin') or current_user.has_role?('ServiceLineResp') %>
+  <% if APP_CONFIG['workloads_show_filter'] %>
+   <%= link_to_function('Filters', "Effect.toggle('filters','blind', {duration: 0.5});",{:class=>"btnlnk"}) %>
+  <% end %>
   <% if APP_CONFIG['workloads_view_by_project_menu'] %>
     <%= link_to('Switch to project view', {:controller=>'project_workloads'}, {:class=>'btnlnk'}) %>
   <% end %>
 <% end %>
+
 <%= render(:partial=>"workload") %>
 
 <script>

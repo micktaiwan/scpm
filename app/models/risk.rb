@@ -59,7 +59,7 @@ class Risk < ActiveRecord::Base
     if self.impact_was != nil
       self.old_impact = self.impact_was
     end
-    if self.probability != nil
+    if self.probability_was != nil
       self.old_probability = self.probability_was
     end
   end

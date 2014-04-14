@@ -1,8 +1,14 @@
 <% if current_user.has_role?('Admin') %>
-	<%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
-	<%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
-	<%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
-	<br/>
+<%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
+<%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
+<%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
+<%= link_to_remote('Check setting', {:url=>{ 
+	:action=>'check_settings'}, 
+	:success=>"alert('Success')",
+	:failure=>"alert('Failure')"},
+	{:class=>"btnlnk special",:id=>"check_settings"}) %>
+<br/>	
+<br/>
 <% else %>
 <%= current_user.name %>
 <% end %>
@@ -11,24 +17,27 @@
 <h2>People</h2>
 <% @allCompanies.each { |company| %>
 	<% peopleNotLeft = @people.find_all{|person| ((person.has_left == 0) and (person.company_id == company.company_id )) } %>
-	<% if not Company.find_by_id(peopleNotLeft[0].company_id).nil? %>
-		<%= link_to(image_tag('edit.gif'), {:controller=>'companies', :action=>'edit', :id=>company.company_id}) %>
-		<%= link_to(image_tag('delete.gif'), {:controller=>'companies', :action=>'destroy', :id=>company.company_id}) %>
-
-		<% if ((peopleNotLeft.count > 0) and (peopleNotLeft[0].company)) %><%= peopleNotLeft[0].company.name%> (
-			<% if HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id) %>
-				<%= HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id).name %>
-			<% else %>
-				<a style="color:#FA5858">No calendar associated</a>
-			<% end %>)
-		<% else %>???<% end %>
-
-	<% else %>
-		<a style="color:#FA5858"> Nonexistant company for the following persons :</a>
+	<% if peopleNotLeft != nil and peopleNotLeft.count > 0 %>
+		<% if not Company.find_by_id(peopleNotLeft[0].company_id).nil? %>
+			<%= link_to(image_tag('edit.gif'), {:controller=>'companies', :action=>'edit', :id=>company.company_id}) %>
+			<%= link_to(image_tag('delete.gif'), {:controller=>'companies', :action=>'destroy', :id=>company.company_id}) %>
+			
+			<% if ((peopleNotLeft.count > 0) and (peopleNotLeft[0].company)) %><%= peopleNotLeft[0].company.name%> (
+				<% if HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id) %>
+					<%= HolidaysCalendar.find_by_id(peopleNotLeft[0].company.wl_holidays_calendar_id).name %>
+				<% else %>
+					<a style="color:#FA5858">No calendar associated</a>
+				<% end %>)
+			<% else %>???<% end %>
+			
+		<% else %>
+			<a style="color:#FA5858"> Nonexistant company for the following persons :</a>
+		<% end %>
+		<ul>
+		  <%= render(:partial=>'person', :collection=>peopleNotLeft) %>
+		</ul>
 	<% end %>
-	<ul>
-	  <%= render(:partial=>'person', :collection=>peopleNotLeft) %>
-	</ul>
+
 <% } %>
 
 <% peopleLeft = @people.find_all{|person| (person.has_left == 1)} %>

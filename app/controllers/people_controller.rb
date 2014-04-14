@@ -19,8 +19,17 @@ class PeopleController < ApplicationController
     @roles = Role.find(:all, :conditions=>"name != 'Super'")
   end
 
+  def check_settings
+    Person.find(:all, :conditions=>["settings IS NULL"]).each do |p|
+      p.save_default_settings
+    end
+    render(:nothing=>true)
+  end
+
   def create
     @person = Person.new(params[:person])
+    @person.save_default_settings
+
     if not @person.save
       render :action => 'new'
       return

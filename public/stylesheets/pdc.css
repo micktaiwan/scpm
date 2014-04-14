@@ -311,8 +311,77 @@ ul.sdp_tasks {
   width: 40px;
 }
 
-.wl_tag {
+/* Duplicate view */
+#view_backup_add {
+  position: absolute;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  border:1px solid #DDD;
+  background: #909190;
+  left:40%;
+  width:500px;
+  text-align: center;
+  opacity: 0.90;
+  vertical-align: middle;
+  padding-bottom: 20px;
   padding-left: 5px;
-  color: red;
-  font-size:0.8em;
+  padding-right: 5px;
+  position: fixed;
+}
+
+#button_backup_add_close
+{
+  float:left;
+}
+
+.backup_list_person li
+{
+  /*display:inline;*/
+}
+
+#holiday_detail 
+{
+  display: none;
+  position: absolute;
+
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+
+  border:1px solid #DDD;
+  background: #909190;
+  opacity: 0.95;
+  color:white;
+  font-weight: bold;
+
+}
+#holiday_detail ul
+{
+  list-style-type: circle;
+  padding-right: 15px;
+}
+
+/* ALERT SDP */
+#view_alert_sdp{
+  position: absolute;
+  border-radius: 10px;
+  border: 2px solid #DDD;
+  background: #FFFFFF;
+  left:40%;
+  width: 500px;
+  opacity: 0.90;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  display: none;
+  z-index: 2;
+}
+
+#view_alert_sdp_content{
+  padding-left: 31px;
+  vertical-align: middle;
+}
+
+#button_alert_sdp{
+  float: left;
 }

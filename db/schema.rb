@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130917130404) do
+ActiveRecord::Schema.define(:version => 20140407105759) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -357,6 +357,28 @@ ActiveRecord::Schema.define(:version => 20130917130404) do
     t.integer  "checklist_not_applicable", :default => 0
   end
 
+  create_table "monthly_task_people", :force => true do |t|
+    t.integer  "monthly_task_id"
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "monthly_task_types", :force => true do |t|
+    t.string   "name"
+    t.text     "template"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "monthly_tasks", :force => true do |t|
+    t.string   "title"
+    t.integer  "load_value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "monthly_task_type_id"
+  end
+
   create_table "notes", :force => true do |t|
     t.text     "note"
     t.integer  "project_id"
@@ -398,6 +420,14 @@ ActiveRecord::Schema.define(:version => 20130917130404) do
   create_table "plannings", :force => true do |t|
     t.string   "name"
     t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pm_type_axe_excels", :force => true do |t|
+    t.integer  "axe_id"
+    t.integer  "lifecycle_id"
+    t.integer  "excel_position"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -606,8 +636,8 @@ ActiveRecord::Schema.define(:version => 20130917130404) do
     t.integer  "is_quality",      :default => 1
     t.integer  "generic_risk_id"
     t.integer  "stream_id"
-    t.boolean  "is_ria_logged",   :default => false
-    t.boolean  "is_ria_action",   :default => false
+    t.integer  "is_ria_logged",   :default => 0
+    t.integer  "is_ria_action",   :default => 0
     t.integer  "old_impact",      :default => 0
     t.integer  "old_probability", :default => 0
   end
@@ -784,6 +814,7 @@ ActiveRecord::Schema.define(:version => 20130917130404) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "file_link"
+    t.boolean  "impact_count", :default => false
   end
 
   create_table "statuses", :force => true do |t|
@@ -845,6 +876,7 @@ ActiveRecord::Schema.define(:version => 20130917130404) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_active",  :default => true
   end
 
   create_table "tags", :force => true do |t|
@@ -876,6 +908,15 @@ ActiveRecord::Schema.define(:version => 20130917130404) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sqli_action", :default => 0
+  end
+
+  create_table "wl_backups", :force => true do |t|
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "comment"
+    t.integer  "backup_person_id"
+    t.integer  "week"
   end
 
   create_table "wl_holidays", :force => true do |t|

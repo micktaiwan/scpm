@@ -72,12 +72,12 @@ class Workload
     end
     # Case: no project selected
     if !project_ids or project_ids.size==0
-      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"])
+      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
     else
     # Case: at least, one project selected
     # No iteration selected
       if iterations.size==0
-        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
+        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
       else
     # at least, one iteration selected
         project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
@@ -148,7 +148,7 @@ class Workload
     else
       @displayed_lines = @wl_lines
     end
-    @displayed_lines  = @displayed_lines.sort_by { |l| eval(APP_CONFIG['workloads_lines_sort'])}
+    #@displayed_lines  = @displayed_lines.sort_by { |l| eval(APP_CONFIG['workloads_lines_sort'])}
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
     from_day    = Date.today - (Date.today.cwday-1).days
@@ -238,7 +238,7 @@ class Workload
       @line_sums[l.id][:sums] = l.planned_sum
       @total          += l.sum if l.wl_type <= 200
       @planned_total  += @line_sums[l.id][:sums] if l.wl_type <= 200 and @line_sums[l.id][:sums]
-      if l.sdp_tasks
+      if l.sdp_tasks.count > 0
         @sdp_remaining_total        += l.sdp_tasks_remaining.to_f
         @line_sums[l.id][:init]      = l.sdp_tasks_initial
         @line_sums[l.id][:balance]   = l.sdp_tasks_balancei

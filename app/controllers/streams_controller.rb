@@ -36,7 +36,7 @@ class StreamsController < ApplicationController
     #                                               and is_qr_qwr = 1", Workstream.find(@stream.workstream).name])
     @projects = Project.find(:all,:conditions => ["workstream = ? 
                                                   and is_running = 1 
-                                                  and project_id is null", Workstream.find(@stream.workstream).name])
+                                                  and project_id is null", Workstream.find(@stream.workstream).name], :order=>"name")
   end
   
   def show_stream_informations
@@ -118,19 +118,33 @@ class StreamsController < ApplicationController
           end
         end
 
+
         # Get x/y for qs (alert managed in view)
-        qr_qwr_data["qs_x"]     = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL",qr.id.to_s, @stream.id.to_s]).count
+        qr_qwr_data["qs_x"]       = HistoryCounter.find(:all,:include => [:request], :conditions => ["author_id = ? and history_counters.stream_id = ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL and requests.assigned_to = ?",qr.id.to_s, @stream.id.to_s, qr.rmt_user]).count
+        qr_qwr_data["qs_x_ghost"] = HistoryCounter.find(:all,:include => [:request], :conditions => ["author_id = ? and history_counters.stream_id = ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL and requests.assigned_to != ?",qr.id.to_s, @stream.id.to_s, qr.rmt_user]).count
         qr_qwr_data["qs_y"]     = 0 
+        request_qs_array        = Array.new
+
         Request.find(:all,:include=>[:counter_log],:conditions => ["work_package = ? and assigned_to = ? and is_stream = 'Yes' and stream_id = ? and counter_logs.validity = 1", WORKPACKAGE_QS_RMT_NAME, qr.rmt_user, @stream.id]).each do |req|
           qr_qwr_data["qs_y"] = qr_qwr_data["qs_y"].to_i + req.counter_log.counter_value.to_i
+          request_qs_array    << req.id
         end
+        qr_qwr_data["qs_consumed_by_other_author"] = HistoryCounter.find(:all,
+          :conditions => ["author_id != ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL and request_id IN (?)", qr.id.to_s, request_qs_array.join(',').to_s]).count
+
 
         # Get x/y for spider (alert managed in view)
-        qr_qwr_data["spider_x"] = HistoryCounter.find(:all,:conditions => ["author_id = ? and stream_id = ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL",qr.id.to_s, @stream.id.to_s]).count
+        qr_qwr_data["spider_x"]       = HistoryCounter.find(:all,:include => [:request],:conditions => ["author_id = ? and history_counters.stream_id = ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL and requests.assigned_to = ?",qr.id.to_s, @stream.id.to_s, qr.rmt_user]).count
+        qr_qwr_data["spider_x_ghost"] = HistoryCounter.find(:all,:include => [:request],:conditions => ["author_id = ? and history_counters.stream_id = ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL and requests.assigned_to != ?",qr.id.to_s, @stream.id.to_s, qr.rmt_user]).count
         qr_qwr_data["spider_y"] = 0 
+        request_spider_array    = Array.new
+
         Request.find(:all,:include=>[:counter_log],:conditions => ["work_package = ? and assigned_to = ? and is_stream = 'Yes' and stream_id = ? and counter_logs.validity = 1", WORKPACKAGE_SPIDERS_RMT_NAME, qr.rmt_user, @stream.id]).each do |req|
           qr_qwr_data["spider_y"] = qr_qwr_data["spider_y"].to_i + req.counter_log.counter_value.to_i
+          request_spider_array    << req.id
         end
+        qr_qwr_data["spider_consumed_by_other_author"] = HistoryCounter.find(:all,
+          :conditions => ["author_id != ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL and request_id IN (?)", qr.id.to_s, request_spider_array.join(',').to_s]).count
 
         # Compare
         qr_qwr_data["qs_comp"]     = (qr_qwr_data["qs_y"].to_i     - qr_qwr_data["qs_x"].to_i)      - qr_qwr_data["total_qs_prev"].to_i
