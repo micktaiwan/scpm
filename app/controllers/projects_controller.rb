@@ -760,6 +760,7 @@ private
   end
 
   def get_projects
+    # Text filtering
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
       @wps = @projects #.select {|wp| wp.has_status and wp.has_requests }
