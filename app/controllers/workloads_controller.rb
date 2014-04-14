@@ -734,7 +734,9 @@ class WorkloadsController < ApplicationController
 
   def backup
     @people   = Person.find(:all, :conditions=>["has_left=0 and is_supervisor=0 and id != ?", session['workload_person_id']], :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    
+    @weeks = [['01', '01'],['02', '02'],['03', '03'],['04', '04'],['05', '05'],['06', '06'],['07', '07'],['08', '08'],['09', '09']] 
+    (10..52).each{|i| @weeks << ["#{i}","#{i}"] }
+    @years = [Time.new.year,Time.new.year+1]
     @backups      = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
     @self_backups = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
   end

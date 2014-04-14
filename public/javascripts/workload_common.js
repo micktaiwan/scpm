@@ -152,6 +152,11 @@ function add_backup_action()
   $("view_backup_add").show();
 }
 
+function update_selected_backup_date()
+{
+  selected_backup_date = $("select_list_year").value+""+$("select_list_week").value;
+}
+
 function add_backup(person_id, backup_person_id, week)
 {
 
