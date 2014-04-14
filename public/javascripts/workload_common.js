@@ -116,6 +116,131 @@ function colorToHex(color) {
     return digits[1] + '#' + rgb.toString(16);
 };
 
+
+
+// Duplicate
+
+function check_duplicate_workload_interactions()
+{
+  $$(".duplicate_load_td").invoke('observe', 'click', function(){
+    if (this.select("input")[0].checked == true)
+    {
+      this.select("input")[0].checked=false;
+      this.setStyle({
+          backgroundColor: "white"
+      });
+    }
+    else
+    {
+      this.select("input")[0].checked=true;
+      this.setStyle({
+          backgroundColor: "#FF9BAB"
+      });
+    }
+  });
+
+}
+
+// backup functions
+
+var selected_backup_person_id = null;
+var selected_backup_date = null;
+function check_backup_person_change()
+{  
+  Event.observe($('select_list_backup_person'), 'change', function()
+  {
+      selected_backup_person_id = $('select_list_backup_person').getValue();
+  });
+}
+
+function add_backup_action()
+{
+  $("view_backup_add").show();
+}
+
+function add_backup(person_id, backup_person_id, week)
+{
+
+  if (week != null)
+  {
+    // Call the controller/action in ajax
+    new Ajax.Request('/workloads/create_backup', 
+    {
+      parameters: { backup_person_id: backup_person_id, person_id: person_id, week: week },
+      onSuccess: function(response) 
+      {
+          if ( (response.responseText != null) && (response.responseText.length > 1))
+          {
+             var date = "";
+             var name = "";
+             var responseArray = response.responseText.split('_');
+             if (responseArray.length == 2)
+             {
+               date = responseArray[0];
+               name = responseArray[1];
+             }
+
+             $("backup_list").innerHTML += "<tr><td>" + date.substring(4,6) + "-" + date.substring(0,4) + "</td><td>" + name + "</td><td></td></tr>";
+          }
+          $("view_backup_add").hide();
+      },
+      onFailure:function(response) 
+      {
+        alert("Error: Can't add the person has backup.")
+        $("view_backup_add").hide();
+      }
+    });
+  }
+  else
+  {
+    alert("Please, select a date.");
+  }
+}
+
+function delete_wl_backup(backup_id, self_backup)
+{
+  new Ajax.Request('/workloads/delete_backup', 
+  {
+    parameters: { backup_id: backup_id},
+    onSuccess: function(response) 
+    {
+        if (self_backup)
+          $("self_backup_"+backup_id).hide();
+        else
+          $("backup_"+backup_id).hide();
+    },
+    onFailure:function(response) 
+    {
+      alert("Error: Can't delete the backup.")
+    }
+  });
+}
+
+function update_backup_comment(backup_id, self_backup)
+{
+  var comment = null;
+  if (self_backup)
+    comment = $('self_backup_comment_'+backup_id).value;
+  else 
+    comment = $('backup_comment_'+backup_id).value;
+  new Ajax.Request('/workloads/update_backup_comment', 
+  {
+    parameters: { backup_id: backup_id, backup_comment: comment},
+    onSuccess: function(response) 
+    {
+      if ( (response.responseText != null) && (response.responseText.length > 0))
+        if (self_backup)
+          $('self_backup_comment_'+backup_id).innerHTML = response.responseText
+        else
+          $('backup_comment_'+backup_id).innerHTML = response.responseText
+    },
+    onFailure:function(response) 
+    {
+      alert("Error: Can't update the backup.")
+    }
+  });
+}
+
 function addTag(last_tag, line_id){
   new Ajax.Request('/tags/add_tag', {
     parameters: { tag_name: last_tag, line_id: line_id }
@@ -143,3 +268,4 @@ function init_tags(line_id, sampleTags) {
     }
   });
 }
+

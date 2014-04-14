@@ -74,10 +74,23 @@ class CsvCiReport
 
   def parse
     reader = CSV.open(@path, 'r')
-    get_columns(reader.shift)
-    while not (row = reader.shift).empty?
-      parse_row(row)
+    begin
+      get_columns(reader.shift)
+      if @columns.count > 1
+       while not (row = reader.shift).empty?
+         parse_row(row)
+       end
+      else
+       raise "Incorrect data format"
+      end
+    rescue Exception => e
+      if e.to_s == "CSV::IllegalFormatError"
+        raise "Unexpected file format"
+      else
+        raise e
+      end
     end
+
   end
 
 private

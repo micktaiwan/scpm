@@ -911,6 +911,15 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.integer  "sqli_action", :default => 0
   end
 
+  create_table "wl_backups", :force => true do |t|
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "comment"
+    t.integer  "backup_person_id"
+    t.integer  "week"
+  end
+
   create_table "wl_holidays", :force => true do |t|
     t.integer  "week"
     t.integer  "nb"
