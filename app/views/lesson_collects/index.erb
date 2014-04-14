@@ -36,6 +36,10 @@
 		<th>Suite name</th>
 		<th>Project Name</th>
 		<th>Import date</th>
+		<th style="text-align:center;">[collects]</th>
+		<th style="text-align:center;">[actions]</th>
+		<th style="text-align:center;">[assessments]</th>
+		<th></th>
 	</tr>
 <% @lessonFiles.each do |lf| %>
 	<tr>
@@ -46,7 +50,10 @@
 		<td><%= lf.suite_name %></td>
 		<td><%= lf.project_name %></td>
 		<td><%= lf.created_at.strftime("%Y-%m-%d %H:%M") %></td>
-		<!-- <td><% link_to("Delete", {:controller=>'lesson_collects', :action=>'delete', :id=>lf.id}) %></td> -->
+		<td style="text-align:center;">[<%= lf.lesson_collects.count.to_s %>]</td>
+		<td style="text-align:center;">[<%= lf.lesson_collect_actions.count.to_s %>]</td>
+		<td style="text-align:center;">[<%= lf.lesson_collect_assessments.count.to_s %>]</td>
+		<td><%= link_to("Delete", {:controller=>'lesson_collects', :action=>'delete', :id=>lf.id.to_s}, :confirm=>"Are you sure ?") %></td>
 	</tr>
 <% end %>
 </table>

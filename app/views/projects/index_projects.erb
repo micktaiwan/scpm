@@ -1,47 +1,97 @@
 
 <SCRIPT language="Javascript">
 
-  show_timeline = function(project_id)
-  {
-      div_str = "milestone_ajax_div_"+project_id;
-      if ($(div_str).innerHTML == '')
-      {
-        $(div_str).innerHTML = '<%= image_tag "loading.gif", :alt => "Loading", :id => "image_loading" %>';
+  var index_projects_timeline = 0;
+  var total_results           = 0;
+  var is_loading_projects = false;
 
-        new Ajax.Request('/milestones/ajax_milestone', 
-        {
-          parameters: { project_id: project_id },
-          onSuccess: function(response) 
-          {
-            div_str_response = "milestone_ajax_div_"+project_id;
-            $(div_str_response).innerHTML = response.responseText;
-          },
-          onFailure:function(response) 
-          {
-            div_str_response = "milestone_ajax_div_"+project_id;
-            $(div_str_response).innerHTML = "Loading Error";
-          }
-        });
-      }
-      else
-      {
-        $(div_str).innerHTML = '';
-      }
-  }
-  show_all_timeline = function()
-  {  
-    var nb_projects = "<%= @total_wps_filtered %>";
-    if (nb_projects <= 30)
+  show_group_timeline = function(project_id)
+  {
+    is_loading_projects = true;
+
+    div_str = "milestone_ajax_div_"+project_id;
+    if ($(div_str).innerHTML == '')
     {
-      var project_list = [<%= @projects_id %>];
-      for (var i = 0; i < project_list.length; i++)
+      $(div_str).innerHTML = '<%= image_tag "loading.gif", :alt => "Loading", :id => "image_loading" %>';
+
+      new Ajax.Request('/milestones/ajax_milestone', 
       {
-       show_timeline(project_list[i].replace("'",""));
-      }
+        parameters: { project_id: project_id },
+        onSuccess: function(response) 
+        {
+          div_str_response = "milestone_ajax_div_"+project_id;
+          $(div_str_response).innerHTML = response.responseText;
+          update_counters();
+        },
+        onFailure:function(response) 
+        {
+          div_str_response = "milestone_ajax_div_"+project_id;
+          $(div_str_response).innerHTML = "Loading Error";
+          update_counters();
+        }
+      });
     }
     else
     {
-      alert("Too many project to open all timeline. Please, reduce your filters.")
+      update_counters();
+    }
+  }
+
+  update_counters = function()
+  {
+    total_results += 1;
+    if (total_results == index_projects_timeline)
+    {
+      is_loading_projects = false;
+    } 
+  }
+
+  show_timeline = function(project_id)
+  {
+    div_str = "milestone_ajax_div_"+project_id;
+    if ($(div_str).innerHTML == '')
+    {
+      $(div_str).innerHTML = '<%= image_tag "loading.gif", :alt => "Loading", :id => "image_loading" %>';
+
+      new Ajax.Request('/milestones/ajax_milestone', 
+      {
+        parameters: { project_id: project_id },
+        onSuccess: function(response) 
+        {
+          div_str_response = "milestone_ajax_div_"+project_id;
+          $(div_str_response).innerHTML = response.responseText;
+        },
+        onFailure:function(response) 
+        {
+          div_str_response = "milestone_ajax_div_"+project_id;
+          $(div_str_response).innerHTML = "Loading Error";
+        }
+      });
+    }
+    else
+    {
+      $(div_str).innerHTML = '';
+    }
+  }
+
+  show_all_timeline = function()
+  {  
+    if (is_loading_projects == false)
+    {
+      var project_list = [<%= @projects_id %>];
+      var total = index_projects_timeline + 30;
+
+      if (total > project_list.length)
+      {
+        total = project_list.length;
+      }
+
+      for (var i = index_projects_timeline; i < total; i++)
+      {
+       show_group_timeline(project_list[i].replace("'",""));
+       index_projects_timeline += 1
+      }
+
     }
   }
 

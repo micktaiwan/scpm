@@ -1,8 +1,14 @@
 <% if current_user.has_role?('Admin') %>
-	<%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
-	<%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
-	<%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
-	<br/>
+<%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
+<%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
+<%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
+<%= link_to_remote('Check setting', {:url=>{ 
+	:action=>'check_settings'}, 
+	:success=>"alert('Success')",
+	:failure=>"alert('Failure')"},
+	{:class=>"btnlnk special",:id=>"check_settings"}) %>
+<br/>	
+<br/>
 <% else %>
 <%= current_user.name %>
 <% end %>

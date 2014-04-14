@@ -311,8 +311,27 @@ ul.sdp_tasks {
   width: 40px;
 }
 
-.wl_tag {
+#view_alert_sdp{
+  position: absolute;
+  border-radius: 10px;
+  border: 2px solid #DDD;
+  background: #FFFFFF;
+  left:40%;
+  width: 500px;
+  opacity: 0.90;
+  padding-top: 10px;
+  padding-bottom: 10px;
   padding-left: 5px;
-  color: red;
-  font-size:0.8em;
+  padding-right: 5px;
+  display: none;
+  z-index: 2;
+}
+
+#view_alert_sdp_content{
+  padding-left: 31px;
+  vertical-align: middle;
+}
+
+#button_alert_sdp{
+  float: left;
 }

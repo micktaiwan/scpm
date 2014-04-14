@@ -176,3 +176,10 @@ function check_duplicate_workload_interactions()
 	  }
 	});
 }
+
+function clear_project_filter_suite(sender)
+{
+  sender.select('option:selected').each(function(i){
+    i.selected = false;
+  });
+}

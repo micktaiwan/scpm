@@ -8,4 +8,6 @@
   <%= render(:partial => f, :locals => {:lifecycle_id => @lifecycle_id}) %>
   <p><label>&nbsp;</label>
   <%= submit_tag 'OK' %></p>
+<%= link_to('Delete', {:action=>'destroy', :id=>@pmtypeaxeexcel.id}, :confirm=>"Are you sure you want to delete this column ?") %>
 <% end -%>
+

@@ -29,7 +29,7 @@ class Mailer < ActionMailer::Base
     people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
     @workloads = []
     for p in people
-      @workloads << Workload.new(p.id)
+      @workloads << Workload.new(p.id,{},{})
     end
     @workloads = @workloads.select{|w| w.next_month_percents < 95 or w.next_month_percents > 115}.sort_by {|w| [w.next_month_percents]}
 

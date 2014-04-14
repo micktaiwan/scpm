@@ -56,7 +56,7 @@ class SpiderKpisController < ApplicationController
     end
 
     # Begin/End date
-    @begin_date = "2013-01-01"
+    @begin_date = "2014-01-01"
     @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
     if (params[:begin_date])
       @begin_date  = params[:begin_date]
@@ -181,7 +181,7 @@ class SpiderKpisController < ApplicationController
     if ((@milestone_name_id != nil) and (@milestone_name_id != "0"))
       milestone_title   = MilestoneName.find(@milestone_name_id)
     end
-    @begin_date = "2013-01-01"
+    @begin_date = "2014-01-01"
     @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
     if (params[:begin_date])
       @begin_date  = params[:begin_date]
@@ -342,7 +342,7 @@ class SpiderKpisController < ApplicationController
     if ((@milestone_name_id != nil) and (@milestone_name_id != "0"))
       milestone_title = MilestoneName.find(@milestone_name_id)
     end
-    @begin_date = "2013-01-01"
+    @begin_date = "2014-01-01"
     @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
     if (params[:begin_date])
       @begin_date  = params[:begin_date]
@@ -601,7 +601,7 @@ class SpiderKpisController < ApplicationController
     @workstreams = Workstream.all.map {|u| [u.name,u.name]}
     @workstreams.insert(0,["None",0])
 
-    @begin_date = "2013-01-01"
+    @begin_date = "2014-01-01"
     @end_date   = DateTime.now.year.to_s+"-"+DateTime.now.month.to_s+"-"+DateTime.now.day.to_s
 
     @lifecycle_id       = params[:lifecycle_id]

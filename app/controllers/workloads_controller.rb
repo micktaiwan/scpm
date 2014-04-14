@@ -57,6 +57,7 @@ class WorkloadsController < ApplicationController
     get_sdp_tasks(@workload)
     get_chart
     get_sdp_gain(@workload.person)
+    get_unlinked_sdp_tasks(@workload)
   end
 
   def get_last_sdp_update
@@ -117,9 +118,21 @@ class WorkloadsController < ApplicationController
       end
       task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}#wl.wl_lines.select {|l| l.sdp_task_id != nil}.map { |l| l.sdp_task_id}
       cond = ""
-      cond = " and sdp_id not in (#{task_ids.join(',')}) and remaining > 0" if task_ids.size > 0
-      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond}", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
+      cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
+      @sdp_tasks = SDPTask.find(:all, :conditions=>["collab=? and request_id is null #{cond} and remaining > 0", wl.person.trigram], :order=>"title").map{|t| ["#{ActionController::Base.helpers.sanitize(t.title)} (#{t.assigned})", t.sdp_id]}
     # end
+  end
+
+  def get_unlinked_sdp_tasks(wl)
+    # Directly linked wl<=> sdp
+    task_ids   = wl.wl_lines.map{|l| l.sdp_tasks.map{|l| l.sdp_id}}.select{|l| (l != [])}
+    cond = " and sdp_id not in (#{task_ids.join(',')})" if task_ids.size > 0
+    @sdp_tasks_unlinked  = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NULL #{cond} and remaining > 0", wl.person.trigram])
+    # By requests
+    wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
+    @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
+
+    # render :layout => false
   end
 
   def get_sdp_gain(person)
@@ -296,8 +309,8 @@ class WorkloadsController < ApplicationController
       return
     end
     request_id.strip!
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
@@ -322,8 +335,8 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a name."
       return
     end
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     found = WlLine.find_by_person_id_and_name(person_id, name)
     if not found
@@ -359,8 +372,8 @@ class WorkloadsController < ApplicationController
 
   def add_by_project
     project_id = params[:project_id].to_i
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     project = Project.find(project_id)
     if not project
@@ -428,8 +441,8 @@ class WorkloadsController < ApplicationController
       @error = "Please provide a request number."
       return
     end
-    # person_id = session['workload_person_id'].to_i
-    person_id                     = params[:wl_person].to_i
+    person_id = session['workload_person_id'].to_i
+    # person_id                     = params[:wl_person].to_i
     session['workload_person_id'] = person_id.to_s
     filled = filled_number(request_id,7)
     request = Request.find_by_request_id(filled)
@@ -734,6 +747,7 @@ private
     get_chart
     get_sdp_gain(@workload.person)
     get_sdp_tasks(@workload)
+    get_unlinked_sdp_tasks(@workload)
   end
 
   def update_line_name(line)

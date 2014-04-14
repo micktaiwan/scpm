@@ -486,10 +486,16 @@ end
 			for p in @stream_columns_content
         style = {}
         @xml.Row(style) do
+          col_number = 0
           for column in @stream_column_array do
             @xml.Cell do
-              @xml.Data p[column], 'ss:Type' => 'String';
+              if (col_number >= 4) and (p[column] != 0)
+              @xml.tag!("ss:Data", 'ss:Type' => 'String', 'xmlns'=>'http://www.w3.org/TR/REC-html40') do; @xml<<excel_text(p[column].to_s.split('\r\n').join('&#10;&#10;')); end;
+              else
+               @xml.Data p[column], 'ss:Type' => 'String';
+              end
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
+              col_number += 1
             end
 
            # @xml.Cell { @xml.Data p.get_total_green_projects,  'ss:Type' => 'String';   @xml.NamedCell 'ss:Name' => 'FilterDatabase' }

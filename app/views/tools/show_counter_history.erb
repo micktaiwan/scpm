@@ -2,16 +2,20 @@
 <% form_tag(:action=>'show_counter_history') do %>
   <%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
   <%= select_tag ("request_id",options_for_select(@requests_array,@request_id.to_i))  %>
+  <%= hidden_field_tag 'filter' %>
   <%= submit_tag('Filter') %>
 <% end %>
 
 <% 
   row_number = 0
-  (current_user.has_role?('Admin')) ? (row_number = 4) : (row_number = 3)
+  (current_user.has_role?('Admin')) ? (row_number = 5) : (row_number = 4)
 %>
 
+<% if @filter == true %>
 <h2>Spider Counters</h2>
 <% last_request_spider = 0 %>
+<% line_count = 0 %>
+
 <!-- For each spider counter -->
 <% @spider_counter.each do |sc| %>
 
@@ -31,6 +35,7 @@
     </tr>
     <!-- HEADER TR -->
     <tr class="bg_grey">
+      <td>Number</td>
       <td>Author</td>
       <td>Action date</td>
       <td>Project</td>
@@ -40,10 +45,13 @@
       <% end %>
     </tr>
     <% last_request_spider = sc.request_id %>
+    <% line_count = 0 %>
   <% end %>
   
   <!-- DETAIL ACTION TR-->
+  <% line_count+= 1 %>
   <tr>
+    <td class="line_number"><%= line_count.to_s %></td>
     <td><%= sc.author.name %></td>
     <td><%= sc.action_date.strftime("%Y-%m-%d %H:%M") %></td>   
     <% project_name = sc.spider.project.name %>
@@ -86,6 +94,7 @@
     </tr>
     <!-- HEADER TR -->
     <tr class="bg_grey">
+      <td>Number</td>
       <td>Author</td>
       <td>Action date</td>
       <td>Project</td>
@@ -95,10 +104,13 @@
       <% end %>
     </tr>
     <% last_request_qs = qsc.request_id %>
+    <% line_count = 0 %>
   <% end %>
   
   <!-- DETAIL ACTION TR --> 
+  <% line_count+= 1 %>
   <tr>
+    <td class="line_number"><%= line_count.to_s %></td>
     <td><%= qsc.author.name %></td>
     <td><%= qsc.action_date.strftime("%Y-%m-%d %H:%M") %></td>
     
@@ -115,3 +127,4 @@
   </tr>
 <% end %>
 </table>
+<% end %>

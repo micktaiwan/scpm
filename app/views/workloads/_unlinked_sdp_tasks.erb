@@ -1,0 +1,17 @@
+<div id="view_alert_sdp_content">
+
+<h4>SDP Tasks not linked to your workload</h4>
+<ul>
+	<% sdp_tasks.each do |sdp| %>
+ 		<li><%= sdp.title %></li>
+	<% end %>
+</ul>
+
+<h4>SDP Tasks (with requests) not linked to your workload</h4>
+<ul>
+	<% sdp_tasks_req.each do |sdp| %>
+		<li><%= sdp.title %></li>
+	<% end %>
+</ul>    
+
+</div>

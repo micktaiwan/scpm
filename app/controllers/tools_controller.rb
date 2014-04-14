@@ -17,11 +17,11 @@ class ToolsController < ApplicationController
   PM_LOAD_PER_MONTH           = 48 #was: NB_DAYS_PER_MONTH*2 + NB_DAYS_PER_MONTH/1.5 # CP + PMO + DP
   WP_LEADERS_DAYS_PER_MONTH   = 12 #was: 18 # 10 + 4*2
 
-  PM_PROVISION_ADJUSTMENT     = -36.875
-  QA_PROVISION_ADJUSTMENT     = 11.625
-  RK_PROVISION_ADJUSTMENT     = -16
-  CI_PROVISION_ADJUSTMENT     = 23.5
-  OP_PROVISION_ADJUSTMENT     = -43.5
+  PM_PROVISION_ADJUSTMENT     = -157.750
+  QA_PROVISION_ADJUSTMENT     = 4
+  RK_PROVISION_ADJUSTMENT     = -26.5 
+  CI_PROVISION_ADJUSTMENT     = -10.125
+  OP_PROVISION_ADJUSTMENT     = -75.750
 
   def index
   end
@@ -133,19 +133,23 @@ class ToolsController < ApplicationController
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")
       tasks2012                          = SDPTask.find(:all, :conditions=>"iteration='2012'")
       tasks2013                          = SDPTask.find(:all, :conditions=>"iteration='2013'")
+      tasks2014                          = SDPTask.find(:all, :conditions=>"iteration='2014'")
       op2010                             = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011                             = tasks2011.inject(0) { |sum, t| t.initial+sum}
       op2012                             = tasks2012.inject(0) { |sum, t| t.initial+sum}
       op2013                             = tasks2013.inject(0) { |sum, t| t.initial+sum}
+      op2014                             = tasks2014.inject(0) { |sum, t| t.initial+sum}
       @operational2011_10percent         = round_to_hour(op2011*0.11111111111)
       @operational2012_10percent         = round_to_hour(op2012*0.11111111111)
       @operational2013_10percent         = round_to_hour(op2013*0.11111111111)
-      @operational_percent_total         = @operational2011_10percent + @operational2012_10percent + @operational2013_10percent
+      @operational2014_10percent         = round_to_hour(op2014*0.11111111111)
+      @operational_percent_total         = @operational2011_10percent + @operational2012_10percent + @operational2013_10percent + @operational2014_10percent
       @operational_total_2011            = op2010 + op2011 + @operational2011_10percent
       @operational_total_2012            = op2012 + @operational2012_10percent
       @operational_total_2013            = op2013 + @operational2013_10percent
-      @operational_total                 = @operational_total_2011 + @operational_total_2012 + @operational_total_2013
-      @remaining                         = (tasks2010.inject(0) {|sum, t| t.remaining+sum} + tasks2011.inject(0) {|sum, t| t.remaining+sum} + tasks2012.inject(0) {|sum, t| t.remaining+sum} + tasks2013.inject(0) {|sum, t| t.remaining+sum})
+      @operational_total_2014            = op2014 + @operational2014_10percent
+      @operational_total                 = @operational_total_2011 + @operational_total_2012 + @operational_total_2013 + @operational_total_2014
+      @remaining                         = (tasks2010.inject(0) {|sum, t| t.remaining+sum} + tasks2011.inject(0) {|sum, t| t.remaining+sum} + tasks2012.inject(0) {|sum, t| t.remaining+sum} + tasks2013.inject(0) {|sum, t| t.remaining+sum} + tasks2014.inject(0) {|sum, t| t.remaining+sum})
       @remaining_time                    = (@remaining/NB_FTE/NB_DAYS_PER_MONTH/0.001).round * 0.001
       @phases.each { |p|  p.gain_percent = (p.initial==0) ? 0 : (p.balancei/p.initial*100/0.1).round * 0.1 }
       @theorical_management              = round_to_hour((PM_LOAD_PER_MONTH + MEETINGS_LOAD_PER_MONTH*NB_QR + WP_LEADERS_DAYS_PER_MONTH)*@remaining_time)
@@ -167,7 +171,7 @@ class ToolsController < ApplicationController
       @risks_remaining_should_be         = 0
       provision_qa_ci                    = 0
       @provisions.each { |p|
-        calculate_provision(p,@operational_total_2011, @operational_total_2012, @operational_total_2013, @operational_percent_total)
+        calculate_provision(p,@operational_total_2011, @operational_total_2012, @operational_total_2013, @operational_total_2014, @operational_percent_total)
         @sold += p.initial_should_be if p.title != 'Operational Management' # as already counted in @operational_total
         if p.title == 'Operational Management' or p.title == 'Project Management'
           @provisions_initial             += p.initial
@@ -339,18 +343,22 @@ class ToolsController < ApplicationController
       tasks2011                          = SDPTask.find(:all, :conditions=>"iteration='2011'")
       tasks2012                          = SDPTask.find(:all, :conditions=>"iteration='2012'")
       tasks2013                          = SDPTask.find(:all, :conditions=>"iteration='2013'")
+      tasks2014                          = SDPTask.find(:all, :conditions=>"iteration='2014'")
       op2010                             = tasks2010.inject(0) { |sum, t| t.initial+sum}
       op2011                             = tasks2011.inject(0) { |sum, t| t.initial+sum}
       op2012                             = tasks2012.inject(0) { |sum, t| t.initial+sum}
       op2013                             = tasks2013.inject(0) { |sum, t| t.initial+sum}
+      op2014                             = tasks2014.inject(0) { |sum, t| t.initial+sum}
       @operational2011_10percent_by_type         = round_to_hour(op2011*0.11111111111)
       @operational2012_10percent_by_type         = round_to_hour(op2012*0.11111111111)
-      @operational2013_10percent_by_type         = round_to_hour(op2012*0.11111111111)
-      @operational_percent_total_by_type         = @operational2011_10percent_by_type + @operational2012_10percent_by_type + @operational2013_10percent_by_type
+      @operational2013_10percent_by_type         = round_to_hour(op2013*0.11111111111)
+      @operational2014_10percent_by_type         = round_to_hour(op2014*0.11111111111)
+      @operational_percent_total_by_type         = @operational2011_10percent_by_type + @operational2012_10percent_by_type + @operational2013_10percent_by_type + @operational2014_10percent_by_type
       @operational_total_2011_by_type            = op2010 + op2011 + @operational2011_10percent_by_type
       @operational_total_2012_by_type            = op2012 + @operational2012_10percent_by_type
       @operational_total_2013_by_type            = op2013 + @operational2013_10percent_by_type
-      @operational_total_by_type                 = @operational_total_2011_by_type + @operational_total_2012_by_type + @operational_total_2013_by_type
+      @operational_total_2014_by_type            = op2014 + @operational2014_10percent_by_type
+      @operational_total_by_type                 = @operational_total_2011_by_type + @operational_total_2012_by_type + @operational_total_2013_by_type + @operational_total_2014_by_type 
     rescue Exception => e
       render(:text=>"<b>Error:</b> <i>#{e.message}</i><br/>#{e.backtrace.split("\n").join("<br/>")}")
     end
@@ -362,8 +370,8 @@ class ToolsController < ApplicationController
 
   def sdp_yes_check
     @task_ids = SDPTask.find(:all, :conditions=>"initial > 0").collect{ |t| "'#{t.request_id}'" }.uniq
-    @yes_but_no_task_requests = Request.find(:all, :conditions=>"sdp='yes' and  sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id not in (#{@task_ids.join(',')})")
-    @yes_but_cancelled_requests = Request.find(:all, :conditions=>"sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id in (#{@task_ids.join(',')}) and (status='cancelled' or status='removed')")
+    @yes_but_no_task_requests = Request.find(:all, :conditions=>["sdp='yes' and (start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id not in (#{@task_ids.join(',')})", Date.parse('2014-02-01')])
+    @yes_but_cancelled_requests = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010' and request_id in (#{@task_ids.join(',')}) and (status='cancelled' or status='removed')", Date.parse('2014-02-01')])
     @no_but_sdp = Request.find(:all, :conditions=>"request_id in (#{@task_ids.join(',')}) and sdp='no'")
   end
 
@@ -450,42 +458,19 @@ class ToolsController < ApplicationController
     # check if sdp loads are corrects
     @empty_sdp_iteration = Request.find(:all, :conditions=>"sdpiteration='' and status!='removed'", :order=>"request_id")
     # TODO: not portable
-    @checks = Request.find(:all, :conditions=>"status!='removed' and sdp='Yes' and sdpiteration!='' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010'", :order=>"request_id")
+    @checks = Request.find(:all, :conditions=>["(start_date IS NULL or start_date < ?) and status!='removed' and sdp='Yes' and sdpiteration!='' and sdpiteration!='2013-Y3' and sdpiteration!='2013' and sdpiteration!='2012' and sdpiteration!='2011-Y2' and sdpiteration!='2011' and sdpiteration!='2010'", Date.parse('2014-02-01')], :order=>"request_id")
     @checks = @checks.select {|r|
       r.workload2.to_f != r.sdp_tasks_initial_sum
       }
   end
 
-  def import_monthly_tasks_form
-    @ope = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")
-    @service_resp = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name").select{ |p| p.has_role?('ServiceLineResp')}
-    @cpdp_people = Person.find(:all, :conditions=>"has_left=0 and is_cpdp=1", :order=>"name")
-  end
-
   def import_monthly_tasks
-    # operational people
-    ope_ids  = params["qr"]["ids"].join(",")
-    @oname   = params["qr_name"]
-    @oload   = params["qr_load"]
-    @ope     = Person.find(:all, :conditions=>"id in (#{ope_ids})", :order=>"name")
-    # line responsible people
-    resp_ids = params["resp"]
-    if not resp_ids; resp_ids = "0"; else; resp_ids = resp_ids["ids"].join(","); end
-    @rname = params["resp_name"]
-    @rload = params["resp_load"]
-    @resp  = Person.find(:all, :conditions=>"id in (#{resp_ids})", :order=>"name")
-    # cp/dp people
-    cpdp_ids = params["cpdp"]
-    if not cpdp_ids; cpdp_ids = "0"; else; cpdp_ids = cpdp_ids["ids"].join(","); end
-    @cpdpName = params["cpdp_name"]
-    @cpdpLoad = params["cpdp_load"]
-    @cpdp = Person.find(:all, :conditions=>"id in(#{cpdp_ids})", :order=>"name")
-    render(:layout=>false)
+    @monthlyTasks = MonthlyTask.find(:all)
   end
 
   def requests_by_year
     @requests = Request.find(:all, :conditions=>"status='to be validated'", :order=>"workstream, summary, milestone")
-    @years = [2011, 2012, 2013]
+    @years = [2011, 2012, 2013, 2014]
   end
 
   def projects_length
@@ -633,6 +618,10 @@ class ToolsController < ApplicationController
   def show_counter_history
     @stream_id        = params[:stream_id]
     @request_id       = params[:request_id]
+    @filter = false
+    if params[:filter]
+      @filter = true
+    end
     streams           = Stream.find(:all)
     @streams_array    = [["All",0]]
     streams.each{ |s| 
@@ -833,21 +822,21 @@ private
     (f/0.125).round * 0.125
   end
 
-  def calculate_provision(p, total2011, total2012, total2013, operational_percent)
+  def calculate_provision(p, total2011, total2012, total2013, total2014, operational_percent)
     factor = 1.25 # 20% of PM (reciprocal)
     case p.title
       when 'Project Management'
-        p.difference = round_to_hour(total2011*factor*0.09) + round_to_hour(total2012*factor*0.12) + round_to_hour(total2013*factor*0.12) - p.initial + PM_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.09) + round_to_hour(total2012*factor*0.12) + round_to_hour(total2013*factor*0.12) + round_to_hour(total2014*factor*0.12) - p.initial + PM_PROVISION_ADJUSTMENT
       when 'Risks'
-        p.difference = round_to_hour(total2011*factor*0.04) + round_to_hour(total2012*factor*0.02) + round_to_hour(total2013*factor*0.02)  - p.initial + RK_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.04) + round_to_hour(total2012*factor*0.02) + round_to_hour(total2013*factor*0.02) + round_to_hour(total2014*factor*0.02) - p.initial + RK_PROVISION_ADJUSTMENT
       when 'Operational Management'
         p.difference = operational_percent - p.initial      + OP_PROVISION_ADJUSTMENT
       when '(OLD) Quality Assurance'
         p.difference = 0
       when 'Quality Assurance'
-        p.difference = round_to_hour(total2011*factor*0.02) + round_to_hour(total2012*factor*0.01) + round_to_hour(total2013*factor*0.01) - p.initial+ QA_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour(total2011*factor*0.02) + round_to_hour(total2012*factor*0.01) + round_to_hour(total2013*factor*0.01) + round_to_hour(total2014*factor*0.01)  - p.initial+ QA_PROVISION_ADJUSTMENT
       when 'Continuous Improvement'
-        p.difference = round_to_hour((total2011+total2012+total2013)*factor*0.05) - p.initial  + CI_PROVISION_ADJUSTMENT
+        p.difference = round_to_hour((total2011+total2012+total2013+total2014)*factor*0.05) - p.initial  + CI_PROVISION_ADJUSTMENT
       else
         p.difference = 0
     end

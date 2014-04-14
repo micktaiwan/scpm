@@ -8,8 +8,8 @@
 <td><%= my_simple_format(risk.consequence) %></td>
 <td align="center"><%= risk.impact %> / 4</td>
 <td<%if (risk.probability>=4 or risk.severity>=6) and risk.actions==""%> bgcolor="#F55"<%end%>><%= my_simple_format(risk.actions) %></td>
-<td><% if risk.is_ria_logged==1 %>Y<%end%></td>
-<td><% if risk.is_ria_action==1 %>Y<%end%></td>
+<td><% if risk.is_ria_logged==1 %>Y<%else%>N<%end%></td>
+<td><% if risk.is_ria_action==1 %>Y<%else%>N<%end%></td>
 <td><%= my_time(risk.created_at) %></td>
 <td><%= my_time(risk.updated_at) %></td>
 <td><%= link_to('Edit', :controller=>'risks', :action=>'edit', :id=>risk.id) %></td>
