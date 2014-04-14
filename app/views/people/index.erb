@@ -37,9 +37,7 @@
 		  <%= render(:partial=>'person', :collection=>peopleNotLeft) %>
 		</ul>
 	<% end %>
-	<ul>
-	  <%= render(:partial=>'person', :collection=>peopleNotLeft) %>
-	</ul>
+
 <% } %>
 
 <% peopleLeft = @people.find_all{|person| (person.has_left == 1)} %>

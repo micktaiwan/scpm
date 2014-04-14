@@ -9,11 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20130917130404) do
-=======
 ActiveRecord::Schema.define(:version => 20140407105759) do
->>>>>>> 8707719095ecbcb0c52ee40846936f32747e7b62
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -361,10 +357,6 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.integer  "checklist_not_applicable", :default => 0
   end
 
-<<<<<<< HEAD
-=======
-  add_index "milestones", ["project_id"], :name => "IDX_MILESTONES"
-
   create_table "monthly_task_people", :force => true do |t|
     t.integer  "monthly_task_id"
     t.integer  "person_id"
@@ -387,7 +379,6 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.integer  "monthly_task_type_id"
   end
 
->>>>>>> 8707719095ecbcb0c52ee40846936f32747e7b62
   create_table "notes", :force => true do |t|
     t.text     "note"
     t.integer  "project_id"
@@ -429,6 +420,14 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
   create_table "plannings", :force => true do |t|
     t.string   "name"
     t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pm_type_axe_excels", :force => true do |t|
+    t.integer  "axe_id"
+    t.integer  "lifecycle_id"
+    t.integer  "excel_position"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
