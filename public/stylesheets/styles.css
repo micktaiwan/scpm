@@ -194,6 +194,14 @@ a {text-decoration:none;}
   border-radius: 3px;
   -moz-border-radius: 5px;
 }
+.btnlnk.red {
+  border: 1px solid #ABC;
+  padding: 2px;
+  margin: 0px;
+  background: red;
+  border-radius: 3px;
+  -moz-border-radius: 5px;
+}
 .btnlnk.notimportant {
   background: #EEE;
 }

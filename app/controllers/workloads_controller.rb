@@ -6,8 +6,6 @@ class WorkloadsController < ApplicationController
 
   layout 'pdc'
 
-  $backup_holiday_threshold = 3
-
   def index
     person_id      = params[:person_id]
     project_ids    = params[:project_ids]
@@ -51,6 +49,7 @@ class WorkloadsController < ApplicationController
     get_chart
     get_sdp_gain(@workload.person)
     get_backup_warnings(@workload.person)
+    get_holiday_warning(@workload.person)
     get_unlinked_sdp_tasks(@workload)
   end
 
@@ -115,7 +114,7 @@ class WorkloadsController < ApplicationController
 
         # Calcul the number of day of holiday. If it's over the threshold, display the warning
         person_holiday_load.map { |wload| load_total += wload.wlload }
-        if (load_total > $backup_holiday_threshold)
+        if (load_total > APP_CONFIG['workload_holiday_threshold_before_backup'])
          @backup_holidays << b.person.name if !@backup_holidays.include?(b.person.name)
         end
       end
@@ -153,6 +152,21 @@ class WorkloadsController < ApplicationController
     @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
 
     # render :layout => false
+  end
+
+  def get_holiday_warning(person)
+    @holiday_without_backup = false
+    person_holiday_load = WlLoad.find(:all,
+        :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and week >= ? and wlload >= ?", person.id.to_s, wlweek(Date.today), APP_CONFIG['workload_holiday_threshold_before_backup']])
+    person_holiday_load.each do |holiday|
+      backups = WlBackup.find(:all, :conditions=>["person_id = ? and week = ?",person.id.to_s, holiday.week])
+      if backups == nil or backups.size == 0
+        @holiday_without_backup = true
+        return
+      end
+    end
+
   end
 
   def get_sdp_gain(person)
@@ -777,12 +791,6 @@ class WorkloadsController < ApplicationController
     render :text=>backup.comment, :layout => false 
   end
 
-  def get_week
-    date_str = params['date']
-    date = Date.strptime(date_str, "%Y-%m-%d")
-    render :text=> wlweek(date)
-  end
-
 private
 
   def get_workload_data(person_id, projects_ids, person_iterations)
@@ -793,7 +801,9 @@ private
     get_chart
     get_sdp_gain(@workload.person)
     get_sdp_tasks(@workload)
+    get_backup_warnings(@workload.person)
     get_unlinked_sdp_tasks(@workload)
+    get_holiday_warning(@workload.person)
   end
 
   def update_line_name(line)

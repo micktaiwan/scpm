@@ -29,6 +29,7 @@ consolidation_alert_on_overworkload: false
 consolidation_capped_next_weeks: false
 automatic_except_line_addition: false
 workloads_show_filter: false # Show or hide the filter buttn
+workload_holiday_threshold_before_backup: 2 # Number of holidays days which need the attribution of a backup
 
 
 # SDP
