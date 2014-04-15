@@ -107,7 +107,7 @@ class WorkloadsController < ApplicationController
       # Load for holyday and concerned user (for the 14 next days)
       person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and (wl_loads.week = ? or wl_loads.week = ?)", b.person.id.to_s, currentWeek, nextWeek])
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and (wl_loads.week = ? or wl_loads.week = ?)", b.person.id.to_s, WL_LINE_HOLIDAYS, currentWeek, nextWeek])
 
       if person_holiday_load.count > 0
         load_total = 0
@@ -158,7 +158,7 @@ class WorkloadsController < ApplicationController
     @holiday_without_backup = false
     person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and week >= ? and wlload >= ?", person.id.to_s, wlweek(Date.today), APP_CONFIG['workload_holiday_threshold_before_backup']])
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and week >= ? and wlload >= ?", person.id.to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), APP_CONFIG['workload_holiday_threshold_before_backup']])
     person_holiday_load.each do |holiday|
       backups = WlBackup.find(:all, :conditions=>["person_id = ? and week = ?",person.id.to_s, holiday.week])
       if backups == nil or backups.size == 0
@@ -552,6 +552,11 @@ class WorkloadsController < ApplicationController
     line      = WlLine.find(@line_id)
     id        = view_by==:person ? line.person_id : line.project_id
     if value == 0.0
+      if (line.wl_type == WL_LINE_HOLIDAYS)
+        backup = WlBackup.find(:all, :conditions=>["person_id = ? and week = ?", line.person.id.to_s, @wlweek])
+        # Send email
+        backup.each(&:destroy)
+      end
       WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
       @value = ""
     else

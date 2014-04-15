@@ -21,7 +21,7 @@
   jQuery( document ).ready(function() {
     jQuery(".holiday_td").hover(
       function(e) {
-      	if (holiday_hover_detail[jQuery( this ).attr('id')].length > 0)
+      	if ((holiday_hover_detail[jQuery( this ).attr('id')].length > 0) && (jQuery(this).html().trim()))
       	{
         	jQuery("#holiday_detail").show();
         	jQuery("#holiday_detail").html(holiday_hover_detail[jQuery( this ).attr('id')]);
