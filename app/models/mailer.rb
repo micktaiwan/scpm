@@ -25,10 +25,8 @@ class Mailer < ActionMailer::Base
   end
 
   def backup_delete(backup)
-    Rails.logger.info("------")
     @from       = APP_CONFIG['backup_change_email_source']
-    # @recipients = backup.backup.email
-    @recipients       = APP_CONFIG['backup_change_email_source']
+    @recipients = APP_CONFIG['backup_change_email_source']
     @subject    = "[EISQ] Backup deleted"
     @backup     = backup
   end 
