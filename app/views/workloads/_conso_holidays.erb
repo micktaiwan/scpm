@@ -9,7 +9,12 @@
     wlload  = (wlload == 0.0 ? '' : wlload)
 
   	backups = WlBackup.find(:all, :conditions=>["person_id=? and week = ?", conso_holidays.person.id.to_s, week]);
-  	backups_name = backups.map { |b| "<li>" + b.backup.name + "</li>" }
+
+  	backups_name = backups.map { |b| 
+      backup_comment = " "
+      backup_comment = b.comment if b.comment != nil
+      "<li><span style='color:pink;'>" + b.backup.name + "</span>: " + backup_comment + "</li>" 
+    }
     if wlload.to_i < 4
       color = "#9F9"
     elsif backups.size > 0
