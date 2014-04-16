@@ -70,6 +70,9 @@ status_change_email_destination: "addressMail1@sqli.com"
 risk_change_email_source: "addressMail1@sqli.com"
 risk_change_email_destination: "addressMail1@sqli.com"
 
+# Backup delete mail
+backup_change_email_source: "addressMail1@sqli.com"
+
 # Workload alert mail
 workload_alerts_email_source: "addressMail1@sqli.com"
 workload_alerts_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com,addressMail3@sqli.com,addressMail4@sqli.com"
