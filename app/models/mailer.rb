@@ -26,7 +26,7 @@ class Mailer < ActionMailer::Base
 
   def backup_delete(backup)
     @from       = APP_CONFIG['backup_change_email_source']
-    @recipients = APP_CONFIG['backup_change_email_source']
+    @recipients = backup.backup.email
     @subject    = "[EISQ] Backup deleted"
     @backup     = backup
   end 
