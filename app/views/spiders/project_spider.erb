@@ -1,67 +1,17 @@
 <script type="text/javascript"> 
 $(function () {
-	
+		
 	// Consolidate fct
 	function consolidate()
 	{
 		document.getElementById("consolidate_spider").value=1;
 		document.forms["form_update_spider"].submit();
 	}
-	$("#consolidate_btn").click(function () {
-		var aqValidation = confirm("Are you reporting on this project from a request (assigned to you) belonging to one of these WP?\n WP1.1: Quality Control\n WP1.2: Quality Assurance\n WP1.4: Agility Assurance\n WP1.5: SQR activities\n WP1.6.2: Project Setting-up");
-		if(!aqValidation)
-		{
-			$("#AQ_spider").val("NO");
-			var counterValidation = confirm("If you consolidate this spider, the spider counter of this project will be incremented. Are you sure to continue ?");
-			
-			if(counterValidation)
-			{
-				consolidate();
-			}
-		}
-		else
-		{
-				$("#AQ_spider").val("YES");
-				consolidate();
-		}
-	});
-
-	$("select").change(function () {
-		calculAverage();
-	});
-	calculAverage();
-	
-	// Manage the two charts
-	var docHeight = getDocHeight();
-	if (docHeight < 1000)
-	{
-		$("#spider_separator_offset").height("300px");
-		docHeight = getDocHeight();
-	}
-	
-	// Manage the two charts
-	$("#chartContainer_0").show();
-	$(window).scroll(manageChartVisibility);
-	
-	// Show/hide charts
-	$("#chart_visibility_btn").click(function(){
-
-		if($(".spider_chart").width() == 1)
-		{
-			$(".spider_chart").width("600px");
-		}
-		else
-		{
-			$(".spider_chart").width(1);	
-		}
-	});
 	
 	function manageChartVisibility(){
 		var spider_sepator = $("#spider_separator");
 		var docViewTop = $(window).scrollTop();
 	    var docViewBottom = docViewTop + $(window).height();
-		//console.log(docViewBottom);
-		//console.log(getDocHeight());
 		var docSurface = docViewBottom - docViewTop;
 		var docMiddle = docViewTop + (docSurface/2);
 
@@ -92,12 +42,49 @@ $(function () {
 		}
 	}
 
-	// Execution
+	function checkCheckboxGroup()
+	{
+		$('.check_all').each(function() {
+			var checkbox_id = ".check_" + $(this).attr("id").replace(/[^\d.]/g, '');
+			var to_check = true;
+			$(checkbox_id).each(function(){
+				if ($(this).attr("checked") != "checked")
+				{
+					to_check = false;
+				}
+			});	
+
+			if (to_check)
+				$(this).attr('checked', true)	
+		});
+	}
+
+	/*
+	* Event listener
+	*/
+	$("#consolidate_btn").click(function () {
+		var aqValidation = confirm("Are you reporting on this project from a request (assigned to you) belonging to one of these WP?\n WP1.1: Quality Control\n WP1.2: Quality Assurance\n WP1.4: Agility Assurance\n WP1.5: SQR activities\n WP1.6.2: Project Setting-up");
+		if(!aqValidation)
+		{
+			$("#AQ_spider").val("NO");
+			var counterValidation = confirm("If you consolidate this spider, the spider counter of this project will be incremented. Are you sure to continue ?");
+			
+			if(counterValidation)
+			{
+				consolidate();
+			}
+		}
+		else
+		{
+			$("#AQ_spider").val("YES");
+			consolidate();
+		}
+	});
+
 	$('#file_link').change(function() {
 	  checkFilelink();
 	});
 
-	// Check group
 	$('.check_all').change(function() {
 		var check_status;
 		if ($(this).attr("checked") == "checked") {
@@ -119,7 +106,40 @@ $(function () {
 		}
 	});
 
+	// Manage the two charts
+	$("#chartContainer_0").show();
+	$(window).scroll(manageChartVisibility);
+	
+	// Show/hide charts
+	$("#chart_visibility_btn").click(function(){
+
+		if($(".spider_chart").width() == 1)
+		{
+			$(".spider_chart").width("600px");
+		}
+		else
+		{
+			$(".spider_chart").width(1);	
+		}
+	});
+
+	$("select").change(function () {
+		calculAverage();
+	});
+
+	/*
+	* Execution
+	*/
+	// Manage the two charts
+	var docHeight = getDocHeight();
+	if (docHeight < 1000)
+	{
+		$("#spider_separator_offset").height("300px");
+		docHeight = getDocHeight();
+	}
+	calculAverage();
 	checkFilelink();
+	checkCheckboxGroup();
 });
 
 // Helper
