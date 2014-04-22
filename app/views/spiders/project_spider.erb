@@ -96,6 +96,29 @@ $(function () {
 	$('#file_link').change(function() {
 	  checkFilelink();
 	});
+
+	// Check group
+	$('.check_all').change(function() {
+		var check_status;
+		if ($(this).attr("checked") == "checked") {
+			check_status = true;
+		} else {
+			check_status = false;
+		}
+
+		var checkbox_id = ".check_" + $(this).attr("id").replace(/[^\d.]/g, '');
+		$(checkbox_id).each(function(){
+			$(this).attr('checked', check_status);
+		});
+	});
+
+	$('.check').change(function() {
+		var checkbox_id = "#check_all_" + $(this).attr("class").replace(/[^\d.]/g, '');
+		if (($(this).attr("checked") != "checked") && ($(checkbox_id).attr("checked") == "checked")) {
+			$(checkbox_id).attr('checked', false);
+		}
+	});
+
 	checkFilelink();
 });
 
@@ -168,7 +191,7 @@ function getDocHeight() {
 					currentAxeId = q.lifecycle_question.pm_type_axe.id.to_s
 				end
 				concat "<tr><td class='axe_tab' id='" + pmTabId + "_axe_" + q.lifecycle_question.pm_type_axe.id.to_s + "' style='background-color: #6D6D6D;color:white;border: 1px solid black;'>"+q.lifecycle_question.pm_type_axe.title+"</td>"
-				concat "<td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td><td style='background-color: #6D6D6D;color:white;border: 1px solid black;width:80px;'>Recursive ?</td></tr>"
+				concat "<td style='border: 1px solid black;' class='grey_cell'>Note</td><td style='border: 1px solid black;' class='green_cell'>Ref.</td><td style='background-color: #6D6D6D;color:white;border: 1px solid black;width:80px;'>Recursive ? <input type='checkbox' class='check_all' id='check_all_" + q.lifecycle_question.pm_type_axe.id.to_s + "' /></td></tr>"
 				currentAxes = q.lifecycle_question.pm_type_axe.title
 			end
 			
@@ -222,7 +245,7 @@ function getDocHeight() {
 			if (q.recursive)
 				concat ' checked'
 			end
-			concat ' /></td>'
+			concat 'class="check check_' + q.lifecycle_question.pm_type_axe.id.to_s + '" /></td>'
 			concat '</tr>'	
 			j = j + 1
 		}
