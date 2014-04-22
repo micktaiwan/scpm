@@ -82,7 +82,7 @@ $(function () {
 
 	function checkFilelink()
 	{
-		if($('#file_link').val().length == 0)
+		if (($('#file_link').val()!=undefined) && ($('#file_link').val().length == 0))
 		{
 			$("#warning_file_link").show();
 		}
@@ -245,7 +245,7 @@ function getDocHeight() {
 			if (q.recursive)
 				concat ' checked'
 			end
-			concat 'class="check check_' + q.lifecycle_question.pm_type_axe.id.to_s + '" /></td>'
+			concat ' class="check check_' + q.lifecycle_question.pm_type_axe.id.to_s + '" /></td>'
 			concat '</tr>'	
 			j = j + 1
 		}
