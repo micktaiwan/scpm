@@ -24,19 +24,18 @@ class StreamsController < ApplicationController
   end
   
   def show_stream_projects
-    id            = params['id']
-    @stream       = Stream.find(id)
+    @id           = params['id']
+    @order        = params['projects_order']
+    @stream       = Stream.find(@id)
     @creationError = params['creationError']    
     
-    # @projects = Project.find(:all,:conditions => ["workstream = ? 
-    #                                               and is_running = 1 
-    #                                               and project_id is null 
-    #                                               and qr_qwr_id IS NOT NULL 
-    #                                               and qr_qwr_id != 0 
-    #                                               and is_qr_qwr = 1", Workstream.find(@stream.workstream).name])
     @projects = Project.find(:all,:conditions => ["workstream = ? 
                                                   and is_running = 1 
                                                   and project_id is null", Workstream.find(@stream.workstream).name], :order=>"name")
+    if @order == "date"
+      @projects = @projects.sort{|a,b| a.last_status_date<=>b.last_status_date}.reverse!
+    end
+
   end
   
   def show_stream_informations

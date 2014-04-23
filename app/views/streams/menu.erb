@@ -9,5 +9,7 @@
 	<% @stream.review_types.each do |review_type| %>
 		<%= link_to  review_type.title , {:controller => "streams", :action => "show_stream_review", :id => @stream.id, :type => review_type.id },{:class=>"btnlnk"}%>
 	<% end %>
+
+	<%= javascript_include_tag "streams.js" %>
 </p>
 <br />
