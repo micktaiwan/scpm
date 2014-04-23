@@ -1,9 +1,10 @@
 	<!-- List -->
 	<h3>You are reporting on this project: </h3>
 	<!-- CHOICE 1 -->
+
+	<div class="spider_list_choice" id="choice1" >
 	<%= link_to ('
-		<div class="status_list_choice" id="choice1" >
-			<div class="status_list_choice_text" >'+
+			<div class="spider_list_choice_text" >'+
 				my_simple_format("From a request belonging to one of these WP:
 					WP1.1: Quality Control
 					WP1.2: Quality Assurance
@@ -11,8 +12,7 @@
 					WP1.5: SQR Activities
 					WP1.6.2: Project Setting-up") + ' 
 			</div>
-			<img class="status_list_choice_img" src="/images/right.png">      
-		</div>',
+			<img class="spider_list_choice_img" src="/images/right.png">',
  		{
 			:action=>'update_spider', 
 			:list_choice=>"1", 
@@ -23,18 +23,20 @@
 			:consolidate_spider=>"1", 
 			:project_id=>@project_id, 
 			:milestone_id=>@milestone_id
-		}, :method => :post) 
-	%>
+		}, {:method => :post}) 
+	%>      
+		</div>
 	<br />
 	<!-- CHOICE 2 -->
-	<% choice_2_text = '<div  class="status_list_choice" id="choice2"><div class="status_list_choice_text" >' %>
+	<div  class="spider_list_choice" id="choice2">
+	<% choice_2_text = '<div class="spider_list_choice_text" >' %>
 	<% if @project.get_last_spider_increment %>
 		<% choice_2_text += my_simple_format("During a \"Standard Support\" activity and you <strong>want to</strong> increment the Spider counter.
 			Last Spider counter update for this project: " + @project.get_last_spider_increment.to_s + " (<span class=\"descr\">" + time_ago_in_words(@project.get_last_spider_increment) + "</span>)") %>
 	<% else %>
 		<% choice_2_text +=  my_simple_format('During a "Standard Support" activity and you <strong>want to</strong> increment the Spider counter.') %> 
 	<% end %>
-	<% choice_2_text +='</div><img class="status_list_choice_img" src="/images/right.png"></div>' %>
+	<% choice_2_text +='</div><img class="spider_list_choice_img" src="/images/right.png">' %>
 
 	<%= link_to(choice_2_text,
 		{  
@@ -47,20 +49,21 @@
 			:consolidate_spider=>"1", 
 			:project_id=>@project_id, 
 			:milestone_id=>@milestone_id
-		}, :method => :post) 
+		}, {:method => :post}) 
 	%>
-
+	</div>
 	<br />
 
 	<!-- CHOICE 3 -->
-	<% choice_3_text = '<div  class="status_list_choice" id="choice3" ><div class="status_list_choice_text" >' %>
+	<div  class="spider_list_choice" id="choice3" >
+	<% choice_3_text = '<div class="spider_list_choice_text" >' %>
 	<% if @project.get_last_spider_increment %>
 		<% choice_3_text +=  my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the Spider counter.
 			Last Spider counter update for this project: "'+ @project.get_last_spider_increment.to_s + ' (<span class="descr">' + time_ago_in_words(@project.get_last_spider_increment) + '</span>)') %> 
 	<% else %>
 		<% choice_3_text += my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the Spider counter.') %> 
 	<% end %>
-	<% choice_3_text += '</div><img class="status_list_choice_img" src="/images/right.png"></div>' %>
+	<% choice_3_text += '</div><img class="spider_list_choice_img" src="/images/right.png">' %>
 
 	<%= link_to(choice_3_text,
 		{ 
@@ -73,6 +76,6 @@
 			:consolidate_spider=>"1", 
 			:project_id=>@project_id, 
 			:milestone_id=>@milestone_id
-		}, :method => :post) 
+		}, {:method => :post}) 
 	%>
-
+	</div>
