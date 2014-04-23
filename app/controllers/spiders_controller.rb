@@ -11,6 +11,10 @@ class SpidersController < ApplicationController
      end
    end
    
+
+  $SPIDER_CONSO_AQ = 1
+  $SPIDER_CONSO_COUNTER = 2
+  $SPIDER_CONSO_WITHOUT_COUNTER = 3
   # ------------------------------------------------------------------------------------
   # BASE : ACTION/VIEW
   # ------------------------------------------------------------------------------------
@@ -271,6 +275,8 @@ class SpidersController < ApplicationController
       @spiderquestresursive  = params[:spiderquestresursive]
       @project_id            = params[:project_id]
       @milestone_id          = params[:milestone_id]
+
+      @project = Project.find(@project_id)
   end
   
   # Save spider
@@ -298,7 +304,7 @@ class SpidersController < ApplicationController
 
       #Consolidate
       if(params[:consolidate_spider] == "1")
-        project_spider_consolidate(spider)
+        project_spider_consolidate(spider, params[:list_choice])
      end
      redirect_to :action=>:project_spider, :project_id=>params[:project_id], :milestone_id=>params[:milestone_id]
   end
@@ -321,7 +327,7 @@ class SpidersController < ApplicationController
   end
 
   # Consolidate the spider
-  def project_spider_consolidate(spiderParam)
+  def project_spider_consolidate(spiderParam, counterChoice)
     currentAxes = ""
     currentAxesId = 0;
     valuesTotal = 0
@@ -368,7 +374,7 @@ class SpidersController < ApplicationController
     # Increment the spider counter of the project
     spiderProject = Project.find(spiderParam.project_id)
     
-    if((spiderProject) && (params[:AQ_spider] == "NO"))
+    if((spiderProject) && (counterChoice == $SPIDER_CONSO_COUNTER))
       
       spiderParam.impact_count = true;
       spiderParam.save
