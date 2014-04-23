@@ -264,6 +264,15 @@ class SpidersController < ApplicationController
   # FORMS MANAGEMENT
   # ------------------------------------------------------------------------------------
   
+  def spider_list_form
+      @spider_id             = params[:spider_id]
+      @file_link             = params[:file_link]
+      @spiderquest           = params[:spiderquest]
+      @spiderquestresursive  = params[:spiderquestresursive]
+      @project_id            = params[:project_id]
+      @milestone_id          = params[:milestone_id]
+  end
+  
   # Save spider
   def update_spider
       spider                  = Spider.find(params[:spider_id])

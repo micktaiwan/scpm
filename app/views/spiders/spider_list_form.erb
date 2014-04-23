@@ -1,0 +1,69 @@
+	<!-- List -->
+	<h3>You are reporting on this project: </h3>
+	<!-- CHOICE 1 -->
+	<%= link_to ('
+		<div class="status_list_choice" id="choice1" >
+			<div class="status_list_choice_text" >'+
+				my_simple_format("From a request belonging to one of these WP:
+					WP1.1: Quality Control
+					WP1.2: Quality Assurance
+					WP1.4: Agility Assurance
+					WP1.5: SQR Activities
+					WP1.6.2: Project Setting-up") + ' 
+			</div>
+			<img class="status_list_choice_img" src="/images/right.png">      
+		</div>',
+ 		{
+			:action=>'update_spider', 
+			:list_choice=>"1", 
+			:file_link=>@file_link, 
+			:spider_id=>@spider_id,
+			:spiderquest=>@spiderquest, 
+			:spiderquestresursive=>@spiderquestresursive, 
+			:consolidate_spider=>"1", 
+			:project_id=>@project_id, 
+			:milestone_id=>@milestone_id
+		}, :method => :post) 
+	%>
+	<br />
+	<!-- CHOICE 2 -->
+	<%= link_to('
+		<div  class="status_list_choice" id="choice2" >
+			<div class="status_list_choice_text" >		
+			</div>
+			<img class="status_list_choice_img" src="/images/right.png">      
+		</div>',
+		{  
+			:action=>'update_spider', 
+			:list_choice=>"1", 
+			:file_link=>@file_link, 
+			:spider_id=>@spider_id,
+			:spiderquest=>@spiderquest, 
+			:spiderquestresursive=>@spiderquestresursive, 
+			:consolidate_spider=>"1", 
+			:project_id=>@project_id, 
+			:milestone_id=>@milestone_id
+		}, :method => :post) 
+	%>
+
+	<br />
+	<!-- CHOICE 3 -->
+	<%= link_to('
+		<div  class="status_list_choice" id="choice3" >
+			<div class="status_list_choice_text" >
+			</div>
+			<img class="status_list_choice_img" src="/images/right.png">      
+		</div>',
+		{ 
+			:action=>'update_spider', 
+			:list_choice=>"1", 
+			:file_link=>@file_link, 
+			:spider_id=>@spider_id,
+			:spiderquest=>@spiderquest, 
+			:spiderquestresursive=>@spiderquestresursive, 
+			:consolidate_spider=>"1", 
+			:project_id=>@project_id, 
+			:milestone_id=>@milestone_id
+		}, :method => :post) 
+	%>
+
