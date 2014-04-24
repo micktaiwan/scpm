@@ -223,7 +223,7 @@ class SpidersController < ApplicationController
         @questions[p.id] = SpiderValue.find(:all,
         :include => :lifecycle_question,
         :conditions => ['spider_id = ? and lifecycle_questions.pm_type_axe_id IN (?)', @spider.id,pmTypeAxe_ids],
-        :order => "lifecycle_questions.pm_type_axe_id ASC")
+        :order => "lifecycle_questions.pm_type_axe_id ASC, lifecycle_questions.text ASC")
       }
 
     end
