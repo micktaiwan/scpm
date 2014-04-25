@@ -20,16 +20,17 @@
 
 <br />
 <div>
-  <div style="padding-left:5px;width:115px;float:left;style:inline;background-color:#9F9;">OK</div>
-  <div style="padding-left:5px;width:115px;float:left;style:inline;background-color:#91E9FF;">OK (with a backup)</div>
-  <div style="padding-left:5px;width:115px;float:left;style:inline;background-color:red;">Need a backup</div>
+  <div class="conso_legend" style="background-color:#9F9;">OK</div>
+  <div class="conso_legend" style="background-color:#91E9FF;">OK (with a backup)</div>
+  <div class="conso_legend" style="background-color:red;">Need a backup</div>
+  <div class="conso_legend" style="background-color:pink;">Backup without holiday</div>
 </div>
 
 <SCRIPT language="Javascript">
   jQuery( document ).ready(function() {
     jQuery(".holiday_td").hover(
       function(e) {
-      	if ((holiday_hover_detail[jQuery( this ).attr('id')].length > 0) && (jQuery(this).html().trim()))
+      	if (holiday_hover_detail[jQuery( this ).attr('id')].length > 0)
       	{
         	jQuery("#holiday_detail").show();
         	jQuery("#holiday_detail").html(holiday_hover_detail[jQuery( this ).attr('id')]);

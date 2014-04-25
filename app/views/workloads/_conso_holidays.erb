@@ -4,7 +4,6 @@
 
   wl_line = conso_holidays.wl_lines.first
   for week in conso_holidays.wl_weeks
-
     wlload  = wl_line.get_load_by_week(week) if wl_line
     wlload  = (wlload == 0.0 ? '' : wlload)
 
@@ -15,20 +14,25 @@
       backup_comment = b.comment if b.comment != nil
       "<li><span style='color:pink;'>" + b.backup.name + "</span>: " + backup_comment + "</li>" 
     }
-    if wlload.to_i < 4
+    if wlload.to_f > 0 and wlload.to_f < 4
       color = "#9F9"
-    elsif backups.size > 0
+    elsif backups.size > 0 and wlload.to_f > 0
       color = "#91E9FF"
-    else
+    elsif wlload.to_f > 0
       color = "red"
+    elsif wlload.to_i == 0 and backups.size > 0
+      color = "pink"
+    else
+      color = "white"
     end
 %>
-    <td class="holiday_td" id="holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>" style="border:1px solid black<% if wlload!='' %>;background:<%= color %>;<% end %>">
+    
+    <td class="holiday_td" id="holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>" style="border:1px solid black;background:<%= color %>;">
       <%= wlload %>
     </td>
     <!-- Add backups to array -->
     <SCRIPT language="Javascript">
-		<%= backups_name.size %> > 0 ? holiday_hover_detail["holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>"] = "<ul><%= backups_name.to_s %></ul>" : holiday_hover_detail["holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>"] = "";
-	</SCRIPT>
+		  <%= backups_name.size %> > 0 ? holiday_hover_detail["holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>"] = "<ul><%= backups_name.to_s %></ul>" : holiday_hover_detail["holiday_<%= conso_holidays.person.id.to_s + '_' + week.to_s %>"] = "";
+	   </SCRIPT>
 <% end %>
 </tr>

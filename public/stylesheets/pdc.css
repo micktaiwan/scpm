@@ -363,3 +363,8 @@ ul.sdp_tasks {
   float: left;
 }
 
+.conso_legend {
+  padding-left:5px;
+  width:135px;
+  float:left;
+}
