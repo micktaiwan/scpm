@@ -158,7 +158,7 @@ class WorkloadsController < ApplicationController
     @holiday_without_backup = false
     person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and week >= ? and wlload >= ?", person.id.to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), APP_CONFIG['workload_holiday_threshold_before_backup']])
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and week >= ? and week < ? and wlload >= ?", person.id.to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), wlweek(Date.today+8.weeks), APP_CONFIG['workload_holiday_threshold_before_backup']])
     person_holiday_load.each do |holiday|
       backups = WlBackup.find(:all, :conditions=>["person_id = ? and week = ?",person.id.to_s, holiday.week])
       if backups == nil or backups.size == 0

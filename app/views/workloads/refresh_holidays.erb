@@ -1,5 +1,6 @@
 <%= @workloads.size %> workloads<br/>
 <br/>
+
 <table>
   <tr style="font-weight:bold;">
     <td>Name</td>
@@ -16,6 +17,13 @@
   </tr>
   <%= render(:partial=>'conso_holidays', :collection=>@workloads) %>
 </table>
+
+<br />
+<div>
+  <div style="padding-left:5px;width:115px;float:left;style:inline;background-color:#9F9;">OK</div>
+  <div style="padding-left:5px;width:115px;float:left;style:inline;background-color:#91E9FF;">OK (with a backup)</div>
+  <div style="padding-left:5px;width:115px;float:left;style:inline;background-color:red;">Need a backup</div>
+</div>
 
 <SCRIPT language="Javascript">
   jQuery( document ).ready(function() {
