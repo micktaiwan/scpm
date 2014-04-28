@@ -643,6 +643,9 @@ class WorkloadsController < ApplicationController
         @lines_qr_qwr[wl.project_id] = [wl]
     end
     @owner_id = session['workload_person_id']
+
+    # all lines
+    @all_lines = WlLine.find(:all, :conditions=>["person_id=?",  session['workload_person_id']], :include=>["project"], :order=>"wl_type, name")
   end
 
   def do_transfert
