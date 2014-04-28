@@ -6,7 +6,7 @@
 	<%= link_to "QR/QWR dashboard", 	{:controller => "streams", :action => 'show_informations_by_qr_qwr',:id => @stream.id},{:class=>"btnlnk"}%>
 
 
-	<% @stream.review_types.each do |review_type| %>
+	<% @stream.review_types.select{|s| s.is_active}.each do |review_type| %>
 		<%= link_to  review_type.title , {:controller => "streams", :action => "show_stream_review", :id => @stream.id, :type => review_type.id },{:class=>"btnlnk"}%>
 	<% end %>
 
