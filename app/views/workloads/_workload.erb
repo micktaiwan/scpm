@@ -112,7 +112,7 @@
         You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
       <% end %>
 
-      <% if @backup_holidays.count > 0 %>
+      <% if @backup_holidays and @backup_holidays.count > 0 %>
         <strong>Warning, the following coworkers have holidays during the next 2 weeks while you are their backup: </strong>
         <ul>
         <% @backup_holidays.each do |bh| %>
