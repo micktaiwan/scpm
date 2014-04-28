@@ -16,7 +16,14 @@
 	</ul>
 <% end %>
 
+<h3>All lines</h3>
+<ul>
+  <%= render(:partial=>"transfert_line", :collection=>@all_lines, :as=>:l, :locals => { :is_qr_qwr => false }) %>
+</ul>
+
 <h3>Person to transfert lines to</h3>
   <%= select_tag('person_id', options_for_select(@people)) %>
   <%= submit_tag('Transfer') %>
 <% end %>
+
+
