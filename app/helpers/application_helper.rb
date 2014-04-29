@@ -61,6 +61,12 @@ module ApplicationHelper
     (year + filled_number(date.cweek,2)).to_i
   end
   
+  def wlweek_reverse(wlweek)
+    year = wlweek.to_s[0..-3]
+    week = wlweek.to_s[4..wlweek.to_s.length]
+    return Date.commercial(year.to_i,week.to_i,1)
+  end
+
   # filled_number(123, 5) => 00123
   def filled_number(n, nb)
     "0"*(nb-n.to_s.size) + n.to_s

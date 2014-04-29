@@ -89,6 +89,10 @@ th {
   width: 40px;
   }
 
+.backup_warning {
+  border: 1px solid red;
+  }
+
 tr.wl_total {
   border: 0px solid #DDD;
   border-top: 1px;

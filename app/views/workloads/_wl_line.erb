@@ -76,9 +76,14 @@
     <%
       wlload = wl_line.get_load_by_week(week)
       wlload = wlload == 0.0 ? '' : wlload
+
+      backup_warning = false
+      if wl_line.wl_type == 300 and @holiday_backup_warning[week] == true
+        backup_warning = true
+      end
     %>
 
-    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' workload_milestone' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}', '0');return false;") %>
+    <%= text_field_tag('t', wlload, :id=>"#{wl_line.id}_#{week}", :class=>'wl_textfield'+(milestones.size > 0 ? ' workload_milestone' : '')+(backup_warning ? ' backup_warning' : ''), :onchange=>"wl_save_value('#{wl_line.id}', '#{week}', '0');return false;") %>
     </td>
 <% end %>
 </tr>
