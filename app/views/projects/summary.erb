@@ -229,7 +229,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Suite', 'Project', 'Workpackage', 'PM', 'BRN', 'Lifecycle', 'Old status', 'Current Status', 'Date', 'Status', 'Last change', 'Actions','Pratice spider GAP statuses', 'Deliverable Spider gap statuses', 'Operational Alert', 'Next milestone', 'M1/sM1/G0', 'M3/sM3/G2/g2/pg2', 'G3/g3/pg3', 'G4/g4/pg4', 'QG BRD', 'QG ARD', 'M5/sM5/CCB/G5/g5/pg5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10/G6/g6/pg6', 'QG TD/QG TD M', 'M10a', 'QG MIP', 'M11/G7/g7/pg7', 'M12', 'M12/M13', 'M13/sM13/G8/g8/pg8', 'M14/sM14/G9/g9/pg9'] do
+        for column in ['Supervisor', 'WS','Suite', 'Project', 'Workpackage', 'PM', 'BRN', 'Lifecycle', 'Old status', 'Current Status', 'Date', 'Status', 'Last change', 'Actions','Pratice spider GAP statuses', 'Deliverable Spider gap statuses', 'Operational Alert', 'Next milestone', 'M1/sM1/G0', 'M3/sM3/G2/g2/pg2', 'G3/g3/pg3', 'G4/g4/pg4', 'QG BRD', 'QG ARD', 'M5/sM5/CCB/G5/g5/pg5',  'M5/M7', 'M7', 'M9', 'M9/M10', 'M10/G6/g6/pg6', 'QG TD/QG TD M', 'M10a', 'QG MIP', 'M11/G7/g7/pg7', 'M12', 'M12/M13', 'M13/sM13/G8/g8/pg8', 'M14/sM14/G9/g9/pg9', 'Workpackages'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -291,6 +291,9 @@ end
               @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end
           end # for
+
+          @xml.Cell { @xml.Data excel_text(p.get_workpackages_from_requests.join(',').to_s),         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }  
+          
         end # each project
       end # table
     end # worksheet

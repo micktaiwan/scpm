@@ -545,16 +545,6 @@ class ProjectsController < ApplicationController
         @amendments   = []
       end
 
-=begin
-      @status_progress_series = get_status_progress
-      @status_columns         = ['Centre','Status']
-      @status_progress_dates  = []
-      @status_progress_series['Total'].keys.sort.each { |date|
-        @status_columns << date
-        @status_progress_dates << date
-        }
-=end
-
       date = Date.today-((Date.today().wday+6).days)
 
       wps          = Request.find(:all, :conditions=>["total_csv_category >= ?", date], :order=>"workstream, project_id, total_csv_category")
@@ -646,15 +636,7 @@ class ProjectsController < ApplicationController
       @wps = @wps.select{ |w| w.get_status.status > 0}.sort_by { |w|
         [w.workstream, w.project_name, w.name]
         }
-=begin
-      @status_progress_series = get_status_progress
-      @status_columns         = ['Centre','Status']
-      @status_progress_dates  = []
-      @status_progress_series['Total'].keys.sort.each { |date|
-        @status_columns << date
-        @status_progress_dates << date
-        }
-=end
+
       headers['Content-Type']         = "application/vnd.ms-excel"
       headers['Content-Disposition']  = 'attachment; filename="WS_Reporting.xls"'
       headers['Cache-Control']        = ''

@@ -896,6 +896,17 @@ class Project < ActiveRecord::Base
     end
   end
 
+  #Get the list of workpackages of requests linked to the project
+  def get_workpackages_from_requests
+    result = Array.new
+    self.requests.each do |r|
+      if (!result.include? (r.work_package))
+        result << r.work_package
+      end
+    end
+    return result;
+  end
+
 private
 
   def excel(a,b)
