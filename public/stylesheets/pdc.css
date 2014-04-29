@@ -311,6 +311,12 @@ ul.sdp_tasks {
   width: 40px;
 }
 
+.wl_tag {
+  padding-left: 5px;
+  color: red;
+  font-size:0.8em;
+}
+
 /* Duplicate view */
 #view_backup_add {
   position: absolute;
