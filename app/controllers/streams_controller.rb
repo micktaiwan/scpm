@@ -129,7 +129,7 @@ class StreamsController < ApplicationController
           request_qs_array    << req.id
         end
         qr_qwr_data["qs_consumed_by_other_author"] = HistoryCounter.find(:all,
-          :conditions => ["author_id != ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL and request_id IN (?)", qr.id.to_s, request_qs_array.join(',').to_s]).count
+          :conditions => ["author_id != ? and concerned_status_id IS NOT NULL and concerned_spider_id IS NULL and request_id IN (?)", qr.id.to_s, request_qs_array]).count
 
 
         # Get x/y for spider (alert managed in view)
@@ -143,7 +143,7 @@ class StreamsController < ApplicationController
           request_spider_array    << req.id
         end
         qr_qwr_data["spider_consumed_by_other_author"] = HistoryCounter.find(:all,
-          :conditions => ["author_id != ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL and request_id IN (?)", qr.id.to_s, request_spider_array.join(',').to_s]).count
+          :conditions => ["author_id != ? and concerned_status_id IS NULL and concerned_spider_id IS NOT NULL and request_id IN (?)", qr.id.to_s, request_spider_array]).count
 
         # Compare
         qr_qwr_data["qs_comp"]     = (qr_qwr_data["qs_y"].to_i     - qr_qwr_data["qs_x"].to_i)      - qr_qwr_data["total_qs_prev"].to_i
