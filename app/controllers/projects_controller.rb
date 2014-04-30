@@ -226,7 +226,7 @@ class ProjectsController < ApplicationController
     @status.actions                 = last.actions
     @status.ereporting_date         = last.ereporting_date
     @status.operational_alert       = last.operational_alert
-    @status.ws_report               = last.ws_report
+    @status.reporting               = last.reporting
     @status.pratice_spider_gap      = last.pratice_spider_gap
     @status.deliverable_spider_gap  = last.deliverable_spider_gap
   end
@@ -243,12 +243,12 @@ class ProjectsController < ApplicationController
     t = Time.now
     if last_status
       status.reason_updated_at  = last_status.reason_updated_at
-      status.ws_updated_at      = last_status.ws_updated_at
+      status.reporting_at       = last_status.reporting_at
       status.reason_updated_at  = t if status.reason     != last_status.reason
-      status.ws_updated_at      = t if status.ws_report  != last_status.ws_report
+      status.reporting_at       = t if status.reporting  != last_status.reporting
     else
       status.reason_updated_at  = t
-      status.ws_updated_at      = t
+      status.reporting_at      = t
     end
 
     status.last_modifier = current_user.id
@@ -278,7 +278,7 @@ class ProjectsController < ApplicationController
     status = Status.find(params[:id])
     status.attributes = params[:status] # does not use update_attributes as it saves the record and we can not use "changed?" anymore
     status.reason_updated_at  = Time.now if status.reason_changed?
-    status.ws_updated_at      = Time.now if status.ws_report_changed?
+    status.reporting_at       = Time.now if status.reporting_changed?
     status.last_modifier      = current_user.id
     status.save
     p = status.project

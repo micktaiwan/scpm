@@ -11,7 +11,7 @@ class Workstream < ActiveRecord::Base
   end
   
   def projects_with_new_reason
-    projects.select {|p| s = p.get_status; p.has_requests and s.reason_updated_at > s.ws_updated_at }
+    projects.select {|p| s = p.get_status; p.has_requests and s.reason_updated_at > s.reporting_at }
   end
   
 end

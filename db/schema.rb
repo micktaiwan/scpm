@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140428170400) do
+ActiveRecord::Schema.define(:version => 20140430171005) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -835,9 +835,9 @@ ActiveRecord::Schema.define(:version => 20140428170400) do
     t.integer  "last_modifier"
     t.integer  "locked",                 :default => 0
     t.datetime "locked_time"
-    t.text     "ws_report"
+    t.text     "reporting"
     t.datetime "reason_updated_at",      :default => '2011-07-19 09:15:21'
-    t.datetime "ws_updated_at",          :default => '2011-07-19 09:15:21'
+    t.datetime "reporting_at",           :default => '2011-07-19 09:15:21'
     t.text     "pratice_spider_gap"
     t.text     "deliverable_spider_gap"
   end
