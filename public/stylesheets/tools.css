@@ -82,4 +82,6 @@ h2 {
   padding-right: 5px;
   display: none;
   z-index: 2;
+  
+  position: fixed;
 }
