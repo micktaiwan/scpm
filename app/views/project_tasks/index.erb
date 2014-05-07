@@ -1,3 +1,5 @@
+<script src="/javascripts/project_workload.js" type="text/javascript"></script>
+
 <%
   if session['workload_project_ids'] and session['workload_project_ids'].size > 0 and session['workload_companies_ids'] and session['workload_companies_ids'].size > 0
     display = true
@@ -9,16 +11,17 @@
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:600px;") %>
 
 <%= link_to_function('Projects filter', "Effect.toggle('filters','blind', {duration: 0.5});",{:class=>"btnlnk"}) %>
-<%= link_to('Switch to person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
+<%= link_to('Project view', {:controller=>'project_workloads'}, {:class=>'btnlnk'}) %>
+<%= link_to('Person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
 <% if display and session['workload_project_ids'].size == 1 %>
   <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
 <% else %>
   <a style="color:#FA5858">(Add a person is disabled when no project or more than one project is selected)</a>
 <% end %>
 <!--<div id="edit_line"></div>-->
-
+<br/>
 <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
-<form action="/project_workloads/index/filter_projects_companies" name="filter_projects_companies" method="post">
+<form action="/project_tasks/index/filter_projects_companies" name="filter_projects_companies" method="post">
 <!-- <% form_tag(:action=>'index') do %> -->
 <table>
   <tr valign="top">

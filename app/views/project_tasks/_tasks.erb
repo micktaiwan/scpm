@@ -11,14 +11,19 @@
   </b>
 
 
-  <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
-  <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person()'}) %> group by person
+  <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload("project_tasks")'}) %> hide lines with no workload in next 8 weeks
+  <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person("project_tasks")'}) %> group by person
   <br/>
 
   <!-- WORKLOAD GENERAL -->
   <h2><%= @workload.names %> (<%= @workload.companies %>)</h2>
   <table id="tasks_table">
   <thead>
+    <tr>
+      <th>Task</th>
+      <th>Planned</th>
+      <th>Total</th>
+    </tr>
   </thead>
 
   <tbody class="scrollContent">
