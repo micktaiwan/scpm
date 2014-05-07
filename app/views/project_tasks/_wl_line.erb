@@ -1,0 +1,16 @@
+<%
+  remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
+  consumed      = @workload.line_sums[wl_line.id][:consumed].to_f
+  planned_total = @workload.line_sums[wl_line.id][:sums].to_f
+  error = false
+  error_line    = (wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500)
+  error = 1 if error_line and (planned_total/remaining < 0.9)
+  error = 2 if error_line and (planned_total/remaining > 1.1)
+  #error = 3 if error_line and (planned_total-remaining).abs > 3
+%>
+<tr>
+  <td>
+    <%= wl_line.display_name(:with_tags_names=>true, :with_person_name=>true, :with_project_name=>false, :with_person_url=>true) %>
+  </td>
+  <td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+</tr>
