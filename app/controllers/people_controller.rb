@@ -79,7 +79,7 @@ class PeopleController < ApplicationController
       if p.size > 1
         @person.login = ""
         @person.save
-        flash[:error] = "Duplicate login with #{p.map{|i| i.name}.join(', ')}"
+        flash[:error] = "Duplicate login with #{p.map{|i| '<a href=\'/people/edit/'+i.id.to_s+'\'>'+i.name+'</a>'}.join(', ')}"
         redirect_to "/people/edit/#{id}"
         return
       else
