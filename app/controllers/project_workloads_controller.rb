@@ -63,8 +63,6 @@ class ProjectWorkloadsController < ApplicationController
     get_last_sdp_update
   end
 
-  
-
   def change_workload(project_ids=nil)
     project_ids = params[:project_ids]
 

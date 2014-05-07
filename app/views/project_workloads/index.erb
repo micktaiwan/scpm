@@ -12,6 +12,7 @@
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:600px;") %>
 
 <%= link_to_function('Projects filter', "Effect.toggle('filters','blind', {duration: 0.5});",{:class=>"btnlnk"}) %>
+<%= link_to('PP4 view', {:controller=>'project_tasks'}, {:class=>'btnlnk'}) %>
 <%= link_to('Switch to person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
 <% if display and session['workload_project_ids'].size == 1 %>
   <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>

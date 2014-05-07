@@ -63,6 +63,18 @@ class ProjectTasksController < ApplicationController
     get_common_data(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'],session['workload_tags'])
   end
 
+  def hide_lines_with_no_workload
+    on = (params[:on].to_s != 'false')
+    session['workload_hide_lines_with_no_workload'] = on
+    get_common_data(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'],session['workload_tags'])
+  end
+
+  def group_by_person
+    on = (params[:on].to_s != 'false')
+    session['group_by_person'] = on
+    get_common_data(session['workload_project_ids'],session['workload_companies_ids'],session['workload_iterations'],session['workload_tags'])
+  end
+
 private
 
   def get_common_data(project_ids, companies_ids, iterations, tags_ids)
