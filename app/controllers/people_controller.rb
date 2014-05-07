@@ -75,10 +75,11 @@ class PeopleController < ApplicationController
         end
         }
       login = params[:person][:login]
-      if Person.all.select { |p| p.login == login}.size > 1
+      p = Person.find(:all, :conditions=>["login=?", login]) 
+      if p.size > 1
         @person.login = ""
         @person.save
-        flash[:error] = "Duplicate login"
+        flash[:error] = "Duplicate login with #{p.map{|i| i.name}.join(', ')}"
         redirect_to "/people/edit/#{id}"
         return
       else
