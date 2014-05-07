@@ -502,6 +502,7 @@ class WorkloadsController < ApplicationController
     @wl_line.save
     @workload           = Workload.new(@wl_line.person_id,session['workload_person_project_ids'],session['workload_persons_iterations'],session['workload_person_tags'])
   end
+
   def update_settings_name
     update_status = params[:on]
 
@@ -513,6 +514,7 @@ class WorkloadsController < ApplicationController
     current_user.save
     render(:nothing=>true)
   end
+  
   def link_to_sdp
     sdp_task_id       = params[:sdp_task_id].to_i
     line_id           = params[:id]

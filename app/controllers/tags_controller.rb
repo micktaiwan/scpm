@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   layout 'pdc'
 
   def index
-  	@wl_lines = WlLine.find(:all, :conditions=>"project_id=2", :order=>"project_id, person_id")
+  	@wl_lines = WlLine.find(:all, :conditions=>"project_id=19", :order=>"project_id, person_id")
     #@projects = Project.all # for filter
   end
 
