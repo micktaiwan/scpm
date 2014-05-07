@@ -26,8 +26,15 @@
     </tr>
   </thead>
 
-  <tbody class="scrollContent">
+  <tbody>
     <%= render(:partial=>"wl_line", :collection=>@workload.displayed_lines) %>
+    <tr style="border-top: 1px solid black;font-weight: bold;">
+      <td>
+        Total
+      </td>
+      <td class="wl_total"><%= @workload.planned_total %></td>
+      <td><%= @workload.total %></td>
+    </tr>
   </tbody>
 
   </table>
