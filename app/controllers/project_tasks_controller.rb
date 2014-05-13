@@ -92,7 +92,11 @@ private
     }
     @cost_total = total.to_i
     @total_sales_revenue = @workload.projects.inject(0){|sum, i| sum += i.sales_revenue}
-    @margin = (1 - (@cost_total.to_f / @total_sales_revenue).round(3))*100
+    if @total_sales_revenue > 0
+      @margin = (1 - (@cost_total.to_f / @total_sales_revenue).round(3))*100
+    else
+      @margin = 0
+    end
   end
 
   def require_admin
