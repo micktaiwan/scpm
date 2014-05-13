@@ -12,6 +12,9 @@
 <p><%= label_tag 'company' %>
 <%= select(:person, :company_id, @companies.map {|u| [u.name,u.id]}) %></p>
 
+<p><%= label_tag 'cost_profile' %>
+<%= select(:person, :cost_profile_id, @profiles.map {|u| [u.company.name + ' - ' + u.name,u.id]}) %></p>
+
 <p><%= label_tag 'email' %>
 <%= text_field :person, :email %></p>
 

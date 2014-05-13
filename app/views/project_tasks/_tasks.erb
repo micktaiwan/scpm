@@ -17,12 +17,14 @@
 
   <!-- WORKLOAD GENERAL -->
   <h2><%= @workload.names %> (<%= @workload.companies %>)</h2>
-  <table id="tasks_table">
+  <table id="tasks_table" class="sortable">
   <thead>
     <tr>
       <th>Task</th>
       <th>Planned</th>
       <th>Total</th>
+      <th>Profile</th>
+      <th>Cost</th>
     </tr>
   </thead>
 
@@ -34,6 +36,8 @@
       </td>
       <td class="wl_total"><%= @workload.planned_total %></td>
       <td><%= @workload.total %></td>
+      <td></td>
+      <td><%= @cost_total %></td>
     </tr>
   </tbody>
 

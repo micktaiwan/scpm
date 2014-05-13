@@ -1,0 +1,6 @@
+<tr id="p<%=profile.id%>">
+  <td><%= profile.company.name %></td>
+  <td><%= profile.name %></td>
+  <td><%= profile.cost %></td>
+  <td><%= link_to_remote(image_tag('delete.gif'), :remote=>true, :url=>{:action => :destroy, :id=>profile.id}, :confirm => "Are you sure?", :success=>"$('p#{profile.id}').puff()") %></td>
+</tr>
