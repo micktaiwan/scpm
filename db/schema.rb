@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140508113829) do
+ActiveRecord::Schema.define(:version => 20140513070013) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -488,6 +488,7 @@ ActiveRecord::Schema.define(:version => 20140508113829) do
     t.boolean  "is_qr_qwr",     :default => false
     t.integer  "suite_tag_id"
     t.string   "project_code"
+    t.integer  "sales_revenue", :default => 0
   end
 
   create_table "question_references", :force => true do |t|
