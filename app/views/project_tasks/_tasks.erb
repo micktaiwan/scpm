@@ -17,6 +17,25 @@
 
   <!-- WORKLOAD GENERAL -->
   <h2><%= @workload.names %> (<%= @workload.companies %>)</h2>
+
+  <table class="grid">
+    <tbody>
+      <tr>
+        <td>Sales revenue</td>
+        <td><%= @total_sales_revenue.pretty_number %></td>
+      </tr>
+      <tr>
+        <td>Project cost</td>
+        <td><%= @cost_total.pretty_number %></td>
+      </tr>
+      <tr style="font-weight: bold">
+        <td>Margin</td>
+        <td><%= @margin if @total_sales_revenue > 0%>%</td>
+      </tr>
+    </tbody>
+  </table>
+  <br/>
+  <br/>
   <table id="tasks_table" class="sortable">
   <thead>
     <tr>

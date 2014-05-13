@@ -98,6 +98,7 @@ class ProjectsController < ApplicationController
   end
 
  def sort_projects_without_wps
+    return if !@projects
     case
       when session[:project_sort]=='read'
         @projects = @projects.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year }
@@ -797,7 +798,7 @@ private
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
       return
     end
-    
+    @projects = Project.all
   end
 
   def no_responsible(p)
