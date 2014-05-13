@@ -13,6 +13,9 @@
 #end
 %>
 
+  <% if person.cost_profile %>
+    <%= person.cost_profile.name %>
+  <% end %>
 
 <% if person.is_supervisor==1 %>
   <b>supervisor</b>

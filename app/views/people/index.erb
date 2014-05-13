@@ -1,5 +1,6 @@
 <% if current_user.has_role?('Admin') %>
 <%= link_to('Manage Roles', {:controller=>:roles, :action=>'index'},{:class=>"btnlnk"}) %>
+<%= link_to('Manage Profiles', {:controller=>:cost_profiles, :action=>'index'},{:class=>"btnlnk"}) %>
 <%= link_to('Add a company', {:controller=>'companies', :action=>'new'},{:class=>"btnlnk"}) %>
 <%= link_to('Add person', {:action=>'new'},{:class=>"btnlnk"}) %>
 <%= link_to_remote('Check setting', {:url=>{ 

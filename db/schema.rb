@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140407105759) do
+ActiveRecord::Schema.define(:version => 20140508113829) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -178,6 +178,14 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "wl_holidays_calendar_id"
+  end
+
+  create_table "cost_profiles", :force => true do |t|
+    t.string   "name"
+    t.integer  "cost"
+    t.integer  "company_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "counter_base_values", :force => true do |t|
@@ -398,17 +406,18 @@ ActiveRecord::Schema.define(:version => 20140407105759) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "rmt_user"
-    t.integer  "is_supervisor", :default => 0
+    t.integer  "is_supervisor",   :default => 0
     t.string   "login"
     t.string   "pwd"
     t.datetime "last_view"
-    t.integer  "has_left",      :default => 0
-    t.integer  "sdp_id",        :default => -1
+    t.integer  "has_left",        :default => 0
+    t.integer  "sdp_id",          :default => -1
     t.string   "trigram"
-    t.integer  "is_transverse", :default => 0
-    t.integer  "is_cpdp",       :default => 0
-    t.integer  "is_virtual",    :default => 0
+    t.integer  "is_transverse",   :default => 0
+    t.integer  "is_cpdp",         :default => 0
+    t.integer  "is_virtual",      :default => 0
     t.text     "settings"
+    t.integer  "cost_profile_id"
   end
 
   create_table "person_roles", :force => true do |t|

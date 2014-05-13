@@ -16,6 +16,7 @@ class Person < ActiveRecord::Base
   include ApplicationHelper # for wlweek
 
   belongs_to :company
+  belongs_to :cost_profile
   has_many   :person_roles
   has_many   :roles, :through => :person_roles
   has_many   :open_actions, :class_name=>"Action", :conditions=>"progress='open' or progress='in_progress'"

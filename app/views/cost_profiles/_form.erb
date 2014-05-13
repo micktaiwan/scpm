@@ -1,0 +1,8 @@
+<p><%= label_tag 'company' %>
+<%= select(:profile, :company_id, options_for_select(@companies.map {|u| [u.name,u.id]}, session['company_id'].to_i)) %></p>
+
+<p><%= label_tag 'name' %>
+<%= text_field :profile, :name %></p>
+
+<p><%= label_tag 'cost' %>
+<%= text_field :profile, :cost %></p>

@@ -7,6 +7,7 @@
   error = 1 if error_line and (planned_total/remaining < 0.9)
   error = 2 if error_line and (planned_total/remaining > 1.1)
   #error = 3 if error_line and (planned_total-remaining).abs > 3
+  cp = wl_line.person.cost_profile
 %>
 <tr>
   <td>
@@ -14,4 +15,6 @@
   </td>
   <td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
   <td id="ltotal_<%= wl_line.id %>"><%= wl_line.sum %></td>
+  <td ><%= "#{cp.company.name} - #{cp.name} - #{cp.cost}" if cp %></td>
+  <td ><%= wl_line.cost_total if cp %></td>
 </tr>

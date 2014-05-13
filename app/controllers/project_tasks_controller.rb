@@ -80,6 +80,17 @@ private
   def get_common_data(project_ids, companies_ids, iterations, tags_ids)
     @people   = Person.find(:all, :conditions=>"has_left=0", :order=>"name").map {|p| ["#{p.name}", p.id]}
     @workload = ProjectWorkload.new(project_ids, companies_ids, iterations,tags_ids, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+    total = 0
+    @workload.wl_lines.each {|l|
+      if l.person.cost_profile
+        s = l.person.cost_profile.cost * l.sum
+        l[:cost_total] = s.to_i
+        total += s
+      else
+        l[:cost_total] = 0
+      end
+    }
+    @cost_total = total.to_i
   end
 
   def require_admin

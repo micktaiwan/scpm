@@ -57,7 +57,8 @@ class PeopleController < ApplicationController
 
   def edit
     @person = Person.find(params[:id])
-    @companies = Company.all
+    @companies = Company.all(:order=>'name')
+    @profiles = CostProfile.all(:order=>'company_id, name')
     @roles = Role.find(:all, :conditions=>"name != 'Super'")
   end
 
