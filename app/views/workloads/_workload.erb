@@ -16,9 +16,6 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/javascripts/jscolor.js" ></script>
-<% @tasks_header = 0 %>
-
 <div id="workload" class="workload">
 
     <div id="filters" style="display:none;border:1px solid #DDD;margin-top:25px;background: #EEE;">
@@ -90,7 +87,9 @@
       <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
       <%= link_to('Transfert', {:action=>'transfert'}, {:class=>"btnlnk"}) %>
       <%= link_to('Backup by load', {:action=>'duplicate',:weeks=>@workload.weeks,:wl_weeks=>@workload.wl_weeks,:months=>@workload.months}, {:class=>"btnlnk"}) %>
-      <%= link_to('Backup', {:action=>'backup'}, {:class=>"btnlnk"}) %>
+      <% backup_btn_class = "btnlnk" %>
+      <% backup_btn_class = "btnlnk red" if @holiday_without_backup %>
+      <%= link_to('Backup', {:action=>'backup'}, {:class=>backup_btn_class}) %>
       <% if @suggested_requests.size > 0 %>
       You have <b><%=@suggested_requests.size%></b> suggested requests
       <% end %>

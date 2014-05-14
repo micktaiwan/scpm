@@ -6,7 +6,7 @@ class MonthlyTaskType < ActiveRecord::Base
  def get_template_filled(name, load, login, date)
  	# Format name with the current date
 	date_str = Date.today().year.to_s+"-"+template_filled_number(Date.today().month,2).to_s
-	name_formated = name.to_s+" "+date_str.to_s
+	name_formated = name.to_s
    	template_formated = self.template
 
 	template_formated = template_formated.gsub("[NAME]", name_formated)

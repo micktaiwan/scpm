@@ -1,5 +1,6 @@
 <%= @workloads.size %> workloads<br/>
 <br/>
+
 <table>
   <tr style="font-weight:bold;">
     <td>Name</td>
@@ -16,6 +17,14 @@
   </tr>
   <%= render(:partial=>'conso_holidays', :collection=>@workloads) %>
 </table>
+
+<br />
+<div>
+  <div class="conso_legend" style="background-color:#9F9;">OK</div>
+  <div class="conso_legend" style="background-color:#91E9FF;">OK (with a backup)</div>
+  <div class="conso_legend" style="background-color:red;">Need a backup</div>
+  <div class="conso_legend" style="background-color:pink;">Backup without holiday</div>
+</div>
 
 <SCRIPT language="Javascript">
   jQuery( document ).ready(function() {

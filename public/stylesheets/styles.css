@@ -194,6 +194,14 @@ a {text-decoration:none;}
   border-radius: 3px;
   -moz-border-radius: 5px;
 }
+.btnlnk.red {
+  border: 1px solid #ABC;
+  padding: 2px;
+  margin: 0px;
+  background: red;
+  border-radius: 3px;
+  -moz-border-radius: 5px;
+}
 .btnlnk.notimportant {
   background: #EEE;
 }
@@ -286,7 +294,7 @@ strong {
   color: #A00;
   }
 
-.status_explanation {
+.status_explanation, .spider_explanation {
   border: solid 1px #444;
   background: #EEF;
   padding: 10px;
@@ -295,7 +303,7 @@ strong {
   margin:10px 0 10px 0;
   }
 
-.status_date {
+.status_date, .spider_date {
   font-size:1.2em;
   border-bottom: solid 1px #777;
   background: #DDF;
@@ -307,7 +315,7 @@ strong {
   -moz-border-radius-topright: 5px;
   }
 
-.status_list_choice {
+.status_list_choice, .spider_list_choice {
   cursor: pointer;
   vertical-align: middle;
   width: 500px;
@@ -325,14 +333,14 @@ strong {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f5f6', endColorstr='#c8d7dc',GradientType=0 ); /* IE6-9 */
 }
 
-.status_list_choice_text {
+.status_list_choice_text, .spider_list_choice_text {
   width : 400px;
   float:left;
   height:80px;
   vertical-align: middle;
 }
 
-.status_list_choice_img {
+.status_list_choice_img, .spider_list_choice_img {
   width : 64px;
   float:right;
   margin-top:15px;
@@ -661,4 +669,7 @@ table.sortable td    {
   color: #333; 
   border-left: 0px; 
   border-right: 0px;
+}
+.center {
+  text-align: center;
 }

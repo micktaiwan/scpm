@@ -17,23 +17,91 @@ class MilestonesController < ApplicationController
       render :action => 'new', :project_id=>params[:milestone][:project_id]
       return
     end
-    redirect_to("/projects/show/#{@milestone.project_id}")
+    redirect_to("/projects/show/#{@params[:id]}")
   end
 
   def edit
     id = params[:id]
     @milestone = Milestone.find(id)
+
+    @date_error = params[:date_error]
+    params[:date_error] ? @date_error = params[:date_error] : @date_error = 0
+
     get_infos
   end
 
   def update
     m   = Milestone.find(params[:id])
     old = m.done
-    m.update_attributes(params[:milestone])
-    if m.done == 1 and old == 0 and m.is_eligible_for_note?
-      redirect_to "/notes/new?project_id=#{m.project_id}&done=1"
+
+    error = false;
+
+    # Try to update the date, if wrong format = remote
+    if params[:milestone][:milestone_date]
+      begin
+        date_bdd = Date.parse(params[:milestone][:milestone_date]).strftime("%Y-%m-%d %H:%M:%S")
+        if date_bdd
+          m.milestone_date = date_bdd
+        else
+          raise 'Date format error'
+        end
+      rescue ArgumentError
+        error = true
+      end
+    end
+
+    if params[:milestone][:actual_milestone_date]
+      begin
+        date_bdd = Date.parse(params[:milestone][:actual_milestone_date]).strftime("%Y-%m-%d %H:%M:%S")
+        if date_bdd
+          m.actual_milestone_date = date_bdd
+        else
+          raise 'Date format error'
+        end
+      rescue ArgumentError 
+        error = true
+      end
+    end
+
+    # If no date error
+    if !error
+      # Update parameters
+      if params[:milestone][:project_id]
+        m.project = Project.find(params[:milestone][:project_id])
+      end
+
+      if params[:milestone][:name]
+        m.name = params[:milestone][:name]
+      end
+
+      if params[:milestone][:comments]
+        m.comments = params[:milestone][:comments]
+      end
+
+      if params[:milestone][:status]
+        m.status = params[:milestone][:status]
+      end
+
+      if params[:milestone][:done]
+        m.done = params[:milestone][:done]
+      end
+
+      if params[:milestone][:checklist_not_applicable]
+        m.checklist_not_applicable = params[:milestone][:checklist_not_applicable]
+      end
+
+      # Save
+      m.save true
+
+      # Redirect
+      if m.done == 1 and old == 0 and m.is_eligible_for_note?
+        redirect_to "/notes/new?project_id=#{m.project_id}&done=1"
+      else
+        redirect_to "/projects/show/#{m.project_id}"
+      end
     else
-      redirect_to "/projects/show/#{m.project_id}"
+      # Date error
+      redirect_to("/milestones/edit?id=#{params[:id]}&date_error=1")
     end
   end
 

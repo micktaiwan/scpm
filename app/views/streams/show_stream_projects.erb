@@ -32,7 +32,17 @@ Project Name: Y (same as "Y" in Summary)') %>
 	</div>
 </div>
 
-<h2>Projects</h2>
+
+
+<% name_class = "btnlnk" %>
+<% date_class = "btnlnk" %>
+<% name_class += " special" if @order == "name" or !@order %>
+<% date_class += " special" if @order == "date" %>
+<h2>
+	<%= link_to_function(image_tag('expand.gif'), "expandAll();") %>
+	Projects  
+	- Sort by: <%= link_to('Name', {:action=>"show_stream_projects", :id=>@id, :projects_order=>"name"}, {:class=>name_class}) %> <%= link_to('Date', {:action=>"show_stream_projects", :id=>@id, :projects_order=>"date"}, {:class=>date_class}) %>
+</h2>
 <ul>
 <% @projects.each do |project| %>
   	<%= render(:partial=>'stream_project', :object=>project) %>
