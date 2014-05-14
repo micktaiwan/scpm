@@ -1,16 +1,37 @@
+<script src="/javascripts/jquery-1.9.1.js"></script>
+<script type="text/javascript">
+  var $j = jQuery.noConflict();
+</script>
+<script src="/javascripts/tool.js"></script>
+
+<script type="text/javascript">
+// Hide view when detect a copy
+$j(document).ready(function (){
+  $j("#copy_view").bind('copy', function(){
+    setTimeout(function(){ $j("#copy_view").hide()},1);
+  });
+});
+</script>
+
 <% form_tag(:action=>'show_counter_history_without_rmt') do %>
 	<%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
   <%= submit_tag('Filter') %>
 <% end %>
 
+<div id="copy_view">
+  <input type="button" onclick="$j('#copy_view').hide();" value="X" />
+  <table id="copy_table">
+  </table>
+</div>
 
 <!-- WITHOUT REQUESTS -->
 <h2>Spider Counters not linked with request</h2>
-<table class="history_counts_table" >
+<table class="history_counts_table" id="history_spider_count_table">
 <tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Request found</td>
   <% if (current_user.has_role?('Admin')) %>
-  	<td>Admin</td>
+  	<td class="admin">Admin</td>
   <% end %>
+  <td class="admin"><input type="button" value="Copy" onclick="copyInView($j('#history_spider_count_table'));" /></td>
 </tr>
 <% @spider_counter_no_request.each do |spider_array| %>
 	<% sc_no_req = spider_array["object"] %>
@@ -37,7 +58,7 @@
 		</td>
 
     <% if (current_user.has_role?('Admin')) %>
-      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc_no_req.id, :stream_id=>@stream_id.to_i, :caller => "show_counter_history_without_rmt" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?" ) %></td>
+      <td class="admin"><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc_no_req.id, :stream_id=>@stream_id.to_i, :caller => "show_counter_history_without_rmt" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?" ) %></td>
     <% end %>
 
 	</tr>
@@ -45,11 +66,12 @@
 </table>
 
 <h2>QS Counters not linked with request</h2>
-<table class="history_counts_table" >
+<table class="history_counts_table" id="history_qs_count_table">
 <tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Color</td><td>Request found</td>
   <% if (current_user.has_role?('Admin')) %>
-  	<td>Admin</td>
+  	<td class="admin">Admin</td>
   <% end %>
+  <td class="admin"><input type="button" value="Copy" onclick="copyInView($j('#history_qs_count_table'));" />
 </tr>
 <% @qs_counter_no_request.each do |qs_array| %>
 	<% qsc_no_req = qs_array["object"] %>
@@ -78,7 +100,7 @@
 		</td>
 
     <% if (current_user.has_role?('Admin')) %>
-      <td><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_qs', :id=>qsc_no_req.id, :stream_id=>@stream_id.to_i, :caller => "show_counter_history_without_rmt" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
+      <td class="admin"><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_qs', :id=>qsc_no_req.id, :stream_id=>@stream_id.to_i, :caller => "show_counter_history_without_rmt" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
     <% end %>
 
 	</tr>

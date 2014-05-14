@@ -31,6 +31,9 @@ automatic_except_line_addition: false
 workloads_display_consumed_column: true
 workloads_display_diff_between_consumed_and_planned_column: true
 workloads_display_status_column: true
+workloads_show_filter: false # Show or hide the filter buttn
+workload_holiday_threshold_before_backup: 2 # Number of holidays days which need the attribution of a backup
+
 
 # SDP
 use_multiple_projects_sdp_export: false
@@ -69,6 +72,9 @@ status_change_email_destination: "addressMail1@sqli.com"
 # Risk Change mail
 risk_change_email_source: "addressMail1@sqli.com"
 risk_change_email_destination: "addressMail1@sqli.com"
+
+# Backup delete mail
+backup_change_email_source: "addressMail1@sqli.com"
 
 # Workload alert mail
 workload_alerts_email_source: "addressMail1@sqli.com"

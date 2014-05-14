@@ -6,8 +6,6 @@ class WorkloadsController < ApplicationController
 
   layout 'pdc'
 
-  $backup_holiday_threshold = 3
-
   def index
     person_id      = params[:person_id]
     project_ids    = params[:project_ids]
@@ -60,6 +58,7 @@ class WorkloadsController < ApplicationController
     get_chart
     get_sdp_gain(@workload.person)
     get_backup_warnings(@workload.person)
+    get_holiday_warning(@workload.person)
     get_unlinked_sdp_tasks(@workload)
   end
 
@@ -117,14 +116,14 @@ class WorkloadsController < ApplicationController
       # Load for holyday and concerned user (for the 14 next days)
       person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = 300 and (wl_loads.week = ? or wl_loads.week = ?)", b.person.id.to_s, currentWeek, nextWeek])
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and (wl_loads.week = ? or wl_loads.week = ?)", b.person.id.to_s, WL_LINE_HOLIDAYS, currentWeek, nextWeek])
 
       if person_holiday_load.count > 0
         load_total = 0
 
         # Calcul the number of day of holiday. If it's over the threshold, display the warning
         person_holiday_load.map { |wload| load_total += wload.wlload }
-        if (load_total > $backup_holiday_threshold)
+        if (load_total > APP_CONFIG['workload_holiday_threshold_before_backup'])
          @backup_holidays << b.person.name if !@backup_holidays.include?(b.person.name)
         end
       end
@@ -162,6 +161,68 @@ class WorkloadsController < ApplicationController
     @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
 
     # render :layout => false
+  end
+
+  def get_holiday_warning(person)
+
+    @holiday_without_backup = false # Backup button in red if holiday without backup
+    @holiday_backup_warning = Hash.new # WLload in red if holiday without backup while it should
+
+    # Get holidays
+    person_holiday_load = WlLoad.find(:all,
+        :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and week >= ? and week < ?", person.id.to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), wlweek(Date.today+8.weeks)],
+        :order=>"week")
+
+    holiday_array = Array.new
+    index = 0
+
+    person_holiday_load.each do |holiday|
+
+      backups = WlBackup.find(:all, :conditions=>["person_id = ? and week = ?",person.id.to_s, holiday.week])
+
+      # Create hash object
+      holiday_hash = {"holidayObject" => holiday, "needBackup" => false, "hasBackup" => false}
+      if holiday.wlload >= 4
+        holiday_hash["needBackup"] = true
+      end
+      if backups != nil and backups.size > 0 
+        holiday_hash["hasBackup"] = true
+      end 
+      holiday_array << holiday_hash
+
+      # Check previous
+      if (index > 0)
+        previous_holiday_hash = holiday_array[index-1]
+
+         Rails.logger.info("DEBUG_CDB ")
+    Rails.logger.info("\e[31m WARNING LOG HERE -------------------------- \e[0m")
+    Rails.logger.info(previous_holiday_hash["holidayObject"].week.to_s+"   "+(wlweek_reverse(previous_holiday_hash["holidayObject"].week) + 1.week).to_s)
+    Rails.logger.info(holiday_hash["holidayObject"].week.to_s+"    "+(wlweek_reverse(holiday_hash["holidayObject"].week)).to_s)
+    Rails.logger.info("\e[31m END LOG -------------------------- \e[0m")
+
+
+        if (wlweek_reverse(previous_holiday_hash["holidayObject"].week) + 1.week) == wlweek_reverse(holiday_hash["holidayObject"].week)
+          if (previous_holiday_hash["holidayObject"].wlload.to_i + holiday_hash["holidayObject"].wlload.to_i) >= 4
+            previous_holiday_hash["needBackup"] = true
+            holiday_hash["needBackup"] = true
+          end
+        end
+      end
+
+      index += 1
+    end
+
+    # Analyze the array of hash
+    holiday_array.each do |hash|
+      if hash["needBackup"] == true and hash["hasBackup"] == false
+        @holiday_without_backup = true
+        @holiday_backup_warning[hash["holidayObject"].week] = true
+      else
+        @holiday_backup_warning[hash["holidayObject"].week] = false
+      end
+    end
+
   end
 
   def get_sdp_gain(person)
@@ -568,6 +629,14 @@ class WorkloadsController < ApplicationController
     line      = WlLine.find(@line_id)
     id        = view_by==:person ? line.person_id : line.project_id
     if value == 0.0
+      if (line.wl_type == WL_LINE_HOLIDAYS)
+        backup = WlBackup.find(:all, :conditions=>["person_id = ? and week = ?", line.person.id.to_s, @wlweek])
+        # Send email
+        backup.each do |b|
+         Mailer::deliver_backup_delete(b)
+        end
+        backup.each(&:destroy)
+      end
       WlLoad.delete_all(["wl_line_id=? and week=?",@line_id, @wlweek])
       @value = ""
     else
@@ -773,7 +842,9 @@ class WorkloadsController < ApplicationController
 
   def backup
     @people   = Person.find(:all, :conditions=>["has_left=0 and is_supervisor=0 and id != ?", session['workload_person_id']], :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    
+    @weeks = [['01', '01'],['02', '02'],['03', '03'],['04', '04'],['05', '05'],['06', '06'],['07', '07'],['08', '08'],['09', '09']] 
+    (10..52).each{|i| @weeks << ["#{i}","#{i}"] }
+    @years = [Time.new.year,Time.new.year+1]
     @backups      = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
     @self_backups = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
   end
@@ -814,12 +885,6 @@ class WorkloadsController < ApplicationController
     render :text=>backup.comment, :layout => false 
   end
 
-  def get_week
-    date_str = params['date']
-    date = Date.strptime(date_str, "%Y-%m-%d")
-    render :text=> wlweek(date)
-  end
-
 private
 
   def get_workload_data(person_id, projects_ids, person_iterations, tags_ids)
@@ -830,7 +895,9 @@ private
     get_chart
     get_sdp_gain(@workload.person)
     get_sdp_tasks(@workload)
+    get_backup_warnings(@workload.person)
     get_unlinked_sdp_tasks(@workload)
+    get_holiday_warning(@workload.person)
   end
 
   def update_line_name(line)

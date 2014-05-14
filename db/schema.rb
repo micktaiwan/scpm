@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20140513070013) do
+=======
+ActiveRecord::Schema.define(:version => 20140430171005) do
+>>>>>>> c7ed282679421f91915ce59f0bafa8cb1defa616
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -381,7 +385,7 @@ ActiveRecord::Schema.define(:version => 20140513070013) do
 
   create_table "monthly_tasks", :force => true do |t|
     t.string   "title"
-    t.integer  "load_value"
+    t.float    "load_value"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "monthly_task_type_id"
@@ -631,6 +635,7 @@ ActiveRecord::Schema.define(:version => 20140513070013) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "description"
+    t.boolean  "is_active",   :default => true
   end
 
   create_table "risks", :force => true do |t|
@@ -845,9 +850,9 @@ ActiveRecord::Schema.define(:version => 20140513070013) do
     t.integer  "last_modifier"
     t.integer  "locked",                 :default => 0
     t.datetime "locked_time"
-    t.text     "ws_report"
+    t.text     "reporting"
     t.datetime "reason_updated_at",      :default => '2011-07-19 09:15:21'
-    t.datetime "ws_updated_at",          :default => '2011-07-19 09:15:21'
+    t.datetime "reporting_at",           :default => '2011-07-19 09:15:21'
     t.text     "pratice_spider_gap"
     t.text     "deliverable_spider_gap"
   end

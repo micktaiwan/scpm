@@ -89,6 +89,10 @@ h2 {
   width: 40px;
   }
 
+.backup_warning {
+  border: 1px solid red;
+  }
+
 tr.wl_total {
   border: 0px solid #DDD;
   border-top: 1px;
@@ -326,7 +330,6 @@ ul.sdp_tasks {
   background: #909190;
   left:40%;
   width:500px;
-  text-align: center;
   opacity: 0.90;
   vertical-align: middle;
   padding-bottom: 20px;
@@ -390,4 +393,10 @@ ul.sdp_tasks {
 
 #button_alert_sdp{
   float: left;
+}
+
+.conso_legend {
+  padding-left:5px;
+  width:135px;
+  float:left;
 }

@@ -24,6 +24,13 @@ class Mailer < ActionMailer::Base
     @risk       = risk
   end
 
+  def backup_delete(backup)
+    @from       = APP_CONFIG['backup_change_email_source']
+    @recipients = backup.backup.email
+    @subject    = "[EISQ] Backup deleted"
+    @backup     = backup
+  end 
+
   # search all people without work and send a reminder to update the workload
   def workload_alerts
     people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0", :order=>"name")

@@ -6,7 +6,7 @@
 <br/>
 <%
   projects = workstream.non_green_projects.select { |p| !p.is_ended }
-  projects_without_reporting = projects.select { |p| s = p.get_status; s.ws_report == nil or s.ws_report.strip == ""}
+  projects_without_reporting = projects.select { |p| s = p.get_status; s.reporting == nil or s.reporting.strip == ""}
   size1 = projects_without_reporting.size
 
   new_reasons = workstream.projects_with_new_reason

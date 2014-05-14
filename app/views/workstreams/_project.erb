@@ -3,9 +3,9 @@
 <b><%= project.full_name %></b>
 <%= html_status(status.status) %>
 <b>Reason</b>: <%= time_ago_in_words(status.reason_updated_at) %>
-<b>WS</b>: <%= time_ago_in_words(status.ws_updated_at) %>
-<%= link_to_remote('Copy status to WS reporting',
-  :url=>{:action=>'copy_status_to_ws_reporting', :id=>project.id},
+<b>Reporting</b>: <%= time_ago_in_words(status.reporting_at) %>
+<%= link_to_remote('Copy status to reporting',
+  :url=>{:action=>'copy_status_reporting', :id=>project.id},
   :loading=>"$('copy_#{project.id}').innerHTML='Copying...'",
   :success=>"$('copy_#{project.id}').fade()",
   :update => { :failure => "error" },
@@ -15,7 +15,7 @@
 <ul>
 <b>Status</b>: <%= a = status.reason; a = a.strip if a; my_simple_format(a) %>
 <% 
-s = status.ws_report
+s = status.reporting
 s = (s ? s.strip : "")
 if s == "" -%>
   <strong>Reporting</strong>

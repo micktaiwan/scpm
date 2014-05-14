@@ -876,15 +876,36 @@ class Project < ActiveRecord::Base
   end
 
 
-# Get the last incrementation date of QS count
-def get_last_qs_increment
-  last_inc =  HistoryCounter.last(:include => :status, :conditions=>["concerned_status_id IS NOT NULL and statuses.project_id = ?" ,self.id])
-  if last_inc
-    return last_inc.created_at
-  else
-    return nil
+  # Get the last incrementation date of QS count
+  def get_last_qs_increment
+    last_inc =  HistoryCounter.last(:include => :status, :conditions=>["concerned_status_id IS NOT NULL and statuses.project_id = ?" ,self.id])
+    if last_inc
+      return last_inc.created_at
+    else
+      return nil
+    end
   end
-end
+
+  # Get the last incrementation date of spider count
+  def get_last_spider_increment
+    last_inc =  HistoryCounter.last(:include => :spider, :conditions=>["concerned_spider_id IS NOT NULL and spiders.project_id = ?" ,self.id])
+    if last_inc
+      return last_inc.created_at
+    else
+      return nil
+    end
+  end
+
+  #Get the list of workpackages of requests linked to the project
+  def get_workpackages_from_requests
+    result = Array.new
+    self.requests.each do |r|
+      if (!result.include? (r.work_package))
+        result << r.work_package
+      end
+    end
+    return result;
+  end
 
 private
 

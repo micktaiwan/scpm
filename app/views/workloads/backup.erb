@@ -6,8 +6,10 @@
 <!-- Add backup view -->
 <div id="view_backup_add">
     <%= submit_tag "X", :id=>"button_backup_add_close", :type=>'button', :onclick=>'$("view_backup_add").hide();' %>
-    <h3>Add backup</span></h3>
-    <%= submit_tag "Date", :id=>'week', :type=>'button' %>
+    <h3 class="center">Add backup</h3>
+    <p>Select a week, year, backup</p>
+    <%= select_tag('select_list_week', options_for_select(@weeks), :onchange=> 'update_selected_backup_date();') %>
+    <%= select_tag('select_list_year', options_for_select(@years), :onchange=> 'update_selected_backup_date();') %>
     <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'add_backup('+session["workload_person_id"].to_s+', selected_backup_person_id, selected_backup_date);' %>
 </div>
 
@@ -46,25 +48,5 @@
 
   $("view_backup_add").hide();
   check_backup_person_change();
-
-  jQuery(document).ready(function(){
-    jQuery( "#week" ).datepicker({onSelect:function(dateText){
-      new Ajax.Request('/workloads/get_week', 
-      {
-        parameters: { date: dateText },
-        onSuccess: function(response) 
-        {
-          if ( (response.responseText != null) && (response.responseText.length > 1))
-          {
-            selected_backup_date = response.responseText;
-          }
-        },
-        onFailure:function(response) 
-        {
-          alert("Error: Can't retrieve the date");
-        }
-      });
-    }});
-   });
-
+  update_selected_backup_date();
 </SCRIPT>
