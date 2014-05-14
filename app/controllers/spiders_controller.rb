@@ -12,9 +12,8 @@ class SpidersController < ApplicationController
    end
    
 
-  $SPIDER_CONSO_AQ = 1
-  $SPIDER_CONSO_COUNTER = 2
-  $SPIDER_CONSO_WITHOUT_COUNTER = 3
+  SPIDER_CONSO_AQ = 1
+  SPIDER_CONSO_COUNTER = 2
   # ------------------------------------------------------------------------------------
   # BASE : ACTION/VIEW
   # ------------------------------------------------------------------------------------
@@ -374,7 +373,7 @@ class SpidersController < ApplicationController
     # Increment the spider counter of the project
     spiderProject = Project.find(spiderParam.project_id)
     
-    if((spiderProject) && (counterChoice.to_i == $SPIDER_CONSO_COUNTER.to_i))
+    if((spiderProject) && (counterChoice.to_i == SPIDER_CONSO_COUNTER.to_i))
       spiderParam.impact_count = true;
       spiderParam.save
 

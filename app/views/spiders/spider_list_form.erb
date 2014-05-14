@@ -54,28 +54,3 @@
 	</div>
 	<br />
 
-	<!-- CHOICE 3 -->
-	<div  class="spider_list_choice" id="choice3" >
-	<% choice_3_text = '<div class="spider_list_choice_text" >' %>
-	<% if @project.get_last_spider_increment %>
-		<% choice_3_text +=  my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the Spider counter.
-			Last Spider counter update for this project: "'+ @project.get_last_spider_increment.to_s + ' (<span class="descr">' + time_ago_in_words(@project.get_last_spider_increment) + '</span>)') %> 
-	<% else %>
-		<% choice_3_text += my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the Spider counter.') %> 
-	<% end %>
-	<% choice_3_text += '</div><img class="spider_list_choice_img" src="/images/right.png">' %>
-
-	<%= link_to(choice_3_text,
-		{ 
-			:action=>'update_spider', 
-			:list_choice=>"3", 
-			:file_link=>@file_link, 
-			:spider_id=>@spider_id,
-			:spiderquest=>@spiderquest, 
-			:spiderquestresursive=>@spiderquestresursive, 
-			:consolidate_spider=>"1", 
-			:project_id=>@project_id, 
-			:milestone_id=>@milestone_id
-		}, {:method => :post}) 
-	%>
-	</div>
