@@ -33,7 +33,7 @@ class StreamsController < ApplicationController
                                                   and is_running = 1 
                                                   and project_id is null", Workstream.find(@stream.workstream).name], :order=>"name")
     if @order == "date"
-      @projects = @projects.sort{|a,b| a.last_status_date<=>b.last_status_date}.reverse!
+      @projects = @projects.sort_by{|a| [a.last_status_date ? 1 : 0, a.last_status_date]}.reverse!
     end
 
   end
