@@ -154,44 +154,48 @@ class WorkloadsController < ApplicationController
     # render :layout => false
   end
 
-  def get_holiday_warning(person)
 
-    @holiday_without_backup = false # Backup button in red if holiday without backup
-    @holiday_backup_warning = Hash.new # WLload in red if holiday without backup while it should
+  # Return an array of hash
+  # Hash : {"holidayObject" => HolidayModel, "needBackup" => BOOL, "hasBackup" => BOOL, "backup_people" => [STRING], "backup_comments" => [STIRNG]}
+  def get_holiday_warning_detailed(person, dateMax)
+    holiday_array = Array.new
+    index = 0
 
     # Get holidays
     person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and week >= ? and week < ?", person.id.to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), wlweek(Date.today+8.weeks)],
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and week >= ? and week < ?", person.id.to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), wlweek(dateMax)],
         :order=>"week")
 
-    holiday_array = Array.new
-    index = 0
-
+    # Each holiday
     person_holiday_load.each do |holiday|
 
       backups = WlBackup.find(:all, :conditions=>["person_id = ? and week = ?",person.id.to_s, holiday.week])
 
       # Create hash object
-      holiday_hash = {"holidayObject" => holiday, "needBackup" => false, "hasBackup" => false}
-      if holiday.wlload >= 4
+      holiday_hash = {"holidayObject" => holiday, "needBackup" => false, "hasBackup" => false, "backup_people" => [], "backup_comments" => []}
+      # Need backup by week load ?
+      if holiday.wlload >= APP_CONFIG['workload_holiday_threshold_before_backup'].to_i
         holiday_hash["needBackup"] = true
       end
+      # Have backups ?
       if backups != nil and backups.size > 0 
         holiday_hash["hasBackup"] = true
+        backups.each do |b|
+          holiday_hash["backup_people"] << b.backup.name
+          if b.comment != nil and b.comment.length > 0
+            holiday_hash["backup_comments"] << b.comment
+          else
+            holiday_hash["backup_comments"] << ""
+          end
+        end
       end 
+      # Add hash
       holiday_array << holiday_hash
 
-      # Check previous
+      # Check previous and update needBackup if necessary
       if (index > 0)
         previous_holiday_hash = holiday_array[index-1]
-
-         Rails.logger.info("DEBUG_CDB ")
-    Rails.logger.info("\e[31m WARNING LOG HERE -------------------------- \e[0m")
-    Rails.logger.info(previous_holiday_hash["holidayObject"].week.to_s+"   "+(wlweek_reverse(previous_holiday_hash["holidayObject"].week) + 1.week).to_s)
-    Rails.logger.info(holiday_hash["holidayObject"].week.to_s+"    "+(wlweek_reverse(holiday_hash["holidayObject"].week)).to_s)
-    Rails.logger.info("\e[31m END LOG -------------------------- \e[0m")
-
 
         if (wlweek_reverse(previous_holiday_hash["holidayObject"].week) + 1.week) == wlweek_reverse(holiday_hash["holidayObject"].week)
           if (previous_holiday_hash["holidayObject"].wlload.to_i + holiday_hash["holidayObject"].wlload.to_i) >= 4
@@ -204,7 +208,17 @@ class WorkloadsController < ApplicationController
       index += 1
     end
 
-    # Analyze the array of hash
+    return holiday_array
+  end
+
+  def get_holiday_warning(person)
+
+    @holiday_without_backup = false # Backup button in red if holiday without backup
+    @holiday_backup_warning = Hash.new # WLload in red if holiday without backup while it should
+
+    holiday_array = get_holiday_warning_detailed(person, Date.today+8.weeks)
+
+    # Analyze the array of hash - Set 
     holiday_array.each do |hash|
       if hash["needBackup"] == true and hash["hasBackup"] == false
         @holiday_without_backup = true
@@ -349,8 +363,13 @@ class WorkloadsController < ApplicationController
   def refresh_holidays
     @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0", :order=>"name")
     @workloads = []
+    @resfresh_holidays_backup_warnings = {} #resfresh_holidays_backup_warnings[person.id] = Hash from get_holiday_warning
+
     for p in @people
+      # Peron Workload
       @workloads << Workload.new(p.id,session['workload_person_project_ids'],session['workload_persons_iterations'], {:only_holidays=>true})
+      # Person Holiday Warning
+      @resfresh_holidays_backup_warnings[p.id] = get_holiday_warning_detailed(p, Date.today+26.weeks)
     end
     @workloads = @workloads.sort_by {|w| [w.person.name]}
     render :layout => false
