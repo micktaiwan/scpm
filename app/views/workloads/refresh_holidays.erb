@@ -15,7 +15,7 @@
 
     
   </tr>
-  <%= render(:partial=>'conso_holidays', :collection=>@workloads) %>
+  <%= render(:partial=>'conso_holidays', :collection=>@workloads, :locals=>{:holiday_backup_warnings => @resfresh_holidays_backup_warnings}) %>
 </table>
 
 <br />
