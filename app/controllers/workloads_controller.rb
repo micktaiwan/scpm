@@ -198,9 +198,12 @@ class WorkloadsController < ApplicationController
         previous_holiday_hash = holiday_array[index-1]
 
         if (wlweek_reverse(previous_holiday_hash["holidayObject"].week) + 1.week) == wlweek_reverse(holiday_hash["holidayObject"].week)
-          if (previous_holiday_hash["holidayObject"].wlload.to_i + holiday_hash["holidayObject"].wlload.to_i) >= 4
-            previous_holiday_hash["needBackup"] = true
-            holiday_hash["needBackup"] = true
+          if ((previous_holiday_hash["holidayObject"].wlload.to_i + holiday_hash["holidayObject"].wlload.to_i) >= 4) 
+            if (previous_holiday_hash["holidayObject"].wlload.to_i >= APP_CONFIG['workload_holiday_threshold_before_backup'].to_i) or (holiday_hash["holidayObject"].wlload.to_i >= APP_CONFIG['workload_holiday_threshold_before_backup'].to_i)
+
+              previous_holiday_hash["needBackup"] = true
+              holiday_hash["needBackup"] = true
+            end
           end
         end
       end
