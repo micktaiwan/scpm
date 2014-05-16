@@ -274,12 +274,14 @@ class LessonCollectsController < ApplicationController
                                    "Suite Name",
                                    "Project Name",
                                    "Date of export",
-                                   "PM","QWR/SQR",
+                                   "PM",
+                                   "QWR/SQR",
                                    "ID(Don't touch)",
                                    "Milestone of Collect",
                                    "Lesson learnt / Best Practice",
                                    "TOPICS(Observations / Fact / Problems)",
-                                   "Pb cause","Improvement / Best Practices",
+                                   "Pb cause",
+                                   "Improvement / Best Practices",
                                    "Axes of anaylses",
                                    "Sub Axes"]
 
