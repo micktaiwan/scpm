@@ -28,6 +28,7 @@ class Project < ActiveRecord::Base
   has_many    :project_people
   has_many    :responsibles, :through=>:project_people
   has_many    :risks,       :order=>'id', :dependent=>:destroy
+  has_many    :current_risks, :class_name=>'Risk', :conditions=>"probability > 0"
   has_many    :quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1"
   has_many    :open_quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1 and probability>0"
   has_many    :checklist_items, :through=>:milestones
