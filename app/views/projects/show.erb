@@ -32,7 +32,7 @@ function add(id, nb_months, has_requests, has_rights) {
     <ol>
       <%= tab_menu("project_show", [
         "Timeline and status",
-        "Risks <strong>#{@project.risks.size}</strong>",
+        "Risks <strong>#{@project.current_risks.size}</strong>",
         "Amendments <strong>#{@project.current_amendments.size}</strong>",
         "Actions <strong>#{@project.current_actions.size}</strong>",
         "Notes/Capi <strong>#{@project.visible_notes(current_user.id).size}</strong>",
