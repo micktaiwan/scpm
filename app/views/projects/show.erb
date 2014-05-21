@@ -189,6 +189,7 @@ function add(id, nb_months, has_requests, has_rights) {
             <b>Coordinator</b>: <%= @project.coordinator %><br/>
             <b>PM</b>: <%= @project.pm %> (from RMT: <%=@project.request_pm.join(', ')%>)<br/>
             <b>BPL</b>: <%= @project.bpl %><br/>
+            <b>ISPM</b>: <%= @project.ispm %><br/>
             <b>ISPL</b>: <%= @project.ispl %><br/>
             <b>Request resp:</b> <%=@project.assignees.join(', ')%><br/>
             <b>Associations:</b> <%=@project.responsibles.map{|r| r.name}.join(', ')%><br/>
