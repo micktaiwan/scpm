@@ -192,6 +192,14 @@ class LessonCollectsController < ApplicationController
       elsif lesson_objs != nil
         lesson_objs.each do |lo|
           lo.lesson_collect_file_id = lesson_file.id
+          lo.lesson_id              = l[LESSON_CELL_ID_LABEL]           
+          lo.milestone              = l[LESSON_CELL_MILESTONE_LABEL]    
+          lo.type_lesson            = l[LESSON_CELL_LESSON_LEARNT_LABEL]
+          lo.topics                 = l[LESSON_CELL_TOPICS_LABEL]       
+          lo.cause                  = l[LESSON_CELL_PB_CAUSE_LABEL]    
+          lo.improvement            = l[LESSON_CELL_IMPROVEMENT_LABEL]  
+          lo.axes                   = l[LESSON_CELL_AXES_LABEL]         
+          lo.sub_axes               = l[LESSON_CELL_SUB_AXES_LABEL] 
           lo.save
         end
       end 
@@ -214,7 +222,16 @@ class LessonCollectsController < ApplicationController
         lesson_collect_action.save
       elsif action_objs != nil
         action_objs.each do |ao|
-          ao.lesson_collect_file_id = lesson_file.id
+          ao.lesson_collect_file_id  = lesson_file.id
+          ao.ref                     = a[ACTION_CELL_REF_LABEL]          
+          ao.creation_date           = a[ACTION_CELL_CREATION_DATE_LABEL]
+          ao.source                  = a[ACTION_CELL_SOURCE_LABEL]       
+          ao.title                   = a[ACTION_CELL_TITLE_LABEL]        
+          ao.status                  = a[ACTION_CELL_STATUS_LABEL]       
+          ao.actionne                = a[ACTION_CELL_ACTIONNEE_LABEL]       
+          ao.due_date                = a[ACTION_CELL_DUE_DATE_LABEL]     
+          ao.benefit                 = a[ACTION_CELL_BENEFIT_LABEL]      
+          ao.level_of_investment     = a[ACTION_CELL_LEVEL_INVEST_LABEL]    
           ao.save
         end
       end 
@@ -239,6 +256,16 @@ class LessonCollectsController < ApplicationController
       elsif assessment_objs != nil
         assessment_objs.each do |ao|
           ao.lesson_collect_file_id = lesson_file.id
+          ao.lesson_id               = a[ASSESSMENT_CELL_RMT_ID_LABEL]               
+          ao.milestone               = a[ASSESSMENT_CELL_MILESTONE_LABEL]            
+          ao.mt_detailed_desc        = a[ASSESSMENT_CELL_DET_PRES_LABEL]
+          ao.quality_gates           = a[ASSESSMENT_CELL_QUAL_GATES_LABEL]        
+          ao.milestones_preparation  = a[ASSESSMENT_CELL_MILESTONE_LABEL]      
+          ao.project_setting_up      = a[ASSESSMENT_CELL_PROJ_SET_UP_LABEL]   
+          ao.lessons_learnt          = a[ASSESSMENT_CELL_LESSONS_LABEL]       
+          ao.support_level           = a[ASSESSMENT_CELL_SUPP_LABEL]        
+          ao.mt_improvements         = a[ASSESSMENT_CELL_IMP_LABEL]           
+          ao.comments                = a[ASSESSMENT_CELL_COMMENTS_LABEL]  
           ao.save
         end
       end 
