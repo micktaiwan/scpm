@@ -102,6 +102,10 @@
      @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
      @xml.Interior 'ss:Color'=>"#FB0007", 'ss:Pattern'=>'Solid'
    end
+   @xml.Style 'ss:ID' => 's96', 'ss:Name' => 'StatusHighlight' do
+     @xml.Font 'ss:Color'=>'#000000', 'ss:Bold'=>'1'
+     @xml.Interior 'ss:Color'=>"#0087CC", 'ss:Pattern'=>'Solid'
+   end
 end
 
 # TOPICS
@@ -241,6 +245,7 @@ end
       for p in @wps
         status = p.get_status
         style = {}
+        style = {'ss:StyleID' => 's96'} if p.highlighted_in_summary?
         style = {'ss:StyleID' => 's75'} if p.is_ended
         @xml.Row(style) do
           @xml.Cell { @xml.Data p.supervisor_name,    'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
