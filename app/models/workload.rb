@@ -48,36 +48,28 @@ class Workload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
+    cond += " or (wl_type=300 and person_id='#{person_id}')" if options[:add_holidays] == true
 
     if iterations.size == 0
       @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
-    else
+    else 
       @names      = ""
       cpt         = 0
       project_ids.each do |id|
         cpt     = cpt+1
         @names  << Project.find(id).name
-        @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
-        comma   = false
-        iterations.each do |i|
-          if id == i[:project_id].to_s
-            @names << ", " if comma
-            @names << i[:name]
-            comma   = true
-          end
-        end
-        @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id
-        @names << ", " if cpt < project_ids.length
+        @names  << " [#{iterations.map{|i| i.name}.join(', ')}]"
       end
     end
+
     # Case: no project selected
     if !project_ids or project_ids.size==0
-      @wl_lines   = WlLine.find(:all, :conditions=>["person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
+      @wl_lines   = WlLine.find(:all, :conditions=>["person_id='#{person_id}'"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
     else
     # Case: at least, one project selected
     # No iteration selected
       if iterations.size==0
-        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
+        @wl_lines   = WlLine.find(:all, :conditions=>["project_id in (#{project_ids.join(',')}) and person_id='#{person_id}'"+cond], :include=>["request","wl_line_task","person"], :order=>APP_CONFIG['project_workloads_lines_sort'])
       else
     # at least, one iteration selected
         project_ids_without_iterations  =[]     # Array which contains ids of projects we don't want to filter with iterations
@@ -93,14 +85,14 @@ class Workload
         end
         # Generate lines without iterations
         if project_ids_without_iterations.size>0
-          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
+          @wl_lines = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_without_iterations.join(',')}) and person_id='#{person_id}'"+cond], :include=>["request","wl_line_task","person"])
         else
           @wl_lines = []
         end
 
         # Generate lines with iterations
         if project_ids_with_iterations.size>0
-          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')})"+cond+" and person_id=#{person_id}"], :include=>["request","wl_line_task","person"])
+          wl_lines_with_iteration = WlLine.find(:all, :conditions=>["project_id in (#{project_ids_with_iterations.join(',')}) and person_id=#{person_id}"+cond], :include=>["request","wl_line_task","person"])
           wl_lines_with_iteration.each do |l|
             add_line_condition = false
             if l.sdp_tasks

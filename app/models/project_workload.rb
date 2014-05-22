@@ -48,6 +48,7 @@ class ProjectWorkload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
+
     if iterations.size == 0
       @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
     else
@@ -56,17 +57,7 @@ class ProjectWorkload
       project_ids.each do |id|
         cpt     = cpt+1
         @names  << Project.find(id).name
-        @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
-        comma   = false
-        iterations.each do |i|
-          if id == i[:project_id].to_s
-            @names << ", " if comma
-            @names << i[:name]
-            comma  = true
-          end
-        end
-        @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id
-        @names << ", " if cpt < project_ids.length
+        @names  << " [#{iterations.map{|i| i.name}.join(', ')}]"
       end
     end
     if Company.find(:all).size == companies_ids.size
