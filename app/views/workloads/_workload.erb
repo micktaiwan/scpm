@@ -140,7 +140,7 @@
   </b>
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
-
+  <% @tasks_header = 0 %>
   <!-- WORKLOAD GENERAL -->
   <% if @workload.names.size !=0 %><h2><%= @workload.names %></h2><% end %>
   <table id="workload_table">
