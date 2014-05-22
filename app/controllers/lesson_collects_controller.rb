@@ -282,13 +282,21 @@ class LessonCollectsController < ApplicationController
       lessonFiles   = nil
       @ws_selected  = params[:ws_id_hidden]
       ws_select_obj = nil 
+      @suite_selected = params[:suite_id_hidden]
+      suite_select_obj = nil
       if @ws_selected and @ws_selected != "-1"
         ws_select_obj = Workstream.find(@ws_selected)
       end
-
+      if @suite_selected and @suite_selected != "-1"
+            suite_select_obj = SuiteTag.find(@suite_selected)
+      end
       # Lesson files
-      if (ws_select_obj)
+      if (ws_select_obj and suite_select_obj)
+       lessonFiles  = LessonCollectFile.find(:all, :conditions=>["workstream like ? and suite_name like ?", "%#{ws_select_obj.name}%","%#{suite_select_obj.name}%"])
+      elsif (ws_select_obj)
        lessonFiles  = LessonCollectFile.find(:all, :conditions=>["workstream like ?", "%#{ws_select_obj.name}%"])
+      elsif (suite_select_obj)
+       lessonFiles  = LessonCollectFile.find(:all, :conditions=>["suite_name like ?", "%#{suite_select_obj.name}%"])
       else
        lessonFiles  = LessonCollectFile.find(:all)
       end
