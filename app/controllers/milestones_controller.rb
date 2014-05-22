@@ -33,8 +33,45 @@ class MilestonesController < ApplicationController
   def update
     m   = Milestone.find(params[:id])
     old = m.done
+    error = 0;
 
-    error = false;
+    # Check previous and next milestone
+    if (m.project != nil)
+      milestones = m.project.sorted_milestones
+      # Position of milestones
+      current_milestone_position = milestones.index(m)
+      previous_milestone_position = current_milestone_position - 1
+      next_milestone_position = current_milestone_position + 1
+      # Compare dates with previous and next milestone
+      if params[:milestone][:milestone_date] and params[:milestone][:milestone_date] != ""
+        if previous_milestone_position > 0 and previous_milestone_position < milestones.count
+          if Date.parse(params[:milestone][:milestone_date]) < milestones[previous_milestone_position].milestone_date
+            error = 1
+          end
+        end
+
+        if next_milestone_position < milestones.count
+          if Date.parse(params[:milestone][:milestone_date]) > milestones[next_milestone_position].milestone_date
+            error = 1
+          end
+        end
+      end
+
+      if params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date] != ""
+        if previous_milestone_position > 0 and previous_milestone_position < milestones.count
+          if Date.parse(params[:milestone][:actual_milestone_date]) < milestones[previous_milestone_position].actual_milestone_date
+            error = 1
+          end
+        end
+
+        if next_milestone_position < milestones.count
+          if Date.parse(params[:milestone][:actual_milestone_date]) > milestones[next_milestone_position].actual_milestone_date
+            error = 1
+          end
+        end
+      end
+    end
+
 
     # Try to update the date, if wrong format = remote
     if params[:milestone][:milestone_date]
@@ -46,7 +83,7 @@ class MilestonesController < ApplicationController
           raise 'Date format error'
         end
       rescue ArgumentError
-        error = true
+        error = 2
       end
     end
 
@@ -58,13 +95,13 @@ class MilestonesController < ApplicationController
         else
           raise 'Date format error'
         end
-      rescue ArgumentError 
-        error = true
+      rescue ArgumentError
+        error = 2
       end
     end
 
     # If no date error
-    if !error
+    if error == 0
       # Update parameters
       if params[:milestone][:project_id]
         m.project = Project.find(params[:milestone][:project_id])
@@ -101,7 +138,7 @@ class MilestonesController < ApplicationController
       end
     else
       # Date error
-      redirect_to("/milestones/edit?id=#{params[:id]}&date_error=1")
+      redirect_to("/milestones/edit?id=#{params[:id]}&date_error="+error.to_s)
     end
   end
 
