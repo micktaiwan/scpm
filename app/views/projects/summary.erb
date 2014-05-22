@@ -288,7 +288,7 @@ end
                      ['M13','sM13','G8','g8','pg8','MIPM'],
                      ['M14','sM14','G9','g9','pg9']
                     ]
-            status, style = p.get_milestone_status(ms)
+            status, style = p.get_multiple_milestone_status(ms)
             @xml.Cell(style) do
               @xml.Data('ss:Type' => 'String') do
                 @xml << excel_text(status)
@@ -297,8 +297,8 @@ end
             end
           end # for
 
-          @xml.Cell { @xml.Data excel_text(p.get_workpackages_from_requests.join(',').to_s),         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }  
-          
+          @xml.Cell { @xml.Data excel_text(p.get_workpackages_from_requests.join(',').to_s),         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+
         end # each project
       end # table
     end # worksheet
@@ -607,6 +607,6 @@ end
   @xml.AutoFilter 'x:Range' => 'R1C1:R2000C12', 'xmlns' => 'urn:schemas-microsoft-com:office:excel'
   end
   # STREAMS RISKS END
-  
+
 end
 %>

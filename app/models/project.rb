@@ -591,6 +591,14 @@ class Project < ActiveRecord::Base
     nil
   end
 
+  def find_multiple_milestone_by_name(name)
+    milestones_found = Array.new
+    self.milestones.each { |m|
+      milestones_found << m if m.name == name
+    }
+    return milestones_found
+  end
+
   def get_cell_style_for_milestone(m)
     return {} if not m
     case m.status
@@ -621,6 +629,22 @@ class Project < ActiveRecord::Base
         status += "\r\n"
         style  = get_cell_style_for_milestone(m)
       end
+    end
+    [status,style]
+  end
+
+  # names is a array of names mutually exclusive (if we found M5 we should not be able to found a G5)
+  # ex: ['M5','G5','g5','pg5', 'CCB']
+  def get_multiple_milestone_status(names)
+    status, style = '',{}
+    for name in names
+      milestones = find_multiple_milestone_by_name(name)
+      milestones.each { |m|
+        status += name + ': '+m.comments.split("\n").join("\r\n")
+        status += "\r\n" + m.date.to_s if m.date
+        status += "\r\n"
+        style  = get_cell_style_for_milestone(m)
+      }
     end
     [status,style]
   end
@@ -657,7 +681,7 @@ class Project < ActiveRecord::Base
       if sorted_milestones[y].done == 0
         return [sorted_milestones[y].name] + get_milestone_status(sorted_milestones[y].name)
       end
-    end 
+    end
     # Not managed
     return ["", "", {}]
   end
