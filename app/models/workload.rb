@@ -40,7 +40,7 @@ class Workload
     # return if project_ids.size==0
     @person     = Person.find(person_id)
     raise "could not find this person by id '#{person_id}'" if not @person
-    @projects = Project.find(:all, :conditions=>["id in (#{project_ids.join(',')})"]) if project_ids.size!=0
+    @projects = Project.find(:all, :conditions=>["id in (#{project_ids.join(',')})"]) if project_ids.size > 0
     @projects = WlLine.find(:all, :conditions=>["person_id=#{person_id} and project_id is not null"]).collect{|l| Project.find(l.project_id)}.uniq if project_ids.size==0
     @person_id  = person_id
     @name       = @person.name
@@ -191,7 +191,7 @@ class Workload
       raise "Company doesn't exist for this person" if company.nil?
       @opens    << 5 - WlHoliday.get_from_week_and_company(w,company)
 
-      if @wl_lines.size > 0
+      #if @wl_lines.size > 0
         col_sum = col_sum(w, @wl_lines)
         @ctotals        << {:name=>'ctotal', :id=>w, :value=>col_sum}
         @cprodtotals    << {:id=>w, :value=>col_prod_sum(w, @wl_lines)}
@@ -217,7 +217,7 @@ class Workload
         @next_month_percents += capped_if_option(percent) if nb < 5
         @three_next_months_percents += capped_if_option(percent) if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent, :display=>percent.round.to_s+"%"}
-      end
+      #end
       iteration = iteration + 7.days
       nb += 1
     end
@@ -274,10 +274,12 @@ class Workload
   end
 
   def col_sum(w, wl_lines)
+    return 0 if wl_lines.size == 0
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)
   end
 
   def col_prod_sum(w, wl_lines)
+    return 0 if wl_lines.size == 0
     wl_lines.select{|l| l.wl_type==100}.map{|l| l.get_load_by_week(w)}.inject(:+)
   end
 

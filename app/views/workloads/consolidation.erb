@@ -27,6 +27,7 @@
         <% if APP_CONFIG['workloads_show_consolidation_filters'] %>
           <%= form_remote_tag(:url=> {:action => "refresh_conso"}, :loading => "$('error1').update('');$('loading1').appear()", :complete => "$('loading1').hide()", :update => { :success => "data1", :failure => "error1"}, :html=>{:name=>"refresh_form"})  %>
             <%= select(:company, :company_ids, options_for_select(@companies), :include_blank=>"All" ) %>
+            <%= select(:project, :project_ids, options_for_select(@projects), :include_blank=>"All" ) %>
             <%= submit_tag('Refresh') %>
           </form>
         <% else %>
