@@ -84,7 +84,7 @@ class MilestonesController < ApplicationController
 
 
     # Try to update the date, if wrong format = remote
-    if params[:milestone][:milestone_date]
+    if params[:milestone][:milestone_date] and params[:milestone][:milestone_date].length > 0
       begin
         date_bdd = Date.parse(params[:milestone][:milestone_date]).strftime("%Y-%m-%d %H:%M:%S")
         if date_bdd
@@ -97,7 +97,7 @@ class MilestonesController < ApplicationController
       end
     end
 
-    if params[:milestone][:actual_milestone_date]
+    if params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0
       begin
         date_bdd = Date.parse(params[:milestone][:actual_milestone_date]).strftime("%Y-%m-%d %H:%M:%S")
         if date_bdd
