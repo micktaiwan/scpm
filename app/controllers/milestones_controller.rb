@@ -30,45 +30,55 @@ class MilestonesController < ApplicationController
     get_infos
   end
 
+
+
+  def isDateSuperior(currentDateStr, nextDate)
+    if currentDateStr and currentDateStr != ""
+      begin
+        if Date.parse(currentDateStr) > nextDate
+          return true
+        end
+      rescue ArgumentError
+        return false
+      end
+    end
+    return false
+  end
+
+  def isDateInferior(currentDateStr, previousDate)
+    if currentDateStr and currentDateStr != ""
+      begin
+        if Date.parse(currentDateStr) < previousDate
+          return true
+        end
+      rescue ArgumentError
+        return false
+      end
+    end
+    return false
+  end
+
   def update
     m   = Milestone.find(params[:id])
     old = m.done
     error = 0;
 
-    # Check previous and next milestone
+    # Check previous and next milestones
     if (m.project != nil)
-      milestones = m.project.sorted_milestones
-      # Position of milestones
-      current_milestone_position = milestones.index(m)
-      previous_milestone_position = current_milestone_position - 1
-      next_milestone_position = current_milestone_position + 1
-      # Compare dates with previous and next milestone
-      if params[:milestone][:milestone_date] and params[:milestone][:milestone_date] != ""
-        if previous_milestone_position > 0 and previous_milestone_position < milestones.count
-          if Date.parse(params[:milestone][:milestone_date]) < milestones[previous_milestone_position].milestone_date
-            error = 1
-          end
+      sorted_milestones = m.project.sorted_milestones
+      current_milestone_position = sorted_milestones.index(m)
+
+      i = 0
+      sorted_milestones.each do |m_other|
+        if (current_milestone_position > i)
+          error = 1 if isDateInferior(params[:milestone][:milestone_date], m_other.milestone_date)
+          error = 1 if isDateInferior(params[:milestone][:actual_milestone_date], m_other.actual_milestone_date)
+        elsif (current_milestone_position < i)
+          error = 1 if isDateSuperior(params[:milestone][:milestone_date], m_other.milestone_date)
+          error = 1 if isDateSuperior(params[:milestone][:actual_milestone_date], m_other.actual_milestone_date)
         end
 
-        if next_milestone_position < milestones.count
-          if Date.parse(params[:milestone][:milestone_date]) > milestones[next_milestone_position].milestone_date
-            error = 1
-          end
-        end
-      end
-
-      if params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date] != ""
-        if previous_milestone_position > 0 and previous_milestone_position < milestones.count
-          if Date.parse(params[:milestone][:actual_milestone_date]) < milestones[previous_milestone_position].actual_milestone_date
-            error = 1
-          end
-        end
-
-        if next_milestone_position < milestones.count
-          if Date.parse(params[:milestone][:actual_milestone_date]) > milestones[next_milestone_position].actual_milestone_date
-            error = 1
-          end
-        end
+        i = i + 1
       end
     end
 
