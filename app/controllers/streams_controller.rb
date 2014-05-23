@@ -43,7 +43,7 @@ class StreamsController < ApplicationController
     @stream       = Stream.find(id)
     
     # Get all review types
-    @reviewTypes = ReviewType.find(:all)
+    @reviewTypes = ReviewType.find(:all, :conditions => ["is_active = 1"])
   end
 
   def add_request
