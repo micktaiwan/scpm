@@ -95,6 +95,8 @@ class MilestonesController < ApplicationController
       rescue ArgumentError
         error = 2
       end
+    else
+      m.milestone_date = nil
     end
 
     if params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0
@@ -108,6 +110,8 @@ class MilestonesController < ApplicationController
       rescue ArgumentError
         error = 2
       end
+    else
+      m.actual_milestone_date = nil
     end
 
     # If no date error
