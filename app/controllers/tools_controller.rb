@@ -749,13 +749,16 @@ class ToolsController < ApplicationController
 
     # Delete the object
     if (history_object)
+      spider = history_object.spider
       if (history_object.spider and history_object.spider.project)
         project_object = history_object.spider.project
       end
+      spider.impact_count = 0
+      spider.save
       history_object.destroy
     end
 
-    # Update spider couter or qs counter of project
+    # Update spider counter or qs counter of project
     if (project_object)
       project_object.spider_count = project_object.spider_count - 1
       project_object.spider_count = 0 if (project_object.spider_count < 0)
