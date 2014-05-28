@@ -51,8 +51,8 @@ $j(document).ready(function (){
       <td>
         <a target="_blank" href="http://toulouse.sqli.com/EMN/view.php?id=<%= sc.request.request_id %>">#<%= sc.request.request_id %></a>
       </td>
-      <td COLSPAN="<%= row_number-1 %>"><%= sc.request.summary %></td>
-      <td class="admin"><input type="button" value="Copy" onclick="copyInView($j('#history_spider_count_table_<%= sc.request_id.to_s %>'));" /></td>
+      <td COLSPAN="<%= row_number-2 %>"><%= sc.request.summary %></td>
+      <td class="admin"><input style="float:right;" type="button" value="Copy" onclick="copyInView($j('#history_spider_count_table_<%= sc.request_id.to_s %>'));" /></td>
     </tr>
     <!-- HEADER TR -->
     <tr class="bg_grey">
@@ -60,7 +60,6 @@ $j(document).ready(function (){
       <td>Author</td>
       <td>Action date</td>
       <td>Project</td>
-      <td>Delivery link</td>
       <% if (current_user.has_role?('Admin')) %>
         <td class="admin">Admin</td>
       <% end %>
@@ -80,18 +79,19 @@ $j(document).ready(function (){
       <% project_name = sc.spider.project.project.name + " > " + sc.spider.project.name %>
     <% end %>
     <td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc.spider.project.id}) %></td>
-    <% 
-      file_link = "None"
-      if (sc.spider.file_link)
-        file_link = sc.spider.file_link
-      end
-    %>
-    <td><div style="font-size:50%;" %><%= link_to(file_link, {:controller=>'spiders', :action=>'update_spider_file_name_form', :id=>sc.spider.id}) %></div></td>
 
     <% if (current_user.has_role?('Admin')) %>
       <td class="admin"><%= link_to("Delete", {:controller=>'tools', :action=>'delete_history_spider', :id=>sc.id, :stream_id=>@stream_id.to_i, :request_id=>@request_id.to_i, :caller => "show_counter_history" }, :confirm=>"Are you sure you want to delete this counter and decrement the counter on the assiociated project ?") %></td>
     <% end %>
   </tr>
+
+  <% 
+      file_link = "None"
+      if (sc.spider.file_link)
+        file_link = sc.spider.file_link
+      end
+    %>
+  <tr><td class="tr_bottom"></td><td class="tr_bottom" COLSPAN="5"><div><%= link_to(file_link, {:controller=>'spiders', :action=>'update_spider_file_name_form', :id=>sc.spider.id}) %></div></td></tr>
 <% end %>
 </table>
 
