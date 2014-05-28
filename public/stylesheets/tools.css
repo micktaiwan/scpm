@@ -88,5 +88,6 @@ h2 {
 .tr_bottom {
   border-bottom: 1px solid #DDD;
   table-layout: fixed; 
+  word-break: break-all;
 
 }
