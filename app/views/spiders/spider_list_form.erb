@@ -15,7 +15,7 @@
 
 	<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_choice_1') do -%>
 		<%= hidden_field_tag('list_choice', 1) %>
-		<%= hidden_field_tag('consolidate_spider', 0) %>
+		<%= hidden_field_tag('consolidate_spider', 1) %>
 		<%= hidden_field_tag('file_link', @file_link) %>
 		<%= hidden_field_tag('spider_id', @spider_id) %>
 		<% @spiderquest.each do |sq| %>
