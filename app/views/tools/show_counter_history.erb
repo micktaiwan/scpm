@@ -10,6 +10,28 @@ $j(document).ready(function (){
   $j("#copy_view").bind('copy', function(){
     setTimeout(function(){ $j("#copy_view").hide()},1);
   });
+
+  $j("#stream_id").change(function() {
+    $j("#request_id").val($j("#request_id option:first").val());
+    setRequestList();
+  });
+
+  function setRequestList()
+  {
+    var stream = $j( "#stream_id option:selected" ).text().split(' ')[0];
+    $j("#request_id > option").each(function() {
+      if ((this.text.indexOf(stream) > -1) || (this.text.indexOf("All") > -1) || ( $j( "#stream_id option:selected" ).text().indexOf("All") > -1))
+      {
+        this.show();
+      }
+      else
+      {
+        this.hide();
+      }
+    });
+  }
+
+  setRequestList();
 });
 </script>
 
