@@ -21,7 +21,7 @@
 		<% @spiderquest.each do |sq| %>
 			<%= hidden_field_tag('spiderquest['+sq[0]+'][]', sq[1]) %>
 		<% end %>
-		<% @spiderquestresursive.each do |sr| %>
+		<% @spiderquestresursive != nil and @spiderquestresursive.each do |sr| %>
 			<%= hidden_field_tag('spiderquestresursive['+sr[0]+'][]', sr[1]) %>
 		<% end %>
 		<%= hidden_field_tag('project_id', @project_id) %>
@@ -49,7 +49,7 @@
 		<% @spiderquest.each do |sq| %>
 			<%= hidden_field_tag('spiderquest['+sq[0]+'][]', sq[1]) %>
 		<% end %>
-		<% @spiderquestresursive.each do |sr| %>
+		<% @spiderquestresursive != nil and @spiderquestresursive.each do |sr| %>
 			<%= hidden_field_tag('spiderquestresursive['+sr[0]+'][]', sr[1]) %>
 		<% end %>
 		<%= hidden_field_tag('project_id', @project_id) %>
