@@ -822,6 +822,24 @@ class ToolsController < ApplicationController
     project.save
     redirect_to('/tools/circular_references')
   end
+
+  def show_stream_review_type
+    @review_types = ReviewType.find(:all)
+  end
+
+  def update_stream_review_type_is_active
+    review_type_id = params[:id]
+    review_type_is_active = params[:is_active]
+    review_type = ReviewType.find(:first,:conditions=>["id = ?", review_type_id])
+    
+    if (review_type != nil)
+      review_type.is_active = review_type_is_active
+      review_type.save
+      render(:layout=>false, :text=>'updated') 
+    else
+      render(:layout=>false, :text=>'error') 
+    end
+  end
 private
 
   def round_to_hour(f)

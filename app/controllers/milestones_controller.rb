@@ -17,7 +17,7 @@ class MilestonesController < ApplicationController
       render :action => 'new', :project_id=>params[:milestone][:project_id]
       return
     end
-    redirect_to("/projects/show/#{@params[:id]}")
+    redirect_to("/projects/show/#{@milestone.project_id}")
   end
 
   def edit
