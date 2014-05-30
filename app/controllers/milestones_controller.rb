@@ -70,12 +70,29 @@ class MilestonesController < ApplicationController
 
       i = 0
       sorted_milestones.each do |m_other|
+
         if (current_milestone_position > i)
-          error = 1 if isDateInferior(params[:milestone][:milestone_date], m_other.milestone_date)
-          error = 1 if isDateInferior(params[:milestone][:actual_milestone_date], m_other.actual_milestone_date)
+         
+          previous_date = nil
+          if (m_other.actual_milestone_date != nil)
+            previous_date = m_other.actual_milestone_date
+          else
+            previous_date = m_other.milestone_date
+          end
+          error = 1 if isDateInferior(params[:milestone][:milestone_date], previous_date)
+          error = 1 if isDateInferior(params[:milestone][:actual_milestone_date], previous_date)
+
         elsif (current_milestone_position < i)
-          error = 1 if isDateSuperior(params[:milestone][:milestone_date], m_other.milestone_date)
-          error = 1 if isDateSuperior(params[:milestone][:actual_milestone_date], m_other.actual_milestone_date)
+
+          next_date = nil
+          if (m_other.actual_milestone_date != nil)
+            next_date = m_other.actual_milestone_date
+          else
+            next_date = m_other.milestone_date
+          end
+          error = 1 if isDateSuperior(params[:milestone][:milestone_date], next_date)
+          error = 1 if isDateSuperior(params[:milestone][:actual_milestone_date], next_date)
+          
         end
 
         i = i + 1
