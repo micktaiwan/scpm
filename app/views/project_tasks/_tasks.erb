@@ -1,0 +1,66 @@
+<div id="tasks">
+
+  <b>
+  <%= @workload.nb_current_lines %> lines
+  <% if @workload.nb_hidden_lines > 0 %><strong><%end%>
+  (<%= @workload.nb_hidden_lines %> hidden)
+  <% if @workload.nb_hidden_lines > 0 %></strong><%end%>
+
+  <% if session['workload_persons_iterations'] != [] or session['workload_person_project_ids'] != [] or session['workload_companies_ids'] != [] %>
+  <strong>filtered</strong><%end%>
+  </b>
+
+
+  <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload("project_tasks")'}) %> hide lines with no workload in next 8 weeks
+  <%= check_box_tag('group_by_person', true, session['group_by_person'].to_s=='true', {:onclick=>'group_by_person("project_tasks")'}) %> group by person
+  <br/>
+
+  <!-- WORKLOAD GENERAL -->
+  <h2><%= @workload.names %> (<%= @workload.companies %>)</h2>
+
+  <table class="grid">
+    <tbody>
+      <tr>
+        <td>Sales revenue</td>
+        <td><%= @total_sales_revenue.pretty_number %></td>
+      </tr>
+      <tr>
+        <td>Project cost</td>
+        <td><%= @cost_total.pretty_number %></td>
+      </tr>
+      <tr style="font-weight: bold">
+        <td>Margin</td>
+        <td><%= @margin %>%</td>
+      </tr>
+    </tbody>
+  </table>
+  <br/>
+  <br/>
+  <table id="tasks_table" class="sortable">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Planned</th>
+      <th>Total</th>
+      <th>Profile</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= render(:partial=>"wl_line", :collection=>@workload.displayed_lines) %>
+    <tr style="border-top: 1px solid black;font-weight: bold;">
+      <td>
+        Total
+      </td>
+      <td class="wl_total"><%= @workload.planned_total %></td>
+      <td><%= @workload.total %></td>
+      <td></td>
+      <td><%= @cost_total %></td>
+    </tr>
+  </tbody>
+
+  </table>
+
+</div>
+<br/>

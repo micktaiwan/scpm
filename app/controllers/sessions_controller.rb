@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
     authenticate(params[:person][:login], params[:person][:pwd])
     if logged_in?
       session[:project_filter_qr] = [current_user.id]
+      current_user.save_default_settings
       if not current_user.has_role?('Admin')
         session[:project_sort]        = 'alpha'
         session['workload_person_id'] = current_user.id

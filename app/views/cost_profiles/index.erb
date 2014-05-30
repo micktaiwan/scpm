@@ -1,0 +1,20 @@
+<h2>Profiles</h2>
+<table class="sortable">
+  <thead>
+    <tr>
+      <td>Company</td>
+      <td>Profile</td>
+      <td>Cost</td>
+      <td></td>
+    </tr>
+  </thead>
+
+  <%= render(:partial=>'profile', :collection=>@cp) %>
+</table>
+
+<%= error_messages_for :profile %>
+<% form_for :@profile, :url=>{:action=>'create'} do |f| -%>
+  <%= render(:partial => f) %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>

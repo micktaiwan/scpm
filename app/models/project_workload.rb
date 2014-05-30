@@ -1,4 +1,3 @@
-
 class ProjectWorkload
 
   include ApplicationHelper, WorkloadPlanningsHelper
@@ -11,9 +10,8 @@ class ProjectWorkload
     :months,          # "Oct"
     :days,            # week days display per week: "17-21"
     :opens,           # total of worked days per week (5 - nb of holidays)
-    :project,
-    :project_ids,
-    :projects,
+    :project_ids,     # Array of project_ids
+    :projects,        # Array of projects
     :wl_lines,        # arrays of loads, all lines (filtered and not filtered)
     :displayed_lines, # only filtered lines
     :line_sums,       # sum of days per line of workload
@@ -40,7 +38,7 @@ class ProjectWorkload
   # :only_holidays => true
   # :group_by_person => true
   # :hide_lines_with_no_workload => true
-  def initialize(project_ids, companies_ids, iterations, options = {})
+  def initialize(project_ids, companies_ids, iterations,tags_ids, options = {})
     #Rails.logger.debug "\n===== only_holidays: #{options[:only_holidays]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}"
     #Rails.logger.debug "\n===== group_by_person: #{options[:group_by_person]}\n\n"
@@ -50,6 +48,7 @@ class ProjectWorkload
     # calculate lines
     cond = ""
     cond += " and wl_type=300" if options[:only_holidays] == true
+
     if iterations.size == 0
       @names      = project_ids.map{ |id| Project.find(id).name}.join(', ')
     else
@@ -58,17 +57,7 @@ class ProjectWorkload
       project_ids.each do |id|
         cpt     = cpt+1
         @names  << Project.find(id).name
-        @names  << "[" if iterations.map{|i|i[:project_id].to_s}.include? id
-        comma   = false
-        iterations.each do |i|
-          if id == i[:project_id].to_s
-            @names << ", " if comma
-            @names << i[:name]
-            comma  = true
-          end
-        end
-        @names << "]"  if iterations.map{|i|i[:project_id].to_s}.include? id
-        @names << ", " if cpt < project_ids.length
+        @names  << " [#{iterations.map{|i| i.name}.join(', ')}]"
       end
     end
     if Company.find(:all).size == companies_ids.size
@@ -131,6 +120,8 @@ class ProjectWorkload
         end  
       end
     end
+    # Case: tags selected
+    @wl_lines = @wl_lines.select{|l|l.tag_in(tags_ids) == true} if tags_ids.size > 0
 
     uniq_person_number = @wl_lines.map{|l| l.person_id}.uniq.size
 
@@ -184,6 +175,9 @@ class ProjectWorkload
             person_task[l.person_id][:remaining] += l.sdp_tasks_remaining.to_f
             person_task[l.person_id][:consumed]  += l.sdp_tasks_consumed
             person_task[l.person_id][:sdp]        = true
+          end
+          l.tags.each do |t|
+            selected_line.tags << t if !selected_line.tags.include?(t)
           end
         end
       end
@@ -380,6 +374,7 @@ private
     line.projects   = [l.project]
     line.sdp_tasks  = l.sdp_tasks
     line.alert_sdp_task = true if l.sdp_tasks.size == 0
+    line.tags       = l.tags
   end
   
   def person_is_uniq?(person_id, lines)

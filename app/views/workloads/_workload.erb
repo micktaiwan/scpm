@@ -35,7 +35,18 @@
           <% else %>
             <br/>
             <b style="color:#FF0000"> No Project for </b><br/>
-            <b style="color:#FF0000"> <%= person.name %> </b>          
+            <b style="color:#FF0000"> <%= person.name %> </b>
+          <% end %>
+        </td>
+        <td>
+        <td>
+          <b><a href="#" onclick="check_uncheck(this,'person_tags_ids[]')" >Tags</a></b><br/>
+          <% @tags= person.tags %>
+          <% if @tags %>
+            <% for t in @tags %>
+              <% tag_size = LineTag.find(:all, :conditions=>["tag_id=#{t.id} and id in (#{person.lines_tagged.join(',')})"]).size %>
+              <%= check_box_tag('person_tags_ids[]', t.id, session['workload_person_tags'].include?(t.id.to_s)) %><%= "#{t.name} (#{tag_size})"%><br/>
+            <% end %>
           <% end %>
         </td>
         <td>
@@ -51,7 +62,8 @@
                 <br/><b><a href="#" onclick="check_uncheck_iterations(this,'iterations_<%= actual_project %>')" ><%= i.project.name %></a></b><br/>
                 <% previous_project = actual_project %>
               <% end %>
-              <input id="iterations_<%= actual_project %>" type="checkbox" value="<%= i.id%>" name="iterations_ids[]"><%= "#{i.name}"%></input><br/>
+              <% checked = session['workload_persons_iterations'].include?({:name=>i.name, :project_code=>i.project_code, :project_id=>i.project.id}) %>
+              <input id="iterations_<%= actual_project %>" type="checkbox" value="<%= i.id%>" name="iterations_ids[]" <% if checked %>checked="true"<%end%>><%= "#{i.name}"%></input><br/>
             <% end %>
           <% else %>
             <br/>
@@ -99,8 +111,8 @@
         You have <%= @workload.sdp_remaining_total %> remaining days in SDP but only <strong><%= @workload.planned_total %></strong> days planned in your workload (<%=percent_planned%>%).<br/>
       <% end %>
 
-      <% if @backup_holidays.count > 0 %>
-        <strong>Warning, within the next 2 weeks, you backup: </strong>
+      <% if @backup_holidays and @backup_holidays.count > 0 %>
+        <strong>Warning, the following coworkers have holidays during the next 2 weeks while you are their backup: </strong>
         <ul>
         <% @backup_holidays.each do |bh| %>
           <li><strong>- <%= bh %></strong></li>
@@ -128,16 +140,65 @@
   </b>
 
   <%= check_box_tag('hide_lines_with_no_workload', true, session['workload_hide_lines_with_no_workload'].to_s=='true', {:onclick=>'hide_lines_with_no_workload()'}) %> hide lines with no workload in next 8 weeks
-
+  <% @tasks_header = 0 %>
   <!-- WORKLOAD GENERAL -->
   <% if @workload.names.size !=0 %><h2><%= @workload.names %></h2><% end %>
   <table id="workload_table">
   <thead>
+    <% @workload.projects.each do |p| %>
+      <% color = "#ABC" %>
+      <% if p.planning %>
+        <% if p.planning.tasks %>
+          <% p.planning.tasks.each do |t| %>
+            <tr>
+              <% @tasks_header += 1 %>
+              <% this_color = color %>
+              <% this_color = t.color if t.color%>
+              <% @task_id = "task_"+t.id.to_s %>
+              <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
+              <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="planning_task"></th>
+              <th id="<%=@task_id%>" style="background: <%=this_color%>;" class="wl_names planning_task">[<%= p.name %>] <%= t.name %></th>
+              <% if APP_CONFIG['workloads_display_status_column'] %>
+              <th class="planning_task"></th>
+              <% end %>
+              <th class="planning_task">
+              <% if current_user.is_cpdp == 1 or current_user.has_role?('Admin')%>
+                <input id="color_<%=@task_id%>" class="color_picker" value="<%=this_color[1..6]%>" onchange="change_task_color(this,'<%=@task_id%>')">
+              <% end %>
+              </th>
+              <% if APP_CONFIG['workloads_display_consumed_column'] %>
+                <th class="planning_task"></th>
+              <% end %>
+              <th class="planning_task"></th>
+              <th class="planning_task"></th>
+              <th class="planning_task"></th>
+              <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+                <th class="planning_task"></th>
+              <% end %>
+              <% if APP_CONFIG['workloads_display_total_column'] %>
+                <th class="planning_task"></th>
+              <% end %>
+              <%
+                c = []
+                @workload.planning_tasks.each do |pt|
+                  c << pt if pt[:task]==t
+                end
+              %>
+              <% @start_date_condition = "not detected" %>
+              <% nb_cells = c.select{|y|y[:week]==true}.length %>
+              <%= render(:partial=>"wl_task_planning", :collection=>c, :locals=>{:color=>this_color, :nb_cells=>nb_cells}) %>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    <%  end %>
     <tr>
     <th></th>
     <th></th>
     <th class="wl_names"></th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -145,6 +206,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
@@ -155,7 +219,9 @@
     <th></th>
     <th></th>
     <th class="wl_names"></th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -163,6 +229,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
@@ -173,7 +242,9 @@
     <th></th>
     <th></th>
     <th class="wl_names"></th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th style="min-width:100px;">Status</th>
+    <% end %>
     <th style="min-width:45px;">Init.</th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th style="min-width:45px;">Cons.</th>
@@ -181,16 +252,22 @@
     <th style="min-width:45px;">Gain</th>
     <th style="min-width:45px;">Rem.</th>
     <th class="wl_total" style="min-width:45px;">Planned</th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th style="min-width:45px;">Diff</th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th style="min-width:45px;">Total</th>
     <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.days) %>
     </tr>
+
     <tr class="wl_opens">
     <th></th>
     <th></th>
     <th class="wl_names">Nb of worked days</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -198,16 +275,22 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
     <%= render(:partial=>"wl_head", :collection=>@workload.opens) %>
     </tr>
+
     <tr class="wl_total">
     <th></th>
     <th></th>
     <th class="wl_names">Total</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -215,6 +298,9 @@
     <th></th>
     <th></th>
     <th></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
@@ -225,7 +311,9 @@
     <th></th>
     <th></th>
     <th class="wl_names">Sums / Percents</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th id="consumed_total"><%= @workload.sdp_consumed_total %></th>
@@ -233,6 +321,9 @@
     <th></th>
     <th><%= @workload.sdp_remaining_total %></th>
     <th id="planned_total"><%= @workload.planned_total %></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th id="diff_planned_remaining"><%= @workload.planned_total - @workload.sdp_remaining_total %></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th id="total"><%= @workload.total %></th>
     <% end %>
@@ -243,7 +334,9 @@
     <th></th>
     <th></th>
     <th class="wl_names">Availability (Sum for the 2 next months)</th>
+    <% if APP_CONFIG['workloads_display_status_column'] %>
     <th></th>
+    <% end %>
     <th></th>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
     <th></th>
@@ -251,10 +344,13 @@
     <th></th>
     <th></th>
     <th title="Availablity for the 2 next months" id="availability_total"><%= @workload.sum_availability %></th>
+    <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <th></th>
+    <% end %>
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
-    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability) %>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability, :locals=>{:low_limit=>0, :reverse=>true}) %>
     </tr>
   </thead>
 

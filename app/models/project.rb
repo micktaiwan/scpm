@@ -925,7 +925,7 @@ class Project < ActiveRecord::Base
   def get_workpackages_from_requests
     result = Array.new
     self.requests.each do |r|
-      if (!result.include? (r.work_package))
+      if (!result.include?(r.work_package))
         result << r.work_package
       end
     end

@@ -1,6 +1,9 @@
 <h2>Edit</h2>
 
-<%= error_messages_for :person %>
+<strong>
+<%= flash[:error] %><br/>
+<%= error_messages_for :person %><br/>
+</strong>
 <% form_for :@person, :url=>{:action=>'update', :id=>@person.id} do |f| -%>
   <%= render(:partial => f) %>
   <p><label>&nbsp;</label>

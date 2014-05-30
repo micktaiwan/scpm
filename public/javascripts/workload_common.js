@@ -1,5 +1,10 @@
 function wl_add_line() {
   $('wl_line_add_form').appear({duration:0.2});
+  window.onkeyup = function (event) {
+    if (event.keyCode == 27) {
+      $('wl_line_add_form').fade({duration:0.2});
+    }
+  }
   }
 
 function wl_change_colors(wlweek, background, color) {
@@ -110,6 +115,7 @@ function colorToHex(color) {
     var rgb = blue | (green << 8) | (red << 16);
     return digits[1] + '#' + rgb.toString(16);
 };
+
 
 
 // Duplicate
@@ -239,3 +245,32 @@ function update_backup_comment(backup_id, self_backup)
     }
   });
 }
+
+function addTag(last_tag, line_id){
+  new Ajax.Request('/tags/add_tag', {
+    parameters: { tag_name: last_tag, line_id: line_id }
+  });
+}
+
+function removeTag(tags, line_id){
+  new Ajax.Request('/tags/remove_tag', {
+    parameters: { tags: String(tags), line_id: line_id }
+  });
+}
+
+function init_tags(line_id, sampleTags) {
+  $j("#lineTags_"+line_id).tagit({
+    availableTags: sampleTags,
+    removeConfirmation: true,
+    caseSensitive: false,
+    afterTagAdded: function(event, ui) {
+      a = $j('#lineTags_'+line_id).tagit('assignedTags');
+      addTag(a[a.length -1],line_id);
+    },
+    afterTagRemoved: function(event, ui) {
+      a = $j('#lineTags_'+line_id).tagit('assignedTags');
+      removeTag(a,line_id);
+    }
+  });
+}
+

@@ -46,7 +46,7 @@ h2 {
   border-bottom: 1px solid #000;
   }
 
-th {
+.workload_th {
   text-align: center;
   min-width: 35px;
   border: 1px solid #444;
@@ -167,9 +167,21 @@ tr.wl_opens {
   color: #F33;
   }
 
+.wlerror, .wlerror1, .wlerror2, .wlerror3 {
+  text-align: center;
+  }
+
 .wlerror {
   background: #FAA;
-  text-align: center;
+  }
+.wlerror1 {
+  background: #FAA;
+  }
+.wlerror2 {
+  background: #FDA;
+  }
+.wlerror3 {
+  background: #FDF;
   }
 
 .wlpositive {
@@ -177,7 +189,16 @@ tr.wl_opens {
   text-align: center;
 }
 
+/* FIXME: not DIY */
 .wlerror.no_sdp{
+  background: #AAF;
+  text-align: center;
+  }
+.wlerror1.no_sdp{
+  background: #AAF;
+  text-align: center;
+  }
+.wlerror2.no_sdp{
   background: #AAF;
   text-align: center;
   }
@@ -291,6 +312,13 @@ ul.sdp_tasks {
   border: 0;
   padding: 0;
   color: #333;
+  width: 40px;
+}
+
+.wl_tag {
+  padding-left: 5px;
+  color: red;
+  font-size:0.8em;
 }
 
 /* Duplicate view */

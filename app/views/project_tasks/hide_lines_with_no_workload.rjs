@@ -1,0 +1,3 @@
+page.replace "tasks", render(:partial=>"tasks")
+page << "document.body.style.cursor = 'auto';"
+page << "$('loading').hide();"

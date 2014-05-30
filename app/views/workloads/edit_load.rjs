@@ -11,11 +11,23 @@ begin
     end
   end
   page << "$('pltotal_#{@line_id}').innerHTML = '#{@plsum}'"
+  page << "$('diff_planned_remaining_#{@line_id}').innerHTML = '#{@diff_planned_remaining_line}'" if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column']
   page << "$('ltotal_#{@line_id}').innerHTML = '#{@lsum}'" if APP_CONFIG['workloads_display_total_column']
   page << "$('ctotal_#{@wlweek}').innerHTML = '#{@csum}'"
   page << "$('cpercent_#{@wlweek}').innerHTML = '#{@cpercent}%'"
-  page << "$('avail_#{@wlweek}').innerHTML = '#{@avail}'"
+  # FIXME: use css
+  if @avail < 0
+    page << "$('avail_#{@wlweek}').style.cssText = 'background-color: #F00; color: white'"
+  else
+    page << "$('avail_#{@wlweek}').style.cssText = 'background-color: #555; color: #AB8'"
+  end
+  if @avail == 0
+    page << "$('avail_#{@wlweek}').innerHTML = ''"
+  else
+    page << "$('avail_#{@wlweek}').innerHTML = '#{@avail}'"
+  end
   page << "$('planned_total').innerHTML = '#{@planned_total}'"
+  page << "$('diff_planned_remaining').innerHTML = '#{@diff_planned_remaining}'" if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column']
   page << "$('total').innerHTML = '#{@total}'" if APP_CONFIG['workloads_display_total_column']
   if(@cpercent > 110)
     page << "wl_change_colors(#{@wlweek},'#F00','#FFF')"

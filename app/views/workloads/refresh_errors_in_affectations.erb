@@ -1,0 +1,12 @@
+<%= @associations.size %> errors<br/>
+<br/>
+<table class="sortable">
+  <thead>
+    <td>Project</td>
+    <td>Line</td>
+    <td>Task</td>
+    <td>Line person</td>
+    <td>Task assignation</td>
+  </thead>
+  <%= render(:partial=>'conso_errors_in_affectations', :collection=>@associations, :as=>:a) %>
+</table>

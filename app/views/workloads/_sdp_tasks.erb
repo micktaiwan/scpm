@@ -13,12 +13,12 @@
 <img src="/images/expand.gif" onclick="get_all_sdp_tasks()" title="Also display tasks with no remaining">
 <%= submit_tag("Add") %><br/>
 <% if partial_id=="sdp_tasks_edit" %>
-  <%= check_box_tag('update_sdp_tasks_name', true, current_user.settings.wl_line_change_name==1, :onclick=>"update_settings_name()") %> Update workload line name with all associated tasks<br/>
+  <%= check_box_tag('update_sdp_tasks_name', true, (current_user.settings.wl_line_change_name and current_user.settings.wl_line_change_name==1), :onclick=>"update_settings_name()") %> Update workload line name with all associated tasks<br/>
 <% end %>
 
 <% if edit_line %>
   <br/>
-  Associated tasks: <%= edit_line.sdp_tasks_initial %> days
+  Associated tasks: <%= edit_line.sdp_tasks_assigned %> days
   <ul class="sdp_tasks">
     <%= render(:partial=>'sdp_task', :collection=>edit_line.sdp_tasks, :as=>:t, :locals=>{:wl_line=>edit_line}) %> <!-- problem: checkbox value isn't refreshed here, should be done with javascript to get its value -->
   </ul>

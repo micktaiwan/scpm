@@ -11,14 +11,34 @@ class WlLine < ActiveRecord::Base
 
   include ApplicationHelper
 
-  # def sdp_task
-  #   SDPTask.find_by_sdp_id(self.sdp_task_id)
-  # end
+  def tags
+    line_tags = LineTag.find(:all, :conditions=>["line_id = #{self.id}"]).map{|line_tag| line_tag.tag_id}
+    tags = []
+    tags = Tag.find(:all, :conditions=>["id in (#{line_tags.join(',')})"]) if line_tags.size > 0
+    tags
+  end
+
+  def tag_in(tags_ids)
+    line_tag = LineTag.find(:all, :conditions=>["line_id = #{self.id}"]).map{|line_tag| line_tag.tag_id}
+    return false if ( line_tag.nil? or line_tag.size == 0 ) 
+    line_tag.each do |l|
+      return true if tags_ids.include?(l.to_s)
+    end
+    false
+  end
 
   def sdp_tasks
     wl_line_task_ids = WlLineTask.find(:all, :conditions=>["wl_line_id=?", self.id])
     return [] if wl_line_task_ids.size == 0
     SDPTask.find_by_sql("select * from sdp_tasks where sdp_tasks.sdp_id in (#{wl_line_task_ids.map{ |l| l.sdp_task_id}.join(',')})")
+  end
+
+  def has_wrong_assignation
+    return false if !self.person
+    sdp_tasks.each { |t|
+      return true if t.collab != self.person.trigram
+      }
+    false
   end
 
   def add_sdp_task_by_id(sdp_task_id)
@@ -34,6 +54,12 @@ class WlLine < ActiveRecord::Base
     t = sdp_tasks
     return 0.0 if t.size == 0
     t.map{|t| t.initial}.inject(:+)
+  end
+
+  def sdp_tasks_assigned
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.assigned}.inject(:+)
   end
 
   def sdp_tasks_balancei
@@ -106,6 +132,7 @@ class WlLine < ActiveRecord::Base
         rv += " #{self.number} lines" if self.class==VirtualWlLine
         rv += " x #{tasks_size} tasks" if tasks_size > 1
       end
+      rv += self.tags.map{|t|"<span class='wl_tag'>#{t.name}</span>"}.join(',') if options[:with_tags_names]
       rv
     else
       rv += self.name

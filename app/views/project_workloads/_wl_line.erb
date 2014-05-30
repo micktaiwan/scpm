@@ -2,7 +2,11 @@
   remaining     = @workload.line_sums[wl_line.id][:remaining].to_f
   consumed      = @workload.line_sums[wl_line.id][:consumed].to_f
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
-  error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
+  error = false
+  error_line    = (wl_line.wl_type == 100 or wl_line.wl_type == 200 or wl_line.wl_type == 500)
+  error = 1 if error_line and (planned_total/remaining < 0.9)
+  error = 2 if error_line and (planned_total/remaining > 1.1)
+  #error = 3 if error_line and (planned_total-remaining).abs > 3
 %>
 <tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type_by_project %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
@@ -34,7 +38,7 @@
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= wl_line.display_name(:with_project_name=>false, :with_person_name=>true, :with_person_url=>true) %>
+    <%= wl_line.display_name(:with_tags_names=>true, :with_person_name=>true, :with_project_name=>false, :with_person_url=>true) %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)
@@ -44,25 +48,32 @@
   </td>
 
 	<!-- Request -->
+  <% if APP_CONFIG['workloads_display_status_column'] %>
   <td align="center">
 		<% if wl_line.request %><%= wl_line.request.status %><% end %>
 	</td>
+  <% end %>
 
 	<!-- Sum if wl_type != 110/120 (not qr_qwr wl line) -->
 	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
 		<td class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
-    <td class="wl_case"><%= consumed %></td>
-  <% end %>
-  <% gain_class = "wl_case" %>
-  <% gain_class = "wlerror" if @workload.line_sums[wl_line.id][:balance] < 0 %>
-  <% gain_class = "wlpositive" if @workload.line_sums[wl_line.id][:balance] > 0 %>
-  <td class=<%= gain_class %>><%= @workload.line_sums[wl_line.id][:balance] %></td>
-    <td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% else %> class="wl_case" <% end %>><%= remaining %></td>
+      <td class="wl_case"><%= consumed %></td>
+    <% end %>
+    <% gain_class = "wl_case" %>
+    <% gain_class = "wlerror" if @workload.line_sums[wl_line.id][:balance] < 0 %>
+    <% gain_class = "wlpositive" if @workload.line_sums[wl_line.id][:balance] > 0 %>
+    <td class=<%= gain_class %>><%= @workload.line_sums[wl_line.id][:balance] %></td>
+    <td class="wl_case <% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"><%= remaining %></td>
   <% else %>
     <td colspan="3"></td>
   <% end %>
 	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+  
+  <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+  <td id="diff_planned_remaining_<%= wl_line.id %>" <% if error %> class="wlerror<%=error%>"<% else %> class="wl_case"<% end %>><%= planned_total - remaining %></td>
+  <% end %>
+  
   <% if APP_CONFIG['workloads_display_total_column'] %>
     <td id="ltotal_<%= wl_line.id %>" class="wl_case"><%= wl_line.sum %></td>
   <% end %>

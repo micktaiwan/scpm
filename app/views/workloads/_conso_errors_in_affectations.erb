@@ -1,0 +1,46 @@
+<%
+ task = a.sdp_task
+ line = a.wl_line
+%>
+<tr>
+<td>
+  <% if line %>
+    <%= line.project_name %>
+  <% elsif task %>
+    <%= task.project_code%> (no line projet?)
+  <% end %>
+</td>
+<td>
+  <% if line %>
+    <%= truncate(h(line.name), :length=>40,  :separator=>' ', :omission=>"...")%>
+  <% else %>
+    No line
+  <% end %>
+</td>
+
+<td>
+  <% if task %>
+    <%= truncate(h(task.title), :length=>40,  :separator=>' ', :omission=>"...")%>
+  <% else %>
+    No task
+  <% end %>
+</td>
+
+<td>
+  <% if line %>
+    <%= line.person_name  %>
+    <%= line.person.trigram  %>
+  <% else %>
+    No line
+  <% end %>
+</td>
+
+<td<% if !task %> style="background-color:#FA0"<% elsif task.collab != line.person.trigram%> style="background-color:#F00"<%end%>>
+  <% if task %>
+    <%= task.collab  %>
+  <% else %>
+    No task
+  <% end %>
+</td>
+
+</tr>

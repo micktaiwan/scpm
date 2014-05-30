@@ -3,7 +3,7 @@
   <div class="title"><%= link_to_function(image_tag('expand.gif', {:style=>"margin-right:3px"}), "new Effect.toggle('chat_list', 'blind', {duration:0.2});") %>Messages</div>
 
   <ul id="chat_list" class="list" style="display: none;">
-  <%= render(:partial=>'chat/person', :collection=>chat_get_people) %>
+    <%= render(:partial=>'chat/person', :collection=>chat_get_people) %>
   </ul>
 </div>
 

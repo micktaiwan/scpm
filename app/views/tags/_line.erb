@@ -1,0 +1,17 @@
+<tr>
+	<td><%= line.project_name %></td>
+	<td><%= line.person_name %></td>
+	<td align="left"><%= line.display_name(:with_tags_names=>false, :with_person_name=>false, :with_project_name=>false, :with_project_url=>false) %></td>
+	<td>
+		<ul id="lineTags_<%=line.id%>">
+			<%= line.tags.map { |t| "<li>#{t.name}</li>"} %>
+    </ul>
+	</td>
+</tr>
+<%
+# Existing tags will be added to the sample tags for the auto completion
+# FIXME: add only one script tag at the end of the html page
+%>
+<script type="text/javascript">
+	init_tags(<%= line.id %>, <%= "[\"#{Tag.all.map{|p|p.name}.join('","')}\"]"%>);
+</script>

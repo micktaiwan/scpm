@@ -12,6 +12,7 @@
 <%= image_tag('loading.gif', :id=>'loading', :style=>"display:none;position:fixed;left:600px;") %>
 
 <%= link_to_function('Projects filter', "Effect.toggle('filters','blind', {duration: 0.5});",{:class=>"btnlnk"}) %>
+<%= link_to('PP4 view', {:controller=>'project_tasks'}, {:class=>'btnlnk'}) %>
 <%= link_to('Switch to person view', {:controller=>'workloads'}, {:class=>'btnlnk'}) %>
 <% if display and session['workload_project_ids'].size == 1 %>
   <%= link_to_function('Add a person', "wl_add_line()", :class=>"btnlnk") %>
@@ -44,6 +45,16 @@
       <% end %>
     </td>
     <td>
+      <b><a href="#" onclick="check_uncheck(this,'tags_ids[]')" >Tags</a></b><br/>
+      <% @tags= Tag.find(:all) %>
+      <% if @tags %>
+        <% for t in @tags %>
+          <% tag_size = LineTag.find(:all, :conditions=>["tag_id=?",t.id]).size %>
+          <%= check_box_tag('tags_ids[]', t.id, session['workload_tags'].include?(t.id.to_s)) %><%= "#{t.name} (#{tag_size})"%><br/>
+        <% end %>
+      <% end %>
+    </td>
+    <td>
       <b><a href="#" onclick="check_uncheck(this,'iterations_ids[]')" >Iterations</a></b><br/><br/>
       <% @iterations= Iteration.find(:all, :order=>:project_code) %>
       <% if @iterations %>
@@ -55,11 +66,13 @@
             <br/><b><a href="#" onclick="check_uncheck_iterations(this,'iterations_<%= actual_project %>')" ><%= i.project.name %></a></b><br/>
             <% previous_project = actual_project %>
           <% end %>
-          <input id="iterations_<%= actual_project %>" type="checkbox" value="<%= i.id%>" name="iterations_ids[]"><%= "#{i.name}"%></input><br/>
+          <% checked = session['workload_iterations'].include?({:name=>i.name, :project_code=>i.project_code, :project_id=>i.project.id}) %>
+          <input id="iterations_<%= actual_project %>" type="checkbox" value="<%= i.id%>" name="iterations_ids[]" <% if checked %>checked="true"<%end%>><%= "#{i.name}"%></input><br/>
 
         <% end %>
       <% end %>
     </td>
+    
   </tr>
 </table>
 <button class="btnlnk" type="button" id="submit_filter" onclick="verify_filter(this)">Filter</button>

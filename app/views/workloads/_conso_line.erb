@@ -15,13 +15,13 @@
 			w_avail_css = "availability x"+w_avail_value.to_s
 		%>
     <% if APP_CONFIG['consolidation_alert_on_overworkload'] %>
-      <% if conso_line.percents[indexWeek][:precise] > 100 %>
-        <td style="background-color:red"><%=conso_line.percents[indexWeek][:value]%></td>
+      <% if conso_line.percents[indexWeek][:value] > 100 %>
+        <td style="background-color:red"><%=conso_line.percents[indexWeek][:display]%></td>
       <% else %>
         <td class="<%= w_avail_css %>"><%= w_avail_value if w_avail_value > 0 %></td>
       <% end %>
-    <% else %> 
-      <td class="<%= w_avail_css %>"><%= w[:value] %></td>
+    <% else %>
+      <td class="<%= w_avail_css %>"><%= w[:display] %></td>
 		<% end %>
     <% indexWeek += 1 %>
 	<% end %>

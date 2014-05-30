@@ -21,6 +21,8 @@
     <% end %>
     <!-- SDP Alert -->
     <%= image_tag('alert.gif', :alt=>'no sdp task', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and wl_line.sdp_tasks.size==0 %>
+    <!-- Assignation Alert -->
+    <%= image_tag('alert.gif', :alt=>'wrong assignation', :width=>'14', :height=>'14') if wl_line.wl_type == 200 and wl_line.has_wrong_assignation %>
   </td>
 
 	<!-- Edit btn / Alert / Backup msg / Project name -->
@@ -34,7 +36,7 @@
     <!-- Backup -->
     <% if wl_line.parent_line != nil %>[BACKUP]<% end %>
     <!-- Name -->
-    <%= wl_line.display_name(:with_person_name=>false, :with_project_name=>true, :with_project_url=>true) %>
+    <%= wl_line.display_name(:with_tags_names=>true, :with_person_name=>false, :with_project_name=>true, :with_project_url=>true) %>
     <!-- QS and Spider Previsionals -->
     <% if (wl_line.wl_type == 110 and wl_line.project) %>
       (QS wkld prev : <%= (wl_line.project.calcul_qs_previsional.to_f * APP_CONFIG['qs_load'].to_f).to_s %>)
@@ -43,9 +45,9 @@
     <% end %>
   </td>
 	<!-- Request -->
-  <td align="center">
-		<% if wl_line.request %><%= wl_line.request.status %><% end %>
-	</td>
+  <% if APP_CONFIG['workloads_display_status_column'] %>
+    <td align="center"><% if wl_line.request %><%= wl_line.request.status %><% end %></td>
+  <% end %>
 	<!-- Sum if wl_type != 110/120 (not qr_qwr wl line) -->
 	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
 		<td class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
@@ -56,12 +58,17 @@
   <% gain_class = "wlerror" if @workload.line_sums[wl_line.id][:balance].to_i < 0 %>
   <% gain_class = "wlpositive" if @workload.line_sums[wl_line.id][:balance].to_i > 0 %>
   <td class=<%= gain_class %>><%= @workload.line_sums[wl_line.id][:balance] %></td>
-  	<td<% if error %> class="wlerror<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"<% else %> class="wl_case" <% end %>><%= remaining %></td>
+  	<td class="wl_case<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"><%= remaining %></td>
   <% else %>
 		<td colspan="3"></td>
 	<% end %>
 
 	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+
+  <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+  <td id="diff_planned_remaining_<%= wl_line.id %>" <% if error %> class="wlerror"<% else %> class="wl_case"<% end %>><%= planned_total - remaining %></td>
+  <% end %>
+
   <% if APP_CONFIG['workloads_display_total_column'] %>
   <td id="ltotal_<%= wl_line.id %>" class="wl_case"><%= wl_line.sum %></td>
   <% end %>

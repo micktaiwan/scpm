@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
   WL_LINE_CONSOLIDATED      = 500 # consolidated lines (for view by project)
   WL_LINE_QR_QWR_QS         = 110 # WL line linked to a project for QR QWR
   WL_LINE_QR_QWR_SPIDER     = 120 # WL line linked to a project for QR QWR
+  #COLORS = ["#00FF00","#98AFC7","#7FFFD4","#41A317","#F3E5AB","#C36241","#7D0552","#C25A7C","#D462FF","#EBDDE2"]
 
   def set_timezone
     Time.zone = 'Paris'

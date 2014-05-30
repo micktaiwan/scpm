@@ -1,11 +1,3 @@
-function hide_lines_with_no_workload() {
-  document.body.style.cursor = 'wait';
-  $('loading').show();
-  new Ajax.Request('/project_workloads/hide_lines_with_no_workload', {
-    parameters: { on: $('hide_lines_with_no_workload').checked }
-    });
-}
-
 function verify_filter(source) {
   var companies     = document.getElementsByName('companies_ids[]');
   var projects      = document.getElementsByName('project_ids[]');
@@ -25,10 +17,20 @@ function verify_filter(source) {
     }
 }
 
-function group_by_person() {
+function hide_lines_with_no_workload(controller) {
+  if(!controller) controller = 'project_workloads';
   document.body.style.cursor = 'wait';
   $('loading').show();
-  new Ajax.Request('/project_workloads/group_by_person', {
+  new Ajax.Request('/'+controller+'/hide_lines_with_no_workload', {
+    parameters: { on: $('hide_lines_with_no_workload').checked }
+    });
+}
+
+function group_by_person(controller) {
+  if(!controller) controller = 'project_workloads';
+  document.body.style.cursor = 'wait';
+  $('loading').show();
+  new Ajax.Request('/'+controller+'/group_by_person', {
     parameters: { on: $('group_by_person').checked }
     });
 }
