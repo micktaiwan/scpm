@@ -1,0 +1,29 @@
+<script src="/javascripts/jquery-1.9.1.js"></script>
+<script type="text/javascript">
+  var $j = jQuery.noConflict();
+</script>
+<script src="/javascripts/tool.js"></script>
+
+<script type="text/javascript">
+	$j(document).ready(function() 
+	{
+		$j('.is_active').click(function(){
+			$j.ajax({
+			  type: "POST",
+			  url: "update_stream_review_type_is_active",
+ 			 data: { id : $j(this).attr('id'), is_active:   $j(this).prop('checked')}
+			})
+			.done(function( msg ) {
+			   alert( "Data Saved: " + msg );
+			})
+			.fail(function() 
+			{ });
+		});
+	});
+</script>
+<h2>Review Types</h2>
+<% @review_types.each do |rt| %>
+	<span class="status"><%= rt.title %></span><br />Active  <%= check_box_tag rt.id.to_s ,"is_active", rt.is_active,  :class=> 'is_active' %>
+	<br /> 
+<br />
+<% end %>
