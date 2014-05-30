@@ -218,7 +218,7 @@ class StreamsController < ApplicationController
     history_counter.save
     
     #render(:text=>"Saved")
-    redirect_to :controller=>"tools", :action=>:show_counter_history
+    redirect_to :controller=>"tools", :action=>:show_counter_history_without_rmt
 
   end
   
