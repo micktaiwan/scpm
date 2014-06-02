@@ -79,8 +79,12 @@ class MilestonesController < ApplicationController
           else
             previous_date = m_other.milestone_date
           end
-          error = 1 if isDateInferior(params[:milestone][:milestone_date], previous_date)
-          error = 1 if isDateInferior(params[:milestone][:actual_milestone_date], previous_date)
+
+          if (params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0)
+            error = 1 if isDateInferior(params[:milestone][:actual_milestone_date], previous_date)
+          else
+            error = 1 if isDateInferior(params[:milestone][:milestone_date], previous_date)
+          end
 
         elsif (current_milestone_position < i)
 
@@ -90,8 +94,12 @@ class MilestonesController < ApplicationController
           else
             next_date = m_other.milestone_date
           end
-          error = 1 if isDateSuperior(params[:milestone][:milestone_date], next_date)
-          error = 1 if isDateSuperior(params[:milestone][:actual_milestone_date], next_date)
+
+          if (params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0)
+            error = 1 if isDateSuperior(params[:milestone][:actual_milestone_date], next_date)
+          else
+            error = 1 if isDateSuperior(params[:milestone][:milestone_date], next_date)
+          end
           
         end
 
