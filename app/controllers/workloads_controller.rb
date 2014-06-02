@@ -386,7 +386,10 @@ class WorkloadsController < ApplicationController
     @resfresh_holidays_backup_warnings = {} #resfresh_holidays_backup_warnings[person.id] = Hash from get_holiday_warning
 
     for p in @people
+      # Person Workload
       @workloads << Workload.new(p.id,session['workload_person_project_ids'],session['workload_persons_iterations'],session['workload_person_tags'], {:only_holidays=>true})
+      # Person Holiday Warning
+      @resfresh_holidays_backup_warnings[p.id] = get_holiday_warning_detailed(p, Date.today+26.weeks)
     end
     @workloads = @workloads.sort_by {|w| [w.person.name]}
     render :layout => false
