@@ -141,8 +141,8 @@ function check_duplicate_workload_interactions()
 
 }
 
-// backup functions
 
+// backup functions
 var selected_backup_person_id = null;
 var selected_backup_date = null;
 function check_backup_person_change()
@@ -160,13 +160,12 @@ function add_backup_action()
 
 function update_selected_backup_date()
 {
-  selected_backup_date = $("select_list_year").value+""+$("select_list_week").value;
+  selected_backup_date = $("select_list_date").value;
 }
 
 function add_backup(person_id, backup_person_id, week)
 {
-
-  if (week != null)
+  if (week != null && week != "")
   {
     // Call the controller/action in ajax
     new Ajax.Request('/workloads/create_backup', 

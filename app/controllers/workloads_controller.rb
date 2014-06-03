@@ -872,11 +872,24 @@ class WorkloadsController < ApplicationController
 
   def backup
     @people   = Person.find(:all, :conditions=>["has_left=0 and is_supervisor=0 and id != ?", session['workload_person_id']], :order=>"name").map {|p| ["#{p.name} (#{p.wl_lines.size} lines)", p.id]}
-    @weeks = [['01', '01'],['02', '02'],['03', '03'],['04', '04'],['05', '05'],['06', '06'],['07', '07'],['08', '08'],['09', '09']] 
-    (10..52).each{|i| @weeks << ["#{i}","#{i}"] }
-    @years = [Time.new.year,Time.new.year+1]
+
     @backups      = WlBackup.find(:all, :conditions=>["person_id=?", session['workload_person_id']]);
     @self_backups = WlBackup.find(:all, :conditions=>["backup_person_id=?", session['workload_person_id']]);
+
+    backup_weeks = Array.new
+    @backups.each do |b|
+      backup_weeks << b.week
+    end
+
+    person_holiday_load = WlLoad.find(:all,
+        :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
+        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and wlload > 0 and week >= ? and week NOT IN (?)", session['workload_person_id'].to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), backup_weeks], 
+        :order=>"week")
+    
+    @holiday_dates = Array.new
+    person_holiday_load.each do |holiday_load|
+      @holiday_dates << ["#{holiday_load.week}","#{holiday_load.week}"]
+    end
   end
   
   def create_backup    

@@ -8,8 +8,7 @@
     <%= submit_tag "X", :id=>"button_backup_add_close", :type=>'button', :onclick=>'$("view_backup_add").hide();' %>
     <h3 class="center">Add backup</h3>
     <p>Select a week, year, backup</p>
-    <%= select_tag('select_list_week', options_for_select(@weeks), :onchange=> 'update_selected_backup_date();') %>
-    <%= select_tag('select_list_year', options_for_select(@years), :onchange=> 'update_selected_backup_date();') %>
+    <%= select_tag('select_list_date', options_for_select(@holiday_dates), :onchange=> 'update_selected_backup_date();') %>
     <%= select_tag('select_list_backup_person', options_for_select(@people)) %> <%= submit_tag "Add", :type=>'button', :onclick=>'add_backup('+session["workload_person_id"].to_s+', selected_backup_person_id, selected_backup_date);' %>
 </div>
 
