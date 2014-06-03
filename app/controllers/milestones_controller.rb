@@ -64,48 +64,48 @@ class MilestonesController < ApplicationController
     error = 0;
 
     # Check previous and next milestones
-    if (m.project != nil)
-      sorted_milestones = m.project.sorted_milestones
-      current_milestone_position = sorted_milestones.index(m)
+    # if (m.project != nil)
+    #   sorted_milestones = m.project.sorted_milestones
+    #   current_milestone_position = sorted_milestones.index(m)
 
-      i = 0
-      sorted_milestones.each do |m_other|
+    #   i = 0
+    #   sorted_milestones.each do |m_other|
 
-        if (current_milestone_position > i)
+    #     if (current_milestone_position > i)
          
-          previous_date = nil
-          if (m_other.actual_milestone_date != nil)
-            previous_date = m_other.actual_milestone_date
-          else
-            previous_date = m_other.milestone_date
-          end
+    #       previous_date = nil
+    #       if (m_other.actual_milestone_date != nil)
+    #         previous_date = m_other.actual_milestone_date
+    #       else
+    #         previous_date = m_other.milestone_date
+    #       end
 
-          if (params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0)
-            error = 1 if isDateInferior(params[:milestone][:actual_milestone_date], previous_date)
-          else
-            error = 1 if isDateInferior(params[:milestone][:milestone_date], previous_date)
-          end
+    #       if (params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0)
+    #         error = 1 if isDateInferior(params[:milestone][:actual_milestone_date], previous_date)
+    #       else
+    #         error = 1 if isDateInferior(params[:milestone][:milestone_date], previous_date)
+    #       end
 
-        elsif (current_milestone_position < i)
+    #     elsif (current_milestone_position < i)
 
-          next_date = nil
-          if (m_other.actual_milestone_date != nil)
-            next_date = m_other.actual_milestone_date
-          else
-            next_date = m_other.milestone_date
-          end
+    #       next_date = nil
+    #       if (m_other.actual_milestone_date != nil)
+    #         next_date = m_other.actual_milestone_date
+    #       else
+    #         next_date = m_other.milestone_date
+    #       end
 
-          if (params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0)
-            error = 1 if isDateSuperior(params[:milestone][:actual_milestone_date], next_date)
-          else
-            error = 1 if isDateSuperior(params[:milestone][:milestone_date], next_date)
-          end
+    #       if (params[:milestone][:actual_milestone_date] and params[:milestone][:actual_milestone_date].length > 0)
+    #         error = 1 if isDateSuperior(params[:milestone][:actual_milestone_date], next_date)
+    #       else
+    #         error = 1 if isDateSuperior(params[:milestone][:milestone_date], next_date)
+    #       end
           
-        end
+    #     end
 
-        i = i + 1
-      end
-    end
+    #     i = i + 1
+    #   end
+    # end
 
 
     # Try to update the date, if wrong format = remote
