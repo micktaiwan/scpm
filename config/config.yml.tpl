@@ -14,6 +14,7 @@ workloads_view_by_project_menu: false
 plannings_menu: false
 use_virtual_people: false
 workloads_suggested_request: true
+workloads_use_financial_monitoring: false # Show or not related PP4 functions
 
 # workloads
 # display length in months
