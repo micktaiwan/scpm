@@ -33,7 +33,7 @@ workloads_display_diff_between_consumed_and_planned_column: true
 workloads_display_status_column: true
 workloads_show_filter: false # Show or hide the filter buttn
 workload_holiday_threshold_before_backup: 2 # Number of holidays days which need the attribution of a backup
-
+workload_show_overload_availability: false #Show on the availability parameters of workload if user is in overload
 
 # SDP
 use_multiple_projects_sdp_export: false

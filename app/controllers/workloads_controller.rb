@@ -709,9 +709,11 @@ class WorkloadsController < ApplicationController
     cpercent   = open > 0 ? (csum / open*100).round : 0
     # case_percent is the percent of occupation for a week for a person. It does not depend of the view (person or project)
     case_percent = open > 0 ? (case_sum / person_open*100).round : 0
-    avail = open-csum
-    #avail      = [0,(open-csum)].max
-    #avail      = (avail==0 ? '' : avail)
+    if APP_CONFIG['workload_show_overload_availability']
+      avail = open-csum
+    else
+      avail      = [0,(open-csum)].max
+    end
 
     planned_total = 0
     total         = 0
