@@ -37,7 +37,6 @@
       <tr>
       <td valign='top'>
         <h4>Reporting except Quality Activities</h4><%=my_simple_format(status.reporting)%>
-        <% if status.status > 1 and (status.reporting == "" or status.reporting == nil) %><%=image_tag("alert.gif")%><br/><br/><% end %>
         <br/>
         <b>Last UP3P verification:</b> <%=status.ereporting_date%><br/>
 
