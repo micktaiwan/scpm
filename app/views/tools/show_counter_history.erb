@@ -22,11 +22,11 @@ $j(document).ready(function (){
     $j("#request_id > option").each(function() {
       if ((this.text.indexOf(stream) > -1) || (this.text.indexOf("All") > -1) || ( $j( "#stream_id option:selected" ).text().indexOf("All") > -1))
       {
-        this.show();
+        $j(this).show();
       }
       else
       {
-        this.hide();
+        $j(this).hide();
       }
     });
   }
