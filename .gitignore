@@ -4,6 +4,7 @@
 /Capfile
 /config/deploy.rb
 config/config.yml
+config/task_import.yml
 
 app/.DS_Store
 

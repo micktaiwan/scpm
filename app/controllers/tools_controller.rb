@@ -83,6 +83,8 @@ class ToolsController < ApplicationController
 
   def do_sdp_upload
     post = params[:upload]
+    conf = params[:conf]
+    project = params[:project]
     redirect_to '/tools/sdp_import' and return if post.nil? or post['datafile'].nil?
     name =  post['datafile'].original_filename
     directory = "public/data"
@@ -90,7 +92,7 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     begin
-      sdp.import
+      sdp.import(conf, {:project=>project})
       SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| {:name=>sdp.iteration, :project_code=>sdp.project_code}}.uniq.each { |f|
         if Iteration.find_by_name_and_project_code(f[:name], f[:project_code]).nil?
           Iteration.create(f)
