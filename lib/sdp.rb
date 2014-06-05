@@ -17,13 +17,13 @@ class SDP
   REMAINING   = 7
   REVISED     = 8
   GAINED      = 9
-  if APP_CONFIG['project_name']=='EISQ'
+  if APP_CONFIG['project_name']=='EISQ' # simple projet import
     ITERATION   = 11
     COLLAB      = 12
     BALANCEI    = 13
     BALANCER    = 14
     BALANCEA    = 15
-  else
+  else # SDP consolidation
     ITERATION   = 10
     COLLAB      = 11
     BALANCEI    = 12
