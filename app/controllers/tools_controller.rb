@@ -83,6 +83,8 @@ class ToolsController < ApplicationController
 
   def do_sdp_upload
     post = params[:upload]
+    conf = params[:conf]
+    project = params[:project]
     redirect_to '/tools/sdp_import' and return if post.nil? or post['datafile'].nil?
     name =  post['datafile'].original_filename
     directory = "public/data"
@@ -90,7 +92,7 @@ class ToolsController < ApplicationController
     File.open(path, "wb") { |f| f.write(post['datafile'].read) }
     sdp = SDP.new(path)
     begin
-      sdp.import
+      sdp.import(conf, {:project=>project})
       SDPTask.find(:all, :conditions=>["iteration is not null"]).map{|sdp| {:name=>sdp.iteration, :project_code=>sdp.project_code}}.uniq.each { |f|
         if Iteration.find_by_name_and_project_code(f[:name], f[:project_code]).nil?
           Iteration.create(f)
@@ -749,13 +751,16 @@ class ToolsController < ApplicationController
 
     # Delete the object
     if (history_object)
+      spider = history_object.spider
       if (history_object.spider and history_object.spider.project)
         project_object = history_object.spider.project
       end
+      spider.impact_count = 0
+      spider.save
       history_object.destroy
     end
 
-    # Update spider couter or qs counter of project
+    # Update spider counter or qs counter of project
     if (project_object)
       project_object.spider_count = project_object.spider_count - 1
       project_object.spider_count = 0 if (project_object.spider_count < 0)
@@ -818,6 +823,24 @@ class ToolsController < ApplicationController
     project.project_id = nil
     project.save
     redirect_to('/tools/circular_references')
+  end
+
+  def show_stream_review_type
+    @review_types = ReviewType.find(:all)
+  end
+
+  def update_stream_review_type_is_active
+    review_type_id = params[:id]
+    review_type_is_active = params[:is_active]
+    review_type = ReviewType.find(:first,:conditions=>["id = ?", review_type_id])
+    
+    if (review_type != nil)
+      review_type.is_active = review_type_is_active
+      review_type.save
+      render(:layout=>false, :text=>'updated') 
+    else
+      render(:layout=>false, :text=>'error') 
+    end
   end
 private
 

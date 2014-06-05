@@ -24,6 +24,7 @@
 <br />
 <% form_tag(:action=>'export') do %>
   <%= hidden_field_tag('ws_id_hidden', @ws_selected.to_i) %>
+  <%= hidden_field_tag('suite_id_hidden', @suite_selected.to_i) %>
   <%= submit_tag('Export') %>
 <% end %>
 

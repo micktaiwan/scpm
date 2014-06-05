@@ -33,7 +33,7 @@ class StreamsController < ApplicationController
                                                   and is_running = 1 
                                                   and project_id is null", Workstream.find(@stream.workstream).name], :order=>"name")
     if @order == "date"
-      @projects = @projects.sort{|a,b| a.last_status_date<=>b.last_status_date}.reverse!
+      @projects = @projects.sort_by{|a| a.last_status_date or DateTime.strptime('0','%s')}.reverse!
     end
 
   end
@@ -43,7 +43,7 @@ class StreamsController < ApplicationController
     @stream       = Stream.find(id)
     
     # Get all review types
-    @reviewTypes = ReviewType.find(:all)
+    @reviewTypes = ReviewType.find(:all, :conditions => ["is_active = 1"])
   end
 
   def add_request
@@ -218,7 +218,7 @@ class StreamsController < ApplicationController
     history_counter.save
     
     #render(:text=>"Saved")
-    redirect_to :controller=>"tools", :action=>:show_counter_history
+    redirect_to :controller=>"tools", :action=>:show_counter_history_without_rmt
 
   end
   

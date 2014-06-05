@@ -17,6 +17,11 @@ class PeopleController < ApplicationController
     Company.create(:name=>"SQLI") if Company.find(:first) == nil
     @companies = Company.all
     @roles = Role.find(:all, :conditions=>"name != 'Super'")
+    cost_profiles = CostProfile.all(:order=>'company_id, name')
+    @profiles = []
+    if cost_profiles
+      @profiles = cost_profiles.map {|u| [u.company.name + ' - ' + u.name,u.id]}
+    end
   end
 
   def check_settings
@@ -58,7 +63,11 @@ class PeopleController < ApplicationController
   def edit
     @person = Person.find(params[:id])
     @companies = Company.all(:order=>'name')
-    @profiles = CostProfile.all(:order=>'company_id, name')
+    cost_profiles = CostProfile.all(:order=>'company_id, name')
+    @profiles = []
+    if cost_profiles
+      @profiles = cost_profiles.map {|u| [u.company.name + ' - ' + u.name,u.id]}
+    end
     @roles = Role.find(:all, :conditions=>"name != 'Super'")
   end
 

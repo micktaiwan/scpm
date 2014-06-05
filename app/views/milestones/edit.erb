@@ -1,7 +1,9 @@
 <h2>Milestone Edit</h2>
 
-<% if @date_error.to_i == 1 %>
+<% if @date_error.to_i == 2 %>
 	<div style="color:red;">Date format error</div>
+<% elsif @date_error.to_i == 1 %>
+	<div style="color:red;">Conflict of date. Check previous or next milestone date.</div>
 <% end %>
 
 <%= error_messages_for :milestone %>

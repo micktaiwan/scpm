@@ -12,9 +12,7 @@ function add(id, nb_months, has_requests, has_rights) {
     alert("You can not edit this project because you have not access rights for editing the workpackage")
     return;
     }
-  if(nb_months >= 1 || confirm('There is a status for this month already.\nAre you sure you want to add a new status?')) {
     location = '/projects/status_list_form/'+id;
-    }
   }
 </script>
 
@@ -32,7 +30,7 @@ function add(id, nb_months, has_requests, has_rights) {
     <ol>
       <%= tab_menu("project_show", [
         "Timeline and status",
-        "Risks <strong>#{@project.risks.size}</strong>",
+        "Risks <strong>#{@project.current_risks.size}</strong>",
         "Amendments <strong>#{@project.current_amendments.size}</strong>",
         "Actions <strong>#{@project.current_actions.size}</strong>",
         "Notes/Capi <strong>#{@project.visible_notes(current_user.id).size}</strong>",
@@ -189,6 +187,7 @@ function add(id, nb_months, has_requests, has_rights) {
             <b>Coordinator</b>: <%= @project.coordinator %><br/>
             <b>PM</b>: <%= @project.pm %> (from RMT: <%=@project.request_pm.join(', ')%>)<br/>
             <b>BPL</b>: <%= @project.bpl %><br/>
+            <b>ISPM</b>: <%= @project.ispm %><br/>
             <b>ISPL</b>: <%= @project.ispl %><br/>
             <b>Request resp:</b> <%=@project.assignees.join(', ')%><br/>
             <b>Associations:</b> <%=@project.responsibles.map{|r| r.name}.join(', ')%><br/>

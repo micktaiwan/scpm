@@ -3,8 +3,8 @@
 <tr><td class="descr">Status Explanation</td><td><%= text_area(:status, :reason, {:cols=>100, :rows=>5, :onchange=>"formChanged();"}) %></td></tr>
 <tr><td class="descr">Risks</td><td><%= @risks %></td></tr>
 <tr><td class="descr">Status mitigation actions<br/>(impact analysis done or not?)</td><td><%= text_area(:status, :actions, {:cols=>100, :rows=>3, :onchange=>"formChanged();"}) %></td></tr>
-<tr><td class="descr">Last 7 days changes</td><td><%= text_area(:status, :last_change, {:cols=>100, :rows=>5, :onchange=>"formChanged();"}) %></td></tr>
-<tr><td class="descr">Reporting</td><td><%= text_area(:status, :reporting, {:cols=>100, :rows=>3, :onchange=>"formChanged();"}) %></td></tr>
+<tr><td class="descr">Reporting Quality Activities</td><td><%= text_area(:status, :last_change, {:cols=>100, :rows=>5, :onchange=>"formChanged();"}) %></td></tr>
+<tr><td class="descr">Reporting except Quality Activities</td><td><%= text_area(:status, :reporting, {:cols=>100, :rows=>3, :onchange=>"formChanged();"}) %></td></tr>
 <tr><td class="descr">Operational Alert</td><td><%= text_area(:status, :operational_alert, {:cols=>100, :rows=>3, :onchange=>"formChanged();"}) %></td></tr>
 <tr><td class="descr">Last UP3P verification:</td><td><%= text_field(:status, :ereporting_date, :onchange=>"formChanged();") %>yyyy-mm-dd</td></tr>
 <tr><td class="descr">Details</td><td><%= text_area(:status, :explanation, {:cols=>100, :rows=>7, :onchange=>"formChanged();"}) %></td></tr>

@@ -5,38 +5,22 @@
 
 require 'csv'
 
-class SDP
-
-  ID          = 0
-  TITLE       = 1
-  PROJECT_CODE= 2
-  INTIAL      = 3
-  REEVALUATED = 4
-  ASSIGNED    = 5
-  CONSUMED    = 6
-  REMAINING   = 7
-  REVISED     = 8
-  GAINED      = 9
-  if APP_CONFIG['project_name']=='EISQ'
-    ITERATION   = 11
-    COLLAB      = 12
-    BALANCEI    = 13
-    BALANCER    = 14
-    BALANCEA    = 15
-  else
-    ITERATION   = 10
-    COLLAB      = 11
-    BALANCEI    = 12
-    BALANCER    = 13
-    BALANCEA    = 14
+class Mock
+  def id
+    0
   end
+end
+
+class SDP
 
 	def initialize(path)
     @path = path
 	end
 
-  def import
+  def import(conf='simple', options={})
     @reader = CSV.open(@path, 'r')
+    @conf = conf
+    @options = options
 
     begin    
       # skip 2 first lines
@@ -45,9 +29,15 @@ class SDP
       if header.count <= 1
         raise "CSV file not correctly formated"
       end
-      ActiveRecord::Base.connection.execute("TRUNCATE sdp_phases")
-      ActiveRecord::Base.connection.execute("TRUNCATE sdp_activities")
-      ActiveRecord::Base.connection.execute("TRUNCATE sdp_tasks")
+      if(!options[:project])
+        ActiveRecord::Base.connection.execute("TRUNCATE sdp_phases")
+        ActiveRecord::Base.connection.execute("TRUNCATE sdp_activities")
+        ActiveRecord::Base.connection.execute("TRUNCATE sdp_tasks")
+      else
+        SDPTask.delete_all("project_code='#{options[:project]}'")
+        @current_phase = @current_activity = Mock.new
+        # TODO: what to do about phases and activities ?
+      end
       @state = :init
       while true
         if @next_row == nil
@@ -65,7 +55,7 @@ class SDP
       if e.to_s == "CSV::IllegalFormatError"
         raise "Unexpected file format"
       else
-        raise e
+        raise "#{e} => #{e.backtrace[0]}"
       end
     end
 
@@ -88,43 +78,43 @@ private
   end
 
   def populate(p)
-    p.initial     = @row[INTIAL]
-    p.reevaluated = @row[REEVALUATED]
-    p.assigned    = @row[ASSIGNED]
-    p.consumed    = @row[CONSUMED]
-    p.remaining   = @row[REMAINING]
-    p.revised     = @row[REVISED]
-    p.gained      = @row[GAINED]
-    p.iteration   = @row[ITERATION]
-    p.collab      = @row[COLLAB]
-    p.balancei    = @row[BALANCEI]
-    p.balancer    = @row[BALANCER]
-    p.balancea    = @row[BALANCEA]
+    p.initial     = @row[TASK_IMPORT_CONFIG[@conf]['initial']]
+    p.reevaluated = @row[TASK_IMPORT_CONFIG[@conf]['reevaluated']]
+    p.assigned    = @row[TASK_IMPORT_CONFIG[@conf]['assigned']]
+    p.consumed    = @row[TASK_IMPORT_CONFIG[@conf]['consumed']]
+    p.remaining   = @row[TASK_IMPORT_CONFIG[@conf]['remaining']]
+    p.revised     = @row[TASK_IMPORT_CONFIG[@conf]['revised']]
+    p.gained      = @row[TASK_IMPORT_CONFIG[@conf]['gained']]
+    p.iteration   = @row[TASK_IMPORT_CONFIG[@conf]['iteration']]
+    p.collab      = @row[TASK_IMPORT_CONFIG[@conf]['collab']]
+    p.balancei    = @row[TASK_IMPORT_CONFIG[@conf]['balancei']]
+    p.balancer    = @row[TASK_IMPORT_CONFIG[@conf]['balancer']]
+    p.balancea    = @row[TASK_IMPORT_CONFIG[@conf]['balancea']]
   end
 
   def debug
     puts "=================================="
-    puts @row[PROJECT_CODE]
-    puts @row[INTIAL]
-    puts @row[REEVALUATED]
-    puts @row[ASSIGNED]
-    puts @row[CONSUMED]
-    puts @row[REMAINING]
-    puts @row[REVISED]
-    puts @row[GAINED]
-    puts @row[ITERATION]
-    puts @row[COLLAB]
-    puts @row[BALANCEI]
-    puts @row[BALANCER]
-    puts @row[BALANCEA]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['project_code']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['initial']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['reevaluated']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['assigned']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['consumed']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['remaining']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['revised']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['gained']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['iteration']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['collab']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['balancei']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['balancer']]
+    puts @row[TASK_IMPORT_CONFIG[@conf]['balancea']]
     puts "=================================="
   end
 
   def create_phase
-    t = sanitize(@row[TITLE])
+    t = sanitize(@row[TASK_IMPORT_CONFIG[@conf]['title']])
     return if t == nil
     #p = SDPPhase.find_by_title(t)
-    p = SDPPhase.new# if not p
+    p = SDPPhase.new # if not p
     p.title = t
     populate(p)
     p.save
@@ -132,10 +122,10 @@ private
   end
 
   def create_activity
-    t = sanitize(@row[TITLE])
+    t = sanitize(@row[TASK_IMPORT_CONFIG[@conf]['title']])
     return if t == nil
     #p = SDPActivity.find_by_title_and_phase_id(t,@current_phase.id)
-    p = SDPActivity.new# if not p
+    p = SDPActivity.new # if not p
     p.phase_id = @current_phase.id
     p.title = t
     populate(p)
@@ -144,7 +134,7 @@ private
   end
 
   def create_task
-    t = sanitize(@row[TITLE])
+    t = sanitize(@row[TASK_IMPORT_CONFIG[@conf]['title']])
     return if t == nil
     #p = SDPTask.find_by_sdp_id(@row[ID])
     #debug
@@ -152,9 +142,9 @@ private
     p             = SDPTask.new # if not p
     p.phase_id    = @current_phase.id
     p.activity_id = @current_activity.id
-    p.sdp_id      = @row[ID]
+    p.sdp_id      = @row[TASK_IMPORT_CONFIG[@conf]['id']]
     p.title       = t
-    p.project_code= @row[PROJECT_CODE]
+    p.project_code= @options[:project] || @row[TASK_IMPORT_CONFIG[@conf]['project_code']]
     r_id          = /^\[(\d+)\].*$/.match(t)
     p.request_id  = r_id[1] if r_id
     populate(p)
@@ -164,13 +154,13 @@ private
   def insert
     #puts @row.join(', ')
     #puts @row[ID]
-    if @row[ID]==nil
+    if @row[TASK_IMPORT_CONFIG[@conf]['id']]==nil
       case @state
         when :init;  @state = :phase
         when :phase; @state = :activity
         when :task
           @next_row = @reader.shift
-          if @next_row[ID] == nil
+          if @next_row[TASK_IMPORT_CONFIG[@conf]['id']] == nil
             @state = :phase
           else
             @state = :activity
@@ -179,16 +169,16 @@ private
           @state = :end
         else; raise "state error #{@state.to_s}"
       end
-    elsif @row[ID]=="Total"
+    elsif @row[TASK_IMPORT_CONFIG[@conf]['id']]=="Total"
       @state = :total
     else
       @state = :task
     end
     case @state
       when :phase
-        create_phase
+        create_phase if !@options[:project]
       when :activity
-        create_activity
+        create_activity if !@options[:project]
       when :task
         create_task
       when :total

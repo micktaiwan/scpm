@@ -30,14 +30,13 @@
 
     <table>
       <tr>
-      <td valign='top'><h4>Last 7 days changes</h4><%=my_simple_format(status.last_change)%></td>
+      <td valign='top'><h4>Reporting Quality Activities</h4><%=my_simple_format(status.last_change)%></td>
       <td class='diff'><br/><br/><br/><%=status.last_change_diffs.to_s%></td>
       </tr>
 
       <tr>
       <td valign='top'>
-        <h4>Reporting</h4><%=my_simple_format(status.reporting)%>
-        <% if status.status > 1 and (status.reporting == "" or status.reporting == nil) %><%=image_tag("alert.gif")%><br/><br/><% end %>
+        <h4>Reporting except Quality Activities</h4><%=my_simple_format(status.reporting)%>
         <br/>
         <b>Last UP3P verification:</b> <%=status.ereporting_date%><br/>
 

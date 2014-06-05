@@ -4,6 +4,7 @@
 /Capfile
 /config/deploy.rb
 config/config.yml
+config/task_import.yml
 
 app/.DS_Store
 
@@ -12,3 +13,5 @@ db/.DS_Store
 db/.DS_Store
 
 .DS_Store
+
+merge.sh

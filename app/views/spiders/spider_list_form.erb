@@ -1,81 +1,72 @@
 	<!-- List -->
 	<h3>You are reporting on this project: </h3>
+
 	<!-- CHOICE 1 -->
+	<script type="text/javascript">
+	    $(document).ready(function (){
+			$("#form_choice_1").click(function() {
+				$(this).submit();
+			});
+			$("#form_choice_2").click(function() {
+				$(this).submit();
+			});
+		});
+	</script>
 
-	<div class="spider_list_choice" id="choice1" >
-	<%= link_to ('
-			<div class="spider_list_choice_text" >'+
-				my_simple_format("From a request belonging to one of these WP:
-					WP1.1: Quality Control
-					WP1.2: Quality Assurance
-					WP1.4: Agility Assurance
-					WP1.5: SQR Activities
-					WP1.6.2: Project Setting-up") + ' 
+	<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_choice_1') do -%>
+		<%= hidden_field_tag('list_choice', 1) %>
+		<%= hidden_field_tag('consolidate_spider', 1) %>
+		<%= hidden_field_tag('file_link', @file_link) %>
+		<%= hidden_field_tag('spider_id', @spider_id) %>
+		<% @spiderquest.each do |sq| %>
+			<%= hidden_field_tag('spiderquest['+sq[0]+'][]', sq[1]) %>
+		<% end %>
+		<% @spiderquestresursive != nil and @spiderquestresursive.each do |sr| %>
+			<%= hidden_field_tag('spiderquestresursive['+sr[0]+'][]', sr[1]) %>
+		<% end %>
+		<%= hidden_field_tag('project_id', @project_id) %>
+		<%= hidden_field_tag('milestone_id', @milestone_id) %>
+
+		<div class="spider_list_choice" id="choice1" >
+			<div class="spider_list_choice_text" >
+					<%= my_simple_format("From a request belonging to one of these WP:
+						WP1.1: Quality Control
+						WP1.2: Quality Assurance
+						WP1.4: Agility Assurance
+						WP1.5: SQR Activities
+						WP1.6.2: Project Setting-up") %>
 			</div>
-			<img class="spider_list_choice_img" src="/images/right.png">',
- 		{
-			:action=>'update_spider', 
-			:list_choice=>"1", 
-			:file_link=>@file_link, 
-			:spider_id=>@spider_id,
-			:spiderquest=>@spiderquest, 
-			:spiderquestresursive=>@spiderquestresursive, 
-			:consolidate_spider=>"1", 
-			:project_id=>@project_id, 
-			:milestone_id=>@milestone_id
-		}, {:method => :post}) 
-	%>      
+			<img class="spider_list_choice_img" src="/images/right.png">
 		</div>
-	<br />
+	<% end %>
+
 	<!-- CHOICE 2 -->
-	<div  class="spider_list_choice" id="choice2">
-	<% choice_2_text = '<div class="spider_list_choice_text" >' %>
-	<% if @project.get_last_spider_increment %>
-		<% choice_2_text += my_simple_format("During a \"Standard Support\" activity and you <strong>want to</strong> increment the Spider counter.
-			Last Spider counter update for this project: " + @project.get_last_spider_increment.to_s + " (<span class=\"descr\">" + time_ago_in_words(@project.get_last_spider_increment) + "</span>)") %>
-	<% else %>
-		<% choice_2_text +=  my_simple_format('During a "Standard Support" activity and you <strong>want to</strong> increment the Spider counter.') %> 
-	<% end %>
-	<% choice_2_text +='</div><img class="spider_list_choice_img" src="/images/right.png">' %>
+	<% form_tag({:action => "update_spider"}, :method => "post", :id => 'form_choice_2') do -%>
+		<%= hidden_field_tag('list_choice', 2) %>
+		<%= hidden_field_tag('consolidate_spider', 1) %>
+		<%= hidden_field_tag('file_link', @file_link) %>
+		<%= hidden_field_tag('spider_id', @spider_id) %>
+		<% @spiderquest.each do |sq| %>
+			<%= hidden_field_tag('spiderquest['+sq[0]+'][]', sq[1]) %>
+		<% end %>
+		<% @spiderquestresursive != nil and @spiderquestresursive.each do |sr| %>
+			<%= hidden_field_tag('spiderquestresursive['+sr[0]+'][]', sr[1]) %>
+		<% end %>
+		<%= hidden_field_tag('project_id', @project_id) %>
+		<%= hidden_field_tag('milestone_id', @milestone_id) %>
 
-	<%= link_to(choice_2_text,
-		{  
-			:action=>'update_spider', 
-			:list_choice=>"2", 
-			:file_link=>@file_link, 
-			:spider_id=>@spider_id,
-			:spiderquest=>@spiderquest, 
-			:spiderquestresursive=>@spiderquestresursive, 
-			:consolidate_spider=>"1", 
-			:project_id=>@project_id, 
-			:milestone_id=>@milestone_id
-		}, {:method => :post}) 
-	%>
-	</div>
+		<div  class="spider_list_choice" id="choice2">
+		<% choice_2_text = '<div class="spider_list_choice_text" >' %>
+		<% if @project.get_last_spider_increment %>
+			<% choice_2_text += my_simple_format("During a \"Standard Support\" activity and you <strong>want to</strong> increment the Spider counter.
+				Last Spider counter update for this project: " + @project.get_last_spider_increment.to_s + " (<span class=\"descr\">" + time_ago_in_words(@project.get_last_spider_increment) + "</span>)") %>
+		<% else %>
+			<% choice_2_text +=  my_simple_format('During a "Standard Support" activity and you <strong>want to</strong> increment the Spider counter.') %> 
+		<% end %>
+		<% choice_2_text +='</div><img class="spider_list_choice_img" src="/images/right.png">' %>
+		<%= choice_2_text %>
+
+		</div>
+	<% end %>
 	<br />
 
-	<!-- CHOICE 3 -->
-	<div  class="spider_list_choice" id="choice3" >
-	<% choice_3_text = '<div class="spider_list_choice_text" >' %>
-	<% if @project.get_last_spider_increment %>
-		<% choice_3_text +=  my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the Spider counter.
-			Last Spider counter update for this project: "'+ @project.get_last_spider_increment.to_s + ' (<span class="descr">' + time_ago_in_words(@project.get_last_spider_increment) + '</span>)') %> 
-	<% else %>
-		<% choice_3_text += my_simple_format('During a "Standard Support" activity and you <strong>do not want</strong> to increment the Spider counter.') %> 
-	<% end %>
-	<% choice_3_text += '</div><img class="spider_list_choice_img" src="/images/right.png">' %>
-
-	<%= link_to(choice_3_text,
-		{ 
-			:action=>'update_spider', 
-			:list_choice=>"3", 
-			:file_link=>@file_link, 
-			:spider_id=>@spider_id,
-			:spiderquest=>@spiderquest, 
-			:spiderquestresursive=>@spiderquestresursive, 
-			:consolidate_spider=>"1", 
-			:project_id=>@project_id, 
-			:milestone_id=>@milestone_id
-		}, {:method => :post}) 
-	%>
-	</div>

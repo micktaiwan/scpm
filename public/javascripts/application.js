@@ -102,6 +102,9 @@ function refresh_projects(sort) {
     onComplete: function(r) {
       $('timeline').update(r.responseText);
       $('loading').hide();
+      index_projects_timeline = 0;
+      total_results           = 0;
+      is_loading_projects = false;
       }
     });
 
