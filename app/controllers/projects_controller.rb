@@ -780,7 +780,18 @@ private
       @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
       return
     end
-    @projects = Project.all
+    cond_projects = []
+    cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
+    cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
+    cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
+    cond_projects << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
+    cond_projects << "project_id is null"
+
+    @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
+    if session[:project_filter_qr] != nil
+      @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
+    end
+
   end
 
   def no_responsible(p)

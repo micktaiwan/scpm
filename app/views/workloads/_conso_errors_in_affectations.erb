@@ -29,7 +29,7 @@
 <td>
   <% if line %>
     <%= line.person_name  %>
-    <%= line.person.trigram  %>
+    <%= line.person.trigram if line.person %>
   <% else %>
     No line
   <% end %>

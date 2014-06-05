@@ -14,6 +14,7 @@ workloads_view_by_project_menu: false
 plannings_menu: false
 use_virtual_people: false
 workloads_suggested_request: true
+workloads_use_financial_monitoring: false # Show or not related PP4 functions
 
 # workloads
 # display length in months
@@ -33,7 +34,7 @@ workloads_display_diff_between_consumed_and_planned_column: true
 workloads_display_status_column: true
 workloads_show_filter: false # Show or hide the filter buttn
 workload_holiday_threshold_before_backup: 2 # Number of holidays days which need the attribution of a backup
-
+workload_show_overload_availability: false #Show on the availability parameters of workload if user is in overload
 
 # SDP
 use_multiple_projects_sdp_export: false
@@ -79,3 +80,54 @@ backup_change_email_source: "addressMail1@sqli.com"
 # Workload alert mail
 workload_alerts_email_source: "addressMail1@sqli.com"
 workload_alerts_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com,addressMail3@sqli.com,addressMail4@sqli.com"
+
+# Load QS and spiders
+qs_load: 0.375
+spider_load: 0.375
+
+# Summary export - workpackages which should be highlighted in the summary
+    summary_workpackages_highlight: 
+        - WP2
+        - WP3.0
+        - WP3.1
+        - WP3.2
+        - WP3.2.1
+        - WP3.2.2
+        - WP3.2.3
+        - WP3.3
+        - WP3.4
+        - WP4
+        - WP4.1
+        - WP4.2
+        - WP4.3
+        - WP4.4
+        - WP5
+        - WP5.1
+        - WP6.1
+        - WP5.2
+        - WP6.2
+        - WP6.3
+        - WP6.4
+        - WP6.5
+        - WP6.6
+        - WP6.7
+        - WP6.8
+        - WP6.9
+        - WP6.10.1
+        - WP6.10.2
+        - WP6.10.3
+        - WP6.11
+        - WP7.1
+        - WP7.1.1
+        - WP7.1.2
+        - WP7.1.3
+        - WP7.1.4
+        - WP7.1.5
+        - WP7.1.6
+        - WP7.2
+        - WP7.2.1
+        - WP7.2.2
+        - WP7.2.3
+        - WP7.2.4
+        - WP7.2.5
+        - WP7.2.6

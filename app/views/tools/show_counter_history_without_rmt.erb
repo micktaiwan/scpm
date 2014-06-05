@@ -1,4 +1,4 @@
-<script src="/javascripts/jquery-1.9.1.js"></script>
+<script src="/javascripts/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script type="text/javascript">
   var $j = jQuery.noConflict();
 </script>
@@ -27,7 +27,7 @@ $j(document).ready(function (){
 <!-- WITHOUT REQUESTS -->
 <h2>Spider Counters not linked with request</h2>
 <table class="history_counts_table" id="history_spider_count_table">
-<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Request found</td>
+<tr class="bg_grey"><td>Author</td><td>Action date</td><td>Project</td><td>Milestone</td><td>Request found</td>
   <% if (current_user.has_role?('Admin')) %>
   	<td class="admin">Admin</td>
   <% end %>
@@ -43,8 +43,8 @@ $j(document).ready(function (){
 		<% if sc_no_req.spider.project.project %>
 			<% project_name = sc_no_req.spider.project.project.name + " > " + sc_no_req.spider.project.name %>
 		<% end %>
-		
 		<td><%= link_to(project_name, {:controller=>'projects', :action=>'show', :id=>sc_no_req.spider.project.id}) %></td>
+		<td><%= sc_no_req.spider.milestone.to_s %></td>
 		<td style="width:250px;" id=<%="req_#{sc_no_req.id}" %>>
 			<% if spider_array["request"] %> 
 				<%= link_to('Add this counter to request ' + spider_array["request"].request_id ,

@@ -28,6 +28,7 @@ class Project < ActiveRecord::Base
   has_many    :project_people
   has_many    :responsibles, :through=>:project_people
   has_many    :risks,       :order=>'id', :dependent=>:destroy
+  has_many    :current_risks, :class_name=>'Risk', :conditions=>"probability > 0"
   has_many    :quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1"
   has_many    :open_quality_risks,  :class_name=>"Risk", :foreign_key=>"project_id", :order=>'id', :dependent=>:destroy, :conditions=>"is_quality=1 and probability>0"
   has_many    :checklist_items, :through=>:milestones
@@ -590,6 +591,14 @@ class Project < ActiveRecord::Base
     nil
   end
 
+  def find_multiple_milestone_by_name(name)
+    milestones_found = Array.new
+    self.milestones.each { |m|
+      milestones_found << m if m.name == name
+    }
+    return milestones_found
+  end
+
   def get_cell_style_for_milestone(m)
     return {} if not m
     case m.status
@@ -606,6 +615,17 @@ class Project < ActiveRecord::Base
       else
         {}
     end
+  end
+
+  def get_status_for_milestone(milestone)
+    status, style = '',{}
+    if milestone
+      status += milestone.name + ': '+milestone.comments.split("\n").join("\r\n")
+      status += "\r\n" + milestone.date.to_s if milestone.date
+      status += "\r\n"
+      style  = get_cell_style_for_milestone(milestone)
+    end
+    [status,style]
   end
 
   # names is a array of names mutually exclusive (if we found M5 we should not be able to found a G5)
@@ -656,7 +676,7 @@ class Project < ActiveRecord::Base
       if sorted_milestones[y].done == 0
         return [sorted_milestones[y].name] + get_milestone_status(sorted_milestones[y].name)
       end
-    end 
+    end
     # Not managed
     return ["", "", {}]
   end
@@ -907,6 +927,19 @@ class Project < ActiveRecord::Base
     return result;
   end
 
+  # If specifics requests, return true
+  def highlighted_in_summary?
+    self.requests.each do |r|
+      wp = r.work_package.split('-')[0]
+      wp = wp.delete(' ')
+      if (wp != nil)
+        if (APP_CONFIG['summary_workpackages_highlight'].include?(wp.to_s))
+          return true
+        end
+      end
+    end
+    return false
+  end
 private
 
   def excel(a,b)

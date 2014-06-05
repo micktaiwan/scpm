@@ -19,7 +19,7 @@
 <% end %>
 
 <td><%= my_simple_format(risk.consequence) %></td>
-<td align="center"><%= risk.impact %> / 3</td>
+<td align="center"><%= risk.impact %> / 4</td>
 <td>
 <%= time_ago_in_words(risk.updated_at) %>
 <% if current_user.has_role?('Admin') %>

@@ -4,9 +4,9 @@
   planned_total = @workload.line_sums[wl_line.id][:sums].to_f
   error         = ((wl_line.wl_type == 100 or wl_line.wl_type == 200) and ((planned_total/remaining < 0.9) or (planned_total/remaining > 1.1) or (planned_total-remaining).abs > 3))
 %>
-<tr id="wl_line_<%= wl_line.id %>" title="<%= wl_line.name %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
+<tr id="wl_line_<%= wl_line.id %>" class="wl_line_<%= wl_line.wl_type %>"<% if remaining==0.0 and wl_line.request and wl_line.request.sdp=="Yes"%> style="color:grey; font-style:italic;"<% end %>>
   <!-- Action destroy -->
-	<td align='center'>
+	<td title="<%= wl_line.name %>"  align='center'>
     <%= link_to_remote(image_tag("delete.gif"),
      {:url=>{:action=>'destroy_line', :id=>wl_line.id},
      :confirm=>"Are you sure ?\nYou will lose all workload related to this line.",
@@ -15,7 +15,7 @@
   </td>
 
 	<!-- Request link -->
-  <td align='center'>
+  <td title="<%= wl_line.name %>"  align='center'>
     <% if wl_line.request and wl_line.request.project %>
       <%= link_to(image_tag("link.gif"), :controller=>'projects', :action=>'show', :id=>wl_line.request.project.id) %>
     <% end %>
@@ -26,7 +26,7 @@
   </td>
 
 	<!-- Edit btn / Alert / Backup msg / Project name -->
-  <td>
+  <td title="<%= wl_line.name %>" >
     <!-- highlight function -->
     <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line(#{wl_line.id}, '#FF0')") %>
     <!-- Edit btn -->
@@ -46,27 +46,27 @@
   </td>
 	<!-- Request -->
   <% if APP_CONFIG['workloads_display_status_column'] %>
-    <td align="center"><% if wl_line.request %><%= wl_line.request.status %><% end %></td>
+    <td title="<%= wl_line.name %>" align="center"><% if wl_line.request %><%= wl_line.request.status %><% end %></td>
   <% end %>
 	<!-- Sum if wl_type != 110/120 (not qr_qwr wl line) -->
 	<% if wl_line.wl_type != 110 and wl_line.wl_type != 120 %>
-		<td class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
+		<td title="<%= wl_line.name %>" class="wl_case"><%= @workload.line_sums[wl_line.id][:init] %></td>
     <% if APP_CONFIG['workloads_display_consumed_column'] %>
-    <td class="wl_case"><%= consumed %></td>
+    <td title="<%= wl_line.name %>"  class="wl_case"><%= consumed %></td>
   <% end %>
   <% gain_class = "wl_case" %>
   <% gain_class = "wlerror" if @workload.line_sums[wl_line.id][:balance].to_i < 0 %>
   <% gain_class = "wlpositive" if @workload.line_sums[wl_line.id][:balance].to_i > 0 %>
-  <td class=<%= gain_class %>><%= @workload.line_sums[wl_line.id][:balance] %></td>
-  	<td class="wl_case<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"><%= remaining %></td>
+  <td title="<%= wl_line.name %>" class=<%= gain_class %>><%= @workload.line_sums[wl_line.id][:balance] %></td>
+  	<td title="<%= wl_line.name %>" class="wl_case<% if @workload.line_sums[wl_line.id][:init]=='no sdp' %> no_sdp<%end%>"><%= remaining %></td>
   <% else %>
-		<td colspan="3"></td>
+		<td title="<%= wl_line.name %>" colspan="3"></td>
 	<% end %>
 
-	<td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
+	<td title="<%= wl_line.name %>" id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
 
   <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
-  <td id="diff_planned_remaining_<%= wl_line.id %>" <% if error %> class="wlerror"<% else %> class="wl_case"<% end %>><%= planned_total - remaining %></td>
+  <td title="<%= wl_line.name %>" id="diff_planned_remaining_<%= wl_line.id %>" <% if error %> class="wlerror"<% else %> class="wl_case"<% end %>><%= planned_total - remaining %></td>
   <% end %>
 
   <% if APP_CONFIG['workloads_display_total_column'] %>
@@ -79,7 +79,7 @@
     milestones = wl_line.milestones(week)
     m_names    = milestones.map { |m| "<b>#{m.name}</b>: #{m.date}"}.join("<br/>")
 	%>
-    <td class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones(event,'<%=m_names%>');" onmouseout="hide_milestones();"<% end %>>
+    <td class="wl_case"<% if milestones.size > 0 %> onmouseover="display_milestones(event,'<%=m_names%>');" onmouseout="hide_milestones();"<% else %> title="<%= wl_line.name %>" <% end %>>
     <%
       wlload = wl_line.get_load_by_week(week)
       wlload = wlload == 0.0 ? '' : wlload
