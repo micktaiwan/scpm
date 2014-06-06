@@ -653,14 +653,14 @@ class ToolsController < ApplicationController
                                           "JOIN projects ON projects.id = spiders.project_id",
                                           "JOIN projects as parent ON parent.id = projects.project_id"
                                           ],
-                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
+                                          :order=>"requests.request_id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
     
     @qs_counter     = HistoryCounter.find(:all,:conditions=>[qs_condition],
                                           :joins => ["JOIN requests ON requests.id = history_counters.request_id", 
                                           "JOIN statuses ON statuses.id = history_counters.concerned_status_id",
                                           "JOIN projects ON projects.id = statuses.project_id",
                                           "JOIN projects as parent ON parent.id = projects.project_id"],
-                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
+                                          :order=>"requests.request_id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
   end
   
   def show_counter_history_without_rmt
