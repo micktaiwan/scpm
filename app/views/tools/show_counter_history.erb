@@ -5,8 +5,18 @@
 <script src="/javascripts/tool.js"></script>
 
 <script type="text/javascript">
+// Generate options
+var options = new Array;
+<% @requests_array.each do |option| %>
+  options['<%= option[1] %>'] = '<%= option[0] %>';
+<% end %>
+
 // Hide view when detect a copy
 $j(document).ready(function (){
+  var request_selected = 0;
+  <% if @request_id != nil %>
+    <%= "request_selected = " + @request_id %> 
+  <% end %>
   $j("#copy_view").bind('copy', function(){
     setTimeout(function(){ $j("#copy_view").hide()},1);
   });
@@ -19,16 +29,21 @@ $j(document).ready(function (){
   function setRequestList()
   {
     var stream = $j( "#stream_id option:selected" ).text().split(' ')[0];
-    $j("#request_id > option").each(function() {
-      if ((this.text.indexOf(stream) > -1) || (this.text.indexOf("All") > -1) || ( $j( "#stream_id option:selected" ).text().indexOf("All") > -1))
-      {
-        $j(this).show();
+
+    for (var key in options) {
+      if (options.hasOwnProperty(key)) {
+        if ((options[key].indexOf("WS " + stream) > -1) || (options[key].indexOf("All") > -1) || ( $j( "#stream_id option:selected" ).text().indexOf("All") > -1)) {
+          if ($j("#request_id option[value='"+key+"']").val() == undefined) {
+            $j("#request_id" ).append('<option value="'+key+'">'+options[key]+'</option>')
+          }
+        } else if(parseInt(key) > 0) {
+          $j("#request_id option[value='"+key+"']").remove();
+        }
       }
-      else
-      {
-        $j(this).hide();
-      }
-    });
+    }
+
+    // Select
+    $j("#request_id option[value='"+request_selected+"']").prop("selected", true);
   }
 
   setRequestList();
@@ -37,7 +52,7 @@ $j(document).ready(function (){
 
 <% form_tag(:action=>'show_counter_history') do %>
   <%= select_tag ("stream_id",options_for_select(@streams_array,@stream_id.to_i))  %>
-  <%= select_tag ("request_id",options_for_select(@requests_array,@request_id.to_i))  %>
+  <%= select_tag ("request_id",options_for_select([['All', 0]], @request_id.to_i))  %>
   <%= hidden_field_tag 'filter' %>
   <%= submit_tag('Filter') %>
 <% end %>

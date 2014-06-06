@@ -631,7 +631,7 @@ class ToolsController < ApplicationController
       @streams_array << [s.name, s.id]
     }
     requests          = Request.find(:all, :conditions=>["status != 'removed' and work_package LIKE ? or work_package LIKE ?", "%"+WORKPACKAGE_QS+"%","%"+WORKPACKAGE_SPIDERS+"%"], :order=>"request_id")
-    @requests_array   = [["All",0]] 
+    @requests_array   = [] 
     requests.each{ |r| 
       @requests_array << [r.request_id.to_s+" "+r.summary, r.id ]
     }
