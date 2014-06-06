@@ -1,8 +1,28 @@
 <%= render(:file=>"tools/sdp_menu.erb") %>
-<h2>SDP import</h2>
+<h2>SDP import (one project)</h2>
+<p>Only one TO will be truncated</p>
 <%= form_tag({:action => 'do_sdp_upload'}, :multipart => true) %>
   <p>
     <label for="upload_file">SDP CSV</label>
+    <%= file_field 'upload', 'datafile' %>
+  </p>
+  <p>
+    <label for="project">Project task to truncate</label>
+    <%= text_field_tag(:project, 'TO') %>
+  </p>
+  <p>
+    <%= hidden_field_tag(:conf, :simple) %>
+    <label>&nbsp;</label>
+    <%= submit_tag "Upload" %>
+  </p>
+</form>
+
+<h2>SDP import (projects consolidation)</h2>
+<p>All table will be truncated</p>
+<%= form_tag({:action => 'do_sdp_upload'}, :multipart => true) %>
+  <p>
+    <label for="upload_file">SDP CSV</label>
+    <%= hidden_field_tag(:conf, :multiple) %>
     <%= file_field 'upload', 'datafile' %>
     <%= submit_tag "Upload" %>
   </p>

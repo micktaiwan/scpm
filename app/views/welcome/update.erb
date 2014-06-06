@@ -25,7 +25,9 @@ Last RMT update: <%= last_rmt_update_ago_in_words %> ago (<%= last_rmt_update_ag
 Last SDP update: <%= last_sdp_update_ago_in_words %> ago (<%= last_sdp_update_ago %>)<br/>
 <%= form_tag({:controller=>'tools', :action => 'do_sdp_upload'}, :multipart => true) %>
 <p><label for="upload_file">SDP CSV</label>
+<%= hidden_field_tag(:conf, APP_CONFIG['task_import_config']) %>
 <%= file_field 'upload', 'datafile' %>
 <%= submit_tag "Upload" %></p>
 </form>
 
+<%= link_to('more import choices', :controller=>'tools', :action=>'sdp_import') %>
