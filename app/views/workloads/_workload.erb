@@ -350,7 +350,12 @@
     <% if APP_CONFIG['workloads_display_total_column'] %>
     <th></th>
     <% end %>
-    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability, :locals=>{:low_limit=>0, :reverse=>true}) %>
+    <% availLocals = {} %>
+    <% if APP_CONFIG['workload_show_overload_availability'] %>
+      <% availLocals = {:low_limit=>0, :reverse=>true} %>
+    <% end %>
+    <%= render(:partial=>"wl_ctotal", :collection=>@workload.availability, :locals=>availLocals) %>
+
     </tr>
   </thead>
 
