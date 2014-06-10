@@ -1,7 +1,8 @@
 class CreatePresales < ActiveRecord::Migration
   def self.up
     create_table :presales do |t|
-      t.timestamps
+    	t.integer :project_id
+      	t.timestamps
     end
   end
 
