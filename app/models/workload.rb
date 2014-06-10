@@ -229,6 +229,10 @@ class Workload
     @sdp_remaining_total  = 0
     @sdp_consumed_total   = 0
     @to_be_validated_in_wl_remaining_total = 0
+    if !APP_CONFIG['workload_show_negative_sum_availability']
+      @sum_availability = '' if @sum_availability <= 0
+    end
+
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
       #@line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)
