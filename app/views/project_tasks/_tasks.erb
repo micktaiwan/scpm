@@ -25,12 +25,16 @@
         <td><%= @total_sales_revenue.pretty_number %></td>
       </tr>
       <tr>
-        <td>Project cost</td>
-        <td><%= @cost_total.pretty_number %></td>
+        <td>Project planned cost</td>
+        <td><%= @planned_cost_total.pretty_number %></td>
+        <td style="font-weight: bold">Planned Margin</td>
+        <td><%= @planned_margin %>%</td>
       </tr>
-      <tr style="font-weight: bold">
-        <td>Margin</td>
-        <td><%= @margin %>%</td>
+      <tr>
+        <td>Project SDP revised cost</td>
+        <td><%= @sdp_revised_cost_total.pretty_number %></td>
+        <td style="font-weight: bold">Revised Margin</td>
+        <td><%= @revised_margin %>%</td>
       </tr>
     </tbody>
   </table>
@@ -42,7 +46,7 @@
       <th>Task</th>
       <th>Planned</th>
       <th>Total</th>
-      <th>SDP rev</th>
+      <th>SDP revised</th>
       <th>Profile</th>
       <th>Cost</th>
     </tr>
@@ -56,7 +60,7 @@
       </td>
       <td class="wl_total"><%= @workload.planned_total %></td>
       <td><%= @workload.total %></td>
-      <td><%= @workload.displayed_lines_reevaluated %></td>
+      <td><%= @workload.displayed_lines_revised %></td>
       <td></td>
       <td><%= @cost_total %></td>
     </tr>

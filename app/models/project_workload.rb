@@ -357,6 +357,16 @@ class ProjectWorkload
     }.inject(:+)
   end
 
+  def displayed_lines_revised
+    displayed_lines.map {|l| 
+        if l.sdp_tasks.size==0
+          0.0
+        else
+          l.sdp_tasks.map{|t| t.revised}.inject(:+)
+        end
+    }.inject(:+)
+  end
+
   def col_sum(w, wl_lines)
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)
   end

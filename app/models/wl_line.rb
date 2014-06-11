@@ -68,6 +68,12 @@ class WlLine < ActiveRecord::Base
     t.map{|t| t.reevaluated}.inject(:+)
   end
 
+  def sdp_tasks_revised
+    t = sdp_tasks
+    return 0.0 if t.size == 0
+    t.map{|t| t.revised}.inject(:+)
+  end
+
   def sdp_tasks_balancei
     t = sdp_tasks
     return 0.0 if t.size == 0

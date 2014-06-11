@@ -15,7 +15,7 @@
   </td>
   <td id="pltotal_<%= wl_line.id %>" class="wl_total"><%= planned_total %></td>
   <td id="ltotal_<%= wl_line.id %>"><%= wl_line.sum %></td>
-  <td><%= wl_line.sdp_tasks_reevaluated %></td>
+  <td><%= wl_line.sdp_tasks_revised %></td>
   <td ><%= "#{cp.company.name} - #{cp.name} - #{cp.cost}" if cp %></td>
   <td ><%= wl_line.cost_total if cp %></td>
 </tr>
