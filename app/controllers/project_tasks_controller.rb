@@ -80,6 +80,7 @@ private
   def get_common_data(project_ids, companies_ids, iterations, tags_ids)
     @people   = Person.find(:all, :conditions=>"has_left=0", :order=>"name").map {|p| ["#{p.name}", p.id]}
     @workload = ProjectWorkload.new(project_ids, companies_ids, iterations,tags_ids, {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :group_by_person => session['group_by_person'].to_s=='true'})
+    
     total = 0
     @workload.wl_lines.each {|l|
       if l.person.cost_profile
@@ -90,12 +91,22 @@ private
         l[:cost_total] = 0
       end
     }
-    @cost_total = total.to_i
+    @planned_cost_total = total.to_i
+
+    total = 0
+    @workload.wl_lines.each {|l|
+      if l.person.cost_profile
+        s = l.person.cost_profile.cost * l.sdp_tasks_revised
+        total += s.to_i
+      end
+    }
+    @sdp_revised_cost_total = total
     @total_sales_revenue = @workload.projects.inject(0){|sum, i| sum += i.sales_revenue}
     if @total_sales_revenue > 0
-      @margin = (1 - (@cost_total.to_f / @total_sales_revenue).round(3))*100
+      @planned_margin = (1 - (@planned_cost_total.to_f / @total_sales_revenue).round(3))*100
+      @revised_margin = (1 - (@sdp_revised_cost_total.to_f / @total_sales_revenue).round(3))*100
     else
-      @margin = 0
+      @planned_margin = 0
     end
   end
 
