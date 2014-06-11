@@ -346,6 +346,16 @@ class ProjectWorkload
     end
      @planning_tasks = get_plannings(@projects, wl_weeks)
   end
+  
+  def displayed_lines_reevaluated
+    displayed_lines.map {|l| 
+        if l.sdp_tasks.size==0
+          0.0
+        else
+          l.sdp_tasks.map{|t| t.reevaluated}.inject(:+)
+        end
+    }.inject(:+)
+  end
 
   def col_sum(w, wl_lines)
     wl_lines.map{|l| l.get_load_by_week(w)}.inject(:+)
