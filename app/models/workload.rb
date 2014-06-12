@@ -208,7 +208,7 @@ class Workload
         if APP_CONFIG['workload_show_overload_availability']
           @availability   << {:name=>'avail',:id=>w, :value=>avail, :display=>(avail==0 ? '' : avail), :percent=>avail_percent}
         else
-          @availability   << {:name=>'avail',:id=>w, :value=>avail, :display=>(avail.to_i<=0 ? '' : avail), :percent=>avail_percent}
+          @availability   << {:name=>'avail',:id=>w, :value=>avail, :display=>(avail.to_f<=0 ? '' : avail), :percent=>avail_percent}
         end
         @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
         @next_month_percents += capped_if_option(percent) if nb < 5
