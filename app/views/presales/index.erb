@@ -1,0 +1,25 @@
+<h3>Projects with presales</h3>
+<table>
+<tr><td>ID</td><td>Name</td><td>Workstream</td><td></td></tr>
+<% @projects_with_presales.each do |p| %>
+	<tr>
+		<td><%= p.id %></td>
+		<td><%= p.name %></td>
+		<td><%= p.workstream %></td>
+		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
+	</tr>
+<% end %>
+</table>
+
+<h3>Projects without presales</h3>
+<table>
+<tr><td>ID</td><td>Name</td><td>Workstream</td><td></td></tr>
+<% @projects_without_presales.each do |p| %>
+	<tr>
+		<td><%= p.id %></td>
+		<td><%= p.name %></td>
+		<td><%= p.workstream %></td>
+		<td><%= button_to "Create presale",  {:action=>'show_presale', :id=>p.id} %></td>
+	</tr>
+<% end %>
+</table>
