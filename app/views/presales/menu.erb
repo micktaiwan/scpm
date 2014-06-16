@@ -1,0 +1,22 @@
+<div id="presale_menu">
+	<div class="presale_btnlnk">
+		<%= link_to "Dashboard", {:controller => "presales", :action => "show_presale", :id => @presale.project.id}, {:class => "presale_btnlnk_content"} %>
+	</div>
+	
+	<% @presale.presale_presale_types.each do |presale_presale_type| %>
+		<div class="presale_btnlnk">
+			<% name = presale_presale_type.presale_type.title %>
+			<% if presale_presale_type.milestone_name %>
+				<% name = name +" - "+ presale_presale_type.milestone_name.title %>
+			<% end %>
+			<%= link_to  name , {:controller => "presales", :action => "show_presale_by_type", :presale_presale_type => presale_presale_type.id }, {:class => "presale_btnlnk_content"} %>
+		</div>
+	<% end %>
+	
+	<br />
+	<div class="presale_btnlnk">
+		<%= link_to "Add", {:controller => "presales", :action => "show_presale_type_select", :id => @presale.id}, {:class => "presale_btnlnk_content"} %>
+	</div>
+	<!-- = javascript_include_tag "streams.js" -->
+
+</div>

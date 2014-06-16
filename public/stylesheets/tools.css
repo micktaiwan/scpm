@@ -89,5 +89,34 @@ h2 {
   border-bottom: 1px solid #DDD;
   table-layout: fixed; 
   word-break: break-all;
+}
 
+/* Presale */
+#presale_menu {
+  position:absolute;
+  float:left;
+  width:100px;
+  background-color:grey;
+  padding:2px;
+}
+#presale_content {
+  margin-left:120px;
+}
+.presale_btnlnk {
+  padding: 2px;
+  margin: 3px;
+  background: #CDF;
+  border-radius: 3px;
+  -moz-border-radius: 5px;
+}
+
+.presale_btnlnk:hover {
+  background: #BCF;
+  box-shadow: inset 2px 2px 2px #678;
+  -moz-box-shadow: inset 2px 2px 2px #678;
+  -webkit-box-shadow: inset 2px 2px 2px #678;
+  }
+.presale_btnlnk_content {
+  width:100%;
+  display: block;
 }

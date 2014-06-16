@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140610154000) do
+ActiveRecord::Schema.define(:version => 20140616140909) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -481,10 +481,11 @@ ActiveRecord::Schema.define(:version => 20140610154000) do
     t.date     "buyside_accepted_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "milestone_name_id"
   end
 
   create_table "presale_types", :force => true do |t|
-    t.integer  "title"
+    t.text     "title"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

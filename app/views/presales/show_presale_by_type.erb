@@ -1,0 +1,9 @@
+<%= render(:file=>"presales/menu") %>
+
+<div id="presale_content">
+<% form_for :@presale_presale_type, :url=>{:action=>'update_presale_presale_type'} do |f| -%>
+  <%= render(:partial => "presale_presale_type_form") %>
+  <p><label>&nbsp;</label>
+  <%= submit_tag 'Add' %></p>
+<% end -%>
+</div>
