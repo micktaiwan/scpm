@@ -230,7 +230,7 @@ class Workload
     @sdp_consumed_total   = 0
     @to_be_validated_in_wl_remaining_total = 0
     if !APP_CONFIG['workload_show_negative_sum_availability']
-      @sum_availability = '' if @sum_availability <= 0
+      @sum_availability = '' if @sum_availability.to_f <= 0
     end
 
     for l in @wl_lines
