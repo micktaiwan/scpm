@@ -95,13 +95,33 @@ h2 {
 #presale_menu {
   position:absolute;
   float:left;
-  width:100px;
-  background-color:grey;
+  width:200px;
   padding:2px;
+  border-right: 2px solid grey;
+  height:100%;
 }
+
 #presale_content {
-  margin-left:120px;
+  margin-left:220px;
+  height:100%;
 }
+
+#presale_content_left{
+  height:100%;
+  width:75%;
+  float:left;
+  display: inline-block;
+}
+
+#presale_content_right {
+  border-left: 2px solid grey;
+  width:24%;
+  height:100%;
+  float:right;
+  text-align : right;
+  display: inline-block;
+}
+
 .presale_btnlnk {
   padding: 2px;
   margin: 3px;
@@ -116,6 +136,7 @@ h2 {
   -moz-box-shadow: inset 2px 2px 2px #678;
   -webkit-box-shadow: inset 2px 2px 2px #678;
   }
+
 .presale_btnlnk_content {
   width:100%;
   display: block;

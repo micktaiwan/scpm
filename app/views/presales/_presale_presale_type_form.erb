@@ -1,23 +1,24 @@
+<script>
+$j( document ).ready(function() {
+    $j( "#presale_presale_type_milestone_date" ).datepicker();
+    $j( "#presale_presale_type_buyside_launch_date" ).datepicker();
+    $j( "#presale_presale_type_buyside_accepted_date" ).datepicker();
+});
+</script>
+
 <%= hidden_field(:presale_presale_type, :id, :value=>@presale_presale_type.id) %>
 
-<p>
-<%= label_tag 'Milestone' %>
-<%= select(:presale_presale_type, :milestone_name_id, @milestone_names.map {|m| [m.title, m.id]}, :size => @milestone_names.size ) %>
-</p>
-
-<p><%= label_tag 'Opportunity Number' %><%= text_field :presale_presale_type, :opportunity_number %></p>
-<p><%= label_tag 'Milestone Date' %><%= text_field :presale_presale_type, :milestone_date %></p>
-
-<p>
-<%= label_tag 'Status' %>
-<%= select(:presale_presale_type, :status, @status, :size => @status.size ) %>
-</p>
-
-
-<p>
-<%= label_tag 'Complexity' %>
-<%= select(:presale_presale_type, :complexity, @complexity, :size => @complexity.size ) %>
-</p>
-
-<p><%= label_tag 'Buyside launch Date' %><%= text_field :presale_presale_type, :buyside_launch_date %></p>
-<p><%= label_tag 'Buyside accepted Date' %><%= text_field :presale_presale_type, :buyside_accepted_date %></p>
+<p>Milestone</p>
+<p><%= select(:presale_presale_type, :milestone_name_id, @milestone_names.map {|m| [m.title, m.id]}, :size => @milestone_names.size ) %></p>
+<p>Opportunity Number</p>
+<p><%= text_field :presale_presale_type, :opportunity_number %></p>
+<p>Status</p>
+<p><%= select(:presale_presale_type, :status, @status, :size => @status.size ) %></p>
+<p>Complexity</p>
+<p><%= select(:presale_presale_type, :complexity, @complexity, :size => @complexity.size ) %></p>
+<p>Milestone Date</p>
+<p><%= text_field :presale_presale_type, :milestone_date %></p>
+<p>Buyside launch Date</p>
+<p><%= text_field :presale_presale_type, :buyside_launch_date %></p>
+<p>Buyside accepted Date</p>
+<p><%= text_field :presale_presale_type, :buyside_accepted_date %></p>

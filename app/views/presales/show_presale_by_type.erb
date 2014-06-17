@@ -1,9 +1,40 @@
+<script>
+function edit(id) {
+    location = '/presales/presale_comment_edit/'+id;
+}
+function add(presalePresaleTypeid) {
+	location = '/presales/presale_comment_add?id='+presalePresaleTypeid;
+}
+</script>
+
 <%= render(:file=>"presales/menu") %>
 
 <div id="presale_content">
-<% form_for :@presale_presale_type, :url=>{:action=>'update_presale_presale_type'} do |f| -%>
-  <%= render(:partial => "presale_presale_type_form") %>
-  <p><label>&nbsp;</label>
-  <%= submit_tag 'Add' %></p>
-<% end -%>
+
+	<div id="presale_content_left">
+		<h3>
+			<% name = @presale_presale_type.presale_type.title %>
+			<% if @presale_presale_type.milestone_name %>
+				<% name = name +" - "+ @presale_presale_type.milestone_name.title %>
+			<% end %>
+			<%= name %>
+		</h3>
+		<h3>
+			<%= link_to_function('Add', "add(#{@presale_presale_type.id})", {:class=>'btnlnk'}) %> 
+			Comments
+		</h3>
+
+		<% for comment in @presale_presale_type.presale_comments %>
+			<p><span class="bold">Last update time:</span> <%= time_ago_in_words(comment.updated_at.strftime("%Y-%m-%d %H:%M")) %></p>
+			<%= render(:partial=>'presale_comment', :object=>comment) %>
+		<% end %>
+
+	</div>
+	<div id="presale_content_right">
+		<% form_for :@presale_presale_type, :url=>{:action=>'update_presale_presale_type'} do |f| -%>
+		  <%= submit_tag 'Save' %>
+		  <%= render(:partial => "presale_presale_type_form") %>
+		<% end -%>
+	</div>
+
 </div>
