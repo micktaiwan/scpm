@@ -161,6 +161,14 @@
           <%= render(:file=>'actions/actions_header') %>
           <%= render(:partial=>'actions/action', :collection=>@actions) %>
           </table>
+          <br/>
+		  <br/>
+			<%= link_to_function('Display closed actions', '$("my_closed").toggle()',{:class=>"btnlnk"}) %>
+			<div id="my_closed" style="display:none;">
+			<%= render(:file=>'actions/actions_header') %>
+			<%= render(:partial=>'actions/action', :collection=>@actions_closed) %>
+			</table>
+			</div>
         </div>
     </div>
 
