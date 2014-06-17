@@ -12,11 +12,7 @@
 	
 	<% @presale.presale_presale_types.each do |presale_presale_type| %>
 		<div class="presale_btnlnk">
-			<% name = presale_presale_type.presale_type.title %>
-			<% if presale_presale_type.milestone_name %>
-				<% name = name +" - "+ presale_presale_type.milestone_name.title %>
-			<% end %>
-			<%= link_to  name , {:controller => "presales", :action => "show_presale_by_type", :presale_presale_type => presale_presale_type.id }, {:class => "presale_btnlnk_content"} %>
+			<%= link_to  presale_presale_type.getName , {:controller => "presales", :action => "show_presale_by_type", :presale_presale_type => presale_presale_type.id }, {:class => "presale_btnlnk_content"} %>
 		</div>
 	<% end %>
 	

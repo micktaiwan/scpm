@@ -136,6 +136,8 @@
     <% end %>
     <!-- LESSON LEARNT MENU -->
     <li><%= link_to('Lessons Learnt', {:controller=>'lesson_collects', :action=>'index'}, {:class=>menu_style('welcome','update')}) %></li>
+    <!-- PRESALES MENU -->
+    <li><%= link_to('Presales',{:controller=>'presales', :action=>'index'}, {:class=>menu_style('presales','index')}) %></li>
 
     <% if cu.has_role?('Super') %>
       <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>

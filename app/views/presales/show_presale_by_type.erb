@@ -13,11 +13,8 @@ function add(presalePresaleTypeid) {
 
 	<div id="presale_content_left">
 		<h3>
-			<% name = @presale_presale_type.presale_type.title %>
-			<% if @presale_presale_type.milestone_name %>
-				<% name = name +" - "+ @presale_presale_type.milestone_name.title %>
-			<% end %>
-			<%= name %>
+			<%= @presale_presale_type.getName %>
+			<%= link_to "Delete", {:controller => "presales", :action => "delete_presale_presale_type", :id => @presale_presale_type.id}, {:class => "presale_btnlnk_right", :confirm=>'Sure?'} %>
 		</h3>
 		<h3>
 			<%= link_to_function('Add', "add(#{@presale_presale_type.id})", {:class=>'btnlnk'}) %> 
@@ -26,7 +23,7 @@ function add(presalePresaleTypeid) {
 
 		<% for comment in @presale_presale_type.presale_comments %>
 			<p><span class="bold">Last update time:</span> <%= time_ago_in_words(comment.updated_at.strftime("%Y-%m-%d %H:%M")) %></p>
-			<%= render(:partial=>'presale_comment', :object=>comment) %>
+			<%= render(:partial=>'presale_comment', :object=>comment, :locals=>{:edit_mode => true}) %>
 		<% end %>
 
 	</div>

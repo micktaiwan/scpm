@@ -41,6 +41,14 @@ class PresalesController < ApplicationController
 
 	end
 
+	def delete_presale_presale_type
+		presalePresaleType = PresalePresaleType.find(:first, :conditions => ["id = ?", params[:id]])
+		project_id = presalePresaleType.presale.project.id
+	    presalePresaleType.destroy
+	    redirect_to :action=>:show_presale, :id=>project_id
+	end
+
+
 	# Form callback
 	def update_presale_presale_type
 		presalePresaleType = PresalePresaleType.find(:first, :conditions => ["id = ?", params[:presale_presale_type][:id]])

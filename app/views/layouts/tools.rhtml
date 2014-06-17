@@ -132,7 +132,7 @@
     </li>
 		<% end %>
     <!-- LESSON LEARNT MENU -->
-		<li><%= link_to('Lessons Learnt', {:controller=>'lesson_collects', :action=>'index'}, {:class=>menu_style('welcome','update')}) %></li>
+		<li><%= link_to('Lessons Learnt', {:controller=>'lesson_collects', :action=>'index'}, {:class=>menu_style('lesson_collects','index')}) %></li>
 
     <% if cu.has_role?('Super') %>
       <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
@@ -140,6 +140,9 @@
     <% new_requests = Request.count(:conditions=>"status='new' or status='acknowledged'"); if new_requests > 0 %>
       <li><div class="notif"><strong><%=new_requests%></strong> new or ackn requests</div></li>
     <% end %>
+    <!-- PRESALES MENU -->
+    <li><%= link_to('Presales',{:controller=>'presales', :action=>'index'}, {:class=>menu_style('presales','index')}) %></li>
+
     </ul>
   </div>
 

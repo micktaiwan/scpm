@@ -141,3 +141,13 @@ h2 {
   width:100%;
   display: block;
 }
+
+.presale_btnlnk_right {
+  padding: 2px;
+  margin: 3px;
+  background: #CDF;
+  border-radius: 3px;
+  -moz-border-radius: 5px;
+  float:right;
+  display:inline;
+}

@@ -1,9 +1,9 @@
 <div id='presale_comment_<%=presale_comment.id%>'>
   <div class='presale_comment_date'>
-				<%= presale_comment.updated_at.strftime("%Y-%m-%d %H:%M")%> -
-        <%= presale_comment.person.name if presale_comment.person %>
-
-        <%=link_to_function('Edit', "edit(#{presale_comment.id});")%>
+	<%= presale_comment.updated_at.strftime("%Y-%m-%d %H:%M")%> - <%= presale_comment.person.name if presale_comment.person %>
+	<% if edit_mode %>
+		<%=link_to_function('Edit', "edit(#{presale_comment.id});")%>
+	<% end %>
   </div>
 
 	<div class='status_explanation'>

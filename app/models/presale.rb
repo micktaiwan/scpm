@@ -7,13 +7,6 @@ class Presale < ActiveRecord::Base
     	presale = Presale.new
     	presale.project_id = project_id
     	presale.save
-
-    	# types = PresaleType.find(:all)
-    	# types.each do |t|
-    	# 	presaleType = PresalePresaleType.new
-    	# 	presaleType.presale_type_id = t.id
-    	# 	presaleType.presale_id = presale.id
-    	# 	presaleType.save
-    	# end
+        return presale
     end
 end
