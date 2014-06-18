@@ -673,3 +673,9 @@ table.sortable td    {
 .center {
   text-align: center;
 }
+.my_actions {
+  color: #000;
+  font-weight: bold;
+  font-size: 1.4em;
+  font-style: italic;
+}
