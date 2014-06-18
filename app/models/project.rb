@@ -193,7 +193,7 @@ class Project < ActiveRecord::Base
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_id_arr)
     user_id_arr.each { |id|
-      return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
+      return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id.to_i)
       self.projects.each { |p|
         return true if p.has_responsible(user_id_arr)
         }
@@ -251,21 +251,50 @@ class Project < ActiveRecord::Base
     return status
   end
 
-  def text_filter(text)
-    return true if self.name =~ /#{text}/i
-    return true if self.description =~ /#{text}/i
-    self.statuses.each { |s|
-      return true if s.explanation =~ /#{text}/i
-      return true if s.last_change =~ /#{text}/i
-      return true if s.actions =~ /#{text}/i
-      return true if s.operational_alert =~ /#{text}/i
-      return true if s.feedback =~ /#{text}/i
-      }
-    self.requests.each { |s|
-      return true if s.summary =~ /#{text}/i
-      return true if s.pm =~ /#{text}/i
-      }
-    return false
+  def self.get_projects_with_text(text, parentOnly)
+      cond_projects = []
+      cond_projects << "(projects.name LIKE '%#{text}%')"
+      cond_projects << "(projects.description LIKE '%#{text}%')"
+
+      cond_projects << "(project_statuses.explanation LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.last_change LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.actions LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.operational_alert LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.feedback LIKE '%#{text}%')"
+
+      cond_projects << "(project_requests.summary LIKE '%#{text}%')"
+      cond_projects << "(project_requests.pm LIKE '%#{text}%')"
+
+      projects = nil
+      if parentOnly == true
+        cond_projects << "(childs.name LIKE '%#{text}%')"
+        cond_projects << "(childs.description LIKE '%#{text}%')"
+
+        cond_projects << "(child_statuses.explanation LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.last_change LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.actions LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.operational_alert LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.feedback LIKE '%#{text}%')"
+
+        cond_projects << "(child_requests.summary LIKE '%#{text}%')"
+        cond_projects << "(child_requests.pm LIKE '%#{text}%')"
+
+        projects = Project.find(:all, 
+                               :joins =>["LEFT OUTER JOIN statuses as project_statuses ON project_statuses.project_id = projects.id",
+                                "LEFT OUTER JOIN requests as project_requests ON project_requests.project_id = projects.id",
+                                "LEFT OUTER JOIN projects as childs ON childs.project_id = projects.id",
+                                "LEFT OUTER JOIN statuses as child_statuses ON child_statuses.project_id = childs.id",
+                                "LEFT OUTER JOIN requests as child_requests ON child_requests.project_id = childs.id"],
+                                :conditions => "(#{cond_projects.join(" or ")}) and (projects.project_id is null)",
+                                :group => "projects.id")
+      else
+        projects = Project.find(:all, 
+                               :joins =>["LEFT OUTER JOIN statuses as project_statuses ON project_statuses.project_id = projects.id",
+                                "LEFT OUTER JOIN requests as project_requests ON project_requests.project_id = projects.id"],
+                                :conditions => cond_projects.join(" or "),
+                                :group => "projects.id")
+      end
+      return projects
   end
 
   def supervisor_name

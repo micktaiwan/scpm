@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
     @workstreams = @workstreams.map { |ws| ws.name }
 
     @actions      = Action.find(:all, :conditions=>["progress in('in_progress', 'open') and person_id in (?)", session[:project_filter_qr]])
-    @actions_closed       = Action.find(:all, :conditions=>["person_id=? and progress in('closed','abandonned')", session[:project_filter_qr]], :order=>"due_date")
+    @actions_closed       = Action.find(:all, :conditions=>["person_id in (?) and progress in('closed','abandonned')", session[:project_filter_qr]], :order=>"due_date")
     @total_wps    = Project.count
     @total_status = Status.count
 
@@ -84,16 +84,16 @@ class ProjectsController < ApplicationController
   def sort_projects
     case
       when session[:project_sort]=='read'
-        @projects = @projects.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year }
+        # @projects = @projects.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year }
         @wps = @wps.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year}
       when session[:project_sort]=='update'
-        @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
+        # @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
         @wps = @wps.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
       when session[:project_sort]=='alpha'
-        @projects = @projects.sort_by { |p| p.full_name }
+        # @projects = @projects.sort_by { |p| p.full_name }
         @wps = @wps.sort_by { |p| p.full_name }
       when session[:project_sort]=='workstream'
-        @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
+        # @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
         @wps = @wps.sort_by { |p| [p.workstream, p.full_name] }
     end
   end
@@ -156,7 +156,7 @@ class ProjectsController < ApplicationController
     end
     qr = params[:qr]
     if not qr;  session[:project_filter_qr] = nil
-    else;       session[:project_filter_qr] = qr.map {|t| t.to_i}
+    else;       session[:project_filter_qr] = "(#{qr.map{|t| "'#{t}'"}.join(',')})"
     end
     suiteTags = params[:suiteTags]
     if not suiteTags; session[:project_filter_suiteTags] = nil
@@ -746,8 +746,7 @@ private
   def get_projects
     # Text filtering
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
-      @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
-      @wps = @projects #.select {|wp| wp.has_status and wp.has_requests }
+      @wps = Project.get_projects_with_text(session[:project_filter_text], false)
       return
     end
     cond_wps = []
@@ -755,44 +754,41 @@ private
     cond_wps << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
     cond_wps << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
     cond_wps << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
+    cond_wps << "project_people.person_id in #{session[:project_filter_qr]}" if session[:project_filter_qr] != nil
     cond_wps << "is_running = 1"
-    cond_wps << "project_id IS NOT NULL"
+    cond_wps << "projects.project_id IS NOT NULL"
 
-    cond_projects = []
-    cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    cond_projects << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
-    cond_projects << "project_id is null"
-
-    @wps = Project.find(:all, :conditions=>cond_wps.join(" and "), :include=>['projects', 'requests', 'actions','milestones', 'checklist_items','amendments']) # do not filter workpackages with project is null
-
-    @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
-
-    if session[:project_filter_qr] != nil
-      @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
-      @wps = @wps.select {|p| p.has_responsible(session[:project_filter_qr]) }
-    end
-
+    @wps = Project.find(:all, :joins => ["LEFT OUTER JOIN project_people ON project_people.project_id = projects.id"], :conditions=>cond_wps.join(" and "))
   end
 
   def get_projects_without_wps
     if session[:project_filter_text] != "" and session[:project_filter_text] != nil
-      @projects = Project.all.select {|p| p.text_filter(session[:project_filter_text]) }
+      @projects = Project.get_projects_with_text(session[:project_filter_text], true)
       return
     end
+
     cond_projects = []
-    cond_projects << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond_projects << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    cond_projects << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    cond_projects << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
-    cond_projects << "project_id is null"
-
-    @projects = Project.find(:all, :conditions=>cond_projects.join(" and "))
-    if session[:project_filter_qr] != nil
-      @projects = @projects.select {|p| p.has_responsible(session[:project_filter_qr]) }
+    if session[:project_filter_workstream] != nil
+      cond_projects << "(projects.workstream in #{session[:project_filter_workstream]} or childs.workstream in #{session[:project_filter_workstream]})"
     end
+    if session[:project_filter_status] != nil
+      cond_projects << "(projects.last_status in #{session[:project_filter_status]} or childs.last_status in #{session[:project_filter_status]})"
+    end
+    if session[:project_filter_supervisor] != nil
+      cond_projects << "(projects.supervisor_id in #{session[:project_filter_supervisor]} or childs.supervisor_id in #{session[:project_filter_supervisor]})"
+    end
+    if session[:project_filter_suiteTags] != nil
+      cond_projects << "(projects.suite_tag_id in #{session[:project_filter_suiteTags]} or childs.suite_tag_id in #{session[:project_filter_suiteTags]})"
+    end
+    if session[:project_filter_qr] != nil
+      cond_projects << "(project_people.person_id in #{session[:project_filter_qr]} or childs_pp.person_id in #{session[:project_filter_qr]})"
+    end
+    
+    cond_projects << "(projects.project_id is null)"
 
+    @projects = Project.find(:all, :joins => ["LEFT OUTER JOIN projects as childs ON childs.project_id = projects.id","LEFT OUTER JOIN project_people ON project_people.project_id = projects.id", "LEFT OUTER JOIN project_people as childs_pp ON childs_pp.project_id = childs.id"],
+                                    :conditions=>cond_projects.join(" and "),
+                                    :group => "projects.id")
   end
 
   def no_responsible(p)
