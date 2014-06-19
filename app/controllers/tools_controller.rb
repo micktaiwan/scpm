@@ -419,6 +419,14 @@ class ToolsController < ApplicationController
       }
   end
 
+  def kpi_check
+    @physicalsWithoutSuite = Project.find(:all, :joins=>["JOIN requests ON requests.project_id = projects.id"], :conditions=>["is_running = 1 and suite_tag_id IS NULL and (requests.request_type = 'Yes' or requests.request_type = 'Suite')"], :group => "projects.id")
+
+    @projectsWithoutSuiteForSpecificWPs = Project.find(:all, :joins=>["JOIN requests ON requests.project_id = projects.id"], :conditions=>["is_running = 1 and suite_tag_id IS NULL and requests.work_package IN (?)", APP_CONFIG['report_kpi_projects_should_have_suite_for_wp'].join(",")], :group => "projects.id")
+    @specificWPs = APP_CONFIG['report_kpi_projects_should_have_suite_for_wp'].join(",")
+
+  end
+
   def sdp_people
     tasks   = SDPTask.find(:all, :conditions=>"iteration!='HO' and iteration!='P'")
     @trig   = tasks.collect { |t| t.collab }.uniq

@@ -1,0 +1,31 @@
+<h3>Physical projects without Suite</h3>
+<table class="history_counts_table">
+	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td></tr>
+	<% for project in @physicalsWithoutSuite %>
+		<% name = "" %>
+		<% name += project.project.name+" > " if project.project %>
+		<% name += project.name %>
+		<tr class="bg_grey">
+			<td><%= project.workstream %></td>
+			<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>project.id) %></td>
+			<td><%=project.request_pm.join(', ')%></td>
+			<td><%= project.responsibles.map{|r| r.name}.join(', ')%></td>
+		</tr>
+	<% end %>
+</table>
+
+<h3>Projects without Suite and with the following WPs : <%= @specificWPs %> </h3>
+<table class="history_counts_table">
+	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td></tr>
+	<% for project in @physicalsWithoutSuite %>
+		<% name = "" %>
+		<% name += project.project.name+" > " if project.project %>
+		<% name += project.name %>
+		<tr class="bg_grey">
+			<td><%= project.workstream %></td>
+			<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>project.id) %></td>
+			<td><%=project.request_pm.join(', ')%></td>
+			<td><%= project.responsibles.map{|r| r.name}.join(', ')%></td>
+		</tr>
+	<% end %>
+</table>

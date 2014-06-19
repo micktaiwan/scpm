@@ -6,6 +6,8 @@ task_import_config: 'simple' # or multiple'
 
 # report
 report_timeline_count: 30 # Number of timeline displayed in the list of projects
+report_kpi_projects_should_have_suite_for_wp: # The projects with following WPs must have a suite name
+    - WP1.5 - SQR
 report_spider_milestone_blacklist: # Milestones without spiders
     - M14
     - G9

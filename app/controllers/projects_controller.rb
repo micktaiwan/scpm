@@ -84,16 +84,12 @@ class ProjectsController < ApplicationController
   def sort_projects
     case
       when session[:project_sort]=='read'
-        # @projects = @projects.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year }
         @wps = @wps.sort_by { |p| p.read_date ? p.read_date : Time.now-1.year}
       when session[:project_sort]=='update'
-        # @projects = @projects.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
         @wps = @wps.sort_by { |p| d = p.last_status_date; [p.project_requests_progress_status_html == 'ended' ? 1 : 0, d ? d : Time.zone.now] }
       when session[:project_sort]=='alpha'
-        # @projects = @projects.sort_by { |p| p.full_name }
         @wps = @wps.sort_by { |p| p.full_name }
       when session[:project_sort]=='workstream'
-        # @projects = @projects.sort_by { |p| [p.workstream, p.full_name] }
         @wps = @wps.sort_by { |p| [p.workstream, p.full_name] }
     end
   end
