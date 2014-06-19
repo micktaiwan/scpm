@@ -29,3 +29,16 @@
 		</tr>
 	<% end %>
 </table>
+
+
+<h3>Requests without Milestone and with the following WPs : <%= @specificWPsForRequests %></h3>
+<table class="history_counts_table">
+	<tr class="bg_blue"><td>Request ID</td><td>Name</td><td>Assigned To</td></tr>
+	<% for request in @requestsWithoutMilestone %>
+		<tr class="bg_grey">
+			<td><%= request.request_id %></td>
+			<td><%= request.name %></td>
+			<td><%= request.assigned_to %></td>
+		</tr>
+	<% end %>
+</table>
