@@ -883,15 +883,17 @@ class WorkloadsController < ApplicationController
       backup_weeks << b.week
     end
 
+    # Get holidays week
+    conditions = "wl_lines.person_id = #{session['workload_person_id'].to_s} and wl_lines.wl_type = #{WL_LINE_HOLIDAYS} and wlload > 0 and week >= #{wlweek(Date.today)}"
+    if backup_weeks.size > 0
+      conditions += " and week NOT IN (#{backup_weeks.join(',')})"
+    end
     person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and wlload > 0 and week >= ? and week NOT IN (?)", session['workload_person_id'].to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), backup_weeks], 
+        :conditions=>conditions, 
         :order=>"week")
     
-    @holiday_dates = Array.new
-    person_holiday_load.each do |holiday_load|
-      @holiday_dates << ["#{holiday_load.week}","#{holiday_load.week}"]
-    end
+    @holiday_dates = person_holiday_load.map { |h| "#{h.week}" }
   end
   
   def create_backup    
