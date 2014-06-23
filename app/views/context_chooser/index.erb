@@ -9,18 +9,23 @@
       <% end %>
   </div>
 
-  <div id="last_changes">
-  	<span class="my_actions">My opened actions</span>
-	<%= render(:file=>'actions/actions_header') %>
-    <%= render(:partial=>'actions/action', :collection=>@actions) %>
-	</table>
-	<br />
-	<span class="my_actions">My actions updated in the last 48 hours</span>
-	<%= render(:file=>'actions/actions_header') %>
-    <%= render(:partial=>'actions/action', :collection=>@action_48hr) %>
-	</table>
-  </div>
-
+  <% if (@action_48hr.size > 0 or @actions.size > 0) %>
+	  <div id="last_changes">
+		<% if (@action_48hr.size > 0) %>
+		<span class="my_actions">My actions updated in the last 48 hours</span>
+		<%= render(:file=>'actions/actions_header') %>
+		<%= render(:partial=>'actions/action', :collection=>@action_48hr) %>
+		</table>
+		<% end %>
+		<br />
+		<% if (@actions.size > 0) %>
+		<span class="my_actions">My opened actions</span>
+		<%= render(:file=>'actions/actions_header') %>
+		<%= render(:partial=>'actions/action', :collection=>@actions) %>
+		</table>
+		<% end %>
+	  </div>
+  <% end %>
   <ul id="last_changes">
     <% if(APP_CONFIG['project_name']=='eFactory') %>
       <li><b>16-Jun-2013</b> Besoins en staffing</li>
