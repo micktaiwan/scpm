@@ -14,7 +14,6 @@ class PresalesController < ApplicationController
 
 		@projects_with_presales.each do |p|
 			p_priority_setting_up = nil
-
 			p.milestones.select{|m| (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority']) .include? m.name}.each do |m|
 				if (APP_CONFIG['presale_milestones_priority_setting_up'].include? m.name)
 					p_priority_setting_up = calculPrioritySettingUp(m, p_priority_setting_up)

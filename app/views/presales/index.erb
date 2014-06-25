@@ -1,57 +1,58 @@
+
 <h3>Projects with presales</h3>
-<table>
-<tr><td style="width:150px">Priority Setting-up<td><td rowspan=2>ID</td><td rowspan=2>Name</td><td rowspan=2>Workstream</td><td rowspan=2>PM</td><td rowspan=2>Suite Name</td><td rowspan=2></td></tr>
-<tr><td>Priority</td></tr>
+<table id="presales_table_1" class="sortable">
+<thead>
+	<tr><th>Priority Setting-up</th><th>Priority</th><th>ID</th><th>Name</th><th >Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
+</thead>
+<tbody>
 <% i = 0 %>
 <% @projects_with_presales.each do |p| %>
 	<% name = "" %>
 	<% name += p.project.name+" > " if p.project %>
 	<% name += p.name %>
 
-	<% class_str = "" %>
-	<% class_str = ' class="bg_blue"' if i%2 == 0 %>
-	<tr<%= class_str %>>
-		<td><%= Presale.get_priority_message(@priorities_setting_up[p.id]) %>
-		<td rowspan=2><%= p.id %></td>
-		<td rowspan=2><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
-		<td rowspan=2><%= p.workstream %></td>
-		<td rowspan=2><%= p.pm %></td>
-		<td rowspan=2><%= p.suite_tag.name if p.suite_tag %></td>
-		<td rowspan=2><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
+	<tr>
+		<td><%= Presale.get_priority_message(@priorities_setting_up[p.id]) %></td>
+		<td><%= Presale.get_priority_message(@priorities[p.id]) %></td>
+		<td><%= p.id %></td>
+		<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
+		<td><%= p.workstream %></td>
+		<td><%= p.pm %></td>
+		<td><%= p.suite_tag.name if p.suite_tag %></td>
+		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
 	</tr>
 	<tr<%= class_str %>>
-		<td style='border-top:1px solid black'><%= Presale.get_priority_message(@priorities[p.id]) %>
 	</tr>
 	<% i = i + 1 %>
 <% end %>
+</tbody>
 </table>
 
 
 <h3>Projects without presales</h3>
-<table>
-<tr><td style="width:150px">Priority Setting-up<td><td rowspan=2>ID</td><td rowspan=2>Name</td><td rowspan=2>Workstream</td><td rowspan=2>PM</td><td rowspan=2>Suite Name</td><td rowspan=2></td></tr>
-<tr><td>Priority</td></tr>
-
+<table id="presales_table_2" class="sortable">
+<thead>
+	<tr><th>Priority Setting-up</th><th>Priority</th><th>ID</th><th>Name</th><th>Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
+</thead>
+<tbody>
 <% i = 0 %>
 <% @projects_without_presales.each do |p| %>
 	<% name = "" %>
 	<% name += p.project.name+" > " if p.project %>
 	<% name += p.name %>
 
-	<% class_str = "" %>
-	<% class_str = ' class="bg_blue"' if i%2 == 0 %>
-	<tr<%= class_str %>>
-		<td><%= Presale.get_priority_message(@priorities_setting_up[p.id]) %>
-		<td rowspan=2><%= p.id %></td>
-		<td rowspan=2><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
-		<td rowspan=2><%= p.workstream %></td>
-		<td rowspan=2><%= p.pm %></td>
-		<td rowspan=2><%= p.suite_tag.name if p.suite_tag %></td>
-		<td rowspan=2><%= button_to "Create presale",  {:action=>'show_presale', :id=>p.id} %></td>
+	<tr>
+		<td><%= Presale.get_priority_message(@priorities_setting_up[p.id]) %></td>
+		<td><%= Presale.get_priority_message(@priorities[p.id]) %></td>	
+		<td><%= p.id %></td>
+		<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
+		<td><%= p.workstream %></td>
+		<td><%= p.pm %></td>
+		<td><%= p.suite_tag.name if p.suite_tag %></td>
+		<td><%= button_to "Create presale",  {:action=>'show_presale', :id=>p.id} %></td>
 	</tr>
-	<tr<%= class_str %>>
-		<td><%= Presale.get_priority_message(@priorities[p.id]) %>
-	</tr>
+
 	<% i = i + 1 %>
 <% end %>
+</tbody>
 </table>
