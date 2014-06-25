@@ -102,6 +102,14 @@ workload_alerts_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com,
 qs_load: 0.375
 spider_load: 0.375
 
+# Presale
+presale_milestones_priority_setting_up:
+    - M1
+    - M3
+presale_milestones_priority:
+    - M3
+    - M5
+
 # Summary export - workpackages which should be highlighted in the summary
     summary_workpackages_highlight: 
         - WP2

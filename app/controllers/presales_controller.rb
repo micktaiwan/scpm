@@ -14,11 +14,12 @@ class PresalesController < ApplicationController
 
 		@projects_with_presales.each do |p|
 			p_priority_setting_up = nil
-			p.milestones.select{|m| ['M1','M3','M5'].include? m.name}.each do |m|
-				if (['M1','M3'].include? m.name)
+
+			p.milestones.select{|m| (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority']) .include? m.name}.each do |m|
+				if (APP_CONFIG['presale_milestones_priority_setting_up'].include? m.name)
 					p_priority_setting_up = calculPrioritySettingUp(m, p_priority_setting_up)
 					@priorities_setting_up[p.id] = p_priority_setting_up
-				else
+				elsif (APP_CONFIG['presale_milestones_priority'].include? m.name)
 					p_priority = calculPriority(m, p_priority)
 					@priorities[p.id] = p_priority
 				end
@@ -27,11 +28,11 @@ class PresalesController < ApplicationController
 		end
 		@projects_without_presales.each do |p|
 			p_priority_setting_up = nil
-			p.milestones.select{|m| ['M1','M3','M5'].include? m.name}.each do |m|
-				if (['M1','M3'].include? m.name)
+			p.milestones.select{|m| (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority']).include? m.name}.each do |m|
+				if (APP_CONFIG['presale_milestones_priority_setting_up'].include? m.name)
 					p_priority_setting_up = calculPrioritySettingUp(m, p_priority_setting_up)
 					@priorities_setting_up[p.id] = p_priority_setting_up
-				else
+				elsif (APP_CONFIG['presale_milestones_priority'].include? m.name)
 					p_priority = calculPriority(m, p_priority)
 					@priorities[p.id] = p_priority
 				end
