@@ -3,8 +3,106 @@ class PresalesController < ApplicationController
 	
 	# Projects
 	def index
-		@projects_with_presales = Project.find(:all, :joins=>"JOIN presales ON projects.id = presales.project_id", :conditions=>["is_running=1 and projects.project_id IS NULL"])
-		@projects_without_presales = Project.find(:all, :joins=>"LEFT JOIN presales ON projects.id = presales.project_id", :conditions=>"presales.project_id IS NULL and is_running=1 and projects.project_id IS NULL")
+		# Requests
+		@projects_with_presales = Project.find(:all, :joins=>"JOIN presales ON projects.id = presales.project_id", :conditions=>["is_running=1 and projects.project_id IS NOT NULL"])
+		
+		@projects_without_presales = Project.find(:all, :joins=>"LEFT JOIN presales ON projects.id = presales.project_id", :conditions=>"presales.project_id IS NULL and is_running=1 and projects.project_id IS NOT NULL")
+
+		# Priorities		
+		@priorities_setting_up = Hash.new
+		@priorities = Hash.new
+
+		@projects_with_presales.each do |p|
+			p_priority_setting_up = nil
+			p.milestones.select{|m| ['M1','M3','M5'].include? m.name}.each do |m|
+				if (['M1','M3'].include? m.name)
+					p_priority_setting_up = calculPrioritySettingUp(m, p_priority_setting_up)
+					@priorities_setting_up[p.id] = p_priority_setting_up
+				else
+					p_priority = calculPriority(m, p_priority)
+					@priorities[p.id] = p_priority
+				end
+			end
+
+		end
+		@projects_without_presales.each do |p|
+			p_priority_setting_up = nil
+			p.milestones.select{|m| ['M1','M3','M5'].include? m.name}.each do |m|
+				if (['M1','M3'].include? m.name)
+					p_priority_setting_up = calculPrioritySettingUp(m, p_priority_setting_up)
+					@priorities_setting_up[p.id] = p_priority_setting_up
+				else
+					p_priority = calculPriority(m, p_priority)
+					@priorities[p.id] = p_priority
+				end
+			end
+		end
+	end
+
+	def calculPrioritySettingUp(milestone, lastPriority)
+		priority = lastPriority
+		# Milestone date
+		m_date = nil
+		if milestone.actual_milestone_date != nil
+			m_date = milestone.actual_milestone_date
+		elsif milestone.milestone_date != nil
+			m_date = milestone.milestone_date
+		end
+
+		# Current priority
+		current_priority = nil
+		case m_date
+		when nil		
+			current_priority = Presale::PRIORITY_NONE
+		when m_date >= Date.parse(Time.now.to_s) + 30.days
+			current_priority = Presale::PRIORITY_TO_BE_FOLLOWED
+		when m_date >= Date.parse(Time.now.to_s) + 14.days
+			current_priority = Presale::PRIORTY_IN_TIME
+		when m_date >= Date.parse(Time.now.to_s) + 7.days
+			current_priority = Presale::PRIORITY_URGENT
+		when m_date >= Date.parse(Time.now.to_s)
+			current_priority = Presale::PRIORITY_VERY_URGENT
+		else
+			current_priority = Presale::PRIORITY_TOO_LATE
+		end
+
+		# General Priority
+		if priority == nil or current_priority > priority 
+			priority = current_priority
+		end
+		return priority
+	end
+
+	def calculPriority(milestone, lastPriority)
+		priority = lastPriority
+		# Milestone date
+		m_date = nil
+		if milestone.actual_milestone_date != nil
+			m_date = milestone.actual_milestone_date
+		elsif milestone.milestone_date != nil
+			m_date = milestone.milestone_date
+		end
+
+		# Current priority
+		current_priority = nil
+		case m_date
+		when nil		
+			current_priority = Presale::PRIORITY_NONE
+		when m_date >= Date.parse(Time.now.to_s) + 120.days
+			current_priority = Presale::PRIORTY_IN_TIME
+		when m_date >= Date.parse(Time.now.to_s) + 60.days
+			current_priority = Presale::PRIORITY_URGENT
+		when m_date >= Date.parse(Time.now.to_s)
+			current_priority = Presale::PRIORITY_VERY_URGENT
+		else
+			current_priority = Presale::PRIORITY_TOO_LATE
+		end
+
+		# General Priority
+		if priority == nil or current_priority > priority 
+			priority = current_priority
+		end
+		return priority
 	end
 
 	# Presale
