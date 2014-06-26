@@ -151,3 +151,18 @@ h2 {
   float:right;
   display:inline;
 }
+
+#priority_milestones{
+  position: absolute;
+  border-radius: 10px;
+  border: 2px solid #DDD;
+  background: #FFFFFF;
+  opacity: 0.90;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  display: none;
+  z-index: 2;
+}
+

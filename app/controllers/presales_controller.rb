@@ -4,9 +4,9 @@ class PresalesController < ApplicationController
 	# Projects
 	def index
 		# Requests
-		@projects_with_presales = Project.find(:all, :joins=>"JOIN presales ON projects.id = presales.project_id", :conditions=>["is_running=1 and projects.project_id IS NOT NULL"])
+		@projects_with_presales = Project.find(:all, :joins=>["JOIN presales ON projects.id = presales.project_id", "JOIN milestones ON projects.id = milestones.project_id"], :conditions=>["is_running=1 and projects.project_id IS NOT NULL and milestones.name IN (?)", (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority'])], :group=>'projects.id')
 		
-		@projects_without_presales = Project.find(:all, :joins=>"LEFT JOIN presales ON projects.id = presales.project_id", :conditions=>"presales.project_id IS NULL and is_running=1 and projects.project_id IS NOT NULL")
+		@projects_without_presales = Project.find(:all, :joins=>["LEFT JOIN presales ON projects.id = presales.project_id", "JOIN milestones ON projects.id = milestones.project_id"], :conditions=>["presales.project_id IS NULL and is_running=1 and projects.project_id IS NOT NULL and milestones.name IN (?)", (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority'])], :group=>'projects.id')
 
 		# Priorities		
 		@priorities_setting_up = Hash.new
