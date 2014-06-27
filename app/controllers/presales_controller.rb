@@ -146,6 +146,17 @@ class PresalesController < ApplicationController
 	    redirect_to :action=>:show_presale, :id=>project_id
 	end
 
+	def update_presale_parameter
+		presale_parameter_id = params[:presale_parameter_id]
+		presale_parameter = PresaleParameter.find(:first, :conditions => ["id = ?", presale_parameter_id])
+		if presale_parameter.status == true
+			presale_parameter.status = false
+		else
+			presale_parameter.status = true
+		end
+		presale_parameter.save
+		redirect_to :action=>:show_presale, :id=>presale_parameter.presale.project.id
+	end
 
 	# Form callback
 	def update_presale_presale_type

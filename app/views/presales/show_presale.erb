@@ -1,12 +1,23 @@
 <%= render(:file=>"presales/menu") %>
 <div id="presale_content">
-<% for presalePresaleType in @presale.presale_presale_types %>
-	<h3><%= presalePresaleType.getName %></h3>
-	<% lastComment = presalePresaleType.getLastComment %>
-	<% if lastComment != nil %>
-		<p><span class="bold">Last update time:</span> <%= time_ago_in_words(lastComment.updated_at.strftime("%Y-%m-%d %H:%M")) %></p>
-			<%= render(:partial=>'presale_comment', :object=>lastComment, :locals=>{:edit_mode => false}) %>
+<div id="presale_content_left">
+	<% for presalePresaleType in @presale.presale_presale_types %>
+		<h3><%= presalePresaleType.getName %></h3>
+		<% lastComment = presalePresaleType.getLastComment %>
+		<% if lastComment != nil %>
+			<p><span class="bold">Last update time:</span> <%= time_ago_in_words(lastComment.updated_at.strftime("%Y-%m-%d %H:%M")) %></p>
+				<%= render(:partial=>'presale_comment', :object=>lastComment, :locals=>{:edit_mode => false}) %>
+		<% end %>
 	<% end %>
-<% end %>
+</div>
+<div id="presale_content_right">
+	<% @presale.presale_parameters.each do |parameter| %>
+		<% parameter_class = nil %>
+		<% parameter.status == true ? parameter_class = "presale_parameter_active" : parameter_class = "presale_parameter_inactive" %>
+		<p>
+			<%= link_to  parameter.presale_type.title , {:controller => "presales", :action => "update_presale_parameter", :presale_parameter_id => parameter.id.to_s }, {:class => parameter_class} %>
+		</p>
+	<% end %>
 
+</div>
 </div>

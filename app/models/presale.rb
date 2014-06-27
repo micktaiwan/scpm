@@ -1,6 +1,7 @@
 class Presale < ActiveRecord::Base
   	belongs_to  :project
     has_many    :presale_presale_types, :dependent => :nullify
+    has_many    :presale_parameters, :dependent => :nullify
 
 
     PRIORITY_NONE = -1
@@ -14,6 +15,14 @@ class Presale < ActiveRecord::Base
     	presale = Presale.new
     	presale.project_id = project_id
     	presale.save
+
+        PresaleType.find(:all).each do |pt|
+            pp = PresaleParameter.new
+            pp.presale_id = presale.id
+            pp.presale_type_id = pt.id
+            pp.save
+        end
+
         return presale
     end
 
@@ -34,4 +43,5 @@ class Presale < ActiveRecord::Base
     	end
     	return "Unknow"
     end
+
 end
