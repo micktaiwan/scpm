@@ -8,7 +8,11 @@
 <h3>Projects with presales</h3>
 <table id="presales_table_1" class="sortable">
 <thead>
-	<tr><th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th >Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
+	<tr>
+		<th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th >Workstream</th><th>PM</th><th>Suite Name</th><th></th>
+
+
+	</tr>
 </thead>
 <tbody>
 <% i = 0 %>
@@ -26,6 +30,12 @@
 		<td><%= p.pm %></td>
 		<td><%= p.suite_tag.name if p.suite_tag %></td>
 		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
+		<% p.presales[0].presale_parameters.each do |pp| %>
+			<% parameter_class = nil %>
+			<% pp.status == true ? parameter_class = "presale_parameter_active" : parameter_class = "presale_parameter_inactive" %>
+
+			<td><span class="<%= parameter_class%>"><%= pp.presale_type.title %></span></td>
+		<% end %>
 	</tr>
 	<% i = i + 1 %>
 <% end %>
