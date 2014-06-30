@@ -16,6 +16,7 @@
 		<%= link_to "New", {:controller => "presales", :action => "show_presale_type_select", :id => @presale.id}, {:class => "presale_btnlnk_content"} %>
 	</div>
 	<% @presale.presale_presale_types.each do |presale_presale_type| %>
+		<br />
 		<div class="presale_btnlnk">
 			<%= link_to  presale_presale_type.getName , {:controller => "presales", :action => "show_presale_by_type", :presale_presale_type => presale_presale_type.id }, {:class => "presale_btnlnk_content"} %>
 		</div>
