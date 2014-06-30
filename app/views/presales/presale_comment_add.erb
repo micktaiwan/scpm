@@ -1,4 +1,4 @@
-<h2>Comment for <%= @presale_comment.presale_presale_type.presale_type.title %> <%= @presale_comment.presale_presale_type.milestone_name.title if @presale_comment.presale_presale_type.milestone_name %></h2>
+<h3 class="presale_title">Comment for <%= @presale_comment.presale_presale_type.presale_type.title %> <%= @presale_comment.presale_presale_type.milestone_name.title if @presale_comment.presale_presale_type.milestone_name %></h3>
 
 <%= error_messages_for :presale_comment %>
 <% form_for @presale_comment, :url=>{:action=>'create_presale_comment', :id=>@presale_comment.id} do |f| -%>

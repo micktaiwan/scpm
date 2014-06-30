@@ -91,67 +91,104 @@ h2 {
   word-break: break-all;
 }
 
-/* Presale */
+/* Presale General */
+
+h3.presale_title {
+  font-size: 24px;
+  color: grey;
+  font-weight: bold;
+}
 #presale_menu {
   position:absolute;
   float:left;
-  width:200px;
+  width:17%;
+  height:100%;
   padding:2px;
   border-right: 2px solid grey;
-  height:100%;
 }
-
 #presale_content {
-  margin-left:220px;
+  position:absolute;
+  width:80%;
   height:100%;
+  margin-left:18%;
 }
-
 #presale_content_left{
-  height:100%;
-  width:75%;
+  display: inline-block;
   float:left;
-  display: inline-block;
-}
-
-#presale_content_right {
-  border-left: 2px solid grey;
-  width:24%;
+  width:80%;
   height:100%;
-  float:right;
-  text-align : right;
+}
+#presale_content_right {
   display: inline-block;
+  float:right;
+  width:19%;
+  height:100%;
+  padding-left: 5px;
+  border-left: 2px solid grey;
 }
 
-.presale_btnlnk {
-  padding: 2px;
-  margin: 3px;
-  background: #CDF;
+/* Presale buttons */
+.presale_btnlnk, .presale_btnlnk_action, .presale_parameter_active, .presale_parameter_inactive {
+  padding: 5px;
   border-radius: 3px;
   -moz-border-radius: 5px;
+  font-size: 20px;
+  color: grey;
+  font-weight: bold;
 }
-
-.presale_btnlnk:hover {
-  background: #BCF;
+.presale_btnlnk {
+  background: #CDF;
+}
+.presale_btnlnk_action {
+  background: #D3EEC3;
+}
+.presale_parameter_inactive {
+  background: red;
+  height: 30px;
+  display:block;
+  margin-left:10px;
+  color: black;
+}
+.presale_parameter_active {
+  background: green;
+  height: 30px;
+  display:block;
+  margin-left:10px;
+  color: black;
+}
+.presale_btnlnk:hover, .presale_btnlnk_action:hover, .presale_parameter_active:hover, .presale_parameter_inactive:hover {
   box-shadow: inset 2px 2px 2px #678;
   -moz-box-shadow: inset 2px 2px 2px #678;
   -webkit-box-shadow: inset 2px 2px 2px #678;
-  }
-
+}
+.presale_btnlnk:hover {
+  background-color: #DEF1F3;
+}
+.presale_btnlnk_action:hover {
+  background-color: #EFF1ED;
+}
+.presale_parameter_active:hover {
+  background-color: #7CE980;
+}
+.presale_parameter_inactive:hover {
+  background-color: #DA906E;
+}
 .presale_btnlnk_content {
   width:100%;
   display: block;
 }
-
 .presale_btnlnk_right {
   padding: 2px;
   margin: 3px;
   background: #CDF;
   border-radius: 3px;
   -moz-border-radius: 5px;
+  font-size:14px;
   float:right;
   display:inline;
 }
 
+/* Presales content */
 #priority_milestones{
   position: absolute;
   border-radius: 10px;
@@ -166,18 +203,7 @@ h2 {
   z-index: 2;
 }
 
-.presale_parameter_active, .presale_parameter_inactive {
-  padding: 2px;
-  margin: 3px;
-  border-radius: 3px;
-  -moz-border-radius: 5px;
-}
-
-.presale_parameter_inactive {
-  background: red;
-}
-
-.presale_parameter_active {
-  background: green;
+.presale_type_detail_tf {
+  width : 85%;
 }
 

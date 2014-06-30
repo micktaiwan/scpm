@@ -9,12 +9,11 @@
 <table id="presales_table_1" class="sortable">
 <thead>
 	<tr>
-		<th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th >Workstream</th><th>PM</th><th>Suite Name</th><th></th>
-
-
+		<th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th >Workstream</th><th>PM</th><th>Suite Name</th><th></th><th id="status_th">Status</th>
 	</tr>
 </thead>
 <tbody>
+<% status_number_max = 0 %>
 <% i = 0 %>
 <% @projects_with_presales.each do |p| %>
 	<% name = "" %>
@@ -30,11 +29,13 @@
 		<td><%= p.pm %></td>
 		<td><%= p.suite_tag.name if p.suite_tag %></td>
 		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
+		<% status_number = 0 %>
 		<% p.presales[0].presale_parameters.each do |pp| %>
 			<% parameter_class = nil %>
 			<% pp.status == true ? parameter_class = "presale_parameter_active" : parameter_class = "presale_parameter_inactive" %>
-
 			<td><span class="<%= parameter_class%>"><%= pp.presale_type.title %></span></td>
+			<% status_number += 1%>
+			<% status_number_max = status_number if status_number_max < status_number %>
 		<% end %>
 	</tr>
 	<% i = i + 1 %>
@@ -73,6 +74,8 @@
 
 <script type="text/javascript">
   jQuery( document ).ready(function() {
+  	jQuery("#status_th").attr('colspan', <%= status_number_max %>);
+
     jQuery(".priority_setting_up").hover(
       function(e) {
         jQuery("#priority_milestones").show();

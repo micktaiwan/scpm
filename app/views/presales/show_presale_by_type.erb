@@ -12,10 +12,11 @@ function add(presalePresaleTypeid) {
 <div id="presale_content">
 
 	<div id="presale_content_left">
-		<h3>
+		<h3 class="presale_title">
 			<%= @presale_presale_type.getName %>
-			<%= link_to "Delete", {:controller => "presales", :action => "delete_presale_presale_type", :id => @presale_presale_type.id}, {:class => "presale_btnlnk_right", :confirm=>'Sure?'} %>
+			<%= link_to "Delete opportunity", {:controller => "presales", :action => "delete_presale_presale_type", :id => @presale_presale_type.id}, {:class => "presale_btnlnk_right", :confirm=>'Sure?'} %>
 		</h3>
+		<br />
 		<h3>
 			<%= link_to_function('Add', "add(#{@presale_presale_type.id})", {:class=>'btnlnk'}) %> 
 			Comments
@@ -28,6 +29,9 @@ function add(presalePresaleTypeid) {
 
 	</div>
 	<div id="presale_content_right">
+		<h3 class="presale_title">
+			<%= @presale_presale_type.getName %> detail
+		</h3>
 		<% form_for :@presale_presale_type, :url=>{:action=>'update_presale_presale_type'} do |f| -%>
 		  <%= submit_tag 'Save' %>
 		  <%= render(:partial => "presale_presale_type_form") %>
