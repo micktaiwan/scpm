@@ -1,4 +1,4 @@
-<%= render(:file=>"presales/menu") %>
+<%= render(:file=>"presales/menu", :locals=>{:dashboard => 1}) %>
 <div id="presale_content">
 <div id="presale_content_left">
 	<% for presalePresaleType in @presale.presale_presale_types %>

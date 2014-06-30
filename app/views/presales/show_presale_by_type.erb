@@ -7,7 +7,7 @@ function add(presalePresaleTypeid) {
 }
 </script>
 
-<%= render(:file=>"presales/menu") %>
+<%= render(:file=>"presales/menu", :locals=>{:presale_presale_id => @presale_presale_type.id}) %>
 
 <div id="presale_content">
 

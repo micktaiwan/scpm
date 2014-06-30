@@ -127,8 +127,8 @@ h3.presale_title {
   border-left: 2px solid grey;
 }
 
-/* Presale buttons */
-.presale_btnlnk, .presale_btnlnk_action, .presale_parameter_active, .presale_parameter_inactive {
+/* Presale buttons general */
+.presale_btnlnk, .presale_btnlnk_action, .presale_btnlnk_selected, .presale_parameter_active, .presale_parameter_inactive {
   padding: 5px;
   border-radius: 3px;
   -moz-border-radius: 5px;
@@ -139,6 +139,7 @@ h3.presale_title {
 .presale_btnlnk {
   background: #CDF;
 }
+
 .presale_btnlnk_action {
   background: #D3EEC3;
 }
@@ -156,23 +157,6 @@ h3.presale_title {
   margin-left:10px;
   color: black;
 }
-.presale_btnlnk:hover, .presale_btnlnk_action:hover, .presale_parameter_active:hover, .presale_parameter_inactive:hover {
-  box-shadow: inset 2px 2px 2px #678;
-  -moz-box-shadow: inset 2px 2px 2px #678;
-  -webkit-box-shadow: inset 2px 2px 2px #678;
-}
-.presale_btnlnk:hover {
-  background-color: #DEF1F3;
-}
-.presale_btnlnk_action:hover {
-  background-color: #EFF1ED;
-}
-.presale_parameter_active:hover {
-  background-color: #7CE980;
-}
-.presale_parameter_inactive:hover {
-  background-color: #DA906E;
-}
 .presale_btnlnk_content {
   width:100%;
   display: block;
@@ -187,6 +171,26 @@ h3.presale_title {
   float:right;
   display:inline;
 }
+
+/* Presale Buttons hover/enabled */
+.presale_btnlnk:hover, .presale_btnlnk_action:hover, .presale_parameter_active:hover, .presale_parameter_inactive:hover, .selected {
+  box-shadow: inset 2px 2px 2px #678;
+  -moz-box-shadow: inset 2px 2px 2px #678;
+  -webkit-box-shadow: inset 2px 2px 2px #678;
+}
+.presale_btnlnk:hover, .presale_btnlnk.selected {
+  background-color: #C5E3FF;
+}
+.presale_btnlnk_action:hover, .presale_btnlnk_action.selected {
+  background-color: #E8FFC4;
+}
+.presale_parameter_active:hover, .presale_parameter_active.selected {
+  background-color: #7CE980;
+}
+.presale_parameter_inactive:hover, .presale_parameter_inactive.selected {
+  background-color: #FF7272;
+}
+
 
 /* Presales content */
 #priority_milestones{
