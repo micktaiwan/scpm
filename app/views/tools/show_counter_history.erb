@@ -11,19 +11,21 @@ var options = new Array;
   options.push({"key":'<%= option[1] %>',"value":'<%= option[0] %>'});
 <% end %>
 
-// Hide view when detect a copy
 $j(document).ready(function (){
+
   var request_selected = 0;
   <% if @request_id != nil %>
     <%= "request_selected = " + @request_id %> 
   <% end %>
-  $j("#copy_view").bind('copy', function(){
-    setTimeout(function(){ $j("#copy_view").hide()},1);
-  });
 
   $j("#stream_id").change(function() {
     $j("#request_id").val($j("#request_id option:first").val());
     setRequestList();
+  });
+
+  // Hide view when detect a copy
+  $j("#copy_view").bind('copy', function(){
+    setTimeout(function(){ $j("#copy_view").hide()},1);
   });
 
   function setRequestList()
@@ -32,7 +34,7 @@ $j(document).ready(function (){
 
     for (var i=0; i < options.length; i++) {
       var option = options[i];
-      if ((option["value"].indexOf("WS " + stream) > -1) || (option["value"].indexOf("All") > -1) || ( $j( "#stream_id option:selected" ).text().indexOf("All") > -1)) {
+      if ((option["value"].indexOf("WS " + stream + "]") > -1) || (option["value"].indexOf("All") > -1) || ( $j( "#stream_id option:selected" ).text().indexOf("All") > -1)) {
         if ($j("#request_id option[value='"+option["key"]+"']").val() == undefined) {
           $j("#request_id" ).append('<option value="'+option["key"]+'">'+option["value"]+'</option>')
         }

@@ -970,6 +970,14 @@ class Project < ActiveRecord::Base
     end
     return false
   end
+
+  def get_suite_requests
+    suite_requests = Array.new
+    self.requests.each do |r|
+      suite_requests << r if (r.request_type == 'Yes' || r.request_type == 'Suite')
+    end
+    return suite_requests
+  end
 private
 
   def excel(a,b)

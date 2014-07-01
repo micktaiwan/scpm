@@ -1,6 +1,6 @@
 <h3>Physical projects without Suite</h3>
 <table class="history_counts_table">
-	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td></tr>
+	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td><td>Requests</td></tr>
 	<% for project in @physicalsWithoutSuite %>
 		<% name = "" %>
 		<% name += project.project.name+" > " if project.project %>
@@ -10,13 +10,18 @@
 			<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>project.id) %></td>
 			<td><%=project.request_pm.join(', ')%></td>
 			<td><%= project.responsibles.map{|r| r.name}.join(', ')%></td>
+			<td>
+			<% project.get_suite_requests.each do |r| %>
+				<a href="http://toulouse.sqli.com/EMN/view.php?id=<%= r.request_id %>"><%= r.request_id %></a><br />
+			<% end %>
+			</td>
 		</tr>
 	<% end %>
 </table>
 
 <h3>Projects without Suite and with the following WPs : <%= @specificWPs %> </h3>
 <table class="history_counts_table">
-	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td></tr>
+	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td><td>Requests</td></tr>
 	<% for project in @physicalsWithoutSuite %>
 		<% name = "" %>
 		<% name += project.project.name+" > " if project.project %>
@@ -26,6 +31,11 @@
 			<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>project.id) %></td>
 			<td><%=project.request_pm.join(', ')%></td>
 			<td><%= project.responsibles.map{|r| r.name}.join(', ')%></td>
+			<td>
+			<% project.get_suite_requests.each do |r| %>
+				<a href="http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id}"><%= r.request_id %></a><br />
+			<% end %>
+			</td>
 		</tr>
 	<% end %>
 </table>
