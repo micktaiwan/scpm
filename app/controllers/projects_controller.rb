@@ -754,7 +754,7 @@ private
     cond_wps << "is_running = 1"
     cond_wps << "projects.project_id IS NOT NULL"
 
-    @wps = Project.find(:all, :joins => ["LEFT OUTER JOIN project_people ON project_people.project_id = projects.id"], :conditions=>cond_wps.join(" and "))
+    @wps = Project.find(:all, :joins => ["LEFT OUTER JOIN project_people ON project_people.project_id = projects.id"], :conditions=>cond_wps.join(" and "), :group => "projects.id")
   end
 
   def get_projects_without_wps
