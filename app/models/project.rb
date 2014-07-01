@@ -37,6 +37,7 @@ class Project < ActiveRecord::Base
   has_many    :spiders,      :dependent => :destroy
   has_many    :wl_lines, :dependent => :nullify
   has_many    :presales, :dependent => :nullify
+  has_many    :presale_ignore_projects, :dependent => :nullify
 
   def planning
     planning = Planning.find(:first, :conditions=>["project_id=#{self.id}"])
@@ -978,6 +979,27 @@ class Project < ActiveRecord::Base
     end
     return suite_requests
   end
+
+  def get_priority
+    p_priority = nil
+    self.milestones.select{|m| (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority']) .include? m.name}.each do |m|
+      if (APP_CONFIG['presale_milestones_priority'].include? m.name)
+        p_priority = calculPriority(m, p_priority)
+      end
+    end
+    return p_priority
+  end
+
+  def get_setting_up_priority
+    p_priority_setting_up = nil
+    self.milestones.select{|m| (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority']) .include? m.name}.each do |m|
+        if (APP_CONFIG['presale_milestones_priority_setting_up'].include? m.name)
+          p_priority_setting_up = calculPrioritySettingUp(m, p_priority_setting_up)
+        end
+      end
+      return p_priority_setting_up
+  end
+
 private
 
   def excel(a,b)
@@ -987,6 +1009,72 @@ private
   def days_ago(date_time)
     return "" if date_time == nil
     Date.today() - Date.parse(date_time.to_s)
+  end
+
+  def calculPrioritySettingUp(milestone, lastPriority)
+    priority = lastPriority
+    # Milestone date
+    m_date = nil
+    if milestone.actual_milestone_date != nil
+      m_date = milestone.actual_milestone_date
+    elsif milestone.milestone_date != nil
+      m_date = milestone.milestone_date
+    end
+
+    # Current priority
+    current_priority = nil
+    case m_date
+    when nil    
+      current_priority = Presale::PRIORITY_NONE
+    when m_date >= Date.parse(Time.now.to_s) + 30.days
+      current_priority = Presale::PRIORITY_TO_BE_FOLLOWED
+    when m_date >= Date.parse(Time.now.to_s) + 14.days
+      current_priority = Presale::PRIORTY_IN_TIME
+    when m_date >= Date.parse(Time.now.to_s) + 7.days
+      current_priority = Presale::PRIORITY_URGENT
+    when m_date >= Date.parse(Time.now.to_s)
+      current_priority = Presale::PRIORITY_VERY_URGENT
+    else
+      current_priority = Presale::PRIORITY_TOO_LATE
+    end
+
+    # General Priority
+    if priority == nil or current_priority > priority 
+      priority = current_priority
+    end
+    return priority
+  end
+
+  def calculPriority(milestone, lastPriority)
+    priority = lastPriority
+    # Milestone date
+    m_date = nil
+    if milestone.actual_milestone_date != nil
+      m_date = milestone.actual_milestone_date
+    elsif milestone.milestone_date != nil
+      m_date = milestone.milestone_date
+    end
+
+    # Current priority
+    current_priority = nil
+    case m_date
+    when nil    
+      current_priority = Presale::PRIORITY_NONE
+    when m_date >= Date.parse(Time.now.to_s) + 120.days
+      current_priority = Presale::PRIORTY_IN_TIME
+    when m_date >= Date.parse(Time.now.to_s) + 60.days
+      current_priority = Presale::PRIORITY_URGENT
+    when m_date >= Date.parse(Time.now.to_s)
+      current_priority = Presale::PRIORITY_VERY_URGENT
+    else
+      current_priority = Presale::PRIORITY_TOO_LATE
+    end
+
+    # General Priority
+    if priority == nil or current_priority > priority 
+      priority = current_priority
+    end
+    return priority
   end
 end
 

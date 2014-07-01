@@ -5,51 +5,22 @@
 <script src="/javascripts/tool.js"></script>
 
 <div id="priority_milestones"></div>
-<h3>Projects with presales</h3>
+
+<h3>Projects</h3>
 <table id="presales_table_1" class="sortable">
-<thead>
-	<tr>
-		<th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th >Workstream</th><th>PM</th><th>Suite Name</th><th></th>
-	</tr>
-</thead>
-<tbody>
-<% i = 0 %>
-<% @projects_with_presales.each do |p| %>
-	<% name = "" %>
-	<% name += p.project.name+" > " if p.project %>
-	<% name += p.name %>
-
-	<tr>
-		<td></td>
-		<td></td>
-		<td><%= p.id %></td>
-		<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
-		<td><%= p.workstream %></td>
-		<td><%= p.pm %></td>
-		<td><%= p.suite_tag.name if p.suite_tag %></td>
-		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
-	</tr>
-	<% i = i + 1 %>
-<% end %>
-</tbody>
-</table>
-
-
-<h3>Projects without presales</h3>
-<table id="presales_table_2" class="sortable">
 <thead>
 	<tr><th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th>Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
 </thead>
 <tbody>
 <% i = 0 %>
-<% @projects_without_presales.each do |p| %>
+<% @projects.each do |p| %>
 	<% name = "" %>
 	<% name += p.project.name+" > " if p.project %>
 	<% name += p.name %>
 
 	<tr>
-		<td></td>
-		<td></td>	
+		<td><%= Presale.get_priority_message(p.get_priority) %></td>
+		<td><%= Presale.get_priority_message(p.get_setting_up_priority) %></td>	
 		<td><%= p.id %></td>
 		<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
 		<td><%= p.workstream %></td>

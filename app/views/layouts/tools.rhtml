@@ -143,7 +143,13 @@
       <li><div class="notif"><strong><%=new_requests%></strong> new or ackn requests</div></li>
     <% end %>
     <!-- PRESALES MENU -->
-    <li><%= link_to('Presales',{:controller=>'presales', :action=>'index'}, {:class=>menu_style('presales','index')}) %></li>
+    <li>
+      <%= link_to('Presales', "", {:class=>menu_style('presales','*'), :onclick=>"return false;"}) %>
+      <ul>
+        <li><%= link_to('Dashboard',   {:controller=>'presales',           :action=>'dashboard'})  %></li>
+        <li><%= link_to('Projects',    {:controller=>'presales',           :action=>'projects'})  %></li>
+      </ul>
+    </li>
 
     </ul>
   </div>
