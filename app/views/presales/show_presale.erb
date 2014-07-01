@@ -11,13 +11,5 @@
 	<% end %>
 </div>
 <div id="presale_content_right">
-	<h3 class="presale_title">Status Edit</h3>
-	<% @presale.presale_parameters.each do |parameter| %>
-		<% parameter_class = nil %>
-		<% parameter.status == true ? parameter_class = "presale_parameter_active" : parameter_class = "presale_parameter_inactive" %>
-		<%= link_to  parameter.presale_type.title , {:controller => "presales", :action => "update_presale_parameter", :presale_parameter_id => parameter.id.to_s }, {:class => parameter_class} %>
-		<br />
-	<% end %>
-
 </div>
 </div>

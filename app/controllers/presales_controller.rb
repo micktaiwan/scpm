@@ -2,6 +2,13 @@ class PresalesController < ApplicationController
 	layout "tools"
 	
 	# Projects
+	def dashboard
+	end
+
+	def opportunities
+	end
+
+	
 	def index
 		# Requests
 		@projects_with_presales = Project.find(:all, :joins=>["JOIN presales ON projects.id = presales.project_id", "JOIN milestones ON projects.id = milestones.project_id"], :conditions=>["is_running=1 and projects.project_id IS NOT NULL and milestones.name IN (?)", (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority'])], :group=>'projects.id')

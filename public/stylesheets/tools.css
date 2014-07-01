@@ -173,7 +173,7 @@ h3.presale_title {
 }
 
 /* Presale Buttons hover/enabled */
-.presale_btnlnk:hover, .presale_btnlnk_action:hover, .presale_parameter_active:hover, .presale_parameter_inactive:hover, .selected {
+.presale_btnlnk:hover, .presale_btnlnk_action:hover, .selected {
   box-shadow: inset 2px 2px 2px #678;
   -moz-box-shadow: inset 2px 2px 2px #678;
   -webkit-box-shadow: inset 2px 2px 2px #678;
@@ -183,12 +183,6 @@ h3.presale_title {
 }
 .presale_btnlnk_action:hover, .presale_btnlnk_action.selected {
   background-color: #E8FFC4;
-}
-.presale_parameter_active:hover, .presale_parameter_active.selected {
-  background-color: #7CE980;
-}
-.presale_parameter_inactive:hover, .presale_parameter_inactive.selected {
-  background-color: #FF7272;
 }
 
 
