@@ -8,8 +8,21 @@ class PresalesController < ApplicationController
 	end
 
 	def projects
-		@projects = Project.find(:all, :joins=>["JOIN milestones ON projects.id = milestones.project_id"], :conditions=>[" is_running=1 and projects.project_id IS NOT NULL and milestones.name IN (?)", (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority'])], :group=>'projects.id')
+		@presale_presale_type = params[:presale_presale_type]
+		
 
+		# Presale Types
+		@presale_types = PresaleType.find(:all).map {|pt| [pt.title,pt.id]}
+
+		# Query 
+		cond = ""
+		if defined?(@presale_presale_type) and @presale_presale_type != nil
+			cond = " and presale_presale_types.presale_type_id <> #{@presale_presale_type}" # NOT OK, need to show the projects without Presale or presale presale type.
+		end
+		@projects = Project.find(:all, 
+		                         :joins=>["JOIN milestones ON projects.id = milestones.project_id","LEFT JOIN presales ON projects.id = presales.project_id","LEFT JOIN presale_presale_types ON presales.id = presale_presale_types.presale_id"],
+		                         :conditions=>["is_running=1 and projects.project_id IS NOT NULL and milestones.name IN (?)#{cond}", (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority'])], 
+		                         :group=>'projects.id')
 	end
 
 

@@ -6,7 +6,12 @@
 
 <div id="priority_milestones"></div>
 
-<h3>Projects</h3>
+<% form_tag(:action=>'projects') do %>
+ Type: <%= select_tag ("presale_presale_type",options_for_select(@presale_types,@presale_presale_type.to_i))  %>
+  <%= submit_tag('Filter') %>
+<% end %>
+
+<h3>Projects without opportunities</h3>
 <table id="presales_table_1" class="sortable">
 <thead>
 	<tr><th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th>Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
@@ -26,7 +31,7 @@
 		<td><%= p.workstream %></td>
 		<td><%= p.pm %></td>
 		<td><%= p.suite_tag.name if p.suite_tag %></td>
-		<td><%= button_to "Create presale",  {:action=>'show_presale', :id=>p.id} %></td>
+		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
 	</tr>
 
 	<% i = i + 1 %>
