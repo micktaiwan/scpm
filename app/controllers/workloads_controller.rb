@@ -893,7 +893,11 @@ class WorkloadsController < ApplicationController
         :conditions=>conditions, 
         :order=>"week")
     
-    @holiday_dates = person_holiday_load.map { |h| "#{h.week}" }
+    @holiday_dates = person_holiday_load.map { |h| 
+      year = h.week.to_s[0..-3]
+      week = h.week.to_s[4..6]
+      ["#{week}-#{year}","#{h.week}"]
+    }
   end
   
   def create_backup    
