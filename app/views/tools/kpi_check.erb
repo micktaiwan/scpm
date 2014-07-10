@@ -33,7 +33,7 @@
 			<td><%= project.responsibles.map{|r| r.name}.join(', ')%></td>
 			<td>
 			<% project.get_suite_requests.each do |r| %>
-				<a href="http://toulouse.sqli.com/EMN/view.php?id=#{r.request_id}"><%= r.request_id %></a><br />
+				<a href="http://toulouse.sqli.com/EMN/view.php?id=<%= r.request_id %>"><%= r.request_id %></a><br />
 			<% end %>
 			</td>
 		</tr>
