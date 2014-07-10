@@ -13,6 +13,19 @@
                 <li><%= sdp.title %></li>
             <% end %>
         </ul>
+        <h4>Requests which should be closed (remaining to 0)</h4>
+        <ul>
+            <% @requests_to_close.each do |req| %>
+              <li>
+                <a href='http://toulouse.sqli.com/EMN/view.php?id=#<%= req.request_id.to_s %>'> 
+                  <b><%= req.work_package %></b>
+                  <%= req.milestone %>
+                  <%= req.complexity %>
+                  (<%= req.workload2 %>)
+                  <%= req.foreseen_end_date_str %>
+              </li>
+            <% end %>
+        </ul>
     </div>
 </div>
 
@@ -81,7 +94,7 @@
     <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
     <table width="100%">
     <tr><td valign="top">
-      <% if @sdp_tasks_unlinked.size > 0 || @sdp_tasks_unlinked_req.size > 0 %>
+      <% if @sdp_tasks_unlinked.size > 0 || @sdp_tasks_unlinked_req.size > 0 || @requests_to_close.size > 0 %>
         <%= submit_tag "Alert SDP", :id=>'btn_alert_sdp', :type=>'button', :onclick=>"jQuery('#view_alert_sdp').css('display','block');" , :class=>"btnlnk" %>
       <% end %>
       <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>

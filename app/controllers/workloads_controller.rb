@@ -159,7 +159,21 @@ class WorkloadsController < ApplicationController
     # By requests
     wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
     @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
-
+    # Requests not linked and with no remaining
+    person   = Person.find(session['workload_person_id'].to_i)
+    @requests_to_close = Array.new
+    reqs     = Request.find(:all,
+                        :conditions=>["status='assigned' and resolution!='ended' and resolution!='aborted' and assigned_to = ?", person.rmt_user])
+    reqs.each { |r|
+      total_remaining = 0
+      sdpTaskTemp = SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}'")
+      sdpTaskTemp.each do |tmp_sdp|
+        total_remaining += tmp_sdp.remaining
+      end
+      if sdpTaskTemp.size > 0 and total_remaining == 0
+        @requests_to_close << r
+      end
+    }
     # render :layout => false
   end
 
