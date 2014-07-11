@@ -4,6 +4,14 @@
 </script>
 <script src="/javascripts/tool.js"></script>
 
+
+<% form_tag(:action=>'dashboard') do %>
+  <%= select_tag ("presale_presale_type_id",options_for_select(@presale_types, @presale_presale_type_id.to_i))  %>
+  <%= hidden_field_tag 'filter' %>
+  <%= submit_tag('Filter') %>
+<% end %>
+
+
 <div id="priority_milestones"></div>
 <h3>Opportunities</h3>
 <table id="presales_table_1" class="sortable">
