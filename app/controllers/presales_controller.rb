@@ -18,21 +18,27 @@ class PresalesController < ApplicationController
 
 	def projects
 		# Presale Types
+		@presale_types_tmp = PresaleType.find(:all).map {|pt| [pt.title,pt.id]}
+		@presales_types_by_id = Hash.new
+		@presale_types_tmp.each do |pt|
+			@presales_types_by_id[pt[1].to_s] = pt[0]
+		end
 		@presale_types = [["All",0]]
-		@presale_types = @presale_types + PresaleType.find(:all).map {|pt| [pt.title,pt.id]}
+		@presale_types = @presale_types + @presale_types_tmp
 
 		# Query 
 		@presale_presale_type_id = params[:presale_presale_type]
 		cond = ""
 		if defined?(@presale_presale_type_id) and @presale_presale_type_id != nil and @presale_presale_type_id.to_i != 0
-			cond = "(presales.id IS NULL or presale_presale_types.presale_type_id <> #{@presale_presale_type_id})"
+			cond = "((presales.id IS NULL or presale_presale_types.presale_type_id <> #{@presale_presale_type_id}) and (presale_ignore_projects.id is NULL or presale_ignore_projects.presale_type_id <> #{@presale_presale_type_id}))"
 		else
 			cond = "presales.id IS NULL"
 		end
 		@projects = Project.find(:all, 
 		                         :joins=>["JOIN milestones ON projects.id = milestones.project_id",
 		                         	"LEFT JOIN presales ON projects.id = presales.project_id",
-		                         	"LEFT JOIN presale_presale_types ON presales.id = presale_presale_types.presale_id"],
+		                         	"LEFT JOIN presale_presale_types ON presales.id = presale_presale_types.presale_id",
+		                         	"LEFT JOIN presale_ignore_projects ON projects.id = presale_ignore_projects.project_id"],
 		                         :conditions=>["is_running=1 and projects.project_id IS NOT NULL and milestones.name IN (?) and #{cond}", (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority'])], 
 		                         :group=>'projects.id')
 	end
@@ -89,6 +95,24 @@ class PresalesController < ApplicationController
 			@presale = Presale.init_with_project(@project_id)
 		end
 
+	end
+
+	def ignore_presale
+		# Project
+		project_id = params[:id]
+		project = Project.find(:first, :conditions => ["id = ?", project_id])
+		
+		# Presale presale type
+		presale_type_id = params[:presale_type_id]
+		presale_type = PresaleType.find(:first, :conditions => ["id = ?", presale_type_id])
+
+		if project && presale_type
+			ignore = PresaleIgnoreProject.new
+			ignore.project = project
+			ignore.presale_type = presale_type
+			ignore.save
+		end
+		redirect_to :action=>:projects, :presale_presale_type=>presale_type_id
 	end
 
 	def show_presale_type_select

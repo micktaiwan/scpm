@@ -7,14 +7,18 @@
 <div id="priority_milestones"></div>
 
 <% form_tag(:action=>'projects') do %>
- Type: <%= select_tag ("presale_presale_type",options_for_select(@presale_types,@presale_presale_type.to_i))  %>
+ Type: <%= select_tag ("presale_presale_type",options_for_select(@presale_types,@presale_presale_type_id.to_i))  %>
   <%= submit_tag('Filter') %>
 <% end %>
 
-<h3>Projects without opportunities <% if @presale_presale_type != nil %> for type <%= @presale_presale_type %><% end %></h3>
+<h3>Projects without opportunities <% if @presales_types_by_id != nil and @presale_presale_type_idto_i != 0 %> for type <%= @presales_types_by_id[@presale_presale_type_id.to_s] %><% end %></h3>
 <table id="presales_table_1" class="sortable">
 <thead>
-	<tr><th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th>Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
+	<tr><th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th>Workstream</th><th>PM</th><th>Suite Name</th><th></th>
+  <% if @presale_presale_type_id != nil and @presale_presale_type_idto_i != 0 %>
+    <th></th>
+  <% end %>
+  </tr>
 </thead>
 <tbody>
 <% i = 0 %>
@@ -32,6 +36,9 @@
 		<td><%= p.pm %></td>
 		<td><%= p.suite_tag.name if p.suite_tag %></td>
 		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
+    <% if @presale_presale_type_id != nil and @presale_presale_type_id.to_i != 0 %>
+      <td><%= button_to "Ignore for #{@presales_types_by_id[@presale_presale_type_id.to_s]}", {:action=>'ignore_presale', :id=>p.id, :presale_type_id=>@presale_presale_type_id} %></td>
+    <% end %>
 	</tr>
 
 	<% i = i + 1 %>
