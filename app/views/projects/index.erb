@@ -11,7 +11,7 @@
 
 <div class="stats">
   Last RMT update: <%= @last_update %><br/>
-  <b>Filter</b>: <%= @projects.size %> projects, <%= @wps.size %> WPs with open requests and a status.<br/>
+  <b>Filter</b>: <%= @wps.size %> WPs with open requests and a status.<br/>
   <b>Total</b>: <%= @total_wps %> WPs, <%= @total_status %> statuses.
 </div>
 
@@ -161,6 +161,14 @@
           <%= render(:file=>'actions/actions_header') %>
           <%= render(:partial=>'actions/action', :collection=>@actions) %>
           </table>
+          <br/>
+		  <br/>
+			<%= link_to_function('Display closed actions', '$("my_closed").toggle()',{:class=>"btnlnk"}) %>
+			<div id="my_closed" style="display:none;">
+			<%= render(:file=>'actions/actions_header') %>
+			<%= render(:partial=>'actions/action', :collection=>@actions_closed) %>
+			</table>
+			</div>
         </div>
     </div>
 

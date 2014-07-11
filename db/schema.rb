@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140516145411) do
+ActiveRecord::Schema.define(:version => 20140701160800) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -459,6 +459,47 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
 
   create_table "pm_types", :force => true do |t|
     t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "presale_comments", :force => true do |t|
+    t.integer  "presale_presale_type_id"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "person_id"
+  end
+
+  create_table "presale_ignore_projects", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "presale_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "presale_presale_types", :force => true do |t|
+    t.integer  "presale_id"
+    t.integer  "presale_type_id"
+    t.integer  "opportunity_number"
+    t.integer  "milestone_date"
+    t.string   "status"
+    t.string   "complexity"
+    t.date     "buyside_launch_date"
+    t.date     "buyside_accepted_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "milestone_name_id"
+  end
+
+  create_table "presale_types", :force => true do |t|
+    t.text     "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "presales", :force => true do |t|
+    t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

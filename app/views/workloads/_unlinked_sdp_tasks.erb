@@ -14,4 +14,18 @@
 	<% end %>
 </ul>    
 
+<h4>Requests which should be closed (remaining to 0)</h4>
+<ul>
+    <% requests_to_close.each do |req| %>
+	    <li>
+	        <a href='http://toulouse.sqli.com/EMN/view.php?id=#<%= req.request_id.to_s %>'> 
+	        <b><%= req.work_package %></b>
+	        <%= req.milestone %>
+	        <%= req.complexity %>
+	        (<%= req.workload2 %>)
+	        <%= req.foreseen_end_date_str %>
+	    </li>
+    <% end %>
+</ul>
+
 </div>

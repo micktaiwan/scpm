@@ -8,7 +8,7 @@ class BrowsingTest < ActionController::PerformanceTest
 
   def setup
     session[:user_id] = Person.find_by_login('mfaivremacon')
-    session[:project_filter_qr] = [current_user.id]
+    session[:project_filter_qr] = "('#{current_user.id}')"
     session[:project_sort]      = nil
     session[:context] = 'reporting'
   end

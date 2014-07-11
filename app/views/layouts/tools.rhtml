@@ -11,6 +11,7 @@
   <!--<link rel="stylesheet" type="text/css" href="/stylesheets/chat.css" />-->
   <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
   <link rel="stylesheet" type="text/css" href="/stylesheets/tools.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/jquery-ui-1.10.4.css">
   <!--<script src="/javascripts/chat.js" type="text/javascript"></script>-->
   <script src="/javascripts/raphael-min.js" type="text/javascript"></script>
   <script src="/javascripts/sort_table.js" type="text/javascript"></script>
@@ -63,6 +64,8 @@
       <li><%= link_to('CHECK wrong Remaining Workload', {:controller=>'tools', :action=>'check_sdp_remaining_workload'}) %></li>
     	<li><%= link_to('CHECK QS/Spiders Counters', {:controller=>'tools', :action=>'show_counter_history'}) %></li>
     	<li><%= link_to('CHECK QS/Spiders Counters without RMT', {:controller=>'tools', :action=>'show_counter_history_without_rmt'}) %></li>
+      <li><%= link_to('CHECK KPI', {:controller=>'tools', :action=>'kpi_check'}) %></li>
+
 		</ul>
     </li>
     <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
@@ -131,7 +134,7 @@
     </li>
 		<% end %>
     <!-- LESSON LEARNT MENU -->
-		<li><%= link_to('Lessons Learnt', {:controller=>'lesson_collects', :action=>'index'}, {:class=>menu_style('welcome','update')}) %></li>
+		<li><%= link_to('Lessons Learnt', {:controller=>'lesson_collects', :action=>'index'}, {:class=>menu_style('lesson_collects','index')}) %></li>
 
     <% if cu.has_role?('Super') %>
       <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
@@ -139,6 +142,15 @@
     <% new_requests = Request.count(:conditions=>"status='new' or status='acknowledged'"); if new_requests > 0 %>
       <li><div class="notif"><strong><%=new_requests%></strong> new or ackn requests</div></li>
     <% end %>
+    <!-- PRESALES MENU -->
+    <li>
+      <%= link_to('Presales', "", {:class=>menu_style('presales','*'), :onclick=>"return false;"}) %>
+      <ul>
+        <li><%= link_to('Dashboard',   {:controller=>'presales',           :action=>'dashboard'})  %></li>
+        <li><%= link_to('Projects',    {:controller=>'presales',           :action=>'projects'})  %></li>
+      </ul>
+    </li>
+
     </ul>
   </div>
 

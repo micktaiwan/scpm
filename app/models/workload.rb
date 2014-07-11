@@ -208,9 +208,13 @@ class Workload
         if APP_CONFIG['workload_show_overload_availability']
           @availability   << {:name=>'avail',:id=>w, :value=>avail, :display=>(avail==0 ? '' : avail), :percent=>avail_percent}
         else
-          @availability   << {:name=>'avail',:id=>w, :value=>avail, :display=>(avail.to_i<=0 ? '' : avail), :percent=>avail_percent}
+          @availability   << {:name=>'avail',:id=>w, :value=>avail, :display=>(avail.to_f<=0 ? '' : avail), :percent=>avail_percent}
         end
-        @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
+        if APP_CONFIG['workload_show_negative_sum_availability']
+          @sum_availability += (avail==0 ? '' : avail).to_f if nb<=8
+        else
+          @sum_availability += (avail<=0 ? '' : avail).to_f if nb<=8
+        end
         @next_month_percents += capped_if_option(percent) if nb < 5
         @three_next_months_percents += capped_if_option(percent) if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent, :display=>percent.round.to_s+"%"}
@@ -229,6 +233,8 @@ class Workload
     @sdp_remaining_total  = 0
     @sdp_consumed_total   = 0
     @to_be_validated_in_wl_remaining_total = 0
+
+
     for l in @wl_lines
       @line_sums[l.id] = Hash.new
       #@line_sums[l.id][:sums] = l.wl_loads.map{|load| (load.week < today_week ? 0 : load.wlload)}.inject(:+)

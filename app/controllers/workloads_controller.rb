@@ -159,7 +159,21 @@ class WorkloadsController < ApplicationController
     # By requests
     wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
     @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
-
+    # Requests not linked and with no remaining
+    person   = Person.find(session['workload_person_id'].to_i)
+    @requests_to_close = Array.new
+    reqs     = Request.find(:all,
+                        :conditions=>["status='assigned' and resolution!='ended' and resolution!='aborted' and assigned_to = ?", person.rmt_user])
+    reqs.each { |r|
+      total_remaining = 0
+      sdpTaskTemp = SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}'")
+      sdpTaskTemp.each do |tmp_sdp|
+        total_remaining += tmp_sdp.remaining
+      end
+      if sdpTaskTemp.size > 0 and total_remaining == 0
+        @requests_to_close << r
+      end
+    }
     # render :layout => false
   end
 
@@ -389,7 +403,7 @@ class WorkloadsController < ApplicationController
       # Person Workload
       @workloads << Workload.new(p.id,session['workload_person_project_ids'],session['workload_persons_iterations'],session['workload_person_tags'], {:only_holidays=>true})
       # Person Holiday Warning
-      @resfresh_holidays_backup_warnings[p.id] = get_holiday_warning_detailed(p, Date.today+26.weeks)
+      @resfresh_holidays_backup_warnings[p.id] = get_holiday_warning_detailed(p, Date.today+27.weeks)
     end
     @workloads = @workloads.sort_by {|w| [w.person.name]}
     render :layout => false
@@ -883,15 +897,21 @@ class WorkloadsController < ApplicationController
       backup_weeks << b.week
     end
 
+    # Get holidays week
+    conditions = "wl_lines.person_id = #{session['workload_person_id'].to_s} and wl_lines.wl_type = #{WL_LINE_HOLIDAYS} and wlload > 0 and week >= #{wlweek(Date.today)}"
+    if backup_weeks.size > 0
+      conditions += " and week NOT IN (#{backup_weeks.join(',')})"
+    end
     person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and wlload > 0 and week >= ? and week NOT IN (?)", session['workload_person_id'].to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), backup_weeks], 
+        :conditions=>conditions, 
         :order=>"week")
     
-    @holiday_dates = Array.new
-    person_holiday_load.each do |holiday_load|
-      @holiday_dates << ["#{holiday_load.week}","#{holiday_load.week}"]
-    end
+    @holiday_dates = person_holiday_load.map { |h| 
+      year = h.week.to_s[0..-3]
+      week = h.week.to_s[4..6]
+      ["#{week}-#{year}","#{h.week}"]
+    }
   end
   
   def create_backup    

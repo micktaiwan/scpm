@@ -1,0 +1,54 @@
+<h3>Physical projects without Suite</h3>
+<table class="history_counts_table">
+	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td><td>Requests</td></tr>
+	<% for project in @physicalsWithoutSuite %>
+		<% name = "" %>
+		<% name += project.project.name+" > " if project.project %>
+		<% name += project.name %>
+		<tr class="bg_grey">
+			<td><%= project.workstream %></td>
+			<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>project.id) %></td>
+			<td><%=project.request_pm.join(', ')%></td>
+			<td><%= project.responsibles.map{|r| r.name}.join(', ')%></td>
+			<td>
+			<% project.get_suite_requests.each do |r| %>
+				<a href="http://toulouse.sqli.com/EMN/view.php?id=<%= r.request_id %>"><%= r.request_id %></a><br />
+			<% end %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+
+<h3>Projects without Suite and with the following WPs : <%= @specificWPs %> </h3>
+<table class="history_counts_table">
+	<tr class="bg_blue"><td>Workstream</td><td>Project</td><td>PM</td><td>Associations</td><td>Requests</td></tr>
+	<% for project in @physicalsWithoutSuite %>
+		<% name = "" %>
+		<% name += project.project.name+" > " if project.project %>
+		<% name += project.name %>
+		<tr class="bg_grey">
+			<td><%= project.workstream %></td>
+			<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>project.id) %></td>
+			<td><%=project.request_pm.join(', ')%></td>
+			<td><%= project.responsibles.map{|r| r.name}.join(', ')%></td>
+			<td>
+			<% project.get_suite_requests.each do |r| %>
+				<a href="http://toulouse.sqli.com/EMN/view.php?id=<%= r.request_id %>"><%= r.request_id %></a><br />
+			<% end %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+
+
+<h3>Requests without Milestone and with the following WPs : <%= @specificWPsForRequests %></h3>
+<table class="history_counts_table">
+	<tr class="bg_blue"><td>Request ID</td><td>Name</td><td>Assigned To</td></tr>
+	<% for request in @requestsWithoutMilestone %>
+		<tr class="bg_grey">
+			<td><%= request.request_id %></td>
+			<td><%= request.name %></td>
+			<td><%= request.assigned_to %></td>
+		</tr>
+	<% end %>
+</table>

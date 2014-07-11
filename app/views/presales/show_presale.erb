@@ -1,0 +1,15 @@
+<%= render(:file=>"presales/menu", :locals=>{:dashboard => 1}) %>
+<div id="presale_content">
+<div id="presale_content_left">
+	<% for presalePresaleType in @presale.presale_presale_types %>
+		<h3 class="presale_title"><%= presalePresaleType.getName %></h3>
+		<% lastComment = presalePresaleType.getLastComment %>
+		<% if lastComment != nil %>
+			<p><span class="bold">Last update time:</span> <%= time_ago_in_words(lastComment.updated_at.strftime("%Y-%m-%d %H:%M")) %></p>
+				<%= render(:partial=>'presale_comment', :object=>lastComment, :locals=>{:edit_mode => false}) %>
+		<% end %>
+	<% end %>
+</div>
+<div id="presale_content_right">
+</div>
+</div>
