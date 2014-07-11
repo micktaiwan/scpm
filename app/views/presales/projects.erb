@@ -11,7 +11,7 @@
   <%= submit_tag('Filter') %>
 <% end %>
 
-<h3>Projects without opportunities</h3>
+<h3>Projects without opportunities <% if @presale_presale_type != nil %> for type <%= @presale_presale_type %><% end %></h3>
 <table id="presales_table_1" class="sortable">
 <thead>
 	<tr><th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th>Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
