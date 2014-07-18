@@ -3,6 +3,7 @@ scpm_title: "SCPM Title"
 scpm_address: "http://scpm.sqli.com"
 project_name: "Your project code so you can configure display options"
 task_import_config: 'simple' # or multiple'
+tbp_auth: login/*TBP*/pwd
 
 # report
 report_timeline_count: 30 # Number of timeline displayed in the list of projects
@@ -111,48 +112,48 @@ presale_milestones_priority:
     - M5
 
 # Summary export - workpackages which should be highlighted in the summary
-    summary_workpackages_highlight: 
-        - WP2
-        - WP3.0
-        - WP3.1
-        - WP3.2
-        - WP3.2.1
-        - WP3.2.2
-        - WP3.2.3
-        - WP3.3
-        - WP3.4
-        - WP4
-        - WP4.1
-        - WP4.2
-        - WP4.3
-        - WP4.4
-        - WP5
-        - WP5.1
-        - WP6.1
-        - WP5.2
-        - WP6.2
-        - WP6.3
-        - WP6.4
-        - WP6.5
-        - WP6.6
-        - WP6.7
-        - WP6.8
-        - WP6.9
-        - WP6.10.1
-        - WP6.10.2
-        - WP6.10.3
-        - WP6.11
-        - WP7.1
-        - WP7.1.1
-        - WP7.1.2
-        - WP7.1.3
-        - WP7.1.4
-        - WP7.1.5
-        - WP7.1.6
-        - WP7.2
-        - WP7.2.1
-        - WP7.2.2
-        - WP7.2.3
-        - WP7.2.4
-        - WP7.2.5
-        - WP7.2.6
+summary_workpackages_highlight: 
+    - WP2
+    - WP3.0
+    - WP3.1
+    - WP3.2
+    - WP3.2.1
+    - WP3.2.2
+    - WP3.2.3
+    - WP3.3
+    - WP3.4
+    - WP4
+    - WP4.1
+    - WP4.2
+    - WP4.3
+    - WP4.4
+    - WP5
+    - WP5.1
+    - WP6.1
+    - WP5.2
+    - WP6.2
+    - WP6.3
+    - WP6.4
+    - WP6.5
+    - WP6.6
+    - WP6.7
+    - WP6.8
+    - WP6.9
+    - WP6.10.1
+    - WP6.10.2
+    - WP6.10.3
+    - WP6.11
+    - WP7.1
+    - WP7.1.1
+    - WP7.1.2
+    - WP7.1.3
+    - WP7.1.4
+    - WP7.1.5
+    - WP7.1.6
+    - WP7.2
+    - WP7.2.1
+    - WP7.2.2
+    - WP7.2.3
+    - WP7.2.4
+    - WP7.2.5
+    - WP7.2.6
