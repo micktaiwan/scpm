@@ -4,8 +4,9 @@ class CreateTbpCollabs < ActiveRecord::Migration
       t.integer :tbp_id
       t.string 	:firstname
       t.string 	:lastname
-      t.integer :bu
+      t.integer :activity
       t.integer :profil
+      t.integer :te
       t.timestamps
     end
   end

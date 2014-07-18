@@ -954,8 +954,9 @@ ActiveRecord::Schema.define(:version => 20140716124733) do
     t.integer  "tbp_id"
     t.string   "firstname"
     t.string   "lastname"
-    t.integer  "bu"
+    t.integer  "activity"
     t.integer  "profil"
+    t.integer  "te"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

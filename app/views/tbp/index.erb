@@ -1,3 +1,9 @@
 <%= link_to_remote('Update reference tables', :url=>{:controller=>:tbp, :action=>:update}, :update=>{:success=>:result, :failure=>:result}, :html=>{:class=>"btnlnk"}) %>
-
+<br/>
+<br/>
 <div id="result"></div>
+
+<table class="sortable">
+<thead><tr><td>Last name</td><td>First name</td><td>TE</td></tr></thead>
+<%= render(:partial=>'collab', :collection=>@collabs) %>
+</table>
