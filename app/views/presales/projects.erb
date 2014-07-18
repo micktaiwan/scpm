@@ -1,42 +1,100 @@
+<!-- IMPORT -->
 <script src="/javascripts/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script type="text/javascript">
   var $j = jQuery.noConflict();
 </script>
 <script src="/javascripts/tool.js"></script>
 
+<!-- IS TYPE -->
+<% if @presales_types_by_id != nil and @presale_presale_type_id.to_i != 0 %>
+  <% is_type = true %>
+<% else %>
+  <% is_type = false %>
+<% end %>
+
+<!-- POPOVER -->
 <div id="priority_milestones"></div>
 
-<% form_tag(:action=>'projects') do %>
- Type: <%= select_tag ("presale_presale_type",options_for_select(@presale_types,@presale_presale_type.to_i))  %>
-  <%= submit_tag('Filter') %>
+<!-- MENU -->
+<div style="height:20px;">
+  <!-- TYPE SELECTION -->
+  <div style="position:absolute;">
+    <% form_tag(:action=>'projects') do %>
+     Type: <%= select_tag ("presale_presale_type",options_for_select(@presale_types,@presale_presale_type_id.to_i))  %>
+     <%= submit_tag('Filter') %>
+    <% end %>
+  </div>
+  <!-- SHOW IGNORED -->
+  <div style="position:absolute;right:15px;">
+    <% if is_type %>
+      Show ignored projects for <%= @presales_types_by_id[@presale_presale_type_id.to_s] %>: 
+      <% if @show_ignored %>
+        <%= radio_button_tag "show_ignored", :false,  false, {:onclick=>"setShowIgnore(this);"} %> No
+        <%= radio_button_tag "show_ignored", :true, true, {:onclick=>"setShowIgnore(this);"} %> Yes
+      <% else %>
+        <%= radio_button_tag "show_ignored", :false,  true, {:onclick=>"setShowIgnore(this);"} %> No
+        <%= radio_button_tag "show_ignored", :true, false, {:onclick=>"setShowIgnore(this);"} %> Yes
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<!-- TITLE -->
+<% if @show_ignored %>
+  <h3>Projects ignored for type <%= @presales_types_by_id[@presale_presale_type_id.to_s] %></h3>
+<% else %>
+  <h3>Projects without opportunities <% if is_type %> for type <%= @presales_types_by_id[@presale_presale_type_id.to_s] %><% end %></h3>
 <% end %>
 
-<h3>Projects without opportunities</h3>
+<!-- TABLE -->
 <table id="presales_table_1" class="sortable">
-<thead>
-	<tr><th class="priority_setting_up">Priority Setting-up</th><th class="priority">Priority</th><th>ID</th><th>Name</th><th>Workstream</th><th>PM</th><th>Suite Name</th><th></th></tr>
-</thead>
-<tbody>
-<% i = 0 %>
-<% @projects.each do |p| %>
-	<% name = "" %>
-	<% name += p.project.name+" > " if p.project %>
-	<% name += p.name %>
+  <thead>
+  	<tr>
+      <th class="priority_setting_up">Priority Setting-up</th>
+      <th class="priority">Priority</th>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Workstream</th>
+      <th>PM</th>
+      <th>Suite Name</th>
+      <th></th>
+      <% if is_type %>
+        <th></th>
+      <% end %>
+    </tr>
+  </thead>
 
-	<tr>
-		<td><%= Presale.get_priority_message(p.get_priority) %></td>
-		<td><%= Presale.get_priority_message(p.get_setting_up_priority) %></td>	
-		<td><%= p.id %></td>
-		<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
-		<td><%= p.workstream %></td>
-		<td><%= p.pm %></td>
-		<td><%= p.suite_tag.name if p.suite_tag %></td>
-		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
-	</tr>
+  <tbody>
+  <% i = 0 %>
+  <% @projects.each do |p| %>
+  	<% name = "" %>
+  	<% name += p.project.name+" > " if p.project %>
+  	<% name += p.name %>
 
-	<% i = i + 1 %>
-<% end %>
-</tbody>
+  	<tr>
+  		<td><%= Presale.get_priority_message(p.get_priority) %></td>
+  		<td><%= Presale.get_priority_message(p.get_setting_up_priority) %></td>	
+  		<td><%= p.id %></td>
+  		<td><%=link_to(name, :controller=>'projects', :action=>'show', :id=>p.id) %></td>
+  		<td><%= p.workstream %></td>
+  		<td><%= p.pm %></td>
+  		<td><%= p.suite_tag.name if p.suite_tag %></td>
+  		<td><%= button_to "Presale",  {:action=>'show_presale', :id=>p.id} %></td>
+
+      <% if is_type %>
+        
+          <% if @show_ignored %>
+            <td><%= button_to "Remove from ignored", {:action=>'ignore_presale_remove', :id=>p.id, :presale_type_id=>@presale_presale_type_id} %></td>
+          <% else %>
+            <td><%= button_to "Ignore for #{@presales_types_by_id[@presale_presale_type_id.to_s]}", {:action=>'ignore_presale', :id=>p.id, :presale_type_id=>@presale_presale_type_id} %></td>
+          <% end %>
+        
+      <% end %>
+  	</tr>
+
+  	<% i = i + 1 %>
+  <% end %>
+  </tbody>
 </table>
 
 <script type="text/javascript">
@@ -50,9 +108,8 @@
       }, function() {
       	 jQuery("#priority_milestones").hide();
       }
-    );
-  });
-  jQuery( document ).ready(function() {
+    ); 
+
     jQuery(".priority").hover(
       function(e) {
         jQuery("#priority_milestones").show();
@@ -63,4 +120,8 @@
       }
     );
   });
+
+  function setShowIgnore(object) {
+    window.location.replace("/presales/projects?presale_presale_type=<%= @presale_presale_type_id %>&show_ignored="+object.value)  
+  }
  </script>

@@ -899,9 +899,7 @@ class WorkloadsController < ApplicationController
 
     # Get holidays week
     conditions = "wl_lines.person_id = #{session['workload_person_id'].to_s} and wl_lines.wl_type = #{WL_LINE_HOLIDAYS} and wlload > 0 and week >= #{wlweek(Date.today)}"
-    if backup_weeks.size > 0
-      conditions += " and week NOT IN (#{backup_weeks.join(',')})"
-    end
+    
     person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
         :conditions=>conditions, 
