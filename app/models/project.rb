@@ -649,14 +649,30 @@ class Project < ActiveRecord::Base
   end
 
   def get_status_for_milestone(milestone)
-    status, style = '',{}
+    status, style, decision = '',{}
     if milestone
       status += milestone.name + ': '+milestone.comments.split("\n").join("\r\n")
       status += "\r\n" + milestone.date.to_s if milestone.date
       status += "\r\n"
       style  = get_cell_style_for_milestone(milestone)
+
+      case milestone.status
+        when -1
+          decision = "#no request# "
+        when 0
+          decision = "#unknown# "
+        when 1
+          decision = "#GO# "
+        when 2
+          decision = "#GO w/a# "
+        when 3
+          decision = "#NO GO# "
+        else
+          decision = "#NA# "
+      end
+
     end
-    [status,style]
+    [status,style,decision]
   end
 
   # names is a array of names mutually exclusive (if we found M5 we should not be able to found a G5)
@@ -950,9 +966,16 @@ class Project < ActiveRecord::Base
   #Get the list of workpackages of requests linked to the project
   def get_workpackages_from_requests
     result = Array.new
+    person = nil
+
     self.requests.each do |r|
       if (!result.include?(r.work_package))
-        result << r.work_package
+        if r.assigned_to != ''
+          person = Person.find_by_rmt_user(r.assigned_to)
+          result << r.work_package + "(" + person.name + ")"
+        else
+          result << r.work_package + "(NA)"
+        end        
       end
     end
     return result;
@@ -998,6 +1021,17 @@ class Project < ActiveRecord::Base
         end
       end
       return p_priority_setting_up
+  end
+
+  #return the QR_QWR name (for the summary display)
+  def get_qr_qwr_name
+    qr_qwr = nil
+    if (self.is_qr_qwr && self.is_running && self.qr_qwr_id != nil && self.qr_qwr_id != 0)
+      qr_qwr = Person.find(self.qr_qwr_id)
+      return qr_qwr.name + ""
+    else
+      return "N/A"
+    end
   end
 
 private
