@@ -966,6 +966,7 @@ ActiveRecord::Schema.define(:version => 20140721161610) do
     t.integer  "activity"
     t.integer  "profil"
     t.integer  "te"
+    t.datetime "last_update"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

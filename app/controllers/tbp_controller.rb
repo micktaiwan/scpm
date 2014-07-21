@@ -48,6 +48,7 @@ class TbpController < ApplicationController
     begin
       id = params['id'].to_i
       TbpCollabWork.delete_all("tbp_collab_id='#{id}'")
+      TbpCollab.find_by_tbp_id(id).update_attribute(:last_update, DateTime.now())
       open("http://toulouse.sqli.com/tbp/restService/public/collaborateurs/#{id}/charge.json?date_debut=2014-07-14&date_fin=2014-07-31", "Authorization"=>"Basic #{APP_CONFIG['tbp_auth']}") {|f|
         @rv = JSON.parse(f.read)
         puts @rv.inspect
@@ -55,7 +56,6 @@ class TbpController < ApplicationController
           date = l['date']
           l['projets'].each { |p|
             TbpCollabWork.create(:tbp_collab_id=>id,:date=>date, :tbp_project_id=>p['id'], :workload=>p['charge'])
-
            }
           }
         }
