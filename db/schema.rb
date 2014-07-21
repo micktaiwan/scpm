@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140716124733) do
+ActiveRecord::Schema.define(:version => 20140721161610) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -950,6 +950,15 @@ ActiveRecord::Schema.define(:version => 20140716124733) do
     t.text     "color"
   end
 
+  create_table "tbp_collab_works", :force => true do |t|
+    t.integer  "tbp_collab_id"
+    t.date     "date"
+    t.integer  "tbp_project_id"
+    t.float    "workload"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "tbp_collabs", :force => true do |t|
     t.integer  "tbp_id"
     t.string   "firstname"
@@ -957,6 +966,16 @@ ActiveRecord::Schema.define(:version => 20140716124733) do
     t.integer  "activity"
     t.integer  "profil"
     t.integer  "te"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tbp_projects", :force => true do |t|
+    t.integer  "tbp_id"
+    t.string   "name"
+    t.integer  "activity"
+    t.integer  "ttype"
+    t.string   "agresso"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

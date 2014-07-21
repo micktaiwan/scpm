@@ -1,5 +1,9 @@
 <tr>
-  <td><a href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=collab.tbp_id%>"><%= collab.lastname %></a></td>
+  <td><%= link_to(collab.lastname, :action=>'collab', :id=>collab.tbp_id) %></a></td>
   <td><%= collab.firstname %></td>
   <td><%= collab.te %></td>
+  <td><%= collab.activity %></td>
+  <td id="collab_<%= collab.tbp_id %>"><%= link_to_remote('update', :url=>{:controller=>:tbp, :action=>:update_collab, :id=>collab.tbp_id}, :update=>{:success=>"collab_#{collab.tbp_id}", :failure=>"collab_#{collab.tbp_id}"}, :html=>{:class=>"btnlnk"}) %></td>
+  <td>
+  <a href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=collab.tbp_id%>">TBP</a></td>
 </tr>
