@@ -1,0 +1,25 @@
+<tr<% if tbp_line.person.is_virtual==1 %> style="background-color:#FDA"<% end %>>
+  <td width="200">
+    <%= tbp_line.person.name %>
+    <a href='/workloads/?person_id=<%= tbp_line.person.id %>' class="btnlnk">WL<a>
+    <% if tbp_line.person.tbp_collab %>
+      <a href='/tbp/collab/<%= tbp_line.person.tbp_collab.tbp_id %>' class="btnlnk">TBP<a>    
+    <% end %>
+  </td>
+  <td align="center"><%= tbp_line.remain_to_plan_days %></td>
+  <td align="center"><%= tbp_line.next_month_percents %>%</td>
+  <td align="center" width="80"><%= tbp_line.three_next_months_percents %>% (<%= tbp_line.three_next_months_percents-tbp_line.next_month_percents %>)</td>
+  <td align="center"><%= tbp_line.sum_availability.round %></td>
+	<% indexWeek = 0 %>
+	<% for w in tbp_line.percents %>
+		<%
+			w_work_value = tbp_line.ctotals[indexWeek][:value]
+      diff = tbp_line.forecasted[indexWeek][:value] - w_work_value
+      w_work_css = ""
+      w_work_css = "availability x4" if diff < 0
+      w_work_css = "availability x0" if diff > 0
+		%>
+    <td class="<%= w_work_css %>"><%= diff if diff!=0 %></td>
+    <% indexWeek += 1 %>
+	<% end %>
+</tr>

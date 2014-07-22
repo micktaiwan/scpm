@@ -31,10 +31,14 @@ class Workload
     :nb_total_lines,  # total before filters
     :nb_current_lines,# total after filters
     :nb_hidden_lines, # difference (filtered)
-    :staffing         # nb of person needed per week
+    :staffing,         # nb of person needed per week
+    :forecasted       # TBP: nb of days per weeks forcasted on the current project filter
 
   # options can have
   # :only_holidays => true
+  # :add_holidays => true
+  # :hide_lines_with_no_workload => true
+  # :nb_weeks => nb of weeks to display. Default is read in configuration file
   def initialize(person_id, project_ids, iterations, tags_ids, options = {})
 
     # return if project_ids.size==0
@@ -143,8 +147,13 @@ class Workload
     #@displayed_lines  = @displayed_lines.sort_by { |l| eval(APP_CONFIG['workloads_lines_sort'])}
     @nb_current_lines = @displayed_lines.size
     @nb_hidden_lines  = @nb_total_lines - @nb_current_lines
-    from_day    = Date.today - (Date.today.cwday-1).days
-    farest_week = wlweek(from_day+APP_CONFIG['workloads_months'].to_i.months)
+    from_day    = Date.today - (Date.today.cwday-1).days # get monday of the week
+    if options[:weeks_to_display]
+      delay_to_display = options[:weeks_to_display].to_i.weeks
+    else  
+      delay_to_display = APP_CONFIG['workloads_months'].to_i.months
+    end
+    farest_week = wlweek(from_day+delay_to_display)
     @wl_weeks   = []
     @weeks      = []
     @opens      = []
@@ -155,6 +164,7 @@ class Workload
     @months     = []
     @days       = []
     @staffing   = []
+    @forecasted = []
     month = Date::ABBR_MONTHNAMES[(from_day+4.days).month]
     month_displayed = false
     nb = 0
@@ -219,6 +229,17 @@ class Workload
         @three_next_months_percents += capped_if_option(percent) if nb >= 0 and nb < 0+12 # if nb >= 5 and nb < 5+12 # 28-Mar-2012: changed
         @percents << {:name=>'cpercent', :id=>w, :value=>percent, :display=>percent.round.to_s+"%"}
       #end
+
+      # TBP
+      if options[:add_tbp_info]
+        if @person.tbp_collab
+          value = @person.tbp_collab.get_by_date(iteration, iteration+5.days, project_ids)
+          @forecasted << {:value => value}
+        else
+          @forecasted << {:value => 0}
+        end
+      end
+
       iteration = iteration + 7.days
       nb += 1
     end

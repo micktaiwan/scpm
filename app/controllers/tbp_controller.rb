@@ -51,7 +51,7 @@ class TbpController < ApplicationController
       id = params['id'].to_i
       TbpCollabWork.delete_all("tbp_collab_id='#{id}'")
       index = TbpCollab.find_by_tbp_id(id).account_index
-      open("#{APP_CONFIG['tbp_urls'][index]}/collaborateurs/#{id}/charge.json?date_debut=2014-07-14&date_fin=2014-07-31", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][index]}") {|f|
+      open("#{APP_CONFIG['tbp_urls'][index]}/collaborateurs/#{id}/charge.json?date_debut=2014-07-14&date_fin=2014-10-31", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][index]}") {|f|
         rv = JSON.parse(f.read)
         # puts @rv.inspect
         rv['data']['charge'].each { |l|
