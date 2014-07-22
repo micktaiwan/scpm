@@ -7,6 +7,7 @@ class CreateTbpCollabs < ActiveRecord::Migration
       t.integer :activity
       t.integer :profil
       t.integer :te
+      t.integer :account_index
       t.datetime :last_update
       t.timestamps
     end

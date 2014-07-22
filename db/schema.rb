@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140721161610) do
+ActiveRecord::Schema.define(:version => 20140722120716) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -418,6 +418,7 @@ ActiveRecord::Schema.define(:version => 20140721161610) do
     t.integer  "is_virtual",      :default => 0
     t.text     "settings"
     t.integer  "cost_profile_id"
+    t.integer  "tbp_collab_id"
   end
 
   create_table "person_roles", :force => true do |t|
@@ -966,6 +967,7 @@ ActiveRecord::Schema.define(:version => 20140721161610) do
     t.integer  "activity"
     t.integer  "profil"
     t.integer  "te"
+    t.integer  "account_index"
     t.datetime "last_update"
     t.datetime "created_at"
     t.datetime "updated_at"

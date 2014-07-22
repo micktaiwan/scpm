@@ -62,6 +62,7 @@ class PeopleController < ApplicationController
 
   def edit
     @person = Person.find(params[:id])
+    @tbp_collabs = TbpCollab.all
     @companies = Company.all(:order=>'name')
     cost_profiles = CostProfile.all(:order=>'company_id, name')
     @profiles = []
