@@ -183,6 +183,7 @@ class ProjectsController < ApplicationController
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR' and is_supervisor=0 and has_left=0"], :order=>"people.name asc")    
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
     @suiteTags   = SuiteTag.find(:all)
+    @tbp_projects= TbpProject.all.sort_by { |p| p.name}
   end
 
   def edit_status

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140722120716) do
+ActiveRecord::Schema.define(:version => 20140722122752) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -509,7 +509,7 @@ ActiveRecord::Schema.define(:version => 20140722120716) do
     t.string   "brn"
     t.string   "workstream"
     t.integer  "project_id"
-    t.integer  "last_status",   :default => 0
+    t.integer  "last_status",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "supervisor_id"
@@ -518,19 +518,20 @@ ActiveRecord::Schema.define(:version => 20140722120716) do
     t.string   "bpl"
     t.string   "ispl"
     t.datetime "read_date"
-    t.integer  "lifecycle",     :default => 0
+    t.integer  "lifecycle",      :default => 0
     t.string   "pm_deputy"
     t.string   "ispm"
     t.integer  "lifecycle_id"
-    t.integer  "qs_count",      :default => 0
-    t.integer  "spider_count",  :default => 0
-    t.boolean  "is_running",    :default => true
+    t.integer  "qs_count",       :default => 0
+    t.integer  "spider_count",   :default => 0
+    t.boolean  "is_running",     :default => true
     t.integer  "qr_qwr_id"
     t.string   "dwr"
-    t.boolean  "is_qr_qwr",     :default => false
+    t.boolean  "is_qr_qwr",      :default => false
     t.integer  "suite_tag_id"
     t.string   "project_code"
-    t.integer  "sales_revenue", :default => 0
+    t.integer  "sales_revenue",  :default => 0
+    t.integer  "tbp_project_id"
   end
 
   create_table "question_references", :force => true do |t|
