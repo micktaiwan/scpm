@@ -1,11 +1,12 @@
 <tr<% if tbp_line.person.is_virtual==1 %> style="background-color:#FDA"<% end %>>
-  <td width="200">
-    <%= tbp_line.person.name %>
-    <a href='/workloads/?person_id=<%= tbp_line.person.id %>' class="btnlnk">WL<a>
+  <td width="200"><%= tbp_line.person.name %></td>
+  <td><a href='/workloads/?person_id=<%= tbp_line.person.id %>' class="btnlnk">WL</a></td>
+  <td>
     <% if tbp_line.person.tbp_collab %>
       <a href='/tbp/collab/<%= tbp_line.person.tbp_collab.tbp_id %>' class="btnlnk">TBP<a>    
     <% end %>
   </td>
+  <td><% if tbp_line.person.tbp_collab %><a href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=tbp_line.person.tbp_collab.tbp_id%>">TBP</a><% end %></td>
   <td align="center"><%= tbp_line.remain_to_plan_days %></td>
   <td align="center"><%= tbp_line.next_month_percents %>%</td>
   <td align="center" width="80"><%= tbp_line.three_next_months_percents %>% (<%= tbp_line.three_next_months_percents-tbp_line.next_month_percents %>)</td>
