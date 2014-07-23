@@ -6,6 +6,7 @@ class CreateTbpProjects < ActiveRecord::Migration
       t.integer :activity
       t.integer :ttype
       t.string  :agresso
+      t.integer :account_index
       t.timestamps
     end
   end

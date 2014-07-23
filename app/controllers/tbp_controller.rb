@@ -13,23 +13,24 @@ class TbpController < ApplicationController
     begin
       # update TbpCollabs
       TbpCollab.delete_all
-      for i in (0..APP_CONFIG['tbp_urls'].size-1) do
-        open("#{APP_CONFIG['tbp_urls'][i]}/collaborateurs.json", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][i]}") {|f|
+      for i in (0..APP_CONFIG['tbp_auths'].size-1) do
+        puts APP_CONFIG['tbp_auths'][0]['name'].inspect
+        open("#{APP_CONFIG['tbp_auths'][i]['url']}/collaborateurs.json", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][i]['auth']}") {|f|
           rv = JSON.parse(f.read)
           #puts @rv.inspect
           rv['data']['collaborateurs'].each { |l|
             TbpCollab.create(:account_index=>i , :tbp_id=>l['id'],:lastname=>l['nom'], :firstname=>l['prenom'], :activity=>l['activite'], :te=>l['te'])
             }
-          }
+          'url'}
       end
       # update TbpProjects
       TbpProject.delete_all
-      for i in (0..APP_CONFIG['tbp_urls'].size-1) do
-        open("#{APP_CONFIG['tbp_urls'][i]}/projets.json", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][i]}") {|f|
+      for i in (0..APP_CONFIG['tbp_auths'].size-1) do
+        open("#{APP_CONFIG['tbp_auths'][i]['url']}/projets.json", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][i]['auth']}") {|f|
           rv = JSON.parse(f.read)
           #puts @rv.inspect
           rv['data']['projets'].each { |l|
-            TbpProject.create(:tbp_id=>l['id'],:name=>l['libelle'], :agresso=>l['agresso'], :activity=>l['activite'], :ttype=>l['type'])
+            TbpProject.create(:account_index=>i, :tbp_id=>l['id'],:name=>l['libelle'], :agresso=>l['agresso'], :activity=>l['activite'], :ttype=>l['type'])
             }
           }
       end
@@ -51,7 +52,7 @@ class TbpController < ApplicationController
       id = params['id'].to_i
       TbpCollabWork.delete_all("tbp_collab_id='#{id}'")
       index = TbpCollab.find_by_tbp_id(id).account_index
-      open("#{APP_CONFIG['tbp_urls'][index]}/collaborateurs/#{id}/charge.json?date_debut=2014-07-14&date_fin=2014-10-31", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][index]}") {|f|
+      open("#{APP_CONFIG['tbp_auths'][index]['url']}/collaborateurs/#{id}/charge.json?date_debut=2014-07-14&date_fin=2014-10-31", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][index]['auth']}") {|f|
         rv = JSON.parse(f.read)
         # puts @rv.inspect
         rv['data']['charge'].each { |l|
@@ -68,6 +69,5 @@ class TbpController < ApplicationController
     TbpCollab.find_by_tbp_id(id).update_attribute(:last_update, DateTime.now())
     render(:text=>'ok')
   end
-
 
 end

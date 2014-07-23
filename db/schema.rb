@@ -980,6 +980,7 @@ ActiveRecord::Schema.define(:version => 20140722122752) do
     t.integer  "activity"
     t.integer  "ttype"
     t.string   "agresso"
+    t.integer  "account_index"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,7 +1,7 @@
 <% if @workloads.size > 0 %>
   <table class="refresh_conso_table">
     <tr style="font-weight:bold;">
-      <td colspan="5"></td>
+      <td colspan="10"></td>
       <% for w in @workloads.first.months %>
         <td style="text-align:center;"><%= w %></td>
       <% end %>
@@ -12,6 +12,8 @@
       <td>WL</td>
       <td>BAM</td>
       <td>TBP</td>
+      <td>Edit</td>
+      <td>Update</td>
       <td>To plan</td>
       <td>Next 5 weeks</td>
       <td>Next 3 months</td>

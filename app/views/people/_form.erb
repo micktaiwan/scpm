@@ -13,7 +13,7 @@
 <%= select(:person, :company_id, @companies.map {|u| [u.name,u.id]}) %></p>
 
 <p><%= label_tag 'tbp_collab_id' %>
-<%= select(:person, :tbp_collab_id, @tbp_collabs.map {|u| ["#{u.lastname} #{u.firstname}" , u.tbp_id]},:include_blank => true) %></p>
+<%= select(:person, :tbp_collab_id, @tbp_collabs.map {|u| ["#{APP_CONFIG['tbp_auths'][u.account_index]['name']} - #{u.lastname} #{u.firstname}" , u.tbp_id]},:include_blank => true) %></p>
 
 <% if APP_CONFIG['workloads_use_financial_monitoring'] %>
 	<p><%= label_tag 'cost_profile' %>
