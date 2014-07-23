@@ -16,7 +16,8 @@
         "Missing tasks",
         "Missing lines",
         "Errors in affectation",
-        "Requests to validate"
+        "Requests to validate",
+        "TBP"
         ]) %>
   </ol>
 
@@ -80,7 +81,7 @@
     <div id="tabContent5" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="5"? "block" : "none"%>;">
       <br />
       <div id="errors_in_affectations">
-        <%= link_to_remote('Refresh',  :url => { :action => "refresh_errors_in_affectations" }, :loading => "$('error3').update('');$('loading5').appear()", :complete => "$('loading5').hide()", :update => { :success => "data5", :failure => "error5" }) %>
+        <%= link_to_remote('Refresh',  :url => { :action => "refresh_errors_in_affectations" }, :loading => "$('error5).update('');$('loading5').appear()", :complete => "$('loading5').hide()", :update => { :success => "data5", :failure => "error5" }) %>
         <br/>
         <br/>
         <%= image_tag('loading.gif', :id=>'loading5', :style=>"display:none;") %>
@@ -92,12 +93,34 @@
     <div id="tabContent6" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="6"? "block" : "none"%>;">
       <br />
       <div id="requests_to_validate">
-        <%= link_to_remote('Refresh',  :url => { :action => "refresh_requests_to_validate" }, :loading => "$('error3').update('');$('loading6').appear()", :complete => "$('loading6').hide()", :update => { :success => "data6", :failure => "error6" }) %>
+        <%= link_to_remote('Refresh',  :url => { :action => "refresh_requests_to_validate" }, :loading => "$('error6').update('');$('loading6').appear()", :complete => "$('loading6').hide()", :update => { :success => "data6", :failure => "error6" }) %>
         <br/>
         <br/>
         <%= image_tag('loading.gif', :id=>'loading6', :style=>"display:none;") %>
         <div id="error6"></div>
         <div id="data6"></div>
+      </div>
+    </div>
+    <div id="tabContent7" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="7"? "block" : "none"%>;">
+      <br />
+      <div id="tbp">
+
+        <% if APP_CONFIG['workloads_show_consolidation_filters'] %>
+          <%= form_remote_tag(:url=> {:action => "refresh_tbp"}, :loading => "$('error7').update('');$('loading7').appear()", :complete => "$('loading7').hide()", :update => { :success => "data7", :failure => "error7"}, :html=>{:name=>"refresh_form"})  %>
+            <%= select(:company, :company_ids, options_for_select(@companies), :include_blank=>"All" ) %>
+            <%= select(:project, :project_ids, options_for_select(@projects), :include_blank=>"All" ) %>
+            <%= submit_tag('Refresh') %>
+          </form>
+        <% else %>
+          <%= link_to_remote('Refresh',  :url => { :action => "refresh_tbp" }, :loading => "$('error7').update('');$('loading7').appear()", :complete => "$('loading7').hide()", :update => { :success => "data7", :failure => "error7" }) %>
+        <% end %>
+
+
+        <br/>
+        <br/>
+        <%= image_tag('loading.gif', :id=>'loading7', :style=>"display:none;") %>
+        <div id="error7"></div>
+        <div id="data7"></div>
       </div>
     </div>
 

@@ -1,0 +1,35 @@
+<script src="/javascripts/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery-ui-1.10.4.min.js"></script>
+<script type="text/javascript">
+	var $j = jQuery.noConflict();
+</script>
+
+<div id="presale_menu">
+	<h3 class="presale_title"><%= @presale.project.name %></h3>
+
+	<!-- Dashboard -->
+	<% dashboardIsSelected = "" %>
+	<% dashboardIsSelected = " selected" if defined? dashboard  %>
+	<div class="presale_btnlnk<%= dashboardIsSelected %>">
+		<%= link_to "Dashboard", {:controller => "presales", :action => "show_presale", :id => @presale.project.id}, {:class => "presale_btnlnk_content"} %>
+	</div>
+	
+	<h3 class="presale_title">Opportunities</h3>
+
+	<!-- New presale type -->
+	<% newPresaleTypeIsSelected = "" %>
+	<% newPresaleTypeIsSelected = " selected" if defined? new_presale  %>
+	<div class="presale_btnlnk_action<%= newPresaleTypeIsSelected %>">
+		<%= link_to "New", {:controller => "presales", :action => "show_presale_type_select", :id => @presale.id}, {:class => "presale_btnlnk_content"} %>
+	</div>
+
+	<!-- Presale type -->
+	<% @presale.presale_presale_types.each do |presale_presale_type| %>
+		<br />
+		<% presalePresaleTypeisSelected = "" %>
+		<% presalePresaleTypeisSelected = " selected" if defined? presale_presale_id and presale_presale_id == presale_presale_type.id %>
+		<div class="presale_btnlnk<%= presalePresaleTypeisSelected %>">
+			<%= link_to  presale_presale_type.getName , {:controller => "presales", :action => "show_presale_by_type", :presale_presale_type => presale_presale_type.id }, {:class => "presale_btnlnk_content"} %>
+		</div>
+	<% end %>
+</div>

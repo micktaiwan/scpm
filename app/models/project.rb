@@ -36,6 +36,8 @@ class Project < ActiveRecord::Base
   has_many    :project_check_root_items, :conditions=>"parent_id=0", :class_name=>"ChecklistItem"
   has_many    :spiders,      :dependent => :destroy
   has_many    :wl_lines, :dependent => :nullify
+  has_many    :presales, :dependent => :nullify
+  has_many    :presale_ignore_projects, :dependent => :nullify
 
   def planning
     planning = Planning.find(:first, :conditions=>["project_id=#{self.id}"])
@@ -192,7 +194,7 @@ class Project < ActiveRecord::Base
   # return true if the project or subprojects request is assigned to one of the users in the array
   def has_responsible(user_id_arr)
     user_id_arr.each { |id|
-      return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id)
+      return true if ProjectPerson.find_by_project_id_and_person_id(self.id, id.to_i)
       self.projects.each { |p|
         return true if p.has_responsible(user_id_arr)
         }
@@ -250,21 +252,50 @@ class Project < ActiveRecord::Base
     return status
   end
 
-  def text_filter(text)
-    return true if self.name =~ /#{text}/i
-    return true if self.description =~ /#{text}/i
-    self.statuses.each { |s|
-      return true if s.explanation =~ /#{text}/i
-      return true if s.last_change =~ /#{text}/i
-      return true if s.actions =~ /#{text}/i
-      return true if s.operational_alert =~ /#{text}/i
-      return true if s.feedback =~ /#{text}/i
-      }
-    self.requests.each { |s|
-      return true if s.summary =~ /#{text}/i
-      return true if s.pm =~ /#{text}/i
-      }
-    return false
+  def self.get_projects_with_text(text, parentOnly)
+      cond_projects = []
+      cond_projects << "(projects.name LIKE '%#{text}%')"
+      cond_projects << "(projects.description LIKE '%#{text}%')"
+
+      cond_projects << "(project_statuses.explanation LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.last_change LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.actions LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.operational_alert LIKE '%#{text}%')"
+      cond_projects << "(project_statuses.feedback LIKE '%#{text}%')"
+
+      cond_projects << "(project_requests.summary LIKE '%#{text}%')"
+      cond_projects << "(project_requests.pm LIKE '%#{text}%')"
+
+      projects = nil
+      if parentOnly == true
+        cond_projects << "(childs.name LIKE '%#{text}%')"
+        cond_projects << "(childs.description LIKE '%#{text}%')"
+
+        cond_projects << "(child_statuses.explanation LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.last_change LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.actions LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.operational_alert LIKE '%#{text}%')"
+        cond_projects << "(child_statuses.feedback LIKE '%#{text}%')"
+
+        cond_projects << "(child_requests.summary LIKE '%#{text}%')"
+        cond_projects << "(child_requests.pm LIKE '%#{text}%')"
+
+        projects = Project.find(:all, 
+                               :joins =>["LEFT OUTER JOIN statuses as project_statuses ON project_statuses.project_id = projects.id",
+                                "LEFT OUTER JOIN requests as project_requests ON project_requests.project_id = projects.id",
+                                "LEFT OUTER JOIN projects as childs ON childs.project_id = projects.id",
+                                "LEFT OUTER JOIN statuses as child_statuses ON child_statuses.project_id = childs.id",
+                                "LEFT OUTER JOIN requests as child_requests ON child_requests.project_id = childs.id"],
+                                :conditions => "(#{cond_projects.join(" or ")}) and (projects.project_id is null)",
+                                :group => "projects.id")
+      else
+        projects = Project.find(:all, 
+                               :joins =>["LEFT OUTER JOIN statuses as project_statuses ON project_statuses.project_id = projects.id",
+                                "LEFT OUTER JOIN requests as project_requests ON project_requests.project_id = projects.id"],
+                                :conditions => cond_projects.join(" or "),
+                                :group => "projects.id")
+      end
+      return projects
   end
 
   def supervisor_name
@@ -618,14 +649,30 @@ class Project < ActiveRecord::Base
   end
 
   def get_status_for_milestone(milestone)
-    status, style = '',{}
+    status, style, decision = '',{}
     if milestone
       status += milestone.name + ': '+milestone.comments.split("\n").join("\r\n")
       status += "\r\n" + milestone.date.to_s if milestone.date
       status += "\r\n"
       style  = get_cell_style_for_milestone(milestone)
+
+      case milestone.status
+        when -1
+          decision = "#no request# "
+        when 0
+          decision = "#unknown# "
+        when 1
+          decision = "#GO# "
+        when 2
+          decision = "#GO w/a# "
+        when 3
+          decision = "#NO GO# "
+        else
+          decision = "#NA# "
+      end
+
     end
-    [status,style]
+    [status,style,decision]
   end
 
   # names is a array of names mutually exclusive (if we found M5 we should not be able to found a G5)
@@ -919,9 +966,16 @@ class Project < ActiveRecord::Base
   #Get the list of workpackages of requests linked to the project
   def get_workpackages_from_requests
     result = Array.new
+    person = nil
+
     self.requests.each do |r|
       if (!result.include?(r.work_package))
-        result << r.work_package
+        if r.assigned_to != ''
+          person = Person.find_by_rmt_user(r.assigned_to)
+          result << r.work_package + "(" + person.name + ")"
+        else
+          result << r.work_package + "(NA)"
+        end        
       end
     end
     return result;
@@ -940,6 +994,46 @@ class Project < ActiveRecord::Base
     end
     return false
   end
+
+  def get_suite_requests
+    suite_requests = Array.new
+    self.requests.each do |r|
+      suite_requests << r if (r.request_type == 'Yes' || r.request_type == 'Suite')
+    end
+    return suite_requests
+  end
+
+  def get_priority
+    p_priority = nil
+    self.milestones.select{|m| (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority']) .include? m.name}.each do |m|
+      if (APP_CONFIG['presale_milestones_priority'].include? m.name)
+        p_priority = calculPriority(m, p_priority)
+      end
+    end
+    return p_priority
+  end
+
+  def get_setting_up_priority
+    p_priority_setting_up = nil
+    self.milestones.select{|m| (APP_CONFIG['presale_milestones_priority_setting_up'] + APP_CONFIG['presale_milestones_priority']) .include? m.name}.each do |m|
+        if (APP_CONFIG['presale_milestones_priority_setting_up'].include? m.name)
+          p_priority_setting_up = calculPrioritySettingUp(m, p_priority_setting_up)
+        end
+      end
+      return p_priority_setting_up
+  end
+
+  #return the QR_QWR name (for the summary display)
+  def get_qr_qwr_name
+    qr_qwr = nil
+    if (self.is_qr_qwr && self.is_running && self.qr_qwr_id != nil && self.qr_qwr_id != 0)
+      qr_qwr = Person.find(self.qr_qwr_id)
+      return qr_qwr.name + ""
+    else
+      return "N/A"
+    end
+  end
+
 private
 
   def excel(a,b)
@@ -949,6 +1043,72 @@ private
   def days_ago(date_time)
     return "" if date_time == nil
     Date.today() - Date.parse(date_time.to_s)
+  end
+
+  def calculPrioritySettingUp(milestone, lastPriority)
+    priority = lastPriority
+    # Milestone date
+    m_date = nil
+    if milestone.actual_milestone_date != nil
+      m_date = milestone.actual_milestone_date
+    elsif milestone.milestone_date != nil
+      m_date = milestone.milestone_date
+    end
+
+    # Current priority
+    current_priority = nil
+    case m_date
+    when nil    
+      current_priority = Presale::PRIORITY_NONE
+    when m_date >= Date.parse(Time.now.to_s) + 30.days
+      current_priority = Presale::PRIORITY_TO_BE_FOLLOWED
+    when m_date >= Date.parse(Time.now.to_s) + 14.days
+      current_priority = Presale::PRIORTY_IN_TIME
+    when m_date >= Date.parse(Time.now.to_s) + 7.days
+      current_priority = Presale::PRIORITY_URGENT
+    when m_date >= Date.parse(Time.now.to_s)
+      current_priority = Presale::PRIORITY_VERY_URGENT
+    else
+      current_priority = Presale::PRIORITY_TOO_LATE
+    end
+
+    # General Priority
+    if priority == nil or current_priority > priority 
+      priority = current_priority
+    end
+    return priority
+  end
+
+  def calculPriority(milestone, lastPriority)
+    priority = lastPriority
+    # Milestone date
+    m_date = nil
+    if milestone.actual_milestone_date != nil
+      m_date = milestone.actual_milestone_date
+    elsif milestone.milestone_date != nil
+      m_date = milestone.milestone_date
+    end
+
+    # Current priority
+    current_priority = nil
+    case m_date
+    when nil    
+      current_priority = Presale::PRIORITY_NONE
+    when m_date >= Date.parse(Time.now.to_s) + 120.days
+      current_priority = Presale::PRIORTY_IN_TIME
+    when m_date >= Date.parse(Time.now.to_s) + 60.days
+      current_priority = Presale::PRIORITY_URGENT
+    when m_date >= Date.parse(Time.now.to_s)
+      current_priority = Presale::PRIORITY_VERY_URGENT
+    else
+      current_priority = Presale::PRIORITY_TOO_LATE
+    end
+
+    # General Priority
+    if priority == nil or current_priority > priority 
+      priority = current_priority
+    end
+    return priority
   end
 end
 

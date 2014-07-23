@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140516145411) do
+ActiveRecord::Schema.define(:version => 20140722122752) do
 
   create_table "actions", :force => true do |t|
     t.text     "action"
@@ -124,9 +124,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.integer  "project_id"
   end
 
-  add_index "checklist_items", ["parent_id"], :name => "IDX_CHECKLIST_ITEMS_PARENT_ID"
-  add_index "checklist_items", ["template_id"], :name => "IDX_CHECKLIST_ITEMS_TEMPLATE_ID"
-
   create_table "ci_projects", :force => true do |t|
     t.integer  "internal_id"
     t.integer  "external_id"
@@ -228,8 +225,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.text     "consequence"
     t.text     "actions"
   end
-
-  add_index "generic_risks", ["generic_risk_question_id"], :name => "IDX_GENERIC_RISKS"
 
   create_table "history_counters", :force => true do |t|
     t.integer  "request_id"
@@ -370,8 +365,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.integer  "checklist_not_applicable", :default => 0
   end
 
-  add_index "milestones", ["project_id"], :name => "IDX_MILESTONES"
-
   create_table "monthly_task_people", :force => true do |t|
     t.integer  "monthly_task_id"
     t.integer  "person_id"
@@ -425,6 +418,7 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.integer  "is_virtual",      :default => 0
     t.text     "settings"
     t.integer  "cost_profile_id"
+    t.integer  "tbp_collab_id"
   end
 
   create_table "person_roles", :force => true do |t|
@@ -432,8 +426,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.integer  "role_id"
     t.datetime "created_at"
   end
-
-  add_index "person_roles", ["person_id"], :name => "IDX_PERSON_ROLES_PERSON_ID"
 
   create_table "plannings", :force => true do |t|
     t.string   "name"
@@ -463,6 +455,47 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.datetime "updated_at"
   end
 
+  create_table "presale_comments", :force => true do |t|
+    t.integer  "presale_presale_type_id"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "person_id"
+  end
+
+  create_table "presale_ignore_projects", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "presale_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "presale_presale_types", :force => true do |t|
+    t.integer  "presale_id"
+    t.integer  "presale_type_id"
+    t.integer  "opportunity_number"
+    t.integer  "milestone_date"
+    t.string   "status"
+    t.string   "complexity"
+    t.date     "buyside_launch_date"
+    t.date     "buyside_accepted_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "milestone_name_id"
+  end
+
+  create_table "presale_types", :force => true do |t|
+    t.text     "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "presales", :force => true do |t|
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "project_people", :id => false, :force => true do |t|
     t.integer  "project_id"
     t.integer  "person_id"
@@ -476,7 +509,7 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.string   "brn"
     t.string   "workstream"
     t.integer  "project_id"
-    t.integer  "last_status",   :default => 0
+    t.integer  "last_status",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "supervisor_id"
@@ -485,22 +518,21 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.string   "bpl"
     t.string   "ispl"
     t.datetime "read_date"
-    t.integer  "lifecycle",     :default => 0
+    t.integer  "lifecycle",      :default => 0
     t.string   "pm_deputy"
     t.string   "ispm"
     t.integer  "lifecycle_id"
-    t.integer  "qs_count",      :default => 0
-    t.integer  "spider_count",  :default => 0
-    t.boolean  "is_running",    :default => true
+    t.integer  "qs_count",       :default => 0
+    t.integer  "spider_count",   :default => 0
+    t.boolean  "is_running",     :default => true
     t.integer  "qr_qwr_id"
     t.string   "dwr"
-    t.boolean  "is_qr_qwr",     :default => false
+    t.boolean  "is_qr_qwr",      :default => false
     t.integer  "suite_tag_id"
     t.string   "project_code"
-    t.integer  "sales_revenue", :default => 0
+    t.integer  "sales_revenue",  :default => 0
+    t.integer  "tbp_project_id"
   end
-
-  add_index "projects", ["project_id"], :name => "IDX_PROJECTS_ON_PROJECT_ID"
 
   create_table "question_references", :force => true do |t|
     t.integer  "question_id"
@@ -584,7 +616,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.string   "is_stream",               :default => "No"
   end
 
-  add_index "requests", ["project_id"], :name => "IDX_REQUESTS_ON_PROJECT_ID"
   add_index "requests", ["request_id"], :name => "index_requests_on_request_id"
 
   create_table "requirement_versions", :force => true do |t|
@@ -801,6 +832,16 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.string   "project_code"
   end
 
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
   create_table "spider_consolidations", :force => true do |t|
     t.integer  "spider_id"
     t.integer  "pm_type_axe_id"
@@ -810,8 +851,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "spider_consolidations", ["spider_id"], :name => "IDX_SPIDER_CONSOLIDATIONS"
 
   create_table "spider_values", :force => true do |t|
     t.integer  "lifecycle_question_id"
@@ -831,8 +870,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.string   "file_link"
     t.boolean  "impact_count", :default => false
   end
-
-  add_index "spiders", ["milestone_id"], :name => "IDX_SPIDERS"
 
   create_table "statuses", :force => true do |t|
     t.integer  "project_id",                                                :null => false
@@ -859,8 +896,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.text     "deliverable_spider_gap"
   end
 
-  add_index "statuses", ["project_id"], :name => "IDX_STATUSES"
-
   create_table "stream_review_types", :force => true do |t|
     t.integer  "stream_id"
     t.integer  "review_type_id"
@@ -881,13 +916,13 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
   create_table "streams", :force => true do |t|
     t.string   "name"
     t.integer  "workstream_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.datetime "read_date"
     t.integer  "supervisor_id"
     t.string   "quality_manager"
     t.string   "dwl"
     t.string   "process_owner"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.text     "description"
   end
 
@@ -915,6 +950,39 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.datetime "updated_at"
     t.float    "team_size",   :default => 0.0
     t.text     "color"
+  end
+
+  create_table "tbp_collab_works", :force => true do |t|
+    t.integer  "tbp_collab_id"
+    t.date     "date"
+    t.integer  "tbp_project_id"
+    t.float    "workload"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tbp_collabs", :force => true do |t|
+    t.integer  "tbp_id"
+    t.string   "firstname"
+    t.string   "lastname"
+    t.integer  "activity"
+    t.integer  "profil"
+    t.integer  "te"
+    t.integer  "account_index"
+    t.datetime "last_update"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tbp_projects", :force => true do |t|
+    t.integer  "tbp_id"
+    t.string   "name"
+    t.integer  "activity"
+    t.integer  "ttype"
+    t.string   "agresso"
+    t.integer  "account_index"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "topics", :force => true do |t|
@@ -963,8 +1031,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.integer  "project_id"
   end
 
-  add_index "wl_lines", ["request_id"], :name => "IDX_WL_LINES"
-
   create_table "wl_loads", :force => true do |t|
     t.integer  "wl_line_id"
     t.integer  "week"
@@ -972,8 +1038,6 @@ ActiveRecord::Schema.define(:version => 20140516145411) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "wl_loads", ["wl_line_id"], :name => "IDX_WL_LOADS"
 
   create_table "workpackages", :force => true do |t|
     t.string "title"

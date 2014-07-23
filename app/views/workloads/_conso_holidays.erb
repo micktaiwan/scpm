@@ -18,7 +18,10 @@
     if (holiday_backup_warning != nil)
   	 
       holiday_backup_warning["backup_people"].each_with_index { |backup_person, i|
-        backups_name << "<li><span style='color:pink;'>" + backup_person + "</span>: " + holiday_backup_warning["backup_comments"][i] + "</li>"
+        backup_name_str = "<li><span style='color:pink;'>" + backup_person + "</span>: " + holiday_backup_warning["backup_comments"][i] + "</li>"
+        backup_name_str = backup_name_str.gsub(/\n/," ")
+        backup_name_str = backup_name_str.gsub(/\r/," ")
+        backups_name << backup_name_str
       }
       
       if !holiday_backup_warning["needBackup"]

@@ -159,7 +159,21 @@ class WorkloadsController < ApplicationController
     # By requests
     wl_lines_id             = wl.wl_lines.map{ |l| l.request_id}
     @sdp_tasks_unlinked_req = SDPTask.find(:all, :conditions => ["collab = ? AND request_id IS NOT NULL AND request_id NOT IN (?) and remaining > 0", wl.person.trigram, wl_lines_id])
-
+    # Requests not linked and with no remaining
+    person   = Person.find(session['workload_person_id'].to_i)
+    @requests_to_close = Array.new
+    reqs     = Request.find(:all,
+                        :conditions=>["status='assigned' and resolution!='ended' and resolution!='aborted' and assigned_to = ?", person.rmt_user])
+    reqs.each { |r|
+      total_remaining = 0
+      sdpTaskTemp = SDPTask.find(:all, :conditions=>"request_id='#{r.request_id}'")
+      sdpTaskTemp.each do |tmp_sdp|
+        total_remaining += tmp_sdp.remaining
+      end
+      if sdpTaskTemp.size > 0 and total_remaining == 0
+        @requests_to_close << r
+      end
+    }
     # render :layout => false
   end
 
@@ -252,6 +266,23 @@ class WorkloadsController < ApplicationController
     @projects  = Project.all.map {|p| ["#{p.name}", p.id]}
   end
 
+
+  def get_people
+    @company_ids = params['company']
+    @company_ids = @company_ids['company_ids'] if @company_ids # FIXME: pass only a simple field....
+    @project_ids = params['project']
+    @project_ids = @project_ids['project_ids'] if @project_ids # FIXME: pass only a simple field....
+    if @project_ids and @project_ids != ''
+      @project_ids = [@project_ids]
+    else
+      @project_ids = []
+    end
+    
+    cond = ""
+    cond += " and company_id in (#{@company_ids})" if @company_ids and @company_ids!=''
+    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0" + cond, :order=>"name")
+  end
+
   def refresh_conso
     @start_time = Time.now
     # find "to be validated" requests not in the workload
@@ -260,26 +291,15 @@ class WorkloadsController < ApplicationController
     # find the corresponding production days (minus 20% of gain)
     @not_in_workload_days = @not_in_workload.inject(0) { |sum, r| sum += r.workload2} * 0.80
 
-    company_ids = params['company']
-    company_ids = company_ids['company_ids'] if company_ids # FIXME: pass only a simple field....
-    project_ids = params['project']
-    project_ids = project_ids['project_ids'] if project_ids # FIXME: pass only a simple field....
-    if project_ids and project_ids != ''
-      project_ids = [project_ids]
-    else
-      project_ids = []
-    end
-    
-    cond = ""
-    cond += " and company_id in (#{company_ids})" if company_ids and company_ids!=''
-    @people = Person.find(:all, :conditions=>"has_left=0 and is_supervisor=0 and is_transverse=0" + cond, :order=>"name")
+    get_people
+
     @transverse_people = Person.find(:all, :conditions=>"has_left=0 and is_transverse=1", :order=>"name").map{|p| p.name.split(" ")[0]}.join(", ")
     @workloads = []
     @total_days = 0
     @total_planned_days = 0
     @to_be_validated_in_wl_remaining_total = 0
     for p in @people
-      w = Workload.new(p.id,project_ids,'','', {:add_holidays=>true})
+      w = Workload.new(p.id,@project_ids,'','', {:add_holidays=>true})
       next if w.wl_lines.select{|l| l.wl_type != WL_LINE_HOLIDAYS}.size == 0 # do not display people with no lines at all
       @workloads << w
       @total_days += w.line_sums.inject(0) { |sum, (k,v)|
@@ -389,7 +409,7 @@ class WorkloadsController < ApplicationController
       # Person Workload
       @workloads << Workload.new(p.id,session['workload_person_project_ids'],session['workload_persons_iterations'],session['workload_person_tags'], {:only_holidays=>true})
       # Person Holiday Warning
-      @resfresh_holidays_backup_warnings[p.id] = get_holiday_warning_detailed(p, Date.today+26.weeks)
+      @resfresh_holidays_backup_warnings[p.id] = get_holiday_warning_detailed(p, Date.today+27.weeks)
     end
     @workloads = @workloads.sort_by {|w| [w.person.name]}
     render :layout => false
@@ -422,10 +442,23 @@ class WorkloadsController < ApplicationController
     render :layout => false
   end
 
+  def refresh_tbp
+    get_people
+
+    @workloads = []
+    for p in @people
+      w = Workload.new(p.id, @project_ids, '', '', {:add_tbp_info=>true, :add_holidays=>false, :weeks_to_display=>12})
+      next if w.wl_lines.select{|l| l.wl_type != WL_LINE_HOLIDAYS}.size == 0 # do not display people with no lines at all
+      @workloads << w
+    end
+
+    render :layout => false
+  end
+
   def add_by_request
     request_id = params[:request_id]
     if !request_id or request_id.empty?
-      @error = "Please provide a request number."
+      @error = "Please provide a request number"
       return
     end
     request_id.strip!
@@ -883,15 +916,19 @@ class WorkloadsController < ApplicationController
       backup_weeks << b.week
     end
 
+    # Get holidays week
+    conditions = "wl_lines.person_id = #{session['workload_person_id'].to_s} and wl_lines.wl_type = #{WL_LINE_HOLIDAYS} and wlload > 0 and week >= #{wlweek(Date.today)}"
+    
     person_holiday_load = WlLoad.find(:all,
         :joins => 'JOIN wl_lines ON wl_lines.id = wl_loads.wl_line_id', 
-        :conditions=>["wl_lines.person_id = ? and wl_lines.wl_type = ? and wlload > 0 and week >= ? and week NOT IN (?)", session['workload_person_id'].to_s, WL_LINE_HOLIDAYS, wlweek(Date.today), backup_weeks], 
+        :conditions=>conditions, 
         :order=>"week")
     
-    @holiday_dates = Array.new
-    person_holiday_load.each do |holiday_load|
-      @holiday_dates << ["#{holiday_load.week}","#{holiday_load.week}"]
-    end
+    @holiday_dates = person_holiday_load.map { |h| 
+      year = h.week.to_s[0..-3]
+      week = h.week.to_s[4..6]
+      ["#{week}-#{year}","#{h.week}"]
+    }
   end
   
   def create_backup    

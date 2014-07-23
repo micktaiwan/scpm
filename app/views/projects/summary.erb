@@ -233,7 +233,7 @@ end
 
       # Header
       @xml.Row 'ss:StyleID' => 's62' do
-        for column in ['Supervisor', 'WS','Suite', 'Project', 'Workpackage', 'PM', 'BRN', 'Lifecycle', 'Old status', 'Current Status', 'Date', 'Status', 'Last change', 'Actions','Pratice spider GAP statuses', 'Deliverable Spider gap statuses', 'Operational Alert', 'Next milestone', 'Workpackages'] do
+        for column in ['Supervisor', 'WS','Suite', 'Project', 'Workpackage', 'PM', 'BRN', 'Lifecycle', 'Old status', 'Current Status', 'Date', 'Status', 'Last change', 'Actions','Pratice spider GAP statuses', 'Deliverable Spider gap statuses', 'Operational Alert', 'Next milestone', 'Workpackages', 'Project ID', 'QR-QWR Name'] do
           @xml.Cell do
             @xml.Data column, 'ss:Type' => 'String'
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
@@ -268,12 +268,14 @@ end
           name, status, style = p.get_next_milestone_done
           @xml.Cell(style) { @xml.Data('ss:Type' => 'String') do; @xml<< excel_text(status); end; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
           @xml.Cell { @xml.Data excel_text(p.get_workpackages_from_requests.join(',').to_s),         'ss:Type' => 'String'; @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(p.id.to_s); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
+          @xml.Cell { @xml.Data('ss:Type' => 'String') do; @xml<<excel_text(p.get_qr_qwr_name.to_s); end;     @xml.NamedCell 'ss:Name' => 'FilterDatabase' }
 
           p.sorted_milestones.each do |sm|
-            status, style = p.get_status_for_milestone(sm)
+            status, style, decision = p.get_status_for_milestone(sm)
             @xml.Cell(style) do
               @xml.Data('ss:Type' => 'String') do
-                @xml << excel_text(status)
+                @xml << excel_text(decision + status)
               end
             @xml.NamedCell 'ss:Name' => 'FilterDatabase'
             end

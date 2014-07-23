@@ -3,10 +3,27 @@ scpm_title: "SCPM Title"
 scpm_address: "http://scpm.sqli.com"
 project_name: "Your project code so you can configure display options"
 task_import_config: 'simple' # or multiple'
+tbp_auths: ["login/*TBP*/pwd"]
+tbp_urls: ["http://toulouse.sqli.com/tbp/restService/public"]
 
 # report
 report_timeline_count: 30 # Number of timeline displayed in the list of projects
-
+report_kpi_projects_should_have_suite_for_wp: # The projects with following WPs must have a suite name
+    - WP1.5 - SQR
+report_spider_milestone_blacklist: # Milestones without spiders
+    - M14
+    - G9
+    - sM14
+    - CCB
+report_milestones_eligible_for_note:
+    - M3
+    - G2
+    - M5
+    - G5
+    - QG TD
+    - M13
+    - CCB
+    
 # menu and access configuration
 workloads_add_by_request_number: true
 workloads_add_by_sdp_task: true
@@ -36,6 +53,7 @@ workloads_display_status_column: true
 workloads_show_filter: false # Show or hide the filter buttn
 workload_holiday_threshold_before_backup: 2 # Number of holidays days which need the attribution of a backup
 workload_show_overload_availability: false #Show on the availability parameters of workload if user is in overload
+workload_show_negative_sum_availability: false 
 
 # SDP
 use_multiple_projects_sdp_export: false
@@ -86,49 +104,57 @@ workload_alerts_email_destination: "addressMail1@sqli.com,addressMail2@sqli.com,
 qs_load: 0.375
 spider_load: 0.375
 
+# Presale
+presale_milestones_priority_setting_up:
+    - M1
+    - M3
+presale_milestones_priority:
+    - M3
+    - M5
+
 # Summary export - workpackages which should be highlighted in the summary
-    summary_workpackages_highlight: 
-        - WP2
-        - WP3.0
-        - WP3.1
-        - WP3.2
-        - WP3.2.1
-        - WP3.2.2
-        - WP3.2.3
-        - WP3.3
-        - WP3.4
-        - WP4
-        - WP4.1
-        - WP4.2
-        - WP4.3
-        - WP4.4
-        - WP5
-        - WP5.1
-        - WP6.1
-        - WP5.2
-        - WP6.2
-        - WP6.3
-        - WP6.4
-        - WP6.5
-        - WP6.6
-        - WP6.7
-        - WP6.8
-        - WP6.9
-        - WP6.10.1
-        - WP6.10.2
-        - WP6.10.3
-        - WP6.11
-        - WP7.1
-        - WP7.1.1
-        - WP7.1.2
-        - WP7.1.3
-        - WP7.1.4
-        - WP7.1.5
-        - WP7.1.6
-        - WP7.2
-        - WP7.2.1
-        - WP7.2.2
-        - WP7.2.3
-        - WP7.2.4
-        - WP7.2.5
-        - WP7.2.6
+summary_workpackages_highlight: 
+    - WP2
+    - WP3.0
+    - WP3.1
+    - WP3.2
+    - WP3.2.1
+    - WP3.2.2
+    - WP3.2.3
+    - WP3.3
+    - WP3.4
+    - WP4
+    - WP4.1
+    - WP4.2
+    - WP4.3
+    - WP4.4
+    - WP5
+    - WP5.1
+    - WP6.1
+    - WP5.2
+    - WP6.2
+    - WP6.3
+    - WP6.4
+    - WP6.5
+    - WP6.6
+    - WP6.7
+    - WP6.8
+    - WP6.9
+    - WP6.10.1
+    - WP6.10.2
+    - WP6.10.3
+    - WP6.11
+    - WP7.1
+    - WP7.1.1
+    - WP7.1.2
+    - WP7.1.3
+    - WP7.1.4
+    - WP7.1.5
+    - WP7.1.6
+    - WP7.2
+    - WP7.2.1
+    - WP7.2.2
+    - WP7.2.3
+    - WP7.2.4
+    - WP7.2.5
+    - WP7.2.6

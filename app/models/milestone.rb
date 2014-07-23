@@ -5,8 +5,6 @@ class Milestone < ActiveRecord::Base
   has_many    :checklist_items, :dependent=>:destroy
   has_many    :spiders
   
-  MILESTONE_ELIGIBLE_FOR_NOTE = ['M3', 'G2', 'M5', 'G5', 'QG TD', 'M13', 'CCB']
-  MILESTONE_SPIDER_BLACKLIST  = ["M14", "G9", "sM14"]
   def date
     return self.actual_milestone_date if self.actual_milestone_date and self.actual_milestone_date!=""
     self.milestone_date
@@ -225,11 +223,11 @@ class Milestone < ActiveRecord::Base
   end
 
   def is_eligible_for_note?
-    MILESTONE_ELIGIBLE_FOR_NOTE.include?(self.name)
+    APP_CONFIG['report_milestones_eligible_for_note'].include?(self.name)
   end
 
   def is_eligible_for_spider?
-    return !MILESTONE_SPIDER_BLACKLIST.include?(self.name)
+    return !APP_CONFIG['report_spider_milestone_blacklist'].include?(self.name)
   end
 
   def has_spider_no_consolidated?

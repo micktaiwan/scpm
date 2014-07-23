@@ -4,6 +4,7 @@
   <tr><td>Code (TO2955)</td><td><%= text_field :project, :project_code %></td></tr>
   <tr><td>Sales revenue</td><td><%= text_field :project, :sales_revenue %></td></tr>
 <% end %>
+<tr><td>TBP</td><td><%= select(:project, :tbp_project_id, @tbp_projects.map {|l| ["#{APP_CONFIG['tbp_auths'][l.account_index]['name']} - #{l.name}", l.id]}, :include_blank => true) %></td></tr>
 <tr><td>Workstream</td><td>	<%= text_field :project, :workstream %></td></tr>
 <tr><td>BRN</td><td>				<%= text_field :project, :brn %></td></tr>
 <tr><td>Coordinator</td><td><%= text_field :project, :coordinator %></td></tr>

@@ -419,6 +419,14 @@ class ToolsController < ApplicationController
       }
   end
 
+  def kpi_check
+    @physicalsWithoutSuite = Project.find(:all, :joins=>["JOIN requests ON requests.project_id = projects.id"], :conditions=>["is_running = 1 and suite_tag_id IS NULL and (requests.request_type = 'Yes' or requests.request_type = 'Suite')"], :group => "projects.id")
+    @projectsWithoutSuiteForSpecificWPs = Project.find(:all, :joins=>["JOIN requests ON requests.project_id = projects.id"], :conditions=>["is_running = 1 and suite_tag_id IS NULL and requests.work_package IN (?)", APP_CONFIG['report_kpi_projects_should_have_suite_for_wp'].join(",")], :group => "projects.id")
+    @specificWPs = APP_CONFIG['report_kpi_projects_should_have_suite_for_wp'].join(", ")
+    @requestsWithoutMilestone = Request.find(:all, :conditions => ["work_package in (?) and milestone ='N/A'", APP_CONFIG['report_kpi_requests_should_have_milestone_for_wp'].join(",")])
+    @specificWPsForRequests = APP_CONFIG['report_kpi_requests_should_have_milestone_for_wp'].join(", ")
+  end
+
   def sdp_people
     tasks   = SDPTask.find(:all, :conditions=>"iteration!='HO' and iteration!='P'")
     @trig   = tasks.collect { |t| t.collab }.uniq
@@ -632,8 +640,8 @@ class ToolsController < ApplicationController
     streams.each{ |s| 
       @streams_array << [s.name, s.id]
     }
-    requests          = Request.find(:all,:conditions=>["work_package LIKE ? or work_package LIKE ?", "%"+WORKPACKAGE_QS+"%","%"+WORKPACKAGE_SPIDERS+"%"])
-    @requests_array   = [["All",0]] 
+    requests          = Request.find(:all, :conditions=>["status != 'removed' and work_package LIKE ? or work_package LIKE ?", "%"+WORKPACKAGE_QS+"%","%"+WORKPACKAGE_SPIDERS+"%"], :order=>"request_id")
+    @requests_array   = [] 
     requests.each{ |r| 
       @requests_array << [r.request_id.to_s+" "+r.summary, r.id ]
     }
@@ -655,14 +663,14 @@ class ToolsController < ApplicationController
                                           "JOIN projects ON projects.id = spiders.project_id",
                                           "JOIN projects as parent ON parent.id = projects.project_id"
                                           ],
-                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
+                                          :order=>"requests.request_id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
     
     @qs_counter     = HistoryCounter.find(:all,:conditions=>[qs_condition],
                                           :joins => ["JOIN requests ON requests.id = history_counters.request_id", 
                                           "JOIN statuses ON statuses.id = history_counters.concerned_status_id",
                                           "JOIN projects ON projects.id = statuses.project_id",
                                           "JOIN projects as parent ON parent.id = projects.project_id"],
-                                          :order=>"requests.id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
+                                          :order=>"requests.request_id ASC, parent.name ASC, projects.name ASC, history_counters.action_date ASC")
   end
   
   def show_counter_history_without_rmt

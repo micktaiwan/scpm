@@ -1,0 +1,5 @@
+<h2><%= @collab.firstname %> <%= @collab.lastname %></h2>
+
+<a href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=@collab.tbp_id%>" class="btnlnk">TBP</a><br/>
+<br/>
+<%= render(:partial=>'date', :collection=>@dates, :as=>:d) %>

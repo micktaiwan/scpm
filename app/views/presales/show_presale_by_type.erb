@@ -1,0 +1,41 @@
+<script>
+function edit(id) {
+    location = '/presales/presale_comment_edit/'+id;
+}
+function add(presalePresaleTypeid) {
+	location = '/presales/presale_comment_add?id='+presalePresaleTypeid;
+}
+</script>
+
+<%= render(:file=>"presales/menu", :locals=>{:presale_presale_id => @presale_presale_type.id}) %>
+
+<div id="presale_content">
+
+	<div id="presale_content_left">
+		<h3 class="presale_title">
+			<%= @presale_presale_type.getName %>
+			<%= link_to "Delete opportunity", {:controller => "presales", :action => "delete_presale_presale_type", :id => @presale_presale_type.id}, {:class => "presale_btnlnk_right", :confirm=>'Sure?'} %>
+		</h3>
+		<br />
+		<h3>
+			<%= link_to_function('Add', "add(#{@presale_presale_type.id})", {:class=>'btnlnk'}) %> 
+			Comments
+		</h3>
+
+		<% for comment in @presale_presale_type.presale_comments %>
+			<p><span class="bold">Last update time:</span> <%= time_ago_in_words(comment.updated_at.strftime("%Y-%m-%d %H:%M")) %></p>
+			<%= render(:partial=>'presale_comment', :object=>comment, :locals=>{:edit_mode => true}) %>
+		<% end %>
+
+	</div>
+	<div id="presale_content_right">
+		<h3 class="presale_title">
+			<%= @presale_presale_type.getName %> detail
+		</h3>
+		<% form_for :@presale_presale_type, :url=>{:action=>'update_presale_presale_type'} do |f| -%>
+		  <%= submit_tag 'Save' %>
+		  <%= render(:partial => "presale_presale_type_form") %>
+		<% end -%>
+	</div>
+
+</div>

@@ -9,7 +9,7 @@ page.select('#wl_person').each do |element|
   page.replace element, render(:partial=>"wl_person")
 end
 page.replace "workload", render(:partial=>"workload")
-page.replace "view_alert_sdp_content", render(:partial=>"unlinked_sdp_tasks", :locals=>{:sdp_tasks=>@sdp_tasks_unlinked, :sdp_tasks_req=>@sdp_tasks_unlinked_req})
+page.replace "view_alert_sdp_content", render(:partial=>"unlinked_sdp_tasks", :locals=>{:sdp_tasks=>@sdp_tasks_unlinked, :sdp_tasks_req=>@sdp_tasks_unlinked_req, :requests_to_close=>@requests_to_close})
 page << "document.body.style.cursor = 'auto';"
 page << "$('loading').hide();"
 page << "set_fixed_header(#{APP_CONFIG['workloads_max_height']});"

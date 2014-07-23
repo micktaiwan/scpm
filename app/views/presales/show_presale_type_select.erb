@@ -1,0 +1,11 @@
+<%= render(:file=>"presales/menu", :locals=>{:new_presale=>1}) %>
+
+<div id="presale_content">
+	<h3 class="presale_title">Select a type</h3>	
+	<% @presale_types.each do |pt| %>
+		<div class="presale_btnlnk">
+			<%= link_to pt.title , {:controller => "presales", :action => "create_presale_presale_type", :presale_id => @presale.id, :presale_type_id => pt.id },{:class=>"presale_btnlnk_content"} %>
+		</div>
+		<br />
+	<% end %>
+</div>

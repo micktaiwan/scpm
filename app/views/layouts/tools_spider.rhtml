@@ -72,6 +72,7 @@
       <li><%= link_to('CHECK wrong Remaining Workload', {:controller=>'tools', :action=>'check_sdp_remaining_workload'}) %></li>
       <li><%= link_to('CHECK QS/Spiders Counters', {:controller=>'tools', :action=>'show_counter_history'}) %></li>
       <li><%= link_to('CHECK QS/Spiders Counters without RMT', {:controller=>'tools', :action=>'show_counter_history_without_rmt'}) %></li>
+      <li><%= link_to('CHECK KPI', {:controller=>'tools', :action=>'kpi_check'}) %></li>
     </ul>
     </li>
     <li><%= link_to('WS Reporting', {:controller=>'workstreams', :action=>'index'}, {:class=>menu_style('workstreams','*')}) %>
@@ -136,6 +137,8 @@
     <% end %>
     <!-- LESSON LEARNT MENU -->
     <li><%= link_to('Lessons Learnt', {:controller=>'lesson_collects', :action=>'index'}, {:class=>menu_style('welcome','update')}) %></li>
+    <!-- PRESALES MENU -->
+    <li><%= link_to('Presales',{:controller=>'presales', :action=>'index'}, {:class=>menu_style('presales','index')}) %></li>
 
     <% if cu.has_role?('Super') %>
       <li><%= link_to('Logs', {:controller=>'logs'}, {:class=>'menu'}) %></li>
