@@ -3,8 +3,7 @@ scpm_title: "SCPM Title"
 scpm_address: "http://scpm.sqli.com"
 project_name: "Your project code so you can configure display options"
 task_import_config: 'simple' # or multiple'
-tbp_auths: ["login/*TBP*/pwd"]
-tbp_urls: ["http://toulouse.sqli.com/tbp/restService/public"]
+tbp_auths: [{name: "Tlse", url: "http://toulouse.sqli.com/tbp/restService/public", auth: "login/*TBP*/pwd"}]
 
 # report
 report_timeline_count: 30 # Number of timeline displayed in the list of projects
