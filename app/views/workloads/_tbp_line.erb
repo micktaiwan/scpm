@@ -1,15 +1,15 @@
 <tr<% if tbp_line.person.is_virtual==1 %> style="background-color:#FDA"<% end %>>
   <td width="200"><%= tbp_line.person.name %></td>
-  <td><a href='/workloads/?person_id=<%= tbp_line.person.id %>' class="btnlnk">WL</a></td>
-  <td>
+  <td align="center"><a href='/workloads/?person_id=<%= tbp_line.person.id %>'><img src="/images/edit.gif"></a></td>
+  <td align="center">
     <% if tbp_line.person.tbp_collab %>
-      <a href='/tbp/collab/<%= tbp_line.person.tbp_collab.tbp_id %>' class="btnlnk">TBP</a>    
+      <a href='/tbp/collab/<%= tbp_line.person.tbp_collab.tbp_id %>'><img src="/images/edit.gif"></a>    
     <% end %>
   </td>
-  <td><% if tbp_line.person.tbp_collab %><a href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=tbp_line.person.tbp_collab.tbp_id%>">TBP</a><% end %></td>
-  <td><%= link_to('Edit', :controller=>'people', :action=>'edit', :id=>tbp_line.person.id) %></td>
+  <td align="center"><% if tbp_line.person.tbp_collab %><a href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=tbp_line.person.tbp_collab.tbp_id%>"><img src="/images/link.gif"></a><% end %></td>
+  <td align="center"><%= link_to('Edit', :controller=>'people', :action=>'edit', :id=>tbp_line.person.id) %></td>
   <% if tbp_line.person.tbp_collab %>  
-    <td id="collab_<%=tbp_line.person.tbp_collab.tbp_id%>"><%= link_to_remote('update', :url=>{:controller=>:tbp, :action=>:update_collab, :id=>tbp_line.person.tbp_collab.tbp_id}, :update=>{:success=>"collab_#{tbp_line.person.tbp_collab.tbp_id}", :failure=>"collab_#{tbp_line.person.tbp_collab.tbp_id}"}, :html=>{:class=>"btnlnk"}) %></td>
+    <td align="center" id="collab_<%=tbp_line.person.tbp_collab.tbp_id%>"><%= link_to_remote(image_tag('loading.png'), :url=>{:controller=>:tbp, :action=>:update_collab, :id=>tbp_line.person.tbp_collab.tbp_id}, :update=>{:success=>"collab_#{tbp_line.person.tbp_collab.tbp_id}", :failure=>"collab_#{tbp_line.person.tbp_collab.tbp_id}"}) %></td>
   <% else %>
     <td></td>
   <% end %>
