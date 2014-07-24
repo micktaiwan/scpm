@@ -51,8 +51,17 @@ class Person < ActiveRecord::Base
   end
 
   def project_lines # lines associated to projects
-    projects = WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"])
-    return projects
+    WlLine.find(:all, :conditions=>["person_id=#{self.id} and project_id is not null"])
+  end
+
+  # if the person has at least one planned for a project in the projects ids array
+  def has_workload_for_projects?(project_ids)
+    lines = project_lines.select{ |l|
+      next false if not project_ids.include?(l.project_id.to_s)
+      l.planned_sum > 0
+      }
+    puts "#{name}: #{lines.size}"
+    lines.size > 0
   end
 
   def projects_map
