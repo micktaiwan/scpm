@@ -1,4 +1,4 @@
-<th id="<%= wl_ctotal[:name]%>_<%= wl_ctotal[:id]%>"
+<th class="workload_th" id="<%= wl_ctotal[:name]%>_<%= wl_ctotal[:id]%>"
 
 <% if defined?(high_limit) and wl_ctotal[:value] > high_limit %>
   <% if not defined?(reverse) or !reverse %>
