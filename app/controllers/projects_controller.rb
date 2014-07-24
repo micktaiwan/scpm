@@ -747,11 +747,11 @@ private
       return
     end
     cond_wps = []
-    cond_wps << "workstream in #{session[:project_filter_workstream]}" if session[:project_filter_workstream] != nil
-    cond_wps << "last_status in #{session[:project_filter_status]}" if session[:project_filter_status] != nil
-    cond_wps << "supervisor_id in #{session[:project_filter_supervisor]}" if session[:project_filter_supervisor] != nil
-    cond_wps << "suite_tag_id in #{session[:project_filter_suiteTags]}" if session[:project_filter_suiteTags] != nil
-    cond_wps << "project_people.person_id in #{session[:project_filter_qr]}" if session[:project_filter_qr] != nil
+    cond_wps << "workstream in (#{session[:project_filter_workstream]})" if session[:project_filter_workstream] != nil
+    cond_wps << "last_status in (#{session[:project_filter_status]})" if session[:project_filter_status] != nil
+    cond_wps << "supervisor_id in (#{session[:project_filter_supervisor]})" if session[:project_filter_supervisor] != nil
+    cond_wps << "suite_tag_id in (#{session[:project_filter_suiteTags]})" if session[:project_filter_suiteTags] != nil
+    cond_wps << "project_people.person_id in (#{session[:project_filter_qr]})" if session[:project_filter_qr] != nil
     cond_wps << "is_running = 1"
     cond_wps << "projects.project_id IS NOT NULL"
 
