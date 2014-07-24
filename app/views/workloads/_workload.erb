@@ -1,5 +1,5 @@
 <div id="view_alert_sdp">
-    <%= submit_tag "X", :id=>"button_alert_sdp", :type=>'button', :onclick=> "jQuery('#view_alert_sdp').hide();" %><br />   
+    <a href="#" onclick="$('view_alert_sdp').hide({duration:0.3});"><img src="images/close.png"></a>
     <div id="view_alert_sdp_content">
         <h4>SDP Tasks not linked to your workload</h4>
         <ul>
@@ -94,15 +94,16 @@
     <div id="wmenu" <%if session['wmenu_hidden'].to_s=='true' %>style='display:none;'<% end %>>
     <table width="100%">
     <tr><td valign="top">
-      <% if @sdp_tasks_unlinked.size > 0 || @sdp_tasks_unlinked_req.size > 0 || @requests_to_close.size > 0 %>
-        <%= submit_tag "Alert SDP", :id=>'btn_alert_sdp', :type=>'button', :onclick=>"jQuery('#view_alert_sdp').css('display','block');" , :class=>"btnlnk" %>
-      <% end %>
       <%= link_to_function('Add a line', "wl_add_line(#{@workload.person_id})", :class=>"btnlnk") %>
       <%= link_to('Transfert', {:action=>'transfert'}, {:class=>"btnlnk"}) %>
       <%= link_to('Backup by load', {:action=>'duplicate',:weeks=>@workload.weeks,:wl_weeks=>@workload.wl_weeks,:months=>@workload.months}, {:class=>"btnlnk"}) %>
       <% backup_btn_class = "btnlnk" %>
-      <% backup_btn_class = "btnlnk red" if @holiday_without_backup %>
+      <% backup_btn_class = "btnlnk backup_warning" if @holiday_without_backup %>
       <%= link_to('Backup', {:action=>'backup'}, {:class=>backup_btn_class}) %>
+      <% if @sdp_tasks_unlinked.size > 0 || @sdp_tasks_unlinked_req.size > 0 || @requests_to_close.size > 0 %>
+        <!-- http://www.dougboude.com/blog/1/2008/12/Elementshowhide-anomoly-in-Prototype.cfm -->
+        <a href="#" onclick="$('view_alert_sdp').style.display='block';" class="btnlnk backup_warning">Alert SDP</a>
+      <% end %>
       <% if @suggested_requests.size > 0 %>
       You have <b><%=@suggested_requests.size%></b> suggested requests
       <% end %>
