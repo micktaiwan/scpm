@@ -1,15 +1,15 @@
 <tr<% if tbp_line.person.is_virtual==1 %> style="background-color:#FDA"<% end %>>
   <td width="200"><%= tbp_line.person.name %></td>
-  <td align="center"><a href='/workloads/?person_id=<%= tbp_line.person.id %>'><img src="/images/edit.gif"></a></td>
+  <td align="center"><a title="See BAM workload" href='/workloads/?person_id=<%= tbp_line.person.id %>'><img src="/images/icon_workload.gif"></a></td>
   <td align="center">
     <% if tbp_line.person.tbp_collab %>
-      <a href='/tbp/collab/<%= tbp_line.person.tbp_collab.tbp_id %>'><img src="/images/edit.gif"></a>    
+      <a title="See imported TBP data" href='/tbp/collab/<%= tbp_line.person.tbp_collab.tbp_id %>'><img src="/images/docview.png"></a>    
     <% end %>
   </td>
-  <td align="center"><% if tbp_line.person.tbp_collab %><a href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=tbp_line.person.tbp_collab.tbp_id%>"><img src="/images/link.gif"></a><% end %></td>
-  <td align="center"><%= link_to('Edit', :controller=>'people', :action=>'edit', :id=>tbp_line.person.id) %></td>
+  <td align="center"><% if tbp_line.person.tbp_collab %><a title="Open TBP" href="http://toulouse.sqli.com/tbp/tableau_production/tbpVueMensuelleCollab.php?mois=07&annee=2014&clb_id=<%=tbp_line.person.tbp_collab.tbp_id%>"><img src="/images/link.gif"></a><% end %></td>
+  <td align="center"><%= link_to(image_tag('edit.gif'), {:controller=>'people', :action=>'edit', :id=>tbp_line.person.id}, {:title=>"Edit person info in BAM"}) %></td>
   <% if tbp_line.person.tbp_collab %>  
-    <td align="center" id="collab_<%=tbp_line.person.tbp_collab.tbp_id%>"><%= link_to_remote(image_tag('loading.png'), :url=>{:controller=>:tbp, :action=>:update_collab, :id=>tbp_line.person.tbp_collab.tbp_id}, :update=>{:success=>"collab_#{tbp_line.person.tbp_collab.tbp_id}", :failure=>"collab_#{tbp_line.person.tbp_collab.tbp_id}"}) %></td>
+    <td align="center" id="collab_<%=tbp_line.person.tbp_collab.tbp_id%>"><%= link_to_remote(image_tag('loading.png'), {:url=>{:controller=>:tbp, :action=>:update_collab, :id=>tbp_line.person.tbp_collab.tbp_id}, :loading=>"$('collab_#{tbp_line.person.tbp_collab.tbp_id}').update('...')", :update=>{:success=>"collab_#{tbp_line.person.tbp_collab.tbp_id}", :failure=>"collab_#{tbp_line.person.tbp_collab.tbp_id}"}}, {:title=>"Fetch and update TBP data"}) %></td>
   <% else %>
     <td></td>
   <% end %>
