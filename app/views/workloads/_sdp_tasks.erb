@@ -1,9 +1,7 @@
 <div id='<%=partial_id%>'>
 <% if !@workload.person or !@workload.person.trigram or @workload.person.trigram=='' %>
   <strong>no trigram, so no SDP task</strong>
-  <% if @workload.person %>
-    <%= link_to('add a trigram', :controller=>'people', :action=>'edit', :id=>@workload.person.id) %><br/>
-  <% end %>
+  <% if @workload.person %><%= link_to('add a trigram', :controller=>'people', :action=>'edit', :id=>@workload.person.id) %><br/><% end %>
   <br/>
 <% elsif @sdp_tasks.size == 0 %>
   <strong>No tasks for <%= @workload.person.name %></strong><br/>
