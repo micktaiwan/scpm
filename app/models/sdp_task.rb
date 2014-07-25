@@ -19,9 +19,9 @@ class SDPTask < ActiveRecord::Base
   def project_name
     p = self.project
     if p
-      "#{p.name} (#{p.project_code})"
+      "#{p.name}"
     else
-      "can't find project for '#{self.project_code}'"
+      "no project for '#{self.project_code}'"
     end
   end
 
