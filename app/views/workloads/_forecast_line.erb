@@ -1,0 +1,30 @@
+<tr>
+  <!-- Action destroy -->
+	<td></td>
+	<!-- Request link -->
+  <td></td>
+	<!-- Edit btn / Alert / Backup msg / Project name -->
+  <td><%= line[0] %></td>
+	<!-- Request -->
+  <% if APP_CONFIG['workloads_display_status_column'] %>
+    <td></td>
+  <% end %>
+	<td></td>
+	<td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <% if APP_CONFIG['workloads_display_diff_between_consumed_and_planned_column'] %>
+    <td></td>
+  <% end %>
+  <% if APP_CONFIG['workloads_display_total_column'] %>
+  <td></td>
+  <% end %>
+
+	<!-- Values by week -->
+	<% for work in line[1] %>
+    <td class="wl_case">
+      <%= text_field_tag('t', work, :class=>'wl_textfield') if work!=0%>
+    </td>
+  <% end %>
+</tr>

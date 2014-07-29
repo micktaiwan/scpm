@@ -372,6 +372,7 @@
   </thead>
 
   <tbody class="scrollContent">
+    <%= render(:partial=>"forecast_line", :collection=>@workload.forecasted_projects, :as=>:line) %> 
     <%= render(:partial=>"wl_line", :collection=>@workload.displayed_lines) %>
   </tbody>
 

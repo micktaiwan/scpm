@@ -32,13 +32,15 @@ class Workload
     :nb_current_lines,# total after filters
     :nb_hidden_lines, # difference (filtered)
     :staffing,         # nb of person needed per week
-    :forecasted       # TBP: nb of days per weeks forcasted on the current project filter
+    :forecasted,       # TBP: nb of days per weeks forcasted on the current project filter
+    :forecasted_projects # one line by project and per week
 
   # options can have
   # :only_holidays => true
   # :add_holidays => true
   # :hide_lines_with_no_workload => true
   # :nb_weeks => nb of weeks to display. Default is read in configuration file
+  # :include_forecast => true
   def initialize(person_id, project_ids, iterations, tags_ids, options = {})
 
     # return if project_ids.size==0
@@ -231,10 +233,10 @@ class Workload
       #end
 
       # TBP
-      if options[:add_tbp_info]
+      if options[:include_forecast]
         if @person.tbp_collab
-          value = @person.tbp_collab.get_by_date(iteration, iteration+5.days, project_ids)
-          @forecasted << {:value => value}
+          hash = @person.tbp_collab.get_by_date(iteration, iteration+5.days, project_ids)
+          @forecasted << hash
         else
           @forecasted << {:value => 0}
         end
@@ -242,6 +244,13 @@ class Workload
 
       iteration = iteration + 7.days
       nb += 1
+    end
+    if options[:include_forecast]
+      if @person.tbp_collab
+        @forecasted_projects = @person.tbp_collab.projects_workload(from_day, from_day+delay_to_display, project_ids)
+      else
+        @forecasted_projects = []
+      end
     end
     @next_month_percents        = (@next_month_percents / 5).round
     @three_next_months_percents = (@three_next_months_percents / 12).round
@@ -254,7 +263,6 @@ class Workload
     @sdp_remaining_total  = 0
     @sdp_consumed_total   = 0
     @to_be_validated_in_wl_remaining_total = 0
-
 
     for l in @wl_lines
       @line_sums[l.id] = Hash.new

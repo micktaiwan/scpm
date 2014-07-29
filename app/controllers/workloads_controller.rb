@@ -49,7 +49,7 @@ class WorkloadsController < ApplicationController
   def change_workload(person_id=nil)
     person_id = params[:person_id] if !person_id
     session['workload_person_id'] = person_id
-    @workload = Workload.new(person_id,session['workload_person_project_ids'], session['workload_persons_iterations'],session['workload_person_tags'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true'})
+    @workload = Workload.new(person_id,session['workload_person_project_ids'], session['workload_persons_iterations'],session['workload_person_tags'], {:hide_lines_with_no_workload => session['workload_hide_lines_with_no_workload'].to_s=='true', :include_forecast=>true})
 
     @person   = @workload.person
     get_last_sdp_update
@@ -448,7 +448,7 @@ class WorkloadsController < ApplicationController
 
     @workloads = []
     for p in @people
-      w = Workload.new(p.id, @project_ids, '', '', {:add_tbp_info=>true, :add_holidays=>false, :weeks_to_display=>12})
+      w = Workload.new(p.id, @project_ids, '', '', {:include_forecast=>true, :add_holidays=>false, :weeks_to_display=>12})
       next if w.wl_lines.select{|l| l.wl_type != WL_LINE_HOLIDAYS}.size == 0 # do not display people with no lines at all
       @workloads << w
     end
