@@ -28,7 +28,7 @@
 	<!-- Edit btn / Alert / Backup msg / Project name -->
   <td title="<%= wl_line.name %>" >
     <!-- highlight function -->
-    <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line(#{wl_line.id}, '#FF0')") %>
+    <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line('#{wl_line.id}', '#FF0')") %>
     <!-- Edit btn -->
 		<% if wl_line.wl_type != 110 and wl_line.wl_type != 120  %>
     	<%= link_to_function(image_tag("edit.gif"), "wl_edit(#{wl_line.id})") %>

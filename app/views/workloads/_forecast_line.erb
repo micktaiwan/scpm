@@ -1,10 +1,13 @@
-<tr>
+<tr id="wl_line_<%=line[0]%>">
   <!-- Action destroy -->
 	<td></td>
 	<!-- Request link -->
   <td></td>
-	<!-- Edit btn / Alert / Backup msg / Project name -->
-  <td><%= line[0] %></td>
+  <td>
+  <!-- highlight function -->
+  <%= link_to_function(image_tag('bulb.gif'), "highlight_wl_line('#{line[0]}', '#FF0')") %>
+  <!-- Project name -->
+  <%= line[0] %></td>
 	<!-- Request -->
   <% if APP_CONFIG['workloads_display_status_column'] %>
     <td></td>
