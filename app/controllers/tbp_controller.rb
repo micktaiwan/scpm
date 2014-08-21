@@ -14,7 +14,7 @@ class TbpController < ApplicationController
       # update TbpCollabs
       TbpCollab.delete_all
       for i in (0..APP_CONFIG['tbp_auths'].size-1) do
-        puts APP_CONFIG['tbp_auths'][0]['name'].inspect
+        #puts APP_CONFIG['tbp_auths'][0]['name'].inspect
         open("#{APP_CONFIG['tbp_auths'][i]['url']}/collaborateurs.json", "Authorization"=>"Basic #{APP_CONFIG['tbp_auths'][i]['auth']}") {|f|
           rv = JSON.parse(f.read)
           #puts @rv.inspect
