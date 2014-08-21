@@ -1,0 +1,5 @@
+<div id="results"></div>
+
+<%= text_field_tag(:url, :value=>"collaborateurs/450/TE.json") %>
+<%= link_to_remote('TBP Test', {:url=>{:controller=>:api_tester, :action=>:test_tbp}, :loading=>"$('results').update('Testing TBP')", :update=>{:success=>"results", :failure=>"results"}}, {:title=>"Fetch and update TBP data"}) %>
+

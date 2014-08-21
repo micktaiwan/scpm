@@ -120,6 +120,7 @@ class ProjectsController < ApplicationController
     @project     = Project.new(:project_id=>nil, :name=>'')
     @qr          = Person.find(:all,:include => [:person_roles,:roles], :conditions=>["roles.name = 'QR'"], :order=>"people.name asc")
     @supervisors = Person.find(:all, :conditions=>"is_supervisor=1", :order=>"name asc")
+    @tbp_projects= TbpProject.all.sort_by { |p| p.name}
   end
 
   def create
