@@ -81,7 +81,7 @@
     <div id="tabContent5" class="tabContent" style="display:<%= cookies["tab_menu_wl_conso"]=="5"? "block" : "none"%>;">
       <br />
       <div id="errors_in_affectations">
-        <%= link_to_remote('Refresh',  :url => { :action => "refresh_errors_in_affectations" }, :loading => "$('error5).update('');$('loading5').appear()", :complete => "$('loading5').hide()", :update => { :success => "data5", :failure => "error5" }) %>
+        <%= link_to_remote('Refresh',  :url => { :action => "refresh_errors_in_affectations" }, :loading => "$('error5').update('');$('loading5').appear()", :complete => "$('loading5').hide()", :update => { :success => "data5", :failure => "error5" }) %>
         <br/>
         <br/>
         <%= image_tag('loading.gif', :id=>'loading5', :style=>"display:none;") %>
