@@ -16,6 +16,7 @@ class PeopleController < ApplicationController
     @person = Person.new
     Company.create(:name=>"SQLI") if Company.find(:first) == nil
     @companies = Company.all
+    @tbp_collabs = TbpCollab.all
     @roles = Role.find(:all, :conditions=>"name != 'Super'")
     cost_profiles = CostProfile.all(:order=>'company_id, name')
     @profiles = []
